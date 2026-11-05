@@ -1,0 +1,38 @@
+[package]
+name = "simulacra"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+gpui-kit = "0.8.1"
+rusqlite = { version = "0.32", features = ["bundled"] }
+tokio = { version = "1", features = ["full"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+chrono = { version = "0.4", features = ["serde"] }
+uuid = { version = "1", features = ["v4", "serde"] }
+thiserror = "2.0"
+rust-i18n = "4.2"
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+nano-vectordb-rs = { git = "https://github.com/VectorInstitute/nano-vectordb-rs" }
+rfd = "0.15"
+
+[profile.dev]
+opt-level = 1
+debug = 0
+incremental = false
+
+[profile.dev.package."*"]
+opt-level = 3
+
+[profile.test]
+opt-level = 1
+debug = 0
+incremental = false
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1
+panic = "abort"
+strip = true

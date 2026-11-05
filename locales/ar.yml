@@ -1,0 +1,48 @@
+app:
+  title: "Simulacra"
+  subtitle: "شبكة الشخصيات والمعرفة المحلية"
+  local_db: "قاعدة بيانات محلية"
+  simulation_active: "المحاكاة نشطة"
+
+nav:
+  home: "الرئيسية / الخلاصة"
+  knowledge: "المعرفة / RAG"
+  agent_lab: "مختبر الوكلاء"
+  mind_graph: "رسم العقل Obsidian"
+  theme: "السمات والمظهر"
+  networks_title: "الشبكات / المجالات"
+  new_network: "+ جديد"
+
+composer:
+  placeholder: "اكتب فكرة أو خاطرة في هذه الشبكة... (استخدم [[post_id]] للربط)"
+  link_post: "+ [[ربط منشور]]"
+  tag: "#وسم"
+  post_button: "نشر"
+  char_warning: "تم تجاوز الحد الأقصى"
+  char_counter: "%{count}/280"
+
+feed:
+  no_posts: "لا توجد منشورات في هذه الشبكة بعد. كن أول من يشارك فكرة!"
+  general_timeline: "الجدول الزمني العام"
+
+sidebar:
+  search_placeholder: "بحث متجهي في بنك الأفكار..."
+  grounding_knowledge: "المعرفة المرجعية"
+  upload_doc: "+ رفع مستند"
+  grounding_desc: "المصادر مفهرسة بواسطة nano-vectordb-rs. الشخصيات تبني إجاباتها اعتماداً على هذه الوثائق."
+  popular_tags: "الوسوم الشائعة في الشبكة"
+  posts_count: "%{count} فكرة"
+  spawned_personas: "الشخصيات النشطة (%{count} قيد التشغيل)"
+  docs_and_agents: "%{docs} مستند • %{agents} وكيل"
+
+role:
+  user_primary: "أنت"
+  user_alt: "بديل"
+  agent: "وكيل: %{name}"
+
+user:
+  switch: "تبديل ▾"
+  unknown: "مجهول"
+
+language:
+  select: "اللغة"

@@ -1,0 +1,48 @@
+app:
+  title: "Simulacra"
+  subtitle: "Réseau Local de Personas et de Connaissances"
+  local_db: "BD Locale"
+  simulation_active: "Simulation Active"
+
+nav:
+  home: "Accueil / Fil"
+  knowledge: "Connaissances / RAG"
+  agent_lab: "Lab Agents & Ajustement"
+  mind_graph: "Graphe Mental Obsidian"
+  theme: "Thèmes & Palettes"
+  networks_title: "RÉSEAUX / DOMAINES"
+  new_network: "+ Nouveau"
+
+composer:
+  placeholder: "Déposez une pensée brute dans ce réseau... (Utilisez [[post_id]] pour lier)"
+  link_post: "+ [[Lier un Post]]"
+  tag: "#Tag"
+  post_button: "Publier"
+  char_warning: "Limite dépassée"
+  char_counter: "%{count}/280"
+
+feed:
+  no_posts: "Aucun message dans ce réseau. Soyez le premier à partager une réflexion !"
+  general_timeline: "Fil Général"
+
+sidebar:
+  search_placeholder: "Recherche vectorielle sémantique..."
+  grounding_knowledge: "CONNAISSANCE DE BASE"
+  upload_doc: "+ Ajouter Doc"
+  grounding_desc: "Sources intégrées via nano-vectordb-rs. Les personas ancrent leurs réponses sur ces documents."
+  popular_tags: "TAGS POPULAIRES DANS LE RÉSEAU"
+  posts_count: "%{count} pensées"
+  spawned_personas: "PERSONAS ACTIFS (%{count} en ligne)"
+  docs_and_agents: "%{docs} docs • %{agents} agents"
+
+role:
+  user_primary: "VOUS"
+  user_alt: "ALT"
+  agent: "AGENT: %{name}"
+
+user:
+  switch: "Changer ▾"
+  unknown: "Inconnu"
+
+language:
+  select: "Langue"

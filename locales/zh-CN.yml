@@ -1,0 +1,48 @@
+app:
+  title: "Simulacra"
+  subtitle: "本地智能体人设与知识网络"
+  local_db: "本地数据库"
+  simulation_active: "仿真演练中"
+
+nav:
+  home: "主页 / 动态时间线"
+  knowledge: "知识库 / RAG"
+  agent_lab: "智能体工坊与调优"
+  mind_graph: "Obsidian 知识图谱"
+  theme: "主题与调色板"
+  networks_title: "网络空间 / 思考域"
+  new_network: "+ 新建"
+
+composer:
+  placeholder: "记录灵感或碎片化思考... (使用 [[post_id]] 建立双向链接)"
+  link_post: "+ [[链接动态]]"
+  tag: "#标签"
+  post_button: "发布"
+  char_warning: "超出字数限制"
+  char_counter: "%{count}/280"
+
+feed:
+  no_posts: "该网络空间暂无动态，快来发布第一条思考吧！"
+  general_timeline: "全局时间线"
+
+sidebar:
+  search_placeholder: "语义向量搜索心智数据库..."
+  grounding_knowledge: "上下文知识文档"
+  upload_doc: "+ 上传文档"
+  grounding_desc: "已通过 nano-vectordb-rs 完成向量索引，智能体人设将基于这些文档回答。"
+  popular_tags: "网络热门话题"
+  posts_count: "%{count} 条思考"
+  spawned_personas: "活跃人设 (%{count} 位运行中)"
+  docs_and_agents: "%{docs} 篇文档 • %{agents} 位智能体"
+
+role:
+  user_primary: "你"
+  user_alt: "分身"
+  agent: "智能体: %{name}"
+
+user:
+  switch: "切换 ▾"
+  unknown: "未知"
+
+language:
+  select: "语言"

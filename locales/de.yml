@@ -1,0 +1,48 @@
+app:
+  title: "Simulacra"
+  subtitle: "Lokales Persona- & Wissensnetzwerk"
+  local_db: "Lokale DB"
+  simulation_active: "Simulation Aktiv"
+
+nav:
+  home: "Startseite / Feed"
+  knowledge: "Wissen / RAG"
+  agent_lab: "Agenten-Labor"
+  mind_graph: "Obsidian Mind Graph"
+  theme: "Designs & Paletten"
+  networks_title: "NETZWERKE / DOMÄNEN"
+  new_network: "+ Neu"
+
+composer:
+  placeholder: "Schreibe einen Gedanken in dieses Netzwerk... (Nutze [[post_id]] zum Verlinken)"
+  link_post: "+ [[Beitrag verlinken]]"
+  tag: "#Tag"
+  post_button: "Senden"
+  char_warning: "Zeichenbegrenzung überschritten"
+  char_counter: "%{count}/280"
+
+feed:
+  no_posts: "Noch keine Beiträge in diesem Netzwerk. Sei der Erste!"
+  general_timeline: "Allgemeine Timeline"
+
+sidebar:
+  search_placeholder: "Semantische Vektorsuche..."
+  grounding_knowledge: "REFERENZWISSEN"
+  upload_doc: "+ Dok hochladen"
+  grounding_desc: "Quellen über nano-vectordb-rs eingebettet. Personas beziehen Antworten auf diese Dokumente."
+  popular_tags: "BELIEBTE TAGS IM NETZWERK"
+  posts_count: "%{count} Gedanken"
+  spawned_personas: "AKTIVE PERSONAS (%{count} Online)"
+  docs_and_agents: "%{docs} Dok. • %{agents} Agenten"
+
+role:
+  user_primary: "DU"
+  user_alt: "ALT"
+  agent: "AGENT: %{name}"
+
+user:
+  switch: "Wechseln ▾"
+  unknown: "Unbekannt"
+
+language:
+  select: "Sprache"

@@ -1,0 +1,48 @@
+app:
+  title: "Simulacra"
+  subtitle: "Локальная сеть персон и базы знаний"
+  local_db: "Локальная БД"
+  simulation_active: "Симуляция активна"
+
+nav:
+  home: "Главная / Лента"
+  knowledge: "База знаний / RAG"
+  agent_lab: "Лаборатория агентов"
+  mind_graph: "Граф мыслей Obsidian"
+  theme: "Темы и палитры"
+  networks_title: "СЕТИ / ДОМЕНЫ"
+  new_network: "+ Создать"
+
+composer:
+  placeholder: "Запишите мысль или идею... (Используйте [[post_id]] для ссылки)"
+  link_post: "+ [[Ссылка на пост]]"
+  tag: "#Тег"
+  post_button: "Отправить"
+  char_warning: "Превышен лимит символов"
+  char_counter: "%{count}/280"
+
+feed:
+  no_posts: "В этой сети пока нет записей. Поделитесь мыслью первым!"
+  general_timeline: "Общая лента"
+
+sidebar:
+  search_placeholder: "Семантический поиск в базе мыслей..."
+  grounding_knowledge: "КОНТЕКСТНЫЕ ЗНАНИЯ"
+  upload_doc: "+ Загрузить документ"
+  grounding_desc: "Источники векторизованы в nano-vectordb-rs. Персоны генерируют ответы на базе этих документов."
+  popular_tags: "ПОПУЛЯРНЫЕ ТЕГИ В СЕТИ"
+  posts_count: "%{count} мыслей"
+  spawned_personas: "АКТИВНЫЕ ПЕРСОНЫ (%{count} онлайн)"
+  docs_and_agents: "%{docs} док. • %{agents} агентов"
+
+role:
+  user_primary: "ВЫ"
+  user_alt: "АЛЬТ"
+  agent: "АГЕНТ: %{name}"
+
+user:
+  switch: "Сменить ▾"
+  unknown: "Неизвестный"
+
+language:
+  select: "Язык"

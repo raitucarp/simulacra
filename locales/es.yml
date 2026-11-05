@@ -1,0 +1,48 @@
+app:
+  title: "Simulacra"
+  subtitle: "Red Local de Personas y Conocimiento"
+  local_db: "BD Local"
+  simulation_active: "Simulación Activa"
+
+nav:
+  home: "Inicio / Cronología"
+  knowledge: "Conocimiento / RAG"
+  agent_lab: "Laboratorio de Agentes"
+  mind_graph: "Grafo Mental Obsidian"
+  theme: "Temas y Paletas"
+  networks_title: "REDES / DOMINIOS"
+  new_network: "+ Nueva"
+
+composer:
+  placeholder: "Vierte una idea o pensamiento en esta red... (Usa [[id_post]] para enlazar)"
+  link_post: "+ [[Enlazar Post]]"
+  tag: "#Etiqueta"
+  post_button: "Publicar"
+  char_warning: "Límite excedido"
+  char_counter: "%{count}/280"
+
+feed:
+  no_posts: "Aún no hay publicaciones en esta red. ¡Sé el primero en compartir un pensamiento!"
+  general_timeline: "Cronología General"
+
+sidebar:
+  search_placeholder: "Búsqueda vectorial en la base de datos mental..."
+  grounding_knowledge: "CONOCIMIENTO DE BASE"
+  upload_doc: "+ Subir Doc"
+  grounding_desc: "Fuentes indexadas mediante nano-vectordb-rs. Las personas sintetizan y anclan respuestas en estos documentos."
+  popular_tags: "ETIQUETAS POPULARES EN LA RED"
+  posts_count: "%{count} pensamientos"
+  spawned_personas: "PERSONAS ACTIVAS (%{count} en línea)"
+  docs_and_agents: "%{docs} docs • %{agents} agentes"
+
+role:
+  user_primary: "TÚ"
+  user_alt: "ALT"
+  agent: "AGENTE: %{name}"
+
+user:
+  switch: "Cambiar ▾"
+  unknown: "Desconocido"
+
+language:
+  select: "Idioma"

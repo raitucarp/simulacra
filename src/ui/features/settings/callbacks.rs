@@ -9,6 +9,4 @@ pub type SelectProviderCallback = Box<dyn Fn(LlmProvider, &mut Window, &mut App)
 pub type SelectPresetModelCallback = Box<dyn Fn(&'static str, &mut Window, &mut App) + 'static>;
 pub type SaveSettingsCallback = Box<dyn Fn(&mut Window, &mut App) + 'static>;
 pub type SelectTabCallback = Box<dyn Fn(SettingsTab, &mut Window, &mut App) + 'static>;
-/// Receives the id of the palette to activate.
-pub type SelectThemeCallback = Box<dyn Fn(String, &mut Window, &mut App) + 'static>;
 pub type ToggleSchedulerCallback = Box<dyn Fn(bool, &mut Window, &mut App) + 'static>;

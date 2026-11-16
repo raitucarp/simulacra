@@ -10,7 +10,7 @@ use crate::i18n::Language;
 use crate::state::AppState;
 use crate::theme::ThemeTokens;
 use crate::ui::features::composer::ComposerModalPanel;
-use crate::ui::features::settings::SettingsTab;
+use crate::ui::features::settings::{AppearancePanel, SettingsTab};
 use crate::ui::features::sidebar_right::RightSidebarTab;
 use gpui_kit::{Entity, Subscription};
 
@@ -21,6 +21,8 @@ pub struct AppView {
     pub chrome: ChromeState,
     pub feed: FeedState,
     pub composer_modal: Entity<ComposerModalPanel>,
+    /// Appearance settings pane (theme gallery and editor).
+    pub appearance: Entity<AppearancePanel>,
     pub llm_inputs: LlmInputs,
     pub lab: LabState,
     pub scheduler: SchedulerState,

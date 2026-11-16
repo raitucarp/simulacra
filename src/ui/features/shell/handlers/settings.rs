@@ -4,7 +4,7 @@
 use super::super::view::AppView;
 use crate::agent::LlmProvider;
 use crate::theme::ThemeSettings;
-use crate::ui::features::settings::SettingsTab;
+use crate::ui::features::settings::{AppearanceEvent, AppearancePanel, SettingsTab};
 use gpui_kit::*;
 
 impl AppView {
@@ -13,11 +13,16 @@ impl AppView {
         cx.notify();
     }
 
-    /// Activates and persists the palette `palette_id`.
-    pub(crate) fn select_theme(&mut self, palette_id: String, _: &mut Window, cx: &mut Context<Self>) {
-        let mut settings = self.state.theme_settings.clone();
-        settings.select(&palette_id);
-        self.apply_theme_settings(settings, cx);
+    /// Applies every theme change made in the Appearance pane.
+    pub(crate) fn on_appearance_event(
+        &mut self,
+        _: &Entity<AppearancePanel>,
+        event: &AppearanceEvent,
+        _: &mut Window,
+        cx: &mut Context<Self>,
+    ) {
+        let AppearanceEvent::Changed(settings) = event;
+        self.apply_theme_settings(settings.clone(), cx);
     }
 
     /// Persists `settings`, re-derives the tokens and pushes them to every view and the kit.

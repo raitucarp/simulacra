@@ -9,6 +9,7 @@ use super::view::{AppView, ChromeState};
 use crate::i18n::Language;
 use crate::state::AppState;
 use crate::ui::features::composer::ComposerModalPanel;
+use crate::ui::features::settings::AppearancePanel;
 use gpui_kit::*;
 
 impl AppView {
@@ -23,10 +24,12 @@ impl AppView {
         let theme = state.theme_tokens.clone();
         let composer_modal = cx.new(|cx| ComposerModalPanel::new(theme, profile, window, cx));
         let (graph, graph_subscription) = GraphState::new(&state, window, cx);
+        let appearance = cx.new(|cx| AppearancePanel::new(state.theme_settings.clone(), window, cx));
         let subscriptions = vec![
             feed.subscribe_search(cx),
             cx.subscribe_in(&composer_modal, window, Self::publish_composer_draft),
             graph_subscription,
+            cx.subscribe_in(&appearance, window, Self::on_appearance_event),
             Self::observe_own_changes(cx),
         ];
         let llm_inputs = LlmInputs::new(&state, window, cx);
@@ -39,6 +42,7 @@ impl AppView {
             chrome: ChromeState::new(initial_lang),
             feed,
             composer_modal,
+            appearance,
             llm_inputs,
             lab,
             scheduler,

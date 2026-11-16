@@ -17,7 +17,7 @@ impl AppView {
                 self.llm_inputs.model.clone(),
                 self.llm_inputs.endpoint.clone(),
                 bind.with(Self::select_settings_tab),
-                bind.with(Self::select_theme),
+                self.appearance.clone(),
                 bind.with(Self::select_provider),
                 bind.with(Self::select_preset_model),
                 bind.act(Self::save_settings),

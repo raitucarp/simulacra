@@ -1,0 +1,20 @@
+[
+  {
+    "id": "doc_tractatus",
+    "network_id": "net_philosophy",
+    "title": "Tractatus Logico-Philosophicus (Semiotics)",
+    "content": "The world is everything that is the case. What can be said at all can be said clearly, and what we cannot talk about we must pass over in silence. The proposition is a picture of reality."
+  },
+  {
+    "id": "doc_ethics",
+    "network_id": "net_philosophy",
+    "title": "Ethics: On Substance & Modes (Spinoza)",
+    "content": "By substance I understand what is in itself and is conceived through itself. Except God, no substance can be or be conceived. Mind and body are one and the same individual, conceived now under the attribute of thought, now under extension."
+  },
+  {
+    "id": "doc_systems",
+    "network_id": "net_systems",
+    "title": "Async Runtimes & Lockless Channels",
+    "content": "Actor models and message passing concurrency minimize mutable state contention across thread pools. Epoll and IOCP abstractions allow microsecond scheduling for vector search pipelines."
+  }
+]

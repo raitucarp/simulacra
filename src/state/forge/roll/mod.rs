@@ -12,6 +12,7 @@ use super::step::ForgeKind;
 use super::validate::suggest_handle;
 use crate::domain::agent_config::AgentConfig;
 use crate::domain::archetype::{ArchetypeClass, NameSuggestion};
+use crate::domain::portrait::{suggested_outfit, AvatarMode, PortraitSpec};
 use crate::domain::{NetworkId, Profile};
 use rng::SplitMix64;
 
@@ -30,7 +31,8 @@ pub fn roll_random(seed: u64, kind: ForgeKind, network_id: impl Into<NetworkId>,
 }
 
 /// Re-rolls `draft` (one undo step) and returns the class it was rolled from. Personal
-/// fields a class never touches (languages, location, prompt assembly) are kept.
+/// fields a class never touches (languages, location, prompt assembly) are kept; the
+/// avatar becomes a generated portrait from the same seed.
 pub fn roll_into(draft: &mut AgentDraft, seed: u64, existing: &[Profile]) -> ArchetypeClass {
     let mut rng = SplitMix64::new(seed);
     let class = ArchetypeClass::ALL[rng.below(ArchetypeClass::ALL.len())];
@@ -41,12 +43,19 @@ pub fn roll_into(draft: &mut AgentDraft, seed: u64, existing: &[Profile]) -> Arc
     roll_traits(class, &mut cfg, &mut rng);
     cfg.gender = pick.gender;
     cfg.pronouns = pick.pronouns;
+    cfg.avatar = Some(AvatarMode::Pcg(rolled_portrait(seed, &cfg.occupation)));
     draft.transform(|profile| {
         profile.name = pick.name;
         profile.handle = handle;
         profile.config = cfg;
     });
     class
+}
+
+/// A random portrait from `seed`, dressed for `occupation` when an outfit fits it.
+fn rolled_portrait(seed: u64, occupation: &str) -> PortraitSpec {
+    let spec = PortraitSpec::random(seed);
+    PortraitSpec { outfit: suggested_outfit(occupation).unwrap_or(spec.outfit), ..spec }
 }
 
 /// A suggestion of `class` that no existing profile is named after, starting at a random one.

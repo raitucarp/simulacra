@@ -1,10 +1,11 @@
 //! One typed change to a draft profile.
 
 use super::fields::{
-    CountField, HourField, OptionalTextField, ScoreField, TextField, ToggleField, TraitValue,
+    AvatarField, CountField, HourField, OptionalTextField, ScoreField, TextField, ToggleField, TraitValue,
     MAX_AGE, MAX_HOUR, MAX_SCORE,
 };
 use super::step::ForgeStep;
+use crate::domain::portrait::AvatarMode;
 use crate::domain::Profile;
 use serde::{Deserialize, Serialize};
 
@@ -13,6 +14,7 @@ use serde::{Deserialize, Serialize};
 pub enum DraftEdit {
     Text(TextField, String),
     OptionalText(OptionalTextField, Option<String>),
+    Avatar(AvatarField, Option<AvatarMode>),
     Score(ScoreField, u8),
     Hour(HourField, u8),
     Count(CountField, u16),
@@ -35,6 +37,7 @@ impl DraftEdit {
         match self {
             Self::Text(field, _) => field.path(),
             Self::OptionalText(field, _) => field.path(),
+            Self::Avatar(field, _) => field.path(),
             Self::Score(field, _) => field.path(),
             Self::Hour(field, _) => field.path(),
             Self::Count(field, _) => field.path(),
@@ -48,6 +51,7 @@ impl DraftEdit {
         match self {
             Self::Text(field, _) => field.step(),
             Self::OptionalText(field, _) => field.step(),
+            Self::Avatar(field, _) => field.step(),
             Self::Score(field, _) => field.step(),
             Self::Hour(field, _) => field.step(),
             Self::Count(field, _) => field.step(),
@@ -69,6 +73,7 @@ impl DraftEdit {
         match self {
             Self::Text(field, value) => assign(field.get_mut(profile), value.clone()),
             Self::OptionalText(field, value) => assign(field.get_mut(profile), value.clone()),
+            Self::Avatar(field, value) => assign(field.get_mut(profile), value.clone()),
             Self::Score(field, value) => assign(field.get_mut(profile), (*value).min(MAX_SCORE)),
             Self::Hour(field, value) => assign(field.get_mut(profile), (*value).min(MAX_HOUR)),
             Self::Count(field, value) => assign(field.get_mut(profile), (*value).min(MAX_AGE)),

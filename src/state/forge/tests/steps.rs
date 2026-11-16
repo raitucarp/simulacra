@@ -1,5 +1,6 @@
 use super::*;
 use crate::domain::agent_config::AgentConfig;
+use crate::domain::portrait::{AvatarMode, PortraitSpec};
 use crate::state::forge::fields::{mapped_fields, SYSTEM_FIELDS};
 use std::collections::BTreeMap;
 use std::path::Path;
@@ -54,7 +55,9 @@ fn every_profile_and_config_field_belongs_to_exactly_one_step() {
         .into_iter()
         .filter(|key| !UNMAPPED_PROFILE_KEYS.contains(&key.as_str()))
         .collect();
-    expected.extend(json_keys(&AgentConfig::default()));
+    // `avatar` is skipped when `None`, so enumerate a config that has one.
+    let avatar = Some(AvatarMode::Pcg(PortraitSpec::random(0)));
+    expected.extend(json_keys(&AgentConfig { avatar, ..AgentConfig::default() }));
     let mut counts: BTreeMap<&str, usize> = BTreeMap::new();
     for (path, _) in mapped_fields() {
         *counts.entry(path).or_default() += 1;

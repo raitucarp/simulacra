@@ -30,6 +30,10 @@ impl AppView {
         self.state.update_theme_settings(settings);
         self.theme = self.state.theme_tokens.clone();
         crate::theme::sync_kit_theme(&self.theme, cx);
+        let palette = self.state.theme_settings.effective_palette();
+        for stale in crate::ui::illustration::set_active_palette(&palette.colors) {
+            stale.remove_asset(cx);
+        }
         self.feed.stream.remeasure();
         cx.notify();
     }

@@ -30,6 +30,9 @@ fn edits_mark_dirty_and_clamp_to_field_ranges() {
     assert_eq!(draft.profile().config.mbti, MbtiType::Enfp);
     draft.edit(DraftEdit::OptionalText(OptionalTextField::AvatarPath, Some("a.png".into())));
     assert_eq!(draft.profile().avatar_path.as_deref(), Some("a.png"));
+    let portrait = Some(crate::domain::portrait::AvatarMode::Pcg(crate::domain::portrait::PortraitSpec::random(1)));
+    assert!(draft.edit(DraftEdit::Avatar(AvatarField::Avatar, portrait.clone())));
+    assert_eq!(draft.profile().config.avatar, portrait);
     draft.edit(DraftEdit::Toggle(ToggleField::InjectNetworkGrounding, false));
     assert!(!draft.profile().config.inject_network_grounding);
 }

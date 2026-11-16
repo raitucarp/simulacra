@@ -28,7 +28,7 @@ pub use describe::{describe_prompt, parse_described, DraftPatch, ParseError, Pat
 pub use draft::{normalize_handle, AgentDraft, AutosaveError, StepProgress, AUTOSAVE_VERSION, HISTORY_LIMIT};
 pub use edit::DraftEdit;
 pub use fields::{
-    field_label_key, field_step, fields_for_step, CountField, HourField, OptionalTextField,
+    field_label_key, field_step, fields_for_step, AvatarField, CountField, HourField, OptionalTextField,
     ScoreField, TextField, ToggleField, TraitField, TraitValue,
 };
 pub use roll::{roll_into, roll_random};

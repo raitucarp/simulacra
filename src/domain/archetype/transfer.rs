@@ -5,14 +5,15 @@ use crate::domain::agent_config::AgentConfig;
 use serde_json::{Map, Value};
 
 /// Personal fields a class never overwrites: who the person is, where they live, which
-/// languages they speak, and the advanced prompt-assembly settings.
-pub const CLASS_PRESERVED_FIELDS: [&str; 15] = [
+/// languages they speak, their avatar, and the advanced prompt-assembly settings.
+pub const CLASS_PRESERVED_FIELDS: [&str; 16] = [
     "gender",
     "pronouns",
     "age",
     "location_culture",
     "primary_language",
     "secondary_languages",
+    "avatar",
     "is_active",
     "assembly_strategy",
     "prompt_template",

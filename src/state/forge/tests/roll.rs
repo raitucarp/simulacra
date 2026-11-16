@@ -1,5 +1,6 @@
 use super::*;
 use crate::domain::agent_config::AgentConfig;
+use crate::domain::portrait::AvatarMode;
 use crate::domain::{ArchetypeClass, ClassicTemperament, IdentityVariant, MbtiType};
 use crate::state::forge::roll::{drift_identity, drift_mbti, drift_temperament, PERSONALITY_JITTER};
 use std::collections::HashSet;
@@ -47,6 +48,7 @@ fn rolls_stay_close_to_their_class() {
         let suggestion = suggestion.expect("name comes from the class list");
         assert_eq!(cfg.pronouns, suggestion.pronouns);
         assert_eq!(cfg.gender, suggestion.gender);
+        assert!(matches!(cfg.avatar, Some(AvatarMode::Pcg(spec)) if spec.seed == seed), "seed {seed}");
     }
 }
 

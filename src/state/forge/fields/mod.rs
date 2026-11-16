@@ -1,7 +1,5 @@
 //! Typed handles on every editable `Profile` / `AgentConfig` field, each owned by one forge step.
-//!
-//! A field's `path` is its serde name; `Profile` and `AgentConfig` share no field names, so the
-//! bare name is unambiguous. The step tables here are the single source of the field → step map.
+//! `path` is the serde name (the two structs share none); these tables are the field → step map.
 
 mod map;
 mod traits;
@@ -11,6 +9,7 @@ pub use traits::{TraitField, TraitValue};
 
 use super::step::ForgeStep;
 use crate::domain::agent_config::AgentConfig;
+use crate::domain::portrait::AvatarMode;
 use crate::domain::Profile;
 use serde::{Deserialize, Serialize};
 
@@ -85,6 +84,13 @@ forge_fields! {
     /// Optional free-text fields.
     OptionalTextField: Option<String> {
         AvatarPath => avatar_path @ Appearance,
+    }
+}
+
+forge_fields! {
+    /// The generated portrait, emblem or photo.
+    AvatarField: Option<AvatarMode> {
+        Avatar => [config] avatar @ Appearance,
     }
 }
 

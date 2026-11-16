@@ -1,6 +1,6 @@
 //! The field → step table, assembled from the typed field enums.
 
-use super::{CountField, HourField, OptionalTextField, ScoreField, TextField, ToggleField, TraitField};
+use super::{AvatarField, CountField, HourField, OptionalTextField, ScoreField, TextField, ToggleField, TraitField};
 use crate::state::forge::step::{ForgeStep, FORGE_I18N_ROOT};
 
 const FIELD_GROUP: &str = "field";
@@ -16,6 +16,7 @@ pub fn mapped_fields() -> Vec<(&'static str, ForgeStep)> {
     let mut all: Vec<(&'static str, ForgeStep)> = SYSTEM_FIELDS.to_vec();
     all.extend(TextField::ALL.iter().map(|f| (f.path(), f.step())));
     all.extend(OptionalTextField::ALL.iter().map(|f| (f.path(), f.step())));
+    all.extend(AvatarField::ALL.iter().map(|f| (f.path(), f.step())));
     all.extend(ScoreField::ALL.iter().map(|f| (f.path(), f.step())));
     all.extend(HourField::ALL.iter().map(|f| (f.path(), f.step())));
     all.extend(CountField::ALL.iter().map(|f| (f.path(), f.step())));

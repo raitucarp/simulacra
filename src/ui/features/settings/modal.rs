@@ -43,7 +43,7 @@ impl SettingsModal {
         model_input: Entity<InputState>,
         endpoint_input: Entity<InputState>,
         on_select_tab: impl Fn(SettingsTab, &mut Window, &mut App) + 'static,
-        on_select_theme: impl Fn(ThemeTokens, &mut Window, &mut App) + 'static,
+        on_select_theme: impl Fn(String, &mut Window, &mut App) + 'static,
         on_select_provider: impl Fn(LlmProvider, &mut Window, &mut App) + 'static,
         on_select_preset_model: impl Fn(&'static str, &mut Window, &mut App) + 'static,
         on_save: impl Fn(&mut Window, &mut App) + 'static,

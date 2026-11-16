@@ -14,6 +14,7 @@ pub mod kit;
 pub mod palette;
 pub mod palettes;
 pub mod registry;
+pub mod settings;
 pub mod tokens;
 
 pub use derive::{derive_tokens, Density, RadiusScale, TypeScale};
@@ -21,4 +22,5 @@ pub use kit::{kit_theme_config, sync_kit_theme};
 pub use palette::{PaletteColorKey, PaletteColors, PaletteMode, PaletteOverrides, ThemePalette};
 pub use palettes::{midnight_slate, minimalist_dark, obsidian_zinc};
 pub use registry::ThemeRegistry;
+pub use settings::ThemeSettings;
 pub use tokens::ThemeTokens;

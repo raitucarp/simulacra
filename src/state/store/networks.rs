@@ -1,8 +1,9 @@
 //! Network domain selection, membership queries and derived counters.
 
-use super::{AppState, ACTIVE_NETWORK_KEY};
+use super::AppState;
 use crate::domain::{Network, NetworkId, Profile};
 use crate::error::{AppError, Result};
+use crate::storage::SettingKey;
 
 impl AppState {
     /// Returns a reference to the active network domain.
@@ -16,7 +17,7 @@ impl AppState {
         if self.networks.iter().any(|n| &n.id == network_id) {
             self.active_network_id = network_id.clone();
             if let Some(ref db) = self.db {
-                let _ = db.set_setting(ACTIVE_NETWORK_KEY, network_id.as_str());
+                let _ = db.set_setting(SettingKey::ActiveNetwork, network_id.as_str());
             }
             Ok(())
         } else {

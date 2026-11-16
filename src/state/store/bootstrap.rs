@@ -82,7 +82,8 @@ impl AppState {
             draft_text: String::new(),
             feed_day_filter: None,
             llm_settings: settings.llm,
-            theme_tokens: settings.theme.unwrap_or_else(crate::theme::minimalist_dark),
+            theme_tokens: settings.theme.tokens(),
+            theme_settings: settings.theme,
             db,
         }
     }

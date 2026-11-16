@@ -1,21 +1,8 @@
 //! LLM configuration and its persistence in the SQLite `settings` table.
 
 use super::LlmProvider;
-use crate::storage::Database;
+use crate::storage::{Database, SettingKey};
 use serde::{Deserialize, Serialize};
-
-/// Settings-table key for the provider identifier.
-pub(crate) const KEY_PROVIDER: &str = "llm_provider";
-/// Settings-table key for the API key.
-pub(crate) const KEY_API_KEY: &str = "llm_api_key";
-/// Settings-table key for the model name.
-pub(crate) const KEY_MODEL: &str = "llm_model";
-/// Settings-table key for the custom endpoint URL.
-pub(crate) const KEY_ENDPOINT: &str = "llm_endpoint";
-/// Settings-table key for the sampling temperature.
-pub(crate) const KEY_TEMPERATURE: &str = "llm_temperature";
-/// Settings-table key for the max output token budget.
-pub(crate) const KEY_MAX_TOKENS: &str = "llm_max_tokens";
 
 /// Default sampling temperature.
 pub(crate) const DEFAULT_TEMPERATURE: f32 = 0.7;
@@ -51,28 +38,28 @@ impl LlmSettings {
     /// Loads saved LLM settings from the SQLite database.
     pub fn load_from_db(db: &Database) -> Self {
         let mut settings = Self::default();
-        let get = |key: &str| db.get_setting(key).ok().flatten();
+        let get = |key: SettingKey| db.get_setting(key).ok().flatten();
 
-        if let Some(provider_str) = get(KEY_PROVIDER) {
+        if let Some(provider_str) = get(SettingKey::LlmProvider) {
             settings.provider = LlmProvider::from_id(&provider_str);
         }
-        if let Some(key) = get(KEY_API_KEY) {
+        if let Some(key) = get(SettingKey::LlmApiKey) {
             settings.api_key = key;
         }
-        if let Some(model) = get(KEY_MODEL) {
+        if let Some(model) = get(SettingKey::LlmModel) {
             settings.model = if model.trim().is_empty() {
                 settings.provider.default_model().to_string()
             } else {
                 model
             };
         }
-        if let Some(endpoint) = get(KEY_ENDPOINT) {
+        if let Some(endpoint) = get(SettingKey::LlmEndpoint) {
             settings.custom_endpoint = endpoint;
         }
-        if let Some(val) = get(KEY_TEMPERATURE).and_then(|s| s.parse::<f32>().ok()) {
+        if let Some(val) = get(SettingKey::LlmTemperature).and_then(|s| s.parse::<f32>().ok()) {
             settings.temperature = val;
         }
-        if let Some(val) = get(KEY_MAX_TOKENS).and_then(|s| s.parse::<u32>().ok()) {
+        if let Some(val) = get(SettingKey::LlmMaxTokens).and_then(|s| s.parse::<u32>().ok()) {
             settings.max_tokens = val;
         }
 
@@ -82,15 +69,15 @@ impl LlmSettings {
     /// Persists LLM settings to the SQLite database.
     pub fn save_to_db(&self, db: &Database) -> Result<(), String> {
         let entries = [
-            (KEY_PROVIDER, self.provider.id_str().to_string()),
-            (KEY_API_KEY, self.api_key.clone()),
-            (KEY_MODEL, self.model.clone()),
-            (KEY_ENDPOINT, self.custom_endpoint.clone()),
-            (KEY_TEMPERATURE, self.temperature.to_string()),
-            (KEY_MAX_TOKENS, self.max_tokens.to_string()),
+            (SettingKey::LlmProvider, self.provider.id_str().to_string()),
+            (SettingKey::LlmApiKey, self.api_key.clone()),
+            (SettingKey::LlmModel, self.model.clone()),
+            (SettingKey::LlmEndpoint, self.custom_endpoint.clone()),
+            (SettingKey::LlmTemperature, self.temperature.to_string()),
+            (SettingKey::LlmMaxTokens, self.max_tokens.to_string()),
         ];
         for (key, value) in &entries {
-            db.set_setting(key, value).map_err(|e| e.to_string())?;
+            db.set_setting(*key, value).map_err(|e| e.to_string())?;
         }
         Ok(())
     }

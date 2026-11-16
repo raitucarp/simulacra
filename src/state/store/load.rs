@@ -10,6 +10,7 @@ use crate::agent::LlmSettings;
 use crate::domain::{Network, Profile};
 use crate::error::Result;
 use crate::storage::{Database, Vault};
+use crate::theme::ThemeSettings;
 
 impl AppState {
     /// Initializes state, loading from the local SQLite database if available,
@@ -69,7 +70,7 @@ impl AppState {
 }
 
 fn default_settings() -> StoredSettings {
-    StoredSettings { llm: LlmSettings::default(), theme: None }
+    StoredSettings { llm: LlmSettings::default(), theme: ThemeSettings::default() }
 }
 
 /// The persisted id when it still names an entity, else the first entity's id, else the default.

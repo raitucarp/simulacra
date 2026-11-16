@@ -66,7 +66,7 @@ async fn generate_without_api_key_fails_fast() {
 
 #[test]
 fn settings_persist_round_trip_and_blank_model_falls_back() {
-    use super::settings::KEY_MODEL;
+    use crate::storage::SettingKey;
     let db = crate::storage::Database::in_memory().expect("in-memory db");
     let saved = LlmSettings {
         provider: LlmProvider::Groq,
@@ -86,7 +86,7 @@ fn settings_persist_round_trip_and_blank_model_falls_back() {
     assert_eq!(loaded.temperature, 0.25);
     assert_eq!(loaded.max_tokens, 512);
 
-    db.set_setting(KEY_MODEL, "  ").expect("blank model");
+    db.set_setting(SettingKey::LlmModel, "  ").expect("blank model");
     assert_eq!(LlmSettings::load_from_db(&db).model, "llama-3.3-70b-versatile");
 }
 

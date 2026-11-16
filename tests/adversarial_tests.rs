@@ -1,8 +1,8 @@
 use gpui_kit::rgba;
 use simulacra::domain::{NetworkId, Post, PostId, Profile, ProfileId};
 use simulacra::state::AppState;
-use simulacra::storage::Database;
-use simulacra::theme::{minimalist_dark, ThemeTokens};
+use simulacra::storage::{Database, SettingKey};
+use simulacra::theme::{minimalist_dark, ThemeSettings, ThemeTokens};
 use simulacra::ui::molecules::post_item::{render_post_body, resolve_wikilink_excerpt};
 
 #[test]
@@ -109,12 +109,11 @@ fn test_sqlite_theme_tokens_corrupted_json_resilience() {
             color_accent: "#8b5cf6".into(),
         }).expect("save_network failed");
 
-        // Inject corrupt JSON into settings table
-        db.set_setting("theme_tokens", "{corrupted: true, invalid_json:").expect("set_setting failed");
-
-        // Database load_theme_tokens should return Err on invalid json
-        let res = db.load_theme_tokens();
-        assert!(res.is_err(), "load_theme_tokens must return Err on corrupted JSON");
+        // Inject a corrupt legacy theme row: loading must neither fail nor keep it
+        db.set_setting(SettingKey::LegacyThemeTokens, "{corrupted: true, invalid_json:").expect("set_setting failed");
+        assert_eq!(db.load_theme_settings(), ThemeSettings::default());
+        assert_eq!(db.get_setting(SettingKey::LegacyThemeTokens).expect("read"), None);
+        db.set_setting(SettingKey::ThemeOverrides, "{corrupted").expect("set_setting failed");
     }
 
     // AppState::with_db_path should gracefully fall back to minimalist_dark
@@ -128,21 +127,22 @@ fn test_sqlite_theme_tokens_corrupted_json_resilience() {
 fn test_sqlite_theme_tokens_empty_and_partial_json() {
     let db = Database::in_memory().expect("in-memory db failed");
 
-    // Empty object `{}` should deserialize into default ThemeTokens thanks to #[serde(default)]
-    db.set_setting("theme_tokens", "{}").expect("set_setting failed");
-    let loaded = db.load_theme_tokens().expect("load should succeed").expect("should be Some");
-    assert_eq!(loaded, ThemeTokens::default());
+    // Empty legacy object `{}` is the default look: it migrates to the default preset
+    db.set_setting(SettingKey::LegacyThemeTokens, "{}").expect("set_setting failed");
+    let loaded = db.load_theme_settings();
+    assert_eq!(loaded, ThemeSettings::default());
+    assert_eq!(loaded.tokens(), ThemeTokens::default());
 
-    // Partial JSON with unknown extra fields and missing fields
+    // Partial JSON with unknown extra fields and missing fields keeps the custom font
     let partial_json = r#"{
         "font_family_ui": "Custom UI Font",
         "unknown_legacy_field": 42,
         "another_extra_key": "ignored"
     }"#;
-    db.set_setting("theme_tokens", partial_json).expect("set_setting failed");
-    let loaded_partial = db.load_theme_tokens().expect("load should succeed").expect("should be Some");
+    db.set_setting(SettingKey::LegacyThemeTokens, partial_json).expect("set_setting failed");
+    let loaded_partial = db.load_theme_settings().tokens();
     assert_eq!(loaded_partial.font_family_ui, "Custom UI Font");
-    assert_eq!(loaded_partial.font_family_body, ThemeTokens::default().font_family_body);
+    assert_eq!(loaded_partial.font_family_mono, ThemeTokens::default().font_family_mono);
     assert_eq!(loaded_partial.bg_feed_post, ThemeTokens::default().bg_feed_post);
 }
 
@@ -150,23 +150,19 @@ fn test_sqlite_theme_tokens_empty_and_partial_json() {
 fn test_sqlite_theme_tokens_custom_colors_roundtrip() {
     let db = Database::in_memory().expect("in-memory db failed");
     let mut custom_tokens = minimalist_dark();
-    // Set custom visual colors
-    custom_tokens.accent_brand = rgba(0x12345678);
-    custom_tokens.accent_dialectic = rgba(0xfedcba98);
-    custom_tokens.bg_feed_post = rgba(0x01020304);
-    custom_tokens.bg_transparent = rgba(0x00000000);
-    custom_tokens.on_accent = rgba(0xffffffff);
-
-    // Save to SQLite
-    db.save_theme_tokens(&custom_tokens).expect("save_theme_tokens failed");
+    // Customized legacy colors survive as a migrated custom palette
+    custom_tokens.accent_brand = rgba(0x123456ff);
+    custom_tokens.accent_dialectic = rgba(0xfedcbaff);
+    custom_tokens.bg_app = rgba(0x010203ff);
+    let json = serde_json::to_string(&custom_tokens).expect("serialize legacy tokens");
+    db.set_setting(SettingKey::LegacyThemeTokens, &json).expect("set_setting failed");
 
     // Load back and assert fidelity
-    let loaded = db.load_theme_tokens().expect("load succeeded").expect("found tokens");
-    assert_eq!(loaded.accent_brand, rgba(0x12345678));
-    assert_eq!(loaded.accent_dialectic, rgba(0xfedcba98));
-    assert_eq!(loaded.bg_feed_post, rgba(0x01020304));
-    assert_eq!(loaded.bg_transparent, rgba(0x00000000));
-    assert_eq!(loaded.on_accent, rgba(0xffffffff));
+    let loaded = db.load_theme_settings().tokens();
+    assert_eq!(loaded.accent_brand, rgba(0x123456ff));
+    assert_eq!(loaded.accent_dialectic, rgba(0xfedcbaff));
+    assert_eq!(loaded.bg_app, rgba(0x010203ff));
+    assert_eq!(loaded.bg_feed_post, rgba(0x010203ff));
 }
 
 #[test]
@@ -297,22 +293,17 @@ fn test_adversarial_avatar_geometry_and_theme_tokens() {
 #[test]
 fn test_adversarial_feed_surface_oled_black_palettes() {
     use gpui_kit::rgb;
-    use simulacra::theme::{midnight_slate, obsidian_zinc};
+    use simulacra::theme::derive::derive_default_tokens;
+    use simulacra::theme::ThemeRegistry;
 
-    let palettes = [
-        minimalist_dark(),
-        obsidian_zinc(),
-        midnight_slate(),
-        ThemeTokens::default(),
-    ];
+    // The default look keeps the pure flat OLED black feed surface.
+    assert_eq!(minimalist_dark().bg_feed_post, rgb(0x000000));
+    assert_eq!(ThemeTokens::default().bg_feed_post, rgb(0x000000));
 
-    for (idx, pal) in palettes.iter().enumerate() {
-        assert_eq!(
-            pal.bg_feed_post,
-            rgb(0x000000),
-            "Palette {} must have pure flat OLED black bg_feed_post (#000000)",
-            idx
-        );
+    // Every palette (light ones included) lays posts seamlessly on its own app background.
+    for palette in ThemeRegistry::global().all() {
+        let tokens = derive_default_tokens(palette);
+        assert_eq!(tokens.bg_feed_post, tokens.bg_app, "{}: feed surface must be the app background", palette.id);
     }
 }
 

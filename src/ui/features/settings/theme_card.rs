@@ -15,6 +15,7 @@ pub(super) enum SelectedSurface {
 /// Declarative description of one theme preset card.
 pub(super) struct ThemeCardSpec {
     pub build: fn() -> ThemeTokens,
+    pub palette_id: &'static str,
     pub title: &'static str,
     pub description: &'static str,
     pub title_weight: FontWeight,
@@ -25,6 +26,7 @@ pub(super) struct ThemeCardSpec {
 pub(super) const THEME_CARDS: [ThemeCardSpec; 3] = [
     ThemeCardSpec {
         build: crate::theme::minimalist_dark,
+        palette_id: crate::theme::registry::DEFAULT_PALETTE_ID,
         title: "True Threads OLED Black (Default)",
         description: "Deep #000000 background, hairline neutral borders, zero bleed-through",
         title_weight: FontWeight::SEMIBOLD,
@@ -32,6 +34,7 @@ pub(super) const THEME_CARDS: [ThemeCardSpec; 3] = [
     },
     ThemeCardSpec {
         build: crate::theme::obsidian_zinc,
+        palette_id: crate::theme::registry::OBSIDIAN_ZINC_ID,
         title: "Obsidian Deep Zinc",
         description: "Subtle zinc warmth with soft contrast for long dialectic sessions",
         title_weight: FontWeight::MEDIUM,
@@ -39,6 +42,7 @@ pub(super) const THEME_CARDS: [ThemeCardSpec; 3] = [
     },
     ThemeCardSpec {
         build: crate::theme::midnight_slate,
+        palette_id: crate::theme::registry::MIDNIGHT_SLATE_ID,
         title: "Midnight Slate",
         description: "Cold deep navy tint with oceanic epistemic accents",
         title_weight: FontWeight::MEDIUM,
@@ -59,7 +63,7 @@ pub(super) fn render_theme_card(
         SelectedSurface::Elevated => preset.bg_elevated,
     };
     let hover_bg = theme.hover_bg;
-    let build = spec.build;
+    let palette_id = spec.palette_id;
     div()
         .p_3p5()
         .rounded_lg()
@@ -69,7 +73,7 @@ pub(super) fn render_theme_card(
         .cursor_pointer()
         .hover(move |s| s.bg(hover_bg))
         .on_mouse_down(MouseButton::Left, move |_ev, window, cx| {
-            (on_select)(build(), window, cx);
+            (on_select)(palette_id.to_string(), window, cx);
         })
         .flex()
         .items_center()

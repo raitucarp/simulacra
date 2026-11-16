@@ -1,7 +1,7 @@
 use super::Vault;
 use crate::domain::{Post, Profile};
 use crate::error::AppError;
-use crate::storage::Database;
+use crate::storage::{Database, SettingKey};
 
 fn vault() -> Vault {
     Vault::spawn(Database::in_memory().unwrap()).unwrap()
@@ -34,10 +34,10 @@ fn dropping_the_last_handle_flushes_pending_writes() {
     let path = std::env::temp_dir().join(format!("simulacra_vault_flush_{}.db", uuid::Uuid::new_v4()));
     {
         let vault = Vault::spawn(Database::open(&path).unwrap()).unwrap();
-        vault.set_setting("k", "v").unwrap();
+        vault.set_setting(SettingKey::SchedulerEnabled, "v").unwrap();
     }
     let reopened = Database::open(&path).unwrap();
-    assert_eq!(reopened.get_setting("k").unwrap().as_deref(), Some("v"));
+    assert_eq!(reopened.get_setting(SettingKey::SchedulerEnabled).unwrap().as_deref(), Some("v"));
     drop(reopened);
     for suffix in ["", "-wal", "-shm"] {
         let _ = std::fs::remove_file(format!("{}{suffix}", path.display()));

@@ -1,22 +1,21 @@
 //! Everything the store reads from the vault at startup, gathered in one worker round trip.
 
 use super::bootstrap::StoreData;
-use super::{ACTIVE_NETWORK_KEY, ACTIVE_PROFILE_KEY};
 use crate::agent::LlmSettings;
 use crate::error::Result;
-use crate::storage::Database;
-use crate::theme::ThemeTokens;
+use crate::storage::{Database, SettingKey};
+use crate::theme::ThemeSettings;
 
 /// Persisted settings that do not depend on the store contents.
 pub(super) struct StoredSettings {
     pub llm: LlmSettings,
-    pub theme: Option<ThemeTokens>,
+    pub theme: ThemeSettings,
 }
 
 impl StoredSettings {
-    /// Reads the LLM settings and theme tokens (absent or unreadable tokens give `None`).
+    /// Reads the LLM and theme settings (migrating a legacy theme on the way).
     pub fn read(db: &Database) -> Self {
-        Self { llm: LlmSettings::load_from_db(db), theme: db.load_theme_tokens().unwrap_or(None) }
+        Self { llm: LlmSettings::load_from_db(db), theme: db.load_theme_settings() }
     }
 }
 
@@ -37,8 +36,8 @@ impl VaultSnapshot {
         Ok(Some(Self {
             data: StoreData::load(db)?,
             settings: StoredSettings::read(db),
-            active_network: db.get_setting(ACTIVE_NETWORK_KEY).unwrap_or(None),
-            active_profile: db.get_setting(ACTIVE_PROFILE_KEY).unwrap_or(None),
+            active_network: db.get_setting(SettingKey::ActiveNetwork).unwrap_or(None),
+            active_profile: db.get_setting(SettingKey::ActiveProfile).unwrap_or(None),
         }))
     }
 }

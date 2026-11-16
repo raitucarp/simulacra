@@ -19,3 +19,6 @@ pub use panes::{AppearanceEvent, AppearancePanel};
 pub use general_props::GeneralPaneProps;
 pub use modal::SettingsModal;
 pub use tabs::SettingsTab;
+
+#[cfg(test)]
+mod tests;

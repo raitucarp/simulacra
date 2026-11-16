@@ -39,7 +39,7 @@ pub(super) fn render_heatmap_header(total: usize, theme: &ThemeTokens) -> Div {
             theme,
         ),
         render_mono_badge(t!("cadence.badge", count = total).to_string(), theme.accent_success, theme)
-            .rounded_full(),
+            .rounded(theme.radius_full),
     )
 }
 
@@ -48,7 +48,7 @@ pub(super) fn render_subtitle(heatmap: &ActivityHeatmap, selected: Option<NaiveD
         Some(day) => day_summary(day, heatmap.count_on(day)),
         None => t!("cadence.hint").to_string(),
     };
-    div().font_family(theme.font_family_mono.clone()).text_xs().text_color(theme.text_muted).child(subtitle)
+    div().font_family(theme.font_family_mono.clone()).text_size(theme.font_size_label).text_color(theme.text_muted).child(subtitle)
 }
 
 /// Small muted label absolutely placed in a slot, vertically centered on a `slot_height` row.
@@ -107,7 +107,7 @@ pub(super) fn render_legend(theme: &ThemeTokens) -> Div {
         .justify_end()
         .gap(theme.spacing_xs)
         .pt(theme.spacing_xs)
-        .text_xs()
+        .text_size(theme.font_size_label)
         .text_color(theme.text_muted)
         .child(t!("cadence.less").to_string())
         .children((0..=MAX_ACTIVITY_LEVEL).map(|level| legend_swatch(level_color(level, theme), theme)))

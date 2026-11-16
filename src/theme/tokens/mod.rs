@@ -1,55 +1,14 @@
 //! Core design tokens for typography, surfaces, borders, spacing, and radii.
 //! Strictly tokenized to eliminate magic strings and hardcoded values.
 
+#[macro_use]
+mod macros;
 mod serde_helpers;
 
 use gpui_kit::{px, rgba, Pixels, Rgba};
 use crate::theme::palette::PaletteMode;
 use serde::{Deserialize, Serialize};
 use serde_helpers::{px_serde, rgba_serde};
-
-/// Generates [`ThemeTokens`] from field lists grouped by value kind.
-///
-/// Field order (and therefore the serialized JSON layout) follows the lists in order:
-/// typed enums, strings, colors (`0xRRGGBBAA` numbers), pixels (`f32` numbers), then floats.
-macro_rules! theme_tokens {
-    (
-        typed: [$($typed:ident: $ty:ty),* $(,)?],
-        strings: [$($string:ident),* $(,)?],
-        colors: [$($color:ident),* $(,)?],
-        pixels: [$($pixel:ident),* $(,)?],
-        floats: [$($float:ident),* $(,)?] $(,)?
-    ) => {
-        /// Structured theme tokens for the application interface.
-        #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-        #[serde(default)]
-        pub struct ThemeTokens {
-            $(pub $typed: $ty,)*
-            $(pub $string: String,)*
-            $(#[serde(with = "rgba_serde")] pub $color: Rgba,)*
-            $(#[serde(with = "px_serde")] pub $pixel: Pixels,)*
-            $(pub $float: f32,)*
-        }
-
-        impl ThemeTokens {
-            /// Zero-valued tokens; palettes fill every field on top of this.
-            pub(crate) fn blank() -> Self {
-                Self {
-                    $($typed: <$ty>::default(),)*
-                    $($string: String::new(),)*
-                    $($color: rgba(0),)*
-                    $($pixel: px(0.0),)*
-                    $($float: 0.0,)*
-                }
-            }
-
-            /// Snaps every color to 8-bit channels, so derived tokens equal their persisted form.
-            pub(crate) fn quantize_colors(&mut self) {
-                $(self.$color = crate::theme::color::quantized(self.$color);)*
-            }
-        }
-    };
-}
 
 theme_tokens! {
     // Light/dark appearance the colors were derived for
@@ -108,6 +67,21 @@ theme_tokens! {
         // Agent & Persona Lab Two-Pane Layout Tokens
         contact_list_pane_width, agent_category_rail_width, contact_avatar_size, hero_avatar_size,
         config_tab_height, trait_bar_height, prompt_preview_height,
+        // Dense chrome ramps (type-scaled text and icons, density-scaled half steps)
+        font_size_micro, font_size_hint, font_size_label, icon_size_xs, icon_size_sm, icon_size_md,
+        icon_size_lg, icon_size_xl, icon_size_2xl, spacing_xs_plus, spacing_sm_plus, spacing_md_plus,
+        // Shell columns, sidebars, popovers, indicators and window-control corners
+        left_sidebar_collapsed_width, left_sidebar_collapsed_min, left_sidebar_collapsed_max,
+        left_sidebar_expanded_width, left_sidebar_expanded_min, left_sidebar_expanded_max,
+        right_sidebar_width, right_sidebar_min, right_sidebar_max, stream_pane_width,
+        stream_pane_min_width, stream_pane_max_width, feed_tab_indicator_width, nav_icon_slot_width,
+        nav_active_dot_size, workspace_dot_size, workspace_badge_size, workspace_trigger_height,
+        workspace_popover_width, language_popover_right, language_popover_width, win_control_radius,
+        avatar_initial_small_max, avatar_initial_medium_max,
+        // Settings modal and its appearance editor
+        settings_header_height, settings_input_height, settings_provider_button_height,
+        settings_brand_badge_size, settings_tab_indicator_width, settings_tab_indicator_height,
+        theme_preview_card_width, theme_preview_avatar_size, color_field_width, hex_readout_width,
         // Agent Forge character creator
         forge_rail_width, forge_rail_thumb_width, forge_options_width, forge_preview_width,
         forge_topbar_height, forge_portrait_size, forge_nameplate_avatar_size, forge_class_card_width,

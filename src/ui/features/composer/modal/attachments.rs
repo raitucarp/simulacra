@@ -67,7 +67,7 @@ impl ComposerModalView {
                     .top(theme.spacing_xs)
                     .right(theme.spacing_xs)
                     .p(theme.spacing_2xs)
-                    .rounded_full()
+                    .rounded(theme.radius_full)
                     .bg(theme.bg_scrim)
                     .cursor_pointer()
                     .text_color(theme.on_overlay)

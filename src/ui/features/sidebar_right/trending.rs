@@ -35,13 +35,13 @@ where
 /// Muted "Popular tags" caption.
 pub(super) fn render_popular_tags_title(theme: &ThemeTokens) -> Div {
     div()
-        .text_xs()
+        .text_size(theme.font_size_label)
         .font_bold()
         .text_color(theme.text_muted)
         .child(t!("sidebar.popular_tags").to_string())
 }
 
 /// Vertical list holding the trending rows.
-pub(super) fn render_trending_list(elements: Vec<AnyElement>) -> Div {
-    div().flex().flex_col().gap_1().children(elements)
+pub(super) fn render_trending_list(elements: Vec<AnyElement>, theme: &ThemeTokens) -> Div {
+    div().flex().flex_col().gap(theme.spacing_xs).children(elements)
 }

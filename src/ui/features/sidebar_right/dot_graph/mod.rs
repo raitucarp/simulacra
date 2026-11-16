@@ -31,7 +31,7 @@ fn render_graph_header(scene: &GraphScene, theme: &ThemeTokens) -> Div {
             t!("sidebar.mind_graph_title").to_string(),
             theme,
         ),
-        render_mono_badge(counts.to_string(), theme.accent_agent, theme).rounded_md(),
+        render_mono_badge(counts.to_string(), theme.accent_agent, theme).rounded(theme.radius_sm),
     )
 }
 

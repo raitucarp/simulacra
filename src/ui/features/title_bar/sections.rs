@@ -43,7 +43,7 @@ pub(super) fn render_brand_section(
     div()
         .flex()
         .items_center()
-        .gap_2()
+        .gap(theme.spacing_sm)
         .child(ghost_icon_button(TOGGLE_LEFT_SIDEBAR_ID, LucideIcon::PanelLeft, on_toggle_left))
         .child(render_breadcrumb(active_net_name, theme))
 }
@@ -52,23 +52,23 @@ fn render_breadcrumb(active_net_name: String, theme: &ThemeTokens) -> Div {
     div()
         .flex()
         .items_center()
-        .gap_1p5()
+        .gap(theme.spacing_xs_plus)
         .child(
             div()
-                .text_xs()
+                .text_size(theme.font_size_label)
                 .font_bold()
                 .text_color(theme.text_primary)
                 .child(t!("app.title").to_string()),
         )
         .child(
             div()
-                .text_xs()
+                .text_size(theme.font_size_label)
                 .text_color(theme.text_muted)
                 .child(Icon::new(LucideIcon::ChevronRight)),
         )
         .child(
             div()
-                .text_xs()
+                .text_size(theme.font_size_label)
                 .font_medium()
                 .text_color(theme.accent_agent)
                 .child(active_net_name),
@@ -86,7 +86,7 @@ pub(super) fn render_action_cluster(
     div()
         .flex()
         .items_center()
-        .gap_1p5()
+        .gap(theme.spacing_xs_plus)
         // Toggle Right Sidebar Inspector
         .child(ghost_icon_button(
             TOGGLE_RIGHT_SIDEBAR_ID,

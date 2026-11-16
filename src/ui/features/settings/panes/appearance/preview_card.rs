@@ -1,7 +1,7 @@
 //! Gallery card: a miniature feed drawn entirely with one palette's derived tokens, over a
 //! footer (name, credit, badges) drawn with the app's current tokens.
 
-use super::consts::{CARD_ID_PREFIX, PREVIEW_AVATAR_SIZE, PREVIEW_CARD_WIDTH};
+use super::consts::CARD_ID_PREFIX;
 use crate::theme::{ThemePalette, ThemeTokens};
 use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::*;
@@ -24,7 +24,7 @@ pub(super) fn render(
     let hover_border = chrome.border_strong;
     div()
         .id(SharedString::from(format!("{CARD_ID_PREFIX}{}", palette.id)))
-        .w(px(PREVIEW_CARD_WIDTH))
+        .w(chrome.theme_preview_card_width)
         .flex()
         .flex_col()
         .rounded(chrome.radius_lg)
@@ -64,7 +64,7 @@ fn author_row(p: &ThemeTokens) -> Div {
         .items_center()
         .gap(p.spacing_xs)
         .text_size(p.font_size_2xs)
-        .child(div().size(px(PREVIEW_AVATAR_SIZE)).rounded(p.radius_full).bg(p.accent_agent))
+        .child(div().size(p.theme_preview_avatar_size).rounded(p.radius_full).bg(p.accent_agent))
         .child(div().font_weight(FontWeight::SEMIBOLD).text_color(p.text_primary).child(t!("appearance.preview_name").to_string()))
         .child(div().truncate().text_color(p.text_muted).child(t!("appearance.preview_meta").to_string()))
 }

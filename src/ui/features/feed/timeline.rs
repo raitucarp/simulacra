@@ -1,9 +1,7 @@
 //! Resizable timeline split: main dialectic stream + focus thread inspector.
 
 use super::callbacks::PostCallbacks;
-use super::consts::{
-    STREAM_PANE_DEFAULT_WIDTH, STREAM_PANE_MAX_WIDTH, STREAM_PANE_MIN_WIDTH, TIMELINE_RESIZABLE_ID,
-};
+use super::consts::TIMELINE_RESIZABLE_ID;
 use super::inputs::TimelineInputs;
 use super::inspector::{render_inspector_pane, InspectorContext};
 use super::stream::render_stream_list;
@@ -11,7 +9,7 @@ use super::stream_header::render_stream_header;
 use crate::state::AppState;
 use crate::theme::ThemeTokens;
 use gpui_kit::component::resizable::{h_resizable, resizable_panel};
-use gpui_kit::{div, px, Div, IntoElement, ParentElement, Styled};
+use gpui_kit::{div, Div, IntoElement, ParentElement, Styled};
 use std::rc::Rc;
 
 /// Resizable dual feed layout: left stream ("For you" / "Dialectic") + right focus thread inspector.
@@ -44,8 +42,8 @@ pub(crate) fn render_timeline<C: IntoElement>(
         // PANE 1: Main Dialectic Stream
         .child(
             resizable_panel()
-                .size(px(STREAM_PANE_DEFAULT_WIDTH))
-                .size_range(px(STREAM_PANE_MIN_WIDTH)..px(STREAM_PANE_MAX_WIDTH))
+                .size(theme.stream_pane_width)
+                .size_range(theme.stream_pane_min_width..theme.stream_pane_max_width)
                 .child(render_stream_pane(header, inputs.composer, stream, theme)),
         )
         // PANE 2: Focus Thread & Epistemic Inspector

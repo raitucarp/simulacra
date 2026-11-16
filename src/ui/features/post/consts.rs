@@ -26,14 +26,6 @@ pub(crate) const SHARE_BTN_ID_PREFIX: &str = "share-btn-";
 /// Element id prefix of the overflow (ellipsis) menu button.
 pub(crate) const OVERFLOW_BTN_ID_PREFIX: &str = "post-overflow-btn-";
 
-/// Marker shown next to the timestamp of an instantly reposted original.
-pub(crate) const ORIGINAL_MARKER_LABEL: &str = "(original)";
-/// Suffix of the repost header ("<name> reposted").
-pub(crate) const REPOSTED_SUFFIX: &str = "reposted";
-/// Leading part of the unavailable quoted-thought notice.
-pub(crate) const QUOTE_UNAVAILABLE_PREFIX: &str = "Quoted thought [";
-/// Trailing part of the unavailable quoted-thought notice.
-pub(crate) const QUOTE_UNAVAILABLE_SUFFIX: &str = "] unavailable";
 
 /// Line break character.
 pub(crate) const LINE_BREAK: char = '\n';

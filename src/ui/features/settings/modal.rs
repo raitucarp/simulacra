@@ -118,7 +118,7 @@ impl RenderOnce for SettingsModal {
             self.appearance,
             self.general,
         );
-        let content = render_content_pane(header, tab_content, footer);
+        let content = render_content_pane(header, tab_content, footer, theme);
         render_backdrop(theme, on_close, rail, content)
     }
 }

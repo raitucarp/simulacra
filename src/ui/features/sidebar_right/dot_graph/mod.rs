@@ -1,28 +1,29 @@
-//! Obsidian-style dot-only Mind Graph with vector-placed nodes and relational edges.
-
-mod elements;
-mod layout;
+//! Sidebar mini Mind Graph: the same cached scene as the full view, fitted into a small
+//! canvas (no labels), with matching node/edge counts. Clicking it opens the full graph.
 
 use super::section::{render_divided_section, render_mono_badge, render_section_header, render_section_title};
-use crate::domain::{GroundingDocument, Post};
+use crate::state::graph::GraphScene;
 use crate::theme::ThemeTokens;
+use crate::ui::features::mind_graph::paint::{Focus, PaintOptions, ScenePainter};
+use crate::ui::features::mind_graph::viewport::{Frame, Viewport};
 use crate::ui::icons::LucideIcon;
 use gpui_kit::*;
 use rust_i18n::t;
+use std::rc::Rc;
 
-/// Maximum number of sampled thought nodes rendered in the Obsidian 2D topological graph.
-pub const MAX_OBSIDIAN_GRAPH_NODES: usize = 16;
-/// Maximum scan window when sampling connected nodes in the Obsidian 2D topological graph.
-pub const MAX_GRAPH_SCAN_WINDOW: usize = 128;
-pub const CANVAS_WIDTH: f32 = 246.0;
-pub const CANVAS_HEIGHT: f32 = 140.0;
-pub const GOLDEN_ANGLE_RADIANS: f32 = 2.3999632;
-pub const CANVAS_PADDING: f32 = 14.0;
-pub const NODE_SIZE_AGENT: f32 = 7.0;
-pub const NODE_SIZE_USER: f32 = 6.0;
-pub const NODE_SIZE_NEUTRAL: f32 = 5.0;
+/// Callback opening the full Mind Graph view.
+pub type OpenGraphCallback = Rc<dyn Fn(&mut Window, &mut App) + 'static>;
 
-fn render_graph_header(node_count: usize, edge_count: usize, theme: &ThemeTokens) -> Div {
+const MINI_GRAPH_ID: &str = "sidebar-mini-graph";
+/// Hub nodes in the mini graph are at most this many times the base radius.
+const MINI_HUB_SCALE: f32 = 2.0;
+
+fn render_graph_header(scene: &GraphScene, theme: &ThemeTokens) -> Div {
+    let counts = t!(
+        "graph.mini_counts",
+        nodes = scene.model.node_count(),
+        edges = scene.model.edge_count()
+    );
     render_section_header(
         render_section_title(
             LucideIcon::Share2,
@@ -30,50 +31,53 @@ fn render_graph_header(node_count: usize, edge_count: usize, theme: &ThemeTokens
             t!("sidebar.mind_graph_title").to_string(),
             theme,
         ),
-        render_mono_badge(
-            format!("{} nodes · {} edges", node_count, edge_count),
-            theme.accent_agent,
-            theme,
-        )
-        .rounded_md(),
+        render_mono_badge(counts.to_string(), theme.accent_agent, theme).rounded_md(),
     )
 }
 
-/// 2D topological canvas (dots & edges only, no text labels).
-fn render_canvas(edges: Vec<Div>, nodes: Vec<Div>, theme: &ThemeTokens) -> Div {
-    div()
-        .w_full()
-        .h(px(CANVAS_HEIGHT))
-        .rounded_lg()
-        .border_1()
-        .border_color(theme.border)
-        .bg(theme.bg_app)
-        .relative()
-        .overflow_hidden()
-        .children(edges)
-        .children(nodes)
+fn mini_options(theme: &ThemeTokens) -> PaintOptions {
+    let base = theme.graph_mini_node_radius.as_f32();
+    PaintOptions {
+        padding: theme.spacing_md.as_f32(),
+        radius_range: (base, base * MINI_HUB_SCALE),
+        labels: false,
+    }
 }
 
-/// Renders the Obsidian-style dot-only Mind Graph with vector-placed nodes and relational edges.
-pub fn render_obsidian_dot_graph(
-    posts: &[Post],
-    _docs: &[GroundingDocument],
-    theme: &ThemeTokens,
-) -> impl IntoElement {
-    let sampled_posts = layout::sample_posts(posts);
-    let coords = layout::spiral_coords(sampled_posts.len());
-    let segments = layout::edge_segments(&sampled_posts, &coords);
-    let edges: Vec<Div> = segments
-        .iter()
-        .flat_map(|segment| elements::render_edge_lines(*segment, theme))
-        .collect();
-    let nodes: Vec<Div> = sampled_posts
-        .iter()
-        .zip(coords.iter())
-        .map(|(post, point)| elements::render_node(post, *point, theme))
-        .collect();
+/// Clickable canvas painting the whole scene at the default viewport.
+fn render_canvas(scene: Rc<GraphScene>, on_open: OpenGraphCallback, theme: &ThemeTokens) -> Stateful<Div> {
+    let painter_theme = theme.clone();
+    let surface = canvas(
+        |_, _, _| {},
+        move |bounds, (), window, cx| {
+            let options = mini_options(&painter_theme);
+            let view = (Viewport::default(), Frame::from(bounds));
+            ScenePainter::new(&scene, view, &options, Focus::default(), &painter_theme).paint(window, cx);
+        },
+    )
+    .absolute()
+    .top_0()
+    .left_0()
+    .size_full();
+    div()
+        .id(MINI_GRAPH_ID)
+        .relative()
+        .w_full()
+        .h(theme.graph_canvas_height)
+        .rounded(theme.radius_lg)
+        .border(theme.border_width_hairline)
+        .border_color(theme.border)
+        .bg(theme.bg_app)
+        .overflow_hidden()
+        .cursor_pointer()
+        .hover(|s| s.border_color(theme.border_strong))
+        .on_click(move |_, window, cx| on_open(window, cx))
+        .child(surface)
+}
 
+/// Renders the mini Mind Graph section of the right sidebar.
+pub fn render_mini_graph(scene: Rc<GraphScene>, on_open: OpenGraphCallback, theme: &ThemeTokens) -> impl IntoElement {
     render_divided_section(theme)
-        .child(render_graph_header(posts.len(), segments.len(), theme))
-        .child(render_canvas(edges, nodes, theme))
+        .child(render_graph_header(&scene, theme))
+        .child(render_canvas(scene, on_open, theme))
 }

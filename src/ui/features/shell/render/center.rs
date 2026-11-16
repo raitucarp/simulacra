@@ -1,18 +1,35 @@
-//! Center column: the main feed (timeline, vault, mind graph) or the agent workspace.
+//! Center column: the main feed (timeline, vault), the Mind Graph or the agent workspace.
 
 use super::super::binder::Binder;
 use super::super::view::AppView;
+use crate::state::NavigationTab;
+use crate::ui::features::day_filter::render_day_filter_chip;
 use crate::ui::features::feed::{render_main_feed, FeedParams};
 use gpui_kit::*;
 
 impl AppView {
-    /// The agent workspace while a lab tab is active, otherwise the main feed.
+    /// The agent workspace while a lab tab is active, the Mind Graph view on its tab,
+    /// otherwise the main feed.
     pub(super) fn center_panel(&self, bind: &Binder, cx: &App) -> AnyElement {
         if self.is_lab_tab() {
             self.agent_workspace(bind).into_any_element()
+        } else if self.state.active_tab == NavigationTab::MindGraph {
+            self.graph.panel.clone().into_any_element()
         } else {
-            self.main_feed(bind, cx).into_any_element()
+            self.filtered_feed(bind, cx).into_any_element()
         }
+    }
+
+    /// The main feed, topped by the "Showing <date> ×" chip while a day filter is active.
+    fn filtered_feed(&self, bind: &Binder, cx: &App) -> impl IntoElement {
+        let day = self.state.feed_day_filter.filter(|_| self.state.active_tab == NavigationTab::Timeline);
+        let chip = day.map(|day| render_day_filter_chip(day, bind.boxed_act(Self::clear_day_filter), &self.theme));
+        div()
+            .size_full()
+            .flex()
+            .flex_col()
+            .children(chip)
+            .child(div().flex_1().min_h_0().w_full().child(self.main_feed(bind, cx)))
     }
 
     fn main_feed(&self, bind: &Binder, cx: &App) -> impl IntoElement {

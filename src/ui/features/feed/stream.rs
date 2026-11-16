@@ -32,7 +32,10 @@ pub(crate) fn compute_stream_window<'a>(
 ) -> StreamWindow<'a> {
     let query_trimmed = search_query.trim();
     let requested_window = feed_visible_count.unwrap_or(DEFAULT_FEED_WINDOW_SIZE);
-    let (total, posts): (usize, Vec<&Post>) = if query_trimmed.is_empty() {
+    let (total, posts): (usize, Vec<&Post>) = if let Some(day) = state.feed_day_filter {
+        let on_day: Vec<_> = state.day_filtered_posts(day, query_trimmed).collect();
+        (on_day.len(), on_day)
+    } else if query_trimmed.is_empty() {
         let total = state.current_network_post_count();
         let limit = requested_window.min(total);
         (total, state.current_network_posts().take(limit + 1).collect())

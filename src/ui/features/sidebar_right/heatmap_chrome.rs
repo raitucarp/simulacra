@@ -1,22 +1,36 @@
-//! Header, subtitle, day labels and legend surrounding the cadence heatmap grid.
+//! Header, subtitle, month/weekday labels, level colors and legend around the cadence grid.
 
-use super::heatmap::{ACTIVITY_LEVELS, CELL_COUNT};
+use super::heatmap::cell_slot;
 use super::section::{render_mono_badge, render_section_header, render_section_title};
+use crate::domain::activity::{ActivityHeatmap, HEATMAP_WEEKS, MAX_ACTIVITY_LEVEL};
 use crate::theme::ThemeTokens;
+use crate::ui::features::day_filter::{day_summary, month_label};
 use crate::ui::icons::LucideIcon;
+use chrono::NaiveDate;
+use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::*;
 use rust_i18n::t;
 
-const SPARKS_PER_YEAR_BADGE: &str = "128 sparks/yr";
-const SPARKS_PER_YEAR_HINT: &str = "128 sparks / yr · Click day to inspect";
-/// Weekday row labels shown beside the grid.
-const DAY_LABELS: [&str; 3] = ["M", "W", "F"];
-const DAY_LABELS_HEIGHT: f32 = 85.0;
-const LEGEND_SWATCH_SIZE: f32 = 8.0;
-const LEGEND_LESS: &str = "Less";
-const LEGEND_MORE: &str = "More";
+/// Weekday rows (Sunday = 0) that carry a label, with their translation keys.
+const LABELED_ROWS: [(usize, &str); 3] =
+    [(1, "cadence.weekday_mon"), (3, "cadence.weekday_wed"), (5, "cadence.weekday_fri")];
+/// Divisor centering a label on its row.
+const HALF: f32 = 2.0;
 
-pub(super) fn render_heatmap_header(theme: &ThemeTokens) -> Div {
+/// Cell color of an intensity level: the empty tone, or the success accent at the
+/// level's token opacity.
+pub(super) fn level_color(level: u8, theme: &ThemeTokens) -> Rgba {
+    let opacity = match level {
+        0 => return theme.border_subtle,
+        1 => theme.cadence_alpha_1,
+        2 => theme.cadence_alpha_2,
+        3 => theme.cadence_alpha_3,
+        _ => theme.cadence_alpha_4,
+    };
+    Rgba { a: theme.accent_success.a * opacity, ..theme.accent_success }
+}
+
+pub(super) fn render_heatmap_header(total: usize, theme: &ThemeTokens) -> Div {
     render_section_header(
         render_section_title(
             LucideIcon::Calendar,
@@ -24,38 +38,65 @@ pub(super) fn render_heatmap_header(theme: &ThemeTokens) -> Div {
             t!("sidebar.thought_cadence_title").to_string(),
             theme,
         ),
-        render_mono_badge(SPARKS_PER_YEAR_BADGE.to_string(), theme.accent_success, theme).rounded_full(),
+        render_mono_badge(t!("cadence.badge", count = total).to_string(), theme.accent_success, theme)
+            .rounded_full(),
     )
 }
 
-pub(super) fn render_subtitle(selected_day: Option<usize>, theme: &ThemeTokens) -> Div {
-    let subtitle = match selected_day {
-        Some(day) => format!("Day #{}: {} sparks", day + 1, ACTIVITY_LEVELS[day % CELL_COUNT]),
-        None => SPARKS_PER_YEAR_HINT.to_string(),
+pub(super) fn render_subtitle(heatmap: &ActivityHeatmap, selected: Option<NaiveDate>, theme: &ThemeTokens) -> Div {
+    let subtitle = match selected {
+        Some(day) => day_summary(day, heatmap.count_on(day)),
+        None => t!("cadence.hint").to_string(),
     };
-    div()
-        .font_family(theme.font_family_mono.clone())
-        .text_xs()
-        .text_color(theme.text_muted)
-        .child(subtitle)
+    div().font_family(theme.font_family_mono.clone()).text_xs().text_color(theme.text_muted).child(subtitle)
 }
 
-pub(super) fn render_day_labels(theme: &ThemeTokens) -> Div {
+/// Small muted label absolutely placed in a slot, vertically centered on a `slot_height` row.
+fn slot_label(text: String, slot_height: Pixels, theme: &ThemeTokens) -> Div {
     div()
+        .absolute()
+        .left_0()
+        .top((slot_height - theme.font_size_2xs) / HALF)
+        .text_size(theme.font_size_2xs)
+        .line_height(theme.font_size_2xs)
+        .whitespace_nowrap()
+        .text_color(theme.text_muted)
+        .child(text)
+}
+
+/// Fixed-width label column cell of `row` (Mon / Wed / Fri, otherwise blank).
+pub(super) fn render_weekday_label(row: usize, theme: &ThemeTokens) -> Div {
+    let key = LABELED_ROWS.iter().find(|(r, _)| *r == row).map(|(_, key)| *key);
+    div()
+        .flex_none()
+        .w(theme.heatmap_label_width)
+        .h(theme.heatmap_cell_height)
+        .relative()
+        .when_some(key, |slot, key| slot.child(slot_label(t!(key).to_string(), theme.heatmap_cell_height, theme)))
+}
+
+/// Month names above the first week column of each month, aligned with the grid.
+pub(super) fn render_month_row(heatmap: &ActivityHeatmap, theme: &ThemeTokens) -> Div {
+    let labels = heatmap.month_labels();
+    let slots = (0..HEATMAP_WEEKS).map(|week| {
+        let label = labels.iter().find(|l| l.week == week).map(|l| month_label(l.month));
+        cell_slot(theme)
+            .h(theme.spacing_md)
+            .relative()
+            .when_some(label, |slot, text| slot.child(slot_label(text, theme.spacing_md, theme)))
+    });
+    div()
+        .w_full()
         .flex()
-        .flex_col()
-        .justify_between()
-        .h(px(DAY_LABELS_HEIGHT))
-        .text_xs()
-        .text_color(theme.text_muted)
-        .children(DAY_LABELS.iter().map(|label| div().child(*label)))
+        .child(div().flex_none().w(theme.heatmap_label_width))
+        .child(div().flex_1().min_w_0().flex().gap(theme.heatmap_cell_gap).children(slots))
 }
 
-fn legend_swatch(color: Rgba) -> Div {
+fn legend_swatch(color: Rgba, theme: &ThemeTokens) -> Div {
     div()
-        .w(px(LEGEND_SWATCH_SIZE))
-        .h(px(LEGEND_SWATCH_SIZE))
-        .rounded_sm()
+        .w(theme.cadence_cell_size)
+        .h(theme.cadence_cell_size)
+        .rounded(theme.heatmap_cell_radius)
         .bg(color)
 }
 
@@ -64,15 +105,11 @@ pub(super) fn render_legend(theme: &ThemeTokens) -> Div {
         .flex()
         .items_center()
         .justify_end()
-        .gap_1p5()
-        .pt_1()
+        .gap(theme.spacing_xs)
+        .pt(theme.spacing_xs)
         .text_xs()
         .text_color(theme.text_muted)
-        .child(LEGEND_LESS)
-        .child(legend_swatch(theme.bg_card).border_1().border_color(theme.border))
-        .child(legend_swatch(theme.cadence_level_1))
-        .child(legend_swatch(theme.cadence_level_2))
-        .child(legend_swatch(theme.cadence_level_3))
-        .child(legend_swatch(theme.cadence_level_4))
-        .child(LEGEND_MORE)
+        .child(t!("cadence.less").to_string())
+        .children((0..=MAX_ACTIVITY_LEVEL).map(|level| legend_swatch(level_color(level, theme), theme)))
+        .child(t!("cadence.more").to_string())
 }

@@ -2,7 +2,6 @@
 
 mod item;
 
-use super::dot_graph::MAX_GRAPH_SCAN_WINDOW;
 use super::section::{render_section_header, render_section_title};
 use crate::domain::Post;
 use crate::theme::ThemeTokens;
@@ -14,6 +13,8 @@ use gpui_kit::component::Icon;
 use gpui_kit::*;
 use rust_i18n::t;
 
+/// Maximum number of recent posts scanned when resolving spark previews.
+const MAX_GRAPH_SCAN_WINDOW: usize = 128;
 /// Maximum number of thoughts rendered in the serendipitous discovery spark feed.
 pub const MAX_SPARK_FEED_ITEMS: usize = 4;
 const SPARK_SCROLL_ID: &str = "random-spark-scroll-feed";

@@ -35,6 +35,11 @@ pub(super) fn apply_layout(t: &mut ThemeTokens) {
         modal_rail_width: px(220.0), modal_footer_height: px(54.0), cadence_cell_size: px(10.0),
         graph_canvas_height: px(140.0),
 
+        heatmap_cell_height: px(5.0), heatmap_cell_gap: px(1.0), heatmap_cell_radius: px(1.0),
+        heatmap_label_width: px(24.0),
+        graph_view_min_height: px(420.0), graph_node_radius_min: px(3.5),
+        graph_node_radius_max: px(11.0), graph_mini_node_radius: px(2.0), graph_edge_width: px(1.0),
+
         modal_composer_width: px(580.0), modal_composer_max_height: px(620.0),
         post_image_max_height: px(280.0), post_image_preview_height: px(140.0),
         attachment_btn_size: px(28.0),
@@ -44,6 +49,8 @@ pub(super) fn apply_layout(t: &mut ThemeTokens) {
         trait_bar_height: px(6.0), prompt_preview_height: px(220.0),
 
         line_height_body: 1.45,
+        cadence_alpha_1: 0.28, cadence_alpha_2: 0.48, cadence_alpha_3: 0.72, cadence_alpha_4: 1.0,
+        graph_dim_opacity: 0.22, graph_curve_bend: 0.12,
     });
 }
 
@@ -65,13 +72,7 @@ pub(super) fn apply_semantic_colors(t: &mut ThemeTokens) {
         accent_dialectic_subtle: rgba(0xeab30820),
         accent_dialectic_border: rgba(0xeab30840),
 
-        cadence_level_1: rgb(0x064e3b),
-        cadence_level_2: rgb(0x059669),
-        cadence_level_3: rgb(0x10b981),
-        cadence_level_4: rgb(0x34d399),
-
         graph_edge: rgb(0x2d3246),
-        graph_node_neutral: rgb(0x6b7280),
         bg_feed_post: rgb(0x000000),
     });
 }

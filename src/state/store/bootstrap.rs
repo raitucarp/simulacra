@@ -89,6 +89,7 @@ impl AppState {
             documents: data.documents,
             trending: data.trending,
             draft_text: String::new(),
+            feed_day_filter: None,
             llm_settings,
             theme_tokens,
             db,

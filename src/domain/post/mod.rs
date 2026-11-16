@@ -4,6 +4,8 @@ mod constructors;
 mod parse;
 mod relations;
 
+pub use parse::HASHTAG_SIGIL;
+
 use super::ids::{NetworkId, PostId};
 use super::profile::Profile;
 use chrono::{DateTime, Utc};

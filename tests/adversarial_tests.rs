@@ -208,10 +208,10 @@ fn test_adversarial_cjk_trailing_punctuation_combinations() {
 
 #[test]
 fn test_adversarial_mind_graph_truncation_utf8_boundaries() {
-    use simulacra::domain::GroundingDocument;
-    use simulacra::ui::organisms::mind_graph_view::render_mind_graph_view;
+    use simulacra::domain::graph::layout::GraphLayout;
+    use simulacra::domain::graph::{GraphModel, GraphSource};
+    use simulacra::domain::{GroundingDocument, NetworkId};
 
-    let theme = minimalist_dark();
     let author = Profile::new_primary("prof_1", "Socrates", "@socrates");
 
     // Test cases that would have caused panic in `&post.content[..35]`
@@ -245,8 +245,12 @@ fn test_adversarial_mind_graph_truncation_utf8_boundaries() {
         GroundingDocument::new("doc_1", "net_1", "Republic", "Plato's Republic discussion"),
     ];
 
-    // Rendering mind graph view must not panic
-    let _graph_view = render_mind_graph_view(&posts, &docs, &theme);
+    // Building, labelling and laying out the mind graph must not panic
+    let network = NetworkId::new("net_1");
+    let model = GraphModel::build(&GraphSource { posts: &posts, documents: &docs, profiles: &[], network: &network });
+    assert!(model.nodes().iter().all(|n| n.label.chars().count() <= 42));
+    let layout = GraphLayout::compute(&model);
+    assert!(layout.positions().iter().all(|p| p.x.is_finite() && p.y.is_finite()));
 }
 
 #[test]

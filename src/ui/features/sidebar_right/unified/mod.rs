@@ -6,10 +6,14 @@ mod tabs;
 
 use std::rc::Rc;
 
+use super::dot_graph::OpenGraphCallback;
 use super::heatmap::ClickDayCallback;
 use super::trending::trending_elements;
-use crate::domain::{GroundingDocument, Post};
+use crate::domain::activity::ActivityHeatmap;
+use crate::domain::Post;
+use crate::state::graph::GraphScene;
 use crate::state::AppState;
+use chrono::NaiveDate;
 use crate::theme::ThemeTokens;
 use gpui_kit::component::input::InputState;
 use gpui_kit::prelude::FluentBuilder;
@@ -33,9 +37,13 @@ pub struct UnifiedRightSidebarParams<'a> {
     pub on_select_tab: Box<dyn Fn(RightSidebarTab, &mut Window, &mut App) + 'static>,
     pub state: &'a AppState,
     pub posts: &'a [Post],
-    pub documents: &'a [GroundingDocument],
-    pub selected_day: Option<usize>,
+    pub heatmap: &'a ActivityHeatmap,
+    /// Day the feed is filtered to, highlighted in the heatmap.
+    pub selected_day: Option<NaiveDate>,
     pub on_click_day: ClickDayCallback,
+    /// Cached graph scene shared with the full Mind Graph view.
+    pub graph: Rc<GraphScene>,
+    pub on_open_graph: OpenGraphCallback,
     pub search_input: &'a Entity<InputState>,
     pub on_click_topic: Box<dyn Fn(&str, &mut Window, &mut App) + 'static>,
     pub theme: &'a ThemeTokens,
@@ -48,9 +56,11 @@ pub fn render_unified_right_sidebar(params: UnifiedRightSidebarParams<'_>) -> im
     let mind = MindPaneParams {
         state: params.state,
         posts: params.posts,
-        documents: params.documents,
+        heatmap: params.heatmap,
         selected_day: params.selected_day,
         on_click_day: params.on_click_day,
+        graph: params.graph,
+        on_open_graph: params.on_open_graph,
     };
 
     div()

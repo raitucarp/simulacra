@@ -61,10 +61,8 @@ theme_tokens! {
         // Tinted Accent Badges & Borders
         accent_brand_subtle, accent_brand_border, accent_success_subtle, accent_success_border,
         accent_dialectic_subtle, accent_dialectic_border,
-        // Activity Cadence Heatmap Scale (4 Levels)
-        cadence_level_1, cadence_level_2, cadence_level_3, cadence_level_4,
         // Mind Graph Topological Colors
-        graph_edge, graph_node_neutral,
+        graph_edge,
         // Feed Surface Specialization (R2 Seamless Flat OLED)
         bg_feed_post,
     ],
@@ -84,6 +82,9 @@ theme_tokens! {
         win_control_width, win_control_height, avatar_size_sm, avatar_size_md, avatar_size_lg,
         modal_width, modal_height, modal_rail_width, modal_footer_height, cadence_cell_size,
         graph_canvas_height,
+        // Cadence Heatmap Grid & Mind Graph Canvas
+        heatmap_cell_height, heatmap_cell_gap, heatmap_cell_radius, heatmap_label_width, graph_view_min_height,
+        graph_node_radius_min, graph_node_radius_max, graph_mini_node_radius, graph_edge_width,
         // Composer Modal & Attachment Tokens (Milestone 2)
         modal_composer_width, modal_composer_max_height, post_image_max_height,
         post_image_preview_height, attachment_btn_size,
@@ -91,8 +92,11 @@ theme_tokens! {
         contact_list_pane_width, agent_category_rail_width, contact_avatar_size, hero_avatar_size,
         config_tab_height, trait_bar_height, prompt_preview_height,
     ],
-    // Typography Hierarchy & Line Height
-    floats: [line_height_body],
+    // Typography Hierarchy & Line Height; heatmap level opacities; graph dimming & curvature
+    floats: [
+        line_height_body, cadence_alpha_1, cadence_alpha_2, cadence_alpha_3, cadence_alpha_4,
+        graph_dim_opacity, graph_curve_bend,
+    ],
 }
 
 impl Default for ThemeTokens {

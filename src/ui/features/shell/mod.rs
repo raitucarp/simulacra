@@ -15,6 +15,7 @@ mod editor_inputs;
 mod editor_slots;
 mod editor_sync;
 mod feed_state;
+mod graph_state;
 mod handlers;
 mod lab_state;
 mod placeholders;
@@ -27,6 +28,7 @@ mod tests;
 
 pub use editor_inputs::AgentEditorFields;
 pub use feed_state::FeedState;
+pub use graph_state::GraphState;
 pub use lab_state::{LabState, LlmInputs};
 pub use scheduler_state::SchedulerState;
 pub use view::{AppView, ChromeState};

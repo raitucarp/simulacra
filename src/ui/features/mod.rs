@@ -3,6 +3,7 @@
 
 pub mod agent_editor;
 pub mod composer;
+pub mod day_filter;
 pub mod feed;
 pub mod mind_graph;
 pub mod popovers;

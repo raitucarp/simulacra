@@ -1409,6 +1409,11 @@ onboarding.settings_title: "ウェルカムツアー"
 onboarding.settings_label: "初回起動時のようこそ"
 onboarding.settings_note: "ムネモのようこそ画面を再表示し、エージェント・フォージへ直接進めます。"
 
+# phase 6 fixes (data)
+# Startup notice when the vault cannot be opened or read (flat keys).
+storage.load_failed_title: "ローカルボルトを開けません"
+storage.load_failed: "ローカルボルトを開けませんでした（%{error}）。デモデータを表示しています。このセッションでは何も保存されず、ボルトのファイルは変更されていません。"
+
 # phase 6 fixes (feed)
 # Count labels: <key>_one / <key>_other, picked per locale plural rule by i18n::t_count (flat keys).
 vault.chunks_count_one: "%{count} チャンク"

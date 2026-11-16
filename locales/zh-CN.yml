@@ -1409,6 +1409,11 @@ onboarding.settings_title: "欢迎导览"
 onboarding.settings_label: "首次启动欢迎"
 onboarding.settings_note: "再次显示 Mnemo 的欢迎页，并提供进入智能体锻造台的快捷方式。"
 
+# phase 6 fixes (data)
+# Startup notice when the vault cannot be opened or read (flat keys).
+storage.load_failed_title: "本地知识库不可用"
+storage.load_failed: "无法打开本地知识库（%{error}）。当前显示演示数据；本次会话不会保存任何内容，你的知识库文件未被改动。"
+
 # phase 6 fixes (feed)
 # Count labels: <key>_one / <key>_other, picked per locale plural rule by i18n::t_count (flat keys).
 vault.chunks_count_one: "%{count} 个分块"

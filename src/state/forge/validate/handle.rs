@@ -1,7 +1,7 @@
 //! `@handle` rules (one optional leading `@`, like the editor's handle field) and suggestions.
 
 use super::{IssueKind, Severity, ValidationIssue, ARG_MAX, ARG_MIN, ARG_VALUE};
-use crate::domain::profile::HANDLE_PREFIX;
+use crate::domain::profile::{handle_key, HANDLE_PREFIX};
 use crate::domain::{Profile, ProfileId};
 use crate::state::forge::fields::TextField;
 
@@ -30,10 +30,8 @@ fn is_handle_char(c: char) -> bool {
 
 /// Whether another profile (not `own`) already uses `handle_body`, ignoring case.
 fn is_taken(handle_body: &str, own: &ProfileId, existing: &[Profile]) -> bool {
-    let wanted = handle_body.to_lowercase();
-    existing
-        .iter()
-        .any(|p| &p.id != own && body(&p.handle).to_lowercase() == wanted)
+    let wanted = handle_key(handle_body);
+    existing.iter().any(|p| &p.id != own && handle_key(&p.handle) == wanted)
 }
 
 pub(super) fn check(profile: &Profile, existing: &[Profile], issues: &mut Vec<ValidationIssue>) {

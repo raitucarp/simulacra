@@ -3,6 +3,7 @@
 mod action_target;
 mod avatar;
 mod controls;
+mod data_fixes;
 mod day_filter;
 mod forge;
 mod index;

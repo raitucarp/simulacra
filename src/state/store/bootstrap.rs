@@ -1,5 +1,6 @@
 //! Entity bundle shared by the load and seed paths, and the `AppState` assembler.
 
+use super::networks::recount_networks;
 use super::{AppState, NavigationTab};
 use super::snapshot::StoredSettings;
 use crate::domain::{GroundingDocument, Network, NetworkId, Post, ProfileId, Profile, TrendingTopic};
@@ -32,17 +33,16 @@ impl StoreData {
         })
     }
 
-    /// Builds the first-run seed collections.
+    /// Builds the first-run seed collections, with network counts derived from them.
     pub fn seeded() -> Self {
-        let networks = seed_networks();
-        let user_profiles = seed_profiles();
-        let posts = seed_posts();
+        let (mut networks, user_profiles, documents) = (seed_networks(), seed_profiles(), seed_documents());
+        recount_networks(&mut networks, &user_profiles, &documents);
         Self {
             networks,
             user_profiles,
             archived_authors: HashMap::new(),
-            posts,
-            documents: seed_documents(),
+            posts: seed_posts(),
+            documents,
             trending: seed_trending(),
         }
     }
@@ -85,6 +85,7 @@ impl AppState {
             theme_tokens: settings.theme.tokens(),
             theme_settings: settings.theme,
             db,
+            load_error: None,
         }
     }
 }

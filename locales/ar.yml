@@ -1409,6 +1409,11 @@ onboarding.settings_title: "جولة الترحيب"
 onboarding.settings_label: "ترحيب التشغيل الأول"
 onboarding.settings_note: "يعرض ترحيب منيمو مجددًا مع اختصار إلى مصنع الوكلاء."
 
+# phase 6 fixes (data)
+# Startup notice when the vault cannot be opened or read (flat keys).
+storage.load_failed_title: "الخزنة المحلية غير متاحة"
+storage.load_failed: "تعذّر فتح الخزنة المحلية (%{error}). تُعرض بيانات تجريبية؛ لن يُحفظ شيء في هذه الجلسة ولم يُمسّ ملف الخزنة."
+
 # phase 6 fixes (feed)
 # Count labels: <key>_one / <key>_other, picked per locale plural rule by i18n::t_count (flat keys).
 vault.chunks_count_one: "%{count} مقطع"

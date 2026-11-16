@@ -2,13 +2,13 @@
 
 use super::NodeRef;
 use crate::domain::post::HASHTAG_SIGIL;
-use crate::domain::profile::HANDLE_PREFIX;
+use crate::domain::profile::handle_key;
 use crate::domain::{GroundingDocument, Post, PostId, Profile, ProfileId};
 use std::collections::{HashMap, HashSet};
 
 /// Lower-cased handle without its `@` prefix.
 pub(super) fn normalize_handle(handle: &str) -> String {
-    handle.trim().trim_start_matches(HANDLE_PREFIX).to_lowercase()
+    handle_key(handle)
 }
 
 /// Lower-cased tag without its `#` sigil.

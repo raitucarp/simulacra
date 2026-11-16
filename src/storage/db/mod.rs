@@ -4,6 +4,7 @@
 //! `Database` is a single type whose `impl` blocks are spread across the sibling
 //! modules by table (networks, profiles, posts, trending, settings, documents).
 
+mod dismissed_seeds;
 mod documents;
 pub mod location;
 mod migrate;

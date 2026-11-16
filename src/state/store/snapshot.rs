@@ -2,9 +2,11 @@
 
 use super::bootstrap::StoreData;
 use crate::agent::LlmSettings;
+use crate::domain::ProfileId;
 use crate::error::Result;
 use crate::storage::{Database, SettingKey};
 use crate::theme::ThemeSettings;
+use std::collections::BTreeSet;
 
 /// Persisted settings that do not depend on the store contents.
 pub(super) struct StoredSettings {
@@ -25,6 +27,8 @@ pub(super) struct VaultSnapshot {
     pub settings: StoredSettings,
     pub active_network: Option<String>,
     pub active_profile: Option<String>,
+    /// Seed profiles the user deleted; the seed upgrade must not re-add them.
+    pub dismissed_seeds: BTreeSet<ProfileId>,
 }
 
 impl VaultSnapshot {
@@ -38,6 +42,7 @@ impl VaultSnapshot {
             settings: StoredSettings::read(db),
             active_network: db.get_setting(SettingKey::ActiveNetwork).unwrap_or(None),
             active_profile: db.get_setting(SettingKey::ActiveProfile).unwrap_or(None),
+            dismissed_seeds: db.dismissed_seeds()?,
         }))
     }
 }

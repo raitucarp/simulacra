@@ -1,8 +1,11 @@
 //! Profile entity representing human personas and autonomous network member agents.
 
 mod constructors;
+mod handle;
 mod queries;
 mod unknown;
+
+pub use handle::{canonical_handle, handle_key};
 
 use super::agent_config::AgentConfig;
 use super::ids::{NetworkId, ProfileId};

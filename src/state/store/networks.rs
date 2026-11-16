@@ -1,9 +1,30 @@
 //! Network domain selection, membership queries and derived counters.
 
 use super::AppState;
-use crate::domain::{Network, NetworkId, Profile};
+use crate::domain::{GroundingDocument, Network, NetworkId, Profile};
 use crate::error::{AppError, Result};
 use crate::storage::SettingKey;
+
+/// Recomputes every network's `doc_count` and `agent_count` from the documents and profiles
+/// (the only source of truth; seed `networks.json` counts are never trusted) and returns the
+/// networks whose counts changed.
+pub(super) fn recount_networks<'a>(
+    networks: &'a mut [Network],
+    profiles: &[Profile],
+    documents: &[GroundingDocument],
+) -> Vec<&'a Network> {
+    let mut changed = Vec::new();
+    for net in networks.iter_mut() {
+        let agents = profiles.iter().filter(|p| p.is_agent() && p.belongs_to_network(&net.id)).count();
+        let docs = documents.iter().filter(|d| d.network_id == net.id).count();
+        if net.agent_count != agents || net.doc_count != docs {
+            net.agent_count = agents;
+            net.doc_count = docs;
+            changed.push(&*net);
+        }
+    }
+    changed
+}
 
 impl AppState {
     /// Returns a reference to the active network domain.
@@ -38,25 +59,13 @@ impl AppState {
             .collect()
     }
 
-    /// Synchronizes each network's `agent_count` and `doc_count` with actual state.
+    /// Synchronizes each network's `agent_count` and `doc_count` with actual state and
+    /// queues the changed networks for the vault.
     pub fn sync_network_counts(&mut self) {
-        for net in &mut self.networks {
-            let agent_cnt = self
-                .user_profiles
-                .iter()
-                .filter(|p| p.is_agent() && p.belongs_to_network(&net.id))
-                .count();
-            let doc_cnt = self
-                .documents
-                .iter()
-                .filter(|d| d.network_id == net.id)
-                .count();
-            if net.agent_count != agent_cnt || net.doc_count != doc_cnt {
-                net.agent_count = agent_cnt;
-                net.doc_count = doc_cnt;
-                if let Some(ref db) = self.db {
-                    let _ = db.save_network(net);
-                }
+        let changed = recount_networks(&mut self.networks, &self.user_profiles, &self.documents);
+        if let Some(ref db) = self.db {
+            for net in changed {
+                let _ = db.save_network(net);
             }
         }
     }

@@ -168,3 +168,18 @@ fn test_generic_voice_uses_occupation_and_language() {
     assert!(text.starts_with("Wah — menarik melihat perspektif di [[p_generic]]"));
     assert!(text.ends_with("#Dialektika"));
 }
+
+#[test]
+fn live_prompts_carry_the_network_and_its_grounding_sources() {
+    let mut agent = socrates();
+    agent.config.inject_network_grounding = true;
+    let context = PromptContext {
+        network_name: "Epistemology & Mind".to_string(),
+        grounding_docs: vec!["Meno".to_string(), "Theaetetus".to_string()],
+    };
+    let prompt = DialecticEngine::system_prompt_in(&agent, &context);
+    assert!(prompt.contains("Network: Epistemology & Mind"));
+    assert!(prompt.contains("Grounding Knowledge Sources: Meno ; Theaetetus"));
+    let fallback = DialecticEngine::system_prompt_in(&agent, &PromptContext::default());
+    assert_eq!(fallback, DialecticEngine::persona_system_prompt(&agent));
+}

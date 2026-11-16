@@ -5,7 +5,7 @@
 //! its slot in the scheduler's generation queue when it finishes.
 
 use super::super::view::AppView;
-use crate::agent::{DialecticEngine, LlmClient, SimulationOutcome};
+use crate::agent::{DialecticEngine, LlmClient, PromptContext, SimulationOutcome};
 use crate::domain::{AuthoredPost, NetworkId, Post, Profile, ProfileId};
 use gpui_kit::*;
 use tokio::sync::oneshot::error::RecvError;
@@ -48,7 +48,8 @@ impl AppView {
     ) {
         let agent_id = agent.id.clone();
         let client = LlmClient::new(self.state.llm_settings.clone());
-        let rx = DialecticEngine::spawn_background_simulation(parent, agent, network, client);
+        let context = self.prompt_context(&network);
+        let rx = DialecticEngine::spawn_grounded_simulation(parent, agent, network, client, context);
         cx.spawn_in(window, async move |entity, cx| {
             let outcome = rx.await;
             let _ = entity.update_in(cx, |this, window, cx| {
@@ -103,5 +104,18 @@ impl AppView {
         if let Err(err) = self.state.insert_reply_after_parent(reply) {
             self.report_storage_failure(&err, window, cx);
         }
+    }
+
+    /// The network's name and grounding document titles, for the agent's system prompt.
+    fn prompt_context(&self, network: &NetworkId) -> PromptContext {
+        let network_name = self.state.networks.iter().find(|n| &n.id == network).map(|n| n.name.clone());
+        let grounding_docs = self
+            .state
+            .documents
+            .iter()
+            .filter(|d| &d.network_id == network)
+            .map(|d| d.title.clone())
+            .collect();
+        PromptContext { network_name: network_name.unwrap_or_default(), grounding_docs }
     }
 }

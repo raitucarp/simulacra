@@ -5,6 +5,7 @@
 
 use super::outcome::SimulationOutcome;
 use super::reply::build_reply;
+use super::prompts::PromptContext;
 use super::DialecticEngine;
 use crate::agent::llm::{LlmClient, LlmFailure};
 use crate::domain::{AuthoredPost, NetworkId, Post, Profile};
@@ -42,11 +43,24 @@ impl DialecticEngine {
         network_id: NetworkId,
         client: LlmClient,
     ) -> oneshot::Receiver<SimulationOutcome> {
+        Self::spawn_grounded_simulation(parent_post, agent_profile, network_id, client, PromptContext::default())
+    }
+
+    /// [`Self::spawn_background_simulation`] with the network name and grounding sources
+    /// passed to the agent's system prompt.
+    pub fn spawn_grounded_simulation(
+        parent_post: AuthoredPost,
+        agent_profile: Profile,
+        network_id: NetworkId,
+        client: LlmClient,
+        context: PromptContext,
+    ) -> oneshot::Receiver<SimulationOutcome> {
         let (tx, rx) = oneshot::channel();
         let _ = std::thread::Builder::new()
             .name(AGENT_SIM_THREAD_NAME.into())
             .spawn(move || {
-                let text = Self::generate_text_blocking(&parent_post, &agent_profile, &client);
+                let system_prompt = Self::system_prompt_in(&agent_profile, &context);
+                let text = Self::generate_text_blocking(&parent_post, &agent_profile, &client, &system_prompt);
                 let _ = tx.send(Self::outcome(&parent_post, agent_profile, network_id, text));
             });
 
@@ -61,7 +75,8 @@ impl DialecticEngine {
         network_id: &NetworkId,
         client: &LlmClient,
     ) -> SimulationOutcome {
-        let text = Self::generate_text_blocking(parent_post, agent_profile, client);
+        let system_prompt = Self::persona_system_prompt(agent_profile);
+        let text = Self::generate_text_blocking(parent_post, agent_profile, client, &system_prompt);
         Self::outcome(parent_post, agent_profile.clone(), network_id.clone(), text)
     }
 
@@ -77,12 +92,16 @@ impl DialecticEngine {
 
     /// Runs the LLM request on a fresh current-thread Tokio runtime, falling back to the
     /// heuristic text if the runtime cannot be built or the request fails.
-    fn generate_text_blocking(parent_post: &AuthoredPost, agent_profile: &Profile, client: &LlmClient) -> TextOutcome {
-        let system_prompt = Self::persona_system_prompt(agent_profile);
+    fn generate_text_blocking(
+        parent_post: &AuthoredPost,
+        agent_profile: &Profile,
+        client: &LlmClient,
+        system_prompt: &str,
+    ) -> TextOutcome {
         let user_prompt = Self::persona_user_prompt(parent_post, agent_profile);
         let runtime = tokio::runtime::Builder::new_current_thread().enable_all().build();
         let result = match runtime {
-            Ok(rt) => rt.block_on(client.generate(&system_prompt, &user_prompt)),
+            Ok(rt) => rt.block_on(client.generate(system_prompt, &user_prompt)),
             Err(e) => Err(e.to_string()),
         };
         Self::text_or_heuristic(result, client, parent_post, agent_profile)

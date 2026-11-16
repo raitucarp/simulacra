@@ -21,6 +21,7 @@ mod voices;
 mod tests;
 
 pub use outcome::SimulationOutcome;
+pub use prompts::PromptContext;
 
 /// Heuristic and LLM-powered Dialectic Reasoner for human-like agent synthesis.
 pub struct DialecticEngine;

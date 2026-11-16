@@ -6,7 +6,23 @@ use crate::domain::{AuthoredPost, Profile};
 /// Network name used when no explicit network context is supplied.
 const DEFAULT_NETWORK_NAME: &str = "Active Epistemic Network";
 
+/// The network an agent speaks in and the grounding sources it may draw on.
+#[derive(Debug, Clone, Default, PartialEq, Eq)]
+pub struct PromptContext {
+    pub network_name: String,
+    /// Titles of the network's grounding documents.
+    pub grounding_docs: Vec<String>,
+}
+
 impl DialecticEngine {
+    /// System prompt for `agent_profile` in `context` (the default network when unnamed).
+    pub fn system_prompt_in(agent_profile: &Profile, context: &PromptContext) -> String {
+        if context.network_name.is_empty() {
+            return Self::persona_system_prompt(agent_profile);
+        }
+        Self::persona_system_prompt_with_context(agent_profile, &context.network_name, &context.grounding_docs)
+    }
+
     /// Constructs the full human psychological & linguistic system prompt for a given agent.
     pub fn persona_system_prompt(agent_profile: &Profile) -> String {
         Self::persona_system_prompt_with_context(agent_profile, DEFAULT_NETWORK_NAME, &[])

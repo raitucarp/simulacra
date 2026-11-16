@@ -1423,3 +1423,8 @@ onboarding.replay_button: "Show welcome"
 onboarding.settings_title: "WELCOME TOUR"
 onboarding.settings_label: "First-run welcome"
 onboarding.settings_note: "Shows Mnemo's welcome again, with a shortcut into the Agent Forge."
+
+# phase 6 fixes (data)
+# Startup notice when the vault cannot be opened or read (flat keys).
+storage.load_failed_title: "Local vault unavailable"
+storage.load_failed: "Could not open the local vault (%{error}). Showing demo data; nothing will be saved this session and your vault file was left untouched."

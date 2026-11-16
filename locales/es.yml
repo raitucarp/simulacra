@@ -1423,3 +1423,8 @@ onboarding.replay_button: "Mostrar bienvenida"
 onboarding.settings_title: "RECORRIDO DE BIENVENIDA"
 onboarding.settings_label: "Bienvenida inicial"
 onboarding.settings_note: "Vuelve a mostrar la bienvenida de Mnemo, con un acceso directo a la Forja de agentes."
+
+# phase 6 fixes (data)
+# Startup notice when the vault cannot be opened or read (flat keys).
+storage.load_failed_title: "Bóveda local no disponible"
+storage.load_failed: "No se pudo abrir la bóveda local (%{error}). Se muestran datos de demostración; no se guardará nada en esta sesión y tu archivo de bóveda no se ha modificado."

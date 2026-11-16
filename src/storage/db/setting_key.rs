@@ -59,6 +59,8 @@ setting_keys! {
     ForgeHideGuide => "forge.hide_guide",
     /// Whether the first-run welcome was completed or skipped (`true` / `false`).
     OnboardingDone => "onboarding.done",
+    /// JSON array of the seed profile ids the user deleted (never re-seeded).
+    DismissedSeeds => "seeds.dismissed",
     /// Pre-palette serialized `ThemeTokens`; migrated on load, then removed.
     LegacyThemeTokens => "theme_tokens",
 }

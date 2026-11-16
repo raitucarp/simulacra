@@ -1423,3 +1423,8 @@ onboarding.replay_button: "Mostrar boas-vindas"
 onboarding.settings_title: "TOUR DE BOAS-VINDAS"
 onboarding.settings_label: "Boas-vindas iniciais"
 onboarding.settings_note: "Mostra de novo as boas-vindas do Mnemo, com um atalho para a Forja de agentes."
+
+# phase 6 fixes (data)
+# Startup notice when the vault cannot be opened or read (flat keys).
+storage.load_failed_title: "Cofre local indisponível"
+storage.load_failed: "Não foi possível abrir o cofre local (%{error}). Exibindo dados de demonstração; nada será salvo nesta sessão e o seu arquivo de cofre não foi alterado."

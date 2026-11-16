@@ -122,7 +122,14 @@ impl PostIndex {
         self.len == 0
     }
 
-    /// Bumped on every insert, removal and rebuild; caches over the post order key on it.
+    /// Marks author data (names, handles, archived authors) as changed: listings that match
+    /// on authors, such as cached search results, must be recomputed.
+    pub fn authors_changed(&mut self) {
+        self.revision += 1;
+    }
+
+    /// Bumped on every insert, removal, rebuild and author change; caches over the post
+    /// listing key on it.
     pub fn revision(&self) -> u64 {
         self.revision
     }

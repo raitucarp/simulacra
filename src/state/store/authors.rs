@@ -2,6 +2,7 @@
 
 use super::AppState;
 use crate::domain::post::AuthoredPost;
+use crate::domain::profile::handle_key;
 use crate::domain::{Post, Profile, ProfileId};
 
 impl AppState {
@@ -22,5 +23,17 @@ impl AppState {
     /// `post` bundled with a snapshot of its author, for consumers outside the store.
     pub fn authored(&self, post: &Post) -> AuthoredPost {
         AuthoredPost::new(post.clone(), self.author_of(post).clone())
+    }
+
+    /// The live profile whose handle matches `handle`, ignoring case and `@` sigils.
+    pub fn profile_by_handle(&self, handle: &str) -> Option<&Profile> {
+        let key = handle_key(handle);
+        self.user_profiles.iter().find(|p| handle_key(&p.handle) == key)
+    }
+
+    /// Whether a live profile other than `own` already uses `handle` (case-insensitive).
+    pub fn handle_taken(&self, handle: &str, own: Option<&ProfileId>) -> bool {
+        let key = handle_key(handle);
+        self.user_profiles.iter().any(|p| Some(&p.id) != own && handle_key(&p.handle) == key)
     }
 }

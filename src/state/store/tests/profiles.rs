@@ -112,7 +112,7 @@ fn test_create_custom_agent_and_persona_lab_separation() {
 #[test]
 fn authors_resolve_by_id_and_survive_profile_edits_and_deletion() {
     let mut state = AppState::new_in_memory();
-    // A custom persona: deleted seed profiles are re-seeded on reload, custom ones are not.
+    // A custom persona (deleted seed profiles are remembered and not re-seeded either).
     let persona_id = state.create_human_persona("Ephemeral", "@ephemeral", "temp").unwrap();
     let agent = state.find_author(&persona_id).cloned().expect("created persona");
     state.switch_profile(&agent.id).expect("switch to persona");

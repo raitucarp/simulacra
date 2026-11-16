@@ -1,60 +1,31 @@
 //! General tab pane: autonomous engine, local storage vault and interface locale.
 
-use super::super::consts::{ICON_LG, ICON_XS, MONO_FONT_STACK, TEXT_SMALL};
+use super::super::consts::{ICON_LG, MONO_FONT_STACK, TEXT_SMALL};
+use super::super::general_props::GeneralPaneProps;
 use super::common::{body_text, card, muted_note, section, section_label, spaced_row, title_with_subtitle};
+use super::engine::render_engine_section;
 use crate::theme::ThemeTokens;
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::Icon;
-use gpui_kit::{div, px, Div, FontWeight, IntoElement, ParentElement, Styled};
+use gpui_kit::{div, px, Div, IntoElement, ParentElement, Styled};
+use rust_i18n::t;
 
 /// Helper function to render General Tab Pane
-pub(in crate::ui::features::settings) fn render_general_pane(theme: &ThemeTokens) -> impl IntoElement {
+pub(in crate::ui::features::settings) fn render_general_pane(
+    theme: &ThemeTokens,
+    mut props: GeneralPaneProps,
+) -> impl IntoElement {
     div()
         .flex()
         .flex_col()
         .gap_5()
-        .child(render_engine_section(theme))
-        .child(render_storage_section(theme))
+        .child(render_engine_section(theme, &mut props))
+        .child(render_storage_section(theme, &props.db_path))
         .child(render_locale_section(theme))
 }
 
-/// Section 1: Autonomous Dialectic Engine
-fn render_engine_section(theme: &ThemeTokens) -> Div {
-    section(
-        spaced_row()
-            .child(section_label(theme, "AUTONOMOUS DIALECTIC ENGINE"))
-            .child(render_active_loop_badge(theme)),
-        card(theme)
-            .gap_2()
-            .child(body_text(theme, "Autonomous Background Heartbeat: 15-minute cycle"))
-            .child(muted_note(theme, "Simulacra's autonomous loop ticks on new thoughts and scheduled intervals, enabling each network's human-like member agents to dialectically question and link memory nodes.")),
-    )
-}
-
-/// Emerald "Active Loop" status pill.
-fn render_active_loop_badge(theme: &ThemeTokens) -> Div {
-    div()
-        .flex()
-        .items_center()
-        .gap_1p5()
-        .px_2()
-        .py_0p5()
-        .rounded_full()
-        .bg(theme.accent_success_subtle)
-        .border_1()
-        .border_color(theme.accent_success_border)
-        .child(Icon::new(LucideIcon::Activity).size(px(ICON_XS)).text_color(theme.accent_success))
-        .child(
-            div()
-                .text_size(px(TEXT_SMALL))
-                .font_weight(FontWeight::MEDIUM)
-                .text_color(theme.accent_success)
-                .child("Active Loop"),
-        )
-}
-
 /// Section 2: Local SQLite Vault Storage
-fn render_storage_section(theme: &ThemeTokens) -> Div {
+fn render_storage_section(theme: &ThemeTokens, db_path: &str) -> Div {
     section(
         section_label(theme, "LOCAL STORAGE & EPISTEMIC VAULT"),
         card(theme)
@@ -63,8 +34,8 @@ fn render_storage_section(theme: &ThemeTokens) -> Div {
                 spaced_row()
                     .child(title_with_subtitle(
                         theme,
-                        "Database Path",
-                        "~/.simulacra/knowledge.db (WAL Mode)",
+                        t!("scheduler.db_path_title").to_string(),
+                        db_path.to_string(),
                         MONO_FONT_STACK,
                     ))
                     .child(

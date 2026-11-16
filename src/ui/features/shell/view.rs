@@ -2,6 +2,7 @@
 
 use super::feed_state::FeedState;
 use super::lab_state::{LabState, LlmInputs};
+use super::scheduler_state::SchedulerState;
 use crate::i18n::Language;
 use crate::state::AppState;
 use crate::theme::ThemeTokens;
@@ -19,6 +20,7 @@ pub struct AppView {
     pub composer_modal: Entity<ComposerModalPanel>,
     pub llm_inputs: LlmInputs,
     pub lab: LabState,
+    pub scheduler: SchedulerState,
     pub(super) _subscriptions: Vec<Subscription>,
 }
 

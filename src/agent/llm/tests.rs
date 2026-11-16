@@ -89,3 +89,31 @@ fn settings_persist_round_trip_and_blank_model_falls_back() {
     db.set_setting(KEY_MODEL, "  ").expect("blank model");
     assert_eq!(LlmSettings::load_from_db(&db).model, "llama-3.3-70b-versatile");
 }
+
+#[test]
+fn failure_redacts_the_api_key_and_key_query_params() {
+    let client = LlmClient::new(LlmSettings {
+        api_key: "AIzaSECRET123".to_string(),
+        ..LlmSettings::default()
+    });
+    let raw = "Gemini network request error: error sending request for url \
+               (https://x.test/v1/m:generateContent?key=AIzaSECRET123&alt=json)\n  echoed AIzaSECRET123";
+    let failure = client.describe_failure(raw);
+    assert_eq!(failure.provider, LlmProvider::Gemini);
+    assert!(!failure.missing_key);
+    assert!(!failure.message.contains("SECRET"), "{}", failure.message);
+    assert!(failure.message.contains("key=[redacted]&alt=json"));
+    assert!(!failure.message.contains('\n'));
+
+    let other = LlmFailure::new(LlmProvider::OpenAi, "bad ?key=abc def", "", false);
+    assert_eq!(other.message, "bad ?key=[redacted] def");
+}
+
+#[test]
+fn failure_message_is_shortened_and_flags_missing_keys() {
+    let long = "x".repeat(MAX_FAILURE_MESSAGE_CHARS * 2);
+    let failure = LlmClient::new(LlmSettings::default()).describe_failure(&long);
+    assert!(failure.missing_key);
+    assert_eq!(failure.message.chars().count(), MAX_FAILURE_MESSAGE_CHARS + 1);
+    assert!(failure.message.ends_with('…'));
+}

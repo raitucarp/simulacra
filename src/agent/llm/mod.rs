@@ -6,6 +6,7 @@
 
 mod anthropic;
 mod client;
+mod failure;
 mod gemini;
 mod openai;
 mod provider;
@@ -15,5 +16,6 @@ mod settings;
 mod tests;
 
 pub use client::LlmClient;
+pub use failure::{LlmFailure, MAX_FAILURE_MESSAGE_CHARS};
 pub use provider::LlmProvider;
 pub use settings::LlmSettings;

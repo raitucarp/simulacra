@@ -7,6 +7,8 @@ mod lab;
 mod lab_profiles;
 mod navigation;
 mod posts;
+mod scheduler;
 mod settings;
 mod simulation;
+mod simulation_notices;
 mod stream;

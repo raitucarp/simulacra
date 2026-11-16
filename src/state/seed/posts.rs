@@ -1,22 +1,17 @@
 //! Seed timeline posts.
 
 use super::parse_seed;
-use crate::domain::{NetworkId, Post, PostId, Profile};
+use crate::domain::{NetworkId, Post, PostId, ProfileId};
 use chrono::{DateTime, Utc};
 use serde::Deserialize;
 
 const POSTS_ASSET: &str = "posts.json";
 const POSTS_JSON: &str = include_str!("../../../assets/seed/posts.json");
 
-/// Author reference; resolved against the supplied profiles, otherwise rebuilt from these fields
-/// (an agent when `persona_type` is present, scoped to the post's network; else a primary user).
+/// Author reference; posts store only the id, the profile is resolved through the store.
 #[derive(Deserialize)]
 struct AuthorSeed {
-    id: String,
-    name: String,
-    handle: String,
-    #[serde(default)]
-    persona_type: Option<String>,
+    id: ProfileId,
 }
 
 /// Post record without a timestamp; `created_at` is stamped at seed time.
@@ -40,26 +35,12 @@ struct PostSeed {
     is_reposted: bool,
 }
 
-impl AuthorSeed {
-    fn resolve(self, profiles: &[Profile], network_id: &NetworkId) -> Profile {
-        if let Some(found) = profiles.iter().find(|p| p.id.as_str() == self.id) {
-            return found.clone();
-        }
-        match self.persona_type {
-            Some(persona_type) => Profile::new_agent(self.id, self.name, self.handle, persona_type)
-                .with_network(network_id.clone()),
-            None => Profile::new_primary(self.id, self.name, self.handle),
-        }
-    }
-}
-
 impl PostSeed {
-    fn into_post(self, profiles: &[Profile], created_at: DateTime<Utc>) -> Post {
-        let author = self.author.resolve(profiles, &self.network_id);
+    fn into_post(self, created_at: DateTime<Utc>) -> Post {
         Post {
             id: self.id,
             network_id: self.network_id,
-            author,
+            author_id: self.author.id,
             content: self.content,
             created_at,
             likes: self.likes,
@@ -78,11 +59,11 @@ impl PostSeed {
     }
 }
 
-pub fn seed_posts(profiles: &[Profile]) -> Vec<Post> {
+pub fn seed_posts() -> Vec<Post> {
     let now = Utc::now();
     let seeds: Vec<PostSeed> = parse_seed(POSTS_ASSET, POSTS_JSON);
     seeds
         .into_iter()
-        .map(|seed| seed.into_post(profiles, now))
+        .map(|seed| seed.into_post(now))
         .collect()
 }

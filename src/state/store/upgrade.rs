@@ -73,18 +73,11 @@ impl AppState {
         mutated
     }
 
-    /// Updates author snapshots in existing posts and persists profiles to SQLite.
+    /// Persists every profile to SQLite (posts resolve their authors by id).
     fn persist_profile_snapshots(&mut self) {
+        let Some(ref db) = self.db else { return };
         for prof in &self.user_profiles {
-            for post in &mut self.posts {
-                if post.author.id == prof.id {
-                    post.author = prof.clone();
-                }
-            }
-            if let Some(ref db) = self.db {
-                let _ = db.save_profile(prof);
-                let _ = db.update_post_author_snapshots(prof);
-            }
+            let _ = db.save_profile(prof);
         }
     }
 }

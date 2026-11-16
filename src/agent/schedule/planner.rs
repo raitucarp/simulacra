@@ -89,7 +89,7 @@ pub fn latest_activity(posts: &[Post]) -> HashMap<ProfileId, DateTime<Utc>> {
     let mut latest: HashMap<ProfileId, DateTime<Utc>> = HashMap::new();
     for post in posts {
         latest
-            .entry(post.author.id.clone())
+            .entry(post.author_id.clone())
             .and_modify(|at| *at = (*at).max(post.created_at))
             .or_insert(post.created_at);
     }

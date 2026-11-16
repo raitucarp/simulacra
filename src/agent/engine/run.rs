@@ -7,7 +7,7 @@ use super::outcome::SimulationOutcome;
 use super::reply::build_reply;
 use super::DialecticEngine;
 use crate::agent::llm::{LlmClient, LlmFailure};
-use crate::domain::{NetworkId, Post, Profile};
+use crate::domain::{AuthoredPost, NetworkId, Post, Profile};
 use tokio::sync::oneshot;
 
 /// Name of the dedicated OS thread that runs background agent simulations.
@@ -20,7 +20,7 @@ impl DialecticEngine {
     /// Asynchronously generates a persona reply using the configured LLM provider,
     /// falling back to heuristic text (and reporting why) when the request fails.
     pub async fn generate_llm_response(
-        parent_post: &Post,
+        parent_post: &AuthoredPost,
         agent_profile: &Profile,
         network_id: &NetworkId,
         client: &LlmClient,
@@ -37,7 +37,7 @@ impl DialecticEngine {
     /// from the UI event loop. The sender is dropped (the receiver errors) only if
     /// the worker thread cannot be spawned.
     pub fn spawn_background_simulation(
-        parent_post: Post,
+        parent_post: AuthoredPost,
         agent_profile: Profile,
         network_id: NetworkId,
         client: LlmClient,
@@ -56,7 +56,7 @@ impl DialecticEngine {
     /// Synchronously generates a persona reply using the configured LLM provider,
     /// falling back to heuristic text (and reporting why) when the request fails.
     pub fn generate_llm_response_sync(
-        parent_post: &Post,
+        parent_post: &AuthoredPost,
         agent_profile: &Profile,
         network_id: &NetworkId,
         client: &LlmClient,
@@ -67,7 +67,7 @@ impl DialecticEngine {
 
     /// Generates an autonomous persona reply to a newly published thought (synchronous heuristic mode).
     pub fn generate_response(
-        parent_post: &Post,
+        parent_post: &AuthoredPost,
         agent_profile: &Profile,
         network_id: &NetworkId,
     ) -> Post {
@@ -77,7 +77,7 @@ impl DialecticEngine {
 
     /// Runs the LLM request on a fresh current-thread Tokio runtime, falling back to the
     /// heuristic text if the runtime cannot be built or the request fails.
-    fn generate_text_blocking(parent_post: &Post, agent_profile: &Profile, client: &LlmClient) -> TextOutcome {
+    fn generate_text_blocking(parent_post: &AuthoredPost, agent_profile: &Profile, client: &LlmClient) -> TextOutcome {
         let system_prompt = Self::persona_system_prompt(agent_profile);
         let user_prompt = Self::persona_user_prompt(parent_post, agent_profile);
         let runtime = tokio::runtime::Builder::new_current_thread().enable_all().build();
@@ -92,7 +92,7 @@ impl DialecticEngine {
     fn text_or_heuristic(
         result: Result<String, String>,
         client: &LlmClient,
-        parent_post: &Post,
+        parent_post: &AuthoredPost,
         agent_profile: &Profile,
     ) -> TextOutcome {
         match result {
@@ -105,7 +105,7 @@ impl DialecticEngine {
     }
 
     /// Wraps generated text into a reply outcome threaded under `parent_post`.
-    fn outcome(parent_post: &Post, agent: Profile, network_id: NetworkId, text: TextOutcome) -> SimulationOutcome {
+    fn outcome(parent_post: &AuthoredPost, agent: Profile, network_id: NetworkId, text: TextOutcome) -> SimulationOutcome {
         let (content, llm_error) = text;
         SimulationOutcome { reply: build_reply(parent_post, agent, network_id, content), llm_error }
     }

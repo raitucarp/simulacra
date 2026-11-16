@@ -94,6 +94,6 @@ impl Database {
         self.conn
             .execute_batch(CREATE_MIGRATED_INDEXES)
             .map_err(db_err)?;
-        Ok(())
+        self.migrate_versions()
     }
 }

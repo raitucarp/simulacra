@@ -6,7 +6,7 @@
 
 use super::super::view::AppView;
 use crate::agent::{DialecticEngine, LlmClient, SimulationOutcome};
-use crate::domain::{NetworkId, Post, Profile, ProfileId};
+use crate::domain::{AuthoredPost, NetworkId, Post, Profile, ProfileId};
 use crate::state::AppState;
 use gpui_kit::*;
 use tokio::sync::oneshot::error::RecvError;
@@ -20,7 +20,7 @@ impl AppView {
         window: &mut Window,
         cx: &mut Context<Self>,
     ) {
-        let parent = self.state.current_network_posts().next().cloned();
+        let parent = self.state.current_network_posts().next().map(|p| self.state.authored(p));
         let (Some(agent), Some(parent)) = (self.simulation_agent(agent_id.as_ref()), parent) else {
             return;
         };
@@ -42,7 +42,7 @@ impl AppView {
     pub(super) fn spawn_generation(
         &mut self,
         agent: Profile,
-        parent: Post,
+        parent: AuthoredPost,
         network: NetworkId,
         window: &mut Window,
         cx: &mut Context<Self>,

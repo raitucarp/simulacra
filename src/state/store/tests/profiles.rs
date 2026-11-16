@@ -108,3 +108,27 @@ fn test_create_custom_agent_and_persona_lab_separation() {
     assert_eq!(loaded_agent.config.primary_language, "Indonesian");
     assert!(loaded_agent.config.hobbies.contains("Gamelan orchestration"));
 }
+
+#[test]
+fn authors_resolve_by_id_and_survive_profile_edits_and_deletion() {
+    let mut state = AppState::new_in_memory();
+    // A custom persona: deleted seed profiles are re-seeded on reload, custom ones are not.
+    let persona_id = state.create_human_persona("Ephemeral", "@ephemeral", "temp").unwrap();
+    let agent = state.find_author(&persona_id).cloned().expect("created persona");
+    state.switch_profile(&agent.id).expect("switch to persona");
+    let post_id = state.submit_post("authored by a persona").unwrap();
+    let post = state.get_post(&post_id).unwrap().clone();
+    assert_eq!(state.author_of(&post).name, agent.name);
+
+    let mut renamed = agent.clone();
+    renamed.name = "Renamed Thinker".to_string();
+    state.update_profile(renamed).unwrap();
+    assert_eq!(state.author_of(&post).name, "Renamed Thinker", "edits apply without rewriting posts");
+
+    state.delete_profile(&agent.id).unwrap();
+    assert_eq!(state.author_of(&post).name, "Renamed Thinker", "deleted authors stay archived");
+    let db = state.db.clone().expect("in-memory db");
+    let reloaded = AppState::load_from_db(&db).expect("reload");
+    let reloaded_post = reloaded.get_post(&post_id).expect("post persisted");
+    assert_eq!(reloaded.author_of(reloaded_post).name, "Renamed Thinker");
+}

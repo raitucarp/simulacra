@@ -14,6 +14,7 @@ use std::rc::Rc;
 pub(super) struct StoreData {
     pub networks: Vec<Network>,
     pub user_profiles: Vec<Profile>,
+    pub archived_authors: HashMap<ProfileId, Profile>,
     pub posts: Vec<Post>,
     pub documents: Vec<GroundingDocument>,
     pub trending: Vec<TrendingTopic>,
@@ -25,6 +26,7 @@ impl StoreData {
         Ok(Self {
             networks: db.load_networks()?,
             user_profiles: db.load_profiles()?,
+            archived_authors: db.load_archived_authors().unwrap_or_default(),
             posts: db.load_posts()?,
             documents: db.load_all_documents().unwrap_or_default(),
             trending: db.load_trending()?,
@@ -35,10 +37,11 @@ impl StoreData {
     pub fn seeded() -> Self {
         let networks = seed_networks();
         let user_profiles = seed_profiles();
-        let posts = seed_posts(&user_profiles);
+        let posts = seed_posts();
         Self {
             networks,
             user_profiles,
+            archived_authors: HashMap::new(),
             posts,
             documents: seed_documents(),
             trending: seed_trending(),
@@ -79,6 +82,7 @@ impl AppState {
             networks: data.networks,
             active_network_id,
             user_profiles: data.user_profiles,
+            archived_authors: data.archived_authors,
             active_profile_id,
             active_tab: NavigationTab::Timeline,
             posts: data.posts,

@@ -1,6 +1,6 @@
 //! A single card in the random sparks discovery feed.
 
-use crate::domain::Post;
+use crate::domain::{Post, Profile};
 use crate::theme::ThemeTokens;
 use crate::ui::atoms::render_profile_avatar;
 use crate::ui::icons::LucideIcon;
@@ -13,35 +13,35 @@ use gpui_kit::*;
 const SPARK_ITEM_ID_PREFIX: &str = "spark-item";
 const SPARK_TIME_FORMAT: &str = "%H:%M";
 
-fn render_author(post: &Post, theme: &ThemeTokens) -> Div {
+fn render_author(author: &Profile, theme: &ThemeTokens) -> Div {
     div()
         .flex()
         .items_center()
         .gap_1p5()
-        .child(render_profile_avatar(&post.author, theme.avatar_size_sm, theme))
+        .child(render_profile_avatar(author, theme.avatar_size_sm, theme))
         .child(
             div()
                 .font_family(theme.font_family_display.clone())
                 .text_xs()
                 .font_bold()
                 .text_color(theme.text_primary)
-                .child(post.author.name.clone()),
+                .child(author.name.clone()),
         )
         .child(
             div()
                 .font_family(theme.font_family_ui.clone())
                 .text_xs()
                 .text_color(theme.text_muted)
-                .child(post.author.handle.clone()),
+                .child(author.handle.clone()),
         )
 }
 
-fn render_item_header(post: &Post, theme: &ThemeTokens) -> Div {
+fn render_item_header(post: &Post, author: &Profile, theme: &ThemeTokens) -> Div {
     div()
         .flex()
         .items_center()
         .justify_between()
-        .child(render_author(post, theme))
+        .child(render_author(author, theme))
         .child(
             div()
                 .font_family(theme.font_family_mono.clone())
@@ -97,7 +97,7 @@ pub(super) fn render_spark_item<L: PostLookup>(
         .flex()
         .flex_col()
         .gap_1p5()
-        .child(render_item_header(post, theme))
+        .child(render_item_header(post, lookup.author_of(post), theme))
         .child(div().w_full().child(render_post_body(&post.content, lookup, theme)))
         .child(render_stats(post, theme))
 }

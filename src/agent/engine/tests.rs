@@ -1,12 +1,13 @@
 use super::*;
-use crate::domain::{NetworkId, Post, PostId, Profile};
+use crate::domain::{AuthoredPost, NetworkId, Post, PostId, Profile};
 use chrono::Utc;
 
-fn parent_post(id: &str, author_name: &str, content: &str, mentions: Vec<String>) -> Post {
-    Post {
+fn parent_post(id: &str, author_name: &str, content: &str, mentions: Vec<String>) -> AuthoredPost {
+    let author = Profile::new_primary("u1", author_name, "@architect");
+    let post = Post {
         id: PostId::new(id),
         network_id: NetworkId::new("net_philosophy"),
-        author: Profile::new_primary("u1", author_name, "@architect"),
+        author_id: author.id.clone(),
         content: content.to_string(),
         created_at: Utc::now(),
         likes: 0,
@@ -21,7 +22,8 @@ fn parent_post(id: &str, author_name: &str, content: &str, mentions: Vec<String>
         image_path: None,
         reposts_count: 0,
         is_reposted: false,
-    }
+    };
+    AuthoredPost::new(post, author)
 }
 
 fn socrates() -> Profile {
@@ -125,7 +127,7 @@ fn test_reply_post_shape_is_threaded_under_parent() {
     assert!(reply.id.as_str().starts_with("post_"));
     assert_ne!(reply.id, parent.id);
     assert_eq!(reply.network_id, parent.network_id);
-    assert_eq!(reply.author.handle, "@sokrates");
+    assert_eq!(reply.author_id.as_str(), "agent_socrates");
     assert_eq!(reply.mentions, vec!["@architect".to_string()]);
     assert_eq!(reply.reply_to_id, Some(PostId::new("post_shape")));
     assert_eq!((reply.likes, reply.replies_count, reply.reposts_count), (0, 0, 0));

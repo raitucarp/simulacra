@@ -3,6 +3,7 @@
 //! `AppState` is a single type whose `impl` blocks are spread across the sibling
 //! modules by concern (loading, networks, profiles, posts, indices, ...).
 
+mod authors;
 mod bootstrap;
 mod day_filter;
 mod documents;
@@ -57,6 +58,8 @@ pub struct AppState {
     pub networks: Vec<Network>,
     pub active_network_id: NetworkId,
     pub user_profiles: Vec<Profile>,
+    /// Last known profile of deleted authors whose posts remain, by author id.
+    pub archived_authors: HashMap<ProfileId, Profile>,
     pub active_profile_id: ProfileId,
     pub active_tab: NavigationTab,
     pub posts: Vec<Post>,

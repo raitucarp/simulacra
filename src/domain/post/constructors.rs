@@ -1,8 +1,7 @@
 //! Validated construction of thought posts.
 
 use super::{Post, MAX_POST_CHARS};
-use crate::domain::ids::{NetworkId, PostId};
-use crate::domain::profile::Profile;
+use crate::domain::ids::{NetworkId, PostId, ProfileId};
 use crate::error::{AppError, Result};
 use chrono::Utc;
 
@@ -11,7 +10,7 @@ impl Post {
     pub fn create(
         id: impl Into<PostId>,
         network_id: impl Into<NetworkId>,
-        author: Profile,
+        author: impl Into<ProfileId>,
         raw_content: &str,
     ) -> Result<Self> {
         Self::create_with_attachments(
@@ -33,7 +32,7 @@ impl Post {
     pub fn create_with_attachments(
         id: impl Into<PostId>,
         network_id: impl Into<NetworkId>,
-        author: Profile,
+        author: impl Into<ProfileId>,
         raw_content: &str,
         link_url: Option<String>,
         image_path: Option<String>,
@@ -53,7 +52,7 @@ impl Post {
         Ok(Self {
             id: id.into(),
             network_id: network_id.into(),
-            author,
+            author_id: author.into(),
             content: trimmed.to_string(),
             created_at: Utc::now(),
             likes: 0,

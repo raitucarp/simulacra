@@ -56,7 +56,7 @@ pub fn render_post_item<L: PostLookup>(
         .flex()
         .items_start()
         .gap(theme.spacing_md)
-        .child(render_avatar_column(&effective_post.author, threadline_style, has_repost_header, theme))
+        .child(render_avatar_column(lookup.author_of(effective_post), threadline_style, has_repost_header, theme))
         .child(render_content_column(post, effective_post, is_instant_repost, lookup, theme, handlers))
 }
 
@@ -98,8 +98,8 @@ fn render_content_column<L: PostLookup>(
         .flex()
         .flex_col()
         .gap(theme.spacing_xs)
-        .when(post.repost_id.is_some(), |this| this.child(render_repost_header(&post.author.name, theme)))
-        .child(render_author_row(effective, is_instant_repost, theme))
+        .when(post.repost_id.is_some(), |this| this.child(render_repost_header(&lookup.author_of(post).name, theme)))
+        .child(render_author_row(effective, lookup.author_of(effective), is_instant_repost, theme))
         .child(
             div()
                 .w_full()

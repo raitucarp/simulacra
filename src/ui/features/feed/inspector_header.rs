@@ -2,7 +2,7 @@
 
 use super::consts::{QUICK_REPLY_BUTTON_ID, REPLY_TO_LABEL};
 use super::params::ReplyPostCallback;
-use crate::domain::Post;
+use crate::domain::{Post, Profile};
 use crate::theme::ThemeTokens;
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::button::{Button, ButtonVariants};
@@ -94,9 +94,14 @@ pub(crate) fn render_grounding_callout(theme: &ThemeTokens) -> Div {
 }
 
 /// Pinned bottom quick reply bar for the focused thought.
-pub(crate) fn render_quick_reply_bar(root: &Post, theme: &ThemeTokens, on_reply: Rc<ReplyPostCallback>) -> Div {
+pub(crate) fn render_quick_reply_bar(
+    root: &Post,
+    author: &Profile,
+    theme: &ThemeTokens,
+    on_reply: Rc<ReplyPostCallback>,
+) -> Div {
     let root_id = root.id.clone();
-    let author_handle = root.author.handle.clone();
+    let author_handle = author.handle.clone();
     div()
         .w_full()
         .px(theme.spacing_md)

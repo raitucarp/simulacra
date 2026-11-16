@@ -1,13 +1,15 @@
 //! Thought post entity, parsing logic, and character limit rules.
 
+mod author_ref;
+mod authored;
 mod constructors;
 mod parse;
 mod relations;
 
+pub use authored::AuthoredPost;
 pub use parse::HASHTAG_SIGIL;
 
-use super::ids::{NetworkId, PostId};
-use super::profile::Profile;
+use super::ids::{NetworkId, PostId, ProfileId};
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
@@ -19,7 +21,9 @@ pub const MAX_POST_CHARS: usize = 280;
 pub struct Post {
     pub id: PostId,
     pub network_id: NetworkId,
-    pub author: Profile,
+    /// Author identity; the profile itself is resolved through the store.
+    #[serde(alias = "author", deserialize_with = "author_ref::deserialize")]
+    pub author_id: ProfileId,
     pub content: String,
     pub created_at: DateTime<Utc>,
     pub likes: usize,

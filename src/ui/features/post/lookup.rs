@@ -1,7 +1,7 @@
 //! Post entity lookup abstraction shared by feed renderers.
 
 use super::excerpt::excerpt_with;
-use crate::domain::Post;
+use crate::domain::{Post, Profile};
 use std::borrow::Borrow;
 
 /// Trait abstracting post entity lookup and wikilink excerpt resolution.
@@ -9,6 +9,8 @@ use std::borrow::Borrow;
 pub trait PostLookup: Copy {
     fn find_post(&self, id: &str) -> Option<&Post>;
     fn resolve_wikilink(&self, target_id: &str) -> String;
+    /// The resolved author of `post` (collections without profiles answer the placeholder).
+    fn author_of(&self, post: &Post) -> &Profile;
 }
 
 /// Linear id search over any collection of owned or borrowed posts.
@@ -34,6 +36,10 @@ macro_rules! impl_collection_lookup {
             fn resolve_wikilink(&self, target_id: &str) -> String {
                 excerpt_with(target_id, |id| self.find_post(id))
             }
+            #[inline]
+            fn author_of(&self, _post: &Post) -> &Profile {
+                Profile::unknown()
+            }
         }
     )*};
 }
@@ -53,5 +59,9 @@ impl PostLookup for &crate::state::AppState {
     #[inline]
     fn resolve_wikilink(&self, target_id: &str) -> String {
         self.resolve_wikilink_fast(target_id)
+    }
+    #[inline]
+    fn author_of(&self, post: &Post) -> &Profile {
+        crate::state::AppState::author_of(self, post)
     }
 }

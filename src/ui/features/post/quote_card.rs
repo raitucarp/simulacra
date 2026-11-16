@@ -3,7 +3,7 @@
 use super::body::render_post_body;
 use super::consts::{META_SEPARATOR, QUOTE_UNAVAILABLE_PREFIX, QUOTE_UNAVAILABLE_SUFFIX, TIME_FORMAT};
 use super::lookup::PostLookup;
-use crate::domain::{Post, ProfileRole};
+use crate::domain::{Post, Profile, ProfileRole};
 use crate::theme::ThemeTokens;
 use crate::ui::atoms::{render_avatar, render_role_badge};
 use crate::ui::icons::LucideIcon;
@@ -32,7 +32,7 @@ fn render_quoted_card<L: PostLookup>(quoted: &Post, lookup: L, theme: &ThemeToke
         .flex()
         .flex_col()
         .gap(theme.spacing_xs)
-        .child(render_quoted_meta(quoted, theme))
+        .child(render_quoted_meta(quoted, lookup.author_of(quoted), theme))
         .child(
             div()
                 .font_family(theme.font_family_body.clone())
@@ -42,10 +42,9 @@ fn render_quoted_card<L: PostLookup>(quoted: &Post, lookup: L, theme: &ThemeToke
         )
 }
 
-fn render_quoted_meta(quoted: &Post, theme: &ThemeTokens) -> Div {
+fn render_quoted_meta(quoted: &Post, author: &Profile, theme: &ThemeTokens) -> Div {
     let quoted_time = quoted.created_at.format(TIME_FORMAT).to_string();
-    let quoted_is_agent = matches!(quoted.author.role, ProfileRole::Agent { .. });
-    let author = &quoted.author;
+    let quoted_is_agent = matches!(author.role, ProfileRole::Agent { .. });
     div()
         .flex()
         .items_center()

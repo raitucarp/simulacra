@@ -1,11 +1,11 @@
 //! Parent post context shown above the editor in reply mode.
 
-use crate::domain::Post;
+use crate::domain::AuthoredPost;
 use crate::theme::ThemeTokens;
 use crate::ui::atoms::render_profile_avatar;
 use gpui_kit::*;
 
-pub(super) fn render_reply_context(parent: &Post, theme: &ThemeTokens) -> Div {
+pub(super) fn render_reply_context(parent: &AuthoredPost, theme: &ThemeTokens) -> Div {
     div()
         .w_full()
         .px(theme.spacing_lg)
@@ -39,7 +39,7 @@ pub(super) fn render_reply_context(parent: &Post, theme: &ThemeTokens) -> Div {
 }
 
 /// Parent author's avatar with a threadline leading down to the reply editor.
-fn parent_avatar_column(parent: &Post, theme: &ThemeTokens) -> Div {
+fn parent_avatar_column(parent: &AuthoredPost, theme: &ThemeTokens) -> Div {
     div()
         .w(theme.post_avatar_col_width)
         .flex()

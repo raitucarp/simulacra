@@ -14,6 +14,7 @@ mod profiles;
 mod schema;
 mod settings;
 mod trending;
+pub(super) mod versions;
 
 #[cfg(test)]
 mod tests;
@@ -25,6 +26,9 @@ use std::path::{Path, PathBuf};
 
 /// Database file name, both in the per-user data folder and as the legacy `./` file.
 pub const DEFAULT_DB_FILE: &str = "simulacra.db";
+
+/// `author_json` value of a post whose author is a live profile (no archived snapshot).
+const EMPTY_AUTHOR_SNAPSHOT: &str = "{}";
 
 /// SQLite integer encoding of a `true` boolean flag.
 const SQL_TRUE: i64 = 1;

@@ -131,6 +131,6 @@ fn test_submit_post_does_not_auto_spawn_agent_above_user_post() {
     assert_eq!(state.posts.len(), initial_len + 1);
     assert_eq!(state.posts[0].id, post_id);
     assert_eq!(state.posts[0].content, "My independent epistemic reflection");
-    assert_eq!(state.posts[0].author.id, state.active_profile_id);
+    assert_eq!(state.posts[0].author_id, state.active_profile_id);
     assert_eq!(state.posts[0].replies_count, 0);
 }

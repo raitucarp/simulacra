@@ -53,14 +53,14 @@ impl AppView {
 
     /// Opens the composer modal replying to `post_id`.
     pub(crate) fn reply_to_post(&mut self, post_id: PostId, window: &mut Window, cx: &mut Context<Self>) {
-        if let Some(target) = self.state.get_post(&post_id).cloned() {
+        if let Some(target) = self.state.get_post(&post_id).map(|p| self.state.authored(p)) {
             self.open_composer_modal(ComposerModalMode::Reply(Box::new(target)), window, cx);
         }
     }
 
     /// Opens the composer modal quoting `post_id`.
     pub(crate) fn quote_post(&mut self, post_id: PostId, window: &mut Window, cx: &mut Context<Self>) {
-        if let Some(target) = self.state.get_post(&post_id).cloned() {
+        if let Some(target) = self.state.get_post(&post_id).map(|p| self.state.authored(p)) {
             self.open_composer_modal(ComposerModalMode::Quote(Box::new(target)), window, cx);
         }
     }

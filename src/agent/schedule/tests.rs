@@ -174,7 +174,7 @@ fn latest_activity_keeps_each_authors_newest_post() {
     let author = crate::domain::Profile::new_agent("agent_x", "X", "@x", "Tester");
     let old = Utc.with_ymd_and_hms(2026, 1, 1, 0, 0, 0).single().expect("valid");
     let new = old + Duration::hours(3);
-    let post = |at| crate::domain::Post { created_at: at, author: author.clone(), ..sample_post() };
+    let post = |at| crate::domain::Post { created_at: at, author_id: author.id.clone(), ..sample_post() };
     let latest = latest_activity(&[post(new), post(old)]);
     assert_eq!(latest.get(&author.id), Some(&new));
 }
@@ -184,7 +184,7 @@ fn sample_post() -> crate::domain::Post {
     crate::domain::Post {
         id: PostId::new("post_sample"),
         network_id: NetworkId::new("net_test"),
-        author: Profile::new_primary("u1", "User", "@user"),
+        author_id: Profile::new_primary("u1", "User", "@user").id,
         content: String::new(),
         created_at: Utc::now(),
         likes: 0,

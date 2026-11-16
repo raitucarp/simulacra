@@ -2,7 +2,8 @@
 //!
 //! `seed_snapshot.json` was generated from the original hand-written Rust seed literals
 //! (before the move to `assets/seed/*.json`), with runtime timestamps replaced by a
-//! placeholder. The JSON-backed seeds must reproduce it exactly.
+//! placeholder. The JSON-backed seeds must reproduce it exactly. Posts were since slimmed to
+//! reference their author by `author_id` instead of embedding the profile.
 
 use crate::state::seed::{seed_documents, seed_networks, seed_posts, seed_profiles, seed_trending};
 use chrono::Utc;
@@ -22,11 +23,9 @@ fn without_timestamps(mut records: Value) -> Value {
 
 fn current_seed_snapshot() -> Value {
     let profiles = seed_profiles();
-    let posts = serde_json::to_value(seed_posts(&profiles)).expect("serialize posts");
+    let posts = serde_json::to_value(seed_posts()).expect("serialize posts");
     let documents = serde_json::to_value(seed_documents()).expect("serialize documents");
-    let bare_posts = serde_json::to_value(seed_posts(&[])).expect("serialize bare posts");
     json!({
-        "posts_without_profiles": without_timestamps(bare_posts),
         "networks": seed_networks(),
         "profiles": profiles,
         "posts": without_timestamps(posts),
@@ -39,7 +38,7 @@ fn current_seed_snapshot() -> Value {
 fn seed_output_matches_pre_json_snapshot() {
     let expected: Value = serde_json::from_str(SNAPSHOT_JSON).expect("valid snapshot");
     let actual = current_seed_snapshot();
-    let sections = ["networks", "profiles", "posts", "posts_without_profiles", "trending", "documents"];
+    let sections = ["networks", "profiles", "posts", "trending", "documents"];
     for section in sections {
         assert_eq!(actual[section], expected[section], "seed section `{section}` drifted");
     }
@@ -49,7 +48,7 @@ fn seed_output_matches_pre_json_snapshot() {
 #[test]
 fn seed_timestamps_are_stamped_at_runtime() {
     let before = Utc::now();
-    let posts = seed_posts(&seed_profiles());
+    let posts = seed_posts();
     let documents = seed_documents();
     let after = Utc::now();
 

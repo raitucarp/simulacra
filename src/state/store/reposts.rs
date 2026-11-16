@@ -20,7 +20,7 @@ impl AppState {
         let already_reposted = self
             .posts
             .iter()
-            .any(|p| p.repost_id.as_ref() == Some(target_post_id) && p.author.id == author.id);
+            .any(|p| p.repost_id.as_ref() == Some(target_post_id) && p.author_id == author.id);
         let is_now_reposted = !already_reposted;
 
         let (target_network_id, new_repost_count) =
@@ -67,7 +67,7 @@ impl AppState {
     /// Removes the author's repost of the target from memory and SQLite.
     fn remove_repost(&mut self, target_post_id: &PostId, author_id: &ProfileId) {
         self.posts
-            .retain(|p| p.repost_id.as_ref() != Some(target_post_id) || &p.author.id != author_id);
+            .retain(|p| p.repost_id.as_ref() != Some(target_post_id) || &p.author_id != author_id);
         if let Some(ref db) = self.db {
             let _ = db.delete_repost_by_target_and_author(target_post_id, author_id);
         }

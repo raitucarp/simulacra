@@ -41,7 +41,7 @@ impl PostCallbacks {
         let select = mode.selectable.then(|| (self.on_select.clone(), post.id.clone()));
         let (like, like_id) = (self.on_like.clone(), post.id.clone());
         let (reply, reply_id) = (self.on_reply.clone(), post.id.clone());
-        let author_handle = post.author.handle.clone();
+        let author_handle = state.author_of(post).handle.clone();
         let (repost, repost_id) = (self.on_repost.clone(), post.id.clone());
         let (quote, quote_id) = (self.on_quote.clone(), post.id.clone());
         render_post_item(

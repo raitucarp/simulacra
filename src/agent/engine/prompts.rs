@@ -1,7 +1,7 @@
 //! Persona prompt assembly (system + user prompts).
 
 use super::DialecticEngine;
-use crate::domain::{Post, Profile};
+use crate::domain::{AuthoredPost, Profile};
 
 /// Network name used when no explicit network context is supplied.
 const DEFAULT_NETWORK_NAME: &str = "Active Epistemic Network";
@@ -25,7 +25,7 @@ impl DialecticEngine {
 
     /// Constructs the user prompt before posting/replying, including `@mention` detection
     /// and pre-post reasoning strategy.
-    pub fn persona_user_prompt(parent_post: &Post, agent_profile: &Profile) -> String {
+    pub fn persona_user_prompt(parent_post: &AuthoredPost, agent_profile: &Profile) -> String {
         let handle_lower = agent_profile.handle.to_lowercase();
         let is_mentioned = parent_post
             .mentions

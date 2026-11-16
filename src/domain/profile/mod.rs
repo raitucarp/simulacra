@@ -2,6 +2,7 @@
 
 mod constructors;
 mod queries;
+mod unknown;
 
 use super::agent_config::AgentConfig;
 use super::ids::{NetworkId, ProfileId};
@@ -40,6 +41,21 @@ pub struct Profile {
     /// Comprehensive human psychology, intelligence, linguistics, schedule, and prompt assembly configuration.
     #[serde(default)]
     pub config: AgentConfig,
+}
+
+impl From<Profile> for ProfileId {
+    /// A profile stands in for its id wherever an author reference is expected.
+    #[inline]
+    fn from(profile: Profile) -> Self {
+        profile.id
+    }
+}
+
+impl From<&Profile> for ProfileId {
+    #[inline]
+    fn from(profile: &Profile) -> Self {
+        profile.id.clone()
+    }
 }
 
 /// Upper-cased first character of `name`, or `fallback` when the name is empty.

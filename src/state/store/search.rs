@@ -14,9 +14,10 @@ impl AppState {
             if q.is_empty() {
                 return true;
             }
+            let author = self.author_of(p);
             p.content.to_lowercase().contains(&q)
-                || p.author.name.to_lowercase().contains(&q)
-                || p.author.handle.to_lowercase().contains(&q)
+                || author.name.to_lowercase().contains(&q)
+                || author.handle.to_lowercase().contains(&q)
         })
     }
 }

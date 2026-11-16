@@ -80,6 +80,7 @@ impl ForgeView {
         let profile = self.draft.profile();
         let bubble = div()
             .flex_1()
+            .min_w_0()
             .p(theme.spacing_md)
             .rounded(theme.radius_lg)
             .bg(theme.bg_callout)

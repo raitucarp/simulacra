@@ -11,6 +11,7 @@ use crate::theme::ThemeTokens;
 use crate::ui::components::{segment_pill, segmented_track, Segment};
 use crate::ui::features::forge::text::tr;
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
+use crate::ui::features::forge::widgets::{KeyboardHint, KeyboardStop};
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::scroll::ScrollableElement;
@@ -86,6 +87,7 @@ impl ForgeView {
                     .items_center()
                     .gap(theme.spacing_md)
                     .child(kind_switch(self.start.kind, handle, theme))
+                    .child(KeyboardHint::button(theme))
                     .child(Button::new(CLOSE_ID).ghost().icon(LucideIcon::X).tooltip(tr(CLOSE_KEY)).on_click(move |_, w, cx| close(w, cx))),
             )
     }
@@ -102,7 +104,8 @@ fn kind_switch(current: ForgeKind, handle: &ForgeHandle, theme: &ThemeTokens) ->
             active: kind == current,
             active_icon_color: theme.accent_brand,
         };
-        segment_pill(segment, theme, move |window, cx| pick(window, cx))
+        let click = pick.clone();
+        segment_pill(segment, theme, move |window, cx| click(window, cx)).keyboard_stop(theme, pick)
     });
     div().w(theme.forge_preview_width).child(segmented_track(theme).children(pills))
 }

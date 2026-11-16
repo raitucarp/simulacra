@@ -45,7 +45,7 @@ impl Default for AgentConfig {
             system_prompt: v::SYSTEM_PROMPT.to_string(), assembly_strategy: PromptAssemblyStrategy::FullHumanSynthesis,
             pre_post_reasoning: PrePostReasoningMode::EmbodiedHumanPerspective, prompt_template: v::PROMPT_TEMPLATE.to_string(),
             inject_identity_and_bio: true, inject_psychological_profile: true, inject_intelligence_profile: true,
-            inject_linguistic_stylistics: true, inject_social_and_schedule: true, inject_network_grounding: true, avatar: None,
+            inject_linguistic_stylistics: true, inject_social_and_schedule: true, inject_network_grounding: true, avatar: None, archetype_class: None,
         }
     }
 }

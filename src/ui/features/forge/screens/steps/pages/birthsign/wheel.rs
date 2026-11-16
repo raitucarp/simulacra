@@ -1,9 +1,11 @@
 //! The Enneagram wheel: the circle, the inner triangle and hexad drawn on a canvas, and nine
-//! clickable numbered points around it (the chosen core point filled in brand violet).
+//! clickable numbered points around it (the chosen core point filled in brand violet). Each
+//! point is a tab stop picked with Enter / Space.
 
 use super::enneagram::{wheel_offset, HEXAD, POINTS, TRIANGLE};
 use crate::theme::ThemeTokens;
-use crate::ui::features::forge::widgets::ValueCallback;
+use crate::ui::features::forge::widgets::{KeyboardStop, ValueCallback};
+use std::rc::Rc;
 use gpui_kit::*;
 
 const WHEEL_ID: &str = "forge-enneagram-wheel";
@@ -55,6 +57,7 @@ fn point_button(point: u8, chosen: bool, theme: &ThemeTokens, on_pick: ValueCall
         (theme.bg_card, theme.text_primary, theme.border_strong)
     };
     let hover_ring = theme.accent_brand;
+    let pick = on_pick.clone();
     div()
         .id((POINT_ID_PREFIX, usize::from(point)))
         .absolute()
@@ -74,6 +77,7 @@ fn point_button(point: u8, chosen: bool, theme: &ThemeTokens, on_pick: ValueCall
         .cursor_pointer()
         .hover(move |style| style.border_color(hover_ring))
         .on_click(move |_, window, cx| on_pick(point, window, cx))
+        .keyboard_stop(theme, Rc::new(move |window, cx| pick(point, window, cx)))
         .child(point.to_string())
 }
 

@@ -8,13 +8,14 @@ use crate::state::forge::{DraftEdit, TraitField, TraitValue};
 use crate::ui::features::forge::screens::common::labeled;
 use crate::ui::features::forge::text::{tr, trait_description, trait_label};
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
-use crate::ui::features::forge::widgets::{option_card, IllustratedOptionGrid, OptionCardSpec};
+use crate::ui::features::forge::widgets::{CardGrid, GridCell, IllustratedOptionGrid, OptionCardSpec};
 use crate::ui::illustration::Illustration;
 use gpui_kit::*;
 
 const WHEEL_HINT_KEY: &str = "forge.ui.birthsign.wheel_hint";
 const WING_KEY: &str = "forge.ui.birthsign.wing";
 const WING_ID_PREFIX: &str = "forge-enneagram-wing";
+const WING_GRID_ID: &str = "forge-enneagram-wings";
 const INSTINCT_GRID_ID: &str = "forge-instinct";
 /// Instinct cards per row.
 const INSTINCT_COLUMNS: usize = 3;
@@ -45,18 +46,20 @@ impl ForgeView {
     }
 
     /// One illustrated card per valid wing of `current`'s core.
-    fn wing_cards(&self, current: EnneagramType, handle: &ForgeHandle) -> Div {
+    fn wing_cards(&self, current: EnneagramType, handle: &ForgeHandle) -> CardGrid {
         let theme = &self.theme;
         let width = theme.forge_option_card_width;
-        let cards = variants(core(current)).into_iter().map(|variant| {
+        let wings = variants(core(current));
+        let columns = wings.len();
+        let cells = wings.into_iter().map(|variant| {
             let art = Illustration::trait_card(variant).width(width);
             let mut spec = OptionCardSpec::new((WING_ID_PREFIX, variant as usize), art, trait_label(variant), width);
             spec.description = trait_description(variant);
             spec.selected = variant == current;
             let pick = handle.edit(|ty: EnneagramType| DraftEdit::Trait(TraitValue::Enneagram(ty)));
-            option_card(spec, theme, move |w, cx| pick(variant, w, cx))
+            GridCell::card(spec, theme, std::rc::Rc::new(move |w, cx| pick(variant, w, cx)))
         });
-        div().flex().justify_center().gap(theme.spacing_sm).children(cards)
+        CardGrid::new(WING_GRID_ID, cells.collect(), columns, theme.spacing_sm).centered()
     }
 
     /// Self-preservation / social / intimate stacking as illustrated cards.

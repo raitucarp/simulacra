@@ -1,19 +1,23 @@
 //! [`HourRangePicker`]: when an agent is online, as a 24-cell day strip (active hours lit,
 //! wrapping past midnight like the scheduler's `HourWindow`) plus start / end steppers.
-//! Clicking an hour moves the start there; Shift-clicking moves the end.
+//! Clicking an hour moves the start there; Shift-clicking moves the end. The strip is one tab
+//! stop (Left / Right move the start, Up / Down the end); the steppers are tab stops too.
 
-use super::ValueCallback;
+use super::focus_ring::KeyboardStop;
+use super::{ActionCallback, ValueCallback};
 use crate::agent::schedule::{HourWindow, HOURS_PER_DAY};
 use crate::domain::agent_config::AgentConfig;
 use crate::state::forge::fields::MAX_HOUR;
 use crate::state::forge::HourField;
 use crate::theme::ThemeTokens;
 use crate::ui::components::mini_step_button;
+use crate::ui::features::forge::logic::hour_key_change;
 use crate::ui::features::forge::text::{field_label, tr};
 use gpui_kit::*;
 use std::rc::Rc;
 
 const STRIP_ID: &str = "forge-hours-strip";
+const STRIP_KEYS_ID: &str = "forge-hours-strip-keys";
 const STEP_ID_PREFIX: &str = "forge-hours-step";
 const HINT_KEY: &str = "forge.ui.hours_hint";
 const MINUS: &str = "-";
@@ -66,7 +70,9 @@ impl HourRangePicker {
         let button = |label: &'static str, next: u8| {
             let on_change = self.on_change.clone();
             let id = SharedString::from(format!("{STEP_ID_PREFIX}-{}-{label}", field.path()));
-            mini_step_button(id, label, theme, move |window, cx| on_change((field, next), window, cx))
+            let step: ActionCallback = Rc::new(move |window, cx| on_change((field, next), window, cx));
+            let click = step.clone();
+            mini_step_button(id, label, theme, move |window, cx| click(window, cx)).keyboard_stop(theme, step)
         };
         let previous = if value == 0 { MAX_HOUR } else { value - 1 };
         let next = if value >= MAX_HOUR { 0 } else { value + 1 };
@@ -95,9 +101,21 @@ impl RenderOnce for HourRangePicker {
             .flex()
             .flex_col()
             .gap(theme.spacing_sm)
-            .child(div().flex().gap(theme.spacing_3xs).children(cells))
+            .child(hour_keys(STRIP_KEYS_ID, (self.start, self.end), theme, self.on_change.clone()).flex().gap(theme.spacing_3xs).children(cells))
             .child(div().text_size(theme.font_size_2xs).text_color(theme.text_muted).child(tr(HINT_KEY)))
             .child(self.stepper(HourField::ActiveHoursStart, self.start))
             .child(self.stepper(HourField::ActiveHoursEnd, self.end))
     }
+}
+
+/// A tab stop moving the active hours `(start, end)` with the arrow keys (see
+/// [`hour_key_change`]); used by the hour strip and the clock ring.
+pub fn hour_keys(id: impl Into<ElementId>, hours: (u8, u8), theme: &ThemeTokens, on_change: ValueCallback<(HourField, u8)>) -> Stateful<Div> {
+    div().id(id).rounded(theme.radius_xs).tab_stop_ring(theme).on_key_down(move |event: &KeyDownEvent, window, cx| {
+        let keystroke = &event.keystroke;
+        if let Some(change) = hour_key_change(keystroke.key.as_str(), keystroke.modifiers.shift, hours) {
+            cx.stop_propagation();
+            on_change(change, window, cx);
+        }
+    })
 }

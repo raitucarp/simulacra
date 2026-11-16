@@ -1,10 +1,14 @@
 //! A kit slider entity kept in keyed element state: values are whole numbers, a soft
 //! `ceiling` below the maximum snaps the thumb back (budgets), and the value is reported on
 //! release so one drag is one undo step. While dragging, the live value is exposed so the
-//! label can follow the thumb.
+//! label can follow the thumb. [`keyboard_slider`] makes it reachable and movable by keyboard.
 
+use super::focus_ring::KeyboardStop;
 use super::ValueCallback;
-use gpui_kit::component::slider::{SliderEvent, SliderState};
+use crate::theme::ThemeTokens;
+use crate::ui::features::forge::logic::slider_key_value;
+use gpui_kit::component::slider::{Slider, SliderEvent, SliderState};
+use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::*;
 
 /// Keyed state of one slider.
@@ -85,4 +89,30 @@ pub fn keyed_slider(
         slider.update(cx, |state, cx| state.set_value(f32::from(value), window, cx));
     }
     SliderBinding { slider, dragging }
+}
+
+/// The kit slider of `binding` as a tab stop with the theme's focus ring: arrows, Page Up /
+/// Down and Home / End move it (up to the soft ceiling), each press one released value.
+pub fn keyboard_slider(
+    id: impl Into<ElementId>,
+    binding: &SliderBinding,
+    (value, range): (u16, SliderRange),
+    disabled: bool,
+    theme: &ThemeTokens,
+    on_release: ValueCallback<u16>,
+) -> Stateful<Div> {
+    let limits = (range.min, range.ceiling.min(range.max), range.step);
+    div()
+        .id(id)
+        .rounded(theme.radius_sm)
+        .when(!disabled, |slot| {
+            slot.tab_stop_ring(theme).on_key_down(move |event: &KeyDownEvent, window, cx| {
+                let next = slider_key_value(value, event.keystroke.key.as_str(), limits);
+                if let Some(next) = next.filter(|_| !event.keystroke.modifiers.modified()) {
+                    cx.stop_propagation();
+                    on_release(next, window, cx);
+                }
+            })
+        })
+        .child(Slider::new(&binding.slider).disabled(disabled))
 }

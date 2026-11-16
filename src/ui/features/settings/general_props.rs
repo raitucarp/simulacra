@@ -1,6 +1,6 @@
 //! Live data and callbacks shown by the General pane (scheduler switch, status, vault path).
 
-use super::callbacks::ToggleSchedulerCallback;
+use super::callbacks::{ReplayWelcomeCallback, ToggleSchedulerCallback};
 
 /// Inputs of the General settings pane.
 #[derive(Default)]
@@ -21,4 +21,6 @@ pub struct GeneralPaneProps {
     pub language_label: &'static str,
     /// Invoked with the requested switch value.
     pub on_toggle_scheduler: Option<ToggleSchedulerCallback>,
+    /// Shows the first-run welcome again.
+    pub on_replay_welcome: Option<ReplayWelcomeCallback>,
 }

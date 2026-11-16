@@ -6,6 +6,7 @@ use crate::theme::ThemeTokens;
 use crate::ui::features::forge::logic::{rail_items, RailItem, RailStatus};
 use crate::ui::features::forge::text::tr;
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
+use crate::ui::features::forge::widgets::KeyboardStop;
 use crate::ui::icons::LucideIcon;
 use crate::ui::illustration::Illustration;
 use gpui_kit::component::scroll::ScrollableElement;
@@ -61,6 +62,7 @@ impl ForgeView {
         let theme = &self.theme;
         let step = item.step;
         let go = handle.act(move |this, window, cx| this.go_to(step, window, cx));
+        let click = go.clone();
         let hover_bg = theme.hover_bg;
         let label = div()
             .flex_1()
@@ -85,7 +87,8 @@ impl ForgeView {
             .cursor_pointer()
             .hover(move |style| style.bg(hover_bg))
             .when(item.is_current, |row| row.bg(theme.accent_brand_subtle).border(theme.border_width_hairline).border_color(theme.accent_brand_border))
-            .on_click(move |_, window, cx| go(window, cx))
+            .on_click(move |_, window, cx| click(window, cx))
+            .keyboard_stop(theme, go)
             .child(div().rounded(theme.radius_sm).overflow_hidden().child(Illustration::step(step_key(step)).width(theme.forge_rail_thumb_width)))
             .child(label)
             .children(status_badge(item, theme))

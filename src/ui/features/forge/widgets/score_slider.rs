@@ -8,7 +8,7 @@
 //! follows the thumb.
 
 use super::explainer::ExplainerButton;
-use super::slider_slot::{keyed_slider, SliderRange};
+use super::slider_slot::{keyboard_slider, keyed_slider, SliderRange};
 use super::ValueCallback;
 use crate::domain::agent_config::AgentConfig;
 use crate::state::forge::attributes::{budget_remaining, BUDGET_FIELDS};
@@ -17,13 +17,13 @@ use crate::state::forge::ScoreField;
 use crate::theme::ThemeTokens;
 use crate::ui::features::forge::logic::score_level_key;
 use crate::ui::features::forge::text::{field_label, tr};
-use gpui_kit::component::slider::Slider;
 use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::*;
 use std::rc::Rc;
 
 const SLIDER_ID_PREFIX: &str = "forge-score";
 const NO_POINTS_KEY: &str = "forge.ui.no_points";
+const KEYS_SUFFIX: &str = "keys";
 /// One slider notch.
 const SCORE_STEP: u16 = 1;
 
@@ -88,7 +88,7 @@ impl RenderOnce for ScoreSlider {
         let range = SliderRange { min: 0, max: u16::from(MAX_SCORE), step: SCORE_STEP, ceiling: u16::from(self.ceiling) };
         let on_change = self.on_change.clone();
         let on_release: ValueCallback<u16> = Rc::new(move |value, window, cx| on_change(value.min(u16::from(MAX_SCORE)) as u8, window, cx));
-        let binding = keyed_slider(id, u16::from(self.value), range, on_release, window, cx);
+        let binding = keyed_slider(id.clone(), u16::from(self.value), range, on_release.clone(), window, cx);
         let shown = binding.dragging.map_or(self.value, |live| live.min(u16::from(MAX_SCORE)) as u8);
         let at_ceiling = self.ceiling <= self.value && self.ceiling < MAX_SCORE;
         let theme = &self.theme;
@@ -97,7 +97,7 @@ impl RenderOnce for ScoreSlider {
             .flex_col()
             .gap(theme.spacing_xs)
             .child(self.header(shown))
-            .child(Slider::new(&binding.slider).disabled(self.disabled))
+            .child(keyboard_slider(SharedString::from(format!("{id}-{KEYS_SUFFIX}")), &binding, (u16::from(self.value), range), self.disabled, theme, on_release))
             .when(at_ceiling, |col| {
                 col.child(div().text_size(theme.font_size_2xs).text_color(theme.warning).child(tr(NO_POINTS_KEY)))
             })

@@ -39,6 +39,7 @@ impl AppView {
             db_path: self.state.db.as_ref().map(|db| db.path()).unwrap_or_default(),
             language_label: self.chrome.current_language.native_label(),
             on_toggle_scheduler: Some(bind.boxed(Self::set_scheduler_enabled)),
+            on_replay_welcome: Some(bind.boxed_act(Self::replay_welcome)),
         }
     }
 }

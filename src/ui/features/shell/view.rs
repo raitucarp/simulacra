@@ -47,6 +47,8 @@ pub struct ChromeState {
     pub is_left_sidebar_collapsed: bool,
     pub is_right_sidebar_open: bool,
     pub right_sidebar_tab: RightSidebarTab,
+    /// The first-run welcome overlay is showing.
+    pub is_onboarding_open: bool,
 }
 
 impl ChromeState {
@@ -62,6 +64,7 @@ impl ChromeState {
             is_left_sidebar_collapsed: false,
             is_right_sidebar_open: true,
             right_sidebar_tab: RightSidebarTab::MindCadence,
+            is_onboarding_open: false,
         }
     }
 }

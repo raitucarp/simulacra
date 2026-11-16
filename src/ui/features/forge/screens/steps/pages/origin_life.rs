@@ -10,7 +10,7 @@ use crate::state::forge::{AvatarField, CountField, DraftEdit, TextField, TraitFi
 use crate::ui::features::forge::logic::OccupationPreset;
 use crate::ui::features::forge::text::{field_label, tr, tr_with};
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
-use crate::ui::features::forge::widgets::{option_card, IllustratedOptionGrid, NumberSlider, OptionCardSpec};
+use crate::ui::features::forge::widgets::{CardGrid, GridCell, IllustratedOptionGrid, NumberSlider, OptionCardSpec};
 use crate::ui::illustration::PortraitView;
 use gpui_kit::*;
 
@@ -19,6 +19,7 @@ const PRESETS_KEY: &str = "forge.ui.origin.occupation_presets";
 const AGE_FORMAT_KEY: &str = "forge.ui.origin.age_years";
 const ARG_AGE: &str = "age";
 const OCCUPATION_ID_PREFIX: &str = "forge-occupation";
+const OCCUPATION_GRID_ID: &str = "forge-occupation-grid";
 const AGE_ID: &str = "forge-age";
 const GENDER_GRID_ID: &str = "forge-gender";
 /// Quick-pick occupation cards per row.
@@ -44,16 +45,14 @@ impl ForgeView {
 
     fn occupation_presets(&self, handle: &ForgeHandle) -> Div {
         let theme = &self.theme;
-        let rows: Vec<Div> = OccupationPreset::ALL
-            .chunks(PRESET_COLUMNS)
-            .map(|row| div().flex().gap(theme.spacing_xs).children(row.iter().map(|&preset| self.occupation_card(preset, handle))))
-            .collect();
-        labeled(TextField::Occupation.path(), div().flex().flex_col().gap(theme.spacing_xs).children(rows), theme)
+        let cells = OccupationPreset::ALL.iter().map(|&preset| self.occupation_card(preset, handle)).collect();
+        let grid = CardGrid::new(OCCUPATION_GRID_ID, cells, PRESET_COLUMNS, theme.spacing_xs);
+        labeled(TextField::Occupation.path(), grid, theme)
             .child(div().text_size(theme.font_size_2xs).text_color(theme.text_muted).child(tr(PRESETS_KEY)))
     }
 
     /// One quick pick: the draft's portrait (or a default one) wearing the preset's outfit.
-    fn occupation_card(&self, preset: OccupationPreset, handle: &ForgeHandle) -> Stateful<Div> {
+    fn occupation_card(&self, preset: OccupationPreset, handle: &ForgeHandle) -> GridCell {
         let theme = &self.theme;
         let width = theme.forge_preset_card_width;
         let base = pcg_spec(self.draft.profile().config.avatar.as_ref()).unwrap_or_default();
@@ -62,7 +61,7 @@ impl ForgeView {
         let mut spec = OptionCardSpec::new((OCCUPATION_ID_PREFIX, preset as usize), art, label.clone(), width);
         spec.selected = self.draft.profile().config.occupation.trim().eq_ignore_ascii_case(&label);
         let pick = handle.act(move |this, _, cx| this.pick_occupation(preset, cx));
-        option_card(spec, theme, move |w, cx| pick(w, cx))
+        GridCell::card(spec, theme, pick)
     }
 
     /// Writes the preset's name into Occupation and dresses a generated portrait to match.

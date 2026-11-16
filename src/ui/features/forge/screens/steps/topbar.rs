@@ -4,6 +4,7 @@
 use super::super::common::muted;
 use crate::ui::features::forge::text::{tr, tr_with};
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
+use crate::ui::features::forge::widgets::KeyboardHint;
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::Disableable;
@@ -38,6 +39,7 @@ impl ForgeView {
             .bg(theme.bg_sidebar)
             .child(self.history_buttons(handle))
             .child(self.step_title())
+            .child(KeyboardHint::button(theme))
             .children(self.guide_show_button(handle))
             .child(self.nav_buttons(handle))
     }

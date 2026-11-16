@@ -83,7 +83,7 @@ impl ForgeView {
             .flex()
             .gap(theme.spacing_xs)
             .child(meta_badge(&tr(&self.draft.kind().label_key()), kind_colors, theme))
-            .children(self.class.map(|class| class_badge(class, theme)));
+            .children(self.class().map(|class| class_badge(class, theme)));
         div()
             .flex()
             .flex_col()

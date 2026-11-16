@@ -4,7 +4,7 @@ use super::state::StartState;
 use super::ForgeView;
 use crate::domain::portrait::{suggested_outfit, AvatarMode, PortraitSpec};
 use crate::domain::ArchetypeClass;
-use crate::state::forge::{apply_class, roll_into, AgentDraft, AvatarField, DraftEdit, ForgeKind};
+use crate::state::forge::{apply_class, roll_into, set_class, AgentDraft, AvatarField, DraftEdit, ForgeKind};
 use crate::ui::features::forge::logic::time_seed;
 use gpui_kit::*;
 
@@ -13,7 +13,6 @@ impl ForgeView {
     pub fn set_kind(&mut self, kind: ForgeKind, _: &mut Window, cx: &mut Context<Self>) {
         self.start = StartState { kind, ..StartState::new(kind) };
         self.draft = AgentDraft::new(kind, self.context.network_id.clone());
-        self.class = None;
         self.revalidate();
         cx.notify();
     }
@@ -21,14 +20,13 @@ impl ForgeView {
     /// "Begin as <class>": applies the class and opens the creator.
     pub fn begin_as(&mut self, class: ArchetypeClass, window: &mut Window, cx: &mut Context<Self>) {
         apply_class(&mut self.draft, class);
-        self.class = Some(class);
         self.ensure_face();
         self.enter_steps(window, cx);
     }
 
     /// "Start from scratch".
     pub fn begin_blank(&mut self, window: &mut Window, cx: &mut Context<Self>) {
-        self.class = None;
+        set_class(&mut self.draft, None);
         self.ensure_face();
         self.enter_steps(window, cx);
     }
@@ -47,7 +45,6 @@ impl ForgeView {
     /// Rolls (or re-rolls) a random thinker and shows the result on the start screen.
     pub fn roll(&mut self, _: &mut Window, cx: &mut Context<Self>) {
         let class = roll_into(&mut self.draft, time_seed(), &self.context.existing);
-        self.class = Some(class);
         self.start.rolled = Some(class);
         self.start.describing = false;
         self.revalidate();

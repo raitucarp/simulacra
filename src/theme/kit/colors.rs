@@ -44,7 +44,7 @@ pub(super) fn apply_base(c: &mut ThemeConfigColors, t: &ThemeTokens) {
     c.foreground = hex(t.text_primary);
     c.border = hex(t.border);
     c.input = hex(t.border_strong);
-    c.ring = hex(t.border_focus);
+    c.ring = hex(t.focus_ring);
     c.muted = hex(t.bg_elevated);
     c.muted_foreground = hex(t.text_muted);
     c.caret = hex(t.accent_brand);

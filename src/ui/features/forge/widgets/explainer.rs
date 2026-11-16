@@ -1,57 +1,43 @@
 //! [`ExplainerButton`]: a small "?" next to a setting that opens a hover card saying what it
-//! is, how it changes posts and an example, in plain language.
+//! is, how it changes posts and an example, in plain language. The "?" is a tab stop:
+//! Enter / Space pin the card open while it keeps focus; Escape closes every card.
 
-use crate::domain::TraitOption;
+use super::explainer_card::{card, Explainer, EXPLAIN_ROOT};
+use super::explainer_state::{generation, set_open, PinState};
+use super::focus_ring::{is_activation, KeyboardStop};
 use crate::theme::ThemeTokens;
-use crate::ui::features::forge::text::{field_label, tr, tr_opt, trait_description, trait_label};
+use crate::ui::atoms::ElevationExt;
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::hover_card::HoverCard;
 use gpui_kit::component::Icon;
 use gpui_kit::*;
+use std::rc::Rc;
 
-/// `forge.explain.{path}.{what|effect|example}`.
-const EXPLAIN_ROOT: &str = "forge.explain";
-const WHAT: &str = "what";
-const EFFECT: &str = "effect";
-const EXAMPLE: &str = "example";
-const WHAT_HEADING: &str = "forge.ui.explain_what";
-const EFFECT_HEADING: &str = "forge.ui.explain_effect";
-const EXAMPLE_HEADING: &str = "forge.ui.explain_example";
 const TRIGGER_SUFFIX: &str = "trigger";
+const PIN_SUFFIX: &str = "pin";
 
-/// The text of one explainer card.
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct Explainer {
-    pub title: String,
-    pub what: String,
-    pub effect: Option<String>,
-    pub example: Option<String>,
-}
+pub use super::explainer_state::close_explainers;
 
-impl Explainer {
-    /// The explainer of the field with serde name `path`, when its texts exist.
-    pub fn for_field(path: &str) -> Option<Self> {
-        let part = |suffix: &str| tr_opt(&format!("{EXPLAIN_ROOT}.{path}.{suffix}"));
-        Some(Self { title: field_label(path), what: part(WHAT)?, effect: part(EFFECT), example: part(EXAMPLE) })
-    }
+/// Builds the body of a hover card.
+pub type CardBody = Rc<dyn Fn(&ThemeTokens) -> Div>;
 
-    /// The explainer of one trait option (its label and description), when described.
-    pub fn for_option<T: TraitOption>(option: T) -> Option<Self> {
-        Some(Self { title: trait_label(option), what: trait_description(option)?, effect: None, example: None })
-    }
-}
-
-/// A "?" icon showing an [`Explainer`] on hover.
+/// A "?" icon showing an [`Explainer`] (or any card body) on hover.
 #[derive(IntoElement)]
 pub struct ExplainerButton {
     id: SharedString,
-    explainer: Explainer,
+    icon: LucideIcon,
+    body: CardBody,
     theme: ThemeTokens,
 }
 
 impl ExplainerButton {
     pub fn new(id: impl Into<SharedString>, explainer: Explainer, theme: &ThemeTokens) -> Self {
-        Self { id: id.into(), explainer, theme: theme.clone() }
+        Self::custom(id, LucideIcon::HelpCircle, Rc::new(move |theme: &ThemeTokens| card(&explainer, theme)), theme)
+    }
+
+    /// An `icon` trigger for any card `body` (sized and padded by the body itself).
+    pub fn custom(id: impl Into<SharedString>, icon: LucideIcon, body: CardBody, theme: &ThemeTokens) -> Self {
+        Self { id: id.into(), icon, body, theme: theme.clone() }
     }
 
     /// A button for field `path`, or `None` when the field has no explainer texts.
@@ -60,38 +46,59 @@ impl ExplainerButton {
     }
 }
 
-fn section(heading_key: &str, body: String, theme: &ThemeTokens) -> Div {
-    div()
-        .flex()
-        .flex_col()
-        .gap(theme.spacing_2xs)
-        .child(div().text_size(theme.font_size_2xs).font_weight(FontWeight::BOLD).text_color(theme.text_muted).child(tr(heading_key)))
-        .child(div().text_size(theme.font_size_xs).text_color(theme.text_primary).line_height(relative(theme.line_height_body)).child(body))
+
+/// The card as a floating surface, for the keyboard-pinned copy.
+fn floating(body: &CardBody, theme: &ThemeTokens) -> impl IntoElement {
+    let surface = body(theme)
+        .rounded(theme.radius_lg)
+        .bg(theme.bg_elevated)
+        .border(theme.border_width_hairline)
+        .border_color(theme.border)
+        .elevation_shadow(theme);
+    deferred(anchored().snap_to_window_with_margin(theme.spacing_md).child(surface))
 }
 
-fn card(explainer: &Explainer, theme: &ThemeTokens) -> Div {
-    div()
-        .w(theme.forge_explainer_width)
-        .p(theme.spacing_md)
-        .flex()
-        .flex_col()
-        .gap(theme.spacing_sm)
-        .child(div().text_size(theme.font_size_sm).font_weight(FontWeight::BOLD).child(explainer.title.clone()))
-        .child(section(WHAT_HEADING, explainer.what.clone(), theme))
-        .children(explainer.effect.clone().map(|text| section(EFFECT_HEADING, text, theme)))
-        .children(explainer.example.clone().map(|text| section(EXAMPLE_HEADING, text, theme)))
+/// Toggles the pinned card of `key` on Enter / Space.
+fn on_trigger_key(pin: &Entity<PinState>, key: &SharedString, event: &KeyDownEvent, cx: &mut App) {
+    if !is_activation(event) {
+        return;
+    }
+    cx.stop_propagation();
+    let pinned = pin.update(cx, |state, cx| {
+        state.pinned = !state.pinned;
+        cx.notify();
+        state.pinned
+    });
+    set_open(key, pinned, cx);
 }
 
 impl RenderOnce for ExplainerButton {
-    fn render(self, _: &mut Window, _: &mut App) -> impl IntoElement {
+    fn render(self, window: &mut Window, cx: &mut App) -> impl IntoElement {
         let theme = self.theme.clone();
+        let key = SharedString::from(format!("{}-{}", self.id, generation(cx)));
+        let pin = window.use_keyed_state(SharedString::from(format!("{key}-{PIN_SUFFIX}")), cx, |_, cx| PinState::new(cx));
+        let handle = pin.read(cx).handle.clone();
+        let pinned = pin.read(cx).pinned && handle.is_focused(window);
+        if pin.read(cx).pinned && !pinned {
+            pin.update(cx, |state, _| state.pinned = false);
+            set_open(&key, false, cx);
+        }
+        let (key_pin, pin_key) = (pin.clone(), key.clone());
         let trigger = div()
-            .id(SharedString::from(format!("{}-{TRIGGER_SUFFIX}", self.id)))
+            .id(SharedString::from(format!("{key}-{TRIGGER_SUFFIX}")))
+            .track_focus(&handle)
+            .focus_ring(&theme)
             .flex_shrink_0()
+            .rounded(theme.radius_full)
             .cursor_pointer()
             .text_color(theme.text_muted)
-            .child(Icon::new(LucideIcon::HelpCircle).size(theme.font_size_sm));
-        let explainer = self.explainer;
-        HoverCard::new(self.id).trigger(trigger).content(move |_, _, _| card(&explainer, &theme))
+            .on_key_down(move |event: &KeyDownEvent, _, cx| on_trigger_key(&key_pin, &pin_key, event, cx))
+            .child(Icon::new(self.icon).size(theme.font_size_sm));
+        let (body, card_theme, open_key) = (self.body.clone(), theme.clone(), key.clone());
+        let hover = HoverCard::new(key)
+            .trigger(trigger)
+            .content(move |_, _, _| body(&card_theme))
+            .on_open_change(move |open, _, cx| set_open(&open_key, *open, cx));
+        div().flex_shrink_0().child(hover).children(pinned.then(|| floating(&self.body, &theme)))
     }
 }

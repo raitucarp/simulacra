@@ -8,7 +8,7 @@ gpui_kit::assets::icon_assets!(
         Activity, Archive, ArrowDown, ArrowLeft, ArrowRight, ArrowUp, BookOpen, Bot, Boxes, Brain,
         Calendar, Check, ChevronDown, ChevronLeft, ChevronRight, ChevronUp, ChevronsUpDown,
         CircleQuestionMark, Clock, Compass, Copy, Cpu, Dices, Ellipsis, ExternalLink, Eye, FileText,
-        Folder, Funnel, GitBranch, Globe, Hash, Heart, Image, Info, Library, Link2, Lock, Maximize2,
+        Folder, Funnel, GitBranch, Globe, Hash, Heart, Image, Info, Keyboard, Library, Link2, Lock, Maximize2,
         MessageSquare, Minimize2, Minus, Moon, Palette, PanelLeft, PanelRight, Pin, Plus, RefreshCw,
         Repeat, Search, Send, Settings, Share2, SlidersHorizontal, Sparkles, SquarePen, Sun, Tag,
         Terminal, Trash, User, UserCheck, Users, Volume2, Wifi, X, Zap,

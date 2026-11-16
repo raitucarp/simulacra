@@ -5,6 +5,7 @@ mod controls;
 mod day_filter;
 mod forge;
 mod index;
+mod onboarding;
 mod scale;
 mod lifecycle;
 mod posts;

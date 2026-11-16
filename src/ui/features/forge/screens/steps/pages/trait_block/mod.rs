@@ -1,41 +1,18 @@
-//! Shared builders of the Voice, Daily Life, Relationships and Grimoire pages: a trait field
-//! as a captioned grid of small illustrated cards with a "what the chosen option does" line,
-//! and any control with its field's "?" explainer beside it.
+//! Shared builders of the option pages: a trait field as a captioned illustrated grid (full
+//! cards on Disposition / Mind, small cards with a "what the chosen option does" line on Voice,
+//! Daily Life, Relationships and Grimoire), and any control with its "?" explainer beside it.
 
 use super::super::super::common::labeled;
 use crate::domain::trait_option::TRAIT_DESCRIPTION_SUFFIX;
-use crate::domain::TraitOption;
-use crate::state::forge::{DraftEdit, TraitField, TraitValue, TraitVisitor};
+use crate::state::forge::{DraftEdit, TraitField, TraitValue};
 use crate::theme::ThemeTokens;
 use crate::ui::features::forge::text::{tr, tr_opt};
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
-use crate::ui::features::forge::widgets::{ExplainerButton, IllustratedOptionGrid, ValueCallback};
+use crate::ui::features::forge::widgets::{trait_option_grid, ExplainerButton, TraitGridLook};
 use gpui_kit::*;
 
-/// Element id prefix of these grids (`forge-pick-<path>`).
-const GRID_ID_PREFIX: &str = "forge-pick";
-/// Small cards per row.
-const SMALL_COLUMNS: usize = 4;
-
-/// Builds a small-card grid once the field's concrete option type is known.
-struct SmallGrid {
-    id: SharedString,
-    theme: ThemeTokens,
-    on_pick: ValueCallback<TraitValue>,
-}
-
-impl TraitVisitor for SmallGrid {
-    type Output = AnyElement;
-
-    fn visit<T: TraitOption>(self, current: T, wrap: fn(T) -> TraitValue) -> AnyElement {
-        let on_pick = self.on_pick;
-        IllustratedOptionGrid::new(self.id, Some(current), &self.theme, move |option: T, window, cx| on_pick(wrap(option), window, cx))
-            .columns(SMALL_COLUMNS)
-            .card_width(self.theme.forge_compact_card_width)
-            .compact()
-            .into_any_element()
-    }
-}
+/// Element id prefix of the trait grids (`forge-trait-<path>`).
+const GRID_ID_PREFIX: &str = "forge-trait";
 
 /// A tinted line naming the chosen option and how it changes their posts.
 pub(super) fn chosen_line(value: TraitValue, theme: &ThemeTokens) -> Option<Div> {
@@ -65,13 +42,18 @@ pub(super) fn explained(path: &str, control: impl IntoElement, theme: &ThemeToke
 }
 
 impl ForgeView {
-    /// The illustrated grid of `field` (small cards), its caption and the chosen-option line.
-    pub(super) fn trait_block(&self, field: TraitField, handle: &ForgeHandle) -> Div {
+    /// The option grid of `field` drawn as `look`, under its caption.
+    pub(in super::super) fn trait_grid(&self, field: TraitField, look: TraitGridLook, handle: &ForgeHandle) -> Div {
         let theme = &self.theme;
-        let value = field.read(&self.draft.profile().config);
         let id = SharedString::from(format!("{GRID_ID_PREFIX}-{}", field.path()));
-        let grid = value.visit(SmallGrid { id, theme: theme.clone(), on_pick: handle.edit(DraftEdit::Trait) });
-        labeled(field.path(), grid, theme).children(chosen_line(value, theme))
+        let grid = trait_option_grid(id, field, &self.draft.profile().config, look, theme, handle.edit(DraftEdit::Trait));
+        labeled(field.path(), grid, theme)
+    }
+
+    /// The small-card grid of `field`, its caption and the chosen-option line.
+    pub(super) fn trait_block(&self, field: TraitField, handle: &ForgeHandle) -> Div {
+        let value = field.read(&self.draft.profile().config);
+        self.trait_grid(field, TraitGridLook::Small, handle).children(chosen_line(value, &self.theme))
     }
 }
 

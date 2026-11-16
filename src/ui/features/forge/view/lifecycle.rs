@@ -30,7 +30,6 @@ impl ForgeView {
             autosave: AutosavePolicy::default(),
             guide,
             start: StartState::new(kind),
-            class: None,
             intro_post: true,
             notice: None,
             portrait_slot: PortraitSlot::Face,

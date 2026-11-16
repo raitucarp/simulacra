@@ -4,7 +4,7 @@ use crate::domain::ArchetypeClass;
 use crate::theme::ThemeTokens;
 use crate::ui::features::forge::text::tr;
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
-use crate::ui::features::forge::widgets::{option_card, ActionCallback, OptionCardSpec};
+use crate::ui::features::forge::widgets::{ActionCallback, CardGrid, GridCell, KeyboardStop, OptionCardSpec};
 use crate::ui::icons::LucideIcon;
 use crate::ui::illustration::{ClassKey, Illustration};
 use gpui_kit::component::Icon;
@@ -13,6 +13,7 @@ use gpui_kit::*;
 /// Class cards per row.
 const CLASS_COLUMNS: usize = 4;
 const CLASS_ID_PREFIX: &str = "forge-class";
+const CLASS_GRID_ID: &str = "forge-class-grid";
 const SCRATCH_ID: &str = "forge-tile-scratch";
 const ROLL_ID: &str = "forge-tile-roll";
 const DESCRIBE_ID: &str = "forge-tile-describe";
@@ -29,16 +30,13 @@ pub(super) fn class_key(class: ArchetypeClass) -> ClassKey {
 }
 
 impl ForgeView {
-    pub(super) fn class_grid(&self, handle: &ForgeHandle) -> Div {
-        let theme = &self.theme;
-        let rows: Vec<Div> = ArchetypeClass::ALL
-            .chunks(CLASS_COLUMNS)
-            .map(|row| div().flex().gap(theme.spacing_md).children(row.iter().map(|class| self.class_card(*class, handle))))
-            .collect();
-        div().flex().flex_col().gap(theme.spacing_md).children(rows)
+    /// The class cards; hovering a card, or moving the keyboard cursor onto it, previews it.
+    pub(super) fn class_grid(&self, handle: &ForgeHandle) -> CardGrid {
+        let cells = ArchetypeClass::ALL.iter().map(|class| self.class_card(*class, handle)).collect();
+        CardGrid::new(CLASS_GRID_ID, cells, CLASS_COLUMNS, self.theme.spacing_md)
     }
 
-    fn class_card(&self, class: ArchetypeClass, handle: &ForgeHandle) -> Stateful<Div> {
+    fn class_card(&self, class: ArchetypeClass, handle: &ForgeHandle) -> GridCell {
         let theme = &self.theme;
         let width = theme.forge_class_card_width;
         let art = Illustration::class(class_key(class)).width(width);
@@ -46,12 +44,8 @@ impl ForgeView {
         spec.description = Some(tr(&class.pitch_key()));
         spec.selected = self.start.preview == Some(class);
         let pick = handle.act(move |this, _, cx| this.preview_class(class, true, cx));
-        let hover = handle.with(move |this, hovered: bool, _, cx| {
-            if hovered {
-                this.preview_class(class, false, cx);
-            }
-        });
-        option_card(spec, theme, move |window, cx| pick(window, cx)).on_hover(move |hovered, window, cx| hover(*hovered, window, cx))
+        let hover = handle.act(move |this, _, cx| this.preview_class(class, false, cx));
+        GridCell::card(spec, theme, pick).on_hover(hover)
     }
 
     pub(super) fn begin_tiles(&self, handle: &ForgeHandle) -> Div {
@@ -68,6 +62,7 @@ impl ForgeView {
 /// One "way to begin" tile: icon, title and a line of explanation.
 fn tile(id: &'static str, icon: LucideIcon, title_key: &str, body_key: &str, theme: &ThemeTokens, on_click: ActionCallback) -> Stateful<Div> {
     let hover_bg = theme.bg_elevated;
+    let click = on_click.clone();
     div()
         .id(id)
         .flex_1()
@@ -82,7 +77,8 @@ fn tile(id: &'static str, icon: LucideIcon, title_key: &str, body_key: &str, the
         .bg(theme.bg_card)
         .cursor_pointer()
         .hover(move |style| style.bg(hover_bg))
-        .on_click(move |_, window, cx| on_click(window, cx))
+        .on_click(move |_, window, cx| click(window, cx))
+        .keyboard_stop(theme, on_click)
         .child(div().text_color(theme.accent_brand).child(Icon::new(icon).size(theme.font_size_xl)))
         .child(div().text_size(theme.font_size_md).font_weight(FontWeight::SEMIBOLD).child(tr(title_key)))
         .child(div().text_size(theme.font_size_xs).text_color(theme.text_muted).child(tr(body_key)))

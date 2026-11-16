@@ -33,13 +33,13 @@ impl AppView {
             Self::observe_own_changes(cx),
         ];
         let llm_inputs = LlmInputs::new(&state, window, cx);
-        let lab = LabState::new(&state);
+        let (lab, onboarding) = (LabState::new(&state), state.should_offer_onboarding());
         let scheduler = SchedulerState::new(state.scheduler_enabled());
 
         let mut view = Self {
             theme: state.theme_tokens.clone(),
             state,
-            chrome: ChromeState::new(initial_lang),
+            chrome: ChromeState { is_onboarding_open: onboarding, ..ChromeState::new(initial_lang) },
             feed,
             composer_modal,
             appearance,

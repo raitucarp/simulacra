@@ -46,3 +46,26 @@ fn every_class_applies_cleanly() {
         assert!(validate(&draft, &[]).iter().all(|i| i.field != "prompt_template"), "{class:?}");
     }
 }
+
+#[test]
+fn the_chosen_class_travels_with_the_draft_and_old_json_still_loads() {
+    let mut draft = named(agent(), "Theo", "@theo");
+    assert_eq!(draft.profile().config.archetype_class, None);
+    apply_class(&mut draft, ArchetypeClass::StoicSage);
+    assert_eq!(draft.profile().config.archetype_class, Some(ArchetypeClass::StoicSage));
+    let restored = AgentDraft::from_autosave(&draft.to_autosave()).expect("autosave round-trips");
+    assert_eq!(restored.profile().config.archetype_class, Some(ArchetypeClass::StoicSage));
+    assert!(set_class(&mut draft, None));
+    assert_eq!(draft.profile().config.archetype_class, None);
+    let json = serde_json::to_string(&draft.profile().config).expect("config serializes");
+    assert!(!json.contains("archetype_class"), "an unset class is not written");
+    let old: crate::domain::AgentConfig = serde_json::from_str("{}").expect("old JSON without the key loads");
+    assert_eq!(old.archetype_class, None);
+}
+
+#[test]
+fn a_rolled_thinker_remembers_its_class() {
+    let mut draft = agent();
+    let class = roll_into(&mut draft, 11, &[]);
+    assert_eq!(draft.profile().config.archetype_class, Some(class));
+}

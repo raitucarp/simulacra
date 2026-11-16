@@ -1423,6 +1423,11 @@ onboarding.settings_title: "WILLKOMMENSTOUR"
 onboarding.settings_label: "Begrüßung beim ersten Start"
 onboarding.settings_note: "Zeigt Mnemos Begrüßung erneut, mit einem direkten Weg in die Agenten-Schmiede."
 
+# phase 6 fixes (data)
+# Startup notice when the vault cannot be opened or read (flat keys).
+storage.load_failed_title: "Lokaler Tresor nicht verfügbar"
+storage.load_failed: "Der lokale Tresor konnte nicht geöffnet werden (%{error}). Es werden Demodaten angezeigt; in dieser Sitzung wird nichts gespeichert, und deine Tresordatei bleibt unverändert."
+
 # phase 6 fixes (ux)
 # Autonomous scheduler paused for a missing API key (flat keys).
 scheduler.paused_title: "Autonomes Posten pausiert"

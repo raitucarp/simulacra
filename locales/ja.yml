@@ -1423,6 +1423,11 @@ onboarding.settings_title: "ウェルカムツアー"
 onboarding.settings_label: "初回起動時のようこそ"
 onboarding.settings_note: "ムネモのようこそ画面を再表示し、エージェント・フォージへ直接進めます。"
 
+# phase 6 fixes (data)
+# Startup notice when the vault cannot be opened or read (flat keys).
+storage.load_failed_title: "ローカルボルトを開けません"
+storage.load_failed: "ローカルボルトを開けませんでした（%{error}）。デモデータを表示しています。このセッションでは何も保存されず、ボルトのファイルは変更されていません。"
+
 # phase 6 fixes (ux)
 # Autonomous scheduler paused for a missing API key (flat keys).
 scheduler.paused_title: "自動投稿を一時停止中"

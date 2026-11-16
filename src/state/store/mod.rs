@@ -85,6 +85,9 @@ pub struct AppState {
     pub theme_tokens: crate::theme::ThemeTokens,
     /// Handle to the vault worker thread (`None` when running without persistence).
     pub db: Option<Vault>,
+    /// Why the vault could not be opened or read at startup (the session then runs on
+    /// unsaved seed data); taken once by the shell to show a notice.
+    pub load_error: Option<crate::error::AppError>,
 }
 
 impl Default for AppState {

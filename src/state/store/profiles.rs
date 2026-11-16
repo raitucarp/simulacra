@@ -1,9 +1,16 @@
 //! Active profile selection, persona cycling, and profile update/deletion.
 
 use super::{AppState, PRIMARY_PROFILE_ID};
+use crate::domain::profile::canonical_handle;
 use crate::domain::{Profile, ProfileId};
 use crate::error::{AppError, Result};
+use crate::state::seed::seed_profiles;
 use crate::storage::SettingKey;
+
+/// Whether `id` names a profile shipped as seed data (re-added on startup unless dismissed).
+fn is_seed_profile(id: &ProfileId) -> bool {
+    seed_profiles().iter().any(|seed| &seed.id == id)
+}
 
 impl AppState {
     /// Returns a reference to the currently active author profile.
@@ -71,9 +78,14 @@ impl AppState {
     }
 
     /// Updates an existing agent or human persona profile, synchronizes derived fields,
-    /// and persists to SQLite. Posts reference authors by id, so they pick the change up as is.
+    /// and persists to SQLite. Posts reference authors by id, so they pick the change up as is
+    /// (cached search listings are invalidated, since they match author names and handles).
     pub fn update_profile(&mut self, mut updated: Profile) -> Result<()> {
         updated.sync_derived_fields();
+        let handle = canonical_handle(&updated.handle);
+        if !handle.is_empty() {
+            updated.handle = handle;
+        }
         let target_id = updated.id.clone();
 
         if let Some(existing) = self.user_profiles.iter_mut().find(|p| p.id == target_id) {
@@ -83,6 +95,7 @@ impl AppState {
         }
 
         self.archived_authors.remove(&target_id);
+        self.index.authors_changed();
         if let Some(ref db) = self.db {
             db.save_profile(&updated)?;
         }
@@ -91,7 +104,8 @@ impl AppState {
         Ok(())
     }
 
-    /// Deletes an agent or custom persona profile by ID.
+    /// Deletes an agent or custom persona profile by ID; a deleted seed profile is
+    /// remembered so startup never re-seeds it.
     /// Protects the primary human persona (`user_main`) from accidental deletion.
     pub fn delete_profile(&mut self, profile_id: &ProfileId) -> Result<()> {
         if profile_id.as_str() == PRIMARY_PROFILE_ID {
@@ -104,8 +118,12 @@ impl AppState {
         };
         if let Some(ref db) = self.db {
             db.archive_and_delete_profile(&removed)?;
+            if is_seed_profile(&removed.id) {
+                db.dismiss_seed(&removed.id)?;
+            }
         }
         self.archived_authors.insert(removed.id.clone(), removed);
+        self.index.authors_changed();
 
         if &self.active_profile_id == profile_id {
             self.activate_first_human_persona();

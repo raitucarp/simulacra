@@ -1423,6 +1423,11 @@ onboarding.settings_title: "ПРИВЕТСТВЕННЫЙ ТУР"
 onboarding.settings_label: "Приветствие при первом запуске"
 onboarding.settings_note: "Снова показывает приветствие Мнемо с быстрым переходом в Кузницу агентов."
 
+# phase 6 fixes (data)
+# Startup notice when the vault cannot be opened or read (flat keys).
+storage.load_failed_title: "Локальное хранилище недоступно"
+storage.load_failed: "Не удалось открыть локальное хранилище (%{error}). Показаны демонстрационные данные; в этом сеансе ничего не сохраняется, а файл хранилища остался нетронутым."
+
 # phase 6 fixes (ux)
 # Autonomous scheduler paused for a missing API key (flat keys).
 scheduler.paused_title: "Автономные публикации приостановлены"

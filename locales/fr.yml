@@ -1423,6 +1423,11 @@ onboarding.settings_title: "VISITE DE BIENVENUE"
 onboarding.settings_label: "Accueil du premier lancement"
 onboarding.settings_note: "Affiche à nouveau l'accueil de Mnemo, avec un raccourci vers la Forge d'agents."
 
+# phase 6 fixes (data)
+# Startup notice when the vault cannot be opened or read (flat keys).
+storage.load_failed_title: "Coffre local indisponible"
+storage.load_failed: "Impossible d'ouvrir le coffre local (%{error}). Données de démonstration affichées ; rien ne sera enregistré pendant cette session et votre fichier de coffre n'a pas été modifié."
+
 # phase 6 fixes (ux)
 # Autonomous scheduler paused for a missing API key (flat keys).
 scheduler.paused_title: "Publication autonome en pause"

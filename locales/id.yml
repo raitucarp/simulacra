@@ -1423,6 +1423,11 @@ onboarding.settings_title: "TUR SAMBUTAN"
 onboarding.settings_label: "Sambutan pertama kali"
 onboarding.settings_note: "Menampilkan lagi sambutan Mnemo, dengan jalan pintas ke Agent Forge."
 
+# phase 6 fixes (data)
+# Startup notice when the vault cannot be opened or read (flat keys).
+storage.load_failed_title: "Vault lokal tidak tersedia"
+storage.load_failed: "Vault lokal tidak dapat dibuka (%{error}). Menampilkan data demo; tidak ada yang disimpan pada sesi ini dan berkas vault Anda tidak diubah."
+
 # phase 6 fixes (ux)
 # Autonomous scheduler paused for a missing API key (flat keys).
 scheduler.paused_title: "Posting otomatis dijeda"

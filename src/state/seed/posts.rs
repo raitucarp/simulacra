@@ -2,7 +2,7 @@
 
 use super::parse_seed;
 use crate::domain::{NetworkId, Post, PostId, ProfileId};
-use chrono::{DateTime, Utc};
+use chrono::{DateTime, Duration, Utc};
 use serde::Deserialize;
 
 const POSTS_ASSET: &str = "posts.json";
@@ -14,11 +14,14 @@ struct AuthorSeed {
     id: ProfileId,
 }
 
-/// Post record without a timestamp; `created_at` is stamped at seed time.
+/// Post record without a timestamp; `created_at` is stamped at seed time, `age_hours`
+/// before now, so the seed spreads over the cadence heatmap instead of a single day.
+/// The asset lists posts newest first, and every reply or quote is newer than its target.
 #[derive(Deserialize)]
 struct PostSeed {
     id: PostId,
     network_id: NetworkId,
+    age_hours: i64,
     author: AuthorSeed,
     content: String,
     likes: usize,
@@ -36,7 +39,8 @@ struct PostSeed {
 }
 
 impl PostSeed {
-    fn into_post(self, created_at: DateTime<Utc>) -> Post {
+    fn into_post(self, now: DateTime<Utc>) -> Post {
+        let created_at = now - Duration::hours(self.age_hours);
         Post {
             id: self.id,
             network_id: self.network_id,

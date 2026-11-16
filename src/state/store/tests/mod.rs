@@ -3,6 +3,7 @@
 mod avatar;
 mod controls;
 mod day_filter;
+mod forge;
 mod index;
 mod scale;
 mod lifecycle;

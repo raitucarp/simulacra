@@ -9,6 +9,8 @@ pub mod defaults;
 mod derived;
 mod prompt;
 
+pub use prompt::{ALL_AGENT_INFO_PLACEHOLDER, TEMPLATE_PLACEHOLDERS};
+
 pub use crate::domain::traits::{
     AttachmentStyle, CapitalizationStyle, ClassicTemperament, CodeSwitchingStyle,
     CognitiveIntelligenceStyle, CognitivePace, ConflictHandlingStyle, DictionRegister, EmojiUsage,

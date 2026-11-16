@@ -8,12 +8,12 @@ use uuid::Uuid;
 const DEFAULT_AGENT_NAME: &str = "New Network Thinker";
 const DEFAULT_AGENT_HANDLE_STEM: &str = "member";
 const DEFAULT_AGENT_DESCRIPTION: &str = "Independent Thinker";
-const AGENT_ID_PREFIX: &str = "agent_";
+pub(crate) const AGENT_ID_PREFIX: &str = "agent_";
 
 const DEFAULT_PERSONA_NAME: &str = "New Human Persona";
 const DEFAULT_PERSONA_HANDLE_STEM: &str = "persona";
 const DEFAULT_PERSONA_DESCRIPTION: &str = "Alter-Ego Persona";
-const PERSONA_ID_PREFIX: &str = "user_";
+pub(crate) const PERSONA_ID_PREFIX: &str = "user_";
 
 const HANDLE_SIGIL: char = '@';
 const HANDLE_SPACE: char = ' ';

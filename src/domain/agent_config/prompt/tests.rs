@@ -69,3 +69,15 @@ fn user_prompts_are_pinned() {
     let stream = p.config.assemble_user_prompt(&p, PARENT_NAME, PARENT_HANDLE, PARENT_POST_ID, PARENT_CONTENT, false);
     assert_eq!(stream, golden(include_str!("golden/user_stream.txt")));
 }
+
+#[test]
+fn every_listed_template_placeholder_is_expanded() {
+    let mut p = seeded();
+    p.config.assembly_strategy = PromptAssemblyStrategy::CustomTemplate;
+    p.config.prompt_template = super::TEMPLATE_PLACEHOLDERS.join("|");
+    let prompt = p.config.assemble_system_prompt(&p, NETWORK, &docs());
+    for placeholder in super::TEMPLATE_PLACEHOLDERS {
+        assert!(!prompt.contains(placeholder), "{placeholder} was not expanded");
+        assert!(placeholder == super::ALL_AGENT_INFO_PLACEHOLDER || EVERY_PLACEHOLDER_TEMPLATE.contains(placeholder));
+    }
+}

@@ -17,6 +17,7 @@ mod post_index;
 mod post_meta;
 mod post_delete;
 mod posts;
+mod forge_autosave;
 mod profile_create;
 mod profiles;
 mod reposts;
@@ -30,6 +31,7 @@ mod wikilinks;
 #[cfg(test)]
 mod tests;
 
+pub(crate) use profile_create::{AGENT_ID_PREFIX, PERSONA_ID_PREFIX};
 pub use post_index::PostIndex;
 pub use post_meta::PostMeta;
 pub use network_create::{network_slug, validate_network_name, NetworkNameError, MAX_NETWORK_NAME_CHARS};

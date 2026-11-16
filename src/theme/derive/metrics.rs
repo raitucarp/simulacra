@@ -16,7 +16,7 @@ fn scaled(base: f32, factor: f32) -> gpui_kit::Pixels {
     px((base * factor * SNAP_STEPS_PER_PX).round() / SNAP_STEPS_PER_PX)
 }
 
-/// Font families and the type scale.
+/// Font families, the type scale and the icon sizes that sit inline with text.
 pub(super) fn apply_typography(t: &mut ThemeTokens, scale: TypeScale) {
     t.font_family_ui = DEFAULT_FONT_FAMILY.to_string();
     t.font_family_display = DEFAULT_FONT_FAMILY.to_string();
@@ -27,6 +27,9 @@ pub(super) fn apply_typography(t: &mut ThemeTokens, scale: TypeScale) {
         font_size_2xs: scaled(10.0, f), font_size_xs: scaled(11.5, f), font_size_sm: scaled(13.0, f),
         font_size_base: scaled(14.0, f), font_size_md: scaled(15.0, f), font_size_lg: scaled(18.0, f),
         font_size_xl: scaled(22.0, f),
+        font_size_micro: scaled(9.0, f), font_size_hint: scaled(11.0, f), font_size_label: scaled(12.0, f),
+        icon_size_xs: scaled(11.0, f), icon_size_sm: scaled(12.0, f), icon_size_md: scaled(13.0, f),
+        icon_size_lg: scaled(14.0, f), icon_size_xl: scaled(15.0, f), icon_size_2xl: scaled(16.0, f),
     });
 }
 
@@ -37,6 +40,7 @@ pub(super) fn apply_spacing(t: &mut ThemeTokens, density: Density) {
         spacing_3xs: scaled(1.0, f), spacing_2xs: scaled(2.0, f), spacing_px3: scaled(3.0, f),
         spacing_xs: scaled(4.0, f), spacing_sm: scaled(8.0, f), spacing_md: scaled(12.0, f),
         spacing_lg: scaled(16.0, f), spacing_xl: scaled(20.0, f), spacing_2xl: scaled(24.0, f),
+        spacing_xs_plus: scaled(6.0, f), spacing_sm_plus: scaled(10.0, f), spacing_md_plus: scaled(14.0, f),
     });
 }
 
@@ -46,6 +50,7 @@ pub(super) fn apply_radii(t: &mut ThemeTokens, radius: RadiusScale) {
     set_tokens!(t {
         radius_xs: scaled(3.0, f), radius_sm: scaled(6.0, f), radius_md: scaled(8.0, f),
         radius_lg: scaled(12.0, f), radius_xl: scaled(16.0, f), radius_full: px(9999.0),
+        win_control_radius: scaled(4.0, f),
         border_width_hairline: px(1.0), border_width_threadline: px(2.0),
         shadow_offset_y: px(12.0), shadow_blur: px(32.0),
     });

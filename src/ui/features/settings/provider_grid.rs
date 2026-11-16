@@ -1,17 +1,14 @@
 //! LLM provider selection grid and model preset chips of the AI Intelligence pane.
 
 use super::callbacks::{SelectPresetModelCallback, SelectProviderCallback};
-use super::consts::{
-    ICON_LG, PRESET_CHIP_ID_PREFIX, PROVIDERS_PER_ROW, PROVIDER_BUTTON_HEIGHT,
-    PROVIDER_BUTTON_ID_PREFIX, TEXT_BODY, TEXT_MICRO, TEXT_SMALL,
-};
+use super::consts::{PRESET_CHIP_ID_PREFIX, PROVIDERS_PER_ROW, PROVIDER_BUTTON_ID_PREFIX};
 use crate::agent::{LlmProvider, LlmSettings};
 use crate::theme::ThemeTokens;
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::Icon;
 use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::{
-    div, px, Div, FontWeight, InteractiveElement, MouseButton, ParentElement, Stateful, Styled,
+    div, Div, FontWeight, InteractiveElement, MouseButton, ParentElement, Stateful, Styled,
 };
 use std::rc::Rc;
 
@@ -60,10 +57,10 @@ fn render_provider_button(
     div()
         .id(format!("{}{:?}", PROVIDER_BUTTON_ID_PREFIX, provider))
         .flex_1()
-        .h(px(PROVIDER_BUTTON_HEIGHT))
-        .px_3()
-        .rounded_lg()
-        .border_1()
+        .h(theme.settings_provider_button_height)
+        .px(theme.spacing_md)
+        .rounded(theme.radius_md)
+        .border(theme.border_width_hairline)
         .border_color(border_color)
         .bg(bg_color)
         .hover(move |s| s.bg(btn_hover_bg))
@@ -71,11 +68,11 @@ fn render_provider_button(
         .flex()
         .items_center()
         .justify_center()
-        .gap_2()
+        .gap(theme.spacing_sm)
         .on_mouse_down(MouseButton::Left, move |_ev, window, cx| {
             (cb)(provider, window, cx);
         })
-        .child(Icon::new(provider_icon(provider)).size(px(ICON_LG)).text_color(icon_color))
+        .child(Icon::new(provider_icon(provider)).size(theme.icon_size_lg).text_color(icon_color))
         .child(render_provider_label(theme, provider, is_selected))
 }
 
@@ -88,13 +85,13 @@ fn render_provider_label(theme: &ThemeTokens, provider: LlmProvider, is_selected
         .flex_col()
         .child(
             div()
-                .text_size(px(TEXT_BODY))
+                .text_size(theme.font_size_label)
                 .font_weight(weight)
                 .text_color(text_color)
                 .child(provider.to_string()),
         )
         .when(provider == LlmProvider::Gemini, |this| {
-            this.child(div().text_size(px(TEXT_MICRO)).text_color(theme.accent_brand).child("★ Recommended"))
+            this.child(div().text_size(theme.font_size_micro).text_color(theme.accent_brand).child("★ Recommended"))
         })
 }
 
@@ -124,15 +121,15 @@ fn render_preset_chip(
     let chip_hover = theme.hover_bg;
     div()
         .id(format!("{}{}", PRESET_CHIP_ID_PREFIX, preset))
-        .px_2()
-        .py_1()
-        .rounded_md()
-        .border_1()
+        .px(theme.spacing_sm)
+        .py(theme.spacing_xs)
+        .rounded(theme.radius_sm)
+        .border(theme.border_width_hairline)
         .border_color(chip_border)
         .bg(chip_bg)
         .hover(move |s| s.bg(chip_hover))
         .cursor_pointer()
-        .text_size(px(TEXT_SMALL))
+        .text_size(theme.font_size_hint)
         .text_color(if is_current { theme.text_primary } else { theme.text_secondary })
         .on_mouse_down(MouseButton::Left, move |_ev, window, cx| {
             (cb)(preset, window, cx);

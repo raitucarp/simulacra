@@ -28,9 +28,9 @@ pub(super) fn render_network_item(
 
     div()
         .id(format!("{ITEM_ID_PREFIX}{idx}"))
-        .px_2p5()
-        .py_2()
-        .rounded_lg()
+        .px(theme.spacing_sm_plus)
+        .py(theme.spacing_sm)
+        .rounded(theme.radius_md)
         .cursor_pointer()
         .flex()
         .items_center()
@@ -52,15 +52,15 @@ fn render_item_label(name: String, docs_meta: String, is_curr: bool, theme: &The
     div()
         .flex()
         .items_center()
-        .gap_2p5()
+        .gap(theme.spacing_sm_plus)
         .min_w_0()
-        .child(div().w_2().h_2().rounded_full().bg(dot_color))
+        .child(div().w(theme.workspace_dot_size).h(theme.workspace_dot_size).rounded(theme.radius_full).bg(dot_color))
         .child(
             div()
                 .flex()
                 .flex_col()
                 .min_w_0()
-                .child(div().text_xs().font_bold().text_color(name_color).truncate().child(name))
-                .child(div().text_xs().text_color(theme.text_muted).truncate().child(docs_meta)),
+                .child(div().text_size(theme.font_size_label).font_bold().text_color(name_color).truncate().child(name))
+                .child(div().text_size(theme.font_size_label).text_color(theme.text_muted).truncate().child(docs_meta)),
         )
 }

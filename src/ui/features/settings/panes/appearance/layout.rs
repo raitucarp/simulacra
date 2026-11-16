@@ -61,5 +61,5 @@ pub(super) fn render(pane: &AppearancePanel, handle: &PanelHandle) -> Div {
             ChipGroup { title: t!("appearance.radius").to_string(), options: RadiusScale::ALL, current: s.radius_scale, id_prefix: RADIUS_ID_PREFIX, key: RadiusScale::id, label_group: Some("radius") }
                 .render(handle, theme, AppearancePanel::set_radius),
         );
-    section(section_label(theme, t!("appearance.layout_title").to_string()), body)
+    section(section_label(theme, t!("appearance.layout_title").to_string()), body, theme)
 }

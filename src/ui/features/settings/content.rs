@@ -1,10 +1,7 @@
 //! Dialog frame of the settings modal: scrim backdrop, tab header, scrollable body and action footer.
 
 use super::callbacks::{ModalCloseCallback, SaveSettingsCallback};
-use super::consts::{
-    BACKDROP_ID, CANCEL_BUTTON_ID, CLOSE_BUTTON_ID, CONTENT_HEADER_HEIGHT, DIALOG_ID, ICON_LG,
-    ICON_MD, SAVE_BUTTON_ID, TEXT_HEADING, TEXT_SMALL,
-};
+use super::consts::{BACKDROP_ID, CANCEL_BUTTON_ID, CLOSE_BUTTON_ID, DIALOG_ID, SAVE_BUTTON_ID};
 use super::tabs::SettingsTab;
 use crate::ui::atoms::ElevationExt;
 use crate::theme::ThemeTokens;
@@ -13,7 +10,7 @@ use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::scroll::ScrollableElement;
 use gpui_kit::component::Icon;
 use gpui_kit::{
-    div, px, AnyElement, Div, FontWeight, InteractiveElement, IntoElement, MouseButton,
+    div, AnyElement, Div, FontWeight, InteractiveElement, IntoElement, MouseButton,
     ParentElement, Styled,
 };
 use std::rc::Rc;
@@ -23,6 +20,7 @@ pub(super) fn render_content_pane(
     header: impl IntoElement,
     tab_content: AnyElement,
     footer: impl IntoElement,
+    theme: &ThemeTokens,
 ) -> Div {
     div()
         .flex_1()
@@ -31,7 +29,7 @@ pub(super) fn render_content_pane(
         .flex_col()
         .child(header)
         // Scrollable Tab Body
-        .child(div().flex_1().overflow_y_scrollbar().p_6().child(tab_content))
+        .child(div().flex_1().overflow_y_scrollbar().p(theme.spacing_2xl).child(tab_content))
         .child(footer)
 }
 
@@ -42,9 +40,9 @@ pub(super) fn render_content_header(
     on_close: Rc<ModalCloseCallback>,
 ) -> Div {
     div()
-        .h(px(CONTENT_HEADER_HEIGHT))
-        .px_6()
-        .border_b_1()
+        .h(theme.settings_header_height)
+        .px(theme.spacing_2xl)
+        .border_b(theme.border_width_hairline)
         .border_color(theme.border)
         .flex()
         .items_center()
@@ -53,20 +51,20 @@ pub(super) fn render_content_header(
             div()
                 .flex()
                 .flex_col()
-                .gap_0p5()
+                .gap(theme.spacing_2xs)
                 .child(
                     div()
-                        .text_size(px(TEXT_HEADING))
+                        .text_size(theme.font_size_md)
                         .font_weight(FontWeight::BOLD)
                         .text_color(theme.text_primary)
                         .child(active_tab.title()),
                 )
-                .child(div().text_size(px(TEXT_SMALL)).text_color(theme.text_muted).child(active_tab.description())),
+                .child(div().text_size(theme.font_size_hint).text_color(theme.text_muted).child(active_tab.description())),
         )
         .child(
             Button::new(CLOSE_BUTTON_ID)
                 .ghost()
-                .icon(Icon::new(LucideIcon::X).size(px(ICON_LG)))
+                .icon(Icon::new(LucideIcon::X).size(theme.icon_size_lg))
                 .on_click(move |_, window, cx| {
                     (on_close)(window, cx);
                 }),
@@ -81,8 +79,8 @@ pub(super) fn render_footer_bar(
 ) -> Div {
     div()
         .h(theme.modal_footer_height)
-        .px_6()
-        .border_t_1()
+        .px(theme.spacing_2xl)
+        .border_t(theme.border_width_hairline)
         .border_color(theme.border)
         .bg(theme.bg_elevated)
         .flex()
@@ -96,7 +94,7 @@ pub(super) fn render_footer_bar(
         .child(
             Button::new(SAVE_BUTTON_ID)
                 .primary()
-                .icon(Icon::new(LucideIcon::Check).size(px(ICON_MD)))
+                .icon(Icon::new(LucideIcon::Check).size(theme.icon_size_md))
                 .label("Save & Apply Settings")
                 .on_click(move |_, window, cx| {
                     (on_save)(window, cx);
@@ -128,8 +126,8 @@ pub(super) fn render_backdrop(
                 .id(DIALOG_ID)
                 .w(theme.modal_width)
                 .h(theme.modal_height)
-                .rounded_xl()
-                .border_1()
+                .rounded(theme.radius_lg)
+                .border(theme.border_width_hairline)
                 .border_color(theme.border)
                 .bg(theme.bg_elevated) // solid OLED dark surface
                 .elevation_shadow(theme)

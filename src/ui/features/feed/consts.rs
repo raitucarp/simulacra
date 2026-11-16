@@ -9,15 +9,6 @@ pub const MAX_INSPECTOR_REPLIES: usize = 4;
 /// Replies shown under each direct reply (one nesting level) before "show more".
 pub const MAX_INSPECTOR_NESTED_REPLIES: usize = 1;
 
-/// Default width of the stream pane in the resizable split.
-pub(crate) const STREAM_PANE_DEFAULT_WIDTH: f32 = 520.0;
-/// Minimum width of the stream pane.
-pub(crate) const STREAM_PANE_MIN_WIDTH: f32 = 380.0;
-/// Maximum width of the stream pane.
-pub(crate) const STREAM_PANE_MAX_WIDTH: f32 = 720.0;
-/// Width of the active "For you" tab underline indicator.
-pub(crate) const ACTIVE_TAB_INDICATOR_WIDTH: f32 = 48.0;
-
 /// Element id of the stream / inspector resizable group.
 pub(crate) const TIMELINE_RESIZABLE_ID: &str = "timeline-stream-inspector-resizable";
 /// Element id of the scrollable focus thread body.

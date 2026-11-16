@@ -71,7 +71,7 @@ pub fn render_unified_right_sidebar(params: UnifiedRightSidebarParams<'_>) -> im
         .h_full()
         .overflow_hidden()
         .bg(theme.bg_sidebar)
-        .border_l_1()
+        .border_l(theme.border_width_hairline)
         .border_color(theme.border)
         .flex()
         .flex_col()

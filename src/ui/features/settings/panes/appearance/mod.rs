@@ -86,7 +86,7 @@ impl Render for AppearancePanel {
             .flex()
             .flex_col()
             .gap(theme.spacing_xl)
-            .child(section(gallery::header(self, &entity, theme), gallery::body(self, &entity, cx)))
+            .child(section(gallery::header(self, &entity, theme), gallery::body(self, &entity, cx), theme))
             .child(editor::render(self, &entity))
             .child(layout::render(self, &entity))
             .child(transfer::render(self, &entity))

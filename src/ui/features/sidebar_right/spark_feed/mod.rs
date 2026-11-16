@@ -24,18 +24,18 @@ fn render_scroll_badge(theme: &ThemeTokens) -> Div {
     div()
         .flex()
         .items_center()
-        .gap_1()
-        .px_1p5()
-        .py_0p5()
-        .rounded_md()
+        .gap(theme.spacing_xs)
+        .px(theme.spacing_xs_plus)
+        .py(theme.spacing_2xs)
+        .rounded(theme.radius_sm)
         .bg(theme.hover_bg)
-        .border_1()
+        .border(theme.border_width_hairline)
         .border_color(theme.border)
         .font_family(theme.font_family_ui.clone())
-        .text_xs()
+        .text_size(theme.font_size_label)
         .font_medium()
         .text_color(theme.text_muted)
-        .child(div().w_3().h_3().child(Icon::new(LucideIcon::Dices)))
+        .child(div().w(theme.icon_size_sm).h(theme.icon_size_sm).child(Icon::new(LucideIcon::Dices)))
         .child(SCROLL_BADGE_LABEL)
 }
 
@@ -74,7 +74,7 @@ pub fn render_random_spark_feed_with_lookup<L: PostLookup>(
         .min_h_0()
         .flex()
         .flex_col()
-        .gap_2p5()
+        .gap(theme.spacing_sm_plus)
         .child(render_feed_header(theme))
         .child(
             div()
@@ -86,7 +86,7 @@ pub fn render_random_spark_feed_with_lookup<L: PostLookup>(
                 .px(theme.spacing_md)
                 .flex()
                 .flex_col()
-                .gap_2()
+                .gap(theme.spacing_sm)
                 .children(spark_elements),
         )
 }

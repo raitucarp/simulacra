@@ -1,6 +1,6 @@
 //! Sidebar workspace trigger button rendering.
 
-use super::consts::{TRIGGER_BADGE_MIN_PX, TRIGGER_HEIGHT_PX, TRIGGER_ID};
+use super::consts::TRIGGER_ID;
 use super::{docs_and_agents_caption, WorkspaceTrigger};
 use crate::domain::Network;
 use crate::theme::ThemeTokens;
@@ -9,7 +9,7 @@ use gpui_kit::base::StyledExt;
 use gpui_kit::component::Icon;
 use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::{
-    div, px, App, Div, InteractiveElement, IntoElement, ParentElement, RenderOnce,
+    div, App, Div, InteractiveElement, IntoElement, ParentElement, RenderOnce,
     StatefulInteractiveElement, Styled, Window,
 };
 use rust_i18n::t;
@@ -26,9 +26,9 @@ impl RenderOnce for WorkspaceTrigger {
         div()
             .id(TRIGGER_ID)
             .w_full()
-            .h(px(TRIGGER_HEIGHT_PX))
-            .rounded_lg()
-            .border_1()
+            .h(theme.workspace_trigger_height)
+            .rounded(theme.radius_md)
+            .border(theme.border_width_hairline)
             .border_color(border_color)
             .bg(bg_color)
             .cursor_pointer()
@@ -38,8 +38,8 @@ impl RenderOnce for WorkspaceTrigger {
             })
             .flex()
             .items_center()
-            .when(is_collapsed, |this| this.justify_center().p_1())
-            .when(!is_collapsed, |this| this.justify_between().px_2p5().py_1p5().gap_2())
+            .when(is_collapsed, |this| this.justify_center().p(theme.spacing_xs))
+            .when(!is_collapsed, |this| this.justify_between().px(theme.spacing_sm_plus).py(theme.spacing_xs_plus).gap(theme.spacing_sm))
             // Left: Workspace Icon / Badge
             .child(render_badge(&theme))
             // Center info + Right chevron (Expanded mode only)
@@ -61,13 +61,13 @@ fn active_labels(active_network: Option<&Network>) -> (String, String) {
 
 fn render_badge(theme: &ThemeTokens) -> Div {
     div()
-        .w_7()
-        .h_7()
-        .min_w(px(TRIGGER_BADGE_MIN_PX))
-        .min_h(px(TRIGGER_BADGE_MIN_PX))
-        .rounded_md()
+        .w(theme.workspace_badge_size)
+        .h(theme.workspace_badge_size)
+        .min_w(theme.workspace_badge_size)
+        .min_h(theme.workspace_badge_size)
+        .rounded(theme.radius_sm)
         .bg(theme.bg_app)
-        .border_1()
+        .border(theme.border_width_hairline)
         .border_color(theme.border)
         .flex()
         .items_center()
@@ -85,13 +85,13 @@ fn render_info(active_name: String, active_meta: String, theme: &ThemeTokens) ->
         .overflow_hidden()
         .child(
             div()
-                .text_xs()
+                .text_size(theme.font_size_label)
                 .font_bold()
                 .text_color(theme.text_primary)
                 .truncate()
                 .child(active_name),
         )
-        .child(div().text_xs().text_color(theme.text_muted).truncate().child(active_meta))
+        .child(div().text_size(theme.font_size_label).text_color(theme.text_muted).truncate().child(active_meta))
 }
 
 fn render_chevron(is_open: bool, theme: &ThemeTokens) -> Div {

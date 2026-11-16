@@ -26,9 +26,9 @@ pub(super) fn render_language_item(
     let hover_bg = theme.hover_bg;
     div()
         .id(format!("{ITEM_ID_PREFIX}{idx}"))
-        .px_2p5()
-        .py_1p5()
-        .rounded_md()
+        .px(theme.spacing_sm_plus)
+        .py(theme.spacing_xs_plus)
+        .rounded(theme.radius_sm)
         .cursor_pointer()
         .flex()
         .items_center()
@@ -41,7 +41,7 @@ pub(super) fn render_language_item(
         .child(render_label(lang, is_active, theme))
         .child(
             div()
-                .text_xs()
+                .text_size(theme.font_size_label)
                 .text_color(theme.text_muted)
                 .child(lang.code().to_uppercase()),
         )
@@ -54,11 +54,11 @@ fn render_label(lang: Language, is_active: bool, theme: &ThemeTokens) -> Div {
     div()
         .flex()
         .items_center()
-        .gap_2()
+        .gap(theme.spacing_sm)
         .child(
             div()
-                .w_3p5()
-                .h_3p5()
+                .w(theme.icon_size_lg)
+                .h(theme.icon_size_lg)
                 .flex()
                 .items_center()
                 .justify_center()
@@ -68,7 +68,7 @@ fn render_label(lang: Language, is_active: bool, theme: &ThemeTokens) -> Div {
         )
         .child(
             div()
-                .text_xs()
+                .text_size(theme.font_size_label)
                 .font_medium()
                 .text_color(label_color)
                 .child(lang.native_label()),

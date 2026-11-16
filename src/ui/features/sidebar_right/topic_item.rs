@@ -14,11 +14,11 @@ fn render_tag_name(topic: &TrendingTopic, theme: &ThemeTokens) -> Div {
     div()
         .flex()
         .items_center()
-        .gap_1()
-        .child(div().w_3().h_3().text_color(theme.accent_brand).child(Icon::new(LucideIcon::Hash)))
+        .gap(theme.spacing_xs)
+        .child(div().w(theme.icon_size_sm).h(theme.icon_size_sm).text_color(theme.accent_brand).child(Icon::new(LucideIcon::Hash)))
         .child(
             div()
-                .text_xs()
+                .text_size(theme.font_size_label)
                 .font_bold()
                 .text_color(theme.text_primary)
                 .child(topic.tag.trim_start_matches(HASH_PREFIX).to_string()),
@@ -29,14 +29,14 @@ fn render_rank_and_tag(topic: &TrendingTopic, rank: usize, theme: &ThemeTokens) 
     div()
         .flex()
         .items_center()
-        .gap_2p5()
-        .child(div().text_xs().font_bold().text_color(theme.text_muted).child(format!("{rank:02}")))
+        .gap(theme.spacing_sm_plus)
+        .child(div().text_size(theme.font_size_label).font_bold().text_color(theme.text_muted).child(format!("{rank:02}")))
         .child(
             div()
                 .flex()
                 .flex_col()
                 .child(render_tag_name(topic, theme))
-                .child(div().text_xs().text_color(theme.text_muted).child(topic.category.clone())),
+                .child(div().text_size(theme.font_size_label).text_color(theme.text_muted).child(topic.category.clone())),
         )
 }
 
@@ -55,8 +55,8 @@ pub fn render_topic_item(
         .flex()
         .items_center()
         .justify_between()
-        .p_2()
-        .rounded_md()
+        .p(theme.spacing_sm)
+        .rounded(theme.radius_sm)
         .hover(move |s| s.bg(hover_bg))
         .cursor_pointer()
         .on_click(move |_, window, cx| {
@@ -65,7 +65,7 @@ pub fn render_topic_item(
         .child(render_rank_and_tag(topic, rank, theme))
         .child(
             div()
-                .text_xs()
+                .text_size(theme.font_size_label)
                 .text_color(theme.text_secondary)
                 .child(t!("sidebar.posts_count", count = topic.post_count).to_string()),
         )

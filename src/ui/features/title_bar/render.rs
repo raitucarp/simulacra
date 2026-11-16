@@ -26,12 +26,12 @@ impl RenderOnce for AppTitleBar {
             .w_full()
             .h(theme.titlebar_height)
             .bg(theme.bg_card)
-            .border_b_1()
+            .border_b(theme.border_width_hairline)
             .border_color(theme.border)
             .flex()
             .items_center()
             .justify_between()
-            .px_3()
+            .px(theme.spacing_md)
             // 1. Left Section: Sidebar Toggle + Brand & Breadcrumbs
             .child(render_brand_section(self.on_toggle_left_sidebar, active_net_name, &theme))
             // 2. Center Draggable Area

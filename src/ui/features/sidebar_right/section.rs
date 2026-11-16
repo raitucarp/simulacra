@@ -16,12 +16,12 @@ pub(super) fn render_section_title(
     div()
         .flex()
         .items_center()
-        .gap_2()
-        .child(div().w_4().h_4().text_color(icon_color).child(Icon::new(icon)))
+        .gap(theme.spacing_sm)
+        .child(div().w(theme.icon_size_2xl).h(theme.icon_size_2xl).text_color(icon_color).child(Icon::new(icon)))
         .child(
             div()
                 .font_family(theme.font_family_display.clone())
-                .text_xs()
+                .text_size(theme.font_size_label)
                 .font_bold()
                 .text_color(theme.text_primary)
                 .child(title),
@@ -42,24 +42,24 @@ pub(super) fn render_section_header(title: Div, badge: impl IntoElement) -> Div 
 pub(super) fn render_divided_section(theme: &ThemeTokens) -> Div {
     div()
         .w_full()
-        .pb_4()
-        .border_b_1()
+        .pb(theme.spacing_lg)
+        .border_b(theme.border_width_hairline)
         .border_color(theme.border)
         .flex()
         .flex_col()
-        .gap_2p5()
+        .gap(theme.spacing_sm_plus)
 }
 
 /// Small hover-tinted mono badge (padding `px_2 py_0p5`) with an accent text color.
 pub(super) fn render_mono_badge(text: String, color: Rgba, theme: &ThemeTokens) -> Div {
     div()
-        .px_2()
-        .py_0p5()
+        .px(theme.spacing_sm)
+        .py(theme.spacing_2xs)
         .bg(theme.hover_bg)
-        .border_1()
+        .border(theme.border_width_hairline)
         .border_color(theme.border)
         .font_family(theme.font_family_mono.clone())
-        .text_xs()
+        .text_size(theme.font_size_label)
         .font_medium()
         .text_color(color)
         .child(text)

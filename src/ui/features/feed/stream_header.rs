@@ -1,11 +1,11 @@
 //! Stream pane header: clickable Threads-style "For you" / "Dialectic" tabs.
 
-use super::consts::{ACTIVE_TAB_INDICATOR_WIDTH, STREAM_TAB_ID};
+use super::consts::STREAM_TAB_ID;
 use super::params::SelectFeedTabCallback;
 use crate::state::FeedTab;
 use crate::theme::ThemeTokens;
 use gpui_kit::{
-    div, px, Div, FontWeight, InteractiveElement, ParentElement, Stateful,
+    div, Div, FontWeight, InteractiveElement, ParentElement, Stateful,
     StatefulInteractiveElement, Styled,
 };
 use rust_i18n::t;
@@ -63,7 +63,7 @@ fn render_tab(
         .child(render_tab_label(theme, tab, is_active))
         .child(
             div()
-                .w(px(ACTIVE_TAB_INDICATOR_WIDTH))
+                .w(theme.feed_tab_indicator_width)
                 .h(theme.border_width_threadline)
                 .rounded(theme.radius_full)
                 .bg(indicator),

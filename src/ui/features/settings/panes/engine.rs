@@ -1,13 +1,13 @@
 //! General pane, engine section: the autonomous-scheduler switch, status and last LLM error.
 
-use super::super::consts::{ICON_XS, SCHEDULER_SWITCH_ID, TEXT_SMALL};
+use super::super::consts::SCHEDULER_SWITCH_ID;
 use super::super::general_props::GeneralPaneProps;
 use super::common::{body_text, card, muted_note, section, section_label, spaced_row};
 use crate::theme::ThemeTokens;
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::switch::Switch;
 use gpui_kit::component::Icon;
-use gpui_kit::{div, px, Div, FontWeight, ParentElement, Styled};
+use gpui_kit::{div, Div, FontWeight, ParentElement, Styled};
 use rust_i18n::t;
 
 /// Section 1: Autonomous Dialectic Engine (scheduler switch, queue status, last error).
@@ -20,7 +20,7 @@ pub(super) fn render_engine_section(theme: &ThemeTokens, props: &mut GeneralPane
             .child(section_label(theme, t!("scheduler.section_title")))
             .child(render_status_badge(theme, enabled)),
         card(theme)
-            .gap_2()
+            .gap(theme.spacing_sm)
             .child(
                 spaced_row()
                     .child(body_text(theme, t!("scheduler.toggle_label")))
@@ -29,6 +29,7 @@ pub(super) fn render_engine_section(theme: &ThemeTokens, props: &mut GeneralPane
             .child(muted_note(theme, hint))
             .child(muted_note(theme, queue))
             .children(props.last_error.as_ref().map(|err| render_last_error(theme, err))),
+            theme,
     )
 }
 
@@ -54,17 +55,17 @@ fn render_status_badge(theme: &ThemeTokens, enabled: bool) -> Div {
     div()
         .flex()
         .items_center()
-        .gap_1p5()
-        .px_2()
-        .py_0p5()
-        .rounded_full()
+        .gap(theme.spacing_xs_plus)
+        .px(theme.spacing_sm)
+        .py(theme.spacing_2xs)
+        .rounded(theme.radius_full)
         .bg(bg)
-        .border_1()
+        .border(theme.border_width_hairline)
         .border_color(border)
-        .child(Icon::new(icon).size(px(ICON_XS)).text_color(fg))
+        .child(Icon::new(icon).size(theme.icon_size_xs).text_color(fg))
         .child(
             div()
-                .text_size(px(TEXT_SMALL))
+                .text_size(theme.font_size_hint)
                 .font_weight(FontWeight::MEDIUM)
                 .text_color(fg)
                 .child(label.to_string()),
@@ -74,7 +75,7 @@ fn render_status_badge(theme: &ThemeTokens, enabled: bool) -> Div {
 /// Danger-tinted line describing the most recent LLM failure.
 fn render_last_error(theme: &ThemeTokens, (provider, message): &(String, String)) -> Div {
     div()
-        .text_size(px(TEXT_SMALL))
+        .text_size(theme.font_size_hint)
         .text_color(theme.accent_danger)
         .child(t!("scheduler.last_error", provider = provider, message = message).to_string())
 }

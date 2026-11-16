@@ -18,11 +18,11 @@ fn render_title(theme: &ThemeTokens) -> Div {
     div()
         .flex()
         .items_center()
-        .gap_2()
-        .child(div().w_4().h_4().text_color(theme.accent_alt).child(Icon::new(LucideIcon::Library)))
+        .gap(theme.spacing_sm)
+        .child(div().w(theme.icon_size_2xl).h(theme.icon_size_2xl).text_color(theme.accent_alt).child(Icon::new(LucideIcon::Library)))
         .child(
             div()
-                .text_xs()
+                .text_size(theme.font_size_label)
                 .font_bold()
                 .text_color(theme.text_primary)
                 .child(t!("sidebar.grounding_knowledge").to_string()),
@@ -32,13 +32,13 @@ fn render_title(theme: &ThemeTokens) -> Div {
 /// Real number of documents in the active network's vault.
 fn render_badge(doc_count: usize, theme: &ThemeTokens) -> Div {
     div()
-        .px_1p5()
-        .py_0p5()
-        .rounded_md()
+        .px(theme.spacing_xs_plus)
+        .py(theme.spacing_2xs)
+        .rounded(theme.radius_sm)
         .bg(theme.hover_bg)
-        .border_1()
+        .border(theme.border_width_hairline)
         .border_color(theme.border)
-        .text_xs()
+        .text_size(theme.font_size_label)
         .font_medium()
         .text_color(theme.text_muted)
         .child(t!("sidebar.doc_count", count = doc_count).to_string())
@@ -65,7 +65,7 @@ pub fn render_knowledge_card(
         .w_full()
         .flex()
         .flex_col()
-        .gap_2p5()
+        .gap(theme.spacing_sm_plus)
         // Header Row: Title & document count
         .child(
             div()
@@ -78,7 +78,7 @@ pub fn render_knowledge_card(
         // Description
         .child(
             div()
-                .text_xs()
+                .text_size(theme.font_size_label)
                 .text_color(theme.text_secondary)
                 .child(t!("sidebar.grounding_desc").to_string()),
         )

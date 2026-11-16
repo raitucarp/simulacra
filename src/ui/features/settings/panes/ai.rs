@@ -4,12 +4,11 @@ use super::super::callbacks::{SelectPresetModelCallback, SelectProviderCallback}
 use super::super::provider_grid::{render_preset_chips, render_provider_rows};
 use super::ai_fields::{render_api_key_section, render_endpoint_section, render_model_section};
 use super::common::{section, section_label, spaced_row};
-use super::super::consts::TEXT_SMALL;
 use crate::agent::{LlmProvider, LlmSettings};
 use crate::theme::ThemeTokens;
 use gpui_kit::component::input::InputState;
 use gpui_kit::prelude::FluentBuilder;
-use gpui_kit::{div, px, Div, Entity, IntoElement, ParentElement, Stateful, Styled};
+use gpui_kit::{div, Div, Entity, IntoElement, ParentElement, Stateful, Styled};
 use std::rc::Rc;
 
 /// Helper function to render AI Intelligence Tab Pane
@@ -31,7 +30,7 @@ pub(in crate::ui::features::settings) fn render_ai_pane(
     div()
         .flex()
         .flex_col()
-        .gap_4()
+        .gap(theme.spacing_lg)
         // 1. Provider Grid Header & Selection
         .child(render_provider_section(theme, active_provider, row1_buttons, row2_buttons))
         // 2. API Key Configuration
@@ -52,15 +51,16 @@ fn render_provider_section(
     section(
         spaced_row().child(section_label(theme, "SELECT LLM PROVIDER")).child(
             div()
-                .text_size(px(TEXT_SMALL))
+                .text_size(theme.font_size_hint)
                 .text_color(theme.accent_brand)
                 .child(format!("Active: {}", active_provider)),
         ),
         div()
             .flex()
             .flex_col()
-            .gap_2()
-            .child(div().flex().gap_2().children(row1_buttons))
-            .child(div().flex().gap_2().children(row2_buttons)),
+            .gap(theme.spacing_sm)
+            .child(div().flex().gap(theme.spacing_sm).children(row1_buttons))
+            .child(div().flex().gap(theme.spacing_sm).children(row2_buttons)),
+            theme,
     )
 }

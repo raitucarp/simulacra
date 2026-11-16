@@ -1,14 +1,14 @@
 //! Composite molecules formed from atomic primitives.
 
-pub mod agent_card;
-pub mod knowledge_card;
+pub use crate::ui::features::sidebar_right::agent_card;
+pub use crate::ui::features::sidebar_right::knowledge_card;
 pub mod language_popover;
 pub mod nav_button;
-pub mod network_card;
-pub mod persona_roster;
+pub use crate::ui::features::sidebar_right::network_card;
+pub use crate::ui::features::sidebar_right::roster as persona_roster;
 pub mod post_composer;
 pub mod post_item;
-pub mod topic_item;
+pub use crate::ui::features::sidebar_right::topic_item;
 pub mod user_card;
 pub mod workspace_dropdown;
 

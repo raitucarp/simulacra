@@ -36,10 +36,8 @@ vault:
   add_doc: "添加锚定文档"
   doc_title_placeholder: "文档标题（例如：柏拉图《理想国》、斯宾诺莎《伦理学》）..."
   doc_content_placeholder: "粘贴或撰写 Markdown 文本，为本网络成员的想法提供依据..."
-  chunks_count: "%{count} 个分块"
   ground_button: "建立索引并锚定"
   no_docs: "本网络还没有锚定文档。请在上方添加基础文本。"
-  corpus_header: "已锚定语料（%{count} 份文档）"
   remove_doc: "移除"
   grounded_status: "已存入本地知识库"
   import_file: "导入文件"
@@ -104,8 +102,6 @@ lab:
 graph:
   title: "拓扑思维图谱"
   subtitle: "想法、锚定文档与语义标签之间的关系网络"
-  nodes_count: "%{count} 个节点"
-  links_count: "%{count} 条链接"
   filter_all: "全部节点"
   legend_thoughts: "想法"
   legend_docs: "锚定文档"
@@ -120,7 +116,6 @@ graph:
   reset_view: "重置视图"
   nothing_selected: "选择一个节点，查看它的关联。"
   empty: "还没有可绘制的内容。分享一个想法，让图谱生长。"
-  mini_counts: "%{nodes} 个节点 · %{edges} 条边"
 
 composer:
   placeholder: "你在想什么？（用 [[ 链接想法，用 # 标记话题）..."
@@ -155,13 +150,10 @@ feed:
   for_you: "为你推荐"
   dialectic: "辩证"
   inspector_title: "讨论串检视器"
-  replies_count: "%{count} 条回复"
   grounding_context_title: "认识论锚定"
   grounding_context_desc: "还没有回复。你可以自己回复，或在设置中开启自主发帖，让网络智能体加入讨论。"
   select_to_inspect: "从信息流中选择任意想法，查看它的对话串。"
   quote_or_reply: "回复"
-  show_more: "显示更多想法（还剩 %{count} 条）"
-  show_more_replies: "显示另外 %{count} 条回复"
   show_fewer_replies: "收起部分回复"
 
 sidebar:
@@ -172,15 +164,12 @@ sidebar:
   upload_doc: "添加文档"
   grounding_desc: "本网络的基础文本，存储在你的本地知识库中。"
   popular_tags: "热门话题"
-  posts_count: "%{count} 条想法"
   spawned_personas: "网络成员（%{count}）"
-  docs_and_agents: "%{docs} 份文档 · %{agents} 位成员"
   mind_cadence: "思维与节奏"
   vault_telemetry: "知识库与遥测"
   mind_graph_title: "思维图谱"
   thought_cadence_title: "思考节奏"
   sparks_feed_title: "意外火花"
-  doc_count: "%{count} 份文档"
 
 role:
   user_primary: "你"
@@ -222,11 +211,8 @@ scheduler:
   db_path_title: "数据库路径"
 
 cadence:
-  badge: "每年 %{count} 条帖子"
   hint: "悬停在某一天查看详情 · 单击筛选信息流"
   day_none: "%{date} 没有帖子"
-  day_one: "%{date} 有 1 条帖子"
-  day_many: "%{date} 有 %{count} 条帖子"
   showing: "正在显示 %{date}"
   less: "少"
   more: "多"
@@ -268,7 +254,6 @@ post:
   refs_none: "没有引用或链接的想法"
   refs_quote: "引用：%{excerpt}"
   refs_link: "链接到：%{excerpt}"
-  refs_open_thread: "打开对话（%{count} 条回复）"
 
 appearance:
   gallery_title: "主题库"
@@ -1428,3 +1413,38 @@ onboarding.settings_note: "再次显示 Mnemo 的欢迎页，并提供进入智�
 # Startup notice when the vault cannot be opened or read (flat keys).
 storage.load_failed_title: "本地知识库不可用"
 storage.load_failed: "无法打开本地知识库（%{error}）。当前显示演示数据；本次会话不会保存任何内容，你的知识库文件未被改动。"
+
+# phase 6 fixes (feed)
+# Count labels: <key>_one / <key>_other, picked per locale plural rule by i18n::t_count (flat keys).
+vault.chunks_count_one: "%{count} 个分块"
+vault.chunks_count_other: "%{count} 个分块"
+vault.corpus_header_one: "已锚定语料（%{count} 份文档）"
+vault.corpus_header_other: "已锚定语料（%{count} 份文档）"
+graph.nodes_count_one: "%{count} 个节点"
+graph.nodes_count_other: "%{count} 个节点"
+graph.links_count_one: "%{count} 条链接"
+graph.links_count_other: "%{count} 条链接"
+graph.mini_nodes_one: "%{count} 个节点"
+graph.mini_nodes_other: "%{count} 个节点"
+graph.mini_edges_one: "%{count} 条边"
+graph.mini_edges_other: "%{count} 条边"
+feed.replies_count_one: "%{count} 条回复"
+feed.replies_count_other: "%{count} 条回复"
+feed.show_more_one: "显示更多想法（还剩 %{count} 条）"
+feed.show_more_other: "显示更多想法（还剩 %{count} 条）"
+feed.show_more_replies_one: "显示另外 %{count} 条回复"
+feed.show_more_replies_other: "显示另外 %{count} 条回复"
+sidebar.posts_count_one: "%{count} 条想法"
+sidebar.posts_count_other: "%{count} 条想法"
+sidebar.doc_count_one: "%{count} 份文档"
+sidebar.doc_count_other: "%{count} 份文档"
+sidebar.member_count_one: "%{count} 位成员"
+sidebar.member_count_other: "%{count} 位成员"
+cadence.badge_one: "每年 %{count} 条帖子"
+cadence.badge_other: "每年 %{count} 条帖子"
+cadence.day_posts_one: "%{date} 有 %{count} 条帖子"
+cadence.day_posts_other: "%{date} 有 %{count} 条帖子"
+post.refs_open_thread_one: "打开对话（%{count} 条回复）"
+post.refs_open_thread_other: "打开对话（%{count} 条回复）"
+sidebar.member_agents_one: "%{count} 位类人智能体"
+sidebar.member_agents_other: "%{count} 位类人智能体"

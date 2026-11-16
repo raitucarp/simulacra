@@ -9,6 +9,7 @@ use crate::ui::icons::LucideIcon;
 use chrono::NaiveDate;
 use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::*;
+use crate::i18n::t_count;
 use rust_i18n::t;
 
 /// Weekday rows (Sunday = 0) that carry a label, with their translation keys.
@@ -38,7 +39,7 @@ pub(super) fn render_heatmap_header(total: usize, theme: &ThemeTokens) -> Div {
             t!("sidebar.thought_cadence_title").to_string(),
             theme,
         ),
-        render_mono_badge(t!("cadence.badge", count = total).to_string(), theme.accent_success, theme)
+        render_mono_badge(t_count("cadence.badge", total), theme.accent_success, theme)
             .rounded(theme.radius_full),
     )
 }

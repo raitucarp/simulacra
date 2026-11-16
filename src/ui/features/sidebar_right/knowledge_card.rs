@@ -6,6 +6,7 @@ use gpui_kit::base::StyledExt;
 use gpui_kit::component::button::Button;
 use gpui_kit::component::{Icon, Sizable};
 use gpui_kit::*;
+use crate::i18n::t_count;
 use rust_i18n::t;
 
 /// Element id of the card's import button.
@@ -41,7 +42,7 @@ fn render_badge(doc_count: usize, theme: &ThemeTokens) -> Div {
         .text_size(theme.font_size_label)
         .font_medium()
         .text_color(theme.text_muted)
-        .child(t!("sidebar.doc_count", count = doc_count).to_string())
+        .child(t_count("sidebar.doc_count", doc_count))
 }
 
 /// Full-width "add document" button opening the native file picker.

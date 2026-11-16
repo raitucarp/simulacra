@@ -1,5 +1,9 @@
 //! Internationalization (i18n) definitions and supported locales.
 
+mod plural;
+
+pub use plural::{plural_key, plural_key_in, t_count, PluralCategory, COUNT_SEPARATOR};
+
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
@@ -89,3 +93,6 @@ impl Language {
 pub fn set_locale(lang: Language) {
     rust_i18n::set_locale(lang.code());
 }
+
+#[cfg(test)]
+mod tests;

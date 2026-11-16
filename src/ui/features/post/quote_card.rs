@@ -6,7 +6,7 @@ use super::controls::OpenPostAction;
 use super::lookup::PostLookup;
 use crate::domain::{Post, Profile, ProfileRole};
 use crate::theme::ThemeTokens;
-use crate::ui::atoms::{render_avatar, render_role_badge};
+use crate::ui::atoms::{render_profile_avatar, render_role_badge};
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::Icon;
 use gpui_kit::prelude::FluentBuilder;
@@ -69,7 +69,7 @@ fn render_quoted_meta(quoted: &Post, author: &Profile, theme: &ThemeTokens) -> D
         .flex()
         .items_center()
         .gap(theme.spacing_sm)
-        .child(render_avatar(&author.avatar_initial, &author.role, theme.avatar_size_sm, theme))
+        .child(render_profile_avatar(author, theme.avatar_size_sm, theme))
         .child(
             div()
                 .font_family(theme.font_family_display.clone())

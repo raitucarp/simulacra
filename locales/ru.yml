@@ -36,10 +36,8 @@ vault:
   add_doc: "ДОБАВИТЬ ОПОРНЫЙ ДОКУМЕНТ"
   doc_title_placeholder: "Название документа (напр. «Государство» Платона, «Этика» Спинозы)..."
   doc_content_placeholder: "Вставьте или напишите текст в markdown, чтобы опереть на него мысли участников сети..."
-  chunks_count: "Фрагментов: %{count}"
   ground_button: "Индексировать и закрепить"
   no_docs: "В этой сети пока нет опорных документов. Добавьте базовые тексты выше."
-  corpus_header: "ОПОРНЫЙ КОРПУС (ДОКУМЕНТОВ: %{count})"
   remove_doc: "Удалить"
   grounded_status: "Хранится в локальном хранилище"
   import_file: "Импортировать файл"
@@ -104,8 +102,6 @@ lab:
 graph:
   title: "Топологический граф разума"
   subtitle: "Сеть связей между мыслями, опорными документами и семантическими тегами"
-  nodes_count: "Узлов: %{count}"
-  links_count: "Связей: %{count}"
   filter_all: "Все узлы"
   legend_thoughts: "Мысли"
   legend_docs: "Опорные документы"
@@ -120,7 +116,6 @@ graph:
   reset_view: "Сбросить вид"
   nothing_selected: "Выберите узел, чтобы увидеть его связи."
   empty: "Пока нечего отображать. Поделитесь мыслью, чтобы граф начал расти."
-  mini_counts: "Узлов: %{nodes} · связей: %{edges}"
 
 composer:
   placeholder: "О чём вы думаете? (Используйте [[ для ссылок на мысли, # для тем)..."
@@ -155,13 +150,10 @@ feed:
   for_you: "Для вас"
   dialectic: "Диалектика"
   inspector_title: "Инспектор цепочки"
-  replies_count: "Ответов: %{count}"
   grounding_context_title: "ЭПИСТЕМИЧЕСКАЯ ОПОРА"
   grounding_context_desc: "Ответов пока нет. Ответьте сами или включите автономные публикации в настройках, чтобы агенты сети присоединились."
   select_to_inspect: "Выберите любую мысль в ленте, чтобы изучить её цепочку обсуждения."
   quote_or_reply: "Ответить"
-  show_more: "Показать ещё мысли (осталось %{count})"
-  show_more_replies: "Показать ещё ответов: %{count}"
   show_fewer_replies: "Показать меньше ответов"
 
 sidebar:
@@ -172,15 +164,12 @@ sidebar:
   upload_doc: "Добавить документ"
   grounding_desc: "Базовые тексты этой сети, хранящиеся в вашем локальном хранилище."
   popular_tags: "ПОПУЛЯРНЫЕ ТЕМЫ"
-  posts_count: "Мыслей: %{count}"
   spawned_personas: "УЧАСТНИКИ СЕТИ (%{count})"
-  docs_and_agents: "Документов: %{docs} · участников: %{agents}"
   mind_cadence: "Разум и ритм"
   vault_telemetry: "Хранилище и телеметрия"
   mind_graph_title: "ГРАФ РАЗУМА"
   thought_cadence_title: "РИТМ МЫСЛЕЙ"
   sparks_feed_title: "СЛУЧАЙНЫЕ ИСКРЫ"
-  doc_count: "Документов: %{count}"
 
 role:
   user_primary: "ВЫ"
@@ -222,11 +211,8 @@ scheduler:
   db_path_title: "Путь к базе данных"
 
 cadence:
-  badge: "%{count} публ./год"
   hint: "Наведите на день для подробностей · клик фильтрует ленту"
   day_none: "Нет публикаций за %{date}"
-  day_one: "1 публикация за %{date}"
-  day_many: "Публикаций за %{date}: %{count}"
   showing: "Показано: %{date}"
   less: "Меньше"
   more: "Больше"
@@ -268,7 +254,6 @@ post:
   refs_none: "Нет цитируемых или связанных мыслей"
   refs_quote: "Цитаты: %{excerpt}"
   refs_link: "Ссылается на: %{excerpt}"
-  refs_open_thread: "Открыть обсуждение (ответов: %{count})"
 
 appearance:
   gallery_title: "ГАЛЕРЕЯ ТЕМ"
@@ -1428,3 +1413,38 @@ onboarding.settings_note: "Снова показывает приветстви�
 # Startup notice when the vault cannot be opened or read (flat keys).
 storage.load_failed_title: "Локальное хранилище недоступно"
 storage.load_failed: "Не удалось открыть локальное хранилище (%{error}). Показаны демонстрационные данные; в этом сеансе ничего не сохраняется, а файл хранилища остался нетронутым."
+
+# phase 6 fixes (feed)
+# Count labels: <key>_one / <key>_other, picked per locale plural rule by i18n::t_count (flat keys).
+vault.chunks_count_one: "%{count} фрагмент"
+vault.chunks_count_other: "Фрагментов: %{count}"
+vault.corpus_header_one: "ОПОРНЫЙ КОРПУС (%{count} ДОКУМЕНТ)"
+vault.corpus_header_other: "ОПОРНЫЙ КОРПУС (ДОКУМЕНТОВ: %{count})"
+graph.nodes_count_one: "%{count} узел"
+graph.nodes_count_other: "Узлов: %{count}"
+graph.links_count_one: "%{count} связь"
+graph.links_count_other: "Связей: %{count}"
+graph.mini_nodes_one: "%{count} узел"
+graph.mini_nodes_other: "Узлов: %{count}"
+graph.mini_edges_one: "%{count} связь"
+graph.mini_edges_other: "связей: %{count}"
+feed.replies_count_one: "%{count} ответ"
+feed.replies_count_other: "Ответов: %{count}"
+feed.show_more_one: "Показать ещё мысли (осталось %{count})"
+feed.show_more_other: "Показать ещё мысли (осталось %{count})"
+feed.show_more_replies_one: "Показать ещё %{count} ответ"
+feed.show_more_replies_other: "Показать ещё ответов: %{count}"
+sidebar.posts_count_one: "%{count} мысль"
+sidebar.posts_count_other: "Мыслей: %{count}"
+sidebar.doc_count_one: "%{count} документ"
+sidebar.doc_count_other: "Документов: %{count}"
+sidebar.member_count_one: "%{count} участник"
+sidebar.member_count_other: "участников: %{count}"
+cadence.badge_one: "%{count} публ./год"
+cadence.badge_other: "%{count} публ./год"
+cadence.day_posts_one: "%{count} публикация за %{date}"
+cadence.day_posts_other: "Публикаций за %{date}: %{count}"
+post.refs_open_thread_one: "Открыть обсуждение (%{count} ответ)"
+post.refs_open_thread_other: "Открыть обсуждение (ответов: %{count})"
+sidebar.member_agents_one: "%{count} человекоподобный агент"
+sidebar.member_agents_other: "Человекоподобных агентов: %{count}"

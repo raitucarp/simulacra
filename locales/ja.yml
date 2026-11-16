@@ -36,10 +36,8 @@ vault:
   add_doc: "グラウンディング文書を追加"
   doc_title_placeholder: "文書のタイトル（例：プラトン『国家』、スピノザ『エチカ』）..."
   doc_content_placeholder: "このネットワークのメンバーの思考の土台となるマークダウンテキストを貼り付けるか入力してください..."
-  chunks_count: "%{count} チャンク"
   ground_button: "インデックス化して反映"
   no_docs: "このネットワークにはまだグラウンディング文書がありません。上から基礎テキストを追加してください。"
-  corpus_header: "グラウンディング済みコーパス（%{count} 件）"
   remove_doc: "削除"
   grounded_status: "ローカルボルトに保存済み"
   import_file: "ファイルをインポート"
@@ -104,8 +102,6 @@ lab:
 graph:
   title: "トポロジカル・マインドグラフ"
   subtitle: "思考、グラウンディング文書、セマンティックタグの関係ネットワーク"
-  nodes_count: "%{count} ノード"
-  links_count: "%{count} リンク"
   filter_all: "すべてのノード"
   legend_thoughts: "思考"
   legend_docs: "グラウンディング文書"
@@ -120,7 +116,6 @@ graph:
   reset_view: "表示をリセット"
   nothing_selected: "ノードを選択すると、つながりが表示されます。"
   empty: "マッピングするものがまだありません。思考を共有してグラフを育てましょう。"
-  mini_counts: "%{nodes} ノード · %{edges} エッジ"
 
 composer:
   placeholder: "今、何を考えていますか？（[[ で思考をリンク、# でトピック）..."
@@ -155,13 +150,10 @@ feed:
   for_you: "おすすめ"
   dialectic: "弁証法"
   inspector_title: "スレッドインスペクター"
-  replies_count: "%{count} 件の返信"
   grounding_context_title: "認識論的グラウンディング"
   grounding_context_desc: "まだ返信がありません。ご自身で返信するか、設定で自律投稿をオンにして、ネットワークエージェントに参加してもらいましょう。"
   select_to_inspect: "ストリームから思考を選ぶと、その会話スレッドを確認できます。"
   quote_or_reply: "返信"
-  show_more: "さらに思考を表示（残り %{count} 件）"
-  show_more_replies: "さらに %{count} 件の返信を表示"
   show_fewer_replies: "返信を折りたたむ"
 
 sidebar:
@@ -172,15 +164,12 @@ sidebar:
   upload_doc: "文書を追加"
   grounding_desc: "このネットワークの基礎テキスト。ローカルボルトに保存されます。"
   popular_tags: "トレンドのトピック"
-  posts_count: "%{count} 件の思考"
   spawned_personas: "ネットワークメンバー（%{count}）"
-  docs_and_agents: "%{docs} 件の文書 · %{agents} 人のメンバー"
   mind_cadence: "マインドとケイデンス"
   vault_telemetry: "ボルトとテレメトリ"
   mind_graph_title: "マインドグラフ"
   thought_cadence_title: "思考のケイデンス"
   sparks_feed_title: "セレンディピティの火花"
-  doc_count: "%{count} 件の文書"
 
 role:
   user_primary: "あなた"
@@ -222,11 +211,8 @@ scheduler:
   db_path_title: "データベースのパス"
 
 cadence:
-  badge: "年間 %{count} 件"
   hint: "日付にカーソルを合わせると詳細 · クリックでフィードを絞り込み"
   day_none: "%{date} の投稿はありません"
-  day_one: "%{date} に1件の投稿"
-  day_many: "%{date} に %{count} 件の投稿"
   showing: "%{date} を表示中"
   less: "少"
   more: "多"
@@ -268,7 +254,6 @@ post:
   refs_none: "引用やリンクされた思考はありません"
   refs_quote: "引用：%{excerpt}"
   refs_link: "リンク先：%{excerpt}"
-  refs_open_thread: "会話を開く（返信 %{count} 件）"
 
 appearance:
   gallery_title: "テーマギャラリー"
@@ -1428,3 +1413,38 @@ onboarding.settings_note: "ムネモのようこそ画面を再表示し、エ�
 # Startup notice when the vault cannot be opened or read (flat keys).
 storage.load_failed_title: "ローカルボルトを開けません"
 storage.load_failed: "ローカルボルトを開けませんでした（%{error}）。デモデータを表示しています。このセッションでは何も保存されず、ボルトのファイルは変更されていません。"
+
+# phase 6 fixes (feed)
+# Count labels: <key>_one / <key>_other, picked per locale plural rule by i18n::t_count (flat keys).
+vault.chunks_count_one: "%{count} チャンク"
+vault.chunks_count_other: "%{count} チャンク"
+vault.corpus_header_one: "グラウンディング済みコーパス（%{count} 件）"
+vault.corpus_header_other: "グラウンディング済みコーパス（%{count} 件）"
+graph.nodes_count_one: "%{count} ノード"
+graph.nodes_count_other: "%{count} ノード"
+graph.links_count_one: "%{count} リンク"
+graph.links_count_other: "%{count} リンク"
+graph.mini_nodes_one: "%{count} ノード"
+graph.mini_nodes_other: "%{count} ノード"
+graph.mini_edges_one: "%{count} エッジ"
+graph.mini_edges_other: "%{count} エッジ"
+feed.replies_count_one: "%{count} 件の返信"
+feed.replies_count_other: "%{count} 件の返信"
+feed.show_more_one: "さらに思考を表示（残り %{count} 件）"
+feed.show_more_other: "さらに思考を表示（残り %{count} 件）"
+feed.show_more_replies_one: "さらに %{count} 件の返信を表示"
+feed.show_more_replies_other: "さらに %{count} 件の返信を表示"
+sidebar.posts_count_one: "%{count} 件の思考"
+sidebar.posts_count_other: "%{count} 件の思考"
+sidebar.doc_count_one: "%{count} 件の文書"
+sidebar.doc_count_other: "%{count} 件の文書"
+sidebar.member_count_one: "%{count} 人のメンバー"
+sidebar.member_count_other: "%{count} 人のメンバー"
+cadence.badge_one: "年間 %{count} 件"
+cadence.badge_other: "年間 %{count} 件"
+cadence.day_posts_one: "%{date} に %{count} 件の投稿"
+cadence.day_posts_other: "%{date} に %{count} 件の投稿"
+post.refs_open_thread_one: "会話を開く（返信 %{count} 件）"
+post.refs_open_thread_other: "会話を開く（返信 %{count} 件）"
+sidebar.member_agents_one: "人間らしいエージェント %{count} 体"
+sidebar.member_agents_other: "人間らしいエージェント %{count} 体"

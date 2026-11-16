@@ -18,6 +18,7 @@ impl AppState {
         link: Option<String>,
         img: Option<String>,
     ) -> Result<PostId> {
+        let target_post_id = &self.action_target(target_post_id);
         if !self.post_exists(target_post_id) {
             return Err(AppError::DatabaseError(format!("Target post '{target_post_id}' not found")));
         }
@@ -39,6 +40,7 @@ impl AppState {
         link: Option<String>,
         img: Option<String>,
     ) -> Result<PostId> {
+        let parent_post_id = &self.action_target(parent_post_id);
         if !self.post_exists(parent_post_id) {
             return Err(AppError::DatabaseError(format!("Parent post '{parent_post_id}' not found")));
         }
@@ -52,8 +54,9 @@ impl AppState {
         )
     }
 
-    /// Toggles like on a post by id and persists the change to SQLite.
+    /// Toggles like on a post by id (the original of an instant repost) and persists it.
     pub fn toggle_like(&mut self, post_id: &PostId) {
+        let post_id = &self.action_target(post_id);
         let post = self.post_position(post_id).and_then(|idx| self.posts.get_mut(idx));
 
         if let Some(post) = post {

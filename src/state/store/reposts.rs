@@ -12,8 +12,10 @@ fn target_not_found(target_post_id: &PostId) -> AppError {
 }
 
 impl AppState {
-    /// Immediately publishes an instant repost of the target thought to the timeline.
+    /// Toggles the active profile's instant repost of the target (the original when the target
+    /// is itself an instant repost).
     pub fn repost(&mut self, target_post_id: &PostId) -> Result<PostId> {
+        let target_post_id = &self.action_target(target_post_id);
         let author = self.current_profile_or_err()?;
 
         // Check if author has already reposted this target post

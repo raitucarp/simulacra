@@ -6,6 +6,7 @@ use crate::domain::graph::{GraphNode, NodeKind};
 use crate::theme::ThemeTokens;
 use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::{div, App, ClickEvent, Div, FontWeight, InteractiveElement, ParentElement, StatefulInteractiveElement, Styled, Window};
+use crate::i18n::t_count;
 use rust_i18n::t;
 
 /// Click handler of a details-bar button.
@@ -53,7 +54,7 @@ fn render_selection(node: Option<(&GraphNode, usize)>, theme: &ThemeTokens) -> D
         .child(div().w(theme.spacing_sm).h(theme.spacing_sm).rounded(theme.radius_full).bg(node_color(kind, theme)))
         .child(div().text_color(theme.text_muted).child(t!(kind_label_key(kind)).to_string()))
         .child(div().font_weight(FontWeight::MEDIUM).text_color(theme.text_primary).truncate().child(node.label.clone()))
-        .child(div().text_color(theme.text_muted).child(t!("graph.links_count", count = degree).to_string()))
+        .child(div().text_color(theme.text_muted).child(t_count("graph.links_count", degree)))
 }
 
 /// Selected-node summary on the left; open and reset buttons on the right.

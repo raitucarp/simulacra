@@ -11,6 +11,7 @@ use gpui_kit::component::input::{InputState, TextareaState};
 use gpui_kit::component::scroll::ScrollableElement;
 use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::{div, App, Div, Entity, FontWeight, InteractiveElement, IntoElement, ParentElement, Styled, Window};
+use crate::i18n::t_count;
 use rust_i18n::t;
 
 pub type AddDocCallback = Box<dyn Fn(String, String, &mut Window, &mut App) + 'static>;
@@ -64,7 +65,7 @@ where
                 .text_size(theme.font_size_xs)
                 .font_weight(FontWeight::BOLD)
                 .text_color(theme.text_muted)
-                .child(t!("vault.corpus_header", count = documents.len()).to_string()),
+                .child(t_count("vault.corpus_header", documents.len())),
         )
         .when(documents.is_empty(), |this| {
             this.child(

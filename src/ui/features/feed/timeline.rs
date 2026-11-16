@@ -19,13 +19,14 @@ pub(crate) fn render_timeline<C: IntoElement>(
     callbacks: &PostCallbacks,
     inputs: TimelineInputs<C>,
 ) -> impl IntoElement {
-    // Determine currently focused post (or fallback to top/first post in feed) via O(1) lookup
+    // Focused post (or the top of the feed), resolved to the original of an instant repost.
     let focused_post = inputs
         .selected_post_id
         .as_ref()
         .and_then(|id| state.get_post(id))
         .or_else(|| inputs.stream.rows.post(state, 0))
-        .or_else(|| state.posts.first());
+        .or_else(|| state.posts.first())
+        .and_then(|post| state.get_post(&state.action_target(&post.id)));
     let on_load_more = inputs.on_load_more.map(Rc::new);
     let ctx = InspectorContext {
         state,

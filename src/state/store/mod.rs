@@ -3,6 +3,7 @@
 //! `AppState` is a single type whose `impl` blocks are spread across the sibling
 //! modules by concern (loading, networks, profiles, posts, indices, ...).
 
+mod action_target;
 mod authors;
 mod avatar;
 mod bootstrap;

@@ -58,13 +58,12 @@ fn surface_colors(is_focused: bool, theme: &ThemeTokens) -> (Rgba, Rgba) {
     }
 }
 
-/// Resolves the instant-repost target when the post content is empty.
+/// Resolves the original thought an instant repost wraps (same rule as the action target).
 fn resolve_effective_post<'a, L: PostLookup>(post: &'a Post, lookup: &'a L) -> (&'a Post, bool) {
-    if post.repost_id.is_none() || !post.content.trim().is_empty() {
+    if !post.is_instant_repost() {
         return (post, false);
     }
-    let rep_id = post.repost_id.as_deref().unwrap_or("");
-    match lookup.find_post(rep_id) {
+    match lookup.find_post(post.action_target_id()) {
         Some(target) => (target, true),
         None => (post, false),
     }

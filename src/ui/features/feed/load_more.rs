@@ -10,6 +10,7 @@ use gpui_kit::{
     div, AnyElement, Div, FontWeight, InteractiveElement, IntoElement, ParentElement, Stateful,
     StatefulInteractiveElement, Styled,
 };
+use crate::i18n::t_count;
 use rust_i18n::t;
 use std::rc::Rc;
 
@@ -66,7 +67,7 @@ fn render_load_more_button(
                 .text_size(theme.font_size_sm)
                 .font_weight(FontWeight::MEDIUM)
                 .text_color(theme.text_secondary)
-                .child(t!("feed.show_more", count = remaining).to_string()),
+                .child(t_count("feed.show_more", remaining)),
         )
         .child(
             div()

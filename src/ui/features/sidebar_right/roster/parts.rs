@@ -1,10 +1,13 @@
 //! Header, metric rows and agent pills of the network telemetry roster card.
 
+use crate::domain::Profile;
 use crate::theme::ThemeTokens;
+use crate::ui::atoms::render_profile_avatar;
 use crate::ui::icons::LucideIcon;
 use gpui_kit::base::StyledExt;
 use gpui_kit::component::Icon;
 use gpui_kit::*;
+use crate::i18n::COUNT_SEPARATOR;
 use rust_i18n::t;
 
 
@@ -53,24 +56,20 @@ pub(super) fn render_metric_row(label: String, value: String, value_color: Rgba,
         )
 }
 
-/// Pill showing an agent name and its MBTI code.
-pub(super) fn render_agent_pill(name: String, mbti: String, theme: &ThemeTokens) -> Div {
+/// Pill showing an agent's avatar, name and MBTI code.
+pub(super) fn render_agent_pill(agent: &Profile, theme: &ThemeTokens) -> Div {
     div()
         .flex()
         .items_center()
         .gap(theme.spacing_xs)
-        .px(theme.spacing_sm)
+        .pl(theme.spacing_2xs)
+        .pr(theme.spacing_sm)
         .py(theme.spacing_2xs)
-        .rounded(theme.radius_sm)
+        .rounded(theme.radius_full)
         .bg(theme.hover_bg)
         .text_size(theme.font_size_2xs)
         .font_medium()
         .text_color(theme.accent_agent)
-        .child(
-            div()
-                .w(theme.font_size_2xs)
-                .h(theme.font_size_2xs)
-                .child(Icon::new(LucideIcon::User)),
-        )
-        .child(format!("{} · {}", name, mbti))
+        .child(render_profile_avatar(agent, theme.avatar_size_sm, theme))
+        .child(format!("{}{COUNT_SEPARATOR}{}", agent.name, agent.config.mbti_full_code()))
 }

@@ -1,5 +1,6 @@
 //! Unit tests for the central state store.
 
+mod action_target;
 mod avatar;
 mod controls;
 mod data_fixes;

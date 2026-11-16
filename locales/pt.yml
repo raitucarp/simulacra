@@ -19,17 +19,15 @@ composer:
   tag: "#Tag"
   post_button: "Publicar"
   char_warning: "Limite excedido"
-  char_counter: "%{count}/280"
+  char_counter: "%{count}/%{max}"
 
 feed:
   no_posts: "Nenhum post nesta rede ainda. Seja o primeiro a compartilhar um pensamento!"
   general_timeline: "Linha do Tempo Geral"
 
 sidebar:
-  search_placeholder: "Busca vetorial semântica..."
   grounding_knowledge: "CONHECIMENTO DE BASE"
   upload_doc: "+ Enviar Doc"
-  grounding_desc: "Fontes indexadas via nano-vectordb-rs. Personas ancoram respostas nestes documentos."
   popular_tags: "TAGS POPULARES NA REDE"
   posts_count: "%{count} pensamentos"
   spawned_personas: "PERSONAS ATIVAS (%{count} Online)"

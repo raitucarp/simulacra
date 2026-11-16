@@ -32,6 +32,7 @@ fn callbacks(entity: &Entity<ComposerModalPanel>) -> ModalCallbacks {
         on_clear_image: act(entity, P::clear_image),
         on_clear_link: act(entity, P::clear_link),
         on_add_draft: act(entity, P::add_draft),
+        on_insert_tag: act(entity, P::insert_tag),
         on_remove_draft: act_at(entity, P::remove_draft),
         on_split_draft: act_at(entity, P::split_draft),
     }

@@ -36,7 +36,8 @@ impl AppView {
     }
 
     /// Toggles the settings modal, closing the other menus.
-    pub(crate) fn toggle_settings(&mut self, _: &mut Window, cx: &mut Context<Self>) {
+    pub(crate) fn toggle_settings(&mut self, window: &mut Window, cx: &mut Context<Self>) {
+        self.revert_settings_draft(window, cx);
         let chrome = &mut self.chrome;
         chrome.is_settings_open = !chrome.is_settings_open;
         chrome.is_lang_menu_open = false;

@@ -42,7 +42,7 @@ impl SettingsTab {
             Self::General => "General Preferences",
             Self::AiIntelligence => "AI Intelligence & Providers",
             Self::Appearance => "Theme & Appearance",
-            Self::KnowledgeVault => "Knowledge Vault & RAG",
+            Self::KnowledgeVault => "Knowledge Vault",
         }
     }
 
@@ -51,7 +51,7 @@ impl SettingsTab {
             Self::General => "Local SQLite database, autonomous thought cycle, and interface locale",
             Self::AiIntelligence => "Configure LLM provider models (Google Gemini recommended) and API keys",
             Self::Appearance => "Display density, high-contrast OLED black themes, and layout aesthetics",
-            Self::KnowledgeVault => "Local vector embedding engine, resonance thresholds, and epistemic grounding",
+            Self::KnowledgeVault => "Grounding documents stored in the local vault",
         }
     }
 }

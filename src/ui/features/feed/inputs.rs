@@ -2,7 +2,7 @@
 
 use super::callbacks::PostCallbacks;
 use super::params::{
-    AddDocCallback, DeleteDocCallback, FeedParams, LoadMoreCallback, SelectFeedTabCallback,
+    AddDocCallback, DeleteDocCallback, FeedParams, ImportDocCallback, LoadMoreCallback, SelectFeedTabCallback,
     ToggleRepliesCallback,
 };
 use crate::domain::PostId;
@@ -31,6 +31,7 @@ pub(crate) struct ToolViewInputs<'a> {
     pub doc_content_input: &'a Entity<TextareaState>,
     pub on_add_document: AddDocCallback,
     pub on_delete_document: DeleteDocCallback,
+    pub on_import_document: ImportDocCallback,
 }
 
 /// Distributes feed parameters to the post callbacks, timeline, and tool views.
@@ -41,6 +42,7 @@ pub(crate) fn split_params<C>(params: FeedParams<'_, C>) -> (PostCallbacks, Time
         on_select: Rc::new(params.on_select_post),
         on_repost: Rc::new(params.on_repost_post),
         on_quote: Rc::new(params.on_quote_post),
+        on_delete: Rc::new(params.on_delete_post),
     };
     let timeline = TimelineInputs {
         composer: params.composer,
@@ -59,6 +61,7 @@ pub(crate) fn split_params<C>(params: FeedParams<'_, C>) -> (PostCallbacks, Time
         doc_content_input: params.doc_content_input,
         on_add_document: params.on_add_document,
         on_delete_document: params.on_delete_document,
+        on_import_document: params.on_import_document,
     };
     (callbacks, timeline, tools)
 }

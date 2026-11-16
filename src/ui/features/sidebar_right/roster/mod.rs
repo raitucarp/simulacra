@@ -1,5 +1,5 @@
 //! Epistemic dialectic telemetry inspector molecule.
-//! Provides real-time visibility into vector indexing, agent cadences, and active network members.
+//! Shows the psychology model in use and the network's actual member agents.
 
 mod parts;
 
@@ -8,26 +8,16 @@ use crate::theme::ThemeTokens;
 use gpui_kit::*;
 use parts::{render_agent_pill, render_header, render_metric_row};
 
-/// Placeholder members shown when the network has no agents: `(name, MBTI code)`.
-const DEFAULT_ROSTER: [(&str, &str); 2] = [("Sokrates", "ENTP-A"), ("Baruch de Spinoza", "INTJ-A")];
-const VECTOR_ENGINE_LABEL: &str = "Vector Engine";
-const VECTOR_ENGINE_VALUE: &str = "nano-vectordb (384d)";
 const PSYCHOLOGY_ENGINE_LABEL: &str = "Psychology Engine";
 const PSYCHOLOGY_ENGINE_VALUE: &str = "MBTI · OCEAN · Enneagram";
 const NETWORK_MEMBERS_LABEL: &str = "Network Members";
 
+/// `(name, MBTI code)` of every real agent of the network.
 fn badge_names(agents: &[&Profile]) -> Vec<(String, String)> {
-    if agents.is_empty() {
-        DEFAULT_ROSTER
-            .iter()
-            .map(|(name, mbti)| (name.to_string(), mbti.to_string()))
-            .collect()
-    } else {
-        agents
-            .iter()
-            .map(|a| (a.name.clone(), a.config.mbti_full_code()))
-            .collect()
-    }
+    agents
+        .iter()
+        .map(|a| (a.name.clone(), a.config.mbti_full_code()))
+        .collect()
 }
 
 fn render_metrics(member_count: usize, theme: &ThemeTokens) -> Div {
@@ -36,7 +26,6 @@ fn render_metrics(member_count: usize, theme: &ThemeTokens) -> Div {
         .flex()
         .flex_col()
         .gap(theme.spacing_sm)
-        .child(render_metric_row(VECTOR_ENGINE_LABEL, VECTOR_ENGINE_VALUE.to_string(), theme.text_secondary, theme))
         .child(render_metric_row(PSYCHOLOGY_ENGINE_LABEL, PSYCHOLOGY_ENGINE_VALUE.to_string(), theme.accent_agent, theme))
         .child(render_metric_row(NETWORK_MEMBERS_LABEL, members, theme.text_secondary, theme))
 }

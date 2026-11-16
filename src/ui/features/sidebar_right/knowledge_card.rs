@@ -1,13 +1,18 @@
-//! Grounding knowledge card molecule with proper layout placement and Lucide icons.
+//! Grounding knowledge card molecule: document count and the "add document" file import.
 
 use crate::theme::ThemeTokens;
 use crate::ui::icons::LucideIcon;
 use gpui_kit::base::StyledExt;
-use gpui_kit::component::Icon;
+use gpui_kit::component::button::Button;
+use gpui_kit::component::{Icon, Sizable};
 use gpui_kit::*;
 use rust_i18n::t;
 
-const VECTOR_RAG_BADGE: &str = "Vector RAG";
+/// Element id of the card's import button.
+const UPLOAD_DOC_BUTTON_ID: &str = "sidebar-upload-doc-btn";
+
+/// Imports a text file into the active network's vault.
+pub type ImportDocumentCallback = Box<dyn Fn(&mut Window, &mut App) + 'static>;
 
 fn render_title(theme: &ThemeTokens) -> Div {
     div()
@@ -24,7 +29,8 @@ fn render_title(theme: &ThemeTokens) -> Div {
         )
 }
 
-fn render_badge(theme: &ThemeTokens) -> Div {
+/// Real number of documents in the active network's vault.
+fn render_badge(doc_count: usize, theme: &ThemeTokens) -> Div {
     div()
         .px_1p5()
         .py_0p5()
@@ -35,48 +41,39 @@ fn render_badge(theme: &ThemeTokens) -> Div {
         .text_xs()
         .font_medium()
         .text_color(theme.text_muted)
-        .child(VECTOR_RAG_BADGE)
+        .child(t!("sidebar.doc_count", count = doc_count).to_string())
 }
 
-/// Clean, dedicated "upload document" action button.
-fn render_upload_button(theme: &ThemeTokens) -> Div {
-    let accent_user = theme.accent_user;
-    div()
+/// Full-width "add document" button opening the native file picker.
+fn render_upload_button(on_import: ImportDocumentCallback) -> Button {
+    Button::new(UPLOAD_DOC_BUTTON_ID)
+        .outline()
+        .small()
         .w_full()
-        .py_1p5()
-        .px_3()
-        .rounded_lg()
-        .bg(theme.hover_bg)
-        .border_1()
-        .border_color(theme.border)
-        .cursor_pointer()
-        .hover(move |s| s.border_color(accent_user))
-        .flex()
-        .items_center()
-        .justify_center()
-        .gap_1p5()
-        .text_xs()
-        .font_medium()
-        .text_color(theme.accent_user)
-        .child(div().w_3p5().h_3p5().child(Icon::new(LucideIcon::Plus)))
-        .child(t!("sidebar.upload_doc").to_string())
+        .icon(Icon::new(LucideIcon::Plus))
+        .label(t!("sidebar.upload_doc").to_string())
+        .on_click(move |_, window, cx| on_import(window, cx))
 }
 
 /// Atomic Grounding Knowledge Card with spacious, well-aligned Add Document placement.
-pub fn render_knowledge_card(theme: &ThemeTokens) -> impl IntoElement {
+pub fn render_knowledge_card(
+    doc_count: usize,
+    on_import: ImportDocumentCallback,
+    theme: &ThemeTokens,
+) -> impl IntoElement {
     div()
         .w_full()
         .flex()
         .flex_col()
         .gap_2p5()
-        // Header Row: Title & Category Icon
+        // Header Row: Title & document count
         .child(
             div()
                 .flex()
                 .items_center()
                 .justify_between()
                 .child(render_title(theme))
-                .child(render_badge(theme)),
+                .child(render_badge(doc_count, theme)),
         )
         // Description
         .child(
@@ -85,5 +82,5 @@ pub fn render_knowledge_card(theme: &ThemeTokens) -> impl IntoElement {
                 .text_color(theme.text_secondary)
                 .child(t!("sidebar.grounding_desc").to_string()),
         )
-        .child(render_upload_button(theme))
+        .child(render_upload_button(on_import))
 }

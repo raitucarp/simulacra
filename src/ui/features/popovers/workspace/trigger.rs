@@ -1,6 +1,6 @@
 //! Sidebar workspace trigger button rendering.
 
-use super::consts::{NO_NETWORK_LABEL, TRIGGER_BADGE_MIN_PX, TRIGGER_HEIGHT_PX, TRIGGER_ID};
+use super::consts::{TRIGGER_BADGE_MIN_PX, TRIGGER_HEIGHT_PX, TRIGGER_ID};
 use super::{docs_and_agents_caption, WorkspaceTrigger};
 use crate::domain::Network;
 use crate::theme::ThemeTokens;
@@ -12,6 +12,7 @@ use gpui_kit::{
     div, px, App, Div, InteractiveElement, IntoElement, ParentElement, RenderOnce,
     StatefulInteractiveElement, Styled, Window,
 };
+use rust_i18n::t;
 
 impl RenderOnce for WorkspaceTrigger {
     fn render(self, _window: &mut Window, _cx: &mut App) -> impl IntoElement {
@@ -53,7 +54,7 @@ impl RenderOnce for WorkspaceTrigger {
 fn active_labels(active_network: Option<&Network>) -> (String, String) {
     let name = active_network
         .map(|n| n.name.clone())
-        .unwrap_or_else(|| NO_NETWORK_LABEL.to_string());
+        .unwrap_or_else(|| t!("workspace.no_network").to_string());
     let meta = active_network.map(docs_and_agents_caption).unwrap_or_default();
     (name, meta)
 }

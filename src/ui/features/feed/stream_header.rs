@@ -1,12 +1,9 @@
-//! Stream pane header: clickable Threads-style "For you" / "Dialectic" tabs and the loop
-//! status pill.
+//! Stream pane header: clickable Threads-style "For you" / "Dialectic" tabs.
 
 use super::consts::{ACTIVE_TAB_INDICATOR_WIDTH, STREAM_TAB_ID};
 use super::params::SelectFeedTabCallback;
 use crate::state::FeedTab;
 use crate::theme::ThemeTokens;
-use crate::ui::icons::LucideIcon;
-use gpui_kit::component::Icon;
 use gpui_kit::{
     div, px, Div, FontWeight, InteractiveElement, ParentElement, Stateful,
     StatefulInteractiveElement, Styled,
@@ -14,7 +11,7 @@ use gpui_kit::{
 use rust_i18n::t;
 use std::rc::Rc;
 
-/// Header row of the stream pane: the stream tabs and the loop status.
+/// Header row of the stream pane: the stream tabs.
 pub(crate) fn render_stream_header(
     theme: &ThemeTokens,
     active: FeedTab,
@@ -34,7 +31,6 @@ pub(crate) fn render_stream_header(
         .items_center()
         .justify_between()
         .child(div().flex().items_center().gap(theme.spacing_xl).h_full().children(tabs))
-        .child(render_loop_status(theme))
 }
 
 fn tab_label_text(tab: FeedTab) -> String {
@@ -89,33 +85,4 @@ fn render_tab_label(theme: &ThemeTokens, tab: FeedTab, is_active: bool) -> Div {
         .text_color(color)
         .hover(move |s| s.text_color(hover_color))
         .child(tab_label_text(tab))
-}
-
-/// "Loop active" status pill.
-fn render_loop_status(theme: &ThemeTokens) -> Div {
-    div()
-        .flex()
-        .items_center()
-        .gap(theme.spacing_xs)
-        .px(theme.spacing_sm)
-        .py(theme.spacing_2xs)
-        .rounded(theme.radius_full)
-        .bg(theme.bg_card)
-        .border(theme.border_width_hairline)
-        .border_color(theme.border_subtle)
-        .child(
-            div()
-                .w(theme.font_size_xs)
-                .h(theme.font_size_xs)
-                .text_color(theme.accent_success)
-                .child(Icon::new(LucideIcon::Activity)),
-        )
-        .child(
-            div()
-                .font_family(theme.font_family_mono.clone())
-                .text_size(theme.font_size_xs)
-                .font_weight(FontWeight::MEDIUM)
-                .text_color(theme.accent_success)
-                .child(t!("feed.loop_active").to_string()),
-        )
 }

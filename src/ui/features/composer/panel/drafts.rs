@@ -1,6 +1,7 @@
 //! Thread drafts: creating, adding, removing and splitting post editors, plus validation.
 
-use super::super::consts::MODAL_COMPOSER_ROWS;
+use super::super::consts::{HASHTAG_TOKEN, MODAL_COMPOSER_ROWS};
+use super::super::snippet::insert_token;
 use super::super::modal::ComposerModalMode;
 use super::{ComposerModalPanel, DraftSlot};
 use crate::domain::{first_thread_problem, split_into_thread, ThreadProblem, MAX_POST_CHARS};
@@ -27,12 +28,17 @@ impl ComposerModalPanel {
 
     fn on_draft_event(
         &mut self,
-        _: &Entity<TextareaState>,
+        input: &Entity<TextareaState>,
         event: &InputEvent,
         window: &mut Window,
         cx: &mut Context<Self>,
     ) {
         match event {
+            InputEvent::Focus => {
+                if let Some(index) = self.drafts.iter().position(|slot| &slot.input == input) {
+                    self.active_draft = index;
+                }
+            }
             InputEvent::Change => {
                 self.error = None;
                 cx.notify();
@@ -78,6 +84,14 @@ impl ComposerModalPanel {
         }
         self.focus_draft(index + rest.len(), window, cx);
         cx.notify();
+    }
+
+    /// Inserts the hashtag sigil at the cursor of the last focused draft.
+    pub(super) fn insert_tag(&mut self, window: &mut Window, cx: &mut Context<Self>) {
+        let index = self.active_draft.min(self.drafts.len().saturating_sub(1));
+        if let Some(input) = self.drafts.get(index).map(|slot| slot.input.clone()) {
+            insert_token(&input, HASHTAG_TOKEN, window, cx);
+        }
     }
 
     pub(super) fn focus_draft(&self, index: usize, window: &mut Window, cx: &mut App) {

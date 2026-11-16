@@ -2,11 +2,12 @@
 
 use super::super::avatar::composer_avatar;
 use super::super::consts::{
-    HASHTAG_SNIPPET, INLINE_FALLBACK_INITIAL, INLINE_TEXTAREA_WRAPPER_ID, INSERT_LINK_BTN_ID,
-    INSERT_TAG_BTN_ID, SUBMIT_POST_BTN_ID, WIKILINK_OPEN_SNIPPET,
+    HASHTAG_TOKEN, INLINE_FALLBACK_INITIAL, INLINE_TEXTAREA_WRAPPER_ID, INSERT_LINK_BTN_ID,
+    INSERT_TAG_BTN_ID, SUBMIT_POST_BTN_ID, WIKILINK_OPEN_TOKEN,
 };
 use super::super::keys::{is_submit_chord, SubmitPostDraft};
 use super::super::messages::render_notice;
+use super::super::snippet::insert_token;
 use super::layout::{avatar_column, composer_row, editor_column, toolbar};
 use super::PostComposerView;
 use crate::domain::MAX_POST_CHARS;
@@ -28,8 +29,16 @@ impl Render for PostComposerView {
             theme,
         );
         let actions = toolbar(
-            insert_snippet_button(INSERT_LINK_BTN_ID, LucideIcon::Link2, WIKILINK_OPEN_SNIPPET, &self.composer_input),
-            insert_snippet_button(INSERT_TAG_BTN_ID, LucideIcon::Hash, HASHTAG_SNIPPET, &self.composer_input),
+            insert_token_button(
+                (INSERT_LINK_BTN_ID, LucideIcon::Link2, t!("composer.insert_link").to_string()),
+                WIKILINK_OPEN_TOKEN,
+                &self.composer_input,
+            ),
+            insert_token_button(
+                (INSERT_TAG_BTN_ID, LucideIcon::Hash, t!("composer.insert_tag").to_string()),
+                HASHTAG_TOKEN,
+                &self.composer_input,
+            ),
             self.submit_button(cx),
             self.draft_length,
             theme,
@@ -74,11 +83,10 @@ impl PostComposerView {
     }
 }
 
-/// Ghost button that appends `snippet` to the draft and refocuses the textarea.
-fn insert_snippet_button(
-    id: &'static str,
-    icon: LucideIcon,
-    snippet: &'static str,
+/// Ghost `(id, icon, tooltip)` button inserting `token` at the draft cursor as a new word.
+fn insert_token_button(
+    (id, icon, tooltip): (&'static str, LucideIcon, String),
+    token: &'static str,
     composer_input: &Entity<TextareaState>,
 ) -> Button {
     let entity = composer_input.clone();
@@ -86,11 +94,6 @@ fn insert_snippet_button(
         .ghost()
         .small()
         .icon(Icon::new(icon))
-        .on_click(move |_, window, cx| {
-            entity.update(cx, |state, cx| {
-                let cur = state.value().to_string();
-                state.set_value(format!("{cur}{snippet}"), window, cx);
-                state.focus(window, cx);
-            });
-        })
+        .tooltip(tooltip)
+        .on_click(move |_, window, cx| insert_token(&entity, token, window, cx))
 }

@@ -11,7 +11,7 @@ impl AppView {
         self.chrome.is_settings_open.then(|| {
             SettingsModal::new(
                 self.theme.clone(),
-                self.state.llm_settings.clone(),
+                self.chrome.settings_draft.view(&self.state.llm_settings),
                 self.chrome.active_settings_tab,
                 self.llm_inputs.api_key.clone(),
                 self.llm_inputs.model.clone(),
@@ -37,6 +37,7 @@ impl AppView {
             queued: scheduler.queue.pending_len(),
             last_error: scheduler.last_error.as_ref().map(|e| (e.provider.to_string(), e.message.clone())),
             db_path: self.state.db.as_ref().map(|db| db.path()).unwrap_or_default(),
+            language_label: self.chrome.current_language.native_label(),
             on_toggle_scheduler: Some(bind.boxed(Self::set_scheduler_enabled)),
         }
     }

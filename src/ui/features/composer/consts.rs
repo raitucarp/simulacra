@@ -12,10 +12,6 @@ pub(super) const WIKILINK_OPEN_TOKEN: &str = "[[";
 /// Token inserted at the cursor by the "insert tag" buttons (the hashtag sigil).
 pub(super) const HASHTAG_TOKEN: &str = "#";
 
-/// Modal title prefix in reply mode (followed by the parent author's handle).
-pub(super) const REPLY_TITLE_PREFIX: &str = "Reply to";
-/// Modal title prefix in quote mode (followed by the quoted author's handle).
-pub(super) const QUOTE_TITLE_PREFIX: &str = "Quote";
 /// Prefix rendered before the community topic label.
 pub(super) const TOPIC_PREFIX: &str = "> ";
 
@@ -55,5 +51,3 @@ pub(super) const MODAL_REMOVE_DRAFT_BTN_ID: &str = "modal-remove-draft-btn";
 pub(super) const MODAL_COMPOSER_ROWS: (usize, usize) = (2, 8);
 /// Placeholder of the modal link input.
 pub(super) const MODAL_LINK_PLACEHOLDER: &str = "https://...";
-/// File dialog title of the modal image picker.
-pub(super) const PICK_IMAGE_TITLE: &str = "Select Image";

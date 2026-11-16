@@ -7,7 +7,7 @@ use crate::domain::PostId;
 use crate::state::{AppState, FeedTab, StreamCache};
 use crate::theme::ThemeTokens;
 use crate::ui::features::feed::{FeedReader, StreamInputs, StreamRows};
-use gpui_kit::{px, App, Entity, ListAlignment, ListOffset, ListState};
+use gpui_kit::{px, App, Entity, ListAlignment, ListOffset, ListState, Pixels};
 use std::rc::Rc;
 
 /// Identity of one stream row: a post, or the trailing load-more row (`None`).
@@ -66,7 +66,7 @@ impl StreamList {
 
     /// Scrolls so that `row` sits at the top of the stream.
     pub fn scroll_to_row(&self, row: usize) {
-        self.list.scroll_to(ListOffset { item_ix: row, offset_in_item: px(0.) });
+        self.list.scroll_to(ListOffset { item_ix: row, offset_in_item: Pixels::ZERO });
     }
 
     /// Forgets measured row heights (after a theme change resizes the cards).

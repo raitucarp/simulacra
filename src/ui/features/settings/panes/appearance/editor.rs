@@ -2,9 +2,7 @@
 //! the live contrast badges.
 
 use super::super::common::{card, muted_note, section, section_label, spaced_row};
-use super::consts::{
-    COLOR_FIELD_WIDTH, COLOR_I18N_PREFIX, DELETE_BUTTON_ID, DUPLICATE_BUTTON_ID, HEX_READOUT_WIDTH, RESET_BUTTON_ID,
-};
+use super::consts::{COLOR_I18N_PREFIX, DELETE_BUTTON_ID, DUPLICATE_BUTTON_ID, RESET_BUTTON_ID};
 use super::contrast::{contrast_checks, render_check};
 use super::handlers::{act, PanelHandle};
 use super::AppearancePanel;
@@ -29,7 +27,7 @@ pub(super) fn render(pane: &AppearancePanel, handle: &PanelHandle) -> Div {
         .when(editable, |body| body.child(color_grid(&pane.pickers, &palette.colors, theme)))
         .child(section_label(theme, t!("appearance.contrast_title").to_string()))
         .children(checks.iter().map(|check| render_check(check, theme)));
-    section(section_label(theme, t!("appearance.editor_title").to_string()), body)
+    section(section_label(theme, t!("appearance.editor_title").to_string()), body, theme)
 }
 
 /// Status line plus Duplicate (always) and Reset / Delete (custom palettes only).
@@ -61,7 +59,7 @@ fn color_grid(pickers: &[(PaletteColorKey, Entity<ColorPickerState>)], colors: &
         let label_key = format!("{COLOR_I18N_PREFIX}{}", key.id());
         let label = t!(label_key.as_str()).to_string();
         div()
-            .w(px(COLOR_FIELD_WIDTH))
+            .w(theme.color_field_width)
             .flex()
             .items_center()
             .gap(theme.spacing_sm)
@@ -69,7 +67,7 @@ fn color_grid(pickers: &[(PaletteColorKey, Entity<ColorPickerState>)], colors: &
             .child(div().flex_1().truncate().text_size(theme.font_size_xs).text_color(theme.text_secondary).child(label))
             .child(
                 div()
-                    .w(px(HEX_READOUT_WIDTH))
+                    .w(theme.hex_readout_width)
                     .text_size(theme.font_size_xs)
                     .font_family(theme.font_family_mono.clone())
                     .text_color(theme.text_muted)

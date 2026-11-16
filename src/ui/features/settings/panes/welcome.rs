@@ -22,5 +22,6 @@ pub(super) fn render_welcome_section(theme: &ThemeTokens, props: &mut GeneralPan
             .gap(theme.spacing_sm)
             .child(spaced_row().child(body_text(theme, t!("onboarding.settings_label").to_string())).child(button))
             .child(muted_note(theme, t!("onboarding.settings_note").to_string())),
+        theme,
     )
 }

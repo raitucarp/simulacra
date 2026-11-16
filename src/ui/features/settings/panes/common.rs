@@ -1,30 +1,29 @@
 //! Shared building blocks for settings panes (section labels, cards, rows, notes).
 
-use super::super::consts::{TEXT_BODY, TEXT_CAPTION, TEXT_SMALL};
 use crate::theme::ThemeTokens;
-use gpui_kit::{div, px, Div, FontWeight, IntoElement, ParentElement, SharedString, Styled};
+use gpui_kit::{div, Div, FontWeight, IntoElement, ParentElement, SharedString, Styled};
 
 /// Uppercase muted bold section heading.
 pub(super) fn section_label(theme: &ThemeTokens, text: impl Into<SharedString>) -> Div {
     div()
-        .text_size(px(TEXT_BODY))
+        .text_size(theme.font_size_label)
         .font_weight(FontWeight::BOLD)
         .text_color(theme.text_muted)
         .child(text.into())
 }
 
 /// Vertical section: a header element stacked above a body element.
-pub(super) fn section(header: impl IntoElement, body: impl IntoElement) -> Div {
-    div().flex().flex_col().gap_2().child(header).child(body)
+pub(super) fn section(header: impl IntoElement, body: impl IntoElement, theme: &ThemeTokens) -> Div {
+    div().flex().flex_col().gap(theme.spacing_sm).child(header).child(body)
 }
 
 /// Bordered card surface laid out as a vertical stack (caller adds the gap).
 pub(super) fn card(theme: &ThemeTokens) -> Div {
     div()
-        .p_3p5()
-        .rounded_lg()
+        .p(theme.spacing_md_plus)
+        .rounded(theme.radius_md)
         .bg(theme.bg_card)
-        .border_1()
+        .border(theme.border_width_hairline)
         .border_color(theme.border)
         .flex()
         .flex_col()
@@ -37,12 +36,12 @@ pub(super) fn spaced_row() -> Div {
 
 /// Small muted explanatory paragraph.
 pub(super) fn muted_note(theme: &ThemeTokens, text: impl Into<SharedString>) -> Div {
-    div().text_size(px(TEXT_SMALL)).text_color(theme.text_muted).child(text.into())
+    div().text_size(theme.font_size_hint).text_color(theme.text_muted).child(text.into())
 }
 
 /// Primary body-sized text line.
 pub(super) fn body_text(theme: &ThemeTokens, text: impl Into<SharedString>) -> Div {
-    div().text_size(px(TEXT_BODY)).text_color(theme.text_primary).child(text.into())
+    div().text_size(theme.font_size_label).text_color(theme.text_primary).child(text.into())
 }
 
 /// Medium-weight title over a secondary subtitle in the given font family.
@@ -55,11 +54,11 @@ pub(super) fn title_with_subtitle(
     div()
         .flex()
         .flex_col()
-        .gap_0p5()
+        .gap(theme.spacing_2xs)
         .child(field_title(theme, title))
         .child(
             div()
-                .text_size(px(TEXT_SMALL))
+                .text_size(theme.font_size_hint)
                 .font_family(subtitle_family)
                 .text_color(theme.text_secondary)
                 .child(subtitle.into()),
@@ -69,20 +68,20 @@ pub(super) fn title_with_subtitle(
 /// Medium-weight primary field title.
 pub(super) fn field_title(theme: &ThemeTokens, text: impl IntoElement) -> Div {
     div()
-        .text_size(px(TEXT_BODY))
+        .text_size(theme.font_size_label)
         .font_weight(FontWeight::MEDIUM)
         .text_color(theme.text_primary)
         .child(text)
 }
 
 /// Field title on the left with a muted caption hint on the right.
-pub(super) fn field_header(theme: &ThemeTokens, title: impl IntoElement, hint: &'static str) -> Div {
+pub(super) fn field_header(theme: &ThemeTokens, title: impl IntoElement, hint: String) -> Div {
     spaced_row()
         .child(field_title(theme, title))
-        .child(div().text_size(px(TEXT_CAPTION)).text_color(theme.text_muted).child(hint))
+        .child(div().text_size(theme.font_size_2xs).text_color(theme.text_muted).child(hint))
 }
 
 /// Vertical field group (label + input + extras).
-pub(super) fn field_group() -> Div {
-    div().flex().flex_col().gap_1p5()
+pub(super) fn field_group(theme: &ThemeTokens) -> Div {
+    div().flex().flex_col().gap(theme.spacing_xs_plus)
 }

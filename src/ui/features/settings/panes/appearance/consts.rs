@@ -1,13 +1,4 @@
-//! Element ids, fixed sizes and option lists of the Appearance pane.
-
-/// Width of one gallery preview card (three per row in the settings dialog).
-pub(super) const PREVIEW_CARD_WIDTH: f32 = 172.0;
-/// Diameter of the fake author avatar inside a preview.
-pub(super) const PREVIEW_AVATAR_SIZE: f32 = 16.0;
-/// Width of one color field in the editor grid (two per row).
-pub(super) const COLOR_FIELD_WIDTH: f32 = 262.0;
-/// Width of the hex readout next to each color picker.
-pub(super) const HEX_READOUT_WIDTH: f32 = 76.0;
+//! Element ids and option lists of the Appearance pane (sizes are theme tokens).
 
 /// Interface font families offered (installed with Windows; the mono family is fixed).
 pub(super) const FONT_FAMILIES: [&str; 5] = ["Segoe UI", "Calibri", "Georgia", "Verdana", "Trebuchet MS"];

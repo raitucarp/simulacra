@@ -1,6 +1,5 @@
 //! General tab pane: autonomous engine, local storage vault and interface locale.
 
-use super::super::consts::{ICON_LG, MONO_FONT_STACK, TEXT_SMALL};
 use super::super::general_props::GeneralPaneProps;
 use super::common::{body_text, card, muted_note, section, section_label, title_with_subtitle};
 use super::engine::render_engine_section;
@@ -9,7 +8,7 @@ use crate::i18n::Language;
 use crate::theme::ThemeTokens;
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::Icon;
-use gpui_kit::{div, px, Div, IntoElement, ParentElement, Styled};
+use gpui_kit::{div, Div, IntoElement, ParentElement, Styled};
 use rust_i18n::t;
 
 /// Helper function to render General Tab Pane
@@ -20,7 +19,7 @@ pub(in crate::ui::features::settings) fn render_general_pane(
     div()
         .flex()
         .flex_col()
-        .gap_5()
+        .gap(theme.spacing_xl)
         .child(render_engine_section(theme, &mut props))
         .child(render_storage_section(theme, &props.db_path))
         .child(render_locale_section(theme, props.language_label))
@@ -32,14 +31,15 @@ fn render_storage_section(theme: &ThemeTokens, db_path: &str) -> Div {
     section(
         section_label(theme, t!("settings.storage_title").to_string()),
         card(theme)
-            .gap_3()
+            .gap(theme.spacing_md)
             .child(title_with_subtitle(
                 theme,
                 t!("scheduler.db_path_title").to_string(),
                 db_path.to_string(),
-                MONO_FONT_STACK,
+                theme.font_family_mono.clone(),
             ))
             .child(muted_note(theme, t!("settings.storage_note").to_string())),
+            theme,
     )
 }
 
@@ -49,10 +49,10 @@ fn render_locale_section(theme: &ThemeTokens, language_label: &str) -> Div {
     section(
         section_label(theme, t!("settings.locale_title").to_string()),
         div()
-            .p_3()
-            .rounded_lg()
+            .p(theme.spacing_md)
+            .rounded(theme.radius_md)
             .bg(theme.bg_card)
-            .border_1()
+            .border(theme.border_width_hairline)
             .border_color(theme.border)
             .flex()
             .items_center()
@@ -61,15 +61,16 @@ fn render_locale_section(theme: &ThemeTokens, language_label: &str) -> Div {
                 div()
                     .flex()
                     .items_center()
-                    .gap_2()
-                    .child(Icon::new(LucideIcon::Globe).size(px(ICON_LG)).text_color(theme.text_muted))
+                    .gap(theme.spacing_sm)
+                    .child(Icon::new(LucideIcon::Globe).size(theme.icon_size_lg).text_color(theme.text_muted))
                     .child(body_text(theme, t!("settings.locale_label").to_string())),
             )
             .child(
                 div()
-                    .text_size(px(TEXT_SMALL))
+                    .text_size(theme.font_size_hint)
                     .text_color(theme.text_secondary)
                     .child(value.to_string()),
             ),
+            theme,
     )
 }

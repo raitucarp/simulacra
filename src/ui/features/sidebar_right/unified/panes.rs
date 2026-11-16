@@ -53,17 +53,17 @@ pub(super) fn render_mind_cadence_pane(params: MindPaneParams<'_>, theme: &Theme
 }
 
 fn divided_block(theme: &ThemeTokens) -> Div {
-    div().w_full().pb_3p5().border_b_1().border_color(theme.border)
+    div().w_full().pb(theme.spacing_md_plus).border_b(theme.border_width_hairline).border_color(theme.border)
 }
 
 fn render_search_box(search_input: &Entity<InputState>, theme: &ThemeTokens) -> Div {
     div()
         .w_full()
-        .rounded_lg()
-        .border_1()
+        .rounded(theme.radius_md)
+        .border(theme.border_width_hairline)
         .border_color(theme.border)
         .bg(theme.bg_card)
-        .p_1()
+        .p(theme.spacing_xs)
         .child(Input::new(search_input).cleanable(true))
 }
 
@@ -91,9 +91,9 @@ pub(super) fn render_vault_telemetry_pane(
             divided_block(theme)
                 .flex()
                 .flex_col()
-                .gap_2p5()
+                .gap(theme.spacing_sm_plus)
                 .child(render_popular_tags_title(theme))
-                .child(render_trending_list(trending)),
+                .child(render_trending_list(trending, theme)),
         )
         .child(render_network_agent_roster(&state.current_network_agents(), theme))
 }

@@ -37,7 +37,7 @@ const TABS: [TabSpec; 2] = [
 fn render_tab_label(spec: &TabSpec, theme: &ThemeTokens) -> Div {
     div()
         .font_family(theme.font_family_ui.clone())
-        .text_xs()
+        .text_size(theme.font_size_label)
         .font_medium()
         .child(t!(spec.label_key).to_string())
 }
@@ -53,17 +53,17 @@ fn render_tab(
     div()
         .id(spec.id)
         .flex_1()
-        .py_1p5()
-        .rounded_lg()
+        .py(theme.spacing_xs_plus)
+        .rounded(theme.radius_md)
         .cursor_pointer()
         .flex()
         .items_center()
         .justify_center()
-        .gap_1p5()
+        .gap(theme.spacing_xs_plus)
         .when(is_active, |s| {
             s.bg(theme.hover_bg)
                 .text_color(theme.text_primary)
-                .border_1()
+                .border(theme.border_width_hairline)
                 .border_color(theme.border)
         })
         .when(!is_active, |s| s.text_color(theme.text_muted))
@@ -71,7 +71,7 @@ fn render_tab(
         .on_click(move |_, window, cx| {
             on_select(tab, window, cx);
         })
-        .child(div().w_3p5().h_3p5().child(Icon::new(spec.icon)))
+        .child(div().w(theme.icon_size_lg).h(theme.icon_size_lg).child(Icon::new(spec.icon)))
         .child(render_tab_label(spec, theme))
 }
 
@@ -91,14 +91,14 @@ pub(super) fn render_tab_switcher(
         .child(
             div()
                 .w_full()
-                .p_1()
-                .rounded_xl()
+                .p(theme.spacing_xs)
+                .rounded(theme.radius_lg)
                 .bg(theme.bg_card)
-                .border_1()
+                .border(theme.border_width_hairline)
                 .border_color(theme.border)
                 .flex()
                 .items_center()
-                .gap_1()
+                .gap(theme.spacing_xs)
                 .children(tabs),
         )
 }

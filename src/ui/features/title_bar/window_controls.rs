@@ -23,8 +23,8 @@ pub(super) fn render_window_controls(is_maximized: bool, theme: &ThemeTokens) ->
     div()
         .flex()
         .items_center()
-        .gap_1()
-        .pl_2()
+        .gap(theme.spacing_xs)
+        .pl(theme.spacing_sm)
         // Minimize
         .child(window_control(WIN_CONTROL_MIN_ID, WindowControlArea::Min, LucideIcon::Minus, hover, theme))
         // Maximize / Restore
@@ -50,7 +50,7 @@ fn window_control(
         .id(id)
         .w(theme.win_control_width)
         .h(theme.win_control_height)
-        .rounded_sm()
+        .rounded(theme.win_control_radius)
         .flex()
         .items_center()
         .justify_center()

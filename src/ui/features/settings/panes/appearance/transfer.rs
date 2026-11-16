@@ -31,7 +31,7 @@ pub(super) fn render(pane: &AppearancePanel, handle: &PanelHandle) -> Div {
             .child(button(SAVE_FILE_ID, "appearance.save_file", AppearancePanel::save_file))
             .child(button(OPEN_FILE_ID, "appearance.open_file", AppearancePanel::open_file)),
     );
-    section(section_label(theme, t!("appearance.transfer_title").to_string()), body)
+    section(section_label(theme, t!("appearance.transfer_title").to_string()), body, theme)
 }
 
 fn toast(window: &mut Window, cx: &mut App, note: Notification) {

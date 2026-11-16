@@ -1,20 +1,18 @@
 //! Left navigation rail of the settings modal: brand header, tab list and status footer.
 
 use super::callbacks::SelectTabCallback;
-use super::consts::{
-    BRAND_BADGE_SIZE, ICON_LG, ICON_SM, ICON_XL, TAB_BUTTON_ID_PREFIX, TAB_INDICATOR_HEIGHT,
-    TAB_INDICATOR_WIDTH, TEXT_CAPTION, TEXT_LABEL, TEXT_TITLE,
-};
+use super::consts::TAB_BUTTON_ID_PREFIX;
 use super::tabs::SettingsTab;
 use crate::theme::ThemeTokens;
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::Icon;
 use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::{
-    div, px, Div, FontWeight, InteractiveElement, IntoElement, MouseButton, ParentElement,
+    div, Div, FontWeight, InteractiveElement, IntoElement, MouseButton, ParentElement,
     Stateful, Styled,
 };
 use std::rc::Rc;
+use rust_i18n::t;
 
 /// Renders the full left rail (title, tab buttons, sovereignty footer).
 pub(super) fn render_rail(
@@ -31,9 +29,9 @@ pub(super) fn render_rail(
         .w(theme.modal_rail_width)
         .h_full()
         .bg(theme.bg_sidebar)
-        .border_r_1()
+        .border_r(theme.border_width_hairline)
         .border_color(theme.border)
-        .p_4()
+        .p(theme.spacing_lg)
         .flex()
         .flex_col()
         .justify_between()
@@ -41,9 +39,9 @@ pub(super) fn render_rail(
             div()
                 .flex()
                 .flex_col()
-                .gap_4()
+                .gap(theme.spacing_lg)
                 .child(render_rail_brand(theme))
-                .child(div().flex().flex_col().gap_1().children(tab_buttons)),
+                .child(div().flex().flex_col().gap(theme.spacing_xs).children(tab_buttons)),
         )
         .child(render_rail_footer(theme))
 }
@@ -53,44 +51,44 @@ fn render_rail_brand(theme: &ThemeTokens) -> Div {
     div()
         .flex()
         .items_center()
-        .gap_2p5()
+        .gap(theme.spacing_sm_plus)
         .child(
             div()
-                .w(px(BRAND_BADGE_SIZE))
-                .h(px(BRAND_BADGE_SIZE))
-                .rounded_lg()
+                .w(theme.settings_brand_badge_size)
+                .h(theme.settings_brand_badge_size)
+                .rounded(theme.radius_md)
                 .bg(theme.accent_brand_subtle)
                 .flex()
                 .items_center()
                 .justify_center()
-                .child(Icon::new(LucideIcon::Sliders).size(px(ICON_LG)).text_color(theme.accent_brand)),
+                .child(Icon::new(LucideIcon::Sliders).size(theme.icon_size_lg).text_color(theme.accent_brand)),
         )
         .child(
             div()
                 .flex()
                 .flex_col()
-                .child(div().text_size(px(TEXT_TITLE)).font_weight(FontWeight::BOLD).text_color(theme.text_primary).child("Settings"))
-                .child(div().text_size(px(TEXT_CAPTION)).text_color(theme.text_muted).child("Simulacra System")),
+                .child(div().text_size(theme.font_size_base).font_weight(FontWeight::BOLD).text_color(theme.text_primary).child(t!("settings.rail_title").to_string()))
+                .child(div().text_size(theme.font_size_2xs).text_color(theme.text_muted).child(t!("settings.rail_subtitle").to_string())),
         )
 }
 
 /// Rail bottom: epistemic status footer.
 fn render_rail_footer(theme: &ThemeTokens) -> Div {
     div()
-        .p_2p5()
-        .rounded_lg()
+        .p(theme.spacing_sm_plus)
+        .rounded(theme.radius_md)
         .bg(theme.hover_bg)
-        .border_1()
+        .border(theme.border_width_hairline)
         .border_color(theme.border)
         .flex()
         .items_center()
-        .gap_2()
-        .child(Icon::new(LucideIcon::Lock).size(px(ICON_SM)).text_color(theme.text_muted))
+        .gap(theme.spacing_sm)
+        .child(Icon::new(LucideIcon::Lock).size(theme.icon_size_sm).text_color(theme.text_muted))
         .child(
             div()
-                .text_size(px(TEXT_CAPTION))
+                .text_size(theme.font_size_2xs)
                 .text_color(theme.text_muted)
-                .child("Local Epistemic Sovereignty"),
+                .child(t!("settings.rail_footer").to_string()),
         )
 }
 
@@ -107,8 +105,8 @@ fn render_tab_button(
         .id(format!("{}{:?}", TAB_BUTTON_ID_PREFIX, tab))
         .w_full()
         .h(theme.titlebar_height)
-        .px_3()
-        .rounded_lg()
+        .px(theme.spacing_md)
+        .rounded(theme.radius_md)
         .bg(bg_color)
         .hover(move |s| s.bg(hover_bg))
         .cursor_pointer()
@@ -123,9 +121,9 @@ fn render_tab_button(
         .when(is_active, |this| {
             this.child(
                 div()
-                    .w(px(TAB_INDICATOR_WIDTH))
-                    .h(px(TAB_INDICATOR_HEIGHT))
-                    .rounded_full()
+                    .w(theme.settings_tab_indicator_width)
+                    .h(theme.settings_tab_indicator_height)
+                    .rounded(theme.radius_full)
                     .bg(theme.accent_brand),
             )
         })
@@ -139,7 +137,7 @@ fn render_tab_label(theme: &ThemeTokens, tab: SettingsTab, is_active: bool) -> D
     div()
         .flex()
         .items_center()
-        .gap_2p5()
-        .child(Icon::new(tab.icon()).size(px(ICON_XL)).text_color(icon_color))
-        .child(div().text_size(px(TEXT_LABEL)).font_weight(weight).text_color(text_color).child(tab.label()))
+        .gap(theme.spacing_sm_plus)
+        .child(Icon::new(tab.icon()).size(theme.icon_size_xl).text_color(icon_color))
+        .child(div().text_size(theme.font_size_sm).font_weight(weight).text_color(text_color).child(tab.label()))
 }

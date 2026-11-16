@@ -1,10 +1,7 @@
 //! Quoted thought card embed (or an unavailable notice when the quote is missing).
 
 use super::body::{render_body_tokens, BodyLinks};
-use super::consts::{
-    META_SEPARATOR, QUOTE_CARD_ID_PREFIX, QUOTE_UNAVAILABLE_PREFIX, QUOTE_UNAVAILABLE_SUFFIX,
-    TIME_FORMAT,
-};
+use super::consts::{META_SEPARATOR, QUOTE_CARD_ID_PREFIX, TIME_FORMAT};
 use super::controls::OpenPostAction;
 use super::lookup::PostLookup;
 use crate::domain::{Post, Profile, ProfileRole};
@@ -118,6 +115,6 @@ fn render_quote_unavailable(quote_id: &str, theme: &ThemeTokens) -> Div {
                 .font_family(theme.font_family_mono.clone())
                 .text_size(theme.font_size_xs)
                 .text_color(theme.text_muted)
-                .child(format!("{QUOTE_UNAVAILABLE_PREFIX}{quote_id}{QUOTE_UNAVAILABLE_SUFFIX}")),
+                .child(rust_i18n::t!("post.quote_unavailable", id = quote_id).to_string()),
         )
 }

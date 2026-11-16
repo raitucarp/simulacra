@@ -19,7 +19,7 @@ pub fn render_char_meter(current: usize, theme: &ThemeTokens) -> impl IntoElemen
     };
 
     div()
-        .text_xs()
+        .text_size(theme.font_size_label)
         .text_color(color)
         .child(t!("composer.char_counter", count = current, max = MAX_POST_CHARS).to_string())
 }

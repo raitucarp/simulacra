@@ -1,11 +1,12 @@
 //! Composer modal panel actions: attachment subscriptions, clearing, submission and attachments.
 
-use super::super::consts::{PATH_QUOTE_DOUBLE, PATH_QUOTE_SINGLE, PICK_IMAGE_TITLE};
+use super::super::consts::{PATH_QUOTE_DOUBLE, PATH_QUOTE_SINGLE};
 use super::{ComposerModalEvent, ComposerModalPanel, ComposerSubmission};
 use crate::ui::components::pick_image_path;
 use gpui_kit::component::input::{InputEvent, InputState};
 use gpui_kit::*;
 use std::path::Path;
+use rust_i18n::t;
 
 impl ComposerModalPanel {
     /// Re-renders when the attachment inputs change.
@@ -77,8 +78,9 @@ impl ComposerModalPanel {
 
     /// Opens a native file dialog and attaches the chosen image.
     pub(super) fn pick_image(&mut self, _: &mut Window, cx: &mut Context<Self>) {
-        cx.spawn(async |entity, cx| {
-            let Some(path) = pick_image_path(PICK_IMAGE_TITLE).await else { return };
+        let title = t!("composer.pick_image_title").to_string();
+        cx.spawn(async move |entity, cx| {
+            let Some(path) = pick_image_path(&title).await else { return };
             let _ = entity.update(cx, |this, cx| {
                 if Path::new(&path).exists() {
                     this.image_path = Some(path);

@@ -1,6 +1,6 @@
 //! Post header rows: repost banner and author identity/metadata row.
 
-use super::consts::{META_SEPARATOR, ORIGINAL_MARKER_LABEL, REPOSTED_SUFFIX, TIME_FORMAT};
+use super::consts::{META_SEPARATOR, TIME_FORMAT};
 use super::controls::{render_overflow_menu, PostCardHandlers};
 use crate::domain::{Post, Profile, ProfileRole};
 use crate::theme::ThemeTokens;
@@ -9,6 +9,7 @@ use crate::ui::icons::LucideIcon;
 use gpui_kit::component::Icon;
 use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::{div, Div, FontWeight, ParentElement, Styled};
+use rust_i18n::t;
 
 /// "<name> reposted" banner shown above a reposted thought.
 pub(crate) fn render_repost_header(reposter_name: &str, theme: &ThemeTokens) -> Div {
@@ -30,7 +31,7 @@ pub(crate) fn render_repost_header(reposter_name: &str, theme: &ThemeTokens) -> 
                 .text_size(theme.font_size_xs)
                 .font_weight(FontWeight::MEDIUM)
                 .text_color(theme.text_muted)
-                .child(format!("{reposter_name} {REPOSTED_SUFFIX}")),
+                .child(t!("post.reposted_by", name = reposter_name).to_string()),
         )
 }
 
@@ -80,7 +81,7 @@ fn render_author_meta(post: &Post, author: &Profile, is_instant_repost: bool, th
         .when(is_agent, |this| this.child(render_role_badge(&author.role, theme)))
         .child(mono_meta(theme, theme.font_size_xs).child(format!("{META_SEPARATOR} {time_str}")))
         .when(is_instant_repost, |this| {
-            this.child(mono_meta(theme, theme.font_size_2xs).text_color(theme.accent_agent).child(ORIGINAL_MARKER_LABEL))
+            this.child(mono_meta(theme, theme.font_size_2xs).text_color(theme.accent_agent).child(t!("post.original_marker").to_string()))
         })
 }
 

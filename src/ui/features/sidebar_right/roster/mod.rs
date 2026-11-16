@@ -7,10 +7,10 @@ use crate::domain::Profile;
 use crate::theme::ThemeTokens;
 use gpui_kit::*;
 use parts::{render_agent_pill, render_header, render_metric_row};
+use rust_i18n::t;
 
-const PSYCHOLOGY_ENGINE_LABEL: &str = "Psychology Engine";
+/// Model names shown as the psychology engine (proper nouns, not translated).
 const PSYCHOLOGY_ENGINE_VALUE: &str = "MBTI · OCEAN · Enneagram";
-const NETWORK_MEMBERS_LABEL: &str = "Network Members";
 
 /// `(name, MBTI code)` of every real agent of the network.
 fn badge_names(agents: &[&Profile]) -> Vec<(String, String)> {
@@ -26,8 +26,8 @@ fn render_metrics(member_count: usize, theme: &ThemeTokens) -> Div {
         .flex()
         .flex_col()
         .gap(theme.spacing_sm)
-        .child(render_metric_row(PSYCHOLOGY_ENGINE_LABEL, PSYCHOLOGY_ENGINE_VALUE.to_string(), theme.accent_agent, theme))
-        .child(render_metric_row(NETWORK_MEMBERS_LABEL, members, theme.text_secondary, theme))
+        .child(render_metric_row(t!("sidebar.psychology_engine").to_string(), PSYCHOLOGY_ENGINE_VALUE.to_string(), theme.accent_agent, theme))
+        .child(render_metric_row(t!("sidebar.network_members_label").to_string(), members, theme.text_secondary, theme))
 }
 
 /// Renders the Dialectic Telemetry Card dynamically reflecting the current network's human-like member agents.

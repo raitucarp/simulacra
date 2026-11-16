@@ -7,20 +7,13 @@ use crate::i18n::Language;
 use crate::theme::ThemeTokens;
 use gpui_kit::base::StyledExt;
 use gpui_kit::{
-    div, px, App, Div, InteractiveElement, IntoElement, MouseButton, ParentElement, RenderOnce,
+    div, App, Div, InteractiveElement, IntoElement, MouseButton, ParentElement, RenderOnce,
     Styled, Window,
 };
 use rust_i18n::t;
 
 pub type SelectLangCallback = Box<dyn Fn(Language, &mut Window, &mut App) + 'static>;
 pub type DismissCallback = Box<dyn Fn(&mut Window, &mut App) + 'static>;
-
-/// Popover top offset (directly below the title bar).
-const POPOVER_TOP_PX: f32 = 38.0;
-/// Popover right offset (under the language trigger button).
-const POPOVER_RIGHT_PX: f32 = 100.0;
-/// Popover width.
-const POPOVER_WIDTH_PX: f32 = 220.0;
 
 /// Atomic Floating Language Selector Popover.
 #[derive(IntoElement)]
@@ -77,18 +70,19 @@ impl RenderOnce for LanguagePopover {
 fn render_card(theme: &ThemeTokens) -> Div {
     div()
         .absolute()
-        .top(px(POPOVER_TOP_PX))
-        .right(px(POPOVER_RIGHT_PX))
-        .w(px(POPOVER_WIDTH_PX))
+        // Directly below the title bar, under the language trigger button
+        .top(theme.titlebar_height)
+        .right(theme.language_popover_right)
+        .w(theme.language_popover_width)
         .bg(theme.bg_card)
-        .border_1()
+        .border(theme.border_width_hairline)
         .border_color(theme.border)
-        .rounded_lg()
+        .rounded(theme.radius_md)
         .elevation_shadow(theme)
-        .p_1p5()
+        .p(theme.spacing_xs_plus)
         .flex()
         .flex_col()
-        .gap_0p5()
+        .gap(theme.spacing_2xs)
         .on_mouse_down(MouseButton::Left, |_, _, cx| {
             cx.stop_propagation();
         })
@@ -96,25 +90,25 @@ fn render_card(theme: &ThemeTokens) -> Div {
 
 fn render_header(current_lang: Language, theme: &ThemeTokens) -> Div {
     div()
-        .px_2()
-        .pt_1()
-        .pb_1p5()
+        .px(theme.spacing_sm)
+        .pt(theme.spacing_xs)
+        .pb(theme.spacing_xs_plus)
         .flex()
         .items_center()
         .justify_between()
-        .border_b_1()
+        .border_b(theme.border_width_hairline)
         .border_color(theme.border)
-        .mb_1()
+        .mb(theme.spacing_xs)
         .child(
             div()
-                .text_xs()
+                .text_size(theme.font_size_label)
                 .font_bold()
                 .text_color(theme.text_muted)
                 .child(t!("language.select").to_string()),
         )
         .child(
             div()
-                .text_xs()
+                .text_size(theme.font_size_label)
                 .text_color(theme.accent_agent)
                 .child(current_lang.code().to_uppercase()),
         )

@@ -4,8 +4,6 @@
 
 use super::super::consts::{
     LAYOUT_ID_COLLAPSED, LAYOUT_ID_EXPANDED, LAYOUT_ID_FORGE_COLLAPSED, LAYOUT_ID_FORGE_EXPANDED,
-    LEFT_SIDEBAR_COLLAPSED_MAX, LEFT_SIDEBAR_COLLAPSED_MIN, LEFT_SIDEBAR_COLLAPSED_WIDTH, LEFT_SIDEBAR_EXPANDED_MAX,
-    LEFT_SIDEBAR_EXPANDED_MIN, LEFT_SIDEBAR_EXPANDED_WIDTH, RIGHT_SIDEBAR_MAX, RIGHT_SIDEBAR_MIN, RIGHT_SIDEBAR_WIDTH,
 };
 use super::super::panels::ShellSection;
 use super::super::view::AppView;
@@ -14,14 +12,15 @@ use gpui_kit::*;
 
 impl AppView {
     /// Layout id, width and resize range of the left sidebar.
-    fn left_column(&self) -> (&'static str, f32, f32, f32) {
+    fn left_column(&self) -> (&'static str, Pixels, Pixels, Pixels) {
         let forge = self.forge.is_some();
+        let t = &self.theme;
         if self.chrome.is_left_sidebar_collapsed {
             let id = if forge { LAYOUT_ID_FORGE_COLLAPSED } else { LAYOUT_ID_COLLAPSED };
-            (id, LEFT_SIDEBAR_COLLAPSED_WIDTH, LEFT_SIDEBAR_COLLAPSED_MIN, LEFT_SIDEBAR_COLLAPSED_MAX)
+            (id, t.left_sidebar_collapsed_width, t.left_sidebar_collapsed_min, t.left_sidebar_collapsed_max)
         } else {
             let id = if forge { LAYOUT_ID_FORGE_EXPANDED } else { LAYOUT_ID_EXPANDED };
-            (id, LEFT_SIDEBAR_EXPANDED_WIDTH, LEFT_SIDEBAR_EXPANDED_MIN, LEFT_SIDEBAR_EXPANDED_MAX)
+            (id, t.left_sidebar_expanded_width, t.left_sidebar_expanded_min, t.left_sidebar_expanded_max)
         }
     }
 
@@ -33,8 +32,8 @@ impl AppView {
             // Panel 1: Left Navigation Sidebar
             .child(
                 resizable_panel()
-                    .size(px(width))
-                    .size_range(px(min)..px(max))
+                    .size(width)
+                    .size_range(min..max)
                     .child(self.panels.cached(ShellSection::LeftSidebar)),
             )
             // Panel 2: Center: feed, roster, Mind Graph or the Agent Forge
@@ -45,8 +44,8 @@ impl AppView {
         // Panel 3: Unified Intelligence & Telemetry Sidebar
         columns.child(
             resizable_panel()
-                .size(px(RIGHT_SIDEBAR_WIDTH))
-                .size_range(px(RIGHT_SIDEBAR_MIN)..px(RIGHT_SIDEBAR_MAX))
+                .size(self.theme.right_sidebar_width)
+                .size_range(self.theme.right_sidebar_min..self.theme.right_sidebar_max)
                 .visible(self.chrome.is_right_sidebar_open)
                 .child(self.panels.cached(ShellSection::RightSidebar)),
         )

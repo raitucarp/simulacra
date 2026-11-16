@@ -5,8 +5,8 @@ use crate::ui::icons::LucideIcon;
 use gpui_kit::base::StyledExt;
 use gpui_kit::component::Icon;
 use gpui_kit::*;
+use rust_i18n::t;
 
-const TELEMETRY_TITLE: &str = "NETWORK MEMBER TELEMETRY";
 
 fn render_title(theme: &ThemeTokens) -> Div {
     div()
@@ -25,7 +25,7 @@ fn render_title(theme: &ThemeTokens) -> Div {
                 .text_size(theme.font_size_xs)
                 .font_bold()
                 .text_color(theme.text_primary)
-                .child(TELEMETRY_TITLE),
+                .child(t!("sidebar.member_telemetry").to_string()),
         )
 }
 
@@ -38,7 +38,7 @@ pub(super) fn render_header(theme: &ThemeTokens) -> Div {
 }
 
 /// One label/value telemetry metric row.
-pub(super) fn render_metric_row(label: &'static str, value: String, value_color: Rgba, theme: &ThemeTokens) -> Div {
+pub(super) fn render_metric_row(label: String, value: String, value_color: Rgba, theme: &ThemeTokens) -> Div {
     div()
         .flex()
         .items_center()

@@ -44,6 +44,7 @@ impl AppView {
             _subscriptions: subscriptions,
         };
         view.start_scheduler_heartbeat(window, cx);
+        view.watch_vault_failures(window, cx);
         view
     }
 }

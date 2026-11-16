@@ -1,7 +1,7 @@
 use crate::domain::NetworkId;
 use crate::state::store::AppState;
 use crate::storage::Database;
-use std::rc::Rc;
+use crate::storage::Vault;
 
 #[test]
 fn test_agents_are_human_named_and_scoped_per_network() {
@@ -46,7 +46,7 @@ fn test_agents_are_human_named_and_scoped_per_network() {
 
 #[test]
 fn test_create_custom_agent_and_persona_lab_separation() {
-    let db = Rc::new(Database::in_memory().expect("in-memory db"));
+    let db = Vault::spawn(Database::in_memory().expect("in-memory db")).expect("vault");
     let mut state = AppState::fallback_seed(Some(db.clone()));
 
     // Create a custom human-like agent in `net_philosophy`

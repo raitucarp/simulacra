@@ -102,8 +102,7 @@ impl AppState {
             return Ok(());
         };
         if let Some(ref db) = self.db {
-            db.archive_post_author(&removed)?;
-            db.delete_profile(profile_id)?;
+            db.archive_and_delete_profile(&removed)?;
         }
         self.archived_authors.insert(removed.id.clone(), removed);
 

@@ -11,4 +11,5 @@ mod scheduler;
 mod settings;
 mod simulation;
 mod simulation_notices;
+mod storage;
 mod stream;

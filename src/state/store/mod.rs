@@ -19,6 +19,7 @@ mod profiles;
 mod reposts;
 mod search;
 mod settings;
+mod snapshot;
 mod threads;
 mod upgrade;
 mod wikilinks;
@@ -31,9 +32,8 @@ pub use post_meta::PostMeta;
 pub use threads::{ThreadAnchor, ThreadDraft};
 
 use crate::domain::{GroundingDocument, Network, NetworkId, Post, Profile, ProfileId, TrendingTopic};
-use crate::storage::Database;
+use crate::storage::Vault;
 use std::collections::HashMap;
-use std::rc::Rc;
 
 /// Settings key persisting the active network selection.
 const ACTIVE_NETWORK_KEY: &str = "active_network_id";
@@ -77,7 +77,8 @@ pub struct AppState {
     pub feed_day_filter: Option<chrono::NaiveDate>,
     pub llm_settings: crate::agent::LlmSettings,
     pub theme_tokens: crate::theme::ThemeTokens,
-    pub db: Option<Rc<Database>>,
+    /// Handle to the vault worker thread (`None` when running without persistence).
+    pub db: Option<Vault>,
 }
 
 impl Default for AppState {

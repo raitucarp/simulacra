@@ -1,7 +1,7 @@
 use crate::domain::{NetworkId, PostId};
 use crate::state::store::AppState;
 use crate::storage::Database;
-use std::rc::Rc;
+use crate::storage::Vault;
 
 #[test]
 fn test_store_initialization() {
@@ -33,7 +33,7 @@ fn test_store_switch_network() {
 
 #[test]
 fn test_store_persistence() {
-    let db = Rc::new(Database::in_memory().expect("in-memory db"));
+    let db = Vault::spawn(Database::in_memory().expect("in-memory db")).expect("vault");
     let mut state = AppState::fallback_seed(Some(db.clone()));
     let post_id = state
         .submit_post("Persistent post test")
@@ -45,7 +45,7 @@ fn test_store_persistence() {
 
 #[test]
 fn test_store_theme_tokens_persistence() {
-    let db = Rc::new(Database::in_memory().expect("in-memory db"));
+    let db = Vault::spawn(Database::in_memory().expect("in-memory db")).expect("vault");
     let mut state = AppState::fallback_seed(Some(db.clone()));
     let mut custom_tokens = crate::theme::obsidian_zinc();
     custom_tokens.accent_brand = gpui_kit::rgb(0xff00aa);

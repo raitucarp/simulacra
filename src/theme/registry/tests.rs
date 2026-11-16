@@ -40,3 +40,14 @@ fn lookup_order_and_mode_filter() {
     assert!(light > 0 && dark > light);
     assert!(registry.by_mode(PaletteMode::Light).all(|p| p.mode == PaletteMode::Light));
 }
+
+#[test]
+fn every_palette_credit_is_acknowledged_in_third_party_notices() {
+    const NOTICES: &str = include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/THIRD_PARTY.md"));
+    const LICENSE_SUFFIX: &str = " (MIT)";
+    for palette in ThemeRegistry::global().all() {
+        let author = palette.credit.trim_end_matches(LICENSE_SUFFIX);
+        assert!(NOTICES.contains(author), "{}: `{author}` missing from THIRD_PARTY.md", palette.id);
+        assert!(NOTICES.contains(palette.name.split_whitespace().next().unwrap_or_default()), "{}", palette.id);
+    }
+}

@@ -17,16 +17,6 @@ const CARD_ID: &str = "sidebar-user-card-container";
 const OPEN_PERSONA_LAB_ID: &str = "sidebar-user-card-open-persona-lab";
 const SWITCH_BUTTON_ID: &str = "sidebar-user-card-switch-btn";
 
-/// Renders the static user identity card.
-pub fn render_user_card(profile: Option<&Profile>, theme: &ThemeTokens) -> impl IntoElement {
-    render_interactive_user_card(
-        profile,
-        theme,
-        |_, _, _| {},
-        |_, _, _| {},
-    )
-}
-
 /// Renders the interactive user identity card where clicking the user opens Persona Lab
 /// and clicking the Switch button cycles the active controllable human persona in the network.
 pub fn render_interactive_user_card(

@@ -1,0 +1,106 @@
+//! Post and thread handlers: inline composer, post interactions and the feed window.
+
+use super::super::view::AppView;
+use crate::domain::PostId;
+use crate::ui::features::composer::ComposerModalMode;
+use crate::ui::features::feed::FEED_WINDOW_INCREMENT;
+use gpui_kit::*;
+
+impl AppView {
+    /// Submits the thought content to the active network timeline.
+    pub fn submit_post_content(&mut self, content: &str, window: &mut Window, cx: &mut Context<Self>) {
+        if content.trim().is_empty() {
+            return;
+        }
+        if let Ok(post_id) = self.state.submit_post(content) {
+            self.feed.selected_thread_post_id = Some(post_id);
+            let composer_view = self.feed.composer_view.clone();
+            window.defer(cx, move |window, cx| {
+                composer_view.update(cx, |composer, cx| composer.reset(window, cx));
+            });
+            self.state.draft_text.clear();
+            cx.notify();
+        }
+    }
+
+    /// Submits the current thought draft to the active network timeline.
+    pub fn submit_post(&mut self, window: &mut Window, cx: &mut Context<Self>) {
+        let content = self.feed.composer_input.read(cx).value().to_string();
+        self.submit_post_content(&content, window, cx);
+    }
+
+    /// Appends helper syntax such as `[[` or `#` to the composer and focuses it.
+    pub fn insert_composer_text(&mut self, text: &str, window: &mut Window, cx: &mut Context<Self>) {
+        self.feed.composer_input.update(cx, |state, cx| {
+            let mut current = state.value().to_string();
+            current.push_str(text);
+            state.set_value(&current, window, cx);
+            state.focus(window, cx);
+        });
+        self.state.draft_text = self.feed.composer_input.read(cx).value().to_string();
+        cx.notify();
+    }
+
+    /// Focuses `post_id` in the thread inspector.
+    pub(crate) fn select_post(&mut self, post_id: PostId, _: &mut Window, cx: &mut Context<Self>) {
+        self.feed.selected_thread_post_id = Some(post_id);
+        cx.notify();
+    }
+
+    pub(crate) fn like_post(&mut self, post_id: PostId, _: &mut Window, cx: &mut Context<Self>) {
+        self.state.toggle_like(&post_id);
+        cx.notify();
+    }
+
+    pub(crate) fn repost_post(&mut self, post_id: PostId, _: &mut Window, cx: &mut Context<Self>) {
+        let _ = self.state.repost(&post_id);
+        cx.notify();
+    }
+
+    /// Opens the composer modal replying to `post_id`.
+    pub(crate) fn reply_to_post(&mut self, post_id: PostId, window: &mut Window, cx: &mut Context<Self>) {
+        if let Some(target) = self.state.get_post(&post_id).cloned() {
+            self.open_composer_modal(ComposerModalMode::Reply(Box::new(target)), window, cx);
+        }
+    }
+
+    /// Opens the composer modal quoting `post_id`.
+    pub(crate) fn quote_post(&mut self, post_id: PostId, window: &mut Window, cx: &mut Context<Self>) {
+        if let Some(target) = self.state.get_post(&post_id).cloned() {
+            self.open_composer_modal(ComposerModalMode::Quote(Box::new(target)), window, cx);
+        }
+    }
+
+    /// Extends the visible timeline window.
+    pub(crate) fn load_more_posts(&mut self, _: &mut Window, cx: &mut Context<Self>) {
+        self.feed.feed_visible_count += FEED_WINDOW_INCREMENT;
+        cx.notify();
+    }
+
+    /// Cycles the active user persona from the feed.
+    pub(crate) fn cycle_profile(&mut self, _: &mut Window, cx: &mut Context<Self>) {
+        let _ = self.state.cycle_active_persona();
+        cx.notify();
+    }
+
+    /// Adds a new grounding document to the Knowledge Vault.
+    pub fn add_document(
+        &mut self,
+        title: String,
+        content: String,
+        window: &mut Window,
+        cx: &mut Context<Self>,
+    ) {
+        if self.state.add_document(&title, &content).is_ok() {
+            self.feed.doc_title_input.update(cx, |state, cx| state.set_value("", window, cx));
+            self.feed.doc_content_input.update(cx, |state, cx| state.set_value("", window, cx));
+            cx.notify();
+        }
+    }
+
+    /// Removes a document from the vault.
+    pub fn delete_document(&mut self, doc_id: String, cx: &mut Context<Self>) {
+        let _ = self.state.delete_document(&doc_id);
+        cx.notify();
+    }
+}

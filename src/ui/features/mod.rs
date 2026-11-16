@@ -8,6 +8,7 @@ pub mod mind_graph;
 pub mod popovers;
 pub mod post;
 pub mod settings;
+pub mod shell;
 pub mod sidebar_left;
 pub mod sidebar_right;
 pub mod title_bar;

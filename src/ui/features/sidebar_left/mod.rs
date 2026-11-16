@@ -14,7 +14,7 @@ pub mod user_card;
 
 pub use nav_button::render_nav_button;
 pub use render::render_left_sidebar;
-pub use user_card::{render_interactive_user_card, render_user_card};
+pub use user_card::render_interactive_user_card;
 
 use crate::domain::ProfileId;
 use crate::state::{AppState, NavigationTab};

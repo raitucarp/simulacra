@@ -9,14 +9,13 @@ pub use crate::ui::features::feed as main_feed;
 pub use crate::ui::features::mind_graph as mind_graph_view;
 pub use crate::ui::features::settings as settings_modal;
 pub use crate::ui::features::sidebar_left as left_sidebar;
-pub use crate::ui::features::sidebar_right::legacy as right_sidebar;
 pub use crate::ui::features::sidebar_right::secondary as secondary_sidebar;
 pub use crate::ui::features::sidebar_right::unified as unified_right_sidebar;
 pub use crate::ui::features::title_bar as app_title_bar;
 pub use crate::ui::features::vault as knowledge_vault_view;
 
 pub use agent_lab_view::{
-    render_agent_lab_view, render_agent_workspace_view, AgentConfigTab, AgentEditorInputs,
+    render_agent_workspace_view, AgentConfigTab, AgentEditorInputs,
     AgentWorkspaceParams, LabMode,
 };
 pub use app_title_bar::AppTitleBar;
@@ -28,7 +27,5 @@ pub use main_feed::{
     FEED_WINDOW_INCREMENT,
 };
 pub use mind_graph_view::render_mind_graph_view;
-pub use right_sidebar::render_right_sidebar;
-pub use secondary_sidebar::render_secondary_sidebar;
 pub use settings_modal::{SettingsModal, SettingsTab};
 pub use unified_right_sidebar::{render_unified_right_sidebar, RightSidebarTab, UnifiedRightSidebarParams};

@@ -13,7 +13,6 @@ pub type RepostPostCallback = Box<dyn Fn(PostId, &mut Window, &mut App) + 'stati
 pub type QuotePostCallback = Box<dyn Fn(PostId, &mut Window, &mut App) + 'static>;
 pub type AddDocCallback = Box<dyn Fn(String, String, &mut Window, &mut App) + 'static>;
 pub type DeleteDocCallback = Box<dyn Fn(String, &mut Window, &mut App) + 'static>;
-pub type TriggerSimCallback = Box<dyn Fn(&mut Window, &mut App) + 'static>;
 pub type CycleProfileCallback = Box<dyn Fn(&mut Window, &mut App) + 'static>;
 pub type LoadMoreCallback = Box<dyn Fn(&mut Window, &mut App) + 'static>;
 
@@ -36,6 +35,5 @@ pub struct FeedParams<'a, C> {
     pub on_quote_post: QuotePostCallback,
     pub on_add_document: AddDocCallback,
     pub on_delete_document: DeleteDocCallback,
-    pub on_trigger_simulation: TriggerSimCallback,
     pub on_cycle_profile: CycleProfileCallback,
 }

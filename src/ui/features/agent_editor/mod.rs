@@ -16,7 +16,6 @@ pub mod config_tab;
 mod header;
 mod header_actions;
 pub mod inputs;
-pub mod legacy;
 pub mod params;
 mod rail;
 mod roster;
@@ -35,6 +34,5 @@ pub use callbacks::{
 };
 pub use config_tab::{AgentConfigTab, LabMode};
 pub use inputs::AgentEditorInputs;
-pub use legacy::render_agent_lab_view;
 pub use params::AgentWorkspaceParams;
 pub use workspace::render_agent_workspace_view;

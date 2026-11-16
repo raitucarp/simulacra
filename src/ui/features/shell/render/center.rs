@@ -1,0 +1,52 @@
+//! Center column: the main feed (timeline, vault, mind graph) or the agent workspace.
+
+use super::super::binder::Binder;
+use super::super::view::AppView;
+use crate::ui::features::feed::{render_main_feed, FeedParams};
+use gpui_kit::*;
+
+impl AppView {
+    /// The agent workspace while a lab tab is active, otherwise the main feed.
+    pub(super) fn center_panel(&self, bind: &Binder, cx: &App) -> AnyElement {
+        if self.is_lab_tab() {
+            self.agent_workspace(bind).into_any_element()
+        } else {
+            self.main_feed(bind, cx).into_any_element()
+        }
+    }
+
+    fn main_feed(&self, bind: &Binder, cx: &App) -> impl IntoElement {
+        let search_query = self.feed.search_input.read(cx).value().to_string();
+        let custom_profile = self
+            .feed
+            .custom_feed_profile_id
+            .as_ref()
+            .and_then(|id| self.state.user_profiles.iter().find(|p| &p.id == id));
+        let reply_entity = bind.entity().clone();
+        let doc_entity = bind.entity().clone();
+        render_main_feed(FeedParams {
+            state: &self.state,
+            custom_profile,
+            selected_post_id: self.feed.selected_thread_post_id.clone(),
+            composer: self.feed.composer_view.clone(),
+            doc_title_input: &self.feed.doc_title_input,
+            doc_content_input: &self.feed.doc_content_input,
+            search_query: &search_query,
+            theme: &self.theme,
+            feed_visible_count: Some(self.feed.feed_visible_count),
+            on_load_more: Some(bind.boxed_act(Self::load_more_posts)),
+            on_select_post: bind.boxed(Self::select_post),
+            on_like_post: bind.boxed(Self::like_post),
+            on_reply_post: Box::new(move |post_id, _author_handle: &str, window, cx| {
+                reply_entity.update(cx, |this, cx| this.reply_to_post(post_id, window, cx));
+            }),
+            on_repost_post: bind.boxed(Self::repost_post),
+            on_quote_post: bind.boxed(Self::quote_post),
+            on_add_document: Box::new(move |title, content, window, cx| {
+                doc_entity.update(cx, |this, cx| this.add_document(title, content, window, cx));
+            }),
+            on_delete_document: bind.boxed(|this, doc_id, _, cx| this.delete_document(doc_id, cx)),
+            on_cycle_profile: bind.boxed_act(Self::cycle_profile),
+        })
+    }
+}

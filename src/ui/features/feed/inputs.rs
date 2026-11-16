@@ -1,7 +1,7 @@
 //! Splits [`FeedParams`] into the inputs of each feed sub-view.
 
 use super::callbacks::PostCallbacks;
-use super::params::{AddDocCallback, DeleteDocCallback, FeedParams, LoadMoreCallback, TriggerSimCallback};
+use super::params::{AddDocCallback, DeleteDocCallback, FeedParams, LoadMoreCallback};
 use crate::domain::PostId;
 use gpui_kit::component::input::{InputState, TextareaState};
 use gpui_kit::Entity;
@@ -16,13 +16,12 @@ pub(crate) struct TimelineInputs<'a, C> {
     pub on_load_more: Option<LoadMoreCallback>,
 }
 
-/// Inputs of the non-timeline tool views (knowledge vault, agent lab).
+/// Inputs of the non-timeline tool views (knowledge vault).
 pub(crate) struct ToolViewInputs<'a> {
     pub doc_title_input: &'a Entity<InputState>,
     pub doc_content_input: &'a Entity<TextareaState>,
     pub on_add_document: AddDocCallback,
     pub on_delete_document: DeleteDocCallback,
-    pub on_trigger_simulation: TriggerSimCallback,
 }
 
 /// Distributes feed parameters to the post callbacks, timeline, and tool views.
@@ -46,7 +45,6 @@ pub(crate) fn split_params<C>(params: FeedParams<'_, C>) -> (PostCallbacks, Time
         doc_content_input: params.doc_content_input,
         on_add_document: params.on_add_document,
         on_delete_document: params.on_delete_document,
-        on_trigger_simulation: params.on_trigger_simulation,
     };
     (callbacks, timeline, tools)
 }

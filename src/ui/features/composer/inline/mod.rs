@@ -2,7 +2,6 @@
 //! Fully tokenized via ThemeTokens.
 //! Features isolated View rendering for 120 FPS sub-millisecond typing latency.
 
-mod fallback;
 mod layout;
 mod render;
 
@@ -11,8 +10,6 @@ use crate::domain::Profile;
 use crate::theme::ThemeTokens;
 use gpui_kit::component::input::{InputEvent, TextareaState};
 use gpui_kit::*;
-
-pub use fallback::render_post_composer;
 
 pub type SubmitPostCallback = Box<dyn Fn(String, &mut Window, &mut App) + 'static>;
 

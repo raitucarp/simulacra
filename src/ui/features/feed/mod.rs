@@ -21,7 +21,7 @@ pub use consts::{DEFAULT_FEED_WINDOW_SIZE, FEED_WINDOW_INCREMENT, MAX_INSPECTOR_
 pub use params::{
     AddDocCallback, CycleProfileCallback, DeleteDocCallback, FeedParams, LikePostCallback,
     LoadMoreCallback, QuotePostCallback, ReplyPostCallback, RepostPostCallback,
-    SelectPostCallback, TriggerSimCallback,
+    SelectPostCallback,
 };
 pub use render::render_main_feed;
 pub use threadline::compute_stream_threadline_style;

@@ -16,11 +16,6 @@ const PSYCHOLOGY_ENGINE_LABEL: &str = "Psychology Engine";
 const PSYCHOLOGY_ENGINE_VALUE: &str = "MBTI · OCEAN · Enneagram";
 const NETWORK_MEMBERS_LABEL: &str = "Network Members";
 
-/// Renders the Dialectic Engine & Local Vector Telemetry Card in the right sidebar.
-pub fn render_persona_roster(theme: &ThemeTokens) -> impl IntoElement {
-    render_network_agent_roster(&[], theme)
-}
-
 fn badge_names(agents: &[&Profile]) -> Vec<(String, String)> {
     if agents.is_empty() {
         DEFAULT_ROSTER

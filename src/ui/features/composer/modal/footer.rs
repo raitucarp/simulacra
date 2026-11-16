@@ -1,4 +1,4 @@
-//! Modal footer: post options hint and the primary post button.
+//! Modal footer: post options hint and the primary post (or "post all") button.
 
 use super::super::consts::MODAL_SUBMIT_POST_BTN_ID;
 use super::ComposerModalView;
@@ -11,7 +11,12 @@ use rust_i18n::t;
 impl ComposerModalView {
     pub(super) fn footer(&self, can_post: bool) -> Div {
         let theme = &self.theme;
-        let on_submit_btn = self.on_submit.clone();
+        let on_submit_btn = self.callbacks.on_submit.clone();
+        let label = if self.drafts.len() > 1 {
+            t!("composer.post_all_button")
+        } else {
+            t!("composer.post_button")
+        };
         div()
             .w_full()
             .px(theme.spacing_lg)
@@ -32,7 +37,7 @@ impl ComposerModalView {
                     .primary()
                     .small()
                     .disabled(!can_post)
-                    .label(t!("composer.post_button").to_string())
+                    .label(label.to_string())
                     .on_click(move |_, window, cx| {
                         (on_submit_btn)(window, cx);
                     }),

@@ -1,13 +1,14 @@
 //! Stateful composer modal entity.
 //!
-//! Owns the modal's draft inputs, attachment toggles and mode, re-rendering itself on
-//! keystrokes. The host only opens it and handles [`ComposerModalEvent::Submit`], since
-//! publishing needs the application state.
+//! Owns the thread being composed (one text area per post), attachment toggles and the mode,
+//! re-rendering itself on keystrokes. The host only opens it and handles
+//! [`ComposerModalEvent::Submit`], reporting store rejections back through [`ComposerModalPanel::set_error`].
 
 mod actions;
+mod drafts;
 mod render;
 
-use super::consts::{MODAL_COMPOSER_ROWS, MODAL_LINK_PLACEHOLDER};
+use super::consts::MODAL_LINK_PLACEHOLDER;
 use super::modal::ComposerModalMode;
 use crate::domain::Profile;
 use crate::theme::ThemeTokens;
@@ -15,11 +16,11 @@ use gpui_kit::component::input::{InputState, TextareaState};
 use gpui_kit::*;
 use rust_i18n::t;
 
-/// A draft the user asked to publish.
+/// A thread the user asked to publish: one text per post, attachments on the first post.
 #[derive(Debug, Clone, PartialEq)]
 pub struct ComposerSubmission {
     pub mode: ComposerModalMode,
-    pub content: String,
+    pub drafts: Vec<String>,
     pub link: Option<String>,
     pub image: Option<String>,
 }
@@ -30,16 +31,24 @@ pub enum ComposerModalEvent {
     Submit(ComposerSubmission),
 }
 
-/// Composer modal visibility, mode, draft inputs and attachments.
+/// One post editor of the thread, with the subscription that keeps the panel in sync.
+struct DraftSlot {
+    input: Entity<TextareaState>,
+    _subscription: Subscription,
+}
+
+/// Composer modal visibility, mode, thread drafts and attachments.
 pub struct ComposerModalPanel {
     is_open: bool,
     mode: ComposerModalMode,
-    composer_input: Entity<TextareaState>,
+    drafts: Vec<DraftSlot>,
     link_input: Entity<InputState>,
     image_input: Entity<InputState>,
     image_path: Option<String>,
     is_link_input_open: bool,
     is_image_input_open: bool,
+    /// Last publish failure reported by the host, cleared on the next edit.
+    error: Option<String>,
     theme: ThemeTokens,
     profile: Option<Profile>,
     _subscriptions: Vec<Subscription>,
@@ -54,30 +63,25 @@ impl ComposerModalPanel {
         window: &mut Window,
         cx: &mut Context<Self>,
     ) -> Self {
-        let (min_rows, max_rows) = MODAL_COMPOSER_ROWS;
-        let composer_placeholder = t!("composer.placeholder").to_string();
-        let composer_input = cx.new(|cx| {
-            TextareaState::new(window, cx)
-                .placeholder(composer_placeholder)
-                .auto_grow(min_rows, max_rows)
-        });
         let link_input = cx.new(|cx| InputState::new(window, cx).placeholder(MODAL_LINK_PLACEHOLDER));
         let image_placeholder = t!("composer.image_path_placeholder").to_string();
         let image_input = cx.new(|cx| InputState::new(window, cx).placeholder(image_placeholder));
         let mut panel = Self {
             is_open: false,
             mode: ComposerModalMode::NewThread,
-            composer_input,
+            drafts: Vec::new(),
             link_input,
             image_input,
             image_path: None,
             is_link_input_open: false,
             is_image_input_open: false,
+            error: None,
             theme,
             profile,
             _subscriptions: Vec::new(),
         };
-        panel._subscriptions = panel.subscribe(window, cx);
+        panel._subscriptions = panel.subscribe(cx);
+        panel.drafts.push(panel.new_draft_slot(window, cx));
         panel
     }
 
@@ -85,19 +89,25 @@ impl ComposerModalPanel {
         self.is_open
     }
 
-    /// Opens the modal in `mode` with an empty, focused draft.
+    /// Opens the modal in `mode` with a single empty, focused draft.
     pub fn open(&mut self, mode: ComposerModalMode, window: &mut Window, cx: &mut Context<Self>) {
         self.mode = mode;
         self.is_open = true;
         self.clear(window, cx);
-        self.composer_input.update(cx, |state, cx| state.focus(window, cx));
+        self.focus_draft(0, window, cx);
         cx.notify();
     }
 
-    /// Closes the modal and clears its draft.
+    /// Closes the modal and clears its drafts.
     pub fn close(&mut self, window: &mut Window, cx: &mut Context<Self>) {
         self.is_open = false;
         self.clear(window, cx);
+        cx.notify();
+    }
+
+    /// Shows why the host could not publish the submitted thread.
+    pub fn set_error(&mut self, message: String, cx: &mut Context<Self>) {
+        self.error = Some(message);
         cx.notify();
     }
 

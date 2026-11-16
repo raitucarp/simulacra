@@ -45,6 +45,10 @@ pub(super) const MODAL_TOGGLE_IMAGE_INPUT_BTN_ID: &str = "modal-toggle-image-inp
 pub(super) const MODAL_TOGGLE_LINK_BTN_ID: &str = "modal-toggle-link-btn";
 pub(super) const MODAL_TAG_BTN_ID: &str = "modal-tag-btn";
 pub(super) const MODAL_SUBMIT_POST_BTN_ID: &str = "modal-submit-post-btn";
+pub(super) const MODAL_THREAD_SCROLL_ID: &str = "modal-thread-scroll";
+pub(super) const MODAL_ADD_DRAFT_BTN_ID: &str = "modal-add-draft-btn";
+pub(super) const MODAL_SPLIT_DRAFT_BTN_ID: &str = "modal-split-draft-btn";
+pub(super) const MODAL_REMOVE_DRAFT_BTN_ID: &str = "modal-remove-draft-btn";
 
 /// Auto-grow row range `(min, max)` of the modal draft text area.
 pub(super) const MODAL_COMPOSER_ROWS: (usize, usize) = (2, 8);

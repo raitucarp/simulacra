@@ -6,11 +6,14 @@ use super::load_more::render_load_more;
 use super::params::LoadMoreCallback;
 use super::threadline::compute_stream_threadline_style;
 use crate::domain::Post;
-use crate::state::AppState;
+use crate::state::{feed_entries, AppState, FeedTab};
 use crate::theme::ThemeTokens;
 use gpui_kit::component::scroll::ScrollableElement;
 use gpui_kit::prelude::FluentBuilder;
-use gpui_kit::{div, AnyElement, InteractiveElement, IntoElement, ParentElement, Styled};
+use gpui_kit::{
+    div, AnyElement, InteractiveElement, IntoElement, ParentElement, ScrollHandle,
+    StatefulInteractiveElement, Styled,
+};
 use rust_i18n::t;
 use std::rc::Rc;
 
@@ -18,28 +21,27 @@ use std::rc::Rc;
 pub(crate) struct StreamWindow<'a> {
     /// Total number of thoughts matching the stream (before windowing).
     pub total: usize,
-    /// Candidate posts (window plus one lookahead post when unfiltered).
+    /// Every matching post in display order (conversations grouped when not searching).
     pub posts: Vec<&'a Post>,
     /// Number of posts actually rendered.
     pub limit: usize,
 }
 
-/// Selects the visible stream for the current network or search query.
+/// Selects the visible stream: the tab's grouped conversations, or flat search matches.
 pub(crate) fn compute_stream_window<'a>(
     state: &'a AppState,
+    tab: FeedTab,
     search_query: &'a str,
     feed_visible_count: Option<usize>,
 ) -> StreamWindow<'a> {
     let query_trimmed = search_query.trim();
     let requested_window = feed_visible_count.unwrap_or(DEFAULT_FEED_WINDOW_SIZE);
-    let (total, posts): (usize, Vec<&Post>) = if query_trimmed.is_empty() {
-        let total = state.current_network_post_count();
-        let limit = requested_window.min(total);
-        (total, state.current_network_posts().take(limit + 1).collect())
+    let posts: Vec<&Post> = if query_trimmed.is_empty() {
+        feed_entries(state, tab)
     } else {
-        let all_filtered: Vec<_> = state.filtered_posts(query_trimmed).collect();
-        (all_filtered.len(), all_filtered)
+        state.filtered_posts(query_trimmed).collect()
     };
+    let total = posts.len();
     StreamWindow { total, posts, limit: requested_window.min(total) }
 }
 
@@ -56,7 +58,9 @@ pub(crate) fn render_stream_elements(
         // Stream posts render with seamless flat OLED black background without card boxes (R2)
         let style = compute_stream_threadline_style(&window.posts, idx);
         let mode = CardMode { is_focused: false, style, selectable: true };
-        elements.push(callbacks.render_post(post, state, theme, mode));
+        // Rigid rows keep each card's full height inside the scrolling column.
+        let card = callbacks.render_post(post, state, theme, mode);
+        elements.push(div().w_full().flex_shrink_0().child(card).into_any_element());
     }
     if window.limit < window.total {
         elements.push(render_load_more(window.limit, window.total, theme, on_load_more));
@@ -64,13 +68,20 @@ pub(crate) fn render_stream_elements(
     elements
 }
 
-/// Scrollable stream body with an empty-state fallback.
-pub(crate) fn render_stream_scroll(elements: Vec<AnyElement>, theme: &ThemeTokens) -> impl IntoElement {
+/// Scrollable stream body with an empty-state fallback. The cards are the direct children of
+/// the area tracked by `scroll`, so `scroll.scroll_to_item(i)` targets the i-th stream entry.
+pub(crate) fn render_stream_scroll(
+    elements: Vec<AnyElement>,
+    scroll: &ScrollHandle,
+    theme: &ThemeTokens,
+) -> impl IntoElement {
     let is_empty = elements.is_empty();
-    div()
+    let area = div()
         .id(STREAM_SCROLL_ID)
-        .flex_1()
-        .overflow_y_scrollbar()
+        .absolute()
+        .inset_0()
+        .overflow_y_scroll()
+        .track_scroll(scroll)
         .flex()
         .flex_col()
         .when(is_empty, |this| {
@@ -81,5 +92,12 @@ pub(crate) fn render_stream_scroll(elements: Vec<AnyElement>, theme: &ThemeToken
                     .child(t!("feed.no_posts").to_string()),
             )
         })
-        .when(!is_empty, |this| this.children(elements))
+        .when(!is_empty, |this| this.children(elements));
+    div()
+        .relative()
+        .flex_1()
+        .w_full()
+        .overflow_hidden()
+        .child(area)
+        .vertical_scrollbar(scroll)
 }

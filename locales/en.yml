@@ -104,6 +104,14 @@ composer:
   image_path_placeholder: "Paste local image path (e.g. C:\\path\\image.png)..."
   pick_image: "Pick Image"
   toggle_image_input: "Enter Image Path"
+  thread_placeholder: "Say more..."
+  add_to_thread: "Add to thread"
+  remove_post: "Remove this post"
+  split_into_thread: "Split into thread"
+  post_all_button: "Post all"
+  error_empty: "Post %{index} is empty. Write something or remove it."
+  error_too_long: "Post %{index} is %{over} characters over the %{max}-character limit. Shorten it or split it into a thread."
+  error_publish: "Could not publish: %{reason}"
 
 feed:
   no_posts: "No thoughts in this network yet. Share the first spark above!"
@@ -118,6 +126,8 @@ feed:
   select_to_inspect: "Select any thought from the stream to inspect its conversation thread."
   quote_or_reply: "Reply"
   show_more: "Show more thoughts (%{count} remaining)"
+  show_more_replies: "Show %{count} more replies"
+  show_fewer_replies: "Show fewer replies"
 
 sidebar:
   search_placeholder: "Semantic vector search..."

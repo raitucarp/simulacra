@@ -34,7 +34,12 @@ impl AppView {
             search_query: &search_query,
             theme: &self.theme,
             feed_visible_count: Some(self.feed.feed_visible_count),
+            feed_tab: self.feed.feed_tab,
+            inspector_expanded: self.feed.inspector_expanded,
+            stream_scroll: &self.feed.stream_scroll,
             on_load_more: Some(bind.boxed_act(Self::load_more_posts)),
+            on_select_feed_tab: bind.boxed(Self::select_feed_tab),
+            on_toggle_replies: bind.boxed_act(Self::toggle_inspector_replies),
             on_select_post: bind.boxed(Self::select_post),
             on_like_post: bind.boxed(Self::like_post),
             on_reply_post: Box::new(move |post_id, _author_handle: &str, window, cx| {

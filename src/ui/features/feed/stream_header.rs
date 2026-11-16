@@ -1,14 +1,29 @@
-//! Stream pane header: Threads-style "For you" / "Dialectic" tabs and loop status pill.
+//! Stream pane header: clickable Threads-style "For you" / "Dialectic" tabs and the loop
+//! status pill.
 
-use super::consts::ACTIVE_TAB_INDICATOR_WIDTH;
+use super::consts::{ACTIVE_TAB_INDICATOR_WIDTH, STREAM_TAB_ID};
+use super::params::SelectFeedTabCallback;
+use crate::state::FeedTab;
 use crate::theme::ThemeTokens;
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::Icon;
-use gpui_kit::{div, px, Div, FontWeight, ParentElement, Styled};
+use gpui_kit::{
+    div, px, Div, FontWeight, InteractiveElement, ParentElement, Stateful,
+    StatefulInteractiveElement, Styled,
+};
 use rust_i18n::t;
+use std::rc::Rc;
 
-/// Header row of the stream pane.
-pub(crate) fn render_stream_header(theme: &ThemeTokens) -> Div {
+/// Header row of the stream pane: the stream tabs and the loop status.
+pub(crate) fn render_stream_header(
+    theme: &ThemeTokens,
+    active: FeedTab,
+    on_select: Rc<SelectFeedTabCallback>,
+) -> Div {
+    let tabs = FeedTab::ALL
+        .into_iter()
+        .enumerate()
+        .map(|(position, tab)| render_tab(theme, tab, position, tab == active, on_select.clone()));
     div()
         .w_full()
         .px(theme.spacing_lg)
@@ -18,54 +33,62 @@ pub(crate) fn render_stream_header(theme: &ThemeTokens) -> Div {
         .flex()
         .items_center()
         .justify_between()
-        .child(
-            div()
-                .flex()
-                .items_center()
-                .gap(theme.spacing_xl)
-                .h_full()
-                .child(render_active_tab(theme))
-                .child(render_inactive_tab(theme)),
-        )
+        .child(div().flex().items_center().gap(theme.spacing_xl).h_full().children(tabs))
         .child(render_loop_status(theme))
 }
 
-/// Tab label text with the display typeface.
-fn tab_label(theme: &ThemeTokens, weight: FontWeight) -> Div {
-    div()
-        .font_family(theme.font_family_display.clone())
-        .text_size(theme.font_size_base)
-        .font_weight(weight)
+fn tab_label_text(tab: FeedTab) -> String {
+    match tab {
+        FeedTab::ForYou => t!("feed.for_you"),
+        FeedTab::Dialectic => t!("feed.dialectic"),
+    }
+    .to_string()
 }
 
-fn render_active_tab(theme: &ThemeTokens) -> Div {
+/// A clickable tab; the active one is bold with the brand underline indicator.
+fn render_tab(
+    theme: &ThemeTokens,
+    tab: FeedTab,
+    position: usize,
+    is_active: bool,
+    on_select: Rc<SelectFeedTabCallback>,
+) -> Stateful<Div> {
+    let indicator = if is_active { theme.accent_brand } else { theme.bg_transparent };
     div()
+        .id((STREAM_TAB_ID, position))
         .flex()
         .flex_col()
         .items_center()
         .h_full()
         .justify_between()
         .pt(theme.spacing_sm)
-        .child(
-            tab_label(theme, FontWeight::BOLD)
-                .text_color(theme.text_primary)
-                .child(t!("feed.for_you").to_string()),
-        )
+        .cursor_pointer()
+        .on_click(move |_, window, cx| on_select(tab, window, cx))
+        .child(render_tab_label(theme, tab, is_active))
         .child(
             div()
                 .w(px(ACTIVE_TAB_INDICATOR_WIDTH))
                 .h(theme.border_width_threadline)
                 .rounded(theme.radius_full)
-                .bg(theme.accent_brand),
+                .bg(indicator),
         )
 }
 
-fn render_inactive_tab(theme: &ThemeTokens) -> Div {
-    div().pt(theme.spacing_sm).h_full().child(
-        tab_label(theme, FontWeight::MEDIUM)
-            .text_color(theme.text_muted)
-            .child(t!("feed.dialectic").to_string()),
-    )
+/// Tab label in the display typeface: bold and primary when active, muted otherwise.
+fn render_tab_label(theme: &ThemeTokens, tab: FeedTab, is_active: bool) -> Div {
+    let (weight, color) = if is_active {
+        (FontWeight::BOLD, theme.text_primary)
+    } else {
+        (FontWeight::MEDIUM, theme.text_muted)
+    };
+    let hover_color = theme.text_primary;
+    div()
+        .font_family(theme.font_family_display.clone())
+        .text_size(theme.font_size_base)
+        .font_weight(weight)
+        .text_color(color)
+        .hover(move |s| s.text_color(hover_color))
+        .child(tab_label_text(tab))
 }
 
 /// "Loop active" status pill.

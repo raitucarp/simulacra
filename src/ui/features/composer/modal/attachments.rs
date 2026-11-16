@@ -22,12 +22,12 @@ impl ComposerModalView {
         input_row_frame(theme)
             .child(Icon::new(LucideIcon::Link2))
             .child(div().flex_1().child(Input::new(&self.link_input).appearance(false)))
-            .child(clear_button(MODAL_CLEAR_LINK_BTN_ID, self.on_clear_link.clone(), theme))
+            .child(clear_button(MODAL_CLEAR_LINK_BTN_ID, self.callbacks.on_clear_link.clone(), theme))
     }
 
     pub(super) fn image_input_row(&self) -> Stateful<Div> {
         let theme = &self.theme;
-        let on_pick_image_browse = self.on_pick_image.clone();
+        let on_pick_image_browse = self.callbacks.on_pick_image.clone();
         input_row_frame(theme)
             .id(MODAL_IMAGE_INPUT_ROW_ID)
             .child(div().text_color(theme.text_muted).child(Icon::new(LucideIcon::Image)))
@@ -40,12 +40,12 @@ impl ComposerModalView {
                     .tooltip(t!("composer.pick_image").to_string())
                     .on_click(move |_, window, cx| (on_pick_image_browse)(window, cx)),
             )
-            .child(clear_button(MODAL_CLEAR_IMAGE_INPUT_BTN_ID, self.on_clear_image.clone(), theme))
+            .child(clear_button(MODAL_CLEAR_IMAGE_INPUT_BTN_ID, self.callbacks.on_clear_image.clone(), theme))
     }
 
     pub(super) fn image_preview(&self, path: &str) -> Stateful<Div> {
         let theme = &self.theme;
-        let on_clear_image = self.on_clear_image.clone();
+        let on_clear_image = self.callbacks.on_clear_image.clone();
         div()
             .id(MODAL_IMAGE_PREVIEW_CARD_ID)
             .w_full()
@@ -77,9 +77,9 @@ impl ComposerModalView {
     }
 
     pub(super) fn attachment_bar(&self) -> Div {
-        let pick_image = self.on_pick_image.clone();
-        let toggle_image = self.on_toggle_image.clone();
-        let toggle_link = self.on_toggle_link.clone();
+        let pick_image = self.callbacks.on_pick_image.clone();
+        let toggle_image = self.callbacks.on_toggle_image.clone();
+        let toggle_link = self.callbacks.on_toggle_link.clone();
         div()
             .w_full()
             .flex()

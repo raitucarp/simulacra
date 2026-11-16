@@ -15,11 +15,14 @@ mod profiles;
 mod reposts;
 mod search;
 mod settings;
+mod threads;
 mod upgrade;
 mod wikilinks;
 
 #[cfg(test)]
 mod tests;
+
+pub use threads::{ThreadAnchor, ThreadDraft};
 
 use crate::domain::{GroundingDocument, Network, NetworkId, Post, PostId, Profile, ProfileId, TrendingTopic};
 use crate::storage::Database;

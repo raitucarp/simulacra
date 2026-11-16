@@ -1,4 +1,4 @@
-//! Composer modal panel actions: input subscriptions, attachments and submission.
+//! Composer modal panel actions: attachment subscriptions, clearing, submission and attachments.
 
 use super::super::consts::{PATH_QUOTE_DOUBLE, PATH_QUOTE_SINGLE, PICK_IMAGE_TITLE};
 use super::{ComposerModalEvent, ComposerModalPanel, ComposerSubmission};
@@ -8,48 +8,44 @@ use gpui_kit::*;
 use std::path::Path;
 
 impl ComposerModalPanel {
-    /// Re-renders on every draft change and submits on secondary (Ctrl/Cmd) Enter.
-    pub(super) fn subscribe(&self, window: &mut Window, cx: &mut Context<Self>) -> Vec<Subscription> {
-        let composer = cx.subscribe_in(
-            &self.composer_input,
-            window,
-            |this, _, event: &InputEvent, window, cx| match event {
-                InputEvent::Change => cx.notify(),
-                InputEvent::PressEnter { secondary: true, .. } => this.submit(window, cx),
-                _ => {}
-            },
-        );
+    /// Re-renders when the attachment inputs change.
+    pub(super) fn subscribe(&self, cx: &mut Context<Self>) -> Vec<Subscription> {
         let link = cx.subscribe(&self.link_input, notify_on_change);
         let image = cx.subscribe(&self.image_input, notify_on_change);
-        vec![composer, link, image]
+        vec![link, image]
     }
 
-    /// Clears the draft inputs and attachment state (the mode is kept).
+    /// Resets to one empty draft and clears attachments and errors (the mode is kept).
     pub(super) fn clear(&mut self, window: &mut Window, cx: &mut App) {
         self.is_link_input_open = false;
         self.is_image_input_open = false;
         self.image_path = None;
+        self.error = None;
         for input in [&self.link_input, &self.image_input] {
             input.update(cx, |state, cx| state.set_value("", window, cx));
         }
-        self.composer_input.update(cx, |state, cx| state.set_value("", window, cx));
+        self.drafts.truncate(1);
+        if let Some(first) = self.drafts.first() {
+            first.input.update(cx, |state, cx| state.set_value("", window, cx));
+        }
     }
 
-    /// Emits the draft for publishing unless it has no text, link or image.
+    /// Emits the thread for publishing, or re-renders to explain why it cannot be posted.
     pub fn submit(&mut self, _: &mut Window, cx: &mut Context<Self>) {
-        let content = self.composer_input.read(cx).value().to_string();
+        if self.submit_problem(cx).is_some() {
+            cx.notify();
+            return;
+        }
         let link_val = self.link_input.read(cx).value().to_string();
         let link = (!link_val.trim().is_empty()).then(|| link_val.trim().to_string());
         let image = self.image_attachment(cx);
-        if content.trim().is_empty() && link.is_none() && image.is_none() {
-            return;
-        }
+        let drafts = self.draft_texts(cx);
         let mode = self.mode.clone();
-        cx.emit(ComposerModalEvent::Submit(ComposerSubmission { mode, content, link, image }));
+        cx.emit(ComposerModalEvent::Submit(ComposerSubmission { mode, drafts, link, image }));
     }
 
     /// The picked image, or a typed path that points to an existing file.
-    fn image_attachment(&self, cx: &App) -> Option<String> {
+    pub(super) fn image_attachment(&self, cx: &App) -> Option<String> {
         let typed = self.image_input.read(cx).value();
         let manual_img = typed
             .trim()

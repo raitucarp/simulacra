@@ -34,6 +34,12 @@ impl Vault {
         })
     }
 
+    /// Queues remembering that the seed profile `id` was deleted.
+    pub fn dismiss_seed(&self, id: &ProfileId) -> Result<()> {
+        let id = id.clone();
+        self.write(move |db| db.dismiss_seed(&id))
+    }
+
     /// Queues an upsert of `network`.
     pub fn save_network(&self, network: &Network) -> Result<()> {
         let network = network.clone();

@@ -35,6 +35,7 @@ impl AppState {
         }
 
         self.documents.insert(0, doc);
+        self.sync_network_counts();
         Ok(doc_id)
     }
 
@@ -44,6 +45,7 @@ impl AppState {
             db.delete_document(doc_id)?;
         }
         self.documents.retain(|d| d.id != doc_id);
+        self.sync_network_counts();
         Ok(())
     }
 

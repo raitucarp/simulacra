@@ -111,3 +111,20 @@ fn legacy_preset_tokens_and_corrupt_rows_migrate_cleanly() {
     assert_eq!(db.load_theme_settings(), ThemeSettings::default());
     assert_eq!(db.get_setting(SettingKey::LegacyThemeTokens).unwrap(), None);
 }
+
+#[test]
+fn dismissed_seeds_accumulate_and_tolerate_a_corrupt_row() {
+    use crate::domain::ProfileId;
+    let db = Database::in_memory().expect("in-memory db");
+    assert!(db.dismissed_seeds().unwrap().is_empty());
+    let (a, b) = (ProfileId::new("agent_a"), ProfileId::new("agent_b"));
+    db.dismiss_seed(&a).unwrap();
+    db.dismiss_seed(&b).unwrap();
+    db.dismiss_seed(&a).unwrap();
+    assert_eq!(db.dismissed_seeds().unwrap().into_iter().collect::<Vec<_>>(), vec![a.clone(), b]);
+
+    db.set_setting(SettingKey::DismissedSeeds, "{not json").unwrap();
+    assert!(db.dismissed_seeds().unwrap().is_empty(), "a corrupt list reads as empty");
+    db.dismiss_seed(&a).unwrap();
+    assert_eq!(db.dismissed_seeds().unwrap().len(), 1);
+}

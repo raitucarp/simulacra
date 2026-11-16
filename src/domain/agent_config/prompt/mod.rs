@@ -6,6 +6,8 @@ mod system;
 mod template;
 mod user;
 
+pub use template::{ALL_AGENT_INFO_PLACEHOLDER, TEMPLATE_PLACEHOLDERS};
+
 use super::AgentConfig;
 use crate::domain::profile::Profile;
 use crate::domain::traits::PrePostReasoningMode;

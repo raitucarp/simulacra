@@ -4,6 +4,7 @@ pub mod trait_option;
 
 pub mod activity;
 pub mod agent_config;
+pub mod archetype;
 pub mod document;
 pub mod graph;
 pub mod ids;
@@ -22,6 +23,7 @@ pub use agent_config::{
     MoralFoundation, PostingCadence, PrePostReasoningMode, PromptAssemblyStrategy,
     PunctuationHabit, SentenceLengthPreference,
 };
+pub use archetype::ArchetypeClass;
 pub use document::GroundingDocument;
 pub use ids::{NetworkId, PostId, ProfileId};
 pub use network::Network;

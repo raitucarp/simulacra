@@ -1,5 +1,6 @@
 //! State management, store container, and seed data factories.
 
+pub mod forge;
 pub mod graph;
 pub mod mock;
 pub mod seed;

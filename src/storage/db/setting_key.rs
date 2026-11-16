@@ -53,6 +53,8 @@ setting_keys! {
     ThemeTypeScale => "theme.type_scale",
     ThemeRadiusScale => "theme.radius_scale",
     ThemeFontFamily => "theme.font_family",
+    /// In-progress Agent Forge draft (JSON from `AgentDraft::to_autosave`).
+    ForgeAutosave => "forge.autosave",
     /// Pre-palette serialized `ThemeTokens`; migrated on load, then removed.
     LegacyThemeTokens => "theme_tokens",
 }

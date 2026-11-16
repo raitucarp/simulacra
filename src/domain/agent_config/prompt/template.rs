@@ -8,6 +8,14 @@ use crate::domain::profile::Profile;
 pub const ALL_AGENT_INFO_PLACEHOLDER: &str = "{{all_agent_info}}";
 /// Number of supported template placeholders.
 const PLACEHOLDER_COUNT: usize = 22;
+/// Every placeholder a custom template may use (same order as the expansion table).
+pub const TEMPLATE_PLACEHOLDERS: [&str; PLACEHOLDER_COUNT] = [
+    "{{name}}", "{{handle}}", "{{description}}", "{{gender}}", "{{pronouns}}", "{{bio}}",
+    "{{hobbies}}", "{{mbti}}", "{{enneagram}}", "{{identity}}", "{{psychology}}",
+    "{{intelligence}}", "{{linguistics}}", "{{diction}}", "{{grammar}}", "{{language}}",
+    "{{typing_style}}", "{{schedule}}", "{{mention_attitude}}", "{{network_context}}",
+    "{{directive}}", ALL_AGENT_INFO_PLACEHOLDER,
+];
 
 impl AgentConfig {
     /// Expands the custom prompt template and appends the dossier and reasoning instruction.

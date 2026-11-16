@@ -1,13 +1,15 @@
 //! The option pages of each step, plus the field-control builders they share.
 
 mod appearance;
+mod attributes;
+mod birthsign;
 mod daily;
-mod generic;
 mod grimoire;
 mod origin;
 mod origin_life;
 mod photo;
 mod portrait;
+mod psyche;
 mod relationships;
 mod review;
 mod review_card;

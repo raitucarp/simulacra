@@ -14,6 +14,7 @@ pub(super) fn apply_forge_layout(t: &mut ThemeTokens) {
         forge_trading_card_width: px(360.0), forge_explainer_width: px(300.0),
         forge_empty_art_width: px(240.0), forge_tile_min_height: px(96.0), forge_bubble_max_width: px(340.0),
         forge_preset_card_width: px(104.0), forge_compact_card_width: px(80.0),
+        forge_wheel_size: px(216.0), forge_wheel_dot_size: px(34.0),
         // Daily Life clock ring and week strip, Relationships heart pips
         forge_clock_size: px(168.0), forge_clock_ring_width: px(16.0), forge_week_cell_height: px(12.0),
         forge_heart_size: px(18.0),

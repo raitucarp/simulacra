@@ -1,10 +1,13 @@
 //! [`ScoreSlider`]: the kit slider bound to a `ScoreField`, with the field name, a level name
 //! (Novice…Legendary for intelligences, very low…very high otherwise) and the personality
-//! point budget enforced: a budgeted score cannot be dragged past the points left.
+//! point budget enforced: a budgeted score cannot be dragged past the points left (unless
+//! the budget is switched off with [`ScoreSlider::budgeted`]). The field's "?" explainer sits
+//! next to its name when it has one.
 //!
 //! The value is committed on release (one undo step per drag); while dragging, the label
 //! follows the thumb.
 
+use super::explainer::ExplainerButton;
 use super::slider_slot::{keyed_slider, SliderRange};
 use super::ValueCallback;
 use crate::domain::agent_config::AgentConfig;
@@ -53,6 +56,15 @@ impl ScoreSlider {
         self
     }
 
+    /// Whether the balanced-build budget caps this slider (on by default); off frees every
+    /// score up to the maximum.
+    pub fn budgeted(mut self, budgeted: bool) -> Self {
+        if !budgeted {
+            self.ceiling = MAX_SCORE;
+        }
+        self
+    }
+
     fn header(&self, shown: u8) -> Div {
         let theme = &self.theme;
         let level = div()
@@ -60,12 +72,13 @@ impl ScoreSlider {
             .text_color(theme.accent_brand)
             .font_weight(FontWeight::SEMIBOLD)
             .child(format!("{} · {shown}", tr(&score_level_key(self.field, shown))));
-        div()
+        let name = div()
             .flex()
             .items_center()
-            .justify_between()
+            .gap(theme.spacing_xs)
             .child(div().text_size(theme.font_size_sm).text_color(theme.text_primary).child(field_label(self.field.path())))
-            .child(level)
+            .children(ExplainerButton::for_field(self.field.path(), theme));
+        div().flex().items_center().justify_between().child(name).child(level)
     }
 }
 

@@ -9,7 +9,7 @@ pub mod main_feed;
 pub mod mind_graph_view;
 pub mod right_sidebar;
 pub mod secondary_sidebar;
-pub mod settings_modal;
+pub use crate::ui::features::settings as settings_modal;
 pub mod unified_right_sidebar;
 
 pub use agent_lab_view::{

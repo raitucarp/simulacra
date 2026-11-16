@@ -4,14 +4,15 @@ use std::rc::Rc;
 
 use crate::theme::ThemeTokens;
 use crate::ui::icons::LucideIcon;
+use super::ImportDocCallback;
 use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::input::{Input, InputState, Textarea, TextareaState};
-use gpui_kit::component::Icon;
+use gpui_kit::component::{Icon, Sizable};
 use gpui_kit::{div, App, Div, Entity, FontWeight, IntoElement, ParentElement, Styled, Window};
 use rust_i18n::t;
 
 const SUBMIT_DOC_BUTTON_ID: &str = "submit-grounding-doc-btn";
-const VECTOR_INDEX_LABEL: &str = "HNSW Vector Index";
+const IMPORT_DOC_BUTTON_ID: &str = "import-grounding-doc-btn";
 
 fn render_add_button<F>(
     doc_title_input: &Entity<InputState>,
@@ -36,7 +37,17 @@ where
         })
 }
 
-fn render_form_header(theme: &ThemeTokens) -> Div {
+/// "Import file" button: picks a text file and adds it as a document.
+fn render_import_button(on_import: ImportDocCallback) -> Button {
+    Button::new(IMPORT_DOC_BUTTON_ID)
+        .ghost()
+        .small()
+        .icon(Icon::new(LucideIcon::FileText))
+        .label(t!("vault.import_file").to_string())
+        .on_click(move |_, window, cx| on_import(window, cx))
+}
+
+fn render_form_header(on_import: ImportDocCallback, theme: &ThemeTokens) -> Div {
     div()
         .flex()
         .items_center()
@@ -49,14 +60,7 @@ fn render_form_header(theme: &ThemeTokens) -> Div {
                 .text_color(theme.text_muted)
                 .child(t!("vault.add_doc").to_string()),
         )
-        .child(
-            div()
-                .font_family(theme.font_family_mono.clone())
-                .text_size(theme.font_size_xs)
-                .font_weight(FontWeight::MEDIUM)
-                .text_color(theme.accent_agent)
-                .child(VECTOR_INDEX_LABEL),
-        )
+        .child(render_import_button(on_import))
 }
 
 /// Inset field frame wrapping an input or textarea.
@@ -74,9 +78,9 @@ fn field_frame(field: impl IntoElement, theme: &ThemeTokens) -> Div {
 
 /// Renders the add-document form card.
 pub(super) fn render_add_form<F>(
-    doc_title_input: &Entity<InputState>,
-    doc_content_input: &Entity<TextareaState>,
+    (doc_title_input, doc_content_input): (&Entity<InputState>, &Entity<TextareaState>),
     on_add: Rc<F>,
+    on_import: ImportDocCallback,
     theme: &ThemeTokens,
 ) -> Div
 where
@@ -93,7 +97,7 @@ where
         .flex()
         .flex_col()
         .gap(theme.spacing_md)
-        .child(render_form_header(theme))
+        .child(render_form_header(on_import, theme))
         .child(field_frame(Input::new(doc_title_input).bordered(false), theme))
         .child(field_frame(Textarea::new(doc_content_input).bordered(false), theme))
         .child(div().flex().justify_end().child(add_btn))

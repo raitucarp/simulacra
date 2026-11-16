@@ -1,7 +1,11 @@
 //! Quoted thought card embed (or an unavailable notice when the quote is missing).
 
 use super::body::render_post_body;
-use super::consts::{META_SEPARATOR, QUOTE_UNAVAILABLE_PREFIX, QUOTE_UNAVAILABLE_SUFFIX, TIME_FORMAT};
+use super::consts::{
+    META_SEPARATOR, QUOTE_CARD_ID_PREFIX, QUOTE_UNAVAILABLE_PREFIX, QUOTE_UNAVAILABLE_SUFFIX,
+    TIME_FORMAT,
+};
+use super::controls::OpenPostAction;
 use super::lookup::PostLookup;
 use crate::domain::{Post, Profile, ProfileRole};
 use crate::theme::ThemeTokens;
@@ -9,19 +13,36 @@ use crate::ui::atoms::{render_avatar, render_role_badge};
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::Icon;
 use gpui_kit::prelude::FluentBuilder;
-use gpui_kit::{div, AnyElement, Div, FontWeight, InteractiveElement, IntoElement, ParentElement, Styled};
+use gpui_kit::{
+    div, AnyElement, Div, FontWeight, InteractiveElement, IntoElement, ParentElement, Stateful,
+    StatefulInteractiveElement, Styled,
+};
 
-/// Quoted thought embed, resolving the quote through `lookup`.
-pub(crate) fn render_quote_embed<L: PostLookup>(quote_id: &str, lookup: L, theme: &ThemeTokens) -> AnyElement {
+/// Quoted thought embed, resolving the quote through `lookup`; clicking it opens the quote.
+pub(crate) fn render_quote_embed<L: PostLookup>(
+    quote_id: &str,
+    lookup: L,
+    on_open: OpenPostAction,
+    theme: &ThemeTokens,
+) -> AnyElement {
     match lookup.find_post(quote_id) {
-        Some(quoted) => render_quoted_card(quoted, lookup, theme).into_any_element(),
+        Some(quoted) => render_quoted_card(quoted, lookup, on_open, theme).into_any_element(),
         None => render_quote_unavailable(quote_id, theme).into_any_element(),
     }
 }
 
-fn render_quoted_card<L: PostLookup>(quoted: &Post, lookup: L, theme: &ThemeTokens) -> Div {
+fn render_quoted_card<L: PostLookup>(
+    quoted: &Post,
+    lookup: L,
+    on_open: OpenPostAction,
+    theme: &ThemeTokens,
+) -> Stateful<Div> {
     let (hover_bg, hover_border) = (theme.hover_bg, theme.border_strong);
+    let quoted_id = quoted.id.clone();
     div()
+        .id(format!("{QUOTE_CARD_ID_PREFIX}{}", quoted.id))
+        .cursor_pointer()
+        .on_click(move |_, window, cx| on_open(quoted_id.clone(), window, cx))
         .w_full()
         .p(theme.spacing_md)
         .rounded(theme.radius_md)

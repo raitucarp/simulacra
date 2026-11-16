@@ -5,7 +5,7 @@ use super::params::FeedParams;
 use super::timeline::render_timeline;
 use crate::state::{AppState, NavigationTab};
 use crate::theme::ThemeTokens;
-use crate::ui::features::vault::render_knowledge_vault_view;
+use crate::ui::features::vault::{render_knowledge_vault_view, VaultCallbacks};
 use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::{div, Div, IntoElement, ParentElement, Styled};
 use rust_i18n::t;
@@ -36,13 +36,18 @@ pub fn render_main_feed<C: IntoElement>(params: FeedParams<'_, C>) -> impl IntoE
 /// Appends the knowledge vault view for the active tab (the Mind Graph is routed by the shell).
 fn route_tool_views(feed: Div, state: &AppState, theme: &ThemeTokens, tools: ToolViewInputs<'_>) -> Div {
     feed.when(state.active_tab == NavigationTab::Knowledge, |this| {
+        // Only the active network's corpus, matching the sidebar counts.
+        let documents: Vec<_> = state.current_documents().cloned().collect();
         this.child(render_knowledge_vault_view(
-            &state.documents,
+            &documents,
             theme,
             tools.doc_title_input,
             tools.doc_content_input,
-            tools.on_add_document,
-            tools.on_delete_document,
+            VaultCallbacks {
+                on_add: tools.on_add_document,
+                on_delete: tools.on_delete_document,
+                on_import: tools.on_import_document,
+            },
         ))
     })
 }

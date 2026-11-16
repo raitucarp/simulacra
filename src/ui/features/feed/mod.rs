@@ -23,8 +23,8 @@ pub use consts::{
     MAX_INSPECTOR_REPLIES,
 };
 pub use params::{
-    AddDocCallback, CycleProfileCallback, DeleteDocCallback, FeedParams, LikePostCallback,
-    LoadMoreCallback, QuotePostCallback, ReplyPostCallback, RepostPostCallback,
+    AddDocCallback, CycleProfileCallback, DeleteDocCallback, DeletePostCallback, FeedParams,
+    ImportDocCallback, LikePostCallback, LoadMoreCallback, QuotePostCallback, ReplyPostCallback, RepostPostCallback,
     SelectFeedTabCallback, SelectPostCallback, ToggleRepliesCallback,
 };
 pub use render::render_main_feed;

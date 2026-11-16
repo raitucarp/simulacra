@@ -15,6 +15,16 @@ use rust_i18n::t;
 
 pub type AddDocCallback = Box<dyn Fn(String, String, &mut Window, &mut App) + 'static>;
 pub type DeleteDocCallback = Box<dyn Fn(String, &mut Window, &mut App) + 'static>;
+pub type ImportDocCallback = Box<dyn Fn(&mut Window, &mut App) + 'static>;
+
+/// Document actions of the vault view.
+pub struct VaultCallbacks {
+    /// Adds the typed title and content as a document.
+    pub on_add: AddDocCallback,
+    pub on_delete: DeleteDocCallback,
+    /// Opens a file picker and adds the chosen text file as a document.
+    pub on_import: ImportDocCallback,
+}
 
 const VAULT_SCROLL_ID: &str = "knowledge-vault-scroll-container";
 
@@ -82,11 +92,11 @@ pub fn render_knowledge_vault_view(
     theme: &ThemeTokens,
     doc_title_input: &Entity<InputState>,
     doc_content_input: &Entity<TextareaState>,
-    on_add_document: impl Fn(String, String, &mut Window, &mut App) + 'static,
-    on_delete_document: impl Fn(String, &mut Window, &mut App) + 'static,
+    callbacks: VaultCallbacks,
 ) -> impl IntoElement {
-    let on_add = Rc::new(on_add_document);
-    let on_delete = Rc::new(on_delete_document);
+    let on_add = Rc::new(callbacks.on_add);
+    let on_delete = Rc::new(callbacks.on_delete);
+    let inputs = (doc_title_input, doc_content_input);
 
     div()
         .id(VAULT_SCROLL_ID)
@@ -99,6 +109,6 @@ pub fn render_knowledge_vault_view(
         .flex_col()
         .gap(theme.spacing_xl)
         .child(render_header(theme))
-        .child(form::render_add_form(doc_title_input, doc_content_input, on_add, theme))
+        .child(form::render_add_form(inputs, on_add, callbacks.on_import, theme))
         .child(render_documents_section(documents, on_delete, theme))
 }

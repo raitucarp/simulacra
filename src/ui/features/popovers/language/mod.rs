@@ -59,6 +59,7 @@ impl RenderOnce for LanguagePopover {
         div()
             .absolute()
             .inset_0()
+            .occlude()
             .on_mouse_down(MouseButton::Left, move |_, window, cx| {
                 on_dismiss(window, cx);
             })

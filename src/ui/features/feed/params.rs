@@ -11,6 +11,8 @@ pub type ReplyPostCallback = Box<dyn Fn(PostId, &str, &mut Window, &mut App) + '
 pub type SelectPostCallback = Box<dyn Fn(PostId, &mut Window, &mut App) + 'static>;
 pub type RepostPostCallback = Box<dyn Fn(PostId, &mut Window, &mut App) + 'static>;
 pub type QuotePostCallback = Box<dyn Fn(PostId, &mut Window, &mut App) + 'static>;
+pub type DeletePostCallback = Box<dyn Fn(PostId, &mut Window, &mut App) + 'static>;
+pub type ImportDocCallback = Box<dyn Fn(&mut Window, &mut App) + 'static>;
 pub type AddDocCallback = Box<dyn Fn(String, String, &mut Window, &mut App) + 'static>;
 pub type DeleteDocCallback = Box<dyn Fn(String, &mut Window, &mut App) + 'static>;
 pub type CycleProfileCallback = Box<dyn Fn(&mut Window, &mut App) + 'static>;
@@ -41,7 +43,11 @@ pub struct FeedParams<'a, C> {
     pub on_reply_post: ReplyPostCallback,
     pub on_repost_post: RepostPostCallback,
     pub on_quote_post: QuotePostCallback,
+    /// Deletes one of the user's own thoughts (after the card's confirmation dialog).
+    pub on_delete_post: DeletePostCallback,
     pub on_add_document: AddDocCallback,
     pub on_delete_document: DeleteDocCallback,
+    /// Opens a file picker and adds the chosen text file as a vault document.
+    pub on_import_document: ImportDocCallback,
     pub on_cycle_profile: CycleProfileCallback,
 }

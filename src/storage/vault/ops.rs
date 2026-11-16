@@ -13,6 +13,12 @@ impl Vault {
         self.write(move |db| db.save_post(&post))
     }
 
+    /// Queues deleting `post_id` and its instant reposts.
+    pub fn delete_post_with_reposts(&self, post_id: &PostId) -> Result<()> {
+        let id = post_id.clone();
+        self.write(move |db| db.delete_post_with_reposts(&id))
+    }
+
     /// Queues an upsert of `profile`.
     pub fn save_profile(&self, profile: &Profile) -> Result<()> {
         let profile = profile.clone();
@@ -97,6 +103,11 @@ impl Vault {
     /// Reads every post (after every queued write).
     pub fn load_posts(&self) -> Result<Vec<Post>> {
         self.read(Database::load_posts)
+    }
+
+    /// Reads every network (after every queued write).
+    pub fn load_networks(&self) -> Result<Vec<Network>> {
+        self.read(Database::load_networks)
     }
 
     /// Reads every profile (after every queued write).

@@ -46,6 +46,8 @@ pub struct UnifiedRightSidebarParams<'a> {
     pub on_open_graph: OpenGraphCallback,
     pub search_input: &'a Entity<InputState>,
     pub on_click_topic: Box<dyn Fn(&str, &mut Window, &mut App) + 'static>,
+    /// Imports a text file into the active network's vault.
+    pub on_import_document: Box<dyn Fn(&mut Window, &mut App) + 'static>,
     pub theme: &'a ThemeTokens,
 }
 
@@ -79,6 +81,7 @@ pub fn render_unified_right_sidebar(params: UnifiedRightSidebarParams<'_>) -> im
             this.child(render_mind_cadence_pane(mind, theme))
         })
         .when(active_tab == RightSidebarTab::VaultTelemetry, |this| {
-            this.child(render_vault_telemetry_pane(params.state, params.search_input, trending, theme))
+            let extras = (trending, params.on_import_document);
+            this.child(render_vault_telemetry_pane(params.state, params.search_input, extras, theme))
         })
 }

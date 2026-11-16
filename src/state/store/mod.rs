@@ -10,9 +10,11 @@ mod documents;
 mod indices;
 mod interactions;
 mod load;
+mod network_create;
 mod networks;
 mod post_index;
 mod post_meta;
+mod post_delete;
 mod posts;
 mod profile_create;
 mod profiles;
@@ -29,6 +31,7 @@ mod tests;
 
 pub use post_index::PostIndex;
 pub use post_meta::PostMeta;
+pub use network_create::{network_slug, validate_network_name, NetworkNameError, MAX_NETWORK_NAME_CHARS};
 pub use threads::{ThreadAnchor, ThreadDraft};
 
 use crate::domain::{GroundingDocument, Network, NetworkId, Post, Profile, ProfileId, TrendingTopic};

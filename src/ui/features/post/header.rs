@@ -1,15 +1,14 @@
 //! Post header rows: repost banner and author identity/metadata row.
 
-use super::consts::{
-    GROUNDING_PILL_LABEL, META_SEPARATOR, ORIGINAL_MARKER_LABEL, REPOSTED_SUFFIX, TIME_FORMAT,
-};
+use super::consts::{META_SEPARATOR, ORIGINAL_MARKER_LABEL, REPOSTED_SUFFIX, TIME_FORMAT};
+use super::controls::{render_overflow_menu, PostCardHandlers};
 use crate::domain::{Post, Profile, ProfileRole};
 use crate::theme::ThemeTokens;
 use crate::ui::atoms::render_role_badge;
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::Icon;
 use gpui_kit::prelude::FluentBuilder;
-use gpui_kit::{div, Div, FontWeight, InteractiveElement, ParentElement, Styled};
+use gpui_kit::{div, Div, FontWeight, ParentElement, Styled};
 
 /// "<name> reposted" banner shown above a reposted thought.
 pub(crate) fn render_repost_header(reposter_name: &str, theme: &ThemeTokens) -> Div {
@@ -35,22 +34,21 @@ pub(crate) fn render_repost_header(reposter_name: &str, theme: &ThemeTokens) -> 
         )
 }
 
-/// Top row: author name, handle, role badge, grounding pill, timestamp, and overflow menu.
-pub(crate) fn render_author_row(post: &Post, author: &Profile, is_instant_repost: bool, theme: &ThemeTokens) -> Div {
-    let overflow_hover = theme.text_primary;
+/// Top row: author name, handle, role badge, timestamp, and the "…" overflow menu.
+pub(crate) fn render_author_row(
+    post: &Post,
+    author: &Profile,
+    is_instant_repost: bool,
+    theme: &ThemeTokens,
+    handlers: &PostCardHandlers,
+) -> Div {
     div()
         .w_full()
         .flex()
         .items_center()
         .justify_between()
         .child(render_author_meta(post, author, is_instant_repost, theme))
-        .child(
-            div()
-                .text_color(theme.text_muted)
-                .cursor_pointer()
-                .hover(move |s| s.text_color(overflow_hover))
-                .child(Icon::new(LucideIcon::Ellipsis).size(theme.font_size_md)),
-        )
+        .child(render_overflow_menu(post, handlers))
 }
 
 fn render_author_meta(post: &Post, author: &Profile, is_instant_repost: bool, theme: &ThemeTokens) -> Div {
@@ -80,7 +78,6 @@ fn render_author_meta(post: &Post, author: &Profile, is_instant_repost: bool, th
                 .child(author.handle.clone()),
         )
         .when(is_agent, |this| this.child(render_role_badge(&author.role, theme)))
-        .when(is_agent, |this| this.child(render_grounding_pill(theme)))
         .child(mono_meta(theme, theme.font_size_xs).child(format!("{META_SEPARATOR} {time_str}")))
         .when(is_instant_repost, |this| {
             this.child(mono_meta(theme, theme.font_size_2xs).text_color(theme.accent_agent).child(ORIGINAL_MARKER_LABEL))
@@ -93,24 +90,4 @@ fn mono_meta(theme: &ThemeTokens, size: gpui_kit::Pixels) -> Div {
         .font_family(theme.font_family_mono.clone())
         .text_size(size)
         .text_color(theme.text_muted)
-}
-
-/// Subtle grounding pill shown on agent-authored thoughts.
-fn render_grounding_pill(theme: &ThemeTokens) -> Div {
-    div()
-        .flex()
-        .items_center()
-        .gap(theme.spacing_2xs)
-        .px(theme.spacing_xs)
-        .py(theme.spacing_2xs)
-        .rounded(theme.radius_sm)
-        .bg(theme.hover_bg)
-        .border(theme.border_width_hairline)
-        .border_color(theme.border_subtle)
-        .font_family(theme.font_family_mono.clone())
-        .text_size(theme.font_size_2xs)
-        .font_weight(FontWeight::SEMIBOLD)
-        .text_color(theme.accent_dialectic)
-        .child(Icon::new(LucideIcon::Library).size(theme.font_size_xs))
-        .child(GROUNDING_PILL_LABEL)
 }

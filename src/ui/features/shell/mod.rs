@@ -21,6 +21,7 @@ mod lab_state;
 mod placeholders;
 mod render;
 mod scheduler_state;
+mod settings_draft;
 mod view;
 
 #[cfg(test)]
@@ -31,4 +32,5 @@ pub use feed_state::FeedState;
 pub use graph_state::GraphState;
 pub use lab_state::{LabState, LlmInputs};
 pub use scheduler_state::SchedulerState;
+pub use settings_draft::SettingsDraft;
 pub use view::{AppView, ChromeState};

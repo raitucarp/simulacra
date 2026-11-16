@@ -13,6 +13,7 @@ impl RenderOnce for ComposerModalView {
             .id(MODAL_BACKDROP_ID)
             .absolute()
             .inset_0()
+            .occlude()
             .bg(self.theme.bg_scrim)
             .flex()
             .items_center()

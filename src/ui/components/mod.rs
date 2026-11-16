@@ -2,10 +2,12 @@
 //!
 //! Every component is a plain function (optionally taking a small spec struct) that returns
 //! a `Div` / `Stateful<Div>`, so callers can keep chaining layout modifiers. `image_picker`
-//! wraps the native image file dialog used by several features.
+//! wraps the native image file dialog used by several features; `document_picker` does the same
+//! for plain-text vault documents.
 
 pub mod badge;
 pub mod chip;
+pub mod document_picker;
 pub mod enum_chips;
 pub mod hover_row;
 pub mod image_picker;
@@ -23,6 +25,9 @@ pub mod vertical_tab;
 
 pub use badge::{meta_badge, mono_tag, BadgeColors};
 pub use chip::{chip_row, choice_chip};
+pub use document_picker::{
+    pick_document_path, read_document_file, DocumentImportError, MAX_DOCUMENT_KB,
+};
 pub use enum_chips::EnumChips;
 pub use hover_row::selectable_row;
 pub use image_picker::pick_image_path;

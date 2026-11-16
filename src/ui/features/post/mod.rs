@@ -6,6 +6,7 @@ mod actions;
 mod attachments;
 mod body;
 mod consts;
+mod controls;
 mod excerpt;
 mod header;
 mod host;
@@ -16,9 +17,10 @@ mod threadline;
 
 pub use actions::ActionClickCallback;
 pub use body::render_post_body;
+pub use controls::{post_permalink, share_text, OpenPostAction, PostAction, PostCardHandlers};
 pub use excerpt::resolve_wikilink_excerpt;
 pub use host::extract_host_domain;
-pub use item::{render_post_item, PostSelectCallback};
+pub use item::render_post_item;
 pub use lookup::PostLookup;
 pub use threadline::ThreadlineStyle;
 

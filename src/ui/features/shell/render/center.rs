@@ -39,8 +39,7 @@ impl AppView {
             .custom_feed_profile_id
             .as_ref()
             .and_then(|id| self.state.user_profiles.iter().find(|p| &p.id == id));
-        let reply_entity = bind.entity().clone();
-        let doc_entity = bind.entity().clone();
+        let (reply_entity, doc_entity) = (bind.entity().clone(), bind.entity().clone());
         render_main_feed(FeedParams {
             state: &self.state,
             custom_profile,
@@ -64,10 +63,12 @@ impl AppView {
             }),
             on_repost_post: bind.boxed(Self::repost_post),
             on_quote_post: bind.boxed(Self::quote_post),
+            on_delete_post: bind.boxed(Self::delete_post),
             on_add_document: Box::new(move |title, content, window, cx| {
                 doc_entity.update(cx, |this, cx| this.add_document(title, content, window, cx));
             }),
             on_delete_document: bind.boxed(|this, doc_id, _, cx| this.delete_document(doc_id, cx)),
+            on_import_document: bind.boxed_act(Self::import_document),
             on_cycle_profile: bind.boxed_act(Self::cycle_profile),
         })
     }

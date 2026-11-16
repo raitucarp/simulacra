@@ -49,6 +49,8 @@ pub struct ModalCallbacks {
     pub on_clear_image: ModalActionCallback,
     pub on_clear_link: ModalActionCallback,
     pub on_add_draft: ModalActionCallback,
+    /// Inserts the hashtag sigil at the cursor of the active draft.
+    pub on_insert_tag: ModalActionCallback,
     pub on_remove_draft: DraftActionCallback,
     pub on_split_draft: DraftActionCallback,
 }

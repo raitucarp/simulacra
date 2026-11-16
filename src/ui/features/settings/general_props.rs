@@ -17,6 +17,8 @@ pub struct GeneralPaneProps {
     pub last_error: Option<(String, String)>,
     /// Resolved database file path.
     pub db_path: String,
+    /// Native name of the active interface language.
+    pub language_label: &'static str,
     /// Invoked with the requested switch value.
     pub on_toggle_scheduler: Option<ToggleSchedulerCallback>,
 }

@@ -114,6 +114,7 @@ pub(super) fn render_backdrop(
         .id(BACKDROP_ID)
         .absolute()
         .inset_0()
+        .occlude()
         .bg(theme.bg_scrim) // Deep opaque scrim to eliminate background bleed
         .flex()
         .items_center()

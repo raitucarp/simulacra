@@ -1,5 +1,6 @@
 //! Feature-oriented UI modules (one directory per product surface).
 
+pub mod composer;
 pub mod feed;
 pub mod mind_graph;
 pub mod popovers;

@@ -1,8 +1,7 @@
 //! Organism-level layout panels.
 
 pub mod agent_lab_view;
-pub use crate::ui::features::title_bar as app_title_bar;
-pub mod composer_modal;
+pub use crate::ui::features::composer::modal as composer_modal;
 pub use crate::ui::features::feed as main_feed;
 pub use crate::ui::features::mind_graph as mind_graph_view;
 pub use crate::ui::features::settings as settings_modal;
@@ -10,6 +9,7 @@ pub use crate::ui::features::sidebar_left as left_sidebar;
 pub use crate::ui::features::sidebar_right::legacy as right_sidebar;
 pub use crate::ui::features::sidebar_right::secondary as secondary_sidebar;
 pub use crate::ui::features::sidebar_right::unified as unified_right_sidebar;
+pub use crate::ui::features::title_bar as app_title_bar;
 pub use crate::ui::features::vault as knowledge_vault_view;
 
 pub use agent_lab_view::{

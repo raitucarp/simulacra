@@ -3,14 +3,18 @@
 mod appearance;
 mod attributes;
 mod birthsign;
-mod generic;
+mod daily;
+mod grimoire;
 mod origin;
 mod origin_life;
 mod photo;
 mod portrait;
 mod psyche;
+mod relationships;
 mod review;
 mod review_card;
+mod trait_block;
+mod voice;
 
 use super::super::common::{labeled, message};
 use crate::state::forge::{DraftEdit, Severity, TextField, ValidationIssue};

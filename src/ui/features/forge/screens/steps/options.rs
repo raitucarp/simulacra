@@ -41,8 +41,11 @@ impl ForgeView {
             ForgeStep::Attributes => self.attributes_page(handle),
             ForgeStep::Disposition => self.disposition_page(handle),
             ForgeStep::Mind => self.mind_page(handle),
+            ForgeStep::Voice => self.voice_page(handle),
+            ForgeStep::DailyLife => self.daily_life_page(handle),
+            ForgeStep::Relationships => self.relationships_page(handle),
+            ForgeStep::Grimoire => self.grimoire_page(handle),
             ForgeStep::Review => self.review_page(handle),
-            other => self.generic_page(other, handle),
         }
     }
 

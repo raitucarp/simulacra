@@ -34,6 +34,8 @@ impl ForgeView {
             intro_post: true,
             notice: None,
             portrait_slot: PortraitSlot::Face,
+            hear: super::HearStatus::Idle,
+            grimoire_open: false,
             focus: cx.focus_handle(),
         };
         view.revalidate();

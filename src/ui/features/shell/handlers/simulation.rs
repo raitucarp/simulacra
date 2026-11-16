@@ -107,7 +107,7 @@ impl AppView {
     }
 
     /// The network's name and grounding document titles, for the agent's system prompt.
-    fn prompt_context(&self, network: &NetworkId) -> PromptContext {
+    pub(in crate::ui::features::shell) fn prompt_context(&self, network: &NetworkId) -> PromptContext {
         let network_name = self.state.networks.iter().find(|n| &n.id == network).map(|n| n.name.clone());
         let grounding_docs = self
             .state

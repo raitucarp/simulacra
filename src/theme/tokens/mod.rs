@@ -117,6 +117,8 @@ theme_tokens! {
         forge_compact_card_width,
         // Agent Forge Birthsign: the Enneagram wheel and its clickable points
         forge_wheel_size, forge_wheel_dot_size,
+        // Agent Forge: Daily Life clock ring and week strip, Relationships heart pips
+        forge_clock_size, forge_clock_ring_width, forge_week_cell_height, forge_heart_size,
     ],
     // Typography Hierarchy & Line Height; heatmap level opacities; graph dimming & curvature
     floats: [

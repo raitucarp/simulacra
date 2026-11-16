@@ -6,7 +6,9 @@ pub mod seed;
 pub mod store;
 pub mod threads;
 
-pub use store::{AppState, NavigationTab, ThreadAnchor, ThreadDraft};
+pub use store::{
+    AppState, NavigationTab, NetworkNameError, ThreadAnchor, ThreadDraft, MAX_NETWORK_NAME_CHARS,
+};
 pub use threads::{
     build_conversation, feed_entries, feed_position, group_conversations, Conversation, FeedTab,
     ReplyBranch, ReplyLimits,

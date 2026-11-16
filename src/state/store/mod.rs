@@ -9,7 +9,9 @@ mod documents;
 mod indices;
 mod interactions;
 mod load;
+mod network_create;
 mod networks;
+mod post_delete;
 mod posts;
 mod profile_create;
 mod profiles;
@@ -23,6 +25,7 @@ mod wikilinks;
 #[cfg(test)]
 mod tests;
 
+pub use network_create::{network_slug, validate_network_name, NetworkNameError, MAX_NETWORK_NAME_CHARS};
 pub use threads::{ThreadAnchor, ThreadDraft};
 
 use crate::domain::{GroundingDocument, Network, NetworkId, Post, PostId, Profile, ProfileId, TrendingTopic};

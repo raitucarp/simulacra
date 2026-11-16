@@ -2,15 +2,15 @@
 
 pub mod agent_card;
 pub mod knowledge_card;
-pub mod language_popover;
-pub mod nav_button;
+pub use crate::ui::features::popovers::language as language_popover;
+pub use crate::ui::features::sidebar_left::nav_button;
 pub mod network_card;
 pub mod persona_roster;
 pub mod post_composer;
 pub use crate::ui::features::post as post_item;
 pub mod topic_item;
-pub mod user_card;
-pub mod workspace_dropdown;
+pub use crate::ui::features::sidebar_left::user_card;
+pub use crate::ui::features::popovers::workspace as workspace_dropdown;
 
 pub use agent_card::render_agent_status_row;
 pub use knowledge_card::render_knowledge_card;

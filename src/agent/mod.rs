@@ -2,6 +2,7 @@
 
 pub mod engine;
 pub mod llm;
+pub mod schedule;
 
-pub use engine::DialecticEngine;
-pub use llm::{LlmClient, LlmProvider, LlmSettings};
+pub use engine::{DialecticEngine, SimulationOutcome};
+pub use llm::{LlmClient, LlmFailure, LlmProvider, LlmSettings};

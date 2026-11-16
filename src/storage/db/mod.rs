@@ -5,6 +5,7 @@
 //! modules by table (networks, profiles, posts, trending, settings, documents).
 
 mod documents;
+pub mod location;
 mod migrate;
 mod networks;
 mod post_updates;
@@ -22,8 +23,8 @@ use chrono::{DateTime, Utc};
 use rusqlite::Connection;
 use std::path::{Path, PathBuf};
 
-/// Default database file name in the workspace or application folder.
-const DEFAULT_DB_FILE: &str = "simulacra.db";
+/// Database file name, both in the per-user data folder and as the legacy `./` file.
+pub const DEFAULT_DB_FILE: &str = "simulacra.db";
 
 /// SQLite integer encoding of a `true` boolean flag.
 const SQL_TRUE: i64 = 1;
@@ -55,10 +56,27 @@ impl Database {
         Ok(db)
     }
 
-    /// Default database file path in the workspace or application folder.
-    pub fn default_path() -> PathBuf {
-        PathBuf::from(DEFAULT_DB_FILE)
+    /// File path of the open database (empty for an in-memory database).
+    pub fn path(&self) -> String {
+        self.conn.path().unwrap_or_default().to_string()
     }
+
+    /// Database path in the per-user application-data folder (or `SIMULACRA_DB_PATH`),
+    /// without touching the file system.
+    pub fn default_path() -> PathBuf {
+        location::resolve_db_path(&env_var, location::Platform::current(), DEFAULT_DB_FILE)
+    }
+
+    /// [`Self::default_path`], after creating its folder and copying a legacy
+    /// `./simulacra.db` there once.
+    pub fn prepare_default_path() -> PathBuf {
+        location::prepare_db_path(&env_var, location::Platform::current(), Path::new(DEFAULT_DB_FILE))
+    }
+}
+
+/// Reads a process environment variable.
+fn env_var(key: &str) -> Option<String> {
+    std::env::var(key).ok()
 }
 
 /// Maps any displayable storage error into the application's database error variant.

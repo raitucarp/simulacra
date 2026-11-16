@@ -5,12 +5,12 @@ use crate::theme::ThemeTokens;
 use gpui_kit::{div, px, Div, FontWeight, IntoElement, ParentElement, SharedString, Styled};
 
 /// Uppercase muted bold section heading.
-pub(super) fn section_label(theme: &ThemeTokens, text: &'static str) -> Div {
+pub(super) fn section_label(theme: &ThemeTokens, text: impl Into<SharedString>) -> Div {
     div()
         .text_size(px(TEXT_BODY))
         .font_weight(FontWeight::BOLD)
         .text_color(theme.text_muted)
-        .child(text)
+        .child(text.into())
 }
 
 /// Vertical section: a header element stacked above a body element.
@@ -36,20 +36,20 @@ pub(super) fn spaced_row() -> Div {
 }
 
 /// Small muted explanatory paragraph.
-pub(super) fn muted_note(theme: &ThemeTokens, text: &'static str) -> Div {
-    div().text_size(px(TEXT_SMALL)).text_color(theme.text_muted).child(text)
+pub(super) fn muted_note(theme: &ThemeTokens, text: impl Into<SharedString>) -> Div {
+    div().text_size(px(TEXT_SMALL)).text_color(theme.text_muted).child(text.into())
 }
 
 /// Primary body-sized text line.
-pub(super) fn body_text(theme: &ThemeTokens, text: &'static str) -> Div {
-    div().text_size(px(TEXT_BODY)).text_color(theme.text_primary).child(text)
+pub(super) fn body_text(theme: &ThemeTokens, text: impl Into<SharedString>) -> Div {
+    div().text_size(px(TEXT_BODY)).text_color(theme.text_primary).child(text.into())
 }
 
 /// Medium-weight title over a secondary subtitle in the given font family.
 pub(super) fn title_with_subtitle(
     theme: &ThemeTokens,
-    title: &'static str,
-    subtitle: &'static str,
+    title: impl IntoElement,
+    subtitle: impl Into<SharedString>,
     subtitle_family: impl Into<SharedString>,
 ) -> Div {
     div()
@@ -62,7 +62,7 @@ pub(super) fn title_with_subtitle(
                 .text_size(px(TEXT_SMALL))
                 .font_family(subtitle_family)
                 .text_color(theme.text_secondary)
-                .child(subtitle),
+                .child(subtitle.into()),
         )
 }
 

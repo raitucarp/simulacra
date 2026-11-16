@@ -70,3 +70,13 @@ fn test_store_zero_copy_accessors() {
     assert!(std::ptr::eq(posts_slice.as_ptr(), state.posts.as_ptr()));
     assert!(std::ptr::eq(docs_slice.as_ptr(), state.documents.as_ptr()));
 }
+
+#[test]
+fn scheduler_switch_defaults_off_and_persists() {
+    let state = AppState::new_in_memory();
+    assert!(!state.scheduler_enabled(), "never surprise-post on a fresh vault");
+    state.set_scheduler_enabled(true);
+    assert!(state.scheduler_enabled());
+    state.set_scheduler_enabled(false);
+    assert!(!state.scheduler_enabled());
+}

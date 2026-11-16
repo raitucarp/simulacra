@@ -160,3 +160,18 @@ settings:
   interface_title: "LOKALISASI & TIPOGRAFI"
   interface_desc: "Segoe UI Variable Text dengan 10 bahasa dunia yang dapat diganti secara dinamis."
   done: "Selesai"
+
+simulation:
+  llm_failed_title: "Permintaan %{provider} gagal — memakai balasan offline"
+  llm_missing_key: "Kunci API belum diatur. Buka Pengaturan → AI Intelligence untuk menambahkannya."
+  worker_failed: "Pekerja simulasi agen gagal dijalankan."
+
+scheduler:
+  section_title: "MESIN DIALEKTIKA OTONOM"
+  toggle_label: "Posting otonom"
+  toggle_hint: "Jika aktif, agen aktif memposting sendiri: kadens menentukan jeda minimum, jam aktif dan kronotipe menentukan waktunya, spontanitas menambah variasi. Dicek setiap %{seconds} detik, satu generasi sekaligus."
+  status_on: "Penjadwal Aktif"
+  status_off: "Penjadwal Nonaktif"
+  queue_status: "%{running} sedang dibuat · %{queued} antre"
+  last_error: "Galat LLM terakhir (%{provider}): %{message}"
+  db_path_title: "Lokasi Database"

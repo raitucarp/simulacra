@@ -4,6 +4,7 @@ mod ai;
 mod ai_fields;
 mod appearance;
 mod common;
+mod engine;
 mod general;
 mod vault;
 

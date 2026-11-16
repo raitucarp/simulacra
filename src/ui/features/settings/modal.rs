@@ -4,6 +4,7 @@ use super::callbacks::{
     ModalCloseCallback, SaveSettingsCallback, SelectPresetModelCallback, SelectProviderCallback,
     SelectTabCallback, SelectThemeCallback,
 };
+use super::general_props::GeneralPaneProps;
 use super::content::{render_backdrop, render_content_header, render_content_pane, render_footer_bar};
 use super::panes::{render_ai_pane, render_appearance_pane, render_general_pane, render_vault_pane};
 use super::rail::render_rail;
@@ -29,6 +30,7 @@ pub struct SettingsModal {
     on_select_preset_model: SelectPresetModelCallback,
     on_save: SaveSettingsCallback,
     on_close: ModalCloseCallback,
+    general: GeneralPaneProps,
 }
 
 impl SettingsModal {
@@ -60,7 +62,14 @@ impl SettingsModal {
             on_select_preset_model: Box::new(on_select_preset_model),
             on_save: Box::new(on_save),
             on_close: Box::new(on_close),
+            general: GeneralPaneProps::default(),
         }
+    }
+
+    /// Supplies the General pane's live scheduler status, vault path and switch callback.
+    pub fn general(mut self, general: GeneralPaneProps) -> Self {
+        self.general = general;
+        self
     }
 
     /// Dispatches tab content to individual pane helpers to prevent stack frame exhaustion.
@@ -70,11 +79,12 @@ impl SettingsModal {
         settings: &LlmSettings,
         inputs: [&Entity<InputState>; 3],
         callbacks: (SelectProviderCallback, SelectPresetModelCallback, SelectThemeCallback),
+        general: GeneralPaneProps,
     ) -> AnyElement {
         let [api_key_input, model_input, endpoint_input] = inputs;
         let (on_provider, on_preset, on_theme) = callbacks;
         match active_tab {
-            SettingsTab::General => render_general_pane(theme).into_any_element(),
+            SettingsTab::General => render_general_pane(theme, general).into_any_element(),
             SettingsTab::AiIntelligence => render_ai_pane(
                 theme,
                 settings,
@@ -104,6 +114,7 @@ impl RenderOnce for SettingsModal {
             &self.current_settings,
             [&self.api_key_input, &self.model_input, &self.endpoint_input],
             (self.on_select_provider, self.on_select_preset_model, self.on_select_theme),
+            self.general,
         );
         let content = render_content_pane(header, tab_content, footer);
         render_backdrop(theme, on_close, rail, content)

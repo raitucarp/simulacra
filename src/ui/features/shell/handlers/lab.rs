@@ -71,8 +71,8 @@ impl AppView {
     }
 
     /// Runs one simulation turn for `profile_id`.
-    pub(crate) fn lab_trigger_agent(&mut self, profile_id: ProfileId, _: &mut Window, cx: &mut Context<Self>) {
+    pub(crate) fn lab_trigger_agent(&mut self, profile_id: ProfileId, window: &mut Window, cx: &mut Context<Self>) {
         self.save_agent_editor_text_inputs(cx);
-        self.trigger_simulation_for_agent(Some(profile_id), cx);
+        self.trigger_simulation_for_agent(Some(profile_id), window, cx);
     }
 }

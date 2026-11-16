@@ -64,9 +64,12 @@ async fn test_async_llm_response_generation() {
     );
 
     let client = crate::agent::LlmClient::new(crate::agent::LlmSettings::default());
-    let reply =
+    let outcome =
         DialecticEngine::generate_llm_response(&parent, &spinoza, &parent.network_id, &client)
             .await;
+    let failure = outcome.llm_error.expect("missing API key is reported, not swallowed");
+    assert!(failure.missing_key);
+    let reply = outcome.reply;
     assert!(reply.content.contains("[[post_async_test]]"));
     assert_eq!(reply.linked_posts, vec![PostId::new("post_async_test")]);
 }
@@ -87,8 +90,9 @@ fn test_spawn_background_simulation() {
         parent.network_id.clone(),
         client,
     );
-    let reply = rx.blocking_recv().expect("channel received reply");
-    assert!(reply.content.contains("[[post_bg_test]]"));
+    let outcome = rx.blocking_recv().expect("channel received reply");
+    assert!(outcome.llm_error.is_some(), "heuristic fallback carries the LLM failure");
+    assert!(outcome.reply.content.contains("[[post_bg_test]]"));
 }
 
 #[test]

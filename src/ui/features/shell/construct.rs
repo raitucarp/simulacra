@@ -2,6 +2,7 @@
 
 use super::feed_state::FeedState;
 use super::lab_state::{LabState, LlmInputs};
+use super::scheduler_state::SchedulerState;
 use super::view::{AppView, ChromeState};
 use crate::i18n::Language;
 use crate::state::AppState;
@@ -25,8 +26,9 @@ impl AppView {
         ];
         let llm_inputs = LlmInputs::new(&state, window, cx);
         let lab = LabState::new(&state, window, cx);
+        let scheduler = SchedulerState::new(state.scheduler_enabled());
 
-        Self {
+        let mut view = Self {
             theme: state.theme_tokens.clone(),
             state,
             chrome: ChromeState::new(initial_lang),
@@ -34,7 +36,10 @@ impl AppView {
             composer_modal,
             llm_inputs,
             lab,
+            scheduler,
             _subscriptions: subscriptions,
-        }
+        };
+        view.start_scheduler_heartbeat(window, cx);
+        view
     }
 }

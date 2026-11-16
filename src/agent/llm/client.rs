@@ -1,6 +1,6 @@
 //! The HTTP client for LLM providers and its provider dispatch.
 
-use super::{openai, LlmProvider, LlmSettings};
+use super::{openai, LlmFailure, LlmProvider, LlmSettings};
 use std::time::Duration;
 
 /// Per-request HTTP timeout.
@@ -39,6 +39,17 @@ impl LlmClient {
     /// Returns whether a valid API key is configured.
     pub fn has_api_key(&self) -> bool {
         !self.settings.api_key.trim().is_empty()
+    }
+
+    /// The configured provider.
+    pub fn provider(&self) -> LlmProvider {
+        self.settings.provider
+    }
+
+    /// Wraps a raw error from [`Self::generate`] into a display-safe [`LlmFailure`]
+    /// (API key redacted, message shortened).
+    pub fn describe_failure(&self, raw: &str) -> LlmFailure {
+        LlmFailure::new(self.settings.provider, raw, &self.settings.api_key, !self.has_api_key())
     }
 
     /// Dispatches an inference request to the configured provider.

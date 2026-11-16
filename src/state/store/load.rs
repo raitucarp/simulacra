@@ -13,7 +13,7 @@ impl AppState {
     /// Initializes state, loading from the local SQLite database if available,
     /// or seeding initial mock entities if first run.
     pub fn new() -> Self {
-        Self::with_db_path(Database::default_path())
+        Self::with_db_path(Database::prepare_default_path())
     }
 
     /// Initializes state with a specific database path (or in-memory if invalid/failed).

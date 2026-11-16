@@ -48,9 +48,10 @@ pub(super) fn avatar_column(avatar: impl IntoElement, theme: &ThemeTokens) -> Di
         )
 }
 
-/// Textarea area stacked above the bottom toolbar.
+/// Textarea area, then the error / limit notice (if any), stacked above the bottom toolbar.
 pub(super) fn editor_column(
     editor: impl IntoElement,
+    notice: Option<Div>,
     toolbar: impl IntoElement,
     theme: &ThemeTokens,
 ) -> Div {
@@ -61,6 +62,7 @@ pub(super) fn editor_column(
         .flex_col()
         .gap(theme.spacing_xs)
         .child(editor)
+        .children(notice)
         // Bottom Toolbar
         .child(toolbar)
 }

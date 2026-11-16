@@ -3,18 +3,24 @@
 use super::consts::{COMPOSER_ROWS, DOC_CONTENT_ROWS};
 use super::view::AppView;
 use crate::domain::{PostId, ProfileId};
-use crate::state::AppState;
+use crate::state::{AppState, FeedTab};
 use crate::ui::features::composer::PostComposerView;
 use crate::ui::features::feed::DEFAULT_FEED_WINDOW_SIZE;
 use gpui_kit::component::input::{InputEvent, InputState, TextareaState};
 use gpui_kit::*;
 use rust_i18n::t;
 
-/// Feed selection plus the inline composer, search and vault document inputs.
+/// Feed selection, stream tab and scroll, plus the inline composer, search and vault inputs.
 pub struct FeedState {
     pub selected_thread_post_id: Option<PostId>,
     pub custom_feed_profile_id: Option<ProfileId>,
     pub feed_visible_count: usize,
+    /// Active stream tab ("For you" / "Dialectic").
+    pub feed_tab: FeedTab,
+    /// Whether the inspector shows every reply instead of the collapsed preview.
+    pub inspector_expanded: bool,
+    /// Scroll position of the main stream (used to bring new posts into view).
+    pub stream_scroll: ScrollHandle,
     pub composer_input: Entity<TextareaState>,
     pub composer_view: Entity<PostComposerView>,
     pub search_input: Entity<InputState>,
@@ -40,6 +46,9 @@ impl FeedState {
             selected_thread_post_id: None,
             custom_feed_profile_id: None,
             feed_visible_count: DEFAULT_FEED_WINDOW_SIZE,
+            feed_tab: FeedTab::default(),
+            inspector_expanded: false,
+            stream_scroll: ScrollHandle::new(),
             composer_input,
             composer_view,
             search_input,
@@ -70,7 +79,7 @@ impl FeedState {
         let theme = state.theme_tokens.clone();
         cx.new(|cx| {
             let on_submit = move |content: String, window: &mut Window, cx: &mut App| {
-                entity_self.update(cx, |this, cx| this.submit_post_content(&content, window, cx));
+                entity_self.update(cx, |this, cx| this.submit_post_content(&content, window, cx))
             };
             PostComposerView::new(profile, composer_input, theme, on_submit, window, cx)
         })

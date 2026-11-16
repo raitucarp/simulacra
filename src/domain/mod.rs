@@ -10,6 +10,7 @@ pub mod ids;
 pub mod network;
 pub mod post;
 pub mod profile;
+pub mod thread;
 pub mod topic;
 pub mod traits;
 
@@ -26,5 +27,6 @@ pub use ids::{NetworkId, PostId, ProfileId};
 pub use network::Network;
 pub use post::{Post, MAX_POST_CHARS};
 pub use profile::{Profile, ProfileRole};
+pub use thread::{draft_issue, first_thread_problem, split_into_thread, DraftIssue, ThreadProblem};
 pub use topic::TrendingTopic;
 pub use trait_option::TraitOption;

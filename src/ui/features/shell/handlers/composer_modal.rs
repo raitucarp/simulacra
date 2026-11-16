@@ -1,8 +1,10 @@
-//! Composer modal handlers: opening and closing the panel and publishing its drafts.
+//! Composer modal handlers: opening and closing the panel and publishing its thread.
 
 use super::super::view::AppView;
+use crate::state::{ThreadAnchor, ThreadDraft};
 use crate::ui::features::composer::{
-    ComposerModalEvent, ComposerModalMode, ComposerModalPanel, ComposerSubmission,
+    publish_error_message, ComposerModalEvent, ComposerModalMode, ComposerModalPanel,
+    ComposerSubmission,
 };
 use gpui_kit::*;
 
@@ -29,7 +31,8 @@ impl AppView {
         self.composer_modal.update(cx, |panel, cx| panel.submit(window, cx));
     }
 
-    /// Publishes a submitted draft; on success focuses the new thread and closes the modal.
+    /// Publishes a submitted thread; on success closes the modal and reveals the last post,
+    /// otherwise shows the store's rejection inside the composer.
     pub(crate) fn publish_composer_draft(
         &mut self,
         _: &Entity<ComposerModalPanel>,
@@ -37,24 +40,35 @@ impl AppView {
         window: &mut Window,
         cx: &mut Context<Self>,
     ) {
-        let ComposerModalEvent::Submit(draft) = event;
-        let ComposerSubmission { mode, content, link, image } = draft.clone();
-        let result = match &mode {
-            ComposerModalMode::NewThread => {
-                self.state.submit_post_with_attachments(&content, link, image, None, None)
+        let ComposerModalEvent::Submit(submission) = event;
+        let (thread, anchor) = thread_from_submission(submission.clone());
+        match self.state.submit_thread(&thread, &anchor) {
+            Ok(ids) => {
+                self.close_composer_modal(window, cx);
+                if let Some(last) = ids.last().cloned() {
+                    self.reveal_post(last, window, cx);
+                }
             }
-            ComposerModalMode::Reply(parent) => {
-                self.state.submit_reply(&parent.id, &content, link, image)
+            Err(err) => {
+                let message = publish_error_message(&err);
+                self.composer_modal.update(cx, |panel, cx| panel.set_error(message, cx));
             }
-            ComposerModalMode::Quote(quoted) => {
-                self.state.submit_quote(&quoted.id, &content, link, image)
-            }
-        };
-        if let Ok(post_id) = result {
-            if !matches!(mode, ComposerModalMode::Reply(_)) {
-                self.feed.selected_thread_post_id = Some(post_id);
-            }
-            self.close_composer_modal(window, cx);
         }
     }
+}
+
+/// Store drafts (attachments on the first post) and the anchor implied by the modal mode.
+fn thread_from_submission(submission: ComposerSubmission) -> (Vec<ThreadDraft>, ThreadAnchor) {
+    let ComposerSubmission { mode, drafts, link, image } = submission;
+    let mut thread: Vec<ThreadDraft> = drafts.into_iter().map(ThreadDraft::text).collect();
+    if let Some(first) = thread.first_mut() {
+        first.link = link;
+        first.image = image;
+    }
+    let anchor = match mode {
+        ComposerModalMode::NewThread => ThreadAnchor::default(),
+        ComposerModalMode::Reply(parent) => ThreadAnchor { reply_to: Some(parent.id), quote_of: None },
+        ComposerModalMode::Quote(quoted) => ThreadAnchor { reply_to: None, quote_of: Some(quoted.id) },
+    };
+    (thread, anchor)
 }

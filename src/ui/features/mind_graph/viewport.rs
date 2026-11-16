@@ -56,14 +56,14 @@ impl Viewport {
     }
 
     /// Window position of a layout point.
-    pub(crate) fn to_screen(&self, frame: &Frame, padding: f32, p: LayoutPoint) -> (f32, f32) {
+    pub(crate) fn to_screen(self, frame: &Frame, padding: f32, p: LayoutPoint) -> (f32, f32) {
         let scale = self.scale(frame, padding);
         let (cx, cy) = self.center(frame);
         (cx + (p.x - LAYOUT_CENTER) * scale, cy + (p.y - LAYOUT_CENTER) * scale)
     }
 
     /// Layout point under a window position.
-    pub(crate) fn to_layout(&self, frame: &Frame, padding: f32, (sx, sy): (f32, f32)) -> LayoutPoint {
+    pub(crate) fn to_layout(self, frame: &Frame, padding: f32, (sx, sy): (f32, f32)) -> LayoutPoint {
         let scale = self.scale(frame, padding);
         let (cx, cy) = self.center(frame);
         LayoutPoint { x: (sx - cx) / scale + LAYOUT_CENTER, y: (sy - cy) / scale + LAYOUT_CENTER }

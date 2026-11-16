@@ -37,7 +37,7 @@ impl ComposerModalView {
 
     fn cancel_button(&self) -> Stateful<Div> {
         let theme = &self.theme;
-        let on_close_cancel = self.on_close.clone();
+        let on_close_cancel = self.callbacks.on_close.clone();
         div()
             .id(MODAL_CANCEL_BTN_ID)
             .cursor_pointer()

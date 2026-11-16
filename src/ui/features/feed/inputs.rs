@@ -1,10 +1,14 @@
 //! Splits [`FeedParams`] into the inputs of each feed sub-view.
 
 use super::callbacks::PostCallbacks;
-use super::params::{AddDocCallback, DeleteDocCallback, FeedParams, LoadMoreCallback};
+use super::params::{
+    AddDocCallback, DeleteDocCallback, FeedParams, LoadMoreCallback, SelectFeedTabCallback,
+    ToggleRepliesCallback,
+};
 use crate::domain::PostId;
+use crate::state::FeedTab;
 use gpui_kit::component::input::{InputState, TextareaState};
-use gpui_kit::Entity;
+use gpui_kit::{Entity, ScrollHandle};
 use std::rc::Rc;
 
 /// Timeline-only feed inputs.
@@ -13,7 +17,12 @@ pub(crate) struct TimelineInputs<'a, C> {
     pub selected_post_id: Option<PostId>,
     pub search_query: &'a str,
     pub feed_visible_count: Option<usize>,
+    pub feed_tab: FeedTab,
+    pub inspector_expanded: bool,
+    pub stream_scroll: &'a ScrollHandle,
     pub on_load_more: Option<LoadMoreCallback>,
+    pub on_select_feed_tab: SelectFeedTabCallback,
+    pub on_toggle_replies: ToggleRepliesCallback,
 }
 
 /// Inputs of the non-timeline tool views (knowledge vault).
@@ -38,7 +47,12 @@ pub(crate) fn split_params<C>(params: FeedParams<'_, C>) -> (PostCallbacks, Time
         selected_post_id: params.selected_post_id,
         search_query: params.search_query,
         feed_visible_count: params.feed_visible_count,
+        feed_tab: params.feed_tab,
+        inspector_expanded: params.inspector_expanded,
+        stream_scroll: params.stream_scroll,
         on_load_more: params.on_load_more,
+        on_select_feed_tab: params.on_select_feed_tab,
+        on_toggle_replies: params.on_toggle_replies,
     };
     let tools = ToolViewInputs {
         doc_title_input: params.doc_title_input,

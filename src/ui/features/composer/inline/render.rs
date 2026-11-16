@@ -6,8 +6,10 @@ use super::super::consts::{
     INSERT_TAG_BTN_ID, SUBMIT_POST_BTN_ID, WIKILINK_OPEN_SNIPPET,
 };
 use super::super::keys::{is_submit_chord, SubmitPostDraft};
+use super::super::messages::render_notice;
 use super::layout::{avatar_column, composer_row, editor_column, toolbar};
 use super::PostComposerView;
+use crate::domain::MAX_POST_CHARS;
 use crate::ui::icons::LucideIcon;
 use gpui_kit::base::Disableable;
 use gpui_kit::component::button::{Button, ButtonVariants};
@@ -32,9 +34,10 @@ impl Render for PostComposerView {
             self.draft_length,
             theme,
         );
+        let notice = self.notice(cx).map(|text| render_notice(text, theme));
         composer_row(
             avatar_column(avatar, theme),
-            editor_column(self.textarea(cx), actions, theme),
+            editor_column(self.textarea(cx), notice, actions, theme),
             theme,
         )
     }
@@ -45,7 +48,7 @@ impl PostComposerView {
         Button::new(SUBMIT_POST_BTN_ID)
             .primary()
             .small()
-            .disabled(self.draft_length == 0)
+            .disabled(self.draft_length == 0 || self.draft_length > MAX_POST_CHARS)
             .label(t!("composer.post_button").to_string())
             .on_click(cx.listener(|this, _, window, cx| {
                 this.submit(window, cx);

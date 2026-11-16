@@ -25,23 +25,26 @@ impl AppState {
             content,
             link_url,
             image_path,
-            reply_to_id.clone(),
-            quote_id.clone(),
+            reply_to_id,
+            quote_id,
             None,
         )?;
 
-        // If this is a reply to an existing post, increment parent's replies_count and persist
-        if let Some(ref parent_id) = reply_to_id {
-            self.increment_replies_count(parent_id);
-        }
+        self.commit_post(post)?;
+        self.draft_text.clear();
+        Ok(post_id)
+    }
 
+    /// Persists a validated post, bumps its parent's reply counter and prepends it.
+    pub(super) fn commit_post(&mut self, post: Post) -> Result<()> {
         if let Some(ref db) = self.db {
             db.save_post(&post)?;
         }
-
+        if let Some(parent_id) = post.reply_to_id.clone() {
+            self.increment_replies_count(&parent_id);
+        }
         self.insert_post_at_head(post);
-        self.draft_text.clear();
-        Ok(post_id)
+        Ok(())
     }
 
     /// Creates and publishes a standard thought to the current network timeline.

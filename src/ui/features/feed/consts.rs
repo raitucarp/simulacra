@@ -4,8 +4,10 @@
 pub const DEFAULT_FEED_WINDOW_SIZE: usize = 8;
 /// Number of additional thoughts to load when expanding the timeline stream.
 pub const FEED_WINDOW_INCREMENT: usize = 12;
-/// Maximum number of direct/indirect replies rendered in the focus thread inspector.
+/// Direct replies shown in the focus thread inspector before "show more".
 pub const MAX_INSPECTOR_REPLIES: usize = 4;
+/// Replies shown under each direct reply (one nesting level) before "show more".
+pub const MAX_INSPECTOR_NESTED_REPLIES: usize = 1;
 
 /// Default width of the stream pane in the resizable split.
 pub(crate) const STREAM_PANE_DEFAULT_WIDTH: f32 = 520.0;
@@ -26,6 +28,10 @@ pub(crate) const INSPECTOR_SCROLL_ID: &str = "focus-thread-scroll-stream";
 pub(crate) const LOAD_MORE_CONTAINER_ID: &str = "feed-load-more-container";
 /// Element id of the load-more button.
 pub(crate) const LOAD_MORE_BUTTON_ID: &str = "btn-load-more-posts";
+/// Element id of the inspector "show more / fewer replies" button.
+pub(crate) const TOGGLE_REPLIES_BUTTON_ID: &str = "btn-toggle-inspector-replies";
+/// Element id prefix of the stream tabs (suffixed with the tab position).
+pub(crate) const STREAM_TAB_ID: &str = "stream-tab";
 /// Element id of the inspector quick reply button.
 pub(crate) const QUICK_REPLY_BUTTON_ID: &str = "btn-quick-reply-thread";
 

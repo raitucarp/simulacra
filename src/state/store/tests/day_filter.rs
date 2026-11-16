@@ -62,3 +62,25 @@ fn heatmap_counts_the_active_network_today() {
     assert_eq!(heatmap.total(), before + 1);
     assert!(heatmap.count_on(heatmap.today()) >= 1);
 }
+
+#[test]
+fn grouped_feed_entries_respect_the_day_filter() {
+    use crate::state::{feed_entries, FeedTab};
+    use chrono::Local;
+    let mut state = AppState::new_in_memory();
+    let day = date(2001, 2, 3);
+    let id = state.submit_post("A thought from long ago").unwrap();
+    let local_noon = Local.from_local_datetime(&day.and_hms_opt(12, 0, 0).unwrap()).earliest().unwrap();
+    restamp(&mut state, &id, local_noon.with_timezone(&Utc));
+    let unfiltered = feed_entries(&state, FeedTab::ForYou).len();
+
+    state.toggle_feed_day_filter(day);
+    let ids: Vec<PostId> = feed_entries(&state, FeedTab::ForYou).iter().map(|p| p.id.clone()).collect();
+    assert_eq!(ids, vec![id]);
+    assert_eq!(state.day_scoped(state.filtered_posts("long ago")).count(), 1);
+    assert_eq!(state.day_scoped(state.filtered_posts("nothing like this")).count(), 0);
+
+    state.clear_feed_day_filter();
+    assert_eq!(feed_entries(&state, FeedTab::ForYou).len(), unfiltered);
+    assert!(unfiltered > 1);
+}

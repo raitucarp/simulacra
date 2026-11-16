@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs><linearGradient id="g-guide-read" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="{{accent}}"/><stop offset="1" stop-color="{{accent}}" stop-opacity="0.75"/>
+  </linearGradient></defs>
+  <ellipse cx="64" cy="118" rx="34" ry="5" fill="{{fg}}" fill-opacity="0.08"/>
+  <path d="M30 70 Q16 84 26 102 Q36 96 36 80 Z" fill="{{accent}}" stroke="{{fg}}" stroke-width="2" stroke-linejoin="round"/><path d="M98 70 Q112 84 102 102 Q92 96 92 80 Z" fill="{{accent}}" stroke="{{fg}}" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M30 62 Q30 30 64 28 Q98 30 98 62 L98 88 Q98 112 64 114 Q30 112 30 88 Z" fill="url(#g-guide-read)"/>
+  <path d="M38 34 L32 18 L50 30 Z M90 34 L96 18 L78 30 Z" fill="{{accent}}"/>
+  <path d="M44 84 Q64 74 84 84 Q84 106 64 108 Q44 106 44 84 Z" fill="{{elevated}}"/>
+  <path d="M52 90 l4 4 l4 -4 M60 98 l4 4 l4 -4 M68 90 l4 4 l4 -4" stroke="{{accent}}" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="50" cy="56" r="15" fill="{{surface}}" stroke="{{fg}}" stroke-width="3"/>
+  <circle cx="78" cy="56" r="15" fill="{{surface}}" stroke="{{fg}}" stroke-width="3"/>
+  <path d="M63 56 L65 56" stroke="{{fg}}" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="50" cy="60" r="5" fill="{{fg}}"/><circle cx="78" cy="60" r="5" fill="{{fg}}"/><path d="M36 50 Q50 44 64 50 M64 50 Q78 44 92 50" stroke="{{fg}}" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <path d="M59 68 L64 76 L69 68 Z" fill="{{warning}}" stroke="{{fg}}" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M36 90 L64 96 L92 90 L92 112 L64 118 L36 112 Z" fill="{{accent_2}}" stroke="{{fg}}" stroke-width="2.5" stroke-linejoin="round"/><path d="M64 96 L64 118" stroke="{{fg}}" stroke-width="2"/><path d="M42 98 L58 101 M42 104 L58 107 M70 101 L86 98 M70 107 L86 104" stroke="{{surface}}" stroke-width="2" stroke-linecap="round"/>
+  <path d="M54 113 l-3 6 M58 114 l0 6 M70 114 l0 6 M74 113 l3 6" stroke="{{warning}}" stroke-width="3" stroke-linecap="round"/>
+</svg>

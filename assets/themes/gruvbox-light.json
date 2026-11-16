@@ -1,0 +1,22 @@
+{
+  "id": "gruvbox-light",
+  "name": "Gruvbox Light",
+  "mode": "light",
+  "credit": "Pavel Pertsev (MIT)",
+  "colors": {
+    "bg": "#fbf1c7",
+    "surface": "#f2e5bc",
+    "elevated": "#ebdbb2",
+    "border": "#d5c4a1",
+    "fg": "#3c3836",
+    "fg_muted": "#665c54",
+    "accent": "#af3a03",
+    "accent_2": "#8f3f71",
+    "agent": "#076678",
+    "success": "#79740e",
+    "warning": "#b57614",
+    "danger": "#9d0006",
+    "info": "#427b58",
+    "selection": "#d5c4a1"
+  }
+}

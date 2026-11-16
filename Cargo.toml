@@ -17,6 +17,9 @@ reqwest = { version = "0.12", default-features = false, features = ["json", "rus
 nano-vectordb-rs = { git = "https://github.com/VectorInstitute/nano-vectordb-rs" }
 rfd = "0.15"
 
+[dev-dependencies]
+resvg = "0.45.1"
+
 [profile.dev]
 opt-level = 1
 debug = 0

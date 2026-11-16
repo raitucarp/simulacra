@@ -1,0 +1,22 @@
+{
+  "id": "one-light",
+  "name": "One Light",
+  "mode": "light",
+  "credit": "Atom (MIT)",
+  "colors": {
+    "bg": "#fafafa",
+    "surface": "#f0f0f1",
+    "elevated": "#e5e5e6",
+    "border": "#d4d4d6",
+    "fg": "#383a42",
+    "fg_muted": "#626570",
+    "accent": "#4078f2",
+    "accent_2": "#a626a4",
+    "agent": "#0184bc",
+    "success": "#50a14f",
+    "warning": "#986801",
+    "danger": "#e45649",
+    "info": "#0184bc",
+    "selection": "#d7e3fc"
+  }
+}

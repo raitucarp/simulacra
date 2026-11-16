@@ -1,0 +1,22 @@
+{
+  "id": "tokyo-night",
+  "name": "Tokyo Night",
+  "mode": "dark",
+  "credit": "enkia (MIT)",
+  "colors": {
+    "bg": "#1a1b26",
+    "surface": "#16161e",
+    "elevated": "#24283b",
+    "border": "#2f3549",
+    "fg": "#c0caf5",
+    "fg_muted": "#8b90b1",
+    "accent": "#7aa2f7",
+    "accent_2": "#bb9af7",
+    "agent": "#7dcfff",
+    "success": "#9ece6a",
+    "warning": "#e0af68",
+    "danger": "#f7768e",
+    "info": "#7dcfff",
+    "selection": "#283457"
+  }
+}

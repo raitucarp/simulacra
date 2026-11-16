@@ -1,0 +1,22 @@
+{
+  "id": "simulacra-midnight",
+  "name": "Simulacra Midnight",
+  "mode": "dark",
+  "credit": "Simulacra",
+  "colors": {
+    "bg": "#000000",
+    "surface": "#08080a",
+    "elevated": "#111115",
+    "border": "#1e1e22",
+    "fg": "#f4f4f5",
+    "fg_muted": "#7e7e86",
+    "accent": "#8b5cf6",
+    "accent_2": "#38bdf8",
+    "agent": "#a78bfa",
+    "success": "#10b981",
+    "warning": "#eab308",
+    "danger": "#ef4444",
+    "info": "#38bdf8",
+    "selection": "#2e1065"
+  }
+}

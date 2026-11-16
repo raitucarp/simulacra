@@ -1,0 +1,22 @@
+{
+  "id": "synthwave-84",
+  "name": "Synthwave '84",
+  "mode": "dark",
+  "credit": "Robb Owen (MIT)",
+  "colors": {
+    "bg": "#262335",
+    "surface": "#1e1a2e",
+    "elevated": "#2a2139",
+    "border": "#495495",
+    "fg": "#f5f2ff",
+    "fg_muted": "#a69ec4",
+    "accent": "#ff7edb",
+    "accent_2": "#36f9f6",
+    "agent": "#72f1b8",
+    "success": "#72f1b8",
+    "warning": "#fede5d",
+    "danger": "#fe4450",
+    "info": "#36f9f6",
+    "selection": "#463465"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "id": "catppuccin-latte",
+  "name": "Catppuccin Latte",
+  "mode": "light",
+  "credit": "Catppuccin (MIT)",
+  "colors": {
+    "bg": "#eff1f5",
+    "surface": "#e6e9ef",
+    "elevated": "#dce0e8",
+    "border": "#ccd0da",
+    "fg": "#4c4f69",
+    "fg_muted": "#5d6078",
+    "accent": "#8839ef",
+    "accent_2": "#ea76cb",
+    "agent": "#1e66f5",
+    "success": "#40a02b",
+    "warning": "#df8e1d",
+    "danger": "#d20f39",
+    "info": "#04a5e5",
+    "selection": "#ccd0da"
+  }
+}

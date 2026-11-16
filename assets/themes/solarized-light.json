@@ -1,0 +1,22 @@
+{
+  "id": "solarized-light",
+  "name": "Solarized Light",
+  "mode": "light",
+  "credit": "Ethan Schoonover (MIT)",
+  "colors": {
+    "bg": "#fdf6e3",
+    "surface": "#f5efdc",
+    "elevated": "#eee8d5",
+    "border": "#ddd6c1",
+    "fg": "#073642",
+    "fg_muted": "#536b72",
+    "accent": "#268bd2",
+    "accent_2": "#d33682",
+    "agent": "#2aa198",
+    "success": "#859900",
+    "warning": "#9a7400",
+    "danger": "#dc322f",
+    "info": "#2aa198",
+    "selection": "#e4dcc4"
+  }
+}

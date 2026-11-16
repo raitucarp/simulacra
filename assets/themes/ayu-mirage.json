@@ -1,0 +1,22 @@
+{
+  "id": "ayu-mirage",
+  "name": "Ayu Mirage",
+  "mode": "dark",
+  "credit": "Ayu Theme (MIT)",
+  "colors": {
+    "bg": "#1f2430",
+    "surface": "#1c212b",
+    "elevated": "#242936",
+    "border": "#33415e",
+    "fg": "#cccac2",
+    "fg_muted": "#8b929a",
+    "accent": "#ffcc66",
+    "accent_2": "#d4bfff",
+    "agent": "#5ccfe6",
+    "success": "#87d96c",
+    "warning": "#ffd173",
+    "danger": "#f28779",
+    "info": "#73d0ff",
+    "selection": "#33415e"
+  }
+}

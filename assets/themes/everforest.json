@@ -1,0 +1,22 @@
+{
+  "id": "everforest",
+  "name": "Everforest",
+  "mode": "dark",
+  "credit": "sainnhe (MIT)",
+  "colors": {
+    "bg": "#2d353b",
+    "surface": "#272e33",
+    "elevated": "#343f44",
+    "border": "#475258",
+    "fg": "#d3c6aa",
+    "fg_muted": "#a2aca1",
+    "accent": "#a7c080",
+    "accent_2": "#d699b6",
+    "agent": "#7fbbb3",
+    "success": "#a7c080",
+    "warning": "#dbbc7f",
+    "danger": "#e67e80",
+    "info": "#83c092",
+    "selection": "#475258"
+  }
+}

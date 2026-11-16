@@ -1,0 +1,22 @@
+{
+  "id": "github-light",
+  "name": "GitHub Light",
+  "mode": "light",
+  "credit": "GitHub (MIT)",
+  "colors": {
+    "bg": "#ffffff",
+    "surface": "#f6f8fa",
+    "elevated": "#eaeef2",
+    "border": "#d0d7de",
+    "fg": "#1f2328",
+    "fg_muted": "#59636e",
+    "accent": "#0969da",
+    "accent_2": "#8250df",
+    "agent": "#0550ae",
+    "success": "#1a7f37",
+    "warning": "#9a6700",
+    "danger": "#cf222e",
+    "info": "#0969da",
+    "selection": "#ddf4ff"
+  }
+}

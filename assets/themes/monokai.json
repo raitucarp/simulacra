@@ -1,0 +1,22 @@
+{
+  "id": "monokai",
+  "name": "Monokai",
+  "mode": "dark",
+  "credit": "Wimer Hazenberg",
+  "colors": {
+    "bg": "#272822",
+    "surface": "#1e1f1c",
+    "elevated": "#3e3d32",
+    "border": "#49483e",
+    "fg": "#f8f8f2",
+    "fg_muted": "#a9a9a3",
+    "accent": "#a6e22e",
+    "accent_2": "#f92672",
+    "agent": "#66d9ef",
+    "success": "#a6e22e",
+    "warning": "#e6db74",
+    "danger": "#f92672",
+    "info": "#66d9ef",
+    "selection": "#49483e"
+  }
+}

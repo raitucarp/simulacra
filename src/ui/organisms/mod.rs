@@ -1,6 +1,9 @@
 //! Organism-level layout panels.
 
-pub mod agent_lab_view;
+/// Compatibility path: the agent editor now lives in `crate::ui::features::agent_editor`.
+pub mod agent_lab_view {
+    pub use crate::ui::features::agent_editor::*;
+}
 pub mod app_title_bar;
 pub mod composer_modal;
 pub mod knowledge_vault_view;

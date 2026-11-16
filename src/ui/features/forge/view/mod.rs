@@ -7,11 +7,13 @@ mod actions;
 mod begin;
 mod describe;
 mod handle;
+mod hear;
 mod keys;
 mod lifecycle;
 mod state;
 
 pub use handle::ForgeHandle;
+pub use hear::HearStatus;
 pub use keys::{init_key_bindings, Redo, Undo, FORGE_KEY_CONTEXT};
 pub use state::{DescribeStatus, ForgeContext, ForgeOpen, ForgeScreen, GuideState, Notice, StartState};
 
@@ -59,6 +61,10 @@ pub struct ForgeView {
     pub(crate) notice: Option<Notice>,
     /// The portrait part whose options the Appearance step shows.
     pub(crate) portrait_slot: PortraitSlot,
+    /// "Hear them speak" on the Voice step.
+    pub(crate) hear: HearStatus,
+    /// Whether the Grimoire's advanced settings are unfolded.
+    pub(crate) grimoire_open: bool,
     pub(crate) focus: FocusHandle,
 }
 

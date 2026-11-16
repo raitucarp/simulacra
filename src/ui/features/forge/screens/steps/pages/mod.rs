@@ -1,13 +1,18 @@
 //! The option pages of each step, plus the field-control builders they share.
 
 mod appearance;
+mod daily;
 mod generic;
+mod grimoire;
 mod origin;
 mod origin_life;
 mod photo;
 mod portrait;
+mod relationships;
 mod review;
 mod review_card;
+mod trait_block;
+mod voice;
 
 use super::super::common::{labeled, message};
 use crate::state::forge::{DraftEdit, Severity, TextField, ValidationIssue};

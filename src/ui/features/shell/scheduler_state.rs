@@ -10,7 +10,7 @@ use std::collections::HashMap;
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
 /// How often the heartbeat asks the scheduling core which agents are due.
-pub const HEARTBEAT_INTERVAL: Duration = Duration::from_secs(60);
+pub const HEARTBEAT_INTERVAL: Duration = crate::agent::schedule::HEARTBEAT_INTERVAL;
 
 /// Scheduler bookkeeping owned by the root view.
 pub struct SchedulerState {

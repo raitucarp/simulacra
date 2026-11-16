@@ -1,7 +1,7 @@
 //! Plain state records of the forge: what it was opened with, which screen shows, the start
 //! screen, Mnemo, and the transient notice.
 
-use crate::agent::LlmSettings;
+use crate::agent::{LlmSettings, PromptContext};
 use crate::domain::{ArchetypeClass, NetworkId, Profile};
 use crate::state::forge::{AgentDraft, ForgeKind};
 
@@ -16,6 +16,8 @@ pub struct ForgeContext {
     pub llm: LlmSettings,
     /// Whether Mnemo starts hidden.
     pub guide_hidden: bool,
+    /// The active network's name and grounding sources, for compiled-prompt previews.
+    pub prompt: PromptContext,
 }
 
 /// How the forge was opened.

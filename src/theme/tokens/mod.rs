@@ -115,6 +115,8 @@ theme_tokens! {
         forge_radar_size, forge_skill_bar_height, forge_trading_card_width, forge_explainer_width,
         forge_empty_art_width, forge_tile_min_height, forge_bubble_max_width, forge_preset_card_width,
         forge_compact_card_width,
+        // Agent Forge Birthsign: the Enneagram wheel and its clickable points
+        forge_wheel_size, forge_wheel_dot_size,
     ],
     // Typography Hierarchy & Line Height; heatmap level opacities; graph dimming & curvature
     floats: [

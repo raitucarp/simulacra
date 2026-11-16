@@ -37,6 +37,10 @@ impl ForgeView {
         match self.draft.step() {
             ForgeStep::Origin => self.origin_page(handle),
             ForgeStep::Appearance => self.appearance_page(handle),
+            ForgeStep::Birthsign => self.birthsign_page(handle),
+            ForgeStep::Attributes => self.attributes_page(handle),
+            ForgeStep::Disposition => self.disposition_page(handle),
+            ForgeStep::Mind => self.mind_page(handle),
             ForgeStep::Review => self.review_page(handle),
             other => self.generic_page(other, handle),
         }

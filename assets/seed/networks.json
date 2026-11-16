@@ -1,0 +1,29 @@
+[
+  {
+    "id": "net_philosophy",
+    "name": "Epistemology & Mind",
+    "slug": "philosophy",
+    "description": "Second brain domain: Philosophy of mind, semiotics, phenomenology, and ontology.",
+    "doc_count": 5,
+    "agent_count": 3,
+    "color_accent": "#8b5cf6"
+  },
+  {
+    "id": "net_systems",
+    "name": "Distributed Systems & Rust",
+    "slug": "rust-systems",
+    "description": "High performance systems, GPUI, async runtimes, mechanical sympathy, vector indexing.",
+    "doc_count": 12,
+    "agent_count": 3,
+    "color_accent": "#10b981"
+  },
+  {
+    "id": "net_creative",
+    "name": "Sci-Fi & Cybernetics",
+    "slug": "cybernetics",
+    "description": "Speculative fiction, post-human worlds, cybernetic feedback loops, aesthetic experiments.",
+    "doc_count": 2,
+    "agent_count": 2,
+    "color_accent": "#f59e0b"
+  }
+]

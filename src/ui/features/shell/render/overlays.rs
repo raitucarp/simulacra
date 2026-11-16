@@ -44,6 +44,7 @@ impl AppView {
                 self.theme.clone(),
                 bind.with(Self::select_network),
                 bind.act(Self::dismiss_workspace),
+                bind.act(Self::open_create_network),
             )
         })
     }

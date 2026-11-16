@@ -80,6 +80,7 @@ impl ComposerModalView {
         let pick_image = self.callbacks.on_pick_image.clone();
         let toggle_image = self.callbacks.on_toggle_image.clone();
         let toggle_link = self.callbacks.on_toggle_link.clone();
+        let insert_tag = self.callbacks.on_insert_tag.clone();
         div()
             .w_full()
             .flex()
@@ -98,9 +99,14 @@ impl ComposerModalView {
             )
             .child(
                 attachment_button(MODAL_TOGGLE_LINK_BTN_ID, LucideIcon::Link2)
+                    .tooltip(t!("composer.attach_link").to_string())
                     .on_click(move |_, window, cx| (toggle_link)(window, cx)),
             )
-            .child(attachment_button(MODAL_TAG_BTN_ID, LucideIcon::Hash))
+            .child(
+                attachment_button(MODAL_TAG_BTN_ID, LucideIcon::Hash)
+                    .tooltip(t!("composer.insert_tag").to_string())
+                    .on_click(move |_, window, cx| (insert_tag)(window, cx)),
+            )
     }
 }
 

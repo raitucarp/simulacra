@@ -4,6 +4,7 @@ use super::feed_state::FeedState;
 use super::graph_state::GraphState;
 use super::lab_state::{LabState, LlmInputs};
 use super::scheduler_state::SchedulerState;
+use super::settings_draft::SettingsDraft;
 use crate::i18n::Language;
 use crate::state::AppState;
 use crate::theme::ThemeTokens;
@@ -32,6 +33,8 @@ pub struct ChromeState {
     pub is_lang_menu_open: bool,
     pub is_settings_open: bool,
     pub active_settings_tab: SettingsTab,
+    /// Unsaved provider/model picks of the open settings modal.
+    pub settings_draft: SettingsDraft,
     pub is_workspace_open: bool,
     pub is_left_sidebar_collapsed: bool,
     pub is_right_sidebar_open: bool,
@@ -46,6 +49,7 @@ impl ChromeState {
             is_lang_menu_open: false,
             is_settings_open: false,
             active_settings_tab: SettingsTab::AiIntelligence,
+            settings_draft: SettingsDraft::default(),
             is_workspace_open: false,
             is_left_sidebar_collapsed: false,
             is_right_sidebar_open: true,

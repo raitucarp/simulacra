@@ -1,17 +1,18 @@
 //! Floating workspace popover: scrim, card, header, network list and create footer.
 
 use super::consts::{
-    POPOVER_LEFT_COLLAPSED_PX, POPOVER_LEFT_EXPANDED_PX, POPOVER_TOP_PX, POPOVER_WIDTH_PX,
+    CREATE_NETWORK_ID, POPOVER_LEFT_COLLAPSED_PX, POPOVER_LEFT_EXPANDED_PX, POPOVER_TOP_PX,
+    POPOVER_WIDTH_PX,
 };
 use super::popover_item::render_network_item;
-use super::WorkspacePopover;
+use super::{CreateNetworkCallback, WorkspacePopover};
 use crate::theme::ThemeTokens;
 use crate::ui::icons::LucideIcon;
 use gpui_kit::base::StyledExt;
 use gpui_kit::component::Icon;
 use gpui_kit::{
     div, px, App, Div, InteractiveElement, IntoElement, MouseButton, ParentElement, RenderOnce,
-    Styled, Window,
+    Stateful, StatefulInteractiveElement, Styled, Window,
 };
 use rust_i18n::t;
 use std::rc::Rc;
@@ -19,7 +20,7 @@ use std::rc::Rc;
 impl RenderOnce for WorkspacePopover {
     fn render(self, _window: &mut Window, _cx: &mut App) -> impl IntoElement {
         let theme = self.theme;
-        let on_dismiss = self.on_dismiss;
+        let (on_dismiss, on_create) = (self.on_dismiss, self.on_create);
         let on_select = Rc::new(self.on_select);
         let active_id = self.active_network.as_ref().map(|n| n.id.clone());
         let left_offset = if self.is_collapsed {
@@ -35,6 +36,7 @@ impl RenderOnce for WorkspacePopover {
         div()
             .absolute()
             .inset_0()
+            .occlude()
             .on_mouse_down(MouseButton::Left, move |_, window, cx| {
                 on_dismiss(window, cx);
             })
@@ -45,7 +47,7 @@ impl RenderOnce for WorkspacePopover {
                     // List of Networks
                     .children(items)
                     // Footer: Create Workspace Action
-                    .child(render_create_footer(&theme)),
+                    .child(render_create_footer(on_create, &theme)),
             )
     }
 }
@@ -89,9 +91,12 @@ fn render_header(theme: &ThemeTokens) -> Div {
         )
 }
 
-fn render_create_footer(theme: &ThemeTokens) -> Div {
+/// "+ Create Network" row opening the naming dialog.
+fn render_create_footer(on_create: CreateNetworkCallback, theme: &ThemeTokens) -> Stateful<Div> {
     let hover_bg = theme.hover_bg;
     div()
+        .id(CREATE_NETWORK_ID)
+        .on_click(move |_, window, cx| on_create(window, cx))
         .mt_1()
         .pt_1p5()
         .border_t_1()

@@ -19,17 +19,15 @@ composer:
   tag: "#タグ"
   post_button: "投稿"
   char_warning: "文字数制限超過"
-  char_counter: "%{count}/280"
+  char_counter: "%{count}/%{max}"
 
 feed:
   no_posts: "このネットワークにはまだ投稿がありません。最初の思考を記録しましょう！"
   general_timeline: "全体タイムライン"
 
 sidebar:
-  search_placeholder: "マインドDBのベクトル検索..."
   grounding_knowledge: "グラウンディング知識"
   upload_doc: "+ 文書追加"
-  grounding_desc: "nano-vectordb-rs でベクトル化済み。エージェントはこの文書に基づいて回答します。"
   popular_tags: "人気のタグ"
   posts_count: "%{count} 件の思考"
   spawned_personas: "生成ペルソナ (%{count} 体稼働中)"

@@ -6,7 +6,24 @@ use simulacra::domain::{Post, PostId, Profile};
 use simulacra::state::AppState;
 use simulacra::storage::Database;
 use simulacra::theme::minimalist_dark;
-use simulacra::ui::molecules::post_item::{extract_host_domain, render_post_item, ThreadlineStyle};
+use simulacra::ui::molecules::post_item::{
+    extract_host_domain, render_post_item, PostAction, PostCardHandlers, ThreadlineStyle,
+};
+use std::rc::Rc;
+
+/// Card handlers that ignore every interaction (rendering-only tests).
+fn noop_handlers() -> PostCardHandlers {
+    let noop: PostAction = Rc::new(|_, _| {});
+    PostCardHandlers {
+        on_select: noop.clone(),
+        on_like: noop.clone(),
+        on_reply: noop.clone(),
+        on_repost: noop.clone(),
+        on_quote: noop,
+        on_open_post: Rc::new(|_, _, _| {}),
+        on_delete: None,
+    }
+}
 use simulacra::ui::organisms::compute_stream_threadline_style;
 
 #[test]
@@ -138,11 +155,7 @@ fn test_stress_quotes_nonexistent_and_deep_nesting() {
         &theme,
         false,
         ThreadlineStyle::None,
-        |_w, _cx| {},
-        |_, _w, _cx| {},
-        |_, _w, _cx| {},
-        |_, _w, _cx| {},
-        |_, _w, _cx| {},
+        noop_handlers(),
     );
 
     // Test quote referencing missing post (e.g. database post whose referenced quote was deleted)
@@ -156,11 +169,7 @@ fn test_stress_quotes_nonexistent_and_deep_nesting() {
         &theme,
         false,
         ThreadlineStyle::None,
-        |_w, _cx| {},
-        |_, _w, _cx| {},
-        |_, _w, _cx| {},
-        |_, _w, _cx| {},
-        |_, _w, _cx| {},
+        noop_handlers(),
     );
 }
 
@@ -201,11 +210,7 @@ fn test_stress_image_attachment_fallback() {
         &theme,
         false,
         ThreadlineStyle::None,
-        |_w, _cx| {},
-        |_, _w, _cx| {},
-        |_, _w, _cx| {},
-        |_, _w, _cx| {},
-        |_, _w, _cx| {},
+        noop_handlers(),
     );
 }
 
@@ -435,11 +440,7 @@ fn test_empirical_valid_vs_nonexistent_image_attachments() {
             &theme,
             false,
             ThreadlineStyle::None,
-            |_w, _cx| {},
-            |_, _w, _cx| {},
-            |_, _w, _cx| {},
-            |_, _w, _cx| {},
-            |_, _w, _cx| {},
+            noop_handlers(),
         );
     }
 
@@ -473,11 +474,7 @@ fn test_empirical_valid_vs_nonexistent_image_attachments() {
             &theme,
             false,
             ThreadlineStyle::None,
-            |_w, _cx| {},
-            |_, _w, _cx| {},
-            |_, _w, _cx| {},
-            |_, _w, _cx| {},
-            |_, _w, _cx| {},
+            noop_handlers(),
         );
     }
 
@@ -607,11 +604,7 @@ fn test_empirical_link_only_thought_submission_and_persistence() {
                 &theme,
                 false,
                 ThreadlineStyle::None,
-                |_w, _cx| {},
-                |_, _w, _cx| {},
-                |_, _w, _cx| {},
-                |_, _w, _cx| {},
-                |_, _w, _cx| {},
+                noop_handlers(),
             );
         }
     }
@@ -735,11 +728,7 @@ fn test_empirical_image_and_link_combined_with_quote() {
             &theme,
             false,
             ThreadlineStyle::None,
-            |_w, _cx| {},
-            |_, _w, _cx| {},
-            |_, _w, _cx| {},
-            |_, _w, _cx| {},
-            |_, _w, _cx| {},
+            noop_handlers(),
         );
     }
 

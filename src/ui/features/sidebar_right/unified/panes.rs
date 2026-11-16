@@ -9,7 +9,7 @@ use crate::domain::Post;
 use crate::state::graph::GraphScene;
 use crate::state::AppState;
 use crate::theme::ThemeTokens;
-use super::super::knowledge_card::render_knowledge_card;
+use super::super::knowledge_card::{render_knowledge_card, ImportDocumentCallback};
 use super::super::roster::render_network_agent_roster;
 use gpui_kit::component::input::{Input, InputState};
 use gpui_kit::component::scroll::ScrollableElement;
@@ -71,9 +71,10 @@ fn render_search_box(search_input: &Entity<InputState>, theme: &ThemeTokens) -> 
 pub(super) fn render_vault_telemetry_pane(
     state: &AppState,
     search_input: &Entity<InputState>,
-    trending: Vec<AnyElement>,
+    (trending, on_import): (Vec<AnyElement>, ImportDocumentCallback),
     theme: &ThemeTokens,
 ) -> impl IntoElement {
+    let doc_count = state.current_documents().count();
     div()
         .w_full()
         .flex_1()
@@ -85,7 +86,7 @@ pub(super) fn render_vault_telemetry_pane(
         .flex_col()
         .gap(theme.spacing_md)
         .child(render_search_box(search_input, theme))
-        .child(divided_block(theme).child(render_knowledge_card(theme)))
+        .child(divided_block(theme).child(render_knowledge_card(doc_count, on_import, theme)))
         .child(
             divided_block(theme)
                 .flex()

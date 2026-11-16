@@ -7,7 +7,6 @@ use gpui_kit::component::Icon;
 use gpui_kit::*;
 
 const TELEMETRY_TITLE: &str = "NETWORK MEMBER TELEMETRY";
-const ACTIVE_LABEL: &str = "Active";
 
 fn render_title(theme: &ThemeTokens) -> Div {
     div()
@@ -30,40 +29,12 @@ fn render_title(theme: &ThemeTokens) -> Div {
         )
 }
 
-fn render_active_badge(theme: &ThemeTokens) -> Div {
-    div()
-        .flex()
-        .items_center()
-        .gap(theme.spacing_xs)
-        .px(theme.spacing_sm)
-        .py(theme.spacing_2xs)
-        .rounded(theme.radius_full)
-        .bg(theme.hover_bg)
-        .border(theme.border_width_hairline)
-        .border_color(theme.border)
-        .child(
-            div()
-                .w(theme.font_size_xs)
-                .h(theme.font_size_xs)
-                .text_color(theme.accent_success)
-                .child(Icon::new(LucideIcon::Activity)),
-        )
-        .child(
-            div()
-                .text_size(theme.font_size_xs)
-                .font_medium()
-                .text_color(theme.accent_success)
-                .child(ACTIVE_LABEL),
-        )
-}
-
 pub(super) fn render_header(theme: &ThemeTokens) -> Div {
     div()
         .flex()
         .items_center()
         .justify_between()
         .child(render_title(theme))
-        .child(render_active_badge(theme))
 }
 
 /// One label/value telemetry metric row.

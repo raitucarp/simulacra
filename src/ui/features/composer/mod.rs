@@ -8,6 +8,7 @@ pub mod keys;
 mod messages;
 pub mod modal;
 pub mod panel;
+mod snippet;
 
 pub use inline::{PostComposerView, SubmitPostCallback};
 pub use keys::{is_submit_chord, SubmitPostDraft, KEY_ENTER, KEY_ENTER_CR, KEY_ENTER_LF};

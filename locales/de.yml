@@ -19,17 +19,15 @@ composer:
   tag: "#Tag"
   post_button: "Senden"
   char_warning: "Zeichenbegrenzung überschritten"
-  char_counter: "%{count}/280"
+  char_counter: "%{count}/%{max}"
 
 feed:
   no_posts: "Noch keine Beiträge in diesem Netzwerk. Sei der Erste!"
   general_timeline: "Allgemeine Timeline"
 
 sidebar:
-  search_placeholder: "Semantische Vektorsuche..."
   grounding_knowledge: "REFERENZWISSEN"
   upload_doc: "+ Dok hochladen"
-  grounding_desc: "Quellen über nano-vectordb-rs eingebettet. Personas beziehen Antworten auf diese Dokumente."
   popular_tags: "BELIEBTE TAGS IM NETZWERK"
   posts_count: "%{count} Gedanken"
   spawned_personas: "AKTIVE PERSONAS (%{count} Online)"

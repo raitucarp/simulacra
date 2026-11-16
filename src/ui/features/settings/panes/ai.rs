@@ -2,9 +2,7 @@
 
 use super::super::callbacks::{SelectPresetModelCallback, SelectProviderCallback};
 use super::super::provider_grid::{render_preset_chips, render_provider_rows};
-use super::ai_fields::{
-    render_api_key_section, render_endpoint_section, render_model_section, render_status_banner,
-};
+use super::ai_fields::{render_api_key_section, render_endpoint_section, render_model_section};
 use super::common::{section, section_label, spaced_row};
 use super::super::consts::TEXT_SMALL;
 use crate::agent::{LlmProvider, LlmSettings};
@@ -42,8 +40,6 @@ pub(in crate::ui::features::settings) fn render_ai_pane(
         .when(is_custom, |this| this.child(render_endpoint_section(theme, endpoint_input)))
         // 4. Model Identifier & Quick Presets
         .child(render_model_section(theme, model_input, preset_chips))
-        // 5. Epistemic Status Banner
-        .child(render_status_banner(theme))
 }
 
 /// Provider grid header ("SELECT LLM PROVIDER" + active readout) above two button rows.

@@ -13,9 +13,9 @@ pub(super) const POPOVER_LEFT_EXPANDED_PX: f32 = 12.0;
 /// Popover width.
 pub(super) const POPOVER_WIDTH_PX: f32 = 260.0;
 
-/// Fallback trigger label when no network is active.
-pub(super) const NO_NETWORK_LABEL: &str = "Select Domain";
 /// Element id of the trigger button.
 pub(super) const TRIGGER_ID: &str = "workspace-trigger-btn";
 /// Element id prefix of each network row (suffixed with the row index).
 pub(super) const ITEM_ID_PREFIX: &str = "ws-item-";
+/// Element id of the "+ Create Network" footer row.
+pub(super) const CREATE_NETWORK_ID: &str = "ws-create-network";

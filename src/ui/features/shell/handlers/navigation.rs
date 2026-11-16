@@ -24,6 +24,7 @@ impl AppView {
             self.save_agent_editor_text_inputs(cx);
         }
         if tab == NavigationTab::Appearance {
+            self.revert_settings_draft(window, cx);
             self.chrome.is_settings_open = true;
             self.chrome.active_settings_tab = SettingsTab::Appearance;
             cx.notify();

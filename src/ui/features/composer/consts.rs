@@ -7,10 +7,10 @@ pub(super) const MODAL_FALLBACK_INITIAL: &str = "U";
 /// Handle shown by the composer modal when no profile is active.
 pub(super) const MODAL_FALLBACK_HANDLE: &str = "@user";
 
-/// Text appended to the draft by the inline "insert link" button.
-pub(super) const WIKILINK_OPEN_SNIPPET: &str = " [[";
-/// Text appended to the draft by the inline "insert tag" button.
-pub(super) const HASHTAG_SNIPPET: &str = " #";
+/// Token inserted at the cursor by the "insert link" button (opens a `[[post_id]]` wikilink).
+pub(super) const WIKILINK_OPEN_TOKEN: &str = "[[";
+/// Token inserted at the cursor by the "insert tag" buttons (the hashtag sigil).
+pub(super) const HASHTAG_TOKEN: &str = "#";
 
 /// Modal title prefix in reply mode (followed by the parent author's handle).
 pub(super) const REPLY_TITLE_PREFIX: &str = "Reply to";
@@ -44,6 +44,7 @@ pub(super) const MODAL_PICK_IMAGE_BTN_ID: &str = "modal-pick-image-btn";
 pub(super) const MODAL_TOGGLE_IMAGE_INPUT_BTN_ID: &str = "modal-toggle-image-input-btn";
 pub(super) const MODAL_TOGGLE_LINK_BTN_ID: &str = "modal-toggle-link-btn";
 pub(super) const MODAL_TAG_BTN_ID: &str = "modal-tag-btn";
+pub(super) const MODAL_MORE_BTN_ID: &str = "modal-more-options-btn";
 pub(super) const MODAL_SUBMIT_POST_BTN_ID: &str = "modal-submit-post-btn";
 pub(super) const MODAL_THREAD_SCROLL_ID: &str = "modal-thread-scroll";
 pub(super) const MODAL_ADD_DRAFT_BTN_ID: &str = "modal-add-draft-btn";

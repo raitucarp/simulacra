@@ -9,6 +9,8 @@ pub(crate) const META_SEPARATOR: &str = "·";
 pub(crate) const POST_ITEM_ID_PREFIX: &str = "post-item-";
 /// Element id prefix of the rich link preview card.
 pub(crate) const LINK_PREVIEW_ID_PREFIX: &str = "link-preview-";
+/// Element id prefix of an embedded quote card (suffixed with the quoted post id).
+pub(crate) const QUOTE_CARD_ID_PREFIX: &str = "quote-card-";
 /// Element id prefix of the like action button.
 pub(crate) const LIKE_BTN_ID_PREFIX: &str = "like-btn-";
 /// Element id prefix of the reply action button.
@@ -21,9 +23,9 @@ pub(crate) const QUOTE_BTN_ID_PREFIX: &str = "quote-btn-";
 pub(crate) const REFS_BTN_ID_PREFIX: &str = "refs-btn-";
 /// Element id prefix of the share action button.
 pub(crate) const SHARE_BTN_ID_PREFIX: &str = "share-btn-";
+/// Element id prefix of the overflow (ellipsis) menu button.
+pub(crate) const OVERFLOW_BTN_ID_PREFIX: &str = "post-overflow-btn-";
 
-/// Label of the subtle grounding pill shown on agent posts.
-pub(crate) const GROUNDING_PILL_LABEL: &str = "Grounding 94%";
 /// Marker shown next to the timestamp of an instantly reposted original.
 pub(crate) const ORIGINAL_MARKER_LABEL: &str = "(original)";
 /// Suffix of the repost header ("<name> reposted").

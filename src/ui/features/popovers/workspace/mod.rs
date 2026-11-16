@@ -12,6 +12,7 @@ use rust_i18n::t;
 
 pub type SelectNetworkCallback = Box<dyn Fn(NetworkId, &mut Window, &mut App) + 'static>;
 pub type ToggleWorkspaceCallback = Box<dyn Fn(&mut Window, &mut App) + 'static>;
+pub type CreateNetworkCallback = Box<dyn Fn(&mut Window, &mut App) + 'static>;
 
 /// Atomic Workspace Trigger button rendered in the sidebar.
 #[derive(IntoElement)]
@@ -50,9 +51,11 @@ pub struct WorkspacePopover {
     theme: ThemeTokens,
     on_select: SelectNetworkCallback,
     on_dismiss: ToggleWorkspaceCallback,
+    on_create: CreateNetworkCallback,
 }
 
 impl WorkspacePopover {
+    #[allow(clippy::too_many_arguments)]
     pub fn new(
         active_network: Option<Network>,
         networks: Vec<Network>,
@@ -60,6 +63,7 @@ impl WorkspacePopover {
         theme: ThemeTokens,
         on_select: impl Fn(NetworkId, &mut Window, &mut App) + 'static,
         on_dismiss: impl Fn(&mut Window, &mut App) + 'static,
+        on_create: impl Fn(&mut Window, &mut App) + 'static,
     ) -> Self {
         Self {
             active_network,
@@ -68,6 +72,7 @@ impl WorkspacePopover {
             theme,
             on_select: Box::new(on_select),
             on_dismiss: Box::new(on_dismiss),
+            on_create: Box::new(on_create),
         }
     }
 }

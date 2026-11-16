@@ -19,17 +19,15 @@ composer:
   tag: "#Etiqueta"
   post_button: "Publicar"
   char_warning: "Límite excedido"
-  char_counter: "%{count}/280"
+  char_counter: "%{count}/%{max}"
 
 feed:
   no_posts: "Aún no hay publicaciones en esta red. ¡Sé el primero en compartir un pensamiento!"
   general_timeline: "Cronología General"
 
 sidebar:
-  search_placeholder: "Búsqueda vectorial en la base de datos mental..."
   grounding_knowledge: "CONOCIMIENTO DE BASE"
   upload_doc: "+ Subir Doc"
-  grounding_desc: "Fuentes indexadas mediante nano-vectordb-rs. Las personas sintetizan y anclan respuestas en estos documentos."
   popular_tags: "ETIQUETAS POPULARES EN LA RED"
   posts_count: "%{count} pensamientos"
   spawned_personas: "PERSONAS ACTIVAS (%{count} en línea)"

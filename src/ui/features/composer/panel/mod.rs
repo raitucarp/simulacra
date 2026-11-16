@@ -42,6 +42,8 @@ pub struct ComposerModalPanel {
     is_open: bool,
     mode: ComposerModalMode,
     drafts: Vec<DraftSlot>,
+    /// Draft that last had focus; toolbar insertions target it.
+    active_draft: usize,
     link_input: Entity<InputState>,
     image_input: Entity<InputState>,
     image_path: Option<String>,
@@ -70,6 +72,7 @@ impl ComposerModalPanel {
             is_open: false,
             mode: ComposerModalMode::NewThread,
             drafts: Vec::new(),
+            active_draft: 0,
             link_input,
             image_input,
             image_path: None,

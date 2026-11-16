@@ -1,13 +1,14 @@
 //! Shared post interaction callbacks and the post card renderer wired to them.
 
 use super::params::{
-    LikePostCallback, QuotePostCallback, ReplyPostCallback, RepostPostCallback, SelectPostCallback,
+    DeletePostCallback, LikePostCallback, QuotePostCallback, ReplyPostCallback, RepostPostCallback,
+    SelectPostCallback,
 };
-use crate::domain::Post;
+use crate::domain::{Post, PostId};
 use crate::state::AppState;
 use crate::theme::ThemeTokens;
-use crate::ui::features::post::{render_post_item, ThreadlineStyle};
-use gpui_kit::{AnyElement, IntoElement};
+use crate::ui::features::post::{render_post_item, PostAction, PostCardHandlers, ThreadlineStyle};
+use gpui_kit::{AnyElement, App, IntoElement, Window};
 use std::rc::Rc;
 
 /// Reference-counted post interaction callbacks shared by every rendered card.
@@ -18,6 +19,7 @@ pub(crate) struct PostCallbacks {
     pub on_select: Rc<SelectPostCallback>,
     pub on_repost: Rc<RepostPostCallback>,
     pub on_quote: Rc<QuotePostCallback>,
+    pub on_delete: Rc<DeletePostCallback>,
 }
 
 /// Visual and interaction mode of a rendered card.
@@ -29,7 +31,28 @@ pub(crate) struct CardMode {
     pub selectable: bool,
 }
 
+/// Binds a `(PostId, Window, App)` callback to one post.
+fn bind<F: Fn(PostId, &mut Window, &mut App) + ?Sized + 'static>(cb: &Rc<Box<F>>, id: &PostId) -> PostAction {
+    let (cb, id) = (cb.clone(), id.clone());
+    Rc::new(move |window, cx| cb(id.clone(), window, cx))
+}
+
 impl PostCallbacks {
+    /// Card handlers for `post`; delete is offered only on thoughts written by a user persona.
+    fn handlers_for(&self, post: &Post, selectable: bool) -> PostCardHandlers {
+        let (reply, reply_id, handle) = (self.on_reply.clone(), post.id.clone(), post.author.handle.clone());
+        let select = self.on_select.clone();
+        PostCardHandlers {
+            on_select: if selectable { bind(&self.on_select, &post.id) } else { Rc::new(|_, _| {}) },
+            on_like: bind(&self.on_like, &post.id),
+            on_reply: Rc::new(move |window, cx| reply(reply_id.clone(), &handle, window, cx)),
+            on_repost: bind(&self.on_repost, &post.id),
+            on_quote: bind(&self.on_quote, &post.id),
+            on_open_post: Rc::new(move |id, window, cx| select(id, window, cx)),
+            on_delete: post.author.is_human_persona().then(|| bind(&self.on_delete, &post.id)),
+        }
+    }
+
     /// Renders `post` as a card whose actions dispatch to these callbacks.
     pub(crate) fn render_post(
         &self,
@@ -38,28 +61,7 @@ impl PostCallbacks {
         theme: &ThemeTokens,
         mode: CardMode,
     ) -> AnyElement {
-        let select = mode.selectable.then(|| (self.on_select.clone(), post.id.clone()));
-        let (like, like_id) = (self.on_like.clone(), post.id.clone());
-        let (reply, reply_id) = (self.on_reply.clone(), post.id.clone());
-        let author_handle = post.author.handle.clone();
-        let (repost, repost_id) = (self.on_repost.clone(), post.id.clone());
-        let (quote, quote_id) = (self.on_quote.clone(), post.id.clone());
-        render_post_item(
-            post,
-            state,
-            theme,
-            mode.is_focused,
-            mode.style,
-            move |window, cx| {
-                if let Some((cb, id)) = &select {
-                    cb(id.clone(), window, cx);
-                }
-            },
-            move |_, window, cx| like(like_id.clone(), window, cx),
-            move |_, window, cx| reply(reply_id.clone(), &author_handle, window, cx),
-            move |_, window, cx| repost(repost_id.clone(), window, cx),
-            move |_, window, cx| quote(quote_id.clone(), window, cx),
-        )
-        .into_any_element()
+        let handlers = self.handlers_for(post, mode.selectable);
+        render_post_item(post, state, theme, mode.is_focused, mode.style, handlers).into_any_element()
     }
 }

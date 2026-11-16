@@ -9,7 +9,7 @@ import sys
 import tempfile
 
 SAMPLE = {'skin': '#e0ac7e', 'hair': '#5b3a29'}
-EXE = os.path.join(os.environ.get('CARGO_TARGET_DIR', 'target'), 'debug', 'examples', 'render_illustrations')
+EXE = os.environ.get('SHEET_EXE') or os.path.join(os.environ.get('CARGO_TARGET_DIR', 'target'), 'debug', 'examples', 'render_illustrations')
 
 
 def fill_dir(src, dst, prefix):

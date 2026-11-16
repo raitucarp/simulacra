@@ -1,6 +1,6 @@
 //! Quoted thought card embed (or an unavailable notice when the quote is missing).
 
-use super::body::render_post_body;
+use super::body::{render_body_tokens, BodyLinks};
 use super::consts::{
     META_SEPARATOR, QUOTE_CARD_ID_PREFIX, QUOTE_UNAVAILABLE_PREFIX, QUOTE_UNAVAILABLE_SUFFIX,
     TIME_FORMAT,
@@ -23,10 +23,11 @@ pub(crate) fn render_quote_embed<L: PostLookup>(
     quote_id: &str,
     lookup: L,
     on_open: OpenPostAction,
+    links: &BodyLinks,
     theme: &ThemeTokens,
 ) -> AnyElement {
     match lookup.find_post(quote_id) {
-        Some(quoted) => render_quoted_card(quoted, lookup, on_open, theme).into_any_element(),
+        Some(quoted) => render_quoted_card(quoted, lookup, on_open, links, theme).into_any_element(),
         None => render_quote_unavailable(quote_id, theme).into_any_element(),
     }
 }
@@ -35,6 +36,7 @@ fn render_quoted_card<L: PostLookup>(
     quoted: &Post,
     lookup: L,
     on_open: OpenPostAction,
+    links: &BodyLinks,
     theme: &ThemeTokens,
 ) -> Stateful<Div> {
     let (hover_bg, hover_border) = (theme.hover_bg, theme.border_strong);
@@ -59,7 +61,7 @@ fn render_quoted_card<L: PostLookup>(
                 .font_family(theme.font_family_body.clone())
                 .text_size(theme.font_size_xs)
                 .text_color(theme.text_secondary)
-                .child(render_post_body(&quoted.content, lookup, theme)),
+                .child(render_body_tokens(&lookup.body_tokens(quoted), lookup, theme, links)),
         )
 }
 

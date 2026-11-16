@@ -21,6 +21,7 @@ mod lab_state;
 mod placeholders;
 mod render;
 mod scheduler_state;
+mod stream_list;
 mod settings_draft;
 mod view;
 

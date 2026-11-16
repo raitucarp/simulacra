@@ -14,9 +14,10 @@ use gpui_kit::*;
 impl Render for AppView {
     fn render(&mut self, _window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
         self.sync_composer_view(cx);
+        self.sync_stream(cx);
         self.sync_mind_graph(cx);
         let bind = Binder::new(cx);
-        let columns = self.render_columns(&bind, cx);
+        let columns = self.render_columns(&bind);
 
         div()
             .w_full()

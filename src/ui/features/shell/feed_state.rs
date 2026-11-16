@@ -1,6 +1,7 @@
 //! Timeline state of the shell: thread selection, feed window and the feed's inputs.
 
 use super::consts::{COMPOSER_ROWS, DOC_CONTENT_ROWS};
+use super::stream_list::StreamList;
 use super::view::AppView;
 use crate::domain::{PostId, ProfileId};
 use crate::state::{AppState, FeedTab};
@@ -19,8 +20,8 @@ pub struct FeedState {
     pub feed_tab: FeedTab,
     /// Whether the inspector shows every reply instead of the collapsed preview.
     pub inspector_expanded: bool,
-    /// Scroll position of the main stream (used to bring new posts into view).
-    pub stream_scroll: ScrollHandle,
+    /// Virtualized main stream (cached rows + list state, used to bring posts into view).
+    pub stream: StreamList,
     pub composer_input: Entity<TextareaState>,
     pub composer_view: Entity<PostComposerView>,
     pub search_input: Entity<InputState>,
@@ -48,7 +49,7 @@ impl FeedState {
             feed_visible_count: DEFAULT_FEED_WINDOW_SIZE,
             feed_tab: FeedTab::default(),
             inspector_expanded: false,
-            stream_scroll: ScrollHandle::new(),
+            stream: StreamList::default(),
             composer_input,
             composer_view,
             search_input,

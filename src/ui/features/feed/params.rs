@@ -4,7 +4,9 @@ use crate::domain::{PostId, Profile};
 use crate::state::{AppState, FeedTab};
 use crate::theme::ThemeTokens;
 use gpui_kit::component::input::{InputState, TextareaState};
-use gpui_kit::{App, Entity, ScrollHandle, Window};
+use super::stream::StreamInputs;
+use crate::ui::features::post::OpenTextAction;
+use gpui_kit::{App, Entity, Window};
 
 pub type LikePostCallback = Box<dyn Fn(PostId, &mut Window, &mut App) + 'static>;
 pub type ReplyPostCallback = Box<dyn Fn(PostId, &str, &mut Window, &mut App) + 'static>;
@@ -28,13 +30,12 @@ pub struct FeedParams<'a, C> {
     pub composer: C,
     pub doc_title_input: &'a Entity<InputState>,
     pub doc_content_input: &'a Entity<TextareaState>,
-    pub search_query: &'a str,
     pub theme: &'a ThemeTokens,
-    pub feed_visible_count: Option<usize>,
     pub feed_tab: FeedTab,
     /// Whether the inspector shows every reply instead of the collapsed preview.
     pub inspector_expanded: bool,
-    pub stream_scroll: &'a ScrollHandle,
+    /// Virtualized stream state and its cached rows.
+    pub stream: StreamInputs,
     pub on_load_more: Option<LoadMoreCallback>,
     pub on_select_feed_tab: SelectFeedTabCallback,
     pub on_toggle_replies: ToggleRepliesCallback,
@@ -45,6 +46,9 @@ pub struct FeedParams<'a, C> {
     pub on_quote_post: QuotePostCallback,
     /// Deletes one of the user's own thoughts (after the card's confirmation dialog).
     pub on_delete_post: DeletePostCallback,
+    /// Hashtag / wikilink clicks in post bodies (tag search, open the linked post or doc).
+    pub on_open_tag: OpenTextAction,
+    pub on_open_wikilink: OpenTextAction,
     pub on_add_document: AddDocCallback,
     pub on_delete_document: DeleteDocCallback,
     /// Opens a file picker and adds the chosen text file as a vault document.

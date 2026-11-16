@@ -7,7 +7,7 @@ use super::params::{
 use crate::domain::{Post, PostId, Profile};
 use crate::state::AppState;
 use crate::theme::ThemeTokens;
-use crate::ui::features::post::{render_post_item, PostAction, PostCardHandlers, ThreadlineStyle};
+use crate::ui::features::post::{render_post_item, BodyLinks, PostAction, PostCardHandlers, ThreadlineStyle};
 use gpui_kit::{AnyElement, App, IntoElement, Window};
 use std::rc::Rc;
 
@@ -20,6 +20,8 @@ pub(crate) struct PostCallbacks {
     pub on_repost: Rc<RepostPostCallback>,
     pub on_quote: Rc<QuotePostCallback>,
     pub on_delete: Rc<DeletePostCallback>,
+    /// Hashtag and wikilink clicks inside post bodies.
+    pub links: BodyLinks,
 }
 
 /// Visual and interaction mode of a rendered card.
@@ -50,6 +52,7 @@ impl PostCallbacks {
             on_quote: bind(&self.on_quote, &post.id),
             on_open_post: Rc::new(move |id, window, cx| select(id, window, cx)),
             on_delete: author.is_human_persona().then(|| bind(&self.on_delete, &post.id)),
+            links: self.links.clone(),
         }
     }
 

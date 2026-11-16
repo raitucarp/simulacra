@@ -16,7 +16,7 @@ mod quote_card;
 mod threadline;
 
 pub use actions::ActionClickCallback;
-pub use body::render_post_body;
+pub use body::{render_body_tokens, render_post_body, BodyLinks, OpenTextAction};
 pub use controls::{post_permalink, share_text, OpenPostAction, PostAction, PostCardHandlers};
 pub use excerpt::resolve_wikilink_excerpt;
 pub use host::extract_host_domain;

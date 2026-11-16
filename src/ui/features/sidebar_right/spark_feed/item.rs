@@ -4,7 +4,7 @@ use crate::domain::{Post, Profile};
 use crate::theme::ThemeTokens;
 use crate::ui::atoms::render_profile_avatar;
 use crate::ui::icons::LucideIcon;
-use crate::ui::molecules::post_item::{render_post_body, PostLookup};
+use crate::ui::molecules::post_item::{render_body_tokens, BodyLinks, PostLookup};
 use gpui_kit::base::StyledExt;
 use gpui_kit::component::Icon;
 use gpui_kit::prelude::FluentBuilder;
@@ -98,6 +98,6 @@ pub(super) fn render_spark_item<L: PostLookup>(
         .flex_col()
         .gap_1p5()
         .child(render_item_header(post, lookup.author_of(post), theme))
-        .child(div().w_full().child(render_post_body(&post.content, lookup, theme)))
+        .child(div().w_full().child(render_body_tokens(&lookup.body_tokens(post), lookup, theme, &BodyLinks::default())))
         .child(render_stats(post, theme))
 }

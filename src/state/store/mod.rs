@@ -33,6 +33,7 @@ pub use post_index::PostIndex;
 pub use post_meta::PostMeta;
 pub use network_create::{network_slug, validate_network_name, NetworkNameError, MAX_NETWORK_NAME_CHARS};
 pub use threads::{ThreadAnchor, ThreadDraft};
+pub use wikilinks::WikilinkTarget;
 
 use crate::domain::{GroundingDocument, Network, NetworkId, Post, Profile, ProfileId, TrendingTopic};
 use crate::storage::Vault;

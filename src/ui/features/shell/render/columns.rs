@@ -12,7 +12,7 @@ use gpui_kit::*;
 
 impl AppView {
     /// Resizable layout of the left sidebar, the center panel and the right sidebar.
-    pub(super) fn render_columns(&self, bind: &Binder, cx: &App) -> impl IntoElement {
+    pub(super) fn render_columns(&self, bind: &Binder) -> impl IntoElement {
         let collapsed = self.chrome.is_left_sidebar_collapsed;
         let (layout_id, width, min, max) = if collapsed {
             (
@@ -38,7 +38,7 @@ impl AppView {
                     .child(self.left_sidebar(bind)),
             )
             // Panel 2: Center Main Dual Feed OR Two-Pane Agent/Persona Lab
-            .child(resizable_panel().child(self.center_panel(bind, cx)))
+            .child(resizable_panel().child(self.center_panel(bind)))
             // Panel 3: Unified Intelligence & Telemetry Sidebar
             .child(
                 resizable_panel()

@@ -1,5 +1,6 @@
 //! Callbacks a rendered post card dispatches to its host.
 
+use super::super::body::BodyLinks;
 use crate::domain::PostId;
 use gpui_kit::{App, Window};
 use std::rc::Rc;
@@ -22,4 +23,6 @@ pub struct PostCardHandlers {
     pub on_open_post: OpenPostAction,
     /// Deletes the thought; `None` when the user did not write it.
     pub on_delete: Option<PostAction>,
+    /// Hashtag and wikilink clicks inside the body.
+    pub links: BodyLinks,
 }

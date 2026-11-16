@@ -71,3 +71,15 @@ fn search_uses_cached_text_and_author_names() {
     let by_author = state.filtered_posts(&author).count();
     assert!(by_author >= 1, "author name matches case-insensitively");
 }
+
+#[test]
+fn wikilinks_resolve_to_posts_then_documents_by_id_or_title() {
+    use crate::state::WikilinkTarget;
+    let mut state = AppState::new_in_memory();
+    let post = state.submit_post("linked thought").unwrap();
+    assert_eq!(state.resolve_wikilink_target(&format!(" {post} ")), Some(WikilinkTarget::Post(post)));
+    let doc = state.documents.first().cloned().expect("seeded document");
+    let by_title = state.resolve_wikilink_target(&doc.title.to_uppercase());
+    assert_eq!(by_title, Some(WikilinkTarget::Document(doc.id.clone())));
+    assert_eq!(state.resolve_wikilink_target("nowhere"), None);
+}

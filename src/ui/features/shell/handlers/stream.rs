@@ -2,7 +2,7 @@
 
 use super::super::view::AppView;
 use crate::domain::PostId;
-use crate::state::{feed_position, FeedTab, NavigationTab};
+use crate::state::{feed_position, FeedTab, NavigationTab, WikilinkTarget};
 use gpui_kit::*;
 
 impl AppView {
@@ -44,8 +44,26 @@ impl AppView {
         }
         if let Some(index) = position {
             self.feed.feed_visible_count = self.feed.feed_visible_count.max(index + 1);
-            self.feed.stream_scroll.scroll_to_item(index);
+            self.sync_stream(cx);
+            self.feed.stream.scroll_to_row(index);
         }
         cx.notify();
+    }
+
+    /// Opens what a clicked `[[wikilink]]` names: the post in the stream and inspector, or
+    /// the knowledge vault for a document.
+    pub(crate) fn open_wikilink(&mut self, target: String, window: &mut Window, cx: &mut Context<Self>) {
+        match self.state.resolve_wikilink_target(&target) {
+            Some(WikilinkTarget::Post(id)) => self.reveal_post(id, window, cx),
+            Some(WikilinkTarget::Document(_)) => self.select_nav(NavigationTab::Knowledge, window, cx),
+            None => {}
+        }
+    }
+
+    /// Brings the virtualized stream's rows up to date (cheap when nothing changed).
+    pub(crate) fn sync_stream(&mut self, cx: &App) {
+        let query = self.feed.search_input.read(cx).value().to_string();
+        let (tab, limit) = (self.feed.feed_tab, self.feed.feed_visible_count);
+        self.feed.stream.sync(&self.state, tab, &query, limit);
     }
 }

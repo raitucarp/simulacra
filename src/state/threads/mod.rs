@@ -3,9 +3,11 @@
 
 mod conversation;
 mod grouping;
+mod stream_cache;
 
 pub use conversation::{build_conversation, Conversation, ReplyBranch, ReplyLimits};
 pub use grouping::{feed_entries, feed_position, group_conversations};
+pub use stream_cache::{stream_posts, StreamCache};
 
 use crate::domain::Post;
 

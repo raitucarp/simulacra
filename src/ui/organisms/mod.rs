@@ -2,7 +2,7 @@
 
 pub mod agent_lab_view;
 pub mod app_title_bar;
-pub mod composer_modal;
+pub use crate::ui::features::composer::modal as composer_modal;
 pub mod knowledge_vault_view;
 pub mod left_sidebar;
 pub mod main_feed;

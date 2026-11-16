@@ -1,6 +1,7 @@
 //! The root window view and its window-chrome state.
 
 use super::feed_state::FeedState;
+use super::graph_state::GraphState;
 use super::lab_state::{LabState, LlmInputs};
 use super::scheduler_state::SchedulerState;
 use crate::i18n::Language;
@@ -21,6 +22,7 @@ pub struct AppView {
     pub llm_inputs: LlmInputs,
     pub lab: LabState,
     pub scheduler: SchedulerState,
+    pub graph: GraphState,
     pub(super) _subscriptions: Vec<Subscription>,
 }
 
@@ -34,7 +36,6 @@ pub struct ChromeState {
     pub is_left_sidebar_collapsed: bool,
     pub is_right_sidebar_open: bool,
     pub right_sidebar_tab: RightSidebarTab,
-    pub selected_calendar_day: Option<usize>,
 }
 
 impl ChromeState {
@@ -49,7 +50,6 @@ impl ChromeState {
             is_left_sidebar_collapsed: false,
             is_right_sidebar_open: true,
             right_sidebar_tab: RightSidebarTab::MindCadence,
-            selected_calendar_day: None,
         }
     }
 }

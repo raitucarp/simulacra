@@ -26,14 +26,17 @@ impl AppView {
     /// Mind & Cadence / Vault & Telemetry panel.
     pub(super) fn right_sidebar(&self, bind: &Binder) -> impl IntoElement {
         let topic_entity = bind.entity().clone();
+        let heatmap = self.state.current_activity_heatmap();
         render_unified_right_sidebar(UnifiedRightSidebarParams {
             active_tab: self.chrome.right_sidebar_tab,
             on_select_tab: bind.boxed(Self::select_right_sidebar_tab),
             state: &self.state,
             posts: self.state.posts(),
-            documents: self.state.documents(),
-            selected_day: self.chrome.selected_calendar_day,
+            heatmap: &heatmap,
+            selected_day: self.state.feed_day_filter,
             on_click_day: Rc::new(bind.with(Self::toggle_calendar_day)),
+            graph: self.graph.cache.current(),
+            on_open_graph: Rc::new(bind.act(Self::open_mind_graph)),
             search_input: &self.feed.search_input,
             on_click_topic: Box::new(move |tag, window, cx| {
                 topic_entity.update(cx, |this, cx| this.search_topic(tag, window, cx));

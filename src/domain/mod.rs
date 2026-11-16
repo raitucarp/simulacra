@@ -2,8 +2,10 @@
 
 pub mod trait_option;
 
+pub mod activity;
 pub mod agent_config;
 pub mod document;
+pub mod graph;
 pub mod ids;
 pub mod network;
 pub mod post;

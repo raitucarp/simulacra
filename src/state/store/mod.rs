@@ -4,6 +4,7 @@
 //! modules by concern (loading, networks, profiles, posts, indices, ...).
 
 mod bootstrap;
+mod day_filter;
 mod documents;
 mod indices;
 mod interactions;
@@ -66,6 +67,8 @@ pub struct AppState {
     pub documents: Vec<GroundingDocument>,
     pub trending: Vec<TrendingTopic>,
     pub draft_text: String,
+    /// Local calendar day the timeline is narrowed to (set from the cadence heatmap).
+    pub feed_day_filter: Option<chrono::NaiveDate>,
     pub llm_settings: crate::agent::LlmSettings,
     pub theme_tokens: crate::theme::ThemeTokens,
     pub db: Option<Rc<Database>>,

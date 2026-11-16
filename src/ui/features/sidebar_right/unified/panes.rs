@@ -1,10 +1,12 @@
 //! Tab content panes of the unified right sidebar.
 
-use super::super::heatmap::{render_clickable_heatmap, ClickDayCallback};
-use super::super::dot_graph::render_obsidian_dot_graph;
+use super::super::dot_graph::{render_mini_graph, OpenGraphCallback};
+use super::super::heatmap::{render_clickable_heatmap, ClickDayCallback, HeatmapParams};
 use super::super::spark_feed::render_random_spark_feed_with_lookup;
 use super::super::trending::{render_popular_tags_title, render_trending_list};
-use crate::domain::{GroundingDocument, Post};
+use crate::domain::activity::ActivityHeatmap;
+use crate::domain::Post;
+use crate::state::graph::GraphScene;
 use crate::state::AppState;
 use crate::theme::ThemeTokens;
 use super::super::knowledge_card::render_knowledge_card;
@@ -12,14 +14,17 @@ use super::super::roster::render_network_agent_roster;
 use gpui_kit::component::input::{Input, InputState};
 use gpui_kit::component::scroll::ScrollableElement;
 use gpui_kit::*;
+use std::rc::Rc;
 
 /// Inputs for the Mind & Cadence pane.
 pub(super) struct MindPaneParams<'a> {
     pub state: &'a AppState,
     pub posts: &'a [Post],
-    pub documents: &'a [GroundingDocument],
-    pub selected_day: Option<usize>,
+    pub heatmap: &'a ActivityHeatmap,
+    pub selected_day: Option<chrono::NaiveDate>,
     pub on_click_day: ClickDayCallback,
+    pub graph: Rc<GraphScene>,
+    pub on_open_graph: OpenGraphCallback,
 }
 
 fn padded_row(theme: &ThemeTokens) -> Div {
@@ -35,10 +40,13 @@ pub(super) fn render_mind_cadence_pane(params: MindPaneParams<'_>, theme: &Theme
         .flex()
         .flex_col()
         .gap(theme.spacing_md)
-        .child(padded_row(theme).child(render_obsidian_dot_graph(params.posts, params.documents, theme)))
+        .child(padded_row(theme).child(render_mini_graph(params.graph, params.on_open_graph, theme)))
         .child(padded_row(theme).child(render_clickable_heatmap(
-            params.selected_day,
-            params.on_click_day,
+            HeatmapParams {
+                heatmap: params.heatmap,
+                selected: params.selected_day,
+                on_click_day: params.on_click_day,
+            },
             theme,
         )))
         .child(render_random_spark_feed_with_lookup(params.posts, params.state, theme))

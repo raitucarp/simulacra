@@ -1,112 +1,79 @@
-//! Clickable GitHub-style thought cadence heatmap calendar.
+//! GitHub-style cadence heatmap of the active network: 53 week columns ending today,
+//! Sunday-first rows. Hovering a day shows "N posts on <date>"; clicking it filters the feed.
 
 use std::rc::Rc;
 
-use super::heatmap_chrome::{render_day_labels, render_heatmap_header, render_legend, render_subtitle};
+use super::heatmap_chrome::{
+    level_color, render_heatmap_header, render_legend, render_month_row, render_subtitle, render_weekday_label,
+};
 use super::section::render_divided_section;
+use crate::domain::activity::{ActivityHeatmap, HeatmapDay, DAYS_PER_WEEK, HEATMAP_WEEKS};
 use crate::theme::ThemeTokens;
-use gpui_kit::prelude::FluentBuilder;
+use crate::ui::features::day_filter::day_summary;
+use chrono::NaiveDate;
+use gpui_kit::component::tooltip::Tooltip;
 use gpui_kit::*;
 
-pub type ClickDayCallback = Rc<dyn Fn(usize, &mut Window, &mut App) + 'static>;
+/// Callback fired with the clicked calendar day.
+pub type ClickDayCallback = Rc<dyn Fn(NaiveDate, &mut Window, &mut App) + 'static>;
 
-/// Number of week columns in the calendar grid.
-pub(super) const WEEKS: usize = 15;
-/// Number of day rows (Sun..Sat) in each week column.
-pub(super) const DAYS_PER_WEEK: usize = 7;
-/// Total number of day cells in the grid.
-pub(super) const CELL_COUNT: usize = WEEKS * DAYS_PER_WEEK;
-/// Gap between calendar cells and week columns.
-pub(super) const CELL_GAP: f32 = 2.5;
 const CELL_ID_PREFIX: &str = "cal-cell";
 
-/// Static activity levels (0..=4) for every day cell, laid out week by week.
-#[rustfmt::skip]
-pub(super) const ACTIVITY_LEVELS: [u8; CELL_COUNT] = [
-    0, 1, 0, 2, 3, 0, 1,
-    1, 2, 0, 0, 4, 3, 2,
-    0, 3, 4, 2, 1, 0, 2,
-    2, 0, 1, 3, 2, 4, 1,
-    3, 4, 2, 0, 1, 3, 2,
-    1, 0, 3, 4, 2, 1, 0,
-    0, 2, 3, 1, 4, 2, 3,
-    2, 3, 0, 2, 3, 4, 1,
-    4, 1, 2, 3, 0, 2, 4,
-    1, 0, 4, 2, 3, 1, 2,
-    3, 2, 1, 4, 2, 0, 3,
-    2, 4, 3, 1, 2, 4, 1,
-    0, 1, 2, 4, 3, 2, 0,
-    3, 2, 4, 1, 0, 3, 2,
-    1, 4, 2, 3, 2, 4, 3,
-];
-
-fn level_color(level: u8, theme: &ThemeTokens) -> Rgba {
-    match level {
-        0 => theme.bg_card,
-        1 => theme.cadence_level_1,
-        2 => theme.cadence_level_2,
-        3 => theme.cadence_level_3,
-        _ => theme.cadence_level_4,
-    }
+/// Inputs of the cadence heatmap section.
+pub struct HeatmapParams<'a> {
+    pub heatmap: &'a ActivityHeatmap,
+    /// Day the feed is currently filtered to, highlighted in the grid.
+    pub selected: Option<NaiveDate>,
+    pub on_click_day: ClickDayCallback,
 }
 
-fn render_day_cell(
-    day_cell_id: usize,
-    selected_day: Option<usize>,
-    on_click_day: &ClickDayCallback,
-    theme: &ThemeTokens,
-) -> Stateful<Div> {
-    let is_selected = selected_day == Some(day_cell_id);
-    let border_color = if is_selected { theme.accent_brand } else { theme.border };
-    let on_click = Rc::clone(on_click_day);
-    div()
-        .id(ElementId::NamedInteger(CELL_ID_PREFIX.into(), day_cell_id as u64))
-        .w(theme.cadence_cell_size)
-        .h(theme.cadence_cell_size)
-        .rounded_sm()
-        .bg(level_color(ACTIVITY_LEVELS[day_cell_id], theme))
-        .border_1()
-        .border_color(border_color)
+/// Unstyled slot sized like one day cell (flexible width, token height).
+pub(super) fn cell_slot(theme: &ThemeTokens) -> Div {
+    div().flex_1().min_w_0().h(theme.heatmap_cell_height).rounded(theme.heatmap_cell_radius)
+}
+
+fn render_cell(day: HeatmapDay, idx: usize, params: &HeatmapParams<'_>, theme: &ThemeTokens) -> Stateful<Div> {
+    let is_selected = params.selected == Some(day.date);
+    let fill = if is_selected { theme.text_primary } else { level_color(day.level, theme) };
+    let on_click = Rc::clone(&params.on_click_day);
+    let HeatmapDay { date, count, .. } = day;
+    cell_slot(theme)
+        .id(ElementId::NamedInteger(CELL_ID_PREFIX.into(), idx as u64))
+        .bg(fill)
         .cursor_pointer()
-        .when(is_selected, |s| s.border_2().border_color(theme.text_white))
-        .on_click(move |_, window, cx| {
-            on_click(day_cell_id, window, cx);
-        })
+        .hover(|s| s.bg(theme.text_secondary))
+        .tooltip(move |window, cx| Tooltip::new(day_summary(date, count)).build(window, cx))
+        .on_click(move |_, window, cx| on_click(date, window, cx))
 }
 
-fn render_week_column(
-    week_idx: usize,
-    selected_day: Option<usize>,
-    on_click_day: &ClickDayCallback,
-    theme: &ThemeTokens,
-) -> Div {
-    let days = (0..DAYS_PER_WEEK).map(|day_idx| {
-        render_day_cell(week_idx * DAYS_PER_WEEK + day_idx, selected_day, on_click_day, theme)
+/// One weekday row: its label, then that weekday of every week (future days left blank).
+fn render_row(row: usize, params: &HeatmapParams<'_>, theme: &ThemeTokens) -> Div {
+    let cells = (0..HEATMAP_WEEKS).map(|week| match params.heatmap.day(week, row) {
+        Some(day) => render_cell(day, week * DAYS_PER_WEEK + row, params, theme).into_any_element(),
+        None => cell_slot(theme).into_any_element(),
     });
-    div().flex().flex_col().gap(px(CELL_GAP)).children(days)
+    div()
+        .w_full()
+        .flex()
+        .items_center()
+        .child(render_weekday_label(row, theme))
+        .child(div().flex_1().min_w_0().flex().gap(theme.heatmap_cell_gap).children(cells))
 }
 
-/// Renders the clickable GitHub-style thought activity calendar heatmap.
-pub fn render_clickable_heatmap(
-    selected_day: Option<usize>,
-    on_click_day: ClickDayCallback,
-    theme: &ThemeTokens,
-) -> impl IntoElement {
-    let weeks: Vec<Div> = (0..WEEKS)
-        .map(|week_idx| render_week_column(week_idx, selected_day, &on_click_day, theme))
-        .collect();
-
+/// Renders the clickable cadence heatmap section.
+pub fn render_clickable_heatmap(params: HeatmapParams<'_>, theme: &ThemeTokens) -> impl IntoElement {
+    let heatmap = params.heatmap;
+    let rows = (0..DAYS_PER_WEEK).map(|row| render_row(row, &params, theme));
+    let grid = div()
+        .w_full()
+        .flex()
+        .flex_col()
+        .gap(theme.heatmap_cell_gap)
+        .child(render_month_row(heatmap, theme))
+        .children(rows);
     render_divided_section(theme)
-        .child(render_heatmap_header(theme))
-        .child(render_subtitle(selected_day, theme))
-        .child(
-            div()
-                .w_full()
-                .flex()
-                .items_center()
-                .gap_2()
-                .child(render_day_labels(theme))
-                .child(div().flex().gap(px(CELL_GAP)).children(weeks)),
-        )
+        .child(render_heatmap_header(heatmap.total(), theme))
+        .child(render_subtitle(heatmap, params.selected, theme))
+        .child(grid)
         .child(render_legend(theme))
 }

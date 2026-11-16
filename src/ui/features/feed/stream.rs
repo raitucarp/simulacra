@@ -39,7 +39,7 @@ pub(crate) fn compute_stream_window<'a>(
     let posts: Vec<&Post> = if query_trimmed.is_empty() {
         feed_entries(state, tab)
     } else {
-        state.filtered_posts(query_trimmed).collect()
+        state.day_scoped(state.filtered_posts(query_trimmed)).collect()
     };
     let total = posts.len();
     StreamWindow { total, posts, limit: requested_window.min(total) }

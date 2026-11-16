@@ -26,6 +26,6 @@ pub use main_feed::{
     compute_stream_threadline_style, render_main_feed, FeedParams, DEFAULT_FEED_WINDOW_SIZE,
     FEED_WINDOW_INCREMENT,
 };
-pub use mind_graph_view::render_mind_graph_view;
+pub use mind_graph_view::{MindGraphEvent, MindGraphPanel};
 pub use settings_modal::{SettingsModal, SettingsTab};
 pub use unified_right_sidebar::{render_unified_right_sidebar, RightSidebarTab, UnifiedRightSidebarParams};

@@ -160,3 +160,18 @@ settings:
   interface_title: "LOCALIZATION & TYPOGRAPHY"
   interface_desc: "Segoe UI Variable Text with 10 world locales dynamically switchable."
   done: "Done"
+
+simulation:
+  llm_failed_title: "%{provider} request failed — used an offline reply"
+  llm_missing_key: "No API key is configured. Open Settings → AI Intelligence to add one."
+  worker_failed: "The agent simulation worker could not start."
+
+scheduler:
+  section_title: "AUTONOMOUS DIALECTIC ENGINE"
+  toggle_label: "Autonomous posting"
+  toggle_hint: "When on, active agents post on their own: cadence sets the minimum gap, active hours and chronotype set when, spontaneity adds jitter. Checked every %{seconds}s, one generation at a time."
+  status_on: "Scheduler On"
+  status_off: "Scheduler Off"
+  queue_status: "%{running} generating · %{queued} queued"
+  last_error: "Last LLM error (%{provider}): %{message}"
+  db_path_title: "Database Path"

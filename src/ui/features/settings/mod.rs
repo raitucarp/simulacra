@@ -4,6 +4,7 @@
 mod callbacks;
 mod consts;
 mod content;
+mod general_props;
 mod modal;
 mod panes;
 mod provider_grid;
@@ -13,7 +14,8 @@ mod theme_card;
 
 pub use callbacks::{
     ModalCloseCallback, SaveSettingsCallback, SelectPresetModelCallback, SelectProviderCallback,
-    SelectTabCallback, SelectThemeCallback,
+    SelectTabCallback, SelectThemeCallback, ToggleSchedulerCallback,
 };
+pub use general_props::GeneralPaneProps;
 pub use modal::SettingsModal;
 pub use tabs::SettingsTab;

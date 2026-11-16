@@ -11,3 +11,4 @@ pub type SelectPresetModelCallback = Box<dyn Fn(&'static str, &mut Window, &mut 
 pub type SaveSettingsCallback = Box<dyn Fn(&mut Window, &mut App) + 'static>;
 pub type SelectTabCallback = Box<dyn Fn(SettingsTab, &mut Window, &mut App) + 'static>;
 pub type SelectThemeCallback = Box<dyn Fn(ThemeTokens, &mut Window, &mut App) + 'static>;
+pub type ToggleSchedulerCallback = Box<dyn Fn(bool, &mut Window, &mut App) + 'static>;

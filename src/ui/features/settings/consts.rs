@@ -48,6 +48,7 @@ pub(super) const SAVE_BUTTON_ID: &str = "btn-save-settings";
 pub(super) const TAB_BUTTON_ID_PREFIX: &str = "settings-tab-btn-";
 pub(super) const PROVIDER_BUTTON_ID_PREFIX: &str = "provider-btn-";
 pub(super) const PRESET_CHIP_ID_PREFIX: &str = "preset-";
+pub(super) const SCHEDULER_SWITCH_ID: &str = "settings-scheduler-switch";
 
 pub(super) const STATUS_ENABLED: &str = "Enabled";
 pub(super) const BADGE_SELECTED: &str = "Selected";

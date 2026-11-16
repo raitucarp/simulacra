@@ -1,11 +1,13 @@
 //! Atomic avatar circle component.
-//! Supports both custom uploaded image files (`avatar_path`) and initial-based role badges.
+//! Supports generated portraits, emblems and cropped photos (`config.avatar`), uploaded image
+//! files (`avatar_path`) and initial-based role badges.
 //! Fully tokenized via ThemeTokens.
 
 use crate::domain::{Profile, ProfileRole};
 use crate::theme::ThemeTokens;
 use gpui_kit::*;
 use super::avatar_cache::resolve_avatar;
+use crate::ui::illustration::render_avatar_mode;
 
 /// Avatars at or below this diameter use the 2xs initial font size.
 const SMALL_AVATAR_MAX_PX: f32 = 24.0;
@@ -52,13 +54,17 @@ pub fn render_avatar(
         .child(initial.to_string())
 }
 
-/// Renders a profile avatar, using the uploaded image at `profile.avatar_path` if present,
-/// or falling back to the role-colored initial badge.
+/// Renders a profile avatar: the chosen [`AvatarMode`](crate::domain::portrait::AvatarMode)
+/// (`profile.config.avatar`) if it can be drawn, else the uploaded image at
+/// `profile.avatar_path`, else the role-colored initial badge.
 pub fn render_profile_avatar(
     profile: &Profile,
     size: Pixels,
     theme: &ThemeTokens,
 ) -> Div {
+    if let Some(avatar) = profile.config.avatar.as_ref().and_then(|mode| render_avatar_mode(mode, size, theme)) {
+        return avatar;
+    }
     if let Some(path) = profile.avatar_path.as_deref().and_then(resolve_avatar) {
         return div()
             .w(size)

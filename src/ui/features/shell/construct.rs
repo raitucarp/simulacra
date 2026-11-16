@@ -18,7 +18,7 @@ impl AppView {
         let initial_lang = Language::English;
         crate::i18n::set_locale(initial_lang);
 
-        let state = AppState::new();
+        let state = load_state();
         let feed = FeedState::new(&state, window, cx);
         let profile = state.current_profile().cloned();
         let theme = state.theme_tokens.clone();
@@ -54,4 +54,13 @@ impl AppView {
         view.watch_vault_failures(window, cx);
         view
     }
+}
+
+/// Opens the store and points the render-side globals at it: the vault folder (relative
+/// avatar photos) and the active palette (themed illustrations).
+fn load_state() -> AppState {
+    let state = AppState::new();
+    crate::storage::avatars::register_vault_dir(state.vault_dir());
+    let _ = crate::ui::illustration::set_active_palette(&state.theme_settings.effective_palette().colors);
+    state
 }

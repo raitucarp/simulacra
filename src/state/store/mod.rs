@@ -4,6 +4,7 @@
 //! modules by concern (loading, networks, profiles, posts, indices, ...).
 
 mod authors;
+mod avatar;
 mod bootstrap;
 mod day_filter;
 mod documents;

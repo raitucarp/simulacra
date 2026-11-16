@@ -1,11 +1,11 @@
 //! Construction of the root view.
 
-use super::composer_state::ComposerModalState;
 use super::feed_state::FeedState;
 use super::lab_state::{LabState, LlmInputs};
 use super::view::{AppView, ChromeState};
 use crate::i18n::Language;
 use crate::state::AppState;
+use crate::ui::features::composer::ComposerModalPanel;
 use gpui_kit::*;
 
 impl AppView {
@@ -16,9 +16,13 @@ impl AppView {
 
         let state = AppState::new();
         let feed = FeedState::new(&state, window, cx);
-        let composer_modal = ComposerModalState::new(window, cx);
-        let mut subscriptions = vec![feed.subscribe_search(cx)];
-        subscriptions.extend(composer_modal.subscribe(window, cx));
+        let profile = state.current_profile().cloned();
+        let theme = state.theme_tokens.clone();
+        let composer_modal = cx.new(|cx| ComposerModalPanel::new(theme, profile, window, cx));
+        let subscriptions = vec![
+            feed.subscribe_search(cx),
+            cx.subscribe_in(&composer_modal, window, Self::publish_composer_draft),
+        ];
         let llm_inputs = LlmInputs::new(&state, window, cx);
         let lab = LabState::new(&state, window, cx);
 

@@ -1,5 +1,5 @@
 //! Named literals of the application shell: column sizes, element ids, placeholders,
-//! file dialog strings and the curated identities offered by "new agent / persona".
+//! the avatar dialog title and the curated identities offered by "new agent / persona".
 
 /// Width of the left sidebar in its collapsed icon-rail mode.
 pub(super) const LEFT_SIDEBAR_COLLAPSED_WIDTH: f32 = 64.0;
@@ -25,23 +25,14 @@ pub(super) const LAYOUT_ID_EXPANDED: &str = "simulacra-main-layout-expanded";
 /// Auto-grow row ranges `(min, max)` of the shell's text areas.
 pub(super) const COMPOSER_ROWS: (usize, usize) = (1, 5);
 pub(super) const DOC_CONTENT_ROWS: (usize, usize) = (3, 8);
-pub(super) const MODAL_COMPOSER_ROWS: (usize, usize) = (2, 8);
 pub(super) const EDITOR_LONG_ROWS: (usize, usize) = (3, 6);
 pub(super) const EDITOR_SHORT_ROWS: (usize, usize) = (2, 5);
 
-/// Placeholder of the composer modal's link input.
-pub(super) const MODAL_LINK_PLACEHOLDER: &str = "https://...";
 /// Placeholders of the LLM settings inputs.
 pub(super) const LLM_API_KEY_PLACEHOLDER: &str = "Enter Gemini API Key (AIzaSy...)";
 pub(super) const LLM_MODEL_PLACEHOLDER: &str = "Model Identifier (e.g. gemini-1.5-flash)";
 pub(super) const LLM_ENDPOINT_PLACEHOLDER: &str = "http://localhost:8000/v1/chat/completions";
 
-/// Image extensions accepted by the file pickers.
-pub(super) const IMAGE_EXTENSIONS: [&str; 6] = ["png", "jpg", "jpeg", "webp", "gif", "bmp"];
-/// File dialog filter name for images.
-pub(super) const IMAGE_FILTER_NAME: &str = "Image Files";
-/// File dialog title of the composer modal image picker.
-pub(super) const PICK_IMAGE_TITLE: &str = "Select Image";
 /// File dialog title of the agent editor avatar picker.
 pub(super) const PICK_AVATAR_TITLE: &str = "Select Avatar Portrait Image";
 
@@ -49,9 +40,6 @@ pub(super) const PICK_AVATAR_TITLE: &str = "Select Avatar Portrait Image";
 pub(super) const HANDLE_PREFIX: char = '@';
 /// Quote character stripped from pasted file paths (e.g. Windows "Copy as path").
 pub(super) const PATH_QUOTE: char = '"';
-/// Quote characters stripped from a typed composer image path.
-pub(super) const PATH_QUOTE_DOUBLE: char = '"';
-pub(super) const PATH_QUOTE_SINGLE: char = '\'';
 
 /// `(id, name, handle, occupation)` of the editor's profile when the store has none.
 pub(super) const FALLBACK_LAB_PROFILE: (&str, &str, &str, &str) =

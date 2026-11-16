@@ -2,7 +2,7 @@
 
 use super::super::binder::Binder;
 use super::super::view::AppView;
-use crate::ui::features::composer::ComposerModalView;
+use crate::ui::features::composer::ComposerModalPanel;
 use crate::ui::features::popovers::language::LanguagePopover;
 use crate::ui::features::popovers::workspace::WorkspacePopover;
 use crate::ui::features::title_bar::AppTitleBar;
@@ -48,31 +48,8 @@ impl AppView {
         })
     }
 
-    /// Threads-style composer modal, while open.
-    pub(super) fn composer_modal_view(&self, bind: &Binder, cx: &App) -> Option<ComposerModalView> {
-        let modal = &self.composer_modal;
-        if !modal.is_open {
-            return None;
-        }
-        let draft_length = modal.composer_input.read(cx).value().chars().count();
-        Some(ComposerModalView::new(
-            self.theme.clone(),
-            self.state.current_profile().cloned(),
-            modal.mode.clone(),
-            modal.composer_input.clone(),
-            modal.link_input.clone(),
-            modal.image_input.clone(),
-            modal.image_path.clone(),
-            modal.is_link_input_open,
-            modal.is_image_input_open,
-            draft_length,
-            bind.act(Self::close_composer_modal),
-            bind.act(Self::submit_composer_modal),
-            bind.act(Self::toggle_modal_link),
-            bind.act(Self::toggle_modal_image),
-            bind.act(Self::pick_modal_image),
-            bind.act(Self::clear_modal_image),
-            bind.act(Self::clear_modal_link),
-        ))
+    /// Threads-style composer modal panel, while open.
+    pub(super) fn composer_modal_view(&self, cx: &App) -> Option<Entity<ComposerModalPanel>> {
+        self.composer_modal.read(cx).is_open().then(|| self.composer_modal.clone())
     }
 }

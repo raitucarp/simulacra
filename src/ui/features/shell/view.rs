@@ -1,14 +1,14 @@
 //! The root window view and its window-chrome state.
 
-use super::composer_state::ComposerModalState;
 use super::feed_state::FeedState;
 use super::lab_state::{LabState, LlmInputs};
 use crate::i18n::Language;
 use crate::state::AppState;
 use crate::theme::ThemeTokens;
+use crate::ui::features::composer::ComposerModalPanel;
 use crate::ui::features::settings::SettingsTab;
 use crate::ui::features::sidebar_right::RightSidebarTab;
-use gpui_kit::Subscription;
+use gpui_kit::{Entity, Subscription};
 
 /// Main window root view container (title bar, three resizable columns and overlays).
 pub struct AppView {
@@ -16,7 +16,7 @@ pub struct AppView {
     pub theme: ThemeTokens,
     pub chrome: ChromeState,
     pub feed: FeedState,
-    pub composer_modal: ComposerModalState,
+    pub composer_modal: Entity<ComposerModalPanel>,
     pub llm_inputs: LlmInputs,
     pub lab: LabState,
     pub(super) _subscriptions: Vec<Subscription>,

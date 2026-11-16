@@ -1,12 +1,14 @@
 //! Reusable, theme-token-driven UI components shared across features.
 //!
 //! Every component is a plain function (optionally taking a small spec struct) that returns
-//! a `Div` / `Stateful<Div>`, so callers can keep chaining layout modifiers.
+//! a `Div` / `Stateful<Div>`, so callers can keep chaining layout modifiers. `image_picker`
+//! wraps the native image file dialog used by several features.
 
 pub mod badge;
 pub mod chip;
 pub mod enum_chips;
 pub mod hover_row;
+pub mod image_picker;
 pub mod labeled_field;
 pub mod pill_tab;
 pub mod save_footer;
@@ -23,6 +25,7 @@ pub use badge::{meta_badge, mono_tag, BadgeColors};
 pub use chip::{chip_row, choice_chip};
 pub use enum_chips::EnumChips;
 pub use hover_row::selectable_row;
+pub use image_picker::pick_image_path;
 pub use labeled_field::{field_label, labeled_group, labeled_input, labeled_textarea};
 pub use pill_tab::{pill_tab, PillTab};
 pub use save_footer::save_footer;

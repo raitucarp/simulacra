@@ -30,18 +30,22 @@ impl Render for AppView {
             .children(self.language_popover(&bind))
             .children(self.settings_modal(&bind))
             .children(self.workspace_popover(&bind))
-            .children(self.composer_modal_view(&bind, cx))
+            .children(self.composer_modal_view(cx))
     }
 }
 
 impl AppView {
-    /// Pushes the active profile and theme into the isolated inline composer view.
+    /// Pushes the active profile and theme into the isolated composer entities.
     fn sync_composer_view(&self, cx: &mut Context<Self>) {
         let current_profile = self.state.current_profile();
         let current_theme = &self.theme;
         self.feed.composer_view.update(cx, |composer, cx| {
             composer.set_profile(current_profile, cx);
             composer.set_theme(current_theme, cx);
+        });
+        self.composer_modal.update(cx, |panel, cx| {
+            panel.set_profile(current_profile, cx);
+            panel.set_theme(current_theme, cx);
         });
     }
 }

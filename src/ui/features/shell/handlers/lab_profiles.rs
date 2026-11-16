@@ -2,13 +2,13 @@
 
 use super::super::consts::{
     CuratedIdentity, CURATED_AGENTS, CURATED_AGENT_OFFSET, CURATED_PERSONAS,
-    CURATED_PERSONA_OFFSET, FALLBACK_AGENT, FALLBACK_PERSONA, IMAGE_EXTENSIONS, IMAGE_FILTER_NAME,
-    PICK_AVATAR_TITLE,
+    CURATED_PERSONA_OFFSET, FALLBACK_AGENT, FALLBACK_PERSONA, PICK_AVATAR_TITLE,
 };
 use super::super::editor_field::EditorTextField;
 use super::super::view::AppView;
 use crate::domain::ProfileId;
 use crate::state::NavigationTab;
+use crate::ui::components::pick_image_path;
 use crate::ui::features::agent_editor::AgentConfigTab;
 use gpui_kit::*;
 use std::path::Path;
@@ -49,13 +49,7 @@ impl AppView {
     /// Opens a native image dialog and stores the chosen file as the profile's avatar.
     pub(crate) fn lab_pick_avatar(&mut self, profile_id: ProfileId, window: &mut Window, cx: &mut Context<Self>) {
         cx.spawn_in(window, async move |entity, cx| {
-            let file = rfd::AsyncFileDialog::new()
-                .set_title(PICK_AVATAR_TITLE)
-                .add_filter(IMAGE_FILTER_NAME, &IMAGE_EXTENSIONS)
-                .pick_file()
-                .await;
-            let Some(file_handle) = file else { return };
-            let path = file_handle.path().to_string_lossy().to_string();
+            let Some(path) = pick_image_path(PICK_AVATAR_TITLE).await else { return };
             let _ = entity.update_in(cx, |this, window, cx| {
                 this.apply_picked_avatar(&profile_id, path, window, cx);
             });

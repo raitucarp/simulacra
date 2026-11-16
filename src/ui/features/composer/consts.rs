@@ -45,3 +45,10 @@ pub(super) const MODAL_TOGGLE_IMAGE_INPUT_BTN_ID: &str = "modal-toggle-image-inp
 pub(super) const MODAL_TOGGLE_LINK_BTN_ID: &str = "modal-toggle-link-btn";
 pub(super) const MODAL_TAG_BTN_ID: &str = "modal-tag-btn";
 pub(super) const MODAL_SUBMIT_POST_BTN_ID: &str = "modal-submit-post-btn";
+
+/// Auto-grow row range `(min, max)` of the modal draft text area.
+pub(super) const MODAL_COMPOSER_ROWS: (usize, usize) = (2, 8);
+/// Placeholder of the modal link input.
+pub(super) const MODAL_LINK_PLACEHOLDER: &str = "https://...";
+/// File dialog title of the modal image picker.
+pub(super) const PICK_IMAGE_TITLE: &str = "Select Image";

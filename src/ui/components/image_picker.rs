@@ -1,0 +1,16 @@
+//! Native image file dialog shared by the composer modal and the agent editor avatar picker.
+
+/// Image extensions accepted by the picker.
+const IMAGE_EXTENSIONS: [&str; 6] = ["png", "jpg", "jpeg", "webp", "gif", "bmp"];
+/// File dialog filter name for images.
+const IMAGE_FILTER_NAME: &str = "Image Files";
+
+/// Opens a native "pick an image" dialog titled `title`; `None` when cancelled.
+pub async fn pick_image_path(title: &str) -> Option<String> {
+    let file = rfd::AsyncFileDialog::new()
+        .set_title(title)
+        .add_filter(IMAGE_FILTER_NAME, &IMAGE_EXTENSIONS)
+        .pick_file()
+        .await?;
+    Some(file.path().to_string_lossy().to_string())
+}

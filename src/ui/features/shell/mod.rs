@@ -8,7 +8,6 @@
 //! - `render`: section builders composed by `impl Render`.
 
 mod binder;
-mod composer_state;
 mod consts;
 mod construct;
 mod editor_field;
@@ -25,7 +24,6 @@ mod view;
 #[cfg(test)]
 mod tests;
 
-pub use composer_state::ComposerModalState;
 pub use editor_inputs::AgentEditorFields;
 pub use feed_state::FeedState;
 pub use lab_state::{LabState, LlmInputs};

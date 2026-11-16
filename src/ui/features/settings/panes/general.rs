@@ -3,6 +3,7 @@
 use super::super::general_props::GeneralPaneProps;
 use super::common::{body_text, card, muted_note, section, section_label, title_with_subtitle};
 use super::engine::render_engine_section;
+use super::welcome::render_welcome_section;
 use crate::i18n::Language;
 use crate::theme::ThemeTokens;
 use crate::ui::icons::LucideIcon;
@@ -22,6 +23,7 @@ pub(in crate::ui::features::settings) fn render_general_pane(
         .child(render_engine_section(theme, &mut props))
         .child(render_storage_section(theme, &props.db_path))
         .child(render_locale_section(theme, props.language_label))
+        .child(render_welcome_section(theme, &mut props))
 }
 
 /// Section 2: Local SQLite storage path and what is kept there.

@@ -23,7 +23,7 @@ pub use attributes::{
     budget_remaining, budget_spent, can_raise, intelligence_radar, is_balanced_build,
     personality_radar, QuotientLevel, RadarPoint, PERSONALITY_POINT_BUDGET,
 };
-pub use class::{apply_class, preview_diff, ChangeValue, FieldChange};
+pub use class::{apply_class, preview_diff, set_class, ChangeValue, FieldChange};
 pub use describe::{describe_prompt, parse_described, DraftPatch, ParseError, PatchWarning};
 pub use draft::{normalize_handle, AgentDraft, AutosaveError, StepProgress, AUTOSAVE_VERSION, HISTORY_LIMIT};
 pub use edit::DraftEdit;

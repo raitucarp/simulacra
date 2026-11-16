@@ -10,11 +10,12 @@ use crate::theme::ThemeTokens;
 use crate::ui::features::forge::logic::{randomized_slot, slot_index, time_seed, with_slot_index};
 use crate::ui::features::forge::text::{tr, tr_with};
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
-use crate::ui::features::forge::widgets::{option_card, ActionCallback, OptionCardSpec};
+use crate::ui::features::forge::widgets::{focus_ring_shadow, ActionCallback, CardGrid, GridCell, OptionCardSpec};
 use crate::ui::icons::LucideIcon;
 use crate::ui::illustration::PortraitView;
 use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::Sizable;
+use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::*;
 
 const PARTS_KEY: &str = "forge.ui.appearance.parts";
@@ -26,6 +27,10 @@ const PART_ID_PREFIX: &str = "forge-part";
 const SWATCH_ID_PREFIX: &str = "forge-swatch";
 const RANDOMIZE_ID: &str = "forge-randomize-all";
 const RANDOMIZE_PART_ID: &str = "forge-randomize-part";
+const SWATCH_GRID_ID: &str = "forge-swatches";
+const PART_GRID_ID: &str = "forge-parts";
+/// Color swatches per row.
+const SWATCH_COLUMNS: usize = 8;
 /// Part thumbnails per row.
 const PART_COLUMNS: usize = 4;
 
@@ -37,16 +42,18 @@ fn swatch_hexes(slot: PortraitSlot) -> Vec<&'static str> {
     }
 }
 
-fn swatch(id: usize, hex: &str, selected: bool, theme: &ThemeTokens, on_click: ActionCallback) -> Stateful<Div> {
+fn swatch(id: usize, hex: &str, (selected, focused): (bool, bool), theme: &ThemeTokens, on_click: ActionCallback) -> Stateful<Div> {
     let fill = parse_hex(hex).unwrap_or(theme.text_muted);
+    let ring = if focused { theme.focus_ring } else if selected { theme.accent_brand } else { theme.border };
     div()
         .id((SWATCH_ID_PREFIX, id))
         .size(theme.forge_swatch_size)
         .rounded(theme.radius_full)
         .bg(fill)
         .cursor_pointer()
-        .border(if selected { theme.border_width_threadline } else { theme.border_width_hairline })
-        .border_color(if selected { theme.accent_brand } else { theme.border })
+        .border(if selected || focused { theme.border_width_threadline } else { theme.border_width_hairline })
+        .border_color(ring)
+        .when(focused, |dot| dot.shadow(focus_ring_shadow(theme)))
         .on_click(move |_, w, cx| on_click(w, cx))
 }
 
@@ -85,33 +92,27 @@ impl ForgeView {
         div().flex().flex_wrap().gap(theme.spacing_xs).children(chips)
     }
 
-    fn slot_options(&self, spec: PortraitSpec, handle: &ForgeHandle) -> Div {
+    fn slot_options(&self, spec: PortraitSpec, handle: &ForgeHandle) -> CardGrid {
         let theme = &self.theme;
         let slot = self.portrait_slot;
         let chosen = slot_index(&spec, slot);
         let pick = |index: usize| -> ActionCallback { handle.act(move |this, _, cx| this.set_portrait(with_slot_index(spec, slot, index), cx)) };
         if slot.layer().is_none() {
-            let swatches = swatch_hexes(slot).into_iter().enumerate().map(|(at, hex)| swatch(at, hex, at == chosen, theme, pick(at)));
-            return div().flex().flex_wrap().gap(theme.spacing_sm).children(swatches.collect::<Vec<_>>());
+            let cells = swatch_hexes(slot).into_iter().enumerate().map(|(at, hex)| {
+                let swatch_theme = theme.clone();
+                GridCell::new(at == chosen, move |focused, click| swatch(at, hex, (at == chosen, focused), &swatch_theme, click), pick(at))
+            });
+            return CardGrid::new((SWATCH_GRID_ID, slot as usize), cells.collect(), SWATCH_COLUMNS, theme.spacing_sm);
         }
+        let width = theme.forge_compact_card_width;
         let keys = slot_option_keys(slot);
-        let rows: Vec<Div> = keys
-            .chunks(PART_COLUMNS)
-            .enumerate()
-            .map(|(row, chunk)| {
-                let cards = chunk.iter().enumerate().map(|(col, key)| {
-                    let at = row * PART_COLUMNS + col;
-                    let width = theme.forge_compact_card_width;
-                    let art = PortraitView::new(AvatarMode::Pcg(with_slot_index(spec, slot, at)), width, theme);
-                    let mut card_spec = OptionCardSpec::new((PART_ID_PREFIX, at), art, tr(&slot.option_label_key(key)), width);
-                    card_spec.selected = at == chosen;
-                    let on_pick = pick(at);
-                    option_card(card_spec, theme, move |w, cx| on_pick(w, cx))
-                });
-                div().flex().gap(theme.spacing_xs).children(cards.collect::<Vec<_>>())
-            })
-            .collect();
-        div().flex().flex_col().gap(theme.spacing_xs).children(rows)
+        let cells = keys.iter().enumerate().map(|(at, key)| {
+            let art = PortraitView::new(AvatarMode::Pcg(with_slot_index(spec, slot, at)), width, theme);
+            let mut card_spec = OptionCardSpec::new((PART_ID_PREFIX, at), art, tr(&slot.option_label_key(key)), width);
+            card_spec.selected = at == chosen;
+            GridCell::card(card_spec, theme, pick(at))
+        });
+        CardGrid::new((PART_GRID_ID, slot as usize), cells.collect(), PART_COLUMNS, theme.spacing_xs)
     }
 
     /// Replaces the generated portrait (one undo step).

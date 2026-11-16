@@ -20,6 +20,8 @@ theme_tokens! {
         bg_app, bg_card, bg_elevated, bg_sidebar, bg_callout, hover_bg,
         // Border Colors
         border, border_subtle, border_strong, border_focus,
+        // Keyboard focus ring (focus-visible outline of custom controls and kit widgets)
+        focus_ring,
         // Text & Content Colors
         text_primary, text_secondary, text_muted,
         // Accents & Semantic Indicators
@@ -50,7 +52,7 @@ theme_tokens! {
         // Radii Tokens
         radius_xs, radius_sm, radius_md, radius_lg, radius_xl, radius_full,
         // Border Widths
-        border_width_hairline, border_width_threadline,
+        border_width_hairline, border_width_threadline, focus_ring_width,
         // Elevation shadow geometry
         shadow_offset_y, shadow_blur,
         // Sizing & Layout Tokens
@@ -93,6 +95,10 @@ theme_tokens! {
         forge_wheel_size, forge_wheel_dot_size,
         // Agent Forge: Daily Life clock ring and week strip, Relationships heart pips
         forge_clock_size, forge_clock_ring_width, forge_week_cell_height, forge_heart_size,
+        // Agent Forge: hour labels inside the clock ring, keyboard-hint key caps
+        forge_clock_label_size, forge_key_cap_min_width,
+        // First-run welcome overlay
+        onboarding_width, onboarding_art_size,
     ],
     // Typography Hierarchy & Line Height; heatmap level opacities; graph dimming & curvature
     floats: [

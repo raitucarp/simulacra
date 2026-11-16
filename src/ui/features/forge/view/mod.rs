@@ -6,6 +6,7 @@
 mod actions;
 mod begin;
 mod describe;
+mod dismiss;
 mod handle;
 mod hear;
 mod keys;
@@ -14,7 +15,7 @@ mod state;
 
 pub use handle::ForgeHandle;
 pub use hear::HearStatus;
-pub use keys::{init_key_bindings, Redo, Undo, FORGE_KEY_CONTEXT};
+pub use keys::{init_key_bindings, Dismiss, Redo, Undo, FORGE_KEY_CONTEXT};
 pub use state::{DescribeStatus, ForgeContext, ForgeOpen, ForgeScreen, GuideState, Notice, StartState};
 
 use crate::domain::portrait::PortraitSlot;
@@ -53,8 +54,6 @@ pub struct ForgeView {
     pub(crate) autosave: AutosavePolicy,
     pub(crate) guide: GuideState,
     pub(crate) start: StartState,
-    /// The class the draft was started from, shown on the nameplate.
-    pub(crate) class: Option<ArchetypeClass>,
     /// "Write an introduction post" on the Review step.
     pub(crate) intro_post: bool,
     /// A transient message (photo import failure, describe result).
@@ -69,6 +68,13 @@ pub struct ForgeView {
 }
 
 impl EventEmitter<ForgeEvent> for ForgeView {}
+
+impl ForgeView {
+    /// The class the draft was started from (stored on its config), shown on the nameplate.
+    pub(crate) fn class(&self) -> Option<ArchetypeClass> {
+        self.draft.profile().config.archetype_class
+    }
+}
 
 impl Focusable for ForgeView {
     fn focus_handle(&self, _: &App) -> FocusHandle {

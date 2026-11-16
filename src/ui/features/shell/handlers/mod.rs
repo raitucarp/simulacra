@@ -6,6 +6,7 @@ mod composer_modal;
 mod lab;
 mod navigation;
 mod networks;
+mod onboarding;
 mod post_menu;
 mod posts;
 mod scheduler;

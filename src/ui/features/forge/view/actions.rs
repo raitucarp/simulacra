@@ -4,6 +4,7 @@ use super::keys::{Redo, Undo};
 use super::{ForgeEvent, ForgeView};
 use crate::state::forge::{validate, DraftEdit, ForgeKind, ForgeStep, ToggleField};
 use crate::ui::features::forge::logic::save_bar_state;
+use crate::ui::features::forge::widgets::close_explainers;
 use gpui_kit::*;
 
 impl ForgeView {
@@ -84,6 +85,7 @@ impl ForgeView {
         }
         self.guide.fresh_step = true;
         self.notice = None;
+        close_explainers(cx);
         self.revalidate();
         self.focus.focus(window, cx);
         cx.notify();
@@ -126,16 +128,6 @@ impl ForgeView {
         let profile = Box::new(self.draft.normalized());
         let intro_post = bring_to_life && self.intro_post;
         cx.emit(ForgeEvent::Commit { profile, bring_to_life, intro_post });
-    }
-
-    /// Leaves the forge, keeping unsaved work in the autosave slot.
-    pub fn close(&mut self, _: &mut Window, cx: &mut Context<Self>) {
-        if self.draft.is_dirty() {
-            cx.emit(ForgeEvent::Autosave(Box::new(self.draft.clone())));
-        } else {
-            cx.emit(ForgeEvent::ClearAutosave);
-        }
-        cx.emit(ForgeEvent::Close);
     }
 
     /// Hides or shows Mnemo (persisted by the host).

@@ -19,6 +19,7 @@ pub use crate::domain::traits::{
     MoralFoundation, PostingCadence, PrePostReasoningMode, PromptAssemblyStrategy,
     PunctuationHabit, SentenceLengthPreference,
 };
+use crate::domain::archetype::ArchetypeClass;
 use crate::domain::portrait::AvatarMode;
 use serde::{Deserialize, Serialize};
 
@@ -81,6 +82,8 @@ pub struct AgentConfig {
     // --- 7. Appearance ---
     #[doc = "Chosen avatar (portrait, emblem or photo); `None` keeps the initial / `avatar_path` badge."]
     #[serde(skip_serializing_if = "Option::is_none")] pub avatar: Option<AvatarMode>,
+    #[doc = "Class the Agent Forge started them from (shown as a badge); absent in older JSON."]
+    #[serde(skip_serializing_if = "Option::is_none")] pub archetype_class: Option<ArchetypeClass>,
 }
 
 #[cfg(test)]

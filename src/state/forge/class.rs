@@ -71,7 +71,16 @@ pub fn preview_diff(draft: &AgentDraft, class: ArchetypeClass) -> Vec<FieldChang
     changes
 }
 
-/// Applies `class` to the draft as one undo step; returns whether anything changed.
+/// Applies `class` to the draft (and records it as the draft's class) as one undo step;
+/// returns whether anything changed.
 pub fn apply_class(draft: &mut AgentDraft, class: ArchetypeClass) -> bool {
-    draft.transform(|profile| class.apply_to(&mut profile.config))
+    draft.transform(|profile| {
+        class.apply_to(&mut profile.config);
+        profile.config.archetype_class = Some(class);
+    })
+}
+
+/// Records which class the draft started from (`None`: from scratch or a description).
+pub fn set_class(draft: &mut AgentDraft, class: Option<ArchetypeClass>) -> bool {
+    draft.transform(|profile| profile.config.archetype_class = class)
 }

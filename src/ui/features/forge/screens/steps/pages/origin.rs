@@ -43,7 +43,7 @@ impl ForgeView {
 
     /// Curated names of the draft's class (or of every class) nobody uses yet.
     fn idea_pool(&self) -> Vec<NameSuggestion> {
-        let classes: Vec<ArchetypeClass> = self.class.map_or_else(|| ArchetypeClass::ALL.to_vec(), |class| vec![class]);
+        let classes: Vec<ArchetypeClass> = self.class().map_or_else(|| ArchetypeClass::ALL.to_vec(), |class| vec![class]);
         let taken = |name: &str| self.context.existing.iter().any(|p| p.name.eq_ignore_ascii_case(name));
         classes
             .iter()

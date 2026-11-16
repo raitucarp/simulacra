@@ -25,7 +25,7 @@ fn config_maps_the_core_tokens() {
     assert_eq!(c.foreground, hex(tokens.text_primary));
     assert_eq!(c.muted_foreground, hex(tokens.text_muted));
     assert_eq!(c.border, hex(tokens.border));
-    assert_eq!(c.ring, hex(tokens.border_focus));
+    assert_eq!(c.ring, hex(tokens.focus_ring));
     assert_eq!(c.popover, hex(tokens.bg_elevated));
     assert_eq!(c.danger, hex(tokens.accent_danger));
     assert_eq!(c.selection, hex(tokens.selection));

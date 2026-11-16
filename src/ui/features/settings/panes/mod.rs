@@ -7,6 +7,7 @@ mod common;
 mod engine;
 mod general;
 mod vault;
+mod welcome;
 
 pub(super) use ai::render_ai_pane;
 pub use appearance::{AppearanceEvent, AppearancePanel};

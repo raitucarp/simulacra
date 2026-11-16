@@ -1,14 +1,15 @@
 //! The active-hours clock: a 24-segment ring drawn on a canvas, online hours lit in violet and
 //! the chronotype's peak hours among them in gold, the window written in the middle. Clicking
-//! a segment moves the start there; Shift-clicking moves the end (like the hour strip).
+//! a segment moves the start there; Shift-clicking moves the end (like the hour strip). It is a
+//! tab stop: Left / Right move the start, Up / Down (or Shift + Left / Right) the end.
 
-use super::clock::{hour_at, segment};
+use super::clock::{hour_at, label_center, segment};
 use crate::agent::schedule::{peak_window, HourWindow, HOURS_PER_DAY};
 use crate::domain::agent_config::AgentConfig;
 use crate::state::forge::HourField;
 use crate::theme::ThemeTokens;
 use crate::ui::features::forge::text::tr;
-use crate::ui::features::forge::widgets::ValueCallback;
+use crate::ui::features::forge::widgets::{hour_keys, ValueCallback};
 use gpui_kit::*;
 use std::cell::Cell;
 use std::rc::Rc;
@@ -17,7 +18,7 @@ const RING_ID: &str = "forge-clock-ring";
 const ONLINE_KEY: &str = "forge.ui.daily.online";
 const ALL_DAY_KEY: &str = "forge.ui.daily.all_day";
 const RANGE_SEPARATOR: &str = " – ";
-/// Hours written around the inside of the ring (top, right, bottom, left).
+/// Hours written around the inside of the ring, each beside its own segment.
 const QUARTERS: [u8; 4] = [0, 6, 12, 18];
 const HALF: f32 = 2.0;
 
@@ -48,32 +49,42 @@ fn paint_ring(bounds: Bounds<Pixels>, (active, peak): (HourWindow, HourWindow), 
     }
 }
 
-/// The hour labels and the window text inside the ring.
-fn dial(start: u8, end: u8, theme: &ThemeTokens) -> Div {
-    let label = |hour: u8| div().text_size(theme.font_size_2xs).text_color(theme.text_muted).child(hour.to_string());
-    let [top, right, bottom, left] = QUARTERS.map(label);
-    let range = if start == end { tr(ALL_DAY_KEY) } else { format!("{}{RANGE_SEPARATOR}{}", clock(start), clock(end)) };
-    let inset = theme.forge_clock_ring_width + theme.spacing_2xs;
+/// One hour number centered on the middle of its segment, just inside the ring.
+fn hour_label(hour: u8, theme: &ThemeTokens) -> Div {
+    let (size, label) = (theme.forge_clock_size.as_f32(), theme.forge_clock_label_size.as_f32());
+    let radius = size / HALF - theme.forge_clock_ring_width.as_f32() - theme.spacing_2xs.as_f32() - label / HALF;
+    let (x, y) = label_center(hour, (size / HALF, size / HALF), radius);
     div()
+        .absolute()
+        .left(px(x - label / HALF))
+        .top(px(y - label / HALF))
+        .size(theme.forge_clock_label_size)
+        .flex()
+        .items_center()
+        .justify_center()
+        .text_size(theme.font_size_2xs)
+        .text_color(theme.text_muted)
+        .child(hour.to_string())
+}
+
+/// The hour labels and the window text inside the ring.
+fn dial(start: u8, end: u8, theme: &ThemeTokens) -> Vec<Div> {
+    let range = if start == end { tr(ALL_DAY_KEY) } else { format!("{}{RANGE_SEPARATOR}{}", clock(start), clock(end)) };
+    let inset = theme.forge_clock_ring_width + theme.forge_clock_label_size + theme.spacing_2xs;
+    let middle = div()
         .absolute()
         .top(inset)
         .bottom(inset)
         .left(inset)
         .right(inset)
-        .child(div().absolute().top_0().left_0().right_0().flex().justify_center().child(top))
-        .child(div().absolute().bottom_0().left_0().right_0().flex().justify_center().child(bottom))
-        .child(div().absolute().left_0().top_0().bottom_0().flex().items_center().child(left))
-        .child(div().absolute().right_0().top_0().bottom_0().flex().items_center().child(right))
-        .child(
-            div()
-                .size_full()
-                .flex()
-                .flex_col()
-                .items_center()
-                .justify_center()
-                .child(div().font_family(theme.font_family_mono.clone()).text_size(theme.font_size_xs).text_color(theme.text_primary).child(range))
-                .child(div().text_size(theme.font_size_2xs).text_color(theme.text_muted).child(tr(ONLINE_KEY))),
-        )
+        .flex()
+        .flex_col()
+        .items_center()
+        .justify_center()
+        .text_center()
+        .child(div().font_family(theme.font_family_mono.clone()).text_size(theme.font_size_xs).text_color(theme.text_primary).child(range))
+        .child(div().text_size(theme.font_size_2xs).text_color(theme.text_muted).child(tr(ONLINE_KEY)));
+    QUARTERS.into_iter().map(|hour| hour_label(hour, theme)).chain([middle]).collect()
 }
 
 /// The clock for `cfg`'s active hours; `on_change` gets `(field, hour)` per click.
@@ -86,11 +97,12 @@ pub(super) fn clock_ring(cfg: &AgentConfig, theme: &ThemeTokens, on_change: Valu
         move |bounds, (), window, _| paint_ring(bounds, windows, &paint_theme, window),
     )
     .size_full();
-    div()
-        .id(RING_ID)
+    let keys = on_change.clone();
+    hour_keys(RING_ID, (cfg.active_hours_start, cfg.active_hours_end), theme, keys)
         .relative()
         .flex_shrink_0()
         .size(theme.forge_clock_size)
+        .rounded(theme.radius_full)
         .cursor_pointer()
         .on_mouse_down(MouseButton::Left, move |event, window, cx| {
             let Some((cx_, cy_)) = center.get() else { return };
@@ -99,5 +111,5 @@ pub(super) fn clock_ring(cfg: &AgentConfig, theme: &ThemeTokens, on_change: Valu
             on_change((field, hour), window, cx);
         })
         .child(surface)
-        .child(dial(cfg.active_hours_start, cfg.active_hours_end, theme))
+        .children(dial(cfg.active_hours_start, cfg.active_hours_end, theme))
 }

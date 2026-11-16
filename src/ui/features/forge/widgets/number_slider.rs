@@ -1,12 +1,13 @@
 //! [`NumberSlider`]: a labeled kit slider over any whole-number range (age, photo zoom),
 //! with a formatter for the shown value. Reports the value on release.
 
-use super::slider_slot::{keyed_slider, SliderRange};
+use super::slider_slot::{keyboard_slider, keyed_slider, SliderRange};
 use super::ValueCallback;
 use crate::theme::ThemeTokens;
-use gpui_kit::component::slider::Slider;
 use gpui_kit::*;
 use std::rc::Rc;
+
+const KEYS_SUFFIX: &str = "keys";
 
 /// Formats the value shown next to the label.
 pub type ValueFormat = Rc<dyn Fn(u16) -> String>;
@@ -62,6 +63,8 @@ impl RenderOnce for NumberSlider {
             .justify_between()
             .child(div().text_size(theme.font_size_sm).text_color(theme.text_primary).child(self.label))
             .child(div().text_size(theme.font_size_xs).font_weight(FontWeight::SEMIBOLD).text_color(theme.accent_brand).child(shown));
-        div().flex().flex_col().gap(theme.spacing_xs).child(header).child(Slider::new(&binding.slider))
+        let keys_id = SharedString::from(format!("{}-{KEYS_SUFFIX}", self.id));
+        let slider = keyboard_slider(keys_id, &binding, (self.value, self.range), false, theme, self.on_change.clone());
+        div().flex().flex_col().gap(theme.spacing_xs).child(header).child(slider)
     }
 }

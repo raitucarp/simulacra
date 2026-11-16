@@ -1,6 +1,7 @@
 //! One illustrated, selectable card: art on top, a label and an optional short description,
-//! a brand ring when selected and a focus ring when the keyboard cursor is on it.
+//! a brand ring when selected and the theme's focus ring when the keyboard cursor is on it.
 
+use super::focus_ring::focus_ring_shadow;
 use crate::theme::ThemeTokens;
 use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::*;
@@ -34,12 +35,12 @@ impl OptionCardSpec {
     }
 }
 
-/// Ring color and width for the card state.
+/// Border color and width for the card state (the keyboard cursor wins over selection).
 fn ring(spec: &OptionCardSpec, theme: &ThemeTokens) -> (Rgba, Pixels) {
-    if spec.selected {
+    if spec.focused {
+        (theme.focus_ring, theme.border_width_threadline)
+    } else if spec.selected {
         (theme.accent_brand, theme.border_width_threadline)
-    } else if spec.focused {
-        (theme.border_focus, theme.border_width_threadline)
     } else {
         (theme.border_subtle, theme.border_width_hairline)
     }
@@ -52,7 +53,7 @@ pub fn option_card(
     on_click: impl Fn(&mut Window, &mut App) + 'static,
 ) -> Stateful<Div> {
     let (ring_color, ring_width) = ring(&spec, theme);
-    let (disabled, selected) = (spec.disabled, spec.selected);
+    let (disabled, selected, focused) = (spec.disabled, spec.selected, spec.focused);
     let hover_bg = theme.bg_elevated;
     div()
         .id(spec.id)
@@ -65,6 +66,7 @@ pub fn option_card(
         .border(ring_width)
         .border_color(ring_color)
         .bg(if selected { theme.accent_brand_subtle } else { theme.bg_card })
+        .when(focused, |card| card.shadow(focus_ring_shadow(theme)))
         .when(disabled, |card| card.opacity(theme.forge_disabled_opacity))
         .when(!disabled, |card| {
             card.cursor_pointer()

@@ -57,6 +57,8 @@ setting_keys! {
     ForgeAutosave => "forge.autosave",
     /// Whether Mnemo the guide owl is hidden in the Agent Forge (`true` / `false`).
     ForgeHideGuide => "forge.hide_guide",
+    /// Whether the first-run welcome was completed or skipped (`true` / `false`).
+    OnboardingDone => "onboarding.done",
     /// Pre-palette serialized `ThemeTokens`; migrated on load, then removed.
     LegacyThemeTokens => "theme_tokens",
 }

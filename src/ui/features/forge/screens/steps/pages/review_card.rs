@@ -65,7 +65,7 @@ impl ForgeView {
             .child(stage_portrait(profile, theme.forge_portrait_size * CARD_PORTRAIT_SCALE, theme))
             .child(title(self.display_name(), theme))
             .child(div().text_size(theme.font_size_sm).text_color(theme.text_muted).child(crate::state::forge::normalize_handle(&profile.handle)))
-            .children(self.class.map(|class| class_badge(class, theme)))
+            .children(self.class().map(|class| class_badge(class, theme)))
             .child(div().flex().flex_wrap().justify_center().gap(theme.spacing_xs).children(chips))
             .child(radar(CARD_RADAR_ID, personality_radar(&profile.config), theme))
     }

@@ -12,6 +12,7 @@ mod indices;
 mod interactions;
 mod load;
 mod network_create;
+mod onboarding;
 mod networks;
 mod post_index;
 mod post_meta;

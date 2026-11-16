@@ -53,3 +53,14 @@ fn early_chronotypes_get_the_sun_and_late_ones_the_moon() {
     let peak = crate::agent::schedule::peak_window(HumanChronotype::NightOwlInsomniac);
     assert_eq!(peak, HourWindow::new(22, 5));
 }
+
+#[test]
+fn hour_labels_sit_on_their_own_segment() {
+    use super::clock::label_center;
+    for hour in [0, 6, 12, 18] {
+        let (x, y) = label_center(hour, CENTER, RADII.0);
+        assert_eq!(hour_at(x - CENTER.0, y - CENTER.1), hour);
+    }
+    let (x, y) = label_center(0, CENTER, RADII.0);
+    assert!(x > CENTER.0 && y < CENTER.1, "midnight's label is just right of the top");
+}

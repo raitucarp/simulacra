@@ -51,7 +51,7 @@ pub(super) fn apply_radii(t: &mut ThemeTokens, radius: RadiusScale) {
         radius_xs: scaled(3.0, f), radius_sm: scaled(6.0, f), radius_md: scaled(8.0, f),
         radius_lg: scaled(12.0, f), radius_xl: scaled(16.0, f), radius_full: px(9999.0),
         win_control_radius: scaled(4.0, f),
-        border_width_hairline: px(1.0), border_width_threadline: px(2.0),
+        border_width_hairline: px(1.0), border_width_threadline: px(2.0), focus_ring_width: px(2.0),
         shadow_offset_y: px(12.0), shadow_blur: px(32.0),
     });
 }

@@ -134,3 +134,28 @@ fn occupation_presets_dress_like_the_outfit_hints() {
 fn time_seeds_differ() {
     assert_ne!(time_seed(), time_seed());
 }
+
+#[test]
+fn slider_keys_move_by_notches_and_stop_at_the_ends() {
+    let range = (0, 100, 1);
+    assert_eq!(slider_key_value(50, "right", range), Some(51));
+    assert_eq!(slider_key_value(50, "down", range), Some(49));
+    assert_eq!(slider_key_value(50, "pageup", range), Some(50 + PAGE_NOTCHES));
+    assert_eq!(slider_key_value(5, "pagedown", range), Some(0));
+    assert_eq!(slider_key_value(50, "home", range), Some(0));
+    assert_eq!(slider_key_value(50, "end", range), Some(100));
+    assert_eq!(slider_key_value(100, "up", range), None, "already at the top");
+    assert_eq!(slider_key_value(50, "a", range), None);
+    assert_eq!(slider_key_value(60, "end", (0, 60, 1)), None, "a budget ceiling caps the end");
+}
+
+#[test]
+fn hour_keys_move_start_or_end_wrapping_midnight() {
+    use crate::state::forge::HourField::{ActiveHoursEnd, ActiveHoursStart};
+    assert_eq!(hour_key_change("left", false, (0, 8)), Some((ActiveHoursStart, 23)));
+    assert_eq!(hour_key_change("right", false, (9, 17)), Some((ActiveHoursStart, 10)));
+    assert_eq!(hour_key_change("right", true, (9, 23)), Some((ActiveHoursEnd, 0)));
+    assert_eq!(hour_key_change("up", false, (9, 17)), Some((ActiveHoursEnd, 18)));
+    assert_eq!(hour_key_change("down", false, (9, 17)), Some((ActiveHoursEnd, 16)));
+    assert_eq!(hour_key_change("enter", false, (9, 17)), None);
+}

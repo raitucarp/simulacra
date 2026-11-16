@@ -36,7 +36,7 @@ pub(super) fn apply_surfaces(t: &mut ThemeTokens, palette: &ThemePalette) {
         input_bg: mix(c.surface, c.bg, INPUT_BG_MIX),
 
         border: c.border, border_subtle: mix(c.border, c.bg, BORDER_SUBTLE_MIX),
-        border_strong: mix(c.border, c.fg, BORDER_STRONG_MIX), border_focus: c.accent,
+        border_strong: mix(c.border, c.fg, BORDER_STRONG_MIX), border_focus: c.accent, focus_ring: c.info,
         graph_edge: mix(c.border, c.fg_muted, GRAPH_EDGE_MIX),
 
         hover_bg: with_alpha(c.fg, HOVER_ALPHA), bg_tab_active: with_alpha(c.fg, TAB_ACTIVE_ALPHA),

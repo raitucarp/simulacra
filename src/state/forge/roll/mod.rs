@@ -44,6 +44,7 @@ pub fn roll_into(draft: &mut AgentDraft, seed: u64, existing: &[Profile]) -> Arc
     cfg.gender = pick.gender;
     cfg.pronouns = pick.pronouns;
     cfg.avatar = Some(AvatarMode::Pcg(rolled_portrait(seed, &cfg.occupation)));
+    cfg.archetype_class = Some(class);
     draft.transform(|profile| {
         profile.name = pick.name;
         profile.handle = handle;

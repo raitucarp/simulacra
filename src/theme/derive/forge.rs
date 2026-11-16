@@ -18,6 +18,10 @@ pub(super) fn apply_forge_layout(t: &mut ThemeTokens) {
         // Daily Life clock ring and week strip, Relationships heart pips
         forge_clock_size: px(168.0), forge_clock_ring_width: px(16.0), forge_week_cell_height: px(12.0),
         forge_heart_size: px(18.0),
+        // Hour labels inside the clock ring, keyboard-hint key caps
+        forge_clock_label_size: px(18.0), forge_key_cap_min_width: px(52.0),
+        // First-run welcome overlay
+        onboarding_width: px(620.0), onboarding_art_size: px(112.0),
 
         forge_disabled_opacity: 0.45, forge_backdrop_opacity: 0.35,
     });

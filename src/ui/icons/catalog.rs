@@ -66,6 +66,7 @@ lucide_catalog! {
     Image => "icons/image.svg",
     EyeOff => "icons/eye-off.svg",
     Info => "icons/info.svg",
+    Keyboard => "icons/keyboard.svg",
     Library => "icons/library.svg",
     Link2 => "icons/link-2.svg",
     Lock => "icons/lock.svg",

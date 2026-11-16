@@ -7,42 +7,46 @@ use crate::state::forge::{DraftEdit, TraitValue};
 use crate::ui::features::forge::screens::common::labeled;
 use crate::ui::features::forge::text::{tr, trait_description, trait_label};
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
-use crate::ui::features::forge::widgets::{option_card, OptionCardSpec};
+use crate::ui::features::forge::widgets::{CardGrid, GridCell, OptionCardSpec};
 use crate::ui::illustration::Illustration;
 use crate::state::forge::TraitField;
 use gpui_kit::*;
 
 const CARD_ID_PREFIX: &str = "forge-mbti";
+const GRID_ID: &str = "forge-mbti-grid";
+/// Type cards per row: one temperament family each.
+const FAMILY_SIZE: usize = 4;
 
 impl ForgeView {
     /// Every family with its cards, and the chosen type's callout.
     pub(super) fn mbti_picker(&self, handle: &ForgeHandle) -> Div {
         let theme = &self.theme;
         let chosen = self.draft.profile().config.mbti;
-        let families: Vec<Div> = MbtiGroup::ALL.into_iter().map(|group| self.mbti_family(group, chosen, handle)).collect();
-        let body = div().flex().flex_col().gap(theme.spacing_md).children(families).child(self.mbti_callout(chosen));
+        let headers = MbtiGroup::ALL.into_iter().map(|group| self.mbti_family(group).into_any_element()).collect();
+        let cells = MbtiGroup::ALL.into_iter().flat_map(|group| group.members()).map(|ty| self.mbti_card(ty, ty == chosen, handle)).collect();
+        let grid = CardGrid::new(GRID_ID, cells, FAMILY_SIZE, theme.spacing_sm).row_headers(headers);
+        let body = div().flex().flex_col().gap(theme.spacing_md).child(grid).child(self.mbti_callout(chosen));
         labeled(TraitField::Mbti.path(), body, theme)
     }
 
-    fn mbti_family(&self, group: MbtiGroup, chosen: MbtiType, handle: &ForgeHandle) -> Div {
+    /// The family's name and blurb, above its row of cards.
+    fn mbti_family(&self, group: MbtiGroup) -> Div {
         let theme = &self.theme;
-        let title = div()
+        div()
             .flex()
             .items_baseline()
             .gap(theme.spacing_xs)
             .child(div().text_size(theme.font_size_sm).font_weight(FontWeight::SEMIBOLD).text_color(theme.text_primary).child(tr(&group.label_key())))
-            .child(div().text_size(theme.font_size_xs).text_color(theme.text_muted).child(tr(&group.blurb_key())));
-        let cards = group.members().into_iter().map(|ty| self.mbti_card(ty, ty == chosen, handle));
-        div().flex().flex_col().gap(theme.spacing_xs).child(title).child(div().flex().gap(theme.spacing_sm).children(cards))
+            .child(div().text_size(theme.font_size_xs).text_color(theme.text_muted).child(tr(&group.blurb_key())))
     }
 
-    fn mbti_card(&self, ty: MbtiType, selected: bool, handle: &ForgeHandle) -> Stateful<Div> {
+    fn mbti_card(&self, ty: MbtiType, selected: bool, handle: &ForgeHandle) -> GridCell {
         let width = self.theme.forge_compact_card_width;
         let art = Illustration::trait_card(ty).width(width);
         let mut spec = OptionCardSpec::new((CARD_ID_PREFIX, ty as usize), art, ty.code(), width);
         spec.selected = selected;
         let pick = handle.edit(|ty: MbtiType| DraftEdit::Trait(TraitValue::Mbti(ty)));
-        option_card(spec, &self.theme, move |w, cx| pick(ty, w, cx))
+        GridCell::card(spec, &self.theme, std::rc::Rc::new(move |w, cx| pick(ty, w, cx)))
     }
 
     /// The chosen type's name, what it does to their posts and its function stack.

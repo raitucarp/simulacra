@@ -14,9 +14,8 @@ use std::fs;
 use std::path::{Path, PathBuf};
 
 const UI_ROOT: &str = "src/ui";
-/// Trees still being cleaned on another branch.
-/// TEMPORARY: empty this once `p5/forge-polish` merges (the coordinator removes it).
-const PENDING_CLEANUP: &[&str] = &["src/ui/features/forge/"];
+/// Trees still being cleaned on another branch (none left).
+const PENDING_CLEANUP: &[&str] = &[];
 /// Calls that must never receive a numeric literal.
 const LITERAL_CALLS: &[&str] = &["px(", "rems(", "relative(", "hsla("];
 /// Calls that must never receive a hex color literal.

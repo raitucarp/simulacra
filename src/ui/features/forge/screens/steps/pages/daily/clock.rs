@@ -8,6 +8,8 @@ const SEGMENT_GAP: f32 = 0.14;
 /// Straight pieces approximating each arc of a segment.
 const ARC_STEPS: u16 = 4;
 const HALF: f32 = 2.0;
+/// Share of an hour's arc before the point its label sits on (the middle).
+const LABEL_AT: f32 = 0.5;
 
 /// Angle (radians, clockwise from the top) of one hour of the ring.
 fn hour_span() -> f32 {
@@ -35,4 +37,10 @@ pub(super) fn segment(hour: u8, center: (f32, f32), (inner, outer): (f32, f32)) 
     let outer_arc = (0..=ARC_STEPS).map(|step| polar(center, angle(step), outer));
     let inner_arc = (0..=ARC_STEPS).rev().map(|step| polar(center, angle(step), inner));
     outer_arc.chain(inner_arc).collect()
+}
+
+/// Where the label of hour `hour` sits: the middle of its segment's arc at `radius`.
+pub(super) fn label_center(hour: u8, center: (f32, f32), radius: f32) -> (f32, f32) {
+    let span = hour_span();
+    polar(center, span * (f32::from(hour % HOURS_PER_DAY) + LABEL_AT), radius)
 }

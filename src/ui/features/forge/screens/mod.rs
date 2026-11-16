@@ -29,6 +29,7 @@ impl Render for ForgeView {
             .track_focus(&self.focus)
             .on_action(cx.listener(Self::on_undo))
             .on_action(cx.listener(Self::on_redo))
+            .on_action(cx.listener(Self::on_dismiss))
             .size_full()
             .flex()
             .flex_col()

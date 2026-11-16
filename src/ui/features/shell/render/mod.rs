@@ -39,6 +39,7 @@ impl Render for AppView {
             .children(self.settings_modal(&bind))
             .children(self.workspace_popover(&bind))
             .children(self.composer_modal_view(cx))
+            .children(self.welcome_overlay(&bind))
     }
 }
 

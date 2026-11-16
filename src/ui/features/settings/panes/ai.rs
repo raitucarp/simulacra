@@ -10,6 +10,7 @@ use gpui_kit::component::input::InputState;
 use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::{div, Div, Entity, IntoElement, ParentElement, Stateful, Styled};
 use std::rc::Rc;
+use rust_i18n::t;
 
 /// Helper function to render AI Intelligence Tab Pane
 pub(in crate::ui::features::settings) fn render_ai_pane(
@@ -49,11 +50,11 @@ fn render_provider_section(
     row2_buttons: Vec<Stateful<Div>>,
 ) -> Div {
     section(
-        spaced_row().child(section_label(theme, "SELECT LLM PROVIDER")).child(
+        spaced_row().child(section_label(theme, t!("settings.provider_title").to_string())).child(
             div()
                 .text_size(theme.font_size_hint)
                 .text_color(theme.accent_brand)
-                .child(format!("Active: {}", active_provider)),
+                .child(t!("settings.provider_active", provider = active_provider).to_string()),
         ),
         div()
             .flex()

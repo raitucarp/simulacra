@@ -12,6 +12,7 @@ use gpui_kit::{
     Stateful, Styled,
 };
 use std::rc::Rc;
+use rust_i18n::t;
 
 /// Renders the full left rail (title, tab buttons, sovereignty footer).
 pub(super) fn render_rail(
@@ -66,8 +67,8 @@ fn render_rail_brand(theme: &ThemeTokens) -> Div {
             div()
                 .flex()
                 .flex_col()
-                .child(div().text_size(theme.font_size_base).font_weight(FontWeight::BOLD).text_color(theme.text_primary).child("Settings"))
-                .child(div().text_size(theme.font_size_2xs).text_color(theme.text_muted).child("Simulacra System")),
+                .child(div().text_size(theme.font_size_base).font_weight(FontWeight::BOLD).text_color(theme.text_primary).child(t!("settings.rail_title").to_string()))
+                .child(div().text_size(theme.font_size_2xs).text_color(theme.text_muted).child(t!("settings.rail_subtitle").to_string())),
         )
 }
 
@@ -87,7 +88,7 @@ fn render_rail_footer(theme: &ThemeTokens) -> Div {
             div()
                 .text_size(theme.font_size_2xs)
                 .text_color(theme.text_muted)
-                .child("Local Epistemic Sovereignty"),
+                .child(t!("settings.rail_footer").to_string()),
         )
 }
 

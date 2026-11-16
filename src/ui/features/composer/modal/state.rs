@@ -1,6 +1,5 @@
 //! Derived state of the composer modal: title and the reply / quote target.
 
-use super::super::consts::{QUOTE_TITLE_PREFIX, REPLY_TITLE_PREFIX};
 use super::{ComposerModalMode, ComposerModalView};
 use crate::domain::AuthoredPost;
 use rust_i18n::t;
@@ -11,10 +10,10 @@ impl ComposerModalView {
         match &self.mode {
             ComposerModalMode::NewThread => t!("composer.new_thread").to_string(),
             ComposerModalMode::Reply(parent) => {
-                format!("{REPLY_TITLE_PREFIX} {}", parent.author.display_handle())
+                t!("composer.reply_title", handle = parent.author.display_handle()).to_string()
             }
             ComposerModalMode::Quote(target) => {
-                format!("{QUOTE_TITLE_PREFIX} {}", target.author.display_handle())
+                t!("composer.quote_title", handle = target.author.display_handle()).to_string()
             }
         }
     }

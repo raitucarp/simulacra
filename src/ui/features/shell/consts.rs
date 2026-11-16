@@ -16,7 +16,5 @@ pub(super) const LAYOUT_ID_FORGE_EXPANDED: &str = "simulacra-forge-layout-expand
 pub(super) const COMPOSER_ROWS: (usize, usize) = (1, 5);
 pub(super) const DOC_CONTENT_ROWS: (usize, usize) = (3, 8);
 
-/// Placeholders of the LLM settings inputs.
-pub(super) const LLM_API_KEY_PLACEHOLDER: &str = "Enter Gemini API Key (AIzaSy...)";
-pub(super) const LLM_MODEL_PLACEHOLDER: &str = "Model Identifier (e.g. gemini-1.5-flash)";
+/// Placeholder of the custom LLM endpoint input (a URL, not translated).
 pub(super) const LLM_ENDPOINT_PLACEHOLDER: &str = "http://localhost:8000/v1/chat/completions";

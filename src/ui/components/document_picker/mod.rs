@@ -5,8 +5,6 @@ use std::path::{Path, PathBuf};
 
 /// Plain-text extensions accepted by the picker.
 const DOCUMENT_EXTENSIONS: [&str; 4] = ["md", "markdown", "txt", "text"];
-/// File dialog filter name for documents.
-const DOCUMENT_FILTER_NAME: &str = "Text Documents";
 /// Bytes per kibibyte.
 const BYTES_PER_KB: u64 = 1024;
 /// Largest file accepted, in kibibytes (documents are stored whole in SQLite).
@@ -29,7 +27,7 @@ pub enum DocumentImportError {
 pub async fn pick_document_path(title: &str) -> Option<PathBuf> {
     let file = rfd::AsyncFileDialog::new()
         .set_title(title)
-        .add_filter(DOCUMENT_FILTER_NAME, &DOCUMENT_EXTENSIONS)
+        .add_filter(rust_i18n::t!("picker.document_filter").to_string(), &DOCUMENT_EXTENSIONS)
         .pick_file()
         .await?;
     Some(file.path().to_path_buf())

@@ -1,8 +1,6 @@
 //! Tokenized "Show more" trigger for progressive stream windowing.
 
-use super::consts::{
-    LOAD_MORE_BUTTON_ID, LOAD_MORE_CONTAINER_ID, SUMMARY_OF, SUMMARY_SHOWING, SUMMARY_THOUGHTS,
-};
+use super::consts::{LOAD_MORE_BUTTON_ID, LOAD_MORE_CONTAINER_ID};
 use super::params::LoadMoreCallback;
 use crate::theme::ThemeTokens;
 use crate::ui::icons::LucideIcon;
@@ -37,7 +35,7 @@ pub(crate) fn render_load_more(
                 .font_family(theme.font_family_mono.clone())
                 .text_size(theme.font_size_2xs)
                 .text_color(theme.text_muted)
-                .child(format!("{SUMMARY_SHOWING} {shown} {SUMMARY_OF} {total} {SUMMARY_THOUGHTS}")),
+                .child(t!("feed.window_summary", shown = shown, total = total).to_string()),
         )
         .into_any_element()
 }

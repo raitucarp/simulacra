@@ -23,10 +23,3 @@ pub(crate) const TOGGLE_REPLIES_BUTTON_ID: &str = "btn-toggle-inspector-replies"
 pub(crate) const STREAM_TAB_ID: &str = "stream-tab";
 /// Element id of the inspector quick reply button.
 pub(crate) const QUICK_REPLY_BUTTON_ID: &str = "btn-quick-reply-thread";
-
-/// Words of the load-more window summary ("Showing <n> of <total> thoughts").
-pub(crate) const SUMMARY_SHOWING: &str = "Showing";
-pub(crate) const SUMMARY_OF: &str = "of";
-pub(crate) const SUMMARY_THOUGHTS: &str = "thoughts";
-/// Lead text of the inspector quick reply bar ("Reply to <handle>").
-pub(crate) const REPLY_TO_LABEL: &str = "Reply to";

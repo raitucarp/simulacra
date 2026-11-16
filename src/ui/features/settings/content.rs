@@ -14,6 +14,7 @@ use gpui_kit::{
     ParentElement, Styled,
 };
 use std::rc::Rc;
+use rust_i18n::t;
 
 /// Assembles the right content pane (flex_1) from header, tab body and footer.
 pub(super) fn render_content_pane(
@@ -87,7 +88,7 @@ pub(super) fn render_footer_bar(
         .items_center()
         .justify_between()
         .child(
-            Button::new(CANCEL_BUTTON_ID).ghost().label("Cancel").on_click(move |_, window, cx| {
+            Button::new(CANCEL_BUTTON_ID).ghost().label(t!("settings.cancel").to_string()).on_click(move |_, window, cx| {
                 (on_close)(window, cx);
             }),
         )
@@ -95,7 +96,7 @@ pub(super) fn render_footer_bar(
             Button::new(SAVE_BUTTON_ID)
                 .primary()
                 .icon(Icon::new(LucideIcon::Check).size(theme.icon_size_md))
-                .label("Save & Apply Settings")
+                .label(t!("settings.save_apply").to_string())
                 .on_click(move |_, window, cx| {
                     (on_save)(window, cx);
                 }),

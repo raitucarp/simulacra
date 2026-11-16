@@ -18,7 +18,6 @@ const MAX_GRAPH_SCAN_WINDOW: usize = 128;
 /// Maximum number of thoughts rendered in the serendipitous discovery spark feed.
 pub const MAX_SPARK_FEED_ITEMS: usize = 4;
 const SPARK_SCROLL_ID: &str = "random-spark-scroll-feed";
-const SCROLL_BADGE_LABEL: &str = "Scroll";
 
 fn render_scroll_badge(theme: &ThemeTokens) -> Div {
     div()
@@ -36,7 +35,7 @@ fn render_scroll_badge(theme: &ThemeTokens) -> Div {
         .font_medium()
         .text_color(theme.text_muted)
         .child(div().w(theme.icon_size_sm).h(theme.icon_size_sm).child(Icon::new(LucideIcon::Dices)))
-        .child(SCROLL_BADGE_LABEL)
+        .child(t!("sidebar.scroll_badge").to_string())
 }
 
 fn render_feed_header(theme: &ThemeTokens) -> Div {

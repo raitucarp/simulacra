@@ -1,6 +1,6 @@
 //! Focus thread inspector chrome: header, grounding callout, and quick reply bar.
 
-use super::consts::{QUICK_REPLY_BUTTON_ID, REPLY_TO_LABEL};
+use super::consts::QUICK_REPLY_BUTTON_ID;
 use super::params::ReplyPostCallback;
 use crate::domain::{Post, Profile};
 use crate::theme::ThemeTokens;
@@ -121,7 +121,7 @@ pub(crate) fn render_quick_reply_bar(
                 .gap(theme.spacing_xs)
                 .text_size(theme.font_size_xs)
                 .text_color(theme.text_muted)
-                .child(format!("{REPLY_TO_LABEL} {author_handle}")),
+                .child(t!("feed.reply_to", handle = author_handle).to_string()),
         )
         .child(
             Button::new(QUICK_REPLY_BUTTON_ID)

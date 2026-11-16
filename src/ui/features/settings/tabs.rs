@@ -1,6 +1,7 @@
 //! Categorical tabs for the vertical settings navigation rail.
 
 use crate::ui::icons::LucideIcon;
+use rust_i18n::t;
 
 /// Categorical tabs for the vertical settings navigation rail.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -19,12 +20,13 @@ impl SettingsTab {
         SettingsTab::KnowledgeVault,
     ];
 
-    pub fn label(self) -> &'static str {
+    /// i18n key of [`Self::label`].
+    pub fn label_key(self) -> &'static str {
         match self {
-            Self::General => "General",
-            Self::AiIntelligence => "AI Intelligence",
-            Self::Appearance => "Appearance",
-            Self::KnowledgeVault => "Knowledge Vault",
+            Self::General => "settings.tab_general",
+            Self::AiIntelligence => "settings.tab_ai",
+            Self::Appearance => "settings.tab_appearance",
+            Self::KnowledgeVault => "settings.tab_vault",
         }
     }
 
@@ -37,21 +39,38 @@ impl SettingsTab {
         }
     }
 
-    pub fn title(self) -> &'static str {
+    /// i18n key of [`Self::title`].
+    pub fn title_key(self) -> &'static str {
         match self {
-            Self::General => "General Preferences",
-            Self::AiIntelligence => "AI Intelligence & Providers",
-            Self::Appearance => "Theme & Appearance",
-            Self::KnowledgeVault => "Knowledge Vault",
+            Self::General => "settings.title_general",
+            Self::AiIntelligence => "settings.title_ai",
+            Self::Appearance => "settings.title_appearance",
+            Self::KnowledgeVault => "settings.tab_vault",
         }
     }
 
-    pub fn description(self) -> &'static str {
+    /// i18n key of [`Self::description`].
+    pub fn description_key(self) -> &'static str {
         match self {
-            Self::General => "Local SQLite database, autonomous thought cycle, and interface locale",
-            Self::AiIntelligence => "Configure LLM provider models (Google Gemini recommended) and API keys",
-            Self::Appearance => "Display density, high-contrast OLED black themes, and layout aesthetics",
-            Self::KnowledgeVault => "Grounding documents stored in the local vault",
+            Self::General => "settings.desc_general",
+            Self::AiIntelligence => "settings.desc_ai",
+            Self::Appearance => "settings.desc_appearance",
+            Self::KnowledgeVault => "settings.desc_vault",
         }
+    }
+
+    /// Translated rail label.
+    pub fn label(self) -> String {
+        t!(self.label_key()).to_string()
+    }
+
+    /// Translated content-pane heading.
+    pub fn title(self) -> String {
+        t!(self.title_key()).to_string()
+    }
+
+    /// Translated content-pane subtitle.
+    pub fn description(self) -> String {
+        t!(self.description_key()).to_string()
     }
 }

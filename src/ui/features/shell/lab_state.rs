@@ -1,10 +1,11 @@
 //! Personas & Agents roster selection and the LLM settings inputs.
 
-use super::consts::{LLM_API_KEY_PLACEHOLDER, LLM_ENDPOINT_PLACEHOLDER, LLM_MODEL_PLACEHOLDER};
+use super::consts::LLM_ENDPOINT_PLACEHOLDER;
 use crate::domain::ProfileId;
 use crate::state::AppState;
 use gpui_kit::component::input::InputState;
 use gpui_kit::*;
+use rust_i18n::t;
 
 /// The profile selected in the roster.
 pub struct LabState {
@@ -30,14 +31,14 @@ impl LlmInputs {
     /// Creates the inputs pre-filled from the persisted LLM settings.
     pub(super) fn new(state: &AppState, window: &mut Window, cx: &mut App) -> Self {
         let settings = &state.llm_settings;
-        let mut input = |value: &str, placeholder: &'static str| {
+        let mut input = |value: &str, placeholder: String| {
             let value = value.to_string();
             cx.new(|cx| InputState::new(window, cx).default_value(value).placeholder(placeholder))
         };
         Self {
-            api_key: input(&settings.api_key, LLM_API_KEY_PLACEHOLDER),
-            model: input(&settings.model, LLM_MODEL_PLACEHOLDER),
-            endpoint: input(&settings.custom_endpoint, LLM_ENDPOINT_PLACEHOLDER),
+            api_key: input(&settings.api_key, t!("settings.api_key_placeholder").to_string()),
+            model: input(&settings.model, t!("settings.model_placeholder").to_string()),
+            endpoint: input(&settings.custom_endpoint, LLM_ENDPOINT_PLACEHOLDER.to_string()),
         }
     }
 

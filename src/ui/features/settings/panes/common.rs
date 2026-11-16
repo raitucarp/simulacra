@@ -75,7 +75,7 @@ pub(super) fn field_title(theme: &ThemeTokens, text: impl IntoElement) -> Div {
 }
 
 /// Field title on the left with a muted caption hint on the right.
-pub(super) fn field_header(theme: &ThemeTokens, title: impl IntoElement, hint: &'static str) -> Div {
+pub(super) fn field_header(theme: &ThemeTokens, title: impl IntoElement, hint: String) -> Div {
     spaced_row()
         .child(field_title(theme, title))
         .child(div().text_size(theme.font_size_2xs).text_color(theme.text_muted).child(hint))

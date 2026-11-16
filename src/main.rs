@@ -7,7 +7,7 @@ use simulacra::prelude::*;
 rust_i18n::i18n!("locales", fallback = "en");
 
 fn main() {
-    application().with_assets(assets::AllAssets).run(|cx| {
+    application().with_assets(simulacra::ui::assets::AppAssets).run(|cx| {
         use gpui_kit::component as gpui_component;
         rust_i18n::extend!(gpui_component);
         init(cx);

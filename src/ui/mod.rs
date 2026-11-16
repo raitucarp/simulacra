@@ -1,9 +1,11 @@
 //! UI architecture organized hierarchically into Atoms, Molecules, Organisms, and Views.
 
+pub mod assets;
 pub mod atoms;
 pub mod components;
 pub mod features;
 pub mod icons;
+pub mod illustration;
 pub mod molecules;
 pub mod organisms;
 pub mod render_stats;

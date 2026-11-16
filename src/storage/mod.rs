@@ -1,5 +1,6 @@
 //! Storage and local database persistence module.
 
+pub mod avatars;
 pub mod db;
 pub mod vault;
 

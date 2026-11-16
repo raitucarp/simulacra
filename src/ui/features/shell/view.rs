@@ -3,6 +3,7 @@
 use super::feed_state::FeedState;
 use super::graph_state::GraphState;
 use super::lab_state::{LabState, LlmInputs};
+use super::panels::ShellPanels;
 use super::scheduler_state::SchedulerState;
 use super::settings_draft::SettingsDraft;
 use crate::i18n::Language;
@@ -24,6 +25,8 @@ pub struct AppView {
     pub lab: LabState,
     pub scheduler: SchedulerState,
     pub graph: GraphState,
+    /// Cached views of the sidebars and the center column.
+    pub(super) panels: ShellPanels,
     pub(super) _subscriptions: Vec<Subscription>,
 }
 

@@ -11,7 +11,7 @@ use std::rc::Rc;
 impl AppView {
     /// The agent workspace while a lab tab is active, the Mind Graph view on its tab,
     /// otherwise the main feed.
-    pub(super) fn center_panel(&self, bind: &Binder) -> AnyElement {
+    pub(in crate::ui::features::shell) fn center_panel(&self, bind: &Binder) -> AnyElement {
         if self.is_lab_tab() {
             self.agent_workspace(bind).into_any_element()
         } else if self.state.active_tab == NavigationTab::MindGraph {

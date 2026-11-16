@@ -9,7 +9,7 @@ use std::rc::Rc;
 
 impl AppView {
     /// Navigation, workspace switcher, members and persona switcher.
-    pub(super) fn left_sidebar(&self, bind: &Binder) -> impl IntoElement {
+    pub(in crate::ui::features::shell) fn left_sidebar(&self, bind: &Binder) -> impl IntoElement {
         render_left_sidebar(LeftSidebarParams {
             state: &self.state,
             theme: &self.theme,
@@ -24,7 +24,7 @@ impl AppView {
     }
 
     /// Mind & Cadence / Vault & Telemetry panel.
-    pub(super) fn right_sidebar(&self, bind: &Binder) -> impl IntoElement {
+    pub(in crate::ui::features::shell) fn right_sidebar(&self, bind: &Binder) -> impl IntoElement {
         let topic_entity = bind.entity().clone();
         let heatmap = self.state.current_activity_heatmap();
         render_unified_right_sidebar(UnifiedRightSidebarParams {

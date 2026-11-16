@@ -18,6 +18,7 @@ mod feed_state;
 mod graph_state;
 mod handlers;
 mod lab_state;
+mod panels;
 mod placeholders;
 mod render;
 mod scheduler_state;

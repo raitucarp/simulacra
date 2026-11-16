@@ -3,6 +3,7 @@
 use super::feed_state::FeedState;
 use super::graph_state::GraphState;
 use super::lab_state::{LabState, LlmInputs};
+use super::panels::ShellPanels;
 use super::scheduler_state::SchedulerState;
 use super::view::{AppView, ChromeState};
 use crate::i18n::Language;
@@ -26,6 +27,7 @@ impl AppView {
             feed.subscribe_search(cx),
             cx.subscribe_in(&composer_modal, window, Self::publish_composer_draft),
             graph_subscription,
+            Self::observe_own_changes(cx),
         ];
         let llm_inputs = LlmInputs::new(&state, window, cx);
         let lab = LabState::new(&state, window, cx);
@@ -41,6 +43,7 @@ impl AppView {
             lab,
             scheduler,
             graph,
+            panels: ShellPanels::new(cx),
             _subscriptions: subscriptions,
         };
         view.start_scheduler_heartbeat(window, cx);

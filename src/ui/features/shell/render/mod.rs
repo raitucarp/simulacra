@@ -9,15 +9,20 @@ mod workspace;
 
 use super::binder::Binder;
 use super::view::AppView;
+use crate::ui::render_stats;
 use gpui_kit::*;
+
+/// Name of the root view in the dev render counter.
+const ROOT_STATS_NAME: &str = "AppView";
 
 impl Render for AppView {
     fn render(&mut self, _window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
+        render_stats::record(ROOT_STATS_NAME);
         self.sync_composer_view(cx);
         self.sync_stream(cx);
         self.sync_mind_graph(cx);
         let bind = Binder::new(cx);
-        let columns = self.render_columns(&bind);
+        let columns = self.render_columns();
 
         div()
             .w_full()

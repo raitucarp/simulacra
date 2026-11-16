@@ -4,6 +4,7 @@
 //! so the same palette always yields the same tokens, in light and dark mode alike.
 
 mod accents;
+mod forge;
 mod metrics;
 mod scales;
 mod surfaces;
@@ -28,6 +29,7 @@ pub fn derive_tokens(
     metrics::apply_spacing(&mut t, density);
     metrics::apply_radii(&mut t, radius_scale);
     metrics::apply_layout(&mut t);
+    forge::apply_forge_layout(&mut t);
     surfaces::apply_surfaces(&mut t, palette);
     text::apply_text(&mut t, palette);
     accents::apply_accents(&mut t, palette);

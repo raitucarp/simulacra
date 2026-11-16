@@ -29,7 +29,7 @@ pub use draft::{normalize_handle, AgentDraft, AutosaveError, StepProgress, AUTOS
 pub use edit::DraftEdit;
 pub use fields::{
     field_label_key, field_step, fields_for_step, AvatarField, CountField, HourField, OptionalTextField,
-    ScoreField, TextField, ToggleField, TraitField, TraitValue,
+    ScoreField, TextField, ToggleField, TraitField, TraitValue, TraitVisitor,
 };
 pub use roll::{roll_into, roll_random};
 pub use step::{steps_for, ForgeKind, ForgeStep, FORGE_I18N_ROOT};

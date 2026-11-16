@@ -55,6 +55,8 @@ setting_keys! {
     ThemeFontFamily => "theme.font_family",
     /// In-progress Agent Forge draft (JSON from `AgentDraft::to_autosave`).
     ForgeAutosave => "forge.autosave",
+    /// Whether Mnemo the guide owl is hidden in the Agent Forge (`true` / `false`).
+    ForgeHideGuide => "forge.hide_guide",
     /// Pre-palette serialized `ThemeTokens`; migrated on load, then removed.
     LegacyThemeTokens => "theme_tokens",
 }

@@ -1,5 +1,7 @@
 //! Domain entities and value objects for the Simulacra local social network.
 
+pub mod trait_option;
+
 pub mod agent_config;
 pub mod document;
 pub mod ids;
@@ -7,6 +9,7 @@ pub mod network;
 pub mod post;
 pub mod profile;
 pub mod topic;
+pub mod traits;
 
 pub use agent_config::{
     AgentConfig, AttachmentStyle, CapitalizationStyle, ClassicTemperament, CodeSwitchingStyle,
@@ -22,3 +25,4 @@ pub use network::Network;
 pub use post::{Post, MAX_POST_CHARS};
 pub use profile::{Profile, ProfileRole};
 pub use topic::TrendingTopic;
+pub use trait_option::TraitOption;

@@ -7,6 +7,11 @@ use crate::theme::ThemeTokens;
 use gpui_kit::*;
 use std::path::PathBuf;
 
+/// Avatars at or below this diameter use the 2xs initial font size.
+const SMALL_AVATAR_MAX_PX: f32 = 24.0;
+/// Avatars at or below this diameter (and above the small cap) use the xs font size.
+const MEDIUM_AVATAR_MAX_PX: f32 = 36.0;
+
 /// Renders a circular profile avatar with initial and role-based coloring.
 pub fn render_avatar(
     initial: &str,
@@ -21,9 +26,9 @@ pub fn render_avatar(
     };
 
     let size_f32 = size.as_f32();
-    let font_size = if size_f32 <= 24.0 {
+    let font_size = if size_f32 <= SMALL_AVATAR_MAX_PX {
         theme.font_size_2xs
-    } else if size_f32 <= 36.0 {
+    } else if size_f32 <= MEDIUM_AVATAR_MAX_PX {
         theme.font_size_xs
     } else {
         theme.font_size_base

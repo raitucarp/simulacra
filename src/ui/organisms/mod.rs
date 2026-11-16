@@ -4,16 +4,16 @@
 pub mod agent_lab_view {
     pub use crate::ui::features::agent_editor::*;
 }
-pub mod app_title_bar;
-pub mod composer_modal;
-pub mod knowledge_vault_view;
-pub mod left_sidebar;
-pub mod main_feed;
-pub mod mind_graph_view;
-pub mod right_sidebar;
-pub mod secondary_sidebar;
-pub mod settings_modal;
-pub mod unified_right_sidebar;
+pub use crate::ui::features::composer::modal as composer_modal;
+pub use crate::ui::features::feed as main_feed;
+pub use crate::ui::features::mind_graph as mind_graph_view;
+pub use crate::ui::features::settings as settings_modal;
+pub use crate::ui::features::sidebar_left as left_sidebar;
+pub use crate::ui::features::sidebar_right::legacy as right_sidebar;
+pub use crate::ui::features::sidebar_right::secondary as secondary_sidebar;
+pub use crate::ui::features::sidebar_right::unified as unified_right_sidebar;
+pub use crate::ui::features::title_bar as app_title_bar;
+pub use crate::ui::features::vault as knowledge_vault_view;
 
 pub use agent_lab_view::{
     render_agent_lab_view, render_agent_workspace_view, AgentConfigTab, AgentEditorInputs,

@@ -1,11 +1,13 @@
 //! Atomic avatar circle component.
-//! Supports both custom uploaded image files (`avatar_path`) and initial-based role badges.
+//! Supports generated portraits, emblems and cropped photos (`config.avatar`), uploaded image
+//! files (`avatar_path`) and initial-based role badges.
 //! Fully tokenized via ThemeTokens.
 
 use crate::domain::{Profile, ProfileRole};
 use crate::theme::ThemeTokens;
 use gpui_kit::*;
-use std::path::PathBuf;
+use super::avatar_cache::resolve_avatar;
+use crate::ui::illustration::render_avatar_mode;
 
 /// Renders a circular profile avatar with initial and role-based coloring.
 pub fn render_avatar(
@@ -20,10 +22,10 @@ pub fn render_avatar(
         ProfileRole::Agent { .. } => theme.accent_agent,
     };
 
-    let size_f32 = size.as_f32();
-    let font_size = if size_f32 <= 24.0 {
+    // Initials step up a font size as the avatar crosses the small and medium caps.
+    let font_size = if size <= theme.avatar_initial_small_max {
         theme.font_size_2xs
-    } else if size_f32 <= 36.0 {
+    } else if size <= theme.avatar_initial_medium_max {
         theme.font_size_xs
     } else {
         theme.font_size_base
@@ -47,39 +49,37 @@ pub fn render_avatar(
         .child(initial.to_string())
 }
 
-/// Renders a profile avatar, using the uploaded image at `profile.avatar_path` if present,
-/// or falling back to the role-colored initial badge.
+/// Renders a profile avatar: the chosen [`AvatarMode`](crate::domain::portrait::AvatarMode)
+/// (`profile.config.avatar`) if it can be drawn, else the uploaded image at
+/// `profile.avatar_path`, else the role-colored initial badge.
 pub fn render_profile_avatar(
     profile: &Profile,
     size: Pixels,
     theme: &ThemeTokens,
 ) -> Div {
-    if let Some(ref path_str) = profile.avatar_path {
-        let trimmed = path_str.trim();
-        if !trimmed.is_empty() {
-            let path = PathBuf::from(trimmed);
-            if path.exists() {
-                return div()
+    if let Some(avatar) = profile.config.avatar.as_ref().and_then(|mode| render_avatar_mode(mode, size, theme)) {
+        return avatar;
+    }
+    if let Some(path) = profile.avatar_path.as_deref().and_then(resolve_avatar) {
+        return div()
+            .w(size)
+            .h(size)
+            .flex_shrink_0()
+            .rounded(theme.radius_full)
+            .bg(theme.bg_card)
+            .border(theme.border_width_hairline)
+            .border_color(theme.border_subtle)
+            .overflow_hidden()
+            .flex()
+            .items_center()
+            .justify_center()
+            .child(
+                img(path)
                     .w(size)
                     .h(size)
-                    .flex_shrink_0()
                     .rounded(theme.radius_full)
-                    .bg(theme.bg_card)
-                    .border(theme.border_width_hairline)
-                    .border_color(theme.border_subtle)
-                    .overflow_hidden()
-                    .flex()
-                    .items_center()
-                    .justify_center()
-                    .child(
-                        img(path)
-                            .w(size)
-                            .h(size)
-                            .rounded(theme.radius_full)
-                            .object_fit(ObjectFit::Cover),
-                    );
-            }
-        }
+                    .object_fit(ObjectFit::Cover),
+            );
     }
 
     render_avatar(&profile.avatar_initial, &profile.role, size, theme)

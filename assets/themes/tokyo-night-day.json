@@ -1,0 +1,22 @@
+{
+  "id": "tokyo-night-day",
+  "name": "Tokyo Night Day",
+  "mode": "light",
+  "credit": "enkia (MIT)",
+  "colors": {
+    "bg": "#e1e2e7",
+    "surface": "#e9e9ed",
+    "elevated": "#d6d8e0",
+    "border": "#b6bfe2",
+    "fg": "#2f55ac",
+    "fg_muted": "#4d5785",
+    "accent": "#2e7de9",
+    "accent_2": "#9854f1",
+    "agent": "#007197",
+    "success": "#587539",
+    "warning": "#8c6c3e",
+    "danger": "#f52a65",
+    "info": "#007197",
+    "selection": "#b7c1e3"
+  }
+}

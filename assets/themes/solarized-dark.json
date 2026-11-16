@@ -1,0 +1,22 @@
+{
+  "id": "solarized-dark",
+  "name": "Solarized Dark",
+  "mode": "dark",
+  "credit": "Ethan Schoonover (MIT)",
+  "colors": {
+    "bg": "#002b36",
+    "surface": "#00212b",
+    "elevated": "#073642",
+    "border": "#0d4a57",
+    "fg": "#eee8d5",
+    "fg_muted": "#909e9e",
+    "accent": "#268bd2",
+    "accent_2": "#d33682",
+    "agent": "#2aa198",
+    "success": "#859900",
+    "warning": "#b58900",
+    "danger": "#dc322f",
+    "info": "#2aa198",
+    "selection": "#0d4a57"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "id": "obsidian-zinc",
+  "name": "Obsidian Zinc",
+  "mode": "dark",
+  "credit": "Simulacra",
+  "colors": {
+    "bg": "#09090b",
+    "surface": "#121214",
+    "elevated": "#1c1c1f",
+    "border": "#27272a",
+    "fg": "#fafafa",
+    "fg_muted": "#a1a1aa",
+    "accent": "#a78bfa",
+    "accent_2": "#22d3ee",
+    "agent": "#c4b5fd",
+    "success": "#34d399",
+    "warning": "#facc15",
+    "danger": "#f87171",
+    "info": "#22d3ee",
+    "selection": "#3b2a6b"
+  }
+}

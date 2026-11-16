@@ -1,0 +1,22 @@
+{
+  "id": "rose-pine-dawn",
+  "name": "Rosé Pine Dawn",
+  "mode": "light",
+  "credit": "Rosé Pine (MIT)",
+  "colors": {
+    "bg": "#faf4ed",
+    "surface": "#fffaf3",
+    "elevated": "#f2e9e1",
+    "border": "#dfdad9",
+    "fg": "#575279",
+    "fg_muted": "#696487",
+    "accent": "#907aa9",
+    "accent_2": "#d7827e",
+    "agent": "#56949f",
+    "success": "#286983",
+    "warning": "#b06d00",
+    "danger": "#b4637a",
+    "info": "#56949f",
+    "selection": "#dfdad9"
+  }
+}

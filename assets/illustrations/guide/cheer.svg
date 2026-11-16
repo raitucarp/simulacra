@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs><linearGradient id="g-guide-cheer" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="0" stop-color="{{accent}}"/><stop offset="1" stop-color="{{accent}}" stop-opacity="0.75"/>
+  </linearGradient></defs>
+  <ellipse cx="64" cy="118" rx="34" ry="5" fill="{{fg}}" fill-opacity="0.08"/>
+  <path d="M32 70 Q14 56 10 34 Q24 40 36 62 Z" fill="{{accent}}" stroke="{{fg}}" stroke-width="2" stroke-linejoin="round"/><path d="M96 70 Q114 56 118 34 Q104 40 92 62 Z" fill="{{accent}}" stroke="{{fg}}" stroke-width="2" stroke-linejoin="round"/><path d="M108 20 l3 7 l7 3 l-7 3 l-3 7 l-3 -7 l-7 -3 l7 -3 Z" fill="{{warning}}"/><path d="M18 22 l2 4 l4 2 l-4 2 l-2 4 l-2 -4 l-4 -2 l4 -2 Z" fill="{{info}}"/>
+  <path d="M30 62 Q30 30 64 28 Q98 30 98 62 L98 88 Q98 112 64 114 Q30 112 30 88 Z" fill="url(#g-guide-cheer)"/>
+  <path d="M38 34 L32 18 L50 30 Z M90 34 L96 18 L78 30 Z" fill="{{accent}}"/>
+  <path d="M44 84 Q64 74 84 84 Q84 106 64 108 Q44 106 44 84 Z" fill="{{elevated}}"/>
+  <path d="M52 90 l4 4 l4 -4 M60 98 l4 4 l4 -4 M68 90 l4 4 l4 -4" stroke="{{accent}}" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="50" cy="56" r="15" fill="{{surface}}" stroke="{{fg}}" stroke-width="3"/>
+  <circle cx="78" cy="56" r="15" fill="{{surface}}" stroke="{{fg}}" stroke-width="3"/>
+  <path d="M63 56 L65 56" stroke="{{fg}}" stroke-width="3" stroke-linecap="round"/>
+  <path d="M43 58 Q50 50 57 58 M71 58 Q78 50 85 58" stroke="{{fg}}" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <path d="M59 68 L64 76 L69 68 Z" fill="{{warning}}" stroke="{{fg}}" stroke-width="2" stroke-linejoin="round"/>
+  
+  <path d="M54 113 l-3 6 M58 114 l0 6 M70 114 l0 6 M74 113 l3 6" stroke="{{warning}}" stroke-width="3" stroke-linecap="round"/>
+</svg>

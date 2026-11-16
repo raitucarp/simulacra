@@ -1,0 +1,22 @@
+{
+  "id": "kanagawa",
+  "name": "Kanagawa",
+  "mode": "dark",
+  "credit": "rebelot (MIT)",
+  "colors": {
+    "bg": "#1f1f28",
+    "surface": "#16161d",
+    "elevated": "#2a2a37",
+    "border": "#363646",
+    "fg": "#dcd7ba",
+    "fg_muted": "#a6a69c",
+    "accent": "#7e9cd8",
+    "accent_2": "#957fb8",
+    "agent": "#7fb4ca",
+    "success": "#98bb6c",
+    "warning": "#e6c384",
+    "danger": "#e46876",
+    "info": "#6a9589",
+    "selection": "#2d4f67"
+  }
+}

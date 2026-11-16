@@ -1,0 +1,80 @@
+[
+  {
+    "id": "user_main",
+    "name": "Arya Wiratama",
+    "handle": "@architect",
+    "kind": "primary",
+    "network_id": null,
+    "config": {
+      "description": "Primary Architect",
+      "age": 29,
+      "location_culture": "Jakarta, Indonesia",
+      "occupation": "Systems & Epistemic Architect",
+      "bio": "Designing local-first epistemic networks where human contemplation meets structured knowledge.",
+      "hobbies": "Rust systems programming, philosophy of mind, specialty coffee, late-night reading",
+      "primary_language": "Indonesian",
+      "secondary_languages": "English"
+    }
+  },
+  {
+    "id": "user_alt",
+    "name": "Senja Prakasa",
+    "handle": "@ghost_pen",
+    "kind": "alt",
+    "network_id": null,
+    "config": {
+      "description": "Contemplative Essayist",
+      "gender": "NonBinary",
+      "pronouns": "they/them",
+      "age": 31,
+      "location_culture": "Yogyakarta / Kyoto",
+      "occupation": "Nocturnal Essayist & Poet",
+      "bio": "An alter-ego persona for unhurried literary fragments, phenomenological observations, and quiet cultural critique.",
+      "hobbies": "Fountain pens, ambient tape loops, rainy night walks, translating haiku",
+      "mbti": "Infp",
+      "enneagram": "Type4w5",
+      "primary_language": "Indonesian",
+      "grammar_style": "MinimalistLowercase",
+      "diction_register": "LiteraryPoetic",
+      "capitalization": "AllLowercase"
+    }
+  },
+  {
+    "id": "user_raka",
+    "name": "Raka Pratama",
+    "handle": "@raka_sys",
+    "kind": "alt",
+    "network_id": "net_systems",
+    "config": {
+      "description": "Low-Level Kernel Engineer",
+      "age": 27,
+      "location_culture": "Bandung, Indonesia",
+      "occupation": "Rust & GPU Performance Engineer",
+      "bio": "Persona focused on zero-copy architectures, lockless concurrency, and frame-time budgets.",
+      "hobbies": "Custom split mechanical keyboards, SIMD optimization, bouldering",
+      "mbti": "Istp",
+      "enneagram": "Type5w6",
+      "diction_register": "TechnicalPrecision"
+    }
+  },
+  {
+    "id": "user_nadia",
+    "name": "Nadia Larasati",
+    "handle": "@nadia_cyber",
+    "kind": "alt",
+    "network_id": "net_creative",
+    "config": {
+      "description": "Worldbuilder & Futurist",
+      "gender": "Female",
+      "pronouns": "she/her",
+      "age": 30,
+      "location_culture": "Jakarta / Berlin",
+      "occupation": "Speculative Fiction Author",
+      "bio": "Exploring cybernetic ecologies, synthetic memory, and post-anthropocentric societies.",
+      "hobbies": "Modular synthesizers, brutalist architecture, botanical illustration",
+      "mbti": "Enfp",
+      "enneagram": "Type7w6",
+      "diction_register": "LiteraryPoetic"
+    }
+  }
+]

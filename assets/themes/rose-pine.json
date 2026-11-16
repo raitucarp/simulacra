@@ -1,0 +1,22 @@
+{
+  "id": "rose-pine",
+  "name": "Rosé Pine",
+  "mode": "dark",
+  "credit": "Rosé Pine (MIT)",
+  "colors": {
+    "bg": "#191724",
+    "surface": "#1f1d2e",
+    "elevated": "#26233a",
+    "border": "#403d52",
+    "fg": "#e0def4",
+    "fg_muted": "#908caa",
+    "accent": "#c4a7e7",
+    "accent_2": "#ebbcba",
+    "agent": "#9ccfd8",
+    "success": "#31748f",
+    "warning": "#f6c177",
+    "danger": "#eb6f92",
+    "info": "#9ccfd8",
+    "selection": "#403d52"
+  }
+}

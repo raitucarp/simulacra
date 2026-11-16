@@ -1,0 +1,22 @@
+{
+  "id": "ayu-light",
+  "name": "Ayu Light",
+  "mode": "light",
+  "credit": "Ayu Theme (MIT)",
+  "colors": {
+    "bg": "#fcfcfc",
+    "surface": "#f3f4f5",
+    "elevated": "#e7e8e9",
+    "border": "#d8d8d7",
+    "fg": "#5c6166",
+    "fg_muted": "#63676c",
+    "accent": "#fa8d3e",
+    "accent_2": "#a37acc",
+    "agent": "#399ee6",
+    "success": "#6cbf43",
+    "warning": "#b28500",
+    "danger": "#e65050",
+    "info": "#478acc",
+    "selection": "#d8e6f2"
+  }
+}

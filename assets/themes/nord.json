@@ -1,0 +1,22 @@
+{
+  "id": "nord",
+  "name": "Nord",
+  "mode": "dark",
+  "credit": "Arctic Ice Studio (MIT)",
+  "colors": {
+    "bg": "#2e3440",
+    "surface": "#272c36",
+    "elevated": "#3b4252",
+    "border": "#434c5e",
+    "fg": "#eceff4",
+    "fg_muted": "#a9b0be",
+    "accent": "#88c0d0",
+    "accent_2": "#b48ead",
+    "agent": "#81a1c1",
+    "success": "#a3be8c",
+    "warning": "#ebcb8b",
+    "danger": "#bf616a",
+    "info": "#5e81ac",
+    "selection": "#434c5e"
+  }
+}

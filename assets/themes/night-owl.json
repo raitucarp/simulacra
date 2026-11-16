@@ -1,0 +1,22 @@
+{
+  "id": "night-owl",
+  "name": "Night Owl",
+  "mode": "dark",
+  "credit": "Sarah Drasner (MIT)",
+  "colors": {
+    "bg": "#011627",
+    "surface": "#010e1a",
+    "elevated": "#0b2942",
+    "border": "#1d3b53",
+    "fg": "#d6deeb",
+    "fg_muted": "#7e97ac",
+    "accent": "#82aaff",
+    "accent_2": "#c792ea",
+    "agent": "#7fdbca",
+    "success": "#addb67",
+    "warning": "#ecc48d",
+    "danger": "#ef5350",
+    "info": "#21c7a8",
+    "selection": "#1d3b53"
+  }
+}

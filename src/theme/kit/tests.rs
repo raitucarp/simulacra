@@ -1,6 +1,6 @@
 use super::*;
 use crate::theme::color::to_hex;
-use crate::theme::derive::derive_default_tokens;
+use crate::theme::derive::{derive_default_tokens, derive_tokens, Density, RadiusScale, TypeScale};
 use crate::theme::registry::ThemeRegistry;
 use gpui_kit::component::try_parse_color;
 use gpui_kit::{Hsla, SharedString};
@@ -55,4 +55,42 @@ fn light_tokens_produce_a_light_kit_theme() {
     let palette = ThemeRegistry::global().get("github-light").expect("github-light");
     let config = kit_theme_config(&derive_default_tokens(palette));
     assert_eq!(config.mode, ThemeMode::Light);
+}
+
+fn scaled_tokens(type_scale: TypeScale, radius: RadiusScale) -> crate::theme::ThemeTokens {
+    let palette = ThemeRegistry::global().all().first().expect("a preset palette");
+    derive_tokens(palette, Density::default(), type_scale, radius)
+}
+
+#[test]
+fn type_scale_reaches_the_kit_font_sizes() {
+    let sizes: Vec<(f32, f32)> = [TypeScale::Small, TypeScale::Default, TypeScale::Large]
+        .into_iter()
+        .map(|scale| {
+            let tokens = scaled_tokens(scale, RadiusScale::default());
+            let config = kit_theme_config(&tokens);
+            assert_eq!(config.font_size, Some(tokens.font_size_root.as_f32()));
+            assert_eq!(config.mono_font_size, Some(tokens.font_size_sm.as_f32()));
+            let mut theme = Theme::default();
+            theme.apply_config(&Rc::new(config));
+            assert_eq!(theme.font_size, tokens.font_size_root, "kit rem follows {scale:?}");
+            assert_eq!(theme.mono_font_size, tokens.font_size_sm);
+            (theme.font_size.as_f32(), theme.mono_font_size.as_f32())
+        })
+        .collect();
+    assert!(sizes.windows(2).all(|pair| pair[0].0 < pair[1].0 && pair[0].1 < pair[1].1), "{sizes:?}");
+}
+
+#[test]
+fn default_type_scale_keeps_the_kit_default_rem() {
+    let kit_default = Theme::default().font_size;
+    let tokens = scaled_tokens(TypeScale::Default, RadiusScale::default());
+    assert_eq!(tokens.font_size_root, kit_default, "default scale must not resize kit widgets");
+}
+
+#[test]
+fn radius_scale_reaches_the_kit_radii() {
+    let sharp = kit_theme_config(&scaled_tokens(TypeScale::default(), RadiusScale::Sharp));
+    let round = kit_theme_config(&scaled_tokens(TypeScale::default(), RadiusScale::Round));
+    assert!(sharp.radius < round.radius && sharp.radius_lg < round.radius_lg);
 }

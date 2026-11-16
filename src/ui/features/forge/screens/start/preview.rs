@@ -6,7 +6,7 @@ use super::classes::class_key;
 use crate::domain::{ArchetypeClass, TraitOption};
 use crate::state::forge::{preview_diff, ChangeValue, FieldChange, ForgeStep, TraitValue, TraitVisitor};
 use crate::theme::ThemeTokens;
-use crate::ui::features::forge::text::{tr, tr_with, trait_label};
+use crate::ui::features::forge::text::{tr, tr_count, tr_with, trait_label};
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
 use crate::ui::icons::LucideIcon;
 use crate::ui::illustration::Illustration;
@@ -23,7 +23,6 @@ const MORE_KEY: &str = "forge.ui.start.more_changes";
 const ON_KEY: &str = "forge.ui.on";
 const OFF_KEY: &str = "forge.ui.off";
 const ARG_CLASS: &str = "class";
-const ARG_COUNT: &str = "count";
 const ARROW: &str = "→";
 /// Longest value shown in a change row before it is cut with an ellipsis.
 const MAX_VALUE_CHARS: usize = 32;
@@ -79,7 +78,7 @@ fn step_group(step: ForgeStep, changes: &[&FieldChange], theme: &ThemeTokens) ->
         .gap(theme.spacing_2xs)
         .child(div().text_size(theme.font_size_xs).font_weight(FontWeight::BOLD).child(tr(&step.label_key())))
         .children(changes.iter().take(ROWS_PER_STEP).map(|change| change_row(change, theme)))
-        .children((more > 0).then(|| muted(tr_with(MORE_KEY, &[(ARG_COUNT, more.to_string())]), theme)))
+        .children((more > 0).then(|| muted(tr_count(MORE_KEY, more, &[]), theme)))
 }
 
 impl ForgeView {

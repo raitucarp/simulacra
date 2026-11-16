@@ -38,7 +38,7 @@ impl LlmClient {
 
     /// Returns whether a valid API key is configured.
     pub fn has_api_key(&self) -> bool {
-        !self.settings.api_key.trim().is_empty()
+        self.settings.has_api_key()
     }
 
     /// The configured provider.

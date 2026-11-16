@@ -5,7 +5,7 @@ use super::super::super::common::{card, heading, muted};
 use super::issue_text;
 use crate::state::forge::{can_save, ForgeKind, Severity, ValidationIssue};
 use crate::theme::ThemeTokens;
-use crate::ui::features::forge::text::{tr, tr_with};
+use crate::ui::features::forge::text::{tr, tr_count};
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
 use crate::ui::features::forge::widgets::ToggleCard;
 use crate::ui::icons::LucideIcon;
@@ -21,7 +21,6 @@ const LIFE_KEY: &str = "forge.ui.review.bring_to_life";
 const INTRO_KEY: &str = "forge.ui.review.intro_post";
 const INTRO_HINT_KEY: &str = "forge.ui.review.intro_hint";
 const BLOCKED_KEY: &str = "forge.ui.save_blocked";
-const ARG_COUNT: &str = "count";
 const FIX_ID_PREFIX: &str = "forge-fix";
 const LIFE_ID: &str = "forge-bring-to-life";
 const INTRO_ID: &str = "forge-intro-post";
@@ -88,7 +87,7 @@ impl ForgeView {
         let go = handle.act(ForgeView::bring_to_life);
         let mut button = Button::new(LIFE_ID).primary().large().icon(LucideIcon::Sparkles).label(tr(LIFE_KEY)).disabled(!ready);
         if !ready {
-            button = button.tooltip(tr_with(BLOCKED_KEY, &[(ARG_COUNT, errors.to_string())]));
+            button = button.tooltip(tr_count(BLOCKED_KEY, errors, &[]));
         }
         let intro = (self.draft.kind() == ForgeKind::Agent).then(|| {
             let toggle = handle.with(|this, on: bool, _, cx| {

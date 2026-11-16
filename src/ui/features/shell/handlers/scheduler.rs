@@ -36,9 +36,17 @@ impl AppView {
         cx.notify();
     }
 
-    /// One heartbeat: enqueue every due agent, then start queued generations.
+    /// One heartbeat: enqueue every due agent, then start queued generations. Paused while
+    /// no API key is configured (one notice) and while backing off after failures.
     fn scheduler_tick(&mut self, window: &mut Window, cx: &mut Context<Self>) {
         if !self.scheduler.enabled {
+            return;
+        }
+        if !self.state.llm_settings.has_api_key() {
+            self.report_scheduler_needs_key(window, cx);
+            return;
+        }
+        if !self.scheduler.failures.allows_generation(Utc::now()) {
             return;
         }
         self.scheduler.tick = self.scheduler.tick.wrapping_add(1);
@@ -66,8 +74,13 @@ impl AppView {
         due_agents(&slots, &ctx)
     }
 
-    /// Starts queued generations while a concurrency slot is free.
+    /// Starts queued generations while a concurrency slot is free; queued agents wait
+    /// while no API key is configured or a failure backoff is pending.
     pub(super) fn pump_generation_queue(&mut self, window: &mut Window, cx: &mut Context<Self>) {
+        let ready = self.state.llm_settings.has_api_key() && self.scheduler.failures.allows_generation(Utc::now());
+        if !ready {
+            return;
+        }
         while let Some(id) = self.scheduler.queue.start_next() {
             self.scheduler.last_dispatch.insert(id.clone(), Utc::now());
             match self.scheduled_job(&id) {

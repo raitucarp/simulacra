@@ -1,10 +1,13 @@
 //! User-facing toasts for generation failures (LLM errors and worker failures).
 //!
 //! The heuristic reply is still inserted; these notices make sure the user knows it
-//! was a fallback and why. Messages are already redacted by [`LlmFailure`].
+//! was a fallback and why. Messages are already redacted by [`LlmFailure`]. Each distinct
+//! failure cause is shown once until the settings change or a generation succeeds.
 
 use super::super::view::AppView;
+use crate::agent::schedule::FailureCause;
 use crate::agent::LlmFailure;
+use chrono::Utc;
 use crate::error::AppError;
 use gpui_kit::component::notification::Notification;
 use gpui_kit::component::WindowExt;
@@ -21,19 +24,42 @@ struct WorkerFailureNotice;
 struct StorageFailureNotice;
 
 impl AppView {
-    /// Records `failure`, logs it, and shows it as a toast (provider + short message).
+    /// Records `failure` and backs autonomous generation off; logs it and shows it as a toast
+    /// (provider + short message) only the first time its cause is seen since the last reset.
     pub(super) fn report_llm_failure(&mut self, failure: LlmFailure, window: &mut Window, cx: &mut Context<Self>) {
-        eprintln!("simulacra: {} request failed: {}", failure.provider, failure.message);
-        let provider = failure.provider.to_string();
-        let title = t!("simulation.llm_failed_title", provider = provider).to_string();
-        let note = if failure.missing_key {
-            Notification::warning(t!("simulation.llm_missing_key").to_string())
-        } else {
-            Notification::error(failure.message.clone())
-        };
-        let note = note.title(title).id1::<LlmFailureNotice>(failure.provider.id_str());
-        window.push_notification(note, cx);
+        let first = self.scheduler.failures.record_failure(FailureCause::of(&failure), Utc::now());
+        if first {
+            eprintln!("simulacra: {} request failed: {}", failure.provider, failure.message);
+            let provider = failure.provider.to_string();
+            let title = t!("simulation.llm_failed_title", provider = provider).to_string();
+            let note = if failure.missing_key {
+                Notification::warning(t!("simulation.llm_missing_key").to_string())
+            } else {
+                Notification::error(failure.message.clone())
+            };
+            window.push_notification(note.title(title).id1::<LlmFailureNotice>(failure.provider.id_str()), cx);
+        }
         self.scheduler.last_error = Some(failure);
+    }
+
+    /// Tells the user, once, that autonomous posting waits for an API key.
+    pub(super) fn report_scheduler_needs_key(&mut self, window: &mut Window, cx: &mut Context<Self>) {
+        let provider = self.state.llm_settings.provider;
+        if !self.scheduler.failures.notice(FailureCause::missing_key(provider)) {
+            return;
+        }
+        let title = t!("scheduler.paused_title").to_string();
+        let body = t!("scheduler.paused_no_key", provider = provider.to_string()).to_string();
+        eprintln!("simulacra: {title}: {body}");
+        let note = Notification::warning(body.clone()).title(title).id1::<LlmFailureNotice>(provider.id_str());
+        window.push_notification(note, cx);
+        self.scheduler.last_error = Some(LlmFailure::new(provider, &body, "", true));
+    }
+
+    /// Forgets shown failure notices and the generation backoff (settings changed or a
+    /// generation succeeded), so the next failure is reported again.
+    pub(super) fn reset_llm_failures(&mut self) {
+        self.scheduler.failures.reset();
     }
 
     /// Shows a toast when the background simulation worker could not run at all.

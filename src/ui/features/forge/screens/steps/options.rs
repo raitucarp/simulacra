@@ -1,7 +1,9 @@
-//! The right-hand options panel: Mnemo, any notice, then the current step's page.
+//! The right-hand options panel: Mnemo, any notice, then the current step's page. Its scroll
+//! position is keyed by step, so changing step starts at the top.
 
 use super::super::common::message;
 use crate::state::forge::ForgeStep;
+use crate::ui::features::forge::logic::options_scroll_id;
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView, Notice};
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::button::{Button, ButtonVariants};
@@ -21,6 +23,7 @@ impl ForgeView {
             .flex_shrink_0()
             .h_full()
             .overflow_y_scrollbar()
+            .id(options_scroll_id(self.draft.step()))
             .p(theme.spacing_lg)
             .flex()
             .flex_col()

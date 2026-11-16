@@ -12,8 +12,10 @@
 //! - [`clock`]: the injectable wall clock.
 //! - [`planner`]: the per-agent decision and the due-agent list.
 //! - [`queue`]: the bounded generation queue with per-agent in-flight tracking.
+//! - [`backoff`]: one notice per distinct LLM failure and a growing pause after failures.
 //! - [`preview`]: a simulated week of posts for one config (the Agent Forge calendar).
 
+mod backoff;
 mod cadence;
 mod chronotype;
 mod clock;
@@ -26,6 +28,7 @@ mod window;
 #[cfg(test)]
 mod tests;
 
+pub use backoff::{backoff_delay, FailureCause, FailureGate, BACKOFF_BASE_MINUTES, BACKOFF_MAX_MINUTES};
 pub use cadence::{cadence_rule, CadenceRule};
 pub use chronotype::{peak_window, posting_chance};
 pub use clock::{Clock, FixedClock, SystemClock};

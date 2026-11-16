@@ -16,6 +16,8 @@ const FORGE_SOURCE: &str = "src/ui/features/forge";
 /// Test files hold deliberately missing keys.
 const TEST_FILE: &str = "tests.rs";
 const KEY_ROOTS: [&str; 2] = ["\"forge.", "\"portrait."];
+/// Count labels live under `<base>_one` / `<base>_other` (see `crate::i18n::t_count`).
+const PLURAL_SUFFIXES: [&str; 2] = ["_one", "_other"];
 const EXPLAIN_PARTS: [&str; 2] = ["what", "effect"];
 /// Origin fields plus the avatar: the fields this task's pages explain.
 const EXPLAINED_FIELDS: [&str; 10] =
@@ -90,6 +92,7 @@ fn forge_ui_keys_exist_in_english_and_indonesian() {
         let missing: Vec<&String> = wanted
             .iter()
             .filter(|key| !available.contains(*key) && !available.iter().any(|leaf| leaf.starts_with(&format!("{key}."))))
+            .filter(|key| !PLURAL_SUFFIXES.iter().all(|suffix| available.contains(&format!("{key}{suffix}"))))
             .collect();
         assert!(missing.is_empty(), "{locale} is missing {missing:?}");
     }
@@ -109,4 +112,34 @@ fn flat_trait_keys_resolve_at_runtime() {
     assert!(trait_description(HumanGender::Female).is_some());
     assert!(!trait_label(HumanGender::Male).is_empty());
     assert!(tr_opt("forge.ui.no_such_key").is_none());
+}
+
+#[test]
+fn cadence_texts_show_the_scheduler_gap_not_a_placeholder() {
+    use crate::agent::schedule::cadence_rule;
+    use crate::domain::PostingCadence;
+    for cadence in PostingCadence::ALL {
+        let texts = [Some(trait_label(cadence)), trait_description(cadence)];
+        for text in texts.into_iter().flatten() {
+            assert!(!text.contains("%{"), "{cadence:?}: unfilled placeholder in {text:?}");
+        }
+    }
+    for cadence in [PostingCadence::OnEveryNewPost, PostingCadence::Every15Minutes] {
+        let minutes = cadence_rule(cadence).expect("autonomous cadence").min_interval_minutes.to_string();
+        let description = trait_description(cadence).expect("described");
+        assert!(description.contains(&minutes), "{cadence:?}: {description:?} lacks {minutes}");
+    }
+}
+
+#[test]
+fn forge_count_labels_follow_the_plural_rule() {
+    use crate::i18n::plural_key_in;
+    let english = |key: String, count: usize| {
+        let text = crate::_rust_i18n_try_translate("en", &key).expect("translated").to_string();
+        text.replace("%{count}", &count.to_string())
+    };
+    assert_eq!(english(plural_key_in("en", "forge.ui.save_blocked", 1), 1), "Fix 1 issue before saving.");
+    assert_eq!(english(plural_key_in("en", "forge.ui.save_blocked", 3), 3), "Fix 3 issues before saving.");
+    assert_eq!(english(plural_key_in("en", "forge.ui.origin.age_years", 1), 1), "1 year");
+    assert_eq!(english(plural_key_in("en", "forge.ui.grimoire.chars", 0), 0), "0 characters");
 }

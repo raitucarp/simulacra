@@ -52,11 +52,13 @@ impl AppView {
         cx.notify();
     }
 
-    /// Persists the draft merged with the typed fields (an empty model falls back to the default).
+    /// Persists the draft merged with the typed fields (an empty model falls back to the default)
+    /// and forgets past LLM failures, so the scheduler retries and reports afresh.
     pub(crate) fn save_settings(&mut self, _: &mut Window, cx: &mut Context<Self>) {
         let typed = self.llm_inputs.values(cx);
         let settings = self.chrome.settings_draft.apply(&self.state.llm_settings, typed);
         self.state.update_llm_settings(settings);
+        self.reset_llm_failures();
         self.chrome.is_settings_open = false;
         cx.notify();
     }

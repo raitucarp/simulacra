@@ -35,6 +35,11 @@ impl Default for LlmSettings {
 }
 
 impl LlmSettings {
+    /// Whether an API key is configured (blank keys do not count).
+    pub fn has_api_key(&self) -> bool {
+        !self.api_key.trim().is_empty()
+    }
+
     /// Loads saved LLM settings from the SQLite database.
     pub fn load_from_db(db: &Database) -> Self {
         let mut settings = Self::default();

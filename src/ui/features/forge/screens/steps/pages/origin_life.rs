@@ -8,7 +8,7 @@ use crate::domain::HumanGender;
 use crate::state::forge::fields::MAX_AGE;
 use crate::state::forge::{AvatarField, CountField, DraftEdit, TextField, TraitField, TraitValue};
 use crate::ui::features::forge::logic::OccupationPreset;
-use crate::ui::features::forge::text::{field_label, tr, tr_with};
+use crate::ui::features::forge::text::{field_label, tr, tr_count};
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
 use crate::ui::features::forge::widgets::{CardGrid, GridCell, IllustratedOptionGrid, NumberSlider, OptionCardSpec};
 use crate::ui::illustration::PortraitView;
@@ -17,7 +17,6 @@ use gpui_kit::*;
 const LIFE_KEY: &str = "forge.ui.origin.life";
 const PRESETS_KEY: &str = "forge.ui.origin.occupation_presets";
 const AGE_FORMAT_KEY: &str = "forge.ui.origin.age_years";
-const ARG_AGE: &str = "age";
 const OCCUPATION_ID_PREFIX: &str = "forge-occupation";
 const OCCUPATION_GRID_ID: &str = "forge-occupation-grid";
 const AGE_ID: &str = "forge-age";
@@ -79,7 +78,7 @@ impl ForgeView {
         let age = *CountField::Age.get(self.draft.profile());
         let edit = handle.edit(|age: u16| DraftEdit::Count(CountField::Age, age));
         let slider = NumberSlider::new(AGE_ID, field_label(path), age, (0, MAX_AGE, AGE_STEP), &self.theme, move |v, w, cx| edit(v, w, cx))
-            .format(|age| tr_with(AGE_FORMAT_KEY, &[(ARG_AGE, age.to_string())]));
+            .format(|age| tr_count(AGE_FORMAT_KEY, usize::from(age), &[]));
         div().flex().flex_col().gap(self.theme.spacing_xs).child(slider).children(self.issue_lines(path))
     }
 

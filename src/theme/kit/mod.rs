@@ -11,7 +11,8 @@ use std::rc::Rc;
 /// Name of the generated kit theme.
 pub const KIT_THEME_NAME: &str = "Simulacra";
 
-/// Pure mapping of the tokens onto a gpui-component theme configuration.
+/// Pure mapping of the tokens onto a gpui-component theme configuration: colors, mode, font
+/// families, the type scale (the kit's rem size and monospace size) and the radius scale.
 pub fn kit_theme_config(tokens: &ThemeTokens) -> ThemeConfig {
     let mut colors = ThemeConfigColors::default();
     colors::apply_base(&mut colors, tokens);
@@ -22,8 +23,10 @@ pub fn kit_theme_config(tokens: &ThemeTokens) -> ThemeConfig {
     ThemeConfig {
         name: KIT_THEME_NAME.into(),
         mode: if tokens.mode.is_dark() { ThemeMode::Dark } else { ThemeMode::Light },
+        font_size: Some(tokens.font_size_root.as_f32()),
         font_family: Some(tokens.font_family_ui.clone().into()),
         mono_font_family: Some(tokens.font_family_mono.clone().into()),
+        mono_font_size: Some(tokens.font_size_sm.as_f32()),
         radius: Some(tokens.radius_sm.as_f32().round() as usize),
         radius_lg: Some(tokens.radius_md.as_f32().round() as usize),
         colors,

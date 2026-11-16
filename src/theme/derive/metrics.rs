@@ -26,7 +26,7 @@ pub(super) fn apply_typography(t: &mut ThemeTokens, scale: TypeScale) {
     set_tokens!(t {
         font_size_2xs: scaled(10.0, f), font_size_xs: scaled(11.5, f), font_size_sm: scaled(13.0, f),
         font_size_base: scaled(14.0, f), font_size_md: scaled(15.0, f), font_size_lg: scaled(18.0, f),
-        font_size_xl: scaled(22.0, f),
+        font_size_xl: scaled(22.0, f), font_size_root: scaled(16.0, f),
         font_size_micro: scaled(9.0, f), font_size_hint: scaled(11.0, f), font_size_label: scaled(12.0, f),
         icon_size_xs: scaled(11.0, f), icon_size_sm: scaled(12.0, f), icon_size_md: scaled(13.0, f),
         icon_size_lg: scaled(14.0, f), icon_size_xl: scaled(15.0, f), icon_size_2xl: scaled(16.0, f),

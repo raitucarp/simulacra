@@ -70,8 +70,9 @@ impl AppView {
         self.scheduler.queue.complete(agent_id);
         match outcome {
             Ok(SimulationOutcome { reply, llm_error }) => {
-                if let Some(failure) = llm_error {
-                    self.report_llm_failure(failure, window, cx);
+                match llm_error {
+                    Some(failure) => self.report_llm_failure(failure, window, cx),
+                    None => self.reset_llm_failures(),
                 }
                 self.insert_simulated_reply(reply, window, cx);
             }

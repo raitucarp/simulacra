@@ -3,6 +3,9 @@ use crate::domain::portrait::{suggested_outfit, PortraitSlot, PortraitSpec};
 use crate::state::forge::{validate, AgentDraft, ForgeKind, ForgeStep, ScoreField};
 use crate::ui::illustration::GuidePose;
 
+/// The forge root's key context.
+const FORGE_CONTEXT: &str = crate::ui::features::forge::view::FORGE_KEY_CONTEXT;
+
 const NETWORK: &str = "net_test";
 
 fn blank(kind: ForgeKind) -> AgentDraft {
@@ -158,4 +161,36 @@ fn hour_keys_move_start_or_end_wrapping_midnight() {
     assert_eq!(hour_key_change("up", false, (9, 17)), Some((ActiveHoursEnd, 18)));
     assert_eq!(hour_key_change("down", false, (9, 17)), Some((ActiveHoursEnd, 16)));
     assert_eq!(hour_key_change("enter", false, (9, 17)), None);
+}
+
+#[test]
+fn every_step_gets_its_own_options_scroll_id() {
+    let ids: Vec<_> = ForgeStep::ALL.iter().map(|step| options_scroll_id(*step)).collect();
+    for (at, id) in ids.iter().enumerate() {
+        assert!(ids[at + 1..].iter().all(|other| other != id), "{id} is shared, so scroll would carry over");
+    }
+    assert_eq!(options_scroll_id(ForgeStep::Voice), options_scroll_id(ForgeStep::Voice), "stable within a step");
+}
+
+fn contexts(sources: &[&str]) -> Vec<gpui_kit::KeyContext> {
+    sources.iter().map(|source| gpui_kit::KeyContext::parse(source).expect("valid context")).collect()
+}
+
+#[test]
+fn escape_closes_hint_cards_before_anything_else() {
+    let in_field = contexts(&["Root", FORGE_CONTEXT, TEXT_INPUT_KEY_CONTEXT]);
+    assert_eq!(dismiss_step(true, &in_field), DismissStep::CloseHints);
+    assert_eq!(dismiss_step(true, &contexts(&["Root", FORGE_CONTEXT])), DismissStep::CloseHints);
+}
+
+#[test]
+fn escape_in_a_text_field_only_leaves_the_field() {
+    let in_field = contexts(&["Root", FORGE_CONTEXT, TEXT_INPUT_KEY_CONTEXT]);
+    assert_eq!(dismiss_step(false, &in_field), DismissStep::LeaveTextField);
+}
+
+#[test]
+fn escape_outside_a_text_field_closes_the_forge() {
+    assert_eq!(dismiss_step(false, &contexts(&["Root", FORGE_CONTEXT])), DismissStep::CloseForge);
+    assert_eq!(dismiss_step(false, &[]), DismissStep::CloseForge);
 }

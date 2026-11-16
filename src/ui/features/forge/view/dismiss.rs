@@ -1,17 +1,22 @@
-//! Leaving the forge: Escape (hint cards first) and the close button.
+//! Leaving the forge: Escape (hint cards first, then a focused text field) and the close button.
 
 use super::keys::Dismiss;
 use super::{ForgeEvent, ForgeScreen, ForgeView};
+use crate::ui::features::forge::logic::{dismiss_step, DismissStep};
 use crate::ui::features::forge::widgets::close_explainers;
 use gpui_kit::*;
 
 impl ForgeView {
-    /// Escape: closes any open hint card first, otherwise leaves the forge.
+    /// Escape: closes any open hint card first; else, inside a text field, only leaves the
+    /// field (focus returns to the forge); otherwise leaves the forge.
     pub(crate) fn on_dismiss(&mut self, _: &Dismiss, window: &mut Window, cx: &mut Context<Self>) {
-        if close_explainers(cx) {
-            cx.notify();
-        } else {
-            self.close(window, cx);
+        match dismiss_step(close_explainers(cx), &window.context_stack()) {
+            DismissStep::CloseHints => cx.notify(),
+            DismissStep::LeaveTextField => {
+                self.focus.focus(window, cx);
+                cx.notify();
+            }
+            DismissStep::CloseForge => self.close(window, cx),
         }
     }
 

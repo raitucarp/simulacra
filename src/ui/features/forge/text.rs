@@ -3,11 +3,14 @@
 
 use crate::agent::schedule::cadence_rule;
 use crate::domain::{PostingCadence, TraitOption};
+use crate::i18n::plural_key;
 use crate::state::forge::field_label_key;
 use rust_i18n::t;
 
 const ARG_OPEN: &str = "%{";
 const ARG_CLOSE: &str = "}";
+/// Placeholder of the number a count label is chosen by.
+const ARG_COUNT: &str = "count";
 /// Placeholder of a posting cadence's minimum gap in its label and description.
 pub const ARG_MINUTES: &str = "minutes";
 
@@ -29,6 +32,14 @@ fn interpolate(text: String, args: &[(&str, String)]) -> String {
 /// The translation of `key` with every `%{name}` replaced by its value from `args`.
 pub fn tr_with(key: &str, args: &[(&str, String)]) -> String {
     interpolate(tr(key), args)
+}
+
+/// The `_one` / `_other` variant of `base` for `count` under the active locale's plural rule,
+/// with `%{count}` and every placeholder in `args` filled in.
+pub fn tr_count(base: &str, count: usize, args: &[(&str, String)]) -> String {
+    let mut all = vec![(ARG_COUNT, count.to_string())];
+    all.extend_from_slice(args);
+    tr_with(&plural_key(base, count), &all)
 }
 
 /// Runtime arguments of a trait label or description key: a posting cadence's `%{minutes}`

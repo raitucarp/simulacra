@@ -7,7 +7,7 @@ use crate::agent::schedule::{simulate_week, HourWindow, WeekPreview, DAYS_PER_WE
 use crate::domain::agent_config::AgentConfig;
 use crate::domain::ProfileId;
 use crate::theme::ThemeTokens;
-use crate::ui::features::forge::text::{tr, tr_with};
+use crate::ui::features::forge::text::{tr, tr_count};
 use gpui_kit::*;
 
 /// Day-name keys, Monday first (`forge.ui.daily.day_*`).
@@ -19,7 +19,6 @@ const OFF_KEY: &str = "forge.ui.daily.week_off";
 const MANUAL_KEY: &str = "forge.ui.daily.week_manual";
 const POSTS_KEY: &str = "forge.ui.daily.week_posts";
 const LEGEND_KEY: &str = "forge.ui.daily.week_legend";
-const ARG_COUNT: &str = "count";
 /// Seed of the preview's spontaneity rolls (any fixed value keeps the preview stable).
 const PREVIEW_SEED: u64 = 0x5EED;
 
@@ -64,7 +63,7 @@ pub(super) fn week_strip(cfg: &AgentConfig, id: &ProfileId, theme: &ThemeTokens)
     let summary = match week_summary(cfg, &week) {
         WeekSummary::Off => tr(OFF_KEY),
         WeekSummary::Manual => tr(MANUAL_KEY),
-        WeekSummary::Posts(count) => tr_with(POSTS_KEY, &[(ARG_COUNT, count.to_string())]),
+        WeekSummary::Posts(count) => tr_count(POSTS_KEY, count as usize, &[]),
     };
     let rows: Vec<Div> = (0..DAYS_PER_WEEK).map(|day| day_row(day, &week, online, theme)).collect();
     div()

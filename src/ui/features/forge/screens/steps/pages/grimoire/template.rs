@@ -6,7 +6,7 @@ use crate::agent::DialecticEngine;
 use crate::domain::agent_config::TEMPLATE_PLACEHOLDERS;
 use crate::domain::PromptAssemblyStrategy;
 use crate::state::forge::{DraftEdit, TextField};
-use crate::ui::features::forge::text::{tr, tr_with};
+use crate::ui::features::forge::text::{tr, tr_count};
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
 use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::scroll::ScrollableElement;
@@ -19,7 +19,6 @@ const UNUSED_KEY: &str = "forge.ui.grimoire.template_unused";
 const COMPILED_KEY: &str = "forge.ui.grimoire.compiled";
 const COMPILED_HINT_KEY: &str = "forge.ui.grimoire.compiled_hint";
 const CHARS_KEY: &str = "forge.ui.grimoire.chars";
-const ARG_COUNT: &str = "count";
 const CHIP_ID_PREFIX: &str = "forge-placeholder";
 const PREVIEW_ID: &str = "forge-compiled-prompt";
 const GAP: char = ' ';
@@ -66,7 +65,7 @@ impl ForgeView {
     pub(super) fn compiled_card(&self) -> Div {
         let theme = &self.theme;
         let prompt = DialecticEngine::system_prompt_in(&self.draft.normalized(), &self.context.prompt);
-        let count = tr_with(CHARS_KEY, &[(ARG_COUNT, prompt.chars().count().to_string())]);
+        let count = tr_count(CHARS_KEY, prompt.chars().count(), &[]);
         let body = div()
             .id(PREVIEW_ID)
             .max_h(theme.prompt_preview_height)

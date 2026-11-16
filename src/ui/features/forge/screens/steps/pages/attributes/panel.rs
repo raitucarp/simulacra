@@ -8,7 +8,7 @@ use crate::state::forge::attributes::is_balanced_build;
 use crate::state::forge::ScoreField;
 use crate::theme::ThemeTokens;
 use crate::ui::features::forge::screens::common::{card, heading, muted};
-use crate::ui::features::forge::text::{tr, tr_with};
+use crate::ui::features::forge::text::{tr, tr_count, tr_with};
 use crate::ui::features::forge::widgets::{ScoreSlider, ToggleCard, ValueCallback};
 use gpui_kit::*;
 
@@ -25,7 +25,6 @@ const HEXACO_KEY: &str = "forge.ui.attributes.hexaco";
 const HEXACO_HINT_KEY: &str = "forge.ui.attributes.hexaco_hint";
 const ARG_LEFT: &str = "left";
 const ARG_TOTAL: &str = "total";
-const ARG_COUNT: &str = "count";
 
 /// Whether the balanced-build budget caps the sliders.
 struct BuildMode {
@@ -48,7 +47,7 @@ impl PersonalityPanel {
         let color = if over.is_some() { theme.warning } else { theme.accent_brand };
         let line = match (balanced, over) {
             (false, _) => muted(tr(FREE_KEY), theme),
-            (true, Some(over)) => muted(tr_with(OVER_KEY, &[(ARG_COUNT, over.to_string())]), theme).text_color(theme.warning),
+            (true, Some(over)) => muted(tr_count(OVER_KEY, usize::from(over), &[]), theme).text_color(theme.warning),
             (true, None) => {
                 let args = [(ARG_LEFT, meter.remaining().to_string()), (ARG_TOTAL, meter.budget.to_string())];
                 muted(tr_with(POINTS_KEY, &args), theme)

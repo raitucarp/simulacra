@@ -16,6 +16,8 @@ const FORGE_SOURCE: &str = "src/ui/features/forge";
 /// Test files hold deliberately missing keys.
 const TEST_FILE: &str = "tests.rs";
 const KEY_ROOTS: [&str; 2] = ["\"forge.", "\"portrait."];
+/// Count labels live under `<base>_one` / `<base>_other` (see `crate::i18n::t_count`).
+const PLURAL_SUFFIXES: [&str; 2] = ["_one", "_other"];
 const EXPLAIN_PARTS: [&str; 2] = ["what", "effect"];
 /// Origin fields plus the avatar: the fields this task's pages explain.
 const EXPLAINED_FIELDS: [&str; 10] =
@@ -90,6 +92,7 @@ fn forge_ui_keys_exist_in_english_and_indonesian() {
         let missing: Vec<&String> = wanted
             .iter()
             .filter(|key| !available.contains(*key) && !available.iter().any(|leaf| leaf.starts_with(&format!("{key}."))))
+            .filter(|key| !PLURAL_SUFFIXES.iter().all(|suffix| available.contains(&format!("{key}{suffix}"))))
             .collect();
         assert!(missing.is_empty(), "{locale} is missing {missing:?}");
     }
@@ -126,4 +129,17 @@ fn cadence_texts_show_the_scheduler_gap_not_a_placeholder() {
         let description = trait_description(cadence).expect("described");
         assert!(description.contains(&minutes), "{cadence:?}: {description:?} lacks {minutes}");
     }
+}
+
+#[test]
+fn forge_count_labels_follow_the_plural_rule() {
+    use crate::i18n::plural_key_in;
+    let english = |key: String, count: usize| {
+        let text = crate::_rust_i18n_try_translate("en", &key).expect("translated").to_string();
+        text.replace("%{count}", &count.to_string())
+    };
+    assert_eq!(english(plural_key_in("en", "forge.ui.save_blocked", 1), 1), "Fix 1 issue before saving.");
+    assert_eq!(english(plural_key_in("en", "forge.ui.save_blocked", 3), 3), "Fix 3 issues before saving.");
+    assert_eq!(english(plural_key_in("en", "forge.ui.origin.age_years", 1), 1), "1 year");
+    assert_eq!(english(plural_key_in("en", "forge.ui.grimoire.chars", 0), 0), "0 characters");
 }

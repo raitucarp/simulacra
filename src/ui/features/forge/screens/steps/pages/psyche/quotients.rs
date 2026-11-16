@@ -5,7 +5,7 @@ use super::ladder::LadderStep;
 use crate::state::forge::attributes::INTELLIGENCE_FIELDS;
 use crate::state::forge::{DraftEdit, QuotientLevel, ScoreField};
 use crate::ui::features::forge::screens::common::{card, heading, muted};
-use crate::ui::features::forge::text::{tr, tr_with};
+use crate::ui::features::forge::text::{tr, tr_count};
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
 use crate::ui::features::forge::widgets::ScoreSlider;
 use gpui_kit::*;
@@ -14,7 +14,6 @@ const SKILLS_KEY: &str = "forge.ui.mind.skills";
 const SKILLS_HINT_KEY: &str = "forge.ui.mind.skills_hint";
 const NEXT_KEY: &str = "forge.ui.mind.next_level";
 const PEAK_KEY: &str = "forge.ui.mind.peak_level";
-const ARG_COUNT: &str = "count";
 const ARG_LEVEL: &str = "level";
 
 impl ForgeView {
@@ -31,7 +30,7 @@ impl ForgeView {
         let step = LadderStep::of(*field.of(cfg));
         let edit = handle.edit(move |value: u8| DraftEdit::Score(field, value));
         let next = match step.next {
-            Some((level, points)) => tr_with(NEXT_KEY, &[(ARG_COUNT, points.to_string()), (ARG_LEVEL, tr(&level.label_key()))]),
+            Some((level, points)) => tr_count(NEXT_KEY, usize::from(points), &[(ARG_LEVEL, tr(&level.label_key()))]),
             None => tr(PEAK_KEY),
         };
         div()

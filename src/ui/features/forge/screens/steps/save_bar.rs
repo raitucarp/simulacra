@@ -2,7 +2,7 @@
 //! errors block it).
 
 use crate::ui::features::forge::logic::{save_bar_state, SaveBarState};
-use crate::ui::features::forge::text::{tr, tr_with};
+use crate::ui::features::forge::text::{tr, tr_count};
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::button::{Button, ButtonVariants};
@@ -14,7 +14,6 @@ const UNSAVED_KEY: &str = "forge.ui.unsaved";
 const BLOCKED_KEY: &str = "forge.ui.save_blocked";
 const DISCARD_KEY: &str = "forge.ui.discard";
 const SAVE_KEY: &str = "forge.ui.save";
-const ARG_COUNT: &str = "count";
 const DISCARD_ID: &str = "forge-discard";
 const SAVE_ID: &str = "forge-save";
 
@@ -27,7 +26,7 @@ impl ForgeView {
         }
         let theme = &self.theme;
         let reason = match state {
-            SaveBarState::Blocked { errors } => Some(tr_with(BLOCKED_KEY, &[(ARG_COUNT, errors.to_string())])),
+            SaveBarState::Blocked { errors } => Some(tr_count(BLOCKED_KEY, errors, &[])),
             SaveBarState::Ready | SaveBarState::Hidden => None,
         };
         let (discard, save) = (handle.act(ForgeView::discard), handle.act(ForgeView::save));

@@ -5,7 +5,7 @@ use super::state::{DescribeStatus, Notice};
 use super::ForgeView;
 use crate::agent::LlmClient;
 use crate::state::forge::{describe_prompt, parse_described, DraftPatch, ParseError, PatchWarning};
-use crate::ui::features::forge::text::{field_label, tr, tr_with};
+use crate::ui::features::forge::text::{field_label, tr, tr_count, tr_with};
 use gpui_kit::*;
 
 /// System prompt for the character-sheet request (the user prompt carries the instructions).
@@ -15,7 +15,6 @@ const EMPTY_KEY: &str = "forge.ui.start.describe_empty";
 const NO_KEY_KEY: &str = "forge.ui.start.describe_no_key";
 const FAILED_KEY: &str = "forge.ui.start.describe_failed";
 const ARG_ERROR: &str = "error";
-const ARG_COUNT: &str = "count";
 const ARG_FIELD: &str = "field";
 const ARG_VALUE: &str = "value";
 const ARG_DETAIL: &str = "detail";
@@ -103,7 +102,7 @@ impl ForgeView {
         crate::state::forge::set_class(&mut self.draft, None);
         self.ensure_face();
         self.start.describe_status = DescribeStatus::Idle;
-        let headline = tr_with(APPLIED_KEY, &[(ARG_COUNT, patch.edits.len().to_string())]);
+        let headline = tr_count(APPLIED_KEY, patch.edits.len(), &[]);
         let details = patch.warnings.iter().map(warning_text).collect();
         self.notice = Some(Notice::info(headline, details));
         self.enter_steps(window, cx);

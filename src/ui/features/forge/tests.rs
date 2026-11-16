@@ -110,3 +110,20 @@ fn flat_trait_keys_resolve_at_runtime() {
     assert!(!trait_label(HumanGender::Male).is_empty());
     assert!(tr_opt("forge.ui.no_such_key").is_none());
 }
+
+#[test]
+fn cadence_texts_show_the_scheduler_gap_not_a_placeholder() {
+    use crate::agent::schedule::cadence_rule;
+    use crate::domain::PostingCadence;
+    for cadence in PostingCadence::ALL {
+        let texts = [Some(trait_label(cadence)), trait_description(cadence)];
+        for text in texts.into_iter().flatten() {
+            assert!(!text.contains("%{"), "{cadence:?}: unfilled placeholder in {text:?}");
+        }
+    }
+    for cadence in [PostingCadence::OnEveryNewPost, PostingCadence::Every15Minutes] {
+        let minutes = cadence_rule(cadence).expect("autonomous cadence").min_interval_minutes.to_string();
+        let description = trait_description(cadence).expect("described");
+        assert!(description.contains(&minutes), "{cadence:?}: {description:?} lacks {minutes}");
+    }
+}

@@ -117,3 +117,12 @@ fn failure_message_is_shortened_and_flags_missing_keys() {
     assert_eq!(failure.message.chars().count(), MAX_FAILURE_MESSAGE_CHARS + 1);
     assert!(failure.message.ends_with('…'));
 }
+
+#[test]
+fn blank_keys_do_not_count_as_configured() {
+    let with = |key: &str| LlmSettings { api_key: key.into(), ..LlmSettings::default() };
+    assert!(!LlmSettings::default().has_api_key(), "the scheduler pauses on a fresh install");
+    assert!(!with("   ").has_api_key());
+    assert!(with("sk-test").has_api_key());
+    assert_eq!(LlmClient::new(with(" ")).has_api_key(), with(" ").has_api_key());
+}

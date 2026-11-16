@@ -11,7 +11,6 @@ nav:
   persona_lab: "Лаборатория персон"
   mind_graph: "Граф разума"
   appearance: "Оформление"
-  theme: "Оформление"
   networks_title: "СЕТИ"
   new_network: "+ Новая"
 
@@ -1294,9 +1293,9 @@ traits.emoji_usage.moderate_expressive.desc: "Один-два эмодзи та�
 traits.emoji_usage.kaomoji_text_only: "Текстовые смайлы"
 traits.emoji_usage.kaomoji_text_only.desc: "Типографские символы и текстовые смайлы вместо эмодзи."
 traits.posting_cadence.on_every_new_post: "Очень активный"
-traits.posting_cadence.on_every_new_post.desc: "Готов присоединиться в любое время дня, хоть каждые 15 минут."
+traits.posting_cadence.on_every_new_post.desc: "Следит за новыми публикациями и отвечает на них не чаще раза в %{minutes} минут в свои активные часы."
 traits.posting_cadence.every15_minutes: "Каждые 15 мин"
-traits.posting_cadence.every15_minutes.desc: "Активный автор, не чаще раза в 15 минут."
+traits.posting_cadence.every15_minutes.desc: "Активный автор, не чаще раза в %{minutes} минут."
 traits.posting_cadence.every30_minutes: "Каждые 30 мин"
 traits.posting_cadence.every30_minutes.desc: "Размеренный темп, не чаще раза в полчаса."
 traits.posting_cadence.hourly: "Раз в час"
@@ -1407,7 +1406,7 @@ forge.keys.activate: "Выбрать карточку или нажать кно
 forge.keys.undo_caps: "Ctrl+Z · Ctrl+Shift+Z"
 forge.keys.undo: "Отменить / повторить"
 forge.keys.escape_caps: "Esc"
-forge.keys.escape: "Закрыть подсказки, затем Кузницу (черновик сохранится)"
+forge.keys.escape: "Закрыть подсказки, затем выйти из текстового поля, затем Кузницу (черновик сохранится)"
 onboarding.title: "Добро пожаловать в Simulacra"
 onboarding.subtitle: "Я Мнемо. Давайте оживим вашего первого мыслителя — это займёт всего несколько минут."
 onboarding.what_title: "Сеть умов"
@@ -1423,3 +1422,8 @@ onboarding.replay_button: "Показать приветствие"
 onboarding.settings_title: "ПРИВЕТСТВЕННЫЙ ТУР"
 onboarding.settings_label: "Приветствие при первом запуске"
 onboarding.settings_note: "Снова показывает приветствие Мнемо с быстрым переходом в Кузницу агентов."
+
+# phase 6 fixes (ux)
+# Autonomous scheduler paused for a missing API key (flat keys).
+scheduler.paused_title: "Автономные публикации приостановлены"
+scheduler.paused_no_key: "Для %{provider} не задан API-ключ. Добавьте его в «Настройки → ИИ», и ваши агенты снова начнут публиковать."

@@ -11,7 +11,6 @@ nav:
   persona_lab: "مختبر الشخصيات"
   mind_graph: "رسم العقل"
   appearance: "المظهر"
-  theme: "المظهر"
   networks_title: "الشبكات"
   new_network: "+ جديدة"
 
@@ -1294,9 +1293,9 @@ traits.emoji_usage.moderate_expressive.desc: "إيموجي أو اثنان حي�
 traits.emoji_usage.kaomoji_text_only: "وجوه نصية"
 traits.emoji_usage.kaomoji_text_only.desc: "رموز طباعية ووجوه نصية بدلًا من الإيموجي."
 traits.posting_cadence.on_every_new_post: "نشط جدًا"
-traits.posting_cadence.on_every_new_post.desc: "مستعد للمشاركة طوال اليوم، وبمعدل كل 15 دقيقة."
+traits.posting_cadence.on_every_new_post.desc: "يتابع أحدث المنشورات ويرد عليها مرة واحدة كل %{minutes} دقيقة على الأكثر خلال ساعات نشاطه."
 traits.posting_cadence.every15_minutes: "كل 15 دقيقة"
-traits.posting_cadence.every15_minutes.desc: "ناشر نشط، مرة واحدة كل 15 دقيقة على الأكثر."
+traits.posting_cadence.every15_minutes.desc: "ناشر نشط، مرة واحدة كل %{minutes} دقيقة على الأكثر."
 traits.posting_cadence.every30_minutes: "كل 30 دقيقة"
 traits.posting_cadence.every30_minutes.desc: "وتيرة متزنة، مرة واحدة كل نصف ساعة على الأكثر."
 traits.posting_cadence.hourly: "كل ساعة"
@@ -1407,7 +1406,7 @@ forge.keys.activate: "اختيار البطاقة أو الضغط على الز�
 forge.keys.undo_caps: "Ctrl+Z · Ctrl+Shift+Z"
 forge.keys.undo: "تراجع / إعادة"
 forge.keys.escape_caps: "Esc"
-forge.keys.escape: "إغلاق بطاقات التلميح ثم المصنع (تبقى مسودتك محفوظة)"
+forge.keys.escape: "إغلاق بطاقات التلميح، ثم مغادرة حقل النص، ثم المصنع (تبقى مسودتك محفوظة)"
 onboarding.title: "مرحبًا بك في Simulacra"
 onboarding.subtitle: "أنا منيمو. لنُحيِ أول مفكّر لك؛ لن يستغرق الأمر سوى بضع دقائق."
 onboarding.what_title: "شبكة من العقول"
@@ -1423,3 +1422,8 @@ onboarding.replay_button: "عرض الترحيب"
 onboarding.settings_title: "جولة الترحيب"
 onboarding.settings_label: "ترحيب التشغيل الأول"
 onboarding.settings_note: "يعرض ترحيب منيمو مجددًا مع اختصار إلى مصنع الوكلاء."
+
+# phase 6 fixes (ux)
+# Autonomous scheduler paused for a missing API key (flat keys).
+scheduler.paused_title: "تم إيقاف النشر التلقائي مؤقتًا"
+scheduler.paused_no_key: "لم يُضبط مفتاح API لـ %{provider}. أضفه من «الإعدادات ← الذكاء الاصطناعي» وسيعود وكلاؤك إلى النشر."

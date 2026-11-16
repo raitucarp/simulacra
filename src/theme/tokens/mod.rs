@@ -46,6 +46,8 @@ theme_tokens! {
         // Typography Scales
         font_size_2xs, font_size_xs, font_size_sm, font_size_base, font_size_md, font_size_lg,
         font_size_xl,
+        // Root (rem) size handed to gpui-component, whose widgets size their text in rems
+        font_size_root,
         // Micro-Spacing Tokens
         spacing_3xs, spacing_2xs, spacing_px3, spacing_xs, spacing_sm, spacing_md, spacing_lg,
         spacing_xl, spacing_2xl,

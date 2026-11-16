@@ -6,7 +6,7 @@ use super::super::super::common::labeled;
 use crate::domain::trait_option::TRAIT_DESCRIPTION_SUFFIX;
 use crate::state::forge::{DraftEdit, TraitField, TraitValue};
 use crate::theme::ThemeTokens;
-use crate::ui::features::forge::text::{tr, tr_opt};
+use crate::ui::features::forge::text::tr_trait;
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
 use crate::ui::features::forge::widgets::{trait_option_grid, ExplainerButton, TraitGridLook};
 use gpui_kit::*;
@@ -16,7 +16,9 @@ const GRID_ID_PREFIX: &str = "forge-trait";
 
 /// A tinted line naming the chosen option and how it changes their posts.
 pub(super) fn chosen_line(value: TraitValue, theme: &ThemeTokens) -> Option<Div> {
-    let description = tr_opt(&format!("{}.{TRAIT_DESCRIPTION_SUFFIX}", value.label_key()))?;
+    let label_key = value.label_key();
+    let description = tr_trait(&format!("{label_key}.{TRAIT_DESCRIPTION_SUFFIX}"))?;
+    let label = tr_trait(&label_key).unwrap_or(label_key);
     Some(
         div()
             .p(theme.spacing_sm)
@@ -26,7 +28,7 @@ pub(super) fn chosen_line(value: TraitValue, theme: &ThemeTokens) -> Option<Div>
             .border_color(theme.accent_brand)
             .text_size(theme.font_size_xs)
             .line_height(relative(theme.line_height_body))
-            .child(div().font_weight(FontWeight::SEMIBOLD).text_color(theme.text_primary).child(tr(&value.label_key())))
+            .child(div().font_weight(FontWeight::SEMIBOLD).text_color(theme.text_primary).child(label))
             .child(div().text_color(theme.text_secondary).child(description)),
     )
 }

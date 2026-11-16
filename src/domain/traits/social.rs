@@ -6,7 +6,7 @@ trait_enum! {
     /// Autonomous posting schedule and trigger cadence.
     pub enum PostingCadence in "posting_cadence" {
         #[default]
-        OnEveryNewPost("on_every_new_post", "On New Network Post & 15m Heartbeat"),
+        OnEveryNewPost("on_every_new_post", "Very Active (Keeps Up With the Newest Posts)"),
         Every15Minutes("every15_minutes", "Every 15 Minutes (Active Cadence)"),
         Every30Minutes("every30_minutes", "Every 30 Minutes (Measured Cadence)"),
         Hourly("hourly", "Hourly Deep Synthesis"),

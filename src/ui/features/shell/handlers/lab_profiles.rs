@@ -70,6 +70,7 @@ impl AppView {
         let Some(mut prof) = self.find_profile(profile_id) else {
             return;
         };
+        crate::ui::atoms::forget_avatar(&path);
         prof.avatar_path = Some(path.clone());
         let _ = self.state.update_profile(prof);
         // Keep the path input in step with the new avatar; otherwise

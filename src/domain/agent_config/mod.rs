@@ -17,6 +17,7 @@ pub use crate::domain::traits::{
     MoralFoundation, PostingCadence, PrePostReasoningMode, PromptAssemblyStrategy,
     PunctuationHabit, SentenceLengthPreference,
 };
+use crate::domain::portrait::AvatarMode;
 use serde::{Deserialize, Serialize};
 
 /// Complete human configuration for an autonomous network member or user persona.
@@ -74,6 +75,10 @@ pub struct AgentConfig {
     pub inject_identity_and_bio: bool, pub inject_psychological_profile: bool,
     pub inject_intelligence_profile: bool, pub inject_linguistic_stylistics: bool,
     pub inject_social_and_schedule: bool, pub inject_network_grounding: bool,
+
+    // --- 7. Appearance ---
+    #[doc = "Chosen avatar (portrait, emblem or photo); `None` keeps the initial / `avatar_path` badge."]
+    #[serde(skip_serializing_if = "Option::is_none")] pub avatar: Option<AvatarMode>,
 }
 
 #[cfg(test)]

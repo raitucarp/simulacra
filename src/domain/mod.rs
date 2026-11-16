@@ -8,6 +8,7 @@ pub mod document;
 pub mod graph;
 pub mod ids;
 pub mod network;
+pub mod portrait;
 pub mod post;
 pub mod profile;
 pub mod thread;

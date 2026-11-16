@@ -33,14 +33,6 @@ pub(crate) const QUOTE_UNAVAILABLE_PREFIX: &str = "Quoted thought [";
 /// Trailing part of the unavailable quoted-thought notice.
 pub(crate) const QUOTE_UNAVAILABLE_SUFFIX: &str = "] unavailable";
 
-/// Opening delimiter of an Obsidian wikilink.
-pub(crate) const WIKILINK_OPEN: &str = "[[";
-/// Opening bracket character of a wikilink delimiter.
-pub(crate) const WIKILINK_OPEN_CHAR: char = '[';
-/// Closing bracket character of a wikilink delimiter.
-pub(crate) const WIKILINK_CLOSE_CHAR: char = ']';
-/// Hashtag marker character.
-pub(crate) const HASHTAG_MARKER: char = '#';
 /// Line break character.
 pub(crate) const LINE_BREAK: char = '\n';
 /// Carriage return stripped from line ends.

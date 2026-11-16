@@ -11,6 +11,8 @@ mod indices;
 mod interactions;
 mod load;
 mod networks;
+mod post_index;
+mod post_meta;
 mod posts;
 mod profile_create;
 mod profiles;
@@ -24,9 +26,11 @@ mod wikilinks;
 #[cfg(test)]
 mod tests;
 
+pub use post_index::PostIndex;
+pub use post_meta::PostMeta;
 pub use threads::{ThreadAnchor, ThreadDraft};
 
-use crate::domain::{GroundingDocument, Network, NetworkId, Post, PostId, Profile, ProfileId, TrendingTopic};
+use crate::domain::{GroundingDocument, Network, NetworkId, Post, Profile, ProfileId, TrendingTopic};
 use crate::storage::Database;
 use std::collections::HashMap;
 use std::rc::Rc;
@@ -62,11 +66,10 @@ pub struct AppState {
     pub archived_authors: HashMap<ProfileId, Profile>,
     pub active_profile_id: ProfileId,
     pub active_tab: NavigationTab,
+    /// Every post, newest first. Mutate through the store methods so `index` stays in sync.
     pub posts: Vec<Post>,
-    pub post_index_by_id: HashMap<PostId, usize>,
-    pub network_post_indices: HashMap<NetworkId, Vec<usize>>,
-    pub replies_index: HashMap<PostId, Vec<usize>>,
-    pub wikilink_cache: HashMap<String, String>,
+    /// Incrementally maintained lookups and derived body data over `posts`.
+    pub index: PostIndex,
     pub documents: Vec<GroundingDocument>,
     pub trending: Vec<TrendingTopic>,
     pub draft_text: String,

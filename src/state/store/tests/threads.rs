@@ -22,7 +22,7 @@ fn thread_chains_each_post_to_the_previous_one() {
     assert_eq!(post(&state, &ids[2]).reply_to_id.as_ref(), Some(&ids[1]));
     let counts: Vec<usize> = ids.iter().map(|id| post(&state, id).replies_count).collect();
     assert_eq!(counts, vec![1, 1, 0]);
-    assert_eq!(state.post_index_by_id.len(), state.posts.len());
+    assert_eq!(state.index.len(), state.posts.len());
 }
 
 #[test]
@@ -87,5 +87,5 @@ fn replies_index_counts_only_reply_to_relations() {
     state.submit_post(&format!("a wikilink [[{root}]] is not a reply")).expect("link");
     let replies: Vec<&PostId> = state.replies_for_post(&root).iter().map(|p| &p.id).collect();
     assert_eq!(replies, vec![&reply]);
-    assert_eq!(state.replies_index.get(&root).map(Vec::len), Some(1));
+    assert_eq!(state.index.reply_positions(&root).count(), 1);
 }

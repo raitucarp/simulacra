@@ -76,7 +76,7 @@ fn ancestors<'a>(state: &'a AppState, focused: &'a Post) -> Vec<&'a Post> {
 fn chronological_replies<'a>(state: &'a AppState, id: &PostId) -> Vec<&'a Post> {
     let mut replies = state.replies_for_post(id);
     replies.sort_by_key(|post| {
-        let store_idx = state.post_index_by_id.get(&post.id).copied().unwrap_or_default();
+        let store_idx = state.post_position(&post.id).unwrap_or_default();
         (post.created_at, Reverse(store_idx))
     });
     replies

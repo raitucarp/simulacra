@@ -222,3 +222,6 @@ cadence:
   month_10: "Okt"
   month_11: "Nov"
   month_12: "Des"
+
+storage:
+  write_failed: "Gagal menyimpan ke vault lokal: %{error}"

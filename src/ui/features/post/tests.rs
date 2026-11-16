@@ -189,7 +189,7 @@ fn test_threadline_style_booleans() {
 
 #[test]
 fn test_tokenize_post_body_segments() {
-    use super::tokenizer::{tokenize_post_body, BodyToken};
+    use crate::domain::post::{tokenize_post_body, BodyToken};
     let tokens = tokenize_post_body("See [[ post_1 ]]， and #virtue! end [[open");
     assert_eq!(
         tokens,
@@ -205,7 +205,7 @@ fn test_tokenize_post_body_segments() {
 
 #[test]
 fn test_tokenize_post_body_ignores_inline_and_bare_hash() {
-    use super::tokenizer::{tokenize_post_body, BodyToken};
+    use crate::domain::post::{tokenize_post_body, BodyToken};
     assert_eq!(tokenize_post_body("a#b # c"), vec![BodyToken::Text("a#b # c".to_string())]);
 }
 

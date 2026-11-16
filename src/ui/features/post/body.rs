@@ -2,7 +2,7 @@
 
 use super::consts::{CARRIAGE_RETURN, LINE_BREAK};
 use super::lookup::PostLookup;
-use super::tokenizer::{has_rich_markup, tokenize_post_body, BodyToken};
+use crate::domain::post::{has_rich_markup, tokenize_post_body, BodyToken};
 use crate::theme::ThemeTokens;
 use crate::ui::atoms::{render_hashtag_span, render_obsidian_pill};
 use gpui_kit::{div, AnyElement, Div, IntoElement, ParentElement, Styled};

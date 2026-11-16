@@ -1,12 +1,19 @@
 //! Tokenizer splitting post content into plain text, wikilinks, and hashtags.
+//!
+//! The store tokenizes each body once (on insert / load) and renderers reuse the tokens.
 
-use super::consts::{
-    HASHTAG_MARKER, LINE_BREAK, WIKILINK_CLOSE_CHAR, WIKILINK_OPEN, WIKILINK_OPEN_CHAR,
-};
+use super::parse::{HASHTAG_SIGIL as HASHTAG_MARKER, WIKILINK_OPEN};
+
+/// Opening bracket character of a wikilink delimiter.
+const WIKILINK_OPEN_CHAR: char = '[';
+/// Closing bracket character of a wikilink delimiter.
+const WIKILINK_CLOSE_CHAR: char = ']';
+/// Line break character.
+const LINE_BREAK: char = '\n';
 
 /// One inline segment of a post body.
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub(crate) enum BodyToken {
+pub enum BodyToken {
     /// Plain text run (may contain line breaks).
     Text(String),
     /// Obsidian `[[target]]` link followed by optional trailing punctuation.
@@ -17,7 +24,7 @@ pub(crate) enum BodyToken {
 
 /// Returns true if the character is an ASCII or CJK trailing punctuation mark.
 #[inline]
-pub(crate) fn is_trailing_punctuation(c: char) -> bool {
+pub fn is_trailing_punctuation(c: char) -> bool {
     matches!(
         c,
         ',' | '.'
@@ -36,12 +43,12 @@ pub(crate) fn is_trailing_punctuation(c: char) -> bool {
 }
 
 /// True when the content needs tokenized rendering (links, hashtags, or line breaks).
-pub(crate) fn has_rich_markup(content: &str) -> bool {
+pub fn has_rich_markup(content: &str) -> bool {
     content.contains(WIKILINK_OPEN) || content.contains(HASHTAG_MARKER) || content.contains(LINE_BREAK)
 }
 
 /// Splits post content into ordered inline tokens.
-pub(crate) fn tokenize_post_body(content: &str) -> Vec<BodyToken> {
+pub fn tokenize_post_body(content: &str) -> Vec<BodyToken> {
     let chars: Vec<char> = content.chars().collect();
     let mut tokens = Vec::new();
     let mut text = String::new();

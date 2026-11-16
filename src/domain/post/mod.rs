@@ -5,9 +5,11 @@ mod authored;
 mod constructors;
 mod parse;
 mod relations;
+mod tokens;
 
 pub use authored::AuthoredPost;
-pub use parse::HASHTAG_SIGIL;
+pub use parse::{HASHTAG_SIGIL, WIKILINK_OPEN};
+pub use tokens::{has_rich_markup, is_trailing_punctuation, tokenize_post_body, BodyToken};
 
 use super::ids::{NetworkId, PostId, ProfileId};
 use chrono::{DateTime, Utc};

@@ -69,20 +69,28 @@ impl AppState {
         PostId::new(format!("{POST_ID_PREFIX}{}", Uuid::new_v4().simple()))
     }
 
-    /// Caches the post's wikilink excerpt, prepends it to the timeline and resyncs indices.
+    /// Prepends the post to the timeline, indexing it incrementally.
     pub(super) fn insert_post_at_head(&mut self, post: Post) {
-        let excerpt = Self::compute_wikilink_excerpt(&post);
-        self.wikilink_cache.insert(post.id.as_str().to_string(), excerpt);
-        self.posts.insert(0, post);
-        self.sync_post_index();
+        self.insert_post_at(0, post);
+    }
+
+    /// Persists an agent reply, bumps its parent's reply counter and inserts it right after
+    /// the parent (or at the head when the parent is unknown).
+    pub fn insert_reply_after_parent(&mut self, reply: Post) -> Result<()> {
+        if let Some(ref db) = self.db {
+            db.save_post(&reply)?;
+        }
+        let parent_position = reply.reply_to_id.as_ref().and_then(|id| self.post_position(id));
+        if let Some(parent_id) = reply.reply_to_id.clone().filter(|_| parent_position.is_some()) {
+            self.increment_replies_count(&parent_id);
+        }
+        self.insert_post_at(parent_position.map_or(0, |idx| idx + 1), reply);
+        Ok(())
     }
 
     /// Increments a parent post's reply counter (index lookup first, linear scan if unindexed).
     fn increment_replies_count(&mut self, parent_id: &PostId) {
-        let parent = match self.post_index_by_id.get(parent_id).copied() {
-            Some(idx) => self.posts.get_mut(idx),
-            None => self.posts.iter_mut().find(|p| &p.id == parent_id),
-        };
+        let parent = self.post_position(parent_id).and_then(|idx| self.posts.get_mut(idx));
         if let Some(parent) = parent {
             parent.replies_count += 1;
             if let Some(ref db) = self.db {

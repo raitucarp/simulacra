@@ -43,12 +43,7 @@ impl AppState {
         target_post_id: &PostId,
         is_now_reposted: bool,
     ) -> Result<(NetworkId, usize)> {
-        let target_idx = self
-            .post_index_by_id
-            .get(target_post_id)
-            .copied()
-            .or_else(|| self.posts.iter().position(|p| &p.id == target_post_id))
-            .ok_or_else(|| target_not_found(target_post_id))?;
+        let target_idx = self.post_position(target_post_id).ok_or_else(|| target_not_found(target_post_id))?;
 
         let target = self
             .posts
@@ -66,12 +61,13 @@ impl AppState {
 
     /// Removes the author's repost of the target from memory and SQLite.
     fn remove_repost(&mut self, target_post_id: &PostId, author_id: &ProfileId) {
-        self.posts
-            .retain(|p| p.repost_id.as_ref() != Some(target_post_id) || &p.author_id != author_id);
+        let is_match = |p: &Post| p.repost_id.as_ref() == Some(target_post_id) && &p.author_id == author_id;
+        while let Some(position) = self.posts.iter().position(is_match) {
+            self.remove_post_at(position);
+        }
         if let Some(ref db) = self.db {
             let _ = db.delete_repost_by_target_and_author(target_post_id, author_id);
         }
-        self.sync_post_index();
     }
 
     /// Creates, persists and prepends a repost of the target.

@@ -1,6 +1,6 @@
 //! Human-readable excerpts for Obsidian `[[post_id]]` wikilinks.
 
-use super::consts::{HASHTAG_MARKER, WIKILINK_OPEN};
+use crate::domain::post::{HASHTAG_SIGIL as HASHTAG_MARKER, WIKILINK_OPEN};
 use crate::domain::Post;
 
 /// Prefix marking a wikilink target as a post id.

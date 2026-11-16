@@ -49,8 +49,8 @@ impl AppState {
     /// Otherwise, generates a fallback 4-character slug without linear searching.
     pub fn resolve_wikilink_fast(&self, target_id: &str) -> String {
         let clean = target_id.trim();
-        if let Some(cached) = self.wikilink_cache.get(clean) {
-            return cached.clone();
+        if let Some(meta) = self.index.meta(clean) {
+            return meta.excerpt.clone();
         }
         if clean.starts_with(POST_ID_PREFIX) {
             let slug = clean.strip_prefix(POST_ID_PREFIX).unwrap_or(clean);

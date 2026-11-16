@@ -13,7 +13,6 @@ mod item;
 mod lookup;
 mod quote_card;
 mod threadline;
-mod tokenizer;
 
 pub use actions::ActionClickCallback;
 pub use body::render_post_body;

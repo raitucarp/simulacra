@@ -5,6 +5,7 @@
 
 use super::super::view::AppView;
 use crate::agent::LlmFailure;
+use crate::error::AppError;
 use gpui_kit::component::notification::Notification;
 use gpui_kit::component::WindowExt;
 use gpui_kit::*;
@@ -15,6 +16,9 @@ struct LlmFailureNotice;
 
 /// Notification id type for simulation worker failures.
 struct WorkerFailureNotice;
+
+/// Notification id type for vault (SQLite) write failures.
+struct StorageFailureNotice;
 
 impl AppView {
     /// Records `failure`, logs it, and shows it as a toast (provider + short message).
@@ -37,5 +41,12 @@ impl AppView {
         let message = t!("simulation.worker_failed").to_string();
         eprintln!("simulacra: {message}");
         window.push_notification(Notification::error(message).id::<WorkerFailureNotice>(), cx);
+    }
+
+    /// Logs a failed vault write and shows it as a toast.
+    pub(crate) fn report_storage_failure(&mut self, err: &AppError, window: &mut Window, cx: &mut Context<Self>) {
+        let message = t!("storage.write_failed", error = err.to_string()).to_string();
+        eprintln!("simulacra: {message}");
+        window.push_notification(Notification::error(message).id::<StorageFailureNotice>(), cx);
     }
 }

@@ -54,6 +54,14 @@ macro_rules! define_id {
             }
         }
 
+        impl std::borrow::Borrow<str> for $name {
+            /// Lets id-keyed maps be queried with a plain `&str` (hashes match `String`'s).
+            #[inline]
+            fn borrow(&self) -> &str {
+                &self.0
+            }
+        }
+
         impl AsRef<str> for $name {
             #[inline]
             fn as_ref(&self) -> &str {

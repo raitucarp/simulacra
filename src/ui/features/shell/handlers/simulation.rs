@@ -7,7 +7,6 @@
 use super::super::view::AppView;
 use crate::agent::{DialecticEngine, LlmClient, SimulationOutcome};
 use crate::domain::{AuthoredPost, NetworkId, Post, Profile, ProfileId};
-use crate::state::AppState;
 use gpui_kit::*;
 use tokio::sync::oneshot::error::RecvError;
 
@@ -73,7 +72,7 @@ impl AppView {
                 if let Some(failure) = llm_error {
                     self.report_llm_failure(failure, window, cx);
                 }
-                self.insert_simulated_reply(reply);
+                self.insert_simulated_reply(reply, window, cx);
             }
             Err(_) => self.report_worker_failure(window, cx),
         }
@@ -99,29 +98,10 @@ impl AppView {
             .map(|p| (*p).clone())
     }
 
-    /// Persists `reply`, bumps its parent's reply count and inserts it after the parent.
-    fn insert_simulated_reply(&mut self, reply: Post) {
-        let state = &mut self.state;
-        let parent_idx_opt = reply
-            .reply_to_id
-            .as_ref()
-            .and_then(|parent_id| state.post_index_by_id.get(parent_id).copied());
-
-        if let (Some(parent_id), Some(parent_idx)) = (&reply.reply_to_id, parent_idx_opt) {
-            if let Some(parent) = state.posts.get_mut(parent_idx) {
-                parent.replies_count += 1;
-                if let Some(ref db) = state.db {
-                    let _ = db.update_post_replies_count(parent_id, parent.replies_count);
-                }
-            }
+    /// Persists `reply` and inserts it after its parent, reporting a failed vault write.
+    fn insert_simulated_reply(&mut self, reply: Post, window: &mut Window, cx: &mut Context<Self>) {
+        if let Err(err) = self.state.insert_reply_after_parent(reply) {
+            self.report_storage_failure(&err, window, cx);
         }
-        if let Some(ref db) = state.db {
-            let _ = db.save_post(&reply);
-        }
-        let excerpt = AppState::compute_wikilink_excerpt(&reply);
-        state.wikilink_cache.insert(reply.id.as_str().to_string(), excerpt);
-        let insert_pos = parent_idx_opt.map_or(0, |idx| (idx + 1).min(state.posts.len()));
-        state.posts.insert(insert_pos, reply);
-        state.sync_post_index();
     }
 }

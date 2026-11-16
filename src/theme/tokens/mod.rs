@@ -115,6 +115,8 @@ theme_tokens! {
         forge_radar_size, forge_skill_bar_height, forge_trading_card_width, forge_explainer_width,
         forge_empty_art_width, forge_tile_min_height, forge_bubble_max_width, forge_preset_card_width,
         forge_compact_card_width,
+        // Agent Forge: Daily Life clock ring and week strip, Relationships heart pips
+        forge_clock_size, forge_clock_ring_width, forge_week_cell_height, forge_heart_size,
     ],
     // Typography Hierarchy & Line Height; heatmap level opacities; graph dimming & curvature
     floats: [

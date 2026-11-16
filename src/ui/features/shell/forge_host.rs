@@ -26,6 +26,7 @@ impl AppView {
             network_id: self.state.active_network_id.clone(),
             llm: self.state.llm_settings.clone(),
             guide_hidden: self.state.forge_guide_hidden(),
+            prompt: self.prompt_context(&self.state.active_network_id),
         }
     }
 

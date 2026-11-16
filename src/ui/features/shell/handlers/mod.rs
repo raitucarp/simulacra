@@ -4,7 +4,6 @@
 mod chrome;
 mod composer_modal;
 mod lab;
-mod lab_profiles;
 mod navigation;
 mod networks;
 mod post_menu;

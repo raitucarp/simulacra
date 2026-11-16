@@ -33,7 +33,7 @@ impl AppView {
             Self::observe_own_changes(cx),
         ];
         let llm_inputs = LlmInputs::new(&state, window, cx);
-        let lab = LabState::new(&state, window, cx);
+        let lab = LabState::new(&state);
         let scheduler = SchedulerState::new(state.scheduler_enabled());
 
         let mut view = Self {
@@ -47,12 +47,19 @@ impl AppView {
             lab,
             scheduler,
             graph,
+            forge: None,
             panels: ShellPanels::new(cx),
             _subscriptions: subscriptions,
         };
-        view.start_scheduler_heartbeat(window, cx);
-        view.watch_vault_failures(window, cx);
+        view.start_background_work(window, cx);
         view
+    }
+
+    /// Key bindings and the long-running tasks every window needs.
+    fn start_background_work(&mut self, window: &mut Window, cx: &mut Context<Self>) {
+        crate::ui::features::forge::view::init_key_bindings(cx);
+        self.start_scheduler_heartbeat(window, cx);
+        self.watch_vault_failures(window, cx);
     }
 }
 

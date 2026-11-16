@@ -108,11 +108,20 @@ theme_tokens! {
         // Agent & Persona Lab Two-Pane Layout Tokens
         contact_list_pane_width, agent_category_rail_width, contact_avatar_size, hero_avatar_size,
         config_tab_height, trait_bar_height, prompt_preview_height,
+        // Agent Forge character creator
+        forge_rail_width, forge_rail_thumb_width, forge_options_width, forge_preview_width,
+        forge_topbar_height, forge_portrait_size, forge_nameplate_avatar_size, forge_class_card_width,
+        forge_option_card_width, forge_part_thumb_size, forge_swatch_size, forge_guide_size,
+        forge_radar_size, forge_skill_bar_height, forge_trading_card_width, forge_explainer_width,
+        forge_empty_art_width, forge_tile_min_height, forge_bubble_max_width, forge_preset_card_width,
+        forge_compact_card_width,
     ],
     // Typography Hierarchy & Line Height; heatmap level opacities; graph dimming & curvature
     floats: [
         line_height_body, cadence_alpha_1, cadence_alpha_2, cadence_alpha_3, cadence_alpha_4,
         graph_dim_opacity, graph_curve_bend,
+        // Agent Forge: opacity of disabled option cards and of the stage backdrop art
+        forge_disabled_opacity, forge_backdrop_opacity,
     ],
 }
 

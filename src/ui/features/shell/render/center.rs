@@ -9,10 +9,12 @@ use gpui_kit::*;
 use std::rc::Rc;
 
 impl AppView {
-    /// The agent workspace while a lab tab is active, the Mind Graph view on its tab,
-    /// otherwise the main feed.
+    /// The Agent Forge while it is open, the roster while a lab tab is active, the Mind Graph
+    /// view on its tab, otherwise the main feed.
     pub(in crate::ui::features::shell) fn center_panel(&self, bind: &Binder) -> AnyElement {
-        if self.is_lab_tab() {
+        if let Some(session) = &self.forge {
+            session.view.clone().into_any_element()
+        } else if self.is_lab_tab() {
             self.agent_workspace(bind).into_any_element()
         } else if self.state.active_tab == NavigationTab::MindGraph {
             self.graph.panel.clone().into_any_element()

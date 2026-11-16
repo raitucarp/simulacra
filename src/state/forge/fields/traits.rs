@@ -32,6 +32,14 @@ fn find_option<T: TraitOption>(raw: &str) -> Option<T> {
     })
 }
 
+/// Generic code over "whichever option type this trait field uses" (see [`TraitValue::visit`]).
+pub trait TraitVisitor {
+    type Output;
+
+    /// Called with the field's current option and the constructor of its [`TraitValue`].
+    fn visit<T: TraitOption>(self, current: T, wrap: fn(T) -> TraitValue) -> Self::Output;
+}
+
 /// Generates `TraitField` (which trait) and `TraitValue` (which trait, set to what).
 macro_rules! trait_fields {
     ($($variant:ident($ty:ty) => $field:ident @ $step:ident),+ $(,)?) => {
@@ -79,6 +87,12 @@ macro_rules! trait_fields {
 
             /// Writes the value into `cfg`.
             pub fn write(self, cfg: &mut AgentConfig) { match self { $(Self::$variant(v) => cfg.$field = v),+ } }
+
+            /// Hands the chosen option to `visitor` at its concrete type, with the constructor
+            /// that turns any option of that type back into a value of this field.
+            pub fn visit<V: TraitVisitor>(self, visitor: V) -> V::Output {
+                match self { $(Self::$variant(v) => visitor.visit(v, TraitValue::$variant)),+ }
+            }
         }
     };
 }

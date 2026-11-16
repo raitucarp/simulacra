@@ -5,7 +5,7 @@ mod map;
 mod traits;
 
 pub use map::{field_label_key, field_step, fields_for_step, mapped_fields, SYSTEM_FIELDS};
-pub use traits::{TraitField, TraitValue};
+pub use traits::{TraitField, TraitValue, TraitVisitor};
 
 use super::step::ForgeStep;
 use crate::domain::agent_config::AgentConfig;

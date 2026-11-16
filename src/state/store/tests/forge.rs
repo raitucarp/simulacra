@@ -26,3 +26,13 @@ fn a_committed_forge_draft_joins_the_active_network() {
     let reopened = AgentDraft::edit_existing(profile);
     assert!(validate(&reopened, &state.user_profiles).is_empty(), "no clash with itself");
 }
+
+#[test]
+fn the_forge_guide_switch_persists() {
+    let state = AppState::new_in_memory();
+    assert!(!state.forge_guide_hidden(), "shown by default");
+    state.set_forge_guide_hidden(true);
+    assert!(state.forge_guide_hidden());
+    state.set_forge_guide_hidden(false);
+    assert!(!state.forge_guide_hidden());
+}

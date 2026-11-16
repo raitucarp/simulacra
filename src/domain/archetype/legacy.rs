@@ -1,6 +1,6 @@
 //! Mapping from the agent editor's four legacy quick presets onto the forge classes.
 //!
-//! The rail presets (`ui/features/agent_editor/rail/archetypes.rs`) set nine trait fields.
+//! The rail presets of the former agent editor (replaced by the Agent Forge) set nine trait fields.
 //! Three of them are folded into classes, which carry those exact values; the fourth
 //! ("Pragmatic Builder", ENTJ 8w7) has no matching class and maps to `None`.
 

@@ -6,7 +6,7 @@ use crate::ui::icons::LucideIcon;
 use gpui_kit::base::StyledExt;
 use gpui_kit::component::Icon;
 use gpui_kit::*;
-use rust_i18n::t;
+use crate::i18n::t_count;
 
 const HASH_PREFIX: char = '#';
 
@@ -67,6 +67,6 @@ pub fn render_topic_item(
             div()
                 .text_size(theme.font_size_label)
                 .text_color(theme.text_secondary)
-                .child(t!("sidebar.posts_count", count = topic.post_count).to_string()),
+                .child(t_count("sidebar.posts_count", topic.post_count)),
         )
 }

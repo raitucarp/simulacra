@@ -6,6 +6,7 @@ use crate::ui::icons::LucideIcon;
 use chrono::{Datelike, NaiveDate};
 use gpui_kit::component::Icon;
 use gpui_kit::*;
+use crate::i18n::plural_key;
 use rust_i18n::t;
 
 /// Translation keys of the abbreviated month names, January first.
@@ -17,6 +18,8 @@ const MONTH_KEYS: [&str; 12] = [
 
 const CHIP_ID: &str = "feed-day-filter-chip";
 const CLEAR_ID: &str = "feed-day-filter-clear";
+/// Count-aware "N posts on <date>" label (`_one` / `_other` variants).
+const DAY_POSTS_KEY: &str = "cadence.day_posts";
 
 /// Callback clearing the day filter.
 pub type ClearDayFilterCallback = Box<dyn Fn(&mut Window, &mut App) + 'static>;
@@ -35,12 +38,12 @@ pub fn format_day(date: NaiveDate) -> String {
 /// "N posts on <date>" summary for a heatmap day.
 pub fn day_summary(date: NaiveDate, count: u32) -> String {
     let date = format_day(date);
-    match count {
-        0 => t!("cadence.day_none", date = date),
-        1 => t!("cadence.day_one", date = date),
-        _ => t!("cadence.day_many", count = count, date = date),
+    if count == 0 {
+        return t!("cadence.day_none", date = date).to_string();
     }
-    .to_string()
+    let count = count as usize;
+    let key = plural_key(DAY_POSTS_KEY, count);
+    t!(key.as_str(), count = count, date = date).to_string()
 }
 
 /// Dismissible chip announcing the active day filter.

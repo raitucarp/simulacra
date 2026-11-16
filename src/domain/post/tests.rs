@@ -159,3 +159,19 @@ fn test_parse_mentions_and_hashtags() {
     assert_eq!(Post::parse_mentions("hi @a_b, @ and @c!"), vec!["@a_b", "@c"]);
     assert_eq!(Post::parse_hashtags("#AI, # and #Mind."), vec!["#AI", "#Mind"]);
 }
+
+#[test]
+fn test_action_target_of_instant_repost_is_the_original() {
+    let author = Profile::new_primary("u1", "Architect", "@arch");
+    let repost = Post::create_repost("p_rep", "net1", author.clone(), "post_original").expect("Repost");
+    assert!(repost.is_instant_repost());
+    assert_eq!(repost.action_target_id(), &PostId::new("post_original"));
+
+    let quote = Post::create_quote("p_q", "net1", author.clone(), "Commentary", "post_original", None, None)
+        .expect("Quote");
+    assert!(!quote.is_instant_repost());
+    assert_eq!(quote.action_target_id(), &PostId::new("p_q"));
+
+    let plain = Post::create("p_plain", "net1", author, "Plain thought").expect("Plain");
+    assert_eq!(plain.action_target_id(), &PostId::new("p_plain"));
+}

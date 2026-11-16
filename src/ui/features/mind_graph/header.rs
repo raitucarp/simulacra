@@ -2,6 +2,7 @@
 
 use crate::theme::ThemeTokens;
 use gpui_kit::{div, Div, FontWeight, ParentElement, Rgba, Styled};
+use crate::i18n::t_count;
 use rust_i18n::t;
 
 fn render_titles(theme: &ThemeTokens) -> Div {
@@ -54,12 +55,12 @@ pub(super) fn render_header(total_nodes: usize, total_links: usize, theme: &Them
                 .items_center()
                 .gap(theme.spacing_sm)
                 .child(render_counter(
-                    t!("graph.nodes_count", count = total_nodes).to_string(),
+                    t_count("graph.nodes_count", total_nodes),
                     theme.accent_agent,
                     theme,
                 ))
                 .child(render_counter(
-                    t!("graph.links_count", count = total_links).to_string(),
+                    t_count("graph.links_count", total_links),
                     theme.accent_user,
                     theme,
                 )),

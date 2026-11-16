@@ -32,8 +32,10 @@ impl AppView {
         cx.notify();
     }
 
-    /// Focuses `post_id` in the thread inspector (collapsing replies of a newly focused post).
+    /// Focuses `post_id` (the original of an instant repost) in the thread inspector, collapsing
+    /// the replies of a newly focused post.
     pub(crate) fn select_post(&mut self, post_id: PostId, _: &mut Window, cx: &mut Context<Self>) {
+        let post_id = self.state.action_target(&post_id);
         if self.feed.selected_thread_post_id.as_ref() != Some(&post_id) {
             self.feed.inspector_expanded = false;
         }
@@ -51,16 +53,16 @@ impl AppView {
         cx.notify();
     }
 
-    /// Opens the composer modal replying to `post_id`.
+    /// Opens the composer modal replying to `post_id` (the original of an instant repost).
     pub(crate) fn reply_to_post(&mut self, post_id: PostId, window: &mut Window, cx: &mut Context<Self>) {
-        if let Some(target) = self.state.get_post(&post_id).map(|p| self.state.authored(p)) {
+        if let Some(target) = self.state.get_post(&self.state.action_target(&post_id)).map(|p| self.state.authored(p)) {
             self.open_composer_modal(ComposerModalMode::Reply(Box::new(target)), window, cx);
         }
     }
 
-    /// Opens the composer modal quoting `post_id`.
+    /// Opens the composer modal quoting `post_id` (the original of an instant repost).
     pub(crate) fn quote_post(&mut self, post_id: PostId, window: &mut Window, cx: &mut Context<Self>) {
-        if let Some(target) = self.state.get_post(&post_id).map(|p| self.state.authored(p)) {
+        if let Some(target) = self.state.get_post(&self.state.action_target(&post_id)).map(|p| self.state.authored(p)) {
             self.open_composer_modal(ComposerModalMode::Quote(Box::new(target)), window, cx);
         }
     }

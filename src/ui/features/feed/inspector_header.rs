@@ -9,6 +9,7 @@ use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::Icon;
 use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::{div, Div, FontWeight, ParentElement, Styled};
+use crate::i18n::t_count;
 use rust_i18n::t;
 use std::rc::Rc;
 
@@ -54,7 +55,7 @@ fn render_replies_pill(count: usize, theme: &ThemeTokens) -> Div {
         .text_size(theme.font_size_xs)
         .font_weight(FontWeight::MEDIUM)
         .text_color(theme.text_secondary)
-        .child(t!("feed.replies_count", count = count).to_string())
+        .child(t_count("feed.replies_count", count))
 }
 
 /// Grounding context insight shown when the focused thought has no replies yet.

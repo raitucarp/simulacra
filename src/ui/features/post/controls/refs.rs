@@ -10,6 +10,7 @@ use gpui_kit::component::menu::{DropdownMenu, PopupMenu, PopupMenuItem};
 use gpui_kit::component::{Icon, Sizable};
 use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::IntoElement;
+use crate::i18n::t_count;
 use rust_i18n::t;
 use std::collections::HashSet;
 
@@ -76,7 +77,7 @@ fn build_menu(
     for reference in refs {
         menu = menu.item(open_item(reference_label(reference), reference.id.clone(), on_open));
     }
-    let thread_label = t!("post.refs_open_thread", count = replies).to_string();
+    let thread_label = t_count("post.refs_open_thread", replies);
     menu.separator().item(open_item(thread_label, self_id.clone(), on_open))
 }
 

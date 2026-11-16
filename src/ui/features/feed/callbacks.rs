@@ -40,16 +40,19 @@ fn bind<F: Fn(PostId, &mut Window, &mut App) + ?Sized + 'static>(cb: &Rc<Box<F>>
 }
 
 impl PostCallbacks {
-    /// Card handlers for `post`; delete is offered only on thoughts written by a user persona.
-    fn handlers_for(&self, post: &Post, author: &Profile, selectable: bool) -> PostCardHandlers {
-        let (reply, reply_id, handle) = (self.on_reply.clone(), post.id.clone(), author.handle.clone());
+    /// Card handlers for `post`. Like, reply, repost, quote and open act on `target` (the
+    /// original of an instant repost); delete stays on the card's own thought and is offered
+    /// only on thoughts written by a user persona.
+    fn handlers_for(&self, post: &Post, author: &Profile, target: CardTarget, selectable: bool) -> PostCardHandlers {
+        let CardTarget { id: target_id, handle } = target;
+        let (reply, reply_id) = (self.on_reply.clone(), target_id.clone());
         let select = self.on_select.clone();
         PostCardHandlers {
-            on_select: if selectable { bind(&self.on_select, &post.id) } else { Rc::new(|_, _| {}) },
-            on_like: bind(&self.on_like, &post.id),
+            on_select: if selectable { bind(&self.on_select, &target_id) } else { Rc::new(|_, _| {}) },
+            on_like: bind(&self.on_like, &target_id),
             on_reply: Rc::new(move |window, cx| reply(reply_id.clone(), &handle, window, cx)),
-            on_repost: bind(&self.on_repost, &post.id),
-            on_quote: bind(&self.on_quote, &post.id),
+            on_repost: bind(&self.on_repost, &target_id),
+            on_quote: bind(&self.on_quote, &target_id),
             on_open_post: Rc::new(move |id, window, cx| select(id, window, cx)),
             on_delete: author.is_human_persona().then(|| bind(&self.on_delete, &post.id)),
             links: self.links.clone(),
@@ -64,7 +67,22 @@ impl PostCallbacks {
         theme: &ThemeTokens,
         mode: CardMode,
     ) -> AnyElement {
-        let handlers = self.handlers_for(post, state.author_of(post), mode.selectable);
+        let target = CardTarget::resolve(post, state);
+        let handlers = self.handlers_for(post, state.author_of(post), target, mode.selectable);
         render_post_item(post, state, theme, mode.is_focused, mode.style, handlers).into_any_element()
+    }
+}
+
+/// The thought a card's actions act on, with its author's handle (for reply mentions).
+struct CardTarget {
+    id: PostId,
+    handle: String,
+}
+
+impl CardTarget {
+    fn resolve(post: &Post, state: &AppState) -> Self {
+        let id = state.action_target(&post.id);
+        let handle = state.get_post(&id).map_or_else(|| state.author_of(post), |p| state.author_of(p)).handle.clone();
+        Self { id, handle }
     }
 }

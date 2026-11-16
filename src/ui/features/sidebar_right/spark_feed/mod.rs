@@ -60,8 +60,10 @@ pub fn render_random_spark_feed_with_lookup<L: PostLookup>(
     lookup: L,
     theme: &ThemeTokens,
 ) -> Div {
+    // Instant reposts carry no thought of their own, so they never surface as sparks.
     let spark_elements: Vec<Stateful<Div>> = posts
         .iter()
+        .filter(|post| !post.is_instant_repost())
         .take(MAX_SPARK_FEED_ITEMS)
         .enumerate()
         .map(|(idx, post)| item::render_spark_item(idx, post, lookup, theme))

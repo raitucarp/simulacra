@@ -76,3 +76,10 @@ fn translations_are_resolved_at_runtime() {
     assert_ne!(english, key);
     assert_ne!(english, indonesian);
 }
+
+#[test]
+fn yaml_boolean_words_stay_string_keys() {
+    let on = rust_i18n::t!("forge.ui.on", locale = "en").to_string();
+    let off = rust_i18n::t!("forge.ui.off", locale = "en").to_string();
+    assert_eq!((on.as_str(), off.as_str()), ("On", "Off"));
+}

@@ -1212,7 +1212,7 @@ forge.explain.pre_post_reasoning.example: "Perajut jaringan: menautkan postingan
 forge.explain.system_prompt.what: "Instruksi inti yang selalu masuk ke prompt-nya."
 forge.explain.system_prompt.effect: "Misi pribadinya; mengarahkan setiap postingan yang dia tulis."
 forge.explain.system_prompt.example: "Pertanyakan setiap jawaban yang gampang, dengan santun."
-forge.explain.prompt_template.what: "Susunan prompt buatanmu sendiri dengan {{placeholder}}."
+forge.explain.prompt_template.what: "Susunan prompt buatanmu sendiri dengan {{placeholders}}."
 forge.explain.prompt_template.effect: "Dipakai dengan penyusunan Templat kustom; placeholder diisi dari lembar karakter."
 forge.explain.prompt_template.example: "Kamu adalah {{name}}. {{bio}} {{directive}}"
 forge.explain.inject_identity_and_bio.what: "Menambahkan identitas dan biografinya ke prompt."

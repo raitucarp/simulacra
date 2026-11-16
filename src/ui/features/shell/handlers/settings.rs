@@ -16,6 +16,7 @@ impl AppView {
     /// Applies and persists a theme palette.
     pub(crate) fn select_theme(&mut self, new_theme: ThemeTokens, _: &mut Window, cx: &mut Context<Self>) {
         self.state.update_theme_tokens(new_theme.clone());
+        crate::theme::sync_kit_theme(&new_theme, cx);
         self.theme = new_theme;
         self.feed.stream.remeasure();
         cx.notify();

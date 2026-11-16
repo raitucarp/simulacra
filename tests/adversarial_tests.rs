@@ -155,7 +155,7 @@ fn test_sqlite_theme_tokens_custom_colors_roundtrip() {
     custom_tokens.accent_dialectic = rgba(0xfedcba98);
     custom_tokens.bg_feed_post = rgba(0x01020304);
     custom_tokens.bg_transparent = rgba(0x00000000);
-    custom_tokens.text_white = rgba(0xffffffff);
+    custom_tokens.on_accent = rgba(0xffffffff);
 
     // Save to SQLite
     db.save_theme_tokens(&custom_tokens).expect("save_theme_tokens failed");
@@ -166,7 +166,7 @@ fn test_sqlite_theme_tokens_custom_colors_roundtrip() {
     assert_eq!(loaded.accent_dialectic, rgba(0xfedcba98));
     assert_eq!(loaded.bg_feed_post, rgba(0x01020304));
     assert_eq!(loaded.bg_transparent, rgba(0x00000000));
-    assert_eq!(loaded.text_white, rgba(0xffffffff));
+    assert_eq!(loaded.on_accent, rgba(0xffffffff));
 }
 
 #[test]

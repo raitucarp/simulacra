@@ -6,6 +6,7 @@ use super::consts::{
     ICON_MD, SAVE_BUTTON_ID, TEXT_HEADING, TEXT_SMALL,
 };
 use super::tabs::SettingsTab;
+use crate::ui::atoms::ElevationExt;
 use crate::theme::ThemeTokens;
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::button::{Button, ButtonVariants};
@@ -131,7 +132,7 @@ pub(super) fn render_backdrop(
                 .border_1()
                 .border_color(theme.border)
                 .bg(theme.bg_elevated) // solid OLED dark surface
-                .shadow_2xl()
+                .elevation_shadow(theme)
                 .flex()
                 .overflow_hidden()
                 .on_mouse_down(MouseButton::Left, |_ev, _window, cx| {

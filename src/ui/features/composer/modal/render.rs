@@ -3,6 +3,7 @@
 use super::super::consts::{MODAL_BACKDROP_ID, MODAL_DIALOG_ID};
 use super::reply_context::render_reply_context;
 use super::ComposerModalView;
+use crate::ui::atoms::ElevationExt;
 use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::*;
 
@@ -36,7 +37,7 @@ impl ComposerModalView {
             .border(theme.border_width_hairline)
             .border_color(theme.border)
             .bg(theme.bg_elevated)
-            .shadow_2xl()
+            .elevation_shadow(theme)
             .flex()
             .flex_col()
             .overflow_hidden()

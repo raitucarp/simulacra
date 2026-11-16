@@ -6,6 +6,7 @@ use super::consts::{
 };
 use super::popover_item::render_network_item;
 use super::{CreateNetworkCallback, WorkspacePopover};
+use crate::ui::atoms::ElevationExt;
 use crate::theme::ThemeTokens;
 use crate::ui::icons::LucideIcon;
 use gpui_kit::base::StyledExt;
@@ -62,7 +63,7 @@ fn render_card(left_offset: gpui_kit::Pixels, theme: &ThemeTokens) -> Div {
         .border_1()
         .border_color(theme.border)
         .rounded_xl()
-        .shadow_2xl()
+        .elevation_shadow(theme)
         .p_1p5()
         .flex()
         .flex_col()

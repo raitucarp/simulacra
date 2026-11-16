@@ -78,6 +78,141 @@ pub struct AppView {
     _subscriptions: Vec<Subscription>,
 }
 
+/// Every free-text field of the Agent & Persona editor that is backed by an input entity.
+///
+/// Text inputs hold an unsaved draft until the user saves, while chips, steppers and presets
+/// commit immediately. Routing both paths through this one list lets enum edits refresh only
+/// the text fields they actually changed, so pending drafts survive.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum EditorTextField {
+    Name,
+    Handle,
+    Description,
+    Occupation,
+    Location,
+    Pronouns,
+    AvatarPath,
+    Bio,
+    Hobbies,
+    Values,
+    Routine,
+    PrimaryLanguage,
+    SecondaryLanguages,
+    TypingQuirks,
+    SignaturePhrases,
+    AvoidedWords,
+    PreferredTopics,
+    MentionInstruction,
+    SystemPrompt,
+    PromptTemplate,
+}
+
+/// Prefix that marks a profile handle.
+const HANDLE_PREFIX: char = '@';
+/// Quote character stripped from pasted file paths (e.g. Windows "Copy as path").
+const PATH_QUOTE: char = '"';
+
+impl EditorTextField {
+    const ALL: [Self; 20] = [
+        Self::Name,
+        Self::Handle,
+        Self::Description,
+        Self::Occupation,
+        Self::Location,
+        Self::Pronouns,
+        Self::AvatarPath,
+        Self::Bio,
+        Self::Hobbies,
+        Self::Values,
+        Self::Routine,
+        Self::PrimaryLanguage,
+        Self::SecondaryLanguages,
+        Self::TypingQuirks,
+        Self::SignaturePhrases,
+        Self::AvoidedWords,
+        Self::PreferredTopics,
+        Self::MentionInstruction,
+        Self::SystemPrompt,
+        Self::PromptTemplate,
+    ];
+
+    /// The text an input shows for this field of `profile`.
+    fn display_value(self, profile: &Profile) -> String {
+        let cfg = &profile.config;
+        match self {
+            Self::Name => profile.name.clone(),
+            Self::Handle => profile.handle.clone(),
+            Self::Description => cfg.description.clone(),
+            Self::Occupation => cfg.occupation.clone(),
+            Self::Location => cfg.location_culture.clone(),
+            Self::Pronouns => cfg.pronouns.clone(),
+            Self::AvatarPath => profile.avatar_path.clone().unwrap_or_default(),
+            Self::Bio => cfg.bio.clone(),
+            Self::Hobbies => cfg.hobbies.clone(),
+            Self::Values => cfg.core_values.clone(),
+            Self::Routine => cfg.daily_routine.clone(),
+            Self::PrimaryLanguage => cfg.primary_language.clone(),
+            Self::SecondaryLanguages => cfg.secondary_languages.clone(),
+            Self::TypingQuirks => cfg.typing_quirks.clone(),
+            Self::SignaturePhrases => cfg.signature_phrases.clone(),
+            Self::AvoidedWords => cfg.avoided_words.clone(),
+            Self::PreferredTopics => cfg.preferred_topics.clone(),
+            Self::MentionInstruction => cfg.custom_mention_instruction.clone(),
+            Self::SystemPrompt => cfg.system_prompt.clone(),
+            Self::PromptTemplate => cfg.prompt_template.clone(),
+        }
+    }
+
+    /// Writes the raw input text into `profile`, applying the field's normalization rules.
+    fn apply(self, profile: &mut Profile, raw: &str) {
+        let trimmed = raw.trim();
+        let cfg = &mut profile.config;
+        match self {
+            // Name, handle and primary language are required: an empty input keeps the old value.
+            Self::Name => {
+                if !trimmed.is_empty() {
+                    profile.name = trimmed.to_string();
+                }
+            }
+            Self::Handle => {
+                if !trimmed.is_empty() {
+                    profile.handle = if trimmed.starts_with(HANDLE_PREFIX) {
+                        trimmed.to_string()
+                    } else {
+                        format!("{HANDLE_PREFIX}{trimmed}")
+                    };
+                }
+            }
+            Self::PrimaryLanguage => {
+                if !trimmed.is_empty() {
+                    cfg.primary_language = trimmed.to_string();
+                }
+            }
+            Self::Description => cfg.description = trimmed.to_string(),
+            Self::Occupation => cfg.occupation = trimmed.to_string(),
+            Self::Location => cfg.location_culture = trimmed.to_string(),
+            Self::Pronouns => cfg.pronouns = trimmed.to_string(),
+            Self::AvatarPath => {
+                let path = trimmed.trim_matches(PATH_QUOTE);
+                profile.avatar_path = (!path.is_empty()).then(|| path.to_string());
+            }
+            // Long-form fields keep their whitespace verbatim.
+            Self::Bio => cfg.bio = raw.to_string(),
+            Self::Hobbies => cfg.hobbies = raw.to_string(),
+            Self::Values => cfg.core_values = raw.to_string(),
+            Self::Routine => cfg.daily_routine = raw.to_string(),
+            Self::SecondaryLanguages => cfg.secondary_languages = raw.to_string(),
+            Self::TypingQuirks => cfg.typing_quirks = raw.to_string(),
+            Self::SignaturePhrases => cfg.signature_phrases = raw.to_string(),
+            Self::AvoidedWords => cfg.avoided_words = raw.to_string(),
+            Self::PreferredTopics => cfg.preferred_topics = raw.to_string(),
+            Self::MentionInstruction => cfg.custom_mention_instruction = raw.to_string(),
+            Self::SystemPrompt => cfg.system_prompt = raw.to_string(),
+            Self::PromptTemplate => cfg.prompt_template = raw.to_string(),
+        }
+    }
+}
+
 impl AppView {
     /// Constructs a new AppView with default state, frameless window setup, and dark minimalist theme.
     pub fn new(window: &mut Window, cx: &mut Context<Self>) -> Self {
@@ -366,126 +501,140 @@ impl AppView {
         }
     }
 
-    /// Synchronizes all 20 text inputs in the Agent/Persona configuration pane with the given `Profile`.
+    /// Overwrites every editor text input with the values of `profile`, discarding any draft.
     pub fn sync_agent_editor_inputs(
         &mut self,
         profile: &Profile,
         window: &mut Window,
         cx: &mut Context<Self>,
     ) {
-        let name = profile.name.clone();
-        let handle = profile.handle.clone();
-        let desc = profile.config.description.clone();
-        let occ = profile.config.occupation.clone();
-        let loc = profile.config.location_culture.clone();
-        let pron = profile.config.pronouns.clone();
-        let av_path = profile.avatar_path.clone().unwrap_or_default();
-        let bio = profile.config.bio.clone();
-        let hobbies = profile.config.hobbies.clone();
-        let values = profile.config.core_values.clone();
-        let routine = profile.config.daily_routine.clone();
-        let plang = profile.config.primary_language.clone();
-        let slang = profile.config.secondary_languages.clone();
-        let quirks = profile.config.typing_quirks.clone();
-        let phrases = profile.config.signature_phrases.clone();
-        let avoided = profile.config.avoided_words.clone();
-        let topics = profile.config.preferred_topics.clone();
-        let mention_inst = profile.config.custom_mention_instruction.clone();
-        let sys_prompt = profile.config.system_prompt.clone();
-        let tmpl = profile.config.prompt_template.clone();
+        for field in EditorTextField::ALL {
+            self.set_editor_field(field, &field.display_value(profile), window, cx);
+        }
+    }
 
-        self.agent_name_input.update(cx, |s, cx| s.set_value(&name, window, cx));
-        self.agent_handle_input.update(cx, |s, cx| s.set_value(&handle, window, cx));
-        self.agent_description_input.update(cx, |s, cx| s.set_value(&desc, window, cx));
-        self.agent_occupation_input.update(cx, |s, cx| s.set_value(&occ, window, cx));
-        self.agent_location_input.update(cx, |s, cx| s.set_value(&loc, window, cx));
-        self.agent_pronouns_input.update(cx, |s, cx| s.set_value(&pron, window, cx));
-        self.agent_avatar_path_input.update(cx, |s, cx| s.set_value(&av_path, window, cx));
-        self.agent_bio_input.update(cx, |s, cx| s.set_value(&bio, window, cx));
-        self.agent_hobbies_input.update(cx, |s, cx| s.set_value(&hobbies, window, cx));
-        self.agent_values_input.update(cx, |s, cx| s.set_value(&values, window, cx));
-        self.agent_routine_input.update(cx, |s, cx| s.set_value(&routine, window, cx));
-        self.agent_primary_lang_input.update(cx, |s, cx| s.set_value(&plang, window, cx));
-        self.agent_secondary_lang_input.update(cx, |s, cx| s.set_value(&slang, window, cx));
-        self.agent_typing_quirks_input.update(cx, |s, cx| s.set_value(&quirks, window, cx));
-        self.agent_signature_phrases_input.update(cx, |s, cx| s.set_value(&phrases, window, cx));
-        self.agent_avoided_words_input.update(cx, |s, cx| s.set_value(&avoided, window, cx));
-        self.agent_preferred_topics_input.update(cx, |s, cx| s.set_value(&topics, window, cx));
-        self.agent_mention_instruction_input.update(cx, |s, cx| s.set_value(&mention_inst, window, cx));
-        self.agent_system_prompt_input.update(cx, |s, cx| s.set_value(&sys_prompt, window, cx));
-        self.agent_prompt_template_input.update(cx, |s, cx| s.set_value(&tmpl, window, cx));
+    /// Refreshes only the inputs whose saved value differs between `previous` and `updated`.
+    ///
+    /// Used after an immediate (chip / stepper / preset) edit so that a field the edit changed
+    /// on purpose — e.g. pronouns reset by a gender chip, or a cleared avatar — is shown, while
+    /// every other input keeps the user's unsaved draft.
+    fn sync_changed_editor_inputs(
+        &mut self,
+        previous: &Profile,
+        updated: &Profile,
+        window: &mut Window,
+        cx: &mut Context<Self>,
+    ) {
+        for field in EditorTextField::ALL {
+            let next = field.display_value(updated);
+            if field.display_value(previous) != next {
+                self.set_editor_field(field, &next, window, cx);
+            }
+        }
+    }
+
+    fn set_editor_field(
+        &self,
+        field: EditorTextField,
+        value: &str,
+        window: &mut Window,
+        cx: &mut Context<Self>,
+    ) {
+        use EditorTextField as F;
+        let input = match field {
+            F::Name => &self.agent_name_input,
+            F::Handle => &self.agent_handle_input,
+            F::Description => &self.agent_description_input,
+            F::Occupation => &self.agent_occupation_input,
+            F::Location => &self.agent_location_input,
+            F::Pronouns => &self.agent_pronouns_input,
+            F::AvatarPath => &self.agent_avatar_path_input,
+            F::Hobbies => &self.agent_hobbies_input,
+            F::Values => &self.agent_values_input,
+            F::Routine => &self.agent_routine_input,
+            F::PrimaryLanguage => &self.agent_primary_lang_input,
+            F::SecondaryLanguages => &self.agent_secondary_lang_input,
+            F::TypingQuirks => &self.agent_typing_quirks_input,
+            F::SignaturePhrases => &self.agent_signature_phrases_input,
+            F::AvoidedWords => &self.agent_avoided_words_input,
+            F::PreferredTopics => &self.agent_preferred_topics_input,
+            F::Bio | F::MentionInstruction | F::SystemPrompt | F::PromptTemplate => {
+                let textarea = match field {
+                    F::Bio => &self.agent_bio_input,
+                    F::MentionInstruction => &self.agent_mention_instruction_input,
+                    F::SystemPrompt => &self.agent_system_prompt_input,
+                    _ => &self.agent_prompt_template_input,
+                };
+                textarea.update(cx, |s, cx| s.set_value(value, window, cx));
+                return;
+            }
+        };
+        input.update(cx, |s, cx| s.set_value(value, window, cx));
+    }
+
+    fn read_editor_field(&self, field: EditorTextField, cx: &App) -> String {
+        use EditorTextField as F;
+        match field {
+            F::Name => self.agent_name_input.read(cx).value().to_string(),
+            F::Handle => self.agent_handle_input.read(cx).value().to_string(),
+            F::Description => self.agent_description_input.read(cx).value().to_string(),
+            F::Occupation => self.agent_occupation_input.read(cx).value().to_string(),
+            F::Location => self.agent_location_input.read(cx).value().to_string(),
+            F::Pronouns => self.agent_pronouns_input.read(cx).value().to_string(),
+            F::AvatarPath => self.agent_avatar_path_input.read(cx).value().to_string(),
+            F::Bio => self.agent_bio_input.read(cx).value().to_string(),
+            F::Hobbies => self.agent_hobbies_input.read(cx).value().to_string(),
+            F::Values => self.agent_values_input.read(cx).value().to_string(),
+            F::Routine => self.agent_routine_input.read(cx).value().to_string(),
+            F::PrimaryLanguage => self.agent_primary_lang_input.read(cx).value().to_string(),
+            F::SecondaryLanguages => self.agent_secondary_lang_input.read(cx).value().to_string(),
+            F::TypingQuirks => self.agent_typing_quirks_input.read(cx).value().to_string(),
+            F::SignaturePhrases => self.agent_signature_phrases_input.read(cx).value().to_string(),
+            F::AvoidedWords => self.agent_avoided_words_input.read(cx).value().to_string(),
+            F::PreferredTopics => self.agent_preferred_topics_input.read(cx).value().to_string(),
+            F::MentionInstruction => self.agent_mention_instruction_input.read(cx).value().to_string(),
+            F::SystemPrompt => self.agent_system_prompt_input.read(cx).value().to_string(),
+            F::PromptTemplate => self.agent_prompt_template_input.read(cx).value().to_string(),
+        }
     }
 
     /// Reads all text input fields and persists them to the currently selected agent/persona profile.
+    ///
+    /// Does nothing when the inputs hold no changes, so it is safe to call before any
+    /// navigation that would otherwise drop the drafts.
     pub fn save_agent_editor_text_inputs(&mut self, cx: &mut Context<Self>) {
-        let target_id = match self.selected_lab_profile_id.clone() {
-            Some(id) => id,
-            None => return,
+        let Some(target_id) = self.selected_lab_profile_id.clone() else {
+            return;
         };
-        let mut prof = match self.state.user_profiles.iter().find(|p| p.id == target_id).cloned() {
-            Some(p) => p,
-            None => return,
-        };
-
-        let name = self.agent_name_input.read(cx).value().trim().to_string();
-        if !name.is_empty() {
-            prof.name = name;
-        }
-        let handle = self.agent_handle_input.read(cx).value().trim().to_string();
-        if !handle.is_empty() {
-            prof.handle = if handle.starts_with('@') {
-                handle
-            } else {
-                format!("@{}", handle)
-            };
-        }
-        prof.config.description = self.agent_description_input.read(cx).value().trim().to_string();
-        prof.config.occupation = self.agent_occupation_input.read(cx).value().trim().to_string();
-        prof.config.location_culture = self.agent_location_input.read(cx).value().trim().to_string();
-        prof.config.pronouns = self.agent_pronouns_input.read(cx).value().trim().to_string();
-
-        let av_path = self
-            .agent_avatar_path_input
-            .read(cx)
-            .value()
-            .trim()
-            .trim_matches('"')
-            .to_string();
-        prof.avatar_path = if av_path.is_empty() {
-            None
-        } else {
-            Some(av_path)
+        let Some(stored) = self.state.user_profiles.iter().find(|p| p.id == target_id).cloned()
+        else {
+            return;
         };
 
-        prof.config.bio = self.agent_bio_input.read(cx).value().to_string();
-        prof.config.hobbies = self.agent_hobbies_input.read(cx).value().to_string();
-        prof.config.core_values = self.agent_values_input.read(cx).value().to_string();
-        prof.config.daily_routine = self.agent_routine_input.read(cx).value().to_string();
-
-        let plang = self.agent_primary_lang_input.read(cx).value().trim().to_string();
-        if !plang.is_empty() {
-            prof.config.primary_language = plang;
+        let mut prof = stored.clone();
+        for field in EditorTextField::ALL {
+            let raw = self.read_editor_field(field, cx);
+            field.apply(&mut prof, &raw);
         }
-        prof.config.secondary_languages = self.agent_secondary_lang_input.read(cx).value().to_string();
-        prof.config.typing_quirks = self.agent_typing_quirks_input.read(cx).value().to_string();
-        prof.config.signature_phrases = self.agent_signature_phrases_input.read(cx).value().to_string();
-        prof.config.avoided_words = self.agent_avoided_words_input.read(cx).value().to_string();
-        prof.config.preferred_topics = self.agent_preferred_topics_input.read(cx).value().to_string();
-        prof.config.custom_mention_instruction = self.agent_mention_instruction_input.read(cx).value().to_string();
-        prof.config.system_prompt = self.agent_system_prompt_input.read(cx).value().to_string();
-        prof.config.prompt_template = self.agent_prompt_template_input.read(cx).value().to_string();
+        if prof == stored {
+            return;
+        }
 
         let _ = self.state.update_profile(prof);
         cx.notify();
     }
 
     /// Selects a specific agent or persona in the Two-Pane Lab and syncs all text inputs.
+    ///
+    /// Unsaved drafts of the previously selected profile are saved first, so every caller
+    /// (roster, mode switch, network switch, persona cycling) is safe from losing edits.
     pub fn select_lab_profile(
         &mut self,
         profile_id: ProfileId,
         window: &mut Window,
         cx: &mut Context<Self>,
     ) {
+        self.save_agent_editor_text_inputs(cx);
         self.selected_lab_profile_id = Some(profile_id.clone());
         if let Some(prof) = self.state.user_profiles.iter().find(|p| p.id == profile_id).cloned() {
             self.sync_agent_editor_inputs(&prof, window, cx);
@@ -1173,8 +1322,19 @@ impl Render for AppView {
                 }),
                 on_update_profile: Box::new(move |updated_prof, window, cx| {
                     entity_upd_prof.update(cx, |this, cx| {
+                        let previous = this
+                            .state
+                            .user_profiles
+                            .iter()
+                            .find(|p| p.id == updated_prof.id)
+                            .cloned();
                         let _ = this.state.update_profile(updated_prof.clone());
-                        this.sync_agent_editor_inputs(&updated_prof, window, cx);
+                        match previous {
+                            Some(previous) => {
+                                this.sync_changed_editor_inputs(&previous, &updated_prof, window, cx)
+                            }
+                            None => this.sync_agent_editor_inputs(&updated_prof, window, cx),
+                        }
                         cx.notify();
                     });
                 }),
@@ -1242,9 +1402,9 @@ impl Render for AppView {
                         cx.notify();
                     });
                 }),
-                on_pick_avatar: Box::new(move |prof_id, _window, cx| {
+                on_pick_avatar: Box::new(move |prof_id, window, cx| {
                     entity_pick_av.update(cx, |_this, cx| {
-                        cx.spawn(async move |entity, cx| {
+                        cx.spawn_in(window, async move |entity, cx| {
                             let file = rfd::AsyncFileDialog::new()
                                 .set_title("Select Avatar Portrait Image")
                                 .add_filter("Image Files", &["png", "jpg", "jpeg", "webp", "gif", "bmp"])
@@ -1253,7 +1413,7 @@ impl Render for AppView {
 
                             if let Some(file_handle) = file {
                                 let path = file_handle.path().to_string_lossy().to_string();
-                                let _ = entity.update(cx, |this, cx| {
+                                let _ = entity.update_in(cx, |this, window, cx| {
                                     if std::path::Path::new(&path).exists() {
                                         if let Some(mut prof) = this
                                             .state
@@ -1262,8 +1422,18 @@ impl Render for AppView {
                                             .find(|p| p.id == prof_id)
                                             .cloned()
                                         {
-                                            prof.avatar_path = Some(path);
+                                            prof.avatar_path = Some(path.clone());
                                             let _ = this.state.update_profile(prof);
+                                            // Keep the path input in step with the new avatar; otherwise
+                                            // the next "Save Changes" writes the stale path back.
+                                            if this.selected_lab_profile_id.as_ref() == Some(&prof_id) {
+                                                this.set_editor_field(
+                                                    EditorTextField::AvatarPath,
+                                                    &path,
+                                                    window,
+                                                    cx,
+                                                );
+                                            }
                                             cx.notify();
                                         }
                                     }

@@ -3,8 +3,8 @@
 
 use super::super::view::AppView;
 use crate::agent::LlmProvider;
-use crate::theme::ThemeTokens;
-use crate::ui::features::settings::SettingsTab;
+use crate::theme::ThemeSettings;
+use crate::ui::features::settings::{AppearanceEvent, AppearancePanel, SettingsTab};
 use gpui_kit::*;
 
 impl AppView {
@@ -13,10 +13,23 @@ impl AppView {
         cx.notify();
     }
 
-    /// Applies and persists a theme palette.
-    pub(crate) fn select_theme(&mut self, new_theme: ThemeTokens, _: &mut Window, cx: &mut Context<Self>) {
-        self.state.update_theme_tokens(new_theme.clone());
-        self.theme = new_theme;
+    /// Applies every theme change made in the Appearance pane.
+    pub(crate) fn on_appearance_event(
+        &mut self,
+        _: &Entity<AppearancePanel>,
+        event: &AppearanceEvent,
+        _: &mut Window,
+        cx: &mut Context<Self>,
+    ) {
+        let AppearanceEvent::Changed(settings) = event;
+        self.apply_theme_settings(settings.clone(), cx);
+    }
+
+    /// Persists `settings`, re-derives the tokens and pushes them to every view and the kit.
+    pub(crate) fn apply_theme_settings(&mut self, settings: ThemeSettings, cx: &mut Context<Self>) {
+        self.state.update_theme_settings(settings);
+        self.theme = self.state.theme_tokens.clone();
+        crate::theme::sync_kit_theme(&self.theme, cx);
         self.feed.stream.remeasure();
         cx.notify();
     }

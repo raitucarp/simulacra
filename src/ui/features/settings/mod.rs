@@ -10,12 +10,12 @@ mod panes;
 mod provider_grid;
 mod rail;
 mod tabs;
-mod theme_card;
 
 pub use callbacks::{
     ModalCloseCallback, SaveSettingsCallback, SelectPresetModelCallback, SelectProviderCallback,
-    SelectTabCallback, SelectThemeCallback, ToggleSchedulerCallback,
+    SelectTabCallback, ToggleSchedulerCallback,
 };
+pub use panes::{AppearanceEvent, AppearancePanel};
 pub use general_props::GeneralPaneProps;
 pub use modal::SettingsModal;
 pub use tabs::SettingsTab;

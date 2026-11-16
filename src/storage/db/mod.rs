@@ -13,12 +13,16 @@ mod post_updates;
 mod posts;
 mod profiles;
 mod schema;
+mod setting_key;
 mod settings;
+mod theme_settings;
 mod trending;
 pub(super) mod versions;
 
 #[cfg(test)]
 mod tests;
+
+pub use setting_key::SettingKey;
 
 use crate::error::{AppError, Result};
 use chrono::{DateTime, Utc};

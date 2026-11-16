@@ -1,8 +1,9 @@
 //! Active profile selection, persona cycling, and profile update/deletion.
 
-use super::{AppState, ACTIVE_PROFILE_KEY, PRIMARY_PROFILE_ID};
+use super::{AppState, PRIMARY_PROFILE_ID};
 use crate::domain::{Profile, ProfileId};
 use crate::error::{AppError, Result};
+use crate::storage::SettingKey;
 
 impl AppState {
     /// Returns a reference to the currently active author profile.
@@ -23,7 +24,7 @@ impl AppState {
         if self.user_profiles.iter().any(|p| &p.id == profile_id) {
             self.active_profile_id = profile_id.clone();
             if let Some(ref db) = self.db {
-                let _ = db.set_setting(ACTIVE_PROFILE_KEY, profile_id.as_str());
+                let _ = db.set_setting(SettingKey::ActiveProfile, profile_id.as_str());
             }
             Ok(())
         } else {
@@ -36,7 +37,7 @@ impl AppState {
         if let Some(first_human) = self.user_profiles.iter().find(|p| p.is_human_persona()) {
             self.active_profile_id = first_human.id.clone();
             if let Some(ref db) = self.db {
-                let _ = db.set_setting(ACTIVE_PROFILE_KEY, self.active_profile_id.as_str());
+                let _ = db.set_setting(SettingKey::ActiveProfile, self.active_profile_id.as_str());
             }
         }
     }

@@ -39,10 +39,6 @@ use crate::domain::{GroundingDocument, Network, NetworkId, Post, Profile, Profil
 use crate::storage::Vault;
 use std::collections::HashMap;
 
-/// Settings key persisting the active network selection.
-const ACTIVE_NETWORK_KEY: &str = "active_network_id";
-/// Settings key persisting the active authoring profile.
-const ACTIVE_PROFILE_KEY: &str = "active_profile_id";
 /// Placeholder id used when no network or profile exists.
 const DEFAULT_ENTITY_ID: &str = "default";
 /// The primary human persona, which can never be deleted.
@@ -80,6 +76,8 @@ pub struct AppState {
     /// Local calendar day the timeline is narrowed to (set from the cadence heatmap).
     pub feed_day_filter: Option<chrono::NaiveDate>,
     pub llm_settings: crate::agent::LlmSettings,
+    /// The user's theme choice; `theme_tokens` is always derived from it.
+    pub theme_settings: crate::theme::ThemeSettings,
     pub theme_tokens: crate::theme::ThemeTokens,
     /// Handle to the vault worker thread (`None` when running without persistence).
     pub db: Option<Vault>,

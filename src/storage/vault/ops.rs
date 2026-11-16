@@ -3,8 +3,8 @@
 use super::Vault;
 use crate::domain::{GroundingDocument, Network, Post, PostId, Profile, ProfileId, TrendingTopic};
 use crate::error::Result;
-use crate::storage::Database;
-use crate::theme::ThemeTokens;
+use crate::storage::{Database, SettingKey};
+use crate::theme::ThemeSettings;
 
 impl Vault {
     /// Queues an upsert of `post`.
@@ -83,21 +83,20 @@ impl Vault {
     }
 
     /// Queues a settings upsert.
-    pub fn set_setting(&self, key: &str, value: &str) -> Result<()> {
-        let (key, value) = (key.to_string(), value.to_string());
-        self.write(move |db| db.set_setting(&key, &value))
+    pub fn set_setting(&self, key: SettingKey, value: &str) -> Result<()> {
+        let value = value.to_string();
+        self.write(move |db| db.set_setting(key, &value))
     }
 
-    /// Queues persisting the theme tokens.
-    pub fn save_theme_tokens(&self, tokens: &ThemeTokens) -> Result<()> {
-        let tokens = tokens.clone();
-        self.write(move |db| db.save_theme_tokens(&tokens))
+    /// Queues persisting the theme settings.
+    pub fn save_theme_settings(&self, settings: &ThemeSettings) -> Result<()> {
+        let settings = settings.clone();
+        self.write(move |db| db.save_theme_settings(&settings))
     }
 
     /// Reads a setting (after every queued write).
-    pub fn get_setting(&self, key: &str) -> Result<Option<String>> {
-        let key = key.to_string();
-        self.read(move |db| db.get_setting(&key))
+    pub fn get_setting(&self, key: SettingKey) -> Result<Option<String>> {
+        self.read(move |db| db.get_setting(key))
     }
 
     /// Reads every post (after every queued write).

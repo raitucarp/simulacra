@@ -33,8 +33,6 @@ pub(super) const CONTENT_HEADER_HEIGHT: f32 = 64.0;
 pub(super) const PROVIDER_BUTTON_HEIGHT: f32 = 40.0;
 /// Text input height for API key / endpoint / model fields.
 pub(super) const INPUT_HEIGHT: f32 = 34.0;
-/// Theme palette swatch diameter.
-pub(super) const THEME_SWATCH_SIZE: f32 = 20.0;
 /// Number of provider buttons rendered on the first grid row.
 pub(super) const PROVIDERS_PER_ROW: usize = 3;
 /// Monospace font stack for the database path readout.
@@ -49,7 +47,3 @@ pub(super) const TAB_BUTTON_ID_PREFIX: &str = "settings-tab-btn-";
 pub(super) const PROVIDER_BUTTON_ID_PREFIX: &str = "provider-btn-";
 pub(super) const PRESET_CHIP_ID_PREFIX: &str = "preset-";
 pub(super) const SCHEDULER_SWITCH_ID: &str = "settings-scheduler-switch";
-
-pub(super) const STATUS_ENABLED: &str = "Enabled";
-pub(super) const BADGE_SELECTED: &str = "Selected";
-pub(super) const BADGE_AVAILABLE: &str = "Available";

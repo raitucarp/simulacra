@@ -44,19 +44,22 @@ fn test_store_persistence() {
 }
 
 #[test]
-fn test_store_theme_tokens_persistence() {
+fn test_store_theme_settings_persistence() {
     let db = Vault::spawn(Database::in_memory().expect("in-memory db")).expect("vault");
     let mut state = AppState::fallback_seed(Some(db.clone()));
-    let mut custom_tokens = crate::theme::obsidian_zinc();
-    custom_tokens.accent_brand = gpui_kit::rgb(0xff00aa);
-    custom_tokens.titlebar_height = gpui_kit::px(40.0);
+    let mut settings = state.theme_settings.clone();
+    settings.select(crate::theme::registry::OBSIDIAN_ZINC_ID);
+    settings.duplicate_active("Mine".into());
+    settings.set_color(crate::theme::PaletteColorKey::Accent, gpui_kit::rgb(0xff00aa));
+    settings.density = crate::theme::Density::Compact;
 
-    state.update_theme_tokens(custom_tokens.clone());
+    state.update_theme_settings(settings.clone());
     assert_eq!(state.theme_tokens.accent_brand, gpui_kit::rgb(0xff00aa));
+    assert_eq!(state.theme_tokens, settings.tokens());
 
     let loaded = AppState::load_from_db(&db).expect("Load from db");
+    assert_eq!(loaded.theme_settings, settings);
     assert_eq!(loaded.theme_tokens.accent_brand, gpui_kit::rgb(0xff00aa));
-    assert_eq!(loaded.theme_tokens.titlebar_height, gpui_kit::px(40.0));
 }
 
 #[test]

@@ -2,11 +2,11 @@
 
 use super::callbacks::{
     ModalCloseCallback, SaveSettingsCallback, SelectPresetModelCallback, SelectProviderCallback,
-    SelectTabCallback, SelectThemeCallback,
+    SelectTabCallback,
 };
 use super::general_props::GeneralPaneProps;
 use super::content::{render_backdrop, render_content_header, render_content_pane, render_footer_bar};
-use super::panes::{render_ai_pane, render_appearance_pane, render_general_pane, render_vault_pane};
+use super::panes::{render_ai_pane, render_general_pane, render_vault_pane, AppearancePanel};
 use super::rail::render_rail;
 use super::tabs::SettingsTab;
 use crate::agent::{LlmProvider, LlmSettings};
@@ -25,7 +25,7 @@ pub struct SettingsModal {
     model_input: Entity<InputState>,
     endpoint_input: Entity<InputState>,
     on_select_tab: SelectTabCallback,
-    on_select_theme: SelectThemeCallback,
+    appearance: Entity<AppearancePanel>,
     on_select_provider: SelectProviderCallback,
     on_select_preset_model: SelectPresetModelCallback,
     on_save: SaveSettingsCallback,
@@ -43,7 +43,7 @@ impl SettingsModal {
         model_input: Entity<InputState>,
         endpoint_input: Entity<InputState>,
         on_select_tab: impl Fn(SettingsTab, &mut Window, &mut App) + 'static,
-        on_select_theme: impl Fn(ThemeTokens, &mut Window, &mut App) + 'static,
+        appearance: Entity<AppearancePanel>,
         on_select_provider: impl Fn(LlmProvider, &mut Window, &mut App) + 'static,
         on_select_preset_model: impl Fn(&'static str, &mut Window, &mut App) + 'static,
         on_save: impl Fn(&mut Window, &mut App) + 'static,
@@ -57,7 +57,7 @@ impl SettingsModal {
             model_input,
             endpoint_input,
             on_select_tab: Box::new(on_select_tab),
-            on_select_theme: Box::new(on_select_theme),
+            appearance,
             on_select_provider: Box::new(on_select_provider),
             on_select_preset_model: Box::new(on_select_preset_model),
             on_save: Box::new(on_save),
@@ -78,11 +78,12 @@ impl SettingsModal {
         active_tab: SettingsTab,
         settings: &LlmSettings,
         inputs: [&Entity<InputState>; 3],
-        callbacks: (SelectProviderCallback, SelectPresetModelCallback, SelectThemeCallback),
+        callbacks: (SelectProviderCallback, SelectPresetModelCallback),
+        appearance: Entity<AppearancePanel>,
         general: GeneralPaneProps,
     ) -> AnyElement {
         let [api_key_input, model_input, endpoint_input] = inputs;
-        let (on_provider, on_preset, on_theme) = callbacks;
+        let (on_provider, on_preset) = callbacks;
         match active_tab {
             SettingsTab::General => render_general_pane(theme, general).into_any_element(),
             SettingsTab::AiIntelligence => render_ai_pane(
@@ -95,7 +96,7 @@ impl SettingsModal {
                 on_preset,
             )
             .into_any_element(),
-            SettingsTab::Appearance => render_appearance_pane(theme, on_theme).into_any_element(),
+            SettingsTab::Appearance => appearance.into_any_element(),
             SettingsTab::KnowledgeVault => render_vault_pane(theme).into_any_element(),
         }
     }
@@ -113,7 +114,8 @@ impl RenderOnce for SettingsModal {
             self.active_tab,
             &self.current_settings,
             [&self.api_key_input, &self.model_input, &self.endpoint_input],
-            (self.on_select_provider, self.on_select_preset_model, self.on_select_theme),
+            (self.on_select_provider, self.on_select_preset_model),
+            self.appearance,
             self.general,
         );
         let content = render_content_pane(header, tab_content, footer);

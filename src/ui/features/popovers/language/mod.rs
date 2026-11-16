@@ -2,6 +2,7 @@
 
 mod item;
 
+use crate::ui::atoms::ElevationExt;
 use crate::i18n::Language;
 use crate::theme::ThemeTokens;
 use gpui_kit::base::StyledExt;
@@ -83,7 +84,7 @@ fn render_card(theme: &ThemeTokens) -> Div {
         .border_1()
         .border_color(theme.border)
         .rounded_lg()
-        .shadow_2xl()
+        .elevation_shadow(theme)
         .p_1p5()
         .flex()
         .flex_col()

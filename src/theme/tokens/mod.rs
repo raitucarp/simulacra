@@ -4,15 +4,17 @@
 mod serde_helpers;
 
 use gpui_kit::{px, rgba, Pixels, Rgba};
+use crate::theme::palette::PaletteMode;
 use serde::{Deserialize, Serialize};
 use serde_helpers::{px_serde, rgba_serde};
 
 /// Generates [`ThemeTokens`] from field lists grouped by value kind.
 ///
 /// Field order (and therefore the serialized JSON layout) follows the lists in order:
-/// strings, colors (`0xRRGGBBAA` numbers), pixels (`f32` numbers), then plain floats.
+/// typed enums, strings, colors (`0xRRGGBBAA` numbers), pixels (`f32` numbers), then floats.
 macro_rules! theme_tokens {
     (
+        typed: [$($typed:ident: $ty:ty),* $(,)?],
         strings: [$($string:ident),* $(,)?],
         colors: [$($color:ident),* $(,)?],
         pixels: [$($pixel:ident),* $(,)?],
@@ -22,6 +24,7 @@ macro_rules! theme_tokens {
         #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
         #[serde(default)]
         pub struct ThemeTokens {
+            $(pub $typed: $ty,)*
             $(pub $string: String,)*
             $(#[serde(with = "rgba_serde")] pub $color: Rgba,)*
             $(#[serde(with = "px_serde")] pub $pixel: Pixels,)*
@@ -32,17 +35,25 @@ macro_rules! theme_tokens {
             /// Zero-valued tokens; palettes fill every field on top of this.
             pub(crate) fn blank() -> Self {
                 Self {
+                    $($typed: <$ty>::default(),)*
                     $($string: String::new(),)*
                     $($color: rgba(0),)*
                     $($pixel: px(0.0),)*
                     $($float: 0.0,)*
                 }
             }
+
+            /// Snaps every color to 8-bit channels, so derived tokens equal their persisted form.
+            pub(crate) fn quantize_colors(&mut self) {
+                $(self.$color = crate::theme::color::quantized(self.$color);)*
+            }
         }
     };
 }
 
 theme_tokens! {
+    // Light/dark appearance the colors were derived for
+    typed: [mode: PaletteMode],
     // Font Family Tokens (Epistemic Quad-Typeface System)
     strings: [font_family_ui, font_family_display, font_family_body, font_family_mono],
     colors: [
@@ -54,7 +65,11 @@ theme_tokens! {
         text_primary, text_secondary, text_muted,
         // Accents & Semantic Indicators
         accent_user, accent_alt, accent_agent, accent_brand, accent_dialectic, accent_success,
-        accent_danger, text_white,
+        accent_danger, warning, info, selection,
+        // Readable foregrounds on filled accent, danger and scrim surfaces
+        on_accent, on_danger, on_overlay,
+        // Interaction overlays, inputs, scrollbars, modal overlays and drop shadows
+        pressed_bg, input_bg, scrollbar, scrollbar_hover, overlay, shadow,
         // Window Controls & Modal Interactivity
         bg_window_control_hover, bg_window_control_close_hover, bg_transparent, bg_tab_active,
         bg_scrim,
@@ -77,6 +92,8 @@ theme_tokens! {
         radius_xs, radius_sm, radius_md, radius_lg, radius_xl, radius_full,
         // Border Widths
         border_width_hairline, border_width_threadline,
+        // Elevation shadow geometry
+        shadow_offset_y, shadow_blur,
         // Sizing & Layout Tokens
         titlebar_height, feed_header_height, post_avatar_col_width, threadline_min_height,
         win_control_width, win_control_height, avatar_size_sm, avatar_size_md, avatar_size_lg,

@@ -70,7 +70,7 @@ impl ComposerModalView {
                     .rounded_full()
                     .bg(theme.bg_scrim)
                     .cursor_pointer()
-                    .text_color(theme.text_white)
+                    .text_color(theme.on_overlay)
                     .on_click(move |_, window, cx| (on_clear_image)(window, cx))
                     .child(Icon::new(LucideIcon::X)),
             )

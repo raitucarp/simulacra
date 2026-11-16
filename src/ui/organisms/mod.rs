@@ -5,7 +5,7 @@ pub mod app_title_bar;
 pub mod composer_modal;
 pub mod knowledge_vault_view;
 pub mod left_sidebar;
-pub mod main_feed;
+pub use crate::ui::features::feed as main_feed;
 pub mod mind_graph_view;
 pub mod right_sidebar;
 pub mod secondary_sidebar;

@@ -8,6 +8,7 @@ use crate::ui::features::mind_graph::paint::{Focus, PaintOptions, ScenePainter};
 use crate::ui::features::mind_graph::viewport::{Frame, Viewport};
 use crate::ui::icons::LucideIcon;
 use gpui_kit::*;
+use crate::i18n::{t_count, COUNT_SEPARATOR};
 use rust_i18n::t;
 use std::rc::Rc;
 
@@ -19,11 +20,11 @@ const MINI_GRAPH_ID: &str = "sidebar-mini-graph";
 const MINI_HUB_SCALE: f32 = 2.0;
 
 fn render_graph_header(scene: &GraphScene, theme: &ThemeTokens) -> Div {
-    let counts = t!(
-        "graph.mini_counts",
-        nodes = scene.model.node_count(),
-        edges = scene.model.edge_count()
-    );
+    let counts = [
+        t_count("graph.mini_nodes", scene.model.node_count()),
+        t_count("graph.mini_edges", scene.model.edge_count()),
+    ]
+    .join(COUNT_SEPARATOR);
     render_section_header(
         render_section_title(
             LucideIcon::Share2,
@@ -31,7 +32,7 @@ fn render_graph_header(scene: &GraphScene, theme: &ThemeTokens) -> Div {
             t!("sidebar.mind_graph_title").to_string(),
             theme,
         ),
-        render_mono_badge(counts.to_string(), theme.accent_agent, theme).rounded(theme.radius_sm),
+        render_mono_badge(counts, theme.accent_agent, theme).rounded(theme.radius_sm),
     )
 }
 

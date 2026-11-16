@@ -10,6 +10,7 @@ use gpui_kit::{
     div, App, Div, FontWeight, InteractiveElement, ParentElement, Stateful,
     StatefulInteractiveElement, Styled, Window,
 };
+use crate::i18n::t_count;
 use rust_i18n::t;
 
 fn render_title_row(doc: &GroundingDocument, theme: &ThemeTokens) -> Div {
@@ -34,7 +35,7 @@ fn render_title_row(doc: &GroundingDocument, theme: &ThemeTokens) -> Div {
                 .font_family(theme.font_family_mono.clone())
                 .text_size(theme.font_size_xs)
                 .text_color(theme.accent_agent)
-                .child(t!("vault.chunks_count", count = doc.chunk_count).to_string()),
+                .child(t_count("vault.chunks_count", doc.chunk_count as usize)),
         )
 }
 

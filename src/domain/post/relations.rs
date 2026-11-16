@@ -74,3 +74,21 @@ impl Post {
         )
     }
 }
+
+impl Post {
+    /// Whether this thought is a content-less instant repost (a quote keeps its own identity).
+    #[inline]
+    pub fn is_instant_repost(&self) -> bool {
+        self.repost_id.is_some() && self.quote_id.is_none() && self.content.trim().is_empty()
+    }
+
+    /// The thought that likes, replies, quotes and reposts of this card act on: the original
+    /// for an instant repost, this thought otherwise.
+    #[inline]
+    pub fn action_target_id(&self) -> &PostId {
+        match (&self.repost_id, self.is_instant_repost()) {
+            (Some(original), true) => original,
+            _ => &self.id,
+        }
+    }
+}

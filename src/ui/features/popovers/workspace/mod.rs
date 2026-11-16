@@ -8,7 +8,7 @@ mod trigger;
 use crate::domain::{Network, NetworkId};
 use crate::theme::ThemeTokens;
 use gpui_kit::{App, IntoElement, Window};
-use rust_i18n::t;
+use crate::i18n::{t_count, COUNT_SEPARATOR};
 
 pub type SelectNetworkCallback = Box<dyn Fn(NetworkId, &mut Window, &mut App) + 'static>;
 pub type ToggleWorkspaceCallback = Box<dyn Fn(&mut Window, &mut App) + 'static>;
@@ -79,10 +79,9 @@ impl WorkspacePopover {
 
 /// Localized "N docs · M agents" caption for a network.
 fn docs_and_agents_caption(network: &Network) -> String {
-    t!(
-        "sidebar.docs_and_agents",
-        docs = network.doc_count,
-        agents = network.agent_count
-    )
-    .to_string()
+    [
+        t_count("sidebar.doc_count", network.doc_count),
+        t_count("sidebar.member_count", network.agent_count),
+    ]
+    .join(COUNT_SEPARATOR)
 }

@@ -35,10 +35,8 @@ vault:
   add_doc: "ADICIONAR DOCUMENTO DE ANCORAGEM"
   doc_title_placeholder: "Título do documento (ex.: A República de Platão, a Ética de Espinosa)..."
   doc_content_placeholder: "Cole ou escreva texto em markdown para ancorar os pensamentos dos membros desta rede..."
-  chunks_count: "%{count} trechos"
   ground_button: "Indexar e ancorar"
   no_docs: "Ainda não há documentos de ancoragem nesta rede. Adicione textos fundamentais acima."
-  corpus_header: "CORPUS ANCORADO (%{count} DOCUMENTOS)"
   remove_doc: "Remover"
   grounded_status: "Guardado no cofre local"
   import_file: "Importar arquivo"
@@ -103,8 +101,6 @@ lab:
 graph:
   title: "Grafo mental topológico"
   subtitle: "Rede relacional de pensamentos, documentos de ancoragem e tags semânticas"
-  nodes_count: "%{count} nós"
-  links_count: "%{count} links"
   filter_all: "Todos os nós"
   legend_thoughts: "Pensamentos"
   legend_docs: "Docs de ancoragem"
@@ -119,7 +115,6 @@ graph:
   reset_view: "Redefinir visualização"
   nothing_selected: "Selecione um nó para ver como ele se conecta."
   empty: "Ainda não há nada para mapear. Compartilhe um pensamento para fazer o grafo crescer."
-  mini_counts: "%{nodes} nós · %{edges} arestas"
 
 composer:
   placeholder: "No que você está pensando? (Use [[ para vincular pensamentos, # para tópicos)..."
@@ -154,13 +149,10 @@ feed:
   for_you: "Para você"
   dialectic: "Dialética"
   inspector_title: "Inspetor de threads"
-  replies_count: "%{count} respostas"
   grounding_context_title: "ANCORAGEM EPISTÊMICA"
   grounding_context_desc: "Ainda não há respostas. Responda você mesmo ou ative a publicação autônoma em Configurações para que os agentes da rede participem."
   select_to_inspect: "Selecione qualquer pensamento do fluxo para inspecionar a thread de conversa."
   quote_or_reply: "Responder"
-  show_more: "Mostrar mais pensamentos (%{count} restantes)"
-  show_more_replies: "Mostrar mais %{count} respostas"
   show_fewer_replies: "Mostrar menos respostas"
 
 sidebar:
@@ -171,15 +163,12 @@ sidebar:
   upload_doc: "Adicionar documento"
   grounding_desc: "Textos fundamentais desta rede, guardados no seu cofre local."
   popular_tags: "TÓPICOS EM ALTA"
-  posts_count: "%{count} pensamentos"
   spawned_personas: "MEMBROS DA REDE (%{count})"
-  docs_and_agents: "%{docs} docs · %{agents} membros"
   mind_cadence: "Mente e cadência"
   vault_telemetry: "Cofre e telemetria"
   mind_graph_title: "GRAFO MENTAL"
   thought_cadence_title: "CADÊNCIA DE PENSAMENTO"
   sparks_feed_title: "FAÍSCAS SERENDÍPICAS"
-  doc_count: "%{count} docs"
 
 role:
   user_primary: "VOCÊ"
@@ -221,11 +210,8 @@ scheduler:
   db_path_title: "Caminho do banco de dados"
 
 cadence:
-  badge: "%{count} publicações/ano"
   hint: "Passe o mouse sobre um dia para ver detalhes · clique para filtrar o feed"
   day_none: "Nenhuma publicação em %{date}"
-  day_one: "1 publicação em %{date}"
-  day_many: "%{count} publicações em %{date}"
   showing: "Mostrando %{date}"
   less: "Menos"
   more: "Mais"
@@ -267,7 +253,6 @@ post:
   refs_none: "Nenhum pensamento citado ou vinculado"
   refs_quote: "Cita: %{excerpt}"
   refs_link: "Vincula a: %{excerpt}"
-  refs_open_thread: "Abrir conversa (%{count} respostas)"
 
 appearance:
   gallery_title: "GALERIA DE TEMAS"
@@ -1427,6 +1412,41 @@ onboarding.settings_note: "Mostra de novo as boas-vindas do Mnemo, com um atalho
 # Startup notice when the vault cannot be opened or read (flat keys).
 storage.load_failed_title: "Cofre local indisponível"
 storage.load_failed: "Não foi possível abrir o cofre local (%{error}). Exibindo dados de demonstração; nada será salvo nesta sessão e o seu arquivo de cofre não foi alterado."
+
+# phase 6 fixes (feed)
+# Count labels: <key>_one / <key>_other, picked per locale plural rule by i18n::t_count (flat keys).
+vault.chunks_count_one: "%{count} trecho"
+vault.chunks_count_other: "%{count} trechos"
+vault.corpus_header_one: "CORPUS ANCORADO (%{count} DOCUMENTO)"
+vault.corpus_header_other: "CORPUS ANCORADO (%{count} DOCUMENTOS)"
+graph.nodes_count_one: "%{count} nó"
+graph.nodes_count_other: "%{count} nós"
+graph.links_count_one: "%{count} link"
+graph.links_count_other: "%{count} links"
+graph.mini_nodes_one: "%{count} nó"
+graph.mini_nodes_other: "%{count} nós"
+graph.mini_edges_one: "%{count} aresta"
+graph.mini_edges_other: "%{count} arestas"
+feed.replies_count_one: "%{count} resposta"
+feed.replies_count_other: "%{count} respostas"
+feed.show_more_one: "Mostrar mais pensamentos (%{count} restante)"
+feed.show_more_other: "Mostrar mais pensamentos (%{count} restantes)"
+feed.show_more_replies_one: "Mostrar mais %{count} resposta"
+feed.show_more_replies_other: "Mostrar mais %{count} respostas"
+sidebar.posts_count_one: "%{count} pensamento"
+sidebar.posts_count_other: "%{count} pensamentos"
+sidebar.doc_count_one: "%{count} doc"
+sidebar.doc_count_other: "%{count} docs"
+sidebar.member_count_one: "%{count} membro"
+sidebar.member_count_other: "%{count} membros"
+cadence.badge_one: "%{count} publicação/ano"
+cadence.badge_other: "%{count} publicações/ano"
+cadence.day_posts_one: "%{count} publicação em %{date}"
+cadence.day_posts_other: "%{count} publicações em %{date}"
+post.refs_open_thread_one: "Abrir conversa (%{count} resposta)"
+post.refs_open_thread_other: "Abrir conversa (%{count} respostas)"
+sidebar.member_agents_one: "%{count} agente com traços humanos"
+sidebar.member_agents_other: "%{count} agentes com traços humanos"
 
 # phase 6 fixes (ux)
 # Autonomous scheduler paused for a missing API key (flat keys).

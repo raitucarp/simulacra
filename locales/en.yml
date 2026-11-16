@@ -35,10 +35,8 @@ vault:
   add_doc: "ADD GROUNDING DOCUMENT"
   doc_title_placeholder: "Document title (e.g. Plato's Republic, Spinoza's Ethics)..."
   doc_content_placeholder: "Paste or write markdown text to ground member thoughts in this network..."
-  chunks_count: "%{count} chunks"
   ground_button: "Index & Ground"
   no_docs: "No grounding documents in this network yet. Add foundational texts above."
-  corpus_header: "GROUNDED CORPUS (%{count} DOCUMENTS)"
   remove_doc: "Remove"
   grounded_status: "Stored in the local vault"
   import_file: "Import file"
@@ -103,8 +101,6 @@ lab:
 graph:
   title: "Topological Mind Graph"
   subtitle: "Relational network of thoughts, grounding documents, and semantic tags"
-  nodes_count: "%{count} Nodes"
-  links_count: "%{count} Links"
   filter_all: "All Nodes"
   legend_thoughts: "Thoughts"
   legend_docs: "Grounding Docs"
@@ -119,7 +115,6 @@ graph:
   reset_view: "Reset view"
   nothing_selected: "Select a node to see how it connects."
   empty: "Nothing to map yet. Share a thought to grow the graph."
-  mini_counts: "%{nodes} nodes · %{edges} edges"
 
 composer:
   placeholder: "What's on your mind? (Use [[ to link thoughts, # for topics)..."
@@ -154,13 +149,10 @@ feed:
   for_you: "For you"
   dialectic: "Dialectic"
   inspector_title: "Thread Inspector"
-  replies_count: "%{count} replies"
   grounding_context_title: "EPISTEMIC GROUNDING"
   grounding_context_desc: "No replies yet. Reply yourself, or turn on autonomous posting in Settings so network agents can join in."
   select_to_inspect: "Select any thought from the stream to inspect its conversation thread."
   quote_or_reply: "Reply"
-  show_more: "Show more thoughts (%{count} remaining)"
-  show_more_replies: "Show %{count} more replies"
   show_fewer_replies: "Show fewer replies"
 
 sidebar:
@@ -171,15 +163,12 @@ sidebar:
   upload_doc: "Add Document"
   grounding_desc: "Foundational texts for this network, stored in your local vault."
   popular_tags: "TRENDING TOPICS"
-  posts_count: "%{count} thoughts"
   spawned_personas: "NETWORK MEMBERS (%{count})"
-  docs_and_agents: "%{docs} docs · %{agents} members"
   mind_cadence: "Mind & Cadence"
   vault_telemetry: "Vault & Telemetry"
   mind_graph_title: "MIND GRAPH"
   thought_cadence_title: "THOUGHT CADENCE"
   sparks_feed_title: "SERENDIPITOUS SPARKS"
-  doc_count: "%{count} docs"
 
 role:
   user_primary: "YOU"
@@ -221,11 +210,8 @@ scheduler:
   db_path_title: "Database Path"
 
 cadence:
-  badge: "%{count} posts/yr"
   hint: "Hover a day for details · click to filter the feed"
   day_none: "No posts on %{date}"
-  day_one: "1 post on %{date}"
-  day_many: "%{count} posts on %{date}"
   showing: "Showing %{date}"
   less: "Less"
   more: "More"
@@ -267,7 +253,6 @@ post:
   refs_none: "No quoted or linked thoughts"
   refs_quote: "Quotes: %{excerpt}"
   refs_link: "Links to: %{excerpt}"
-  refs_open_thread: "Open conversation (%{count} replies)"
 
 appearance:
   gallery_title: "THEME GALLERY"
@@ -1427,6 +1412,41 @@ onboarding.settings_note: "Shows Mnemo's welcome again, with a shortcut into the
 # Startup notice when the vault cannot be opened or read (flat keys).
 storage.load_failed_title: "Local vault unavailable"
 storage.load_failed: "Could not open the local vault (%{error}). Showing demo data; nothing will be saved this session and your vault file was left untouched."
+
+# phase 6 fixes (feed)
+# Count labels: <key>_one / <key>_other, picked per locale plural rule by i18n::t_count (flat keys).
+vault.chunks_count_one: "%{count} chunk"
+vault.chunks_count_other: "%{count} chunks"
+vault.corpus_header_one: "GROUNDED CORPUS (%{count} DOCUMENT)"
+vault.corpus_header_other: "GROUNDED CORPUS (%{count} DOCUMENTS)"
+graph.nodes_count_one: "%{count} Node"
+graph.nodes_count_other: "%{count} Nodes"
+graph.links_count_one: "%{count} Link"
+graph.links_count_other: "%{count} Links"
+graph.mini_nodes_one: "%{count} node"
+graph.mini_nodes_other: "%{count} nodes"
+graph.mini_edges_one: "%{count} edge"
+graph.mini_edges_other: "%{count} edges"
+feed.replies_count_one: "%{count} reply"
+feed.replies_count_other: "%{count} replies"
+feed.show_more_one: "Show more thoughts (%{count} remaining)"
+feed.show_more_other: "Show more thoughts (%{count} remaining)"
+feed.show_more_replies_one: "Show %{count} more reply"
+feed.show_more_replies_other: "Show %{count} more replies"
+sidebar.posts_count_one: "%{count} thought"
+sidebar.posts_count_other: "%{count} thoughts"
+sidebar.doc_count_one: "%{count} doc"
+sidebar.doc_count_other: "%{count} docs"
+sidebar.member_count_one: "%{count} member"
+sidebar.member_count_other: "%{count} members"
+cadence.badge_one: "%{count} post/yr"
+cadence.badge_other: "%{count} posts/yr"
+cadence.day_posts_one: "%{count} post on %{date}"
+cadence.day_posts_other: "%{count} posts on %{date}"
+post.refs_open_thread_one: "Open conversation (%{count} reply)"
+post.refs_open_thread_other: "Open conversation (%{count} replies)"
+sidebar.member_agents_one: "%{count} human-like agent"
+sidebar.member_agents_other: "%{count} human-like agents"
 
 # phase 6 fixes (ux)
 # Autonomous scheduler paused for a missing API key (flat keys).

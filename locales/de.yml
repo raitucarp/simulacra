@@ -35,10 +35,8 @@ vault:
   add_doc: "VERANKERUNGSDOKUMENT HINZUFÜGEN"
   doc_title_placeholder: "Dokumenttitel (z. B. Platons Politeia, Spinozas Ethik)..."
   doc_content_placeholder: "Füge Markdown-Text ein oder schreibe ihn, um die Gedanken der Mitglieder in diesem Netzwerk zu verankern..."
-  chunks_count: "%{count} Abschnitte"
   ground_button: "Indizieren & verankern"
   no_docs: "In diesem Netzwerk gibt es noch keine Verankerungsdokumente. Füge oben Grundlagentexte hinzu."
-  corpus_header: "VERANKERTES KORPUS (%{count} DOKUMENTE)"
   remove_doc: "Entfernen"
   grounded_status: "Im lokalen Tresor gespeichert"
   import_file: "Datei importieren"
@@ -103,8 +101,6 @@ lab:
 graph:
   title: "Topologischer Mind Graph"
   subtitle: "Beziehungsnetz aus Gedanken, Verankerungsdokumenten und semantischen Tags"
-  nodes_count: "%{count} Knoten"
-  links_count: "%{count} Verbindungen"
   filter_all: "Alle Knoten"
   legend_thoughts: "Gedanken"
   legend_docs: "Verankerungsdokumente"
@@ -119,7 +115,6 @@ graph:
   reset_view: "Ansicht zurücksetzen"
   nothing_selected: "Wähle einen Knoten, um zu sehen, wie er verbunden ist."
   empty: "Noch nichts darzustellen. Teile einen Gedanken, damit der Graph wächst."
-  mini_counts: "%{nodes} Knoten · %{edges} Kanten"
 
 composer:
   placeholder: "Was beschäftigt dich? (Mit [[ Gedanken verlinken, mit # Themen markieren)..."
@@ -154,13 +149,10 @@ feed:
   for_you: "Für dich"
   dialectic: "Dialektik"
   inspector_title: "Thread-Inspektor"
-  replies_count: "%{count} Antworten"
   grounding_context_title: "EPISTEMISCHE VERANKERUNG"
   grounding_context_desc: "Noch keine Antworten. Antworte selbst oder aktiviere in den Einstellungen das autonome Posten, damit Netzwerk-Agenten mitdiskutieren können."
   select_to_inspect: "Wähle einen Gedanken aus dem Stream, um seinen Gesprächsverlauf zu untersuchen."
   quote_or_reply: "Antworten"
-  show_more: "Weitere Gedanken anzeigen (%{count} übrig)"
-  show_more_replies: "%{count} weitere Antworten anzeigen"
   show_fewer_replies: "Weniger Antworten anzeigen"
 
 sidebar:
@@ -171,15 +163,12 @@ sidebar:
   upload_doc: "Dokument hinzufügen"
   grounding_desc: "Grundlagentexte für dieses Netzwerk, gespeichert in deinem lokalen Tresor."
   popular_tags: "TRENDTHEMEN"
-  posts_count: "%{count} Gedanken"
   spawned_personas: "NETZWERKMITGLIEDER (%{count})"
-  docs_and_agents: "%{docs} Dokumente · %{agents} Mitglieder"
   mind_cadence: "Geist & Takt"
   vault_telemetry: "Tresor & Telemetrie"
   mind_graph_title: "MIND GRAPH"
   thought_cadence_title: "GEDANKENTAKT"
   sparks_feed_title: "ZUFÄLLIGE FUNKEN"
-  doc_count: "%{count} Dokumente"
 
 role:
   user_primary: "DU"
@@ -221,11 +210,8 @@ scheduler:
   db_path_title: "Datenbankpfad"
 
 cadence:
-  badge: "%{count} Beiträge/Jahr"
   hint: "Über einen Tag fahren für Details · klicken, um den Feed zu filtern"
   day_none: "Keine Beiträge am %{date}"
-  day_one: "1 Beitrag am %{date}"
-  day_many: "%{count} Beiträge am %{date}"
   showing: "Anzeige: %{date}"
   less: "Weniger"
   more: "Mehr"
@@ -267,7 +253,6 @@ post:
   refs_none: "Keine zitierten oder verlinkten Gedanken"
   refs_quote: "Zitate: %{excerpt}"
   refs_link: "Verlinkt auf: %{excerpt}"
-  refs_open_thread: "Unterhaltung öffnen (%{count} Antworten)"
 
 appearance:
   gallery_title: "THEME-GALERIE"
@@ -1427,6 +1412,41 @@ onboarding.settings_note: "Zeigt Mnemos Begrüßung erneut, mit einem direkten W
 # Startup notice when the vault cannot be opened or read (flat keys).
 storage.load_failed_title: "Lokaler Tresor nicht verfügbar"
 storage.load_failed: "Der lokale Tresor konnte nicht geöffnet werden (%{error}). Es werden Demodaten angezeigt; in dieser Sitzung wird nichts gespeichert, und deine Tresordatei bleibt unverändert."
+
+# phase 6 fixes (feed)
+# Count labels: <key>_one / <key>_other, picked per locale plural rule by i18n::t_count (flat keys).
+vault.chunks_count_one: "%{count} Abschnitt"
+vault.chunks_count_other: "%{count} Abschnitte"
+vault.corpus_header_one: "VERANKERTES KORPUS (%{count} DOKUMENT)"
+vault.corpus_header_other: "VERANKERTES KORPUS (%{count} DOKUMENTE)"
+graph.nodes_count_one: "%{count} Knoten"
+graph.nodes_count_other: "%{count} Knoten"
+graph.links_count_one: "%{count} Verbindung"
+graph.links_count_other: "%{count} Verbindungen"
+graph.mini_nodes_one: "%{count} Knoten"
+graph.mini_nodes_other: "%{count} Knoten"
+graph.mini_edges_one: "%{count} Kante"
+graph.mini_edges_other: "%{count} Kanten"
+feed.replies_count_one: "%{count} Antwort"
+feed.replies_count_other: "%{count} Antworten"
+feed.show_more_one: "Weitere Gedanken anzeigen (%{count} übrig)"
+feed.show_more_other: "Weitere Gedanken anzeigen (%{count} übrig)"
+feed.show_more_replies_one: "%{count} weitere Antwort anzeigen"
+feed.show_more_replies_other: "%{count} weitere Antworten anzeigen"
+sidebar.posts_count_one: "%{count} Gedanke"
+sidebar.posts_count_other: "%{count} Gedanken"
+sidebar.doc_count_one: "%{count} Dokument"
+sidebar.doc_count_other: "%{count} Dokumente"
+sidebar.member_count_one: "%{count} Mitglied"
+sidebar.member_count_other: "%{count} Mitglieder"
+cadence.badge_one: "%{count} Beitrag/Jahr"
+cadence.badge_other: "%{count} Beiträge/Jahr"
+cadence.day_posts_one: "%{count} Beitrag am %{date}"
+cadence.day_posts_other: "%{count} Beiträge am %{date}"
+post.refs_open_thread_one: "Unterhaltung öffnen (%{count} Antwort)"
+post.refs_open_thread_other: "Unterhaltung öffnen (%{count} Antworten)"
+sidebar.member_agents_one: "%{count} menschenähnlicher Agent"
+sidebar.member_agents_other: "%{count} menschenähnliche Agenten"
 
 # phase 6 fixes (ux)
 # Autonomous scheduler paused for a missing API key (flat keys).

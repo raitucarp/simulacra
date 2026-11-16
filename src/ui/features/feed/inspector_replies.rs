@@ -11,6 +11,7 @@ use crate::ui::icons::LucideIcon;
 use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::{Icon, Sizable};
 use gpui_kit::{div, AnyElement, IntoElement, ParentElement, Styled};
+use crate::i18n::t_count;
 use rust_i18n::t;
 
 /// Threadline style from whether the card connects upward and downward.
@@ -77,9 +78,9 @@ fn branch_cards(ctx: &InspectorContext<'_>, branch: &ReplyBranch<'_>) -> Vec<Any
 /// "Show N more replies" while collapsed, "Show fewer replies" once expanded (when it matters).
 fn replies_toggle(ctx: &InspectorContext<'_>, conversation: &Conversation<'_>) -> Option<AnyElement> {
     let label = if conversation.hidden > 0 {
-        t!("feed.show_more_replies", count = conversation.hidden)
+        t_count("feed.show_more_replies", conversation.hidden)
     } else if ctx.expanded && collapsible(conversation) {
-        t!("feed.show_fewer_replies")
+        t!("feed.show_fewer_replies").to_string()
     } else {
         return None;
     };
@@ -89,7 +90,7 @@ fn replies_toggle(ctx: &InspectorContext<'_>, conversation: &Conversation<'_>) -
         .ghost()
         .small()
         .icon(Icon::new(icon))
-        .label(label.to_string())
+        .label(label)
         .on_click(move |_, window, cx| on_toggle(window, cx));
     let theme = ctx.theme;
     Some(div().w_full().px(theme.spacing_lg).py(theme.spacing_sm).child(button).into_any_element())

@@ -4,6 +4,7 @@
 //! `apply_avatar` / `set_notice`.
 
 mod actions;
+mod begin;
 mod describe;
 mod handle;
 mod keys;

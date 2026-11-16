@@ -25,6 +25,19 @@ const OFF_KEY: &str = "forge.ui.off";
 const ARG_CLASS: &str = "class";
 const ARG_COUNT: &str = "count";
 const ARROW: &str = "→";
+/// Longest value shown in a change row before it is cut with an ellipsis.
+const MAX_VALUE_CHARS: usize = 32;
+const ELLIPSIS: char = '…';
+
+/// `text` cut to [`MAX_VALUE_CHARS`] characters.
+fn shortened(text: String) -> String {
+    if text.chars().count() <= MAX_VALUE_CHARS {
+        return text;
+    }
+    let mut cut: String = text.chars().take(MAX_VALUE_CHARS).collect();
+    cut.push(ELLIPSIS);
+    cut
+}
 
 /// Display name of a trait value at its concrete option type.
 struct LabelOf;
@@ -38,12 +51,12 @@ impl TraitVisitor for LabelOf {
 }
 
 fn value_text(value: &ChangeValue) -> String {
-    match value {
+    shortened(match value {
         ChangeValue::Text(text) => text.clone(),
         ChangeValue::Number(number) => number.to_string(),
         ChangeValue::Flag(flag) => tr(if *flag { ON_KEY } else { OFF_KEY }),
         ChangeValue::Trait(value) => value.visit(LabelOf),
-    }
+    })
 }
 
 fn change_row(change: &FieldChange, theme: &ThemeTokens) -> Div {

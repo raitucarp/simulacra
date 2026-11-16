@@ -1,13 +1,12 @@
-//! Opening the forge, the start screen's ways into the creator, and what happens after the
-//! host saved the profile.
+//! Opening the forge, resuming an autosave, and what happens after the host saved the profile.
 
 use super::state::{ForgeContext, ForgeOpen, ForgeScreen, GuideState, Notice, StartState};
 use super::{ForgeEvent, ForgeView};
 use crate::domain::portrait::{AvatarMode, PortraitSlot};
-use crate::domain::{ArchetypeClass, Profile};
-use crate::state::forge::{apply_class, roll_into, AgentDraft, AvatarField, DraftEdit, ForgeKind};
+use crate::domain::Profile;
+use crate::state::forge::{AgentDraft, AvatarField, DraftEdit, ForgeKind};
 use crate::theme::ThemeTokens;
-use crate::ui::features::forge::logic::{time_seed, AutosavePolicy};
+use crate::ui::features::forge::logic::AutosavePolicy;
 use gpui_kit::*;
 
 impl ForgeView {
@@ -62,44 +61,6 @@ impl ForgeView {
         cx.emit(ForgeEvent::ClearAutosave);
         self.screen = ForgeScreen::Start;
         cx.notify();
-    }
-
-    /// Switches the start screen between a new agent and a new persona.
-    pub fn set_kind(&mut self, kind: ForgeKind, _: &mut Window, cx: &mut Context<Self>) {
-        self.start = StartState { kind, ..StartState::new(kind) };
-        self.draft = AgentDraft::new(kind, self.context.network_id.clone());
-        self.class = None;
-        self.revalidate();
-        cx.notify();
-    }
-
-    /// "Begin as <class>": applies the class and opens the creator.
-    pub fn begin_as(&mut self, class: ArchetypeClass, window: &mut Window, cx: &mut Context<Self>) {
-        apply_class(&mut self.draft, class);
-        self.class = Some(class);
-        self.enter_steps(window, cx);
-    }
-
-    /// "Start from scratch".
-    pub fn begin_blank(&mut self, window: &mut Window, cx: &mut Context<Self>) {
-        self.class = None;
-        self.enter_steps(window, cx);
-    }
-
-    /// Rolls (or re-rolls) a random thinker and shows the result on the start screen.
-    pub fn roll(&mut self, _: &mut Window, cx: &mut Context<Self>) {
-        let class = roll_into(&mut self.draft, time_seed(), &self.context.existing);
-        self.class = Some(class);
-        self.start.rolled = Some(class);
-        self.start.describing = false;
-        self.revalidate();
-        cx.notify();
-    }
-
-    /// Keeps the rolled thinker and opens the creator.
-    pub fn keep_roll(&mut self, window: &mut Window, cx: &mut Context<Self>) {
-        self.start.rolled = None;
-        self.enter_steps(window, cx);
     }
 
     pub(crate) fn enter_steps(&mut self, window: &mut Window, cx: &mut Context<Self>) {

@@ -22,11 +22,9 @@ const OCCUPATION_ID_PREFIX: &str = "forge-occupation";
 const AGE_ID: &str = "forge-age";
 const GENDER_GRID_ID: &str = "forge-gender";
 /// Quick-pick occupation cards per row.
-const PRESET_COLUMNS: usize = 4;
+const PRESET_COLUMNS: usize = 3;
 /// Gender cards per row.
 const GENDER_COLUMNS: usize = 4;
-/// Gender cards are this many part thumbnails wide.
-const GENDER_CARD_SCALE: f32 = 1.5;
 /// Age slider step.
 const AGE_STEP: u16 = 1;
 
@@ -57,7 +55,7 @@ impl ForgeView {
     /// One quick pick: the draft's portrait (or a default one) wearing the preset's outfit.
     fn occupation_card(&self, preset: OccupationPreset, handle: &ForgeHandle) -> Stateful<Div> {
         let theme = &self.theme;
-        let width = theme.forge_part_thumb_size;
+        let width = theme.forge_preset_card_width;
         let base = pcg_spec(self.draft.profile().config.avatar.as_ref()).unwrap_or_default();
         let art = PortraitView::new(AvatarMode::Pcg(PortraitSpec { outfit: preset.outfit(), ..base }), width, theme);
         let label = tr(&preset.label_key());
@@ -91,7 +89,7 @@ impl ForgeView {
         let pick = handle.with(|this, gender: HumanGender, _, cx| this.pick_gender(gender, cx));
         let grid = IllustratedOptionGrid::new(GENDER_GRID_ID, Some(current), &self.theme, move |g, w, cx| pick(g, w, cx))
             .columns(GENDER_COLUMNS)
-            .card_width(self.theme.forge_part_thumb_size * GENDER_CARD_SCALE)
+            .card_width(self.theme.forge_compact_card_width)
             .compact();
         labeled(TraitField::Gender.path(), grid, &self.theme)
     }

@@ -101,8 +101,9 @@ impl ForgeView {
             .map(|(row, chunk)| {
                 let cards = chunk.iter().enumerate().map(|(col, key)| {
                     let at = row * PART_COLUMNS + col;
-                    let art = PortraitView::new(AvatarMode::Pcg(with_slot_index(spec, slot, at)), theme.forge_part_thumb_size, theme);
-                    let mut card_spec = OptionCardSpec::new((PART_ID_PREFIX, at), art, tr(&slot.option_label_key(key)), theme.forge_part_thumb_size);
+                    let width = theme.forge_compact_card_width;
+                    let art = PortraitView::new(AvatarMode::Pcg(with_slot_index(spec, slot, at)), width, theme);
+                    let mut card_spec = OptionCardSpec::new((PART_ID_PREFIX, at), art, tr(&slot.option_label_key(key)), width);
                     card_spec.selected = at == chosen;
                     let on_pick = pick(at);
                     option_card(card_spec, theme, move |w, cx| on_pick(w, cx))

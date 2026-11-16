@@ -1,6 +1,7 @@
 //! The root window view and its window-chrome state.
 
 use super::feed_state::FeedState;
+use super::forge_host::ForgeSession;
 use super::graph_state::GraphState;
 use super::lab_state::{LabState, LlmInputs};
 use super::panels::ShellPanels;
@@ -27,6 +28,8 @@ pub struct AppView {
     pub lab: LabState,
     pub scheduler: SchedulerState,
     pub graph: GraphState,
+    /// The Agent Forge while it is open (it replaces the center and right columns).
+    pub forge: Option<ForgeSession>,
     /// Cached views of the sidebars and the center column.
     pub(super) panels: ShellPanels,
     pub(super) _subscriptions: Vec<Subscription>,

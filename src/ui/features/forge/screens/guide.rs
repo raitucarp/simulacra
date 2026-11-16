@@ -84,6 +84,7 @@ pub(super) fn guide_bubble(moment: GuideMoment, theme: &ThemeTokens) -> Div {
                 .child(tr(&guide_tip_key(moment))),
         );
     div()
+        .w_full()
         .flex()
         .items_start()
         .gap(theme.spacing_sm)

@@ -1,12 +1,9 @@
-//! Roster pane container: segmented mode switch, scrollable contacts, pinned create button.
+//! Roster pane: segmented mode switch, scrollable contacts, pinned "New agent / persona".
 
 use super::contact_row::{render_contact_row, ContactRowState};
 use super::mode_switch::render_mode_switch;
+use super::params::{LabMode, RosterCallbacks, RosterData, RosterParams};
 use crate::theme::ThemeTokens;
-use crate::ui::features::agent_editor::callbacks::{CreateProfileCallback, SharedCallbacks};
-use crate::ui::features::agent_editor::config_tab::LabMode;
-use crate::ui::features::agent_editor::params::WorkspaceScope;
-use crate::ui::features::agent_editor::workspace::WorkspaceData;
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::scroll::ScrollableElement;
@@ -15,16 +12,12 @@ use gpui_kit::*;
 use rust_i18n::t;
 use std::rc::Rc;
 
-const PANE_ID: &str = "agent-workspace-left-contact-pane";
-const LIST_ID: &str = "agent-contact-list-scroll";
-const CREATE_BUTTON_ID: &str = "create-new-lab-profile-btn";
+const PANE_ID: &str = "roster-contact-pane";
+const LIST_ID: &str = "roster-contact-list";
+const CREATE_BUTTON_ID: &str = "roster-create-profile";
 
-pub(crate) fn render_roster_pane(
-    scope: &WorkspaceScope<'_>,
-    data: &WorkspaceData<'_>,
-    callbacks: &SharedCallbacks,
-) -> Stateful<Div> {
-    let theme = scope.theme;
+pub(super) fn render_roster_pane(params: &RosterParams<'_>, data: &RosterData<'_>, callbacks: &RosterCallbacks) -> Stateful<Div> {
+    let theme = params.theme;
     div()
         .id(PANE_ID)
         .w(theme.contact_list_pane_width)
@@ -35,17 +28,13 @@ pub(crate) fn render_roster_pane(
         .border_color(theme.border_subtle)
         .flex()
         .flex_col()
-        .child(render_mode_switch(scope, data, callbacks.switch_mode.clone()))
-        .child(contact_list(scope, data, callbacks))
-        .child(create_footer(scope.mode, theme, callbacks.create.clone()))
+        .child(render_mode_switch(params, data, callbacks.switch_mode.clone()))
+        .child(contact_list(params, data, callbacks))
+        .child(create_footer(params.mode, theme, callbacks.create.clone()))
 }
 
-fn contact_list(
-    scope: &WorkspaceScope<'_>,
-    data: &WorkspaceData<'_>,
-    callbacks: &SharedCallbacks,
-) -> impl IntoElement {
-    let theme = scope.theme;
+fn contact_list(params: &RosterParams<'_>, data: &RosterData<'_>, callbacks: &RosterCallbacks) -> impl IntoElement {
+    let theme = params.theme;
     let selected_id = data.selected.map(|p| &p.id);
     div()
         .id(LIST_ID)
@@ -55,20 +44,24 @@ fn contact_list(
         .flex()
         .flex_col()
         .gap(theme.spacing_2xs)
-        .children(data.contact_list.iter().enumerate().map(|(idx, prof)| {
+        .children(data.contacts.iter().enumerate().map(|(idx, prof)| {
             let state = ContactRowState {
                 selected: selected_id == Some(&prof.id),
-                active_user_persona: scope.state.active_profile_id == prof.id,
+                active_user_persona: params.state.active_profile_id == prof.id,
             };
-            render_contact_row(idx, prof, state, theme, callbacks.select_profile.clone())
+            render_contact_row(idx, prof, state, theme, callbacks.select.clone())
         }))
 }
 
-fn create_footer(mode: LabMode, theme: &ThemeTokens, on_create: Rc<CreateProfileCallback>) -> Div {
-    let label = match mode {
+/// The "New agent / persona" label of `mode` (the button adds its own plus icon).
+pub(super) fn create_label(mode: LabMode) -> String {
+    match mode {
         LabMode::NetworkAgents => t!("lab.new_agent").to_string(),
         LabMode::PersonaLab => t!("lab.new_persona").to_string(),
-    };
+    }
+}
+
+fn create_footer(mode: LabMode, theme: &ThemeTokens, on_create: Rc<dyn Fn(&mut Window, &mut App)>) -> Div {
     div()
         .w_full()
         .p(theme.spacing_sm)
@@ -79,7 +72,7 @@ fn create_footer(mode: LabMode, theme: &ThemeTokens, on_create: Rc<CreateProfile
                 .primary()
                 .w_full()
                 .icon(Icon::new(LucideIcon::Plus))
-                .label(label)
+                .label(create_label(mode))
                 .on_click(move |_, w, cx| on_create(w, cx)),
         )
 }

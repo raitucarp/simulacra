@@ -3,7 +3,7 @@
 use super::super::view::AppView;
 use crate::domain::{NetworkId, ProfileId};
 use crate::state::NavigationTab;
-use crate::ui::features::agent_editor::LabMode;
+use crate::ui::features::roster::LabMode;
 use crate::ui::features::composer::ComposerModalMode;
 use crate::ui::features::settings::SettingsTab;
 use gpui_kit::*;
@@ -20,9 +20,6 @@ impl AppView {
 
     /// Navigates to `tab`; "Appearance" opens the settings modal instead.
     pub(crate) fn select_nav(&mut self, tab: NavigationTab, window: &mut Window, cx: &mut Context<Self>) {
-        if self.is_lab_tab() {
-            self.save_agent_editor_text_inputs(cx);
-        }
         if tab == NavigationTab::Appearance {
             self.revert_settings_draft(window, cx);
             self.chrome.is_settings_open = true;
@@ -30,6 +27,7 @@ impl AppView {
             cx.notify();
             return;
         }
+        self.close_forge(window, cx);
         self.state.active_tab = tab;
         if tab == NavigationTab::AgentLab {
             self.ensure_valid_lab_selection(LabMode::NetworkAgents, window, cx);
@@ -48,9 +46,7 @@ impl AppView {
 
     /// Opens `agent_id` in the Agent Lab from the sidebar member list.
     pub(crate) fn select_sidebar_agent(&mut self, agent_id: ProfileId, window: &mut Window, cx: &mut Context<Self>) {
-        if self.is_lab_tab() {
-            self.save_agent_editor_text_inputs(cx);
-        }
+        self.close_forge(window, cx);
         self.state.active_tab = NavigationTab::AgentLab;
         self.select_lab_profile(agent_id, window, cx);
     }

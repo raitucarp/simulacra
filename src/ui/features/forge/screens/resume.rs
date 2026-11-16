@@ -41,7 +41,7 @@ impl ForgeView {
                 .items_center()
                 .child(guide_bubble(GuideMoment::Start, theme))
                 .children(portrait)
-                .child(title(tr(TITLE_KEY), theme))
+                .child(title(tr(TITLE_KEY), theme).text_center())
                 .child(muted(body, theme))
                 .child(buttons),
         )

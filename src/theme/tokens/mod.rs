@@ -113,7 +113,8 @@ theme_tokens! {
         forge_topbar_height, forge_portrait_size, forge_nameplate_avatar_size, forge_class_card_width,
         forge_option_card_width, forge_part_thumb_size, forge_swatch_size, forge_guide_size,
         forge_radar_size, forge_skill_bar_height, forge_trading_card_width, forge_explainer_width,
-        forge_empty_art_width, forge_tile_min_height, forge_bubble_max_width,
+        forge_empty_art_width, forge_tile_min_height, forge_bubble_max_width, forge_preset_card_width,
+        forge_compact_card_width,
     ],
     // Typography Hierarchy & Line Height; heatmap level opacities; graph dimming & curvature
     floats: [

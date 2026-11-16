@@ -3,23 +3,20 @@
 //!
 //! - `view` / `*_state`: the view struct and its grouped state (incl. the scheduler).
 //! - `construct`: window-level construction and input subscriptions.
-//! - `editor_*`: agent editor text fields, their inputs and draft-safe syncing.
+//! - `lab_selection` / `forge_host`: the roster selection and the Agent Forge it opens.
 //! - `handlers`: event handlers by responsibility; `binder` wires them to callbacks.
 //! - `render`: section builders composed by `impl Render`.
 
 mod binder;
 mod consts;
 mod construct;
-mod editor_field;
-mod editor_inputs;
-mod editor_slots;
-mod editor_sync;
+mod forge_host;
+mod lab_selection;
 mod feed_state;
 mod graph_state;
 mod handlers;
 mod lab_state;
 mod panels;
-mod placeholders;
 mod render;
 mod scheduler_state;
 mod stream_list;
@@ -29,7 +26,6 @@ mod view;
 #[cfg(test)]
 mod tests;
 
-pub use editor_inputs::AgentEditorFields;
 pub use feed_state::FeedState;
 pub use graph_state::GraphState;
 pub use lab_state::{LabState, LlmInputs};

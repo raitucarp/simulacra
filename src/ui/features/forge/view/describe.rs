@@ -101,6 +101,7 @@ impl ForgeView {
     fn apply_described(&mut self, patch: DraftPatch, window: &mut Window, cx: &mut Context<Self>) {
         self.draft.apply_patch(&patch);
         self.class = None;
+        self.ensure_face();
         self.start.describe_status = DescribeStatus::Idle;
         let headline = tr_with(APPLIED_KEY, &[(ARG_COUNT, patch.edits.len().to_string())]);
         let details = patch.warnings.iter().map(warning_text).collect();

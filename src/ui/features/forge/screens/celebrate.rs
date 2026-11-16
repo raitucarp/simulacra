@@ -38,7 +38,7 @@ impl ForgeView {
                     .w(theme.forge_trading_card_width)
                     .items_center()
                     .child(stage_portrait(profile, theme.forge_portrait_size, theme))
-                    .child(title(tr_with(TITLE_KEY, &[(ARG_NAME, profile.name.clone())]), theme))
+                    .child(title(tr_with(TITLE_KEY, &[(ARG_NAME, profile.name.clone())]), theme).text_center())
                     .child(muted(tr(BODY_KEY), theme))
                     .child(guide_bubble(GuideMoment::Celebrating, theme))
                     .child(buttons),

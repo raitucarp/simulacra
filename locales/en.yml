@@ -602,7 +602,7 @@ forge:
       scratch_body: "A blank sheet. You decide everything."
       roll_title: "Roll a random thinker"
       roll_body: "Let the dice pick a class, a name and a face."
-      rolled_as: "The dice made a %{class}!"
+      rolled_as: "The dice have spoken: %{class}!"
       reroll: "Roll again"
       keep_roll: "Keep this one"
       describe_title: "Describe them in words"

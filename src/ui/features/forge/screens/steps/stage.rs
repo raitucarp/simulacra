@@ -32,6 +32,11 @@ pub(in crate::ui::features::forge::screens) fn class_badge(class: ArchetypeClass
 }
 
 impl ForgeView {
+    /// The draft's name, or "Unnamed thinker" while it has none.
+    pub(in crate::ui::features::forge::screens) fn display_name(&self) -> String {
+        Some(self.draft.profile().name.trim()).filter(|n| !n.is_empty()).map_or_else(|| tr(UNNAMED_KEY), str::to_string)
+    }
+
     pub(super) fn stage(&self, handle: &ForgeHandle) -> impl IntoElement {
         let theme = &self.theme;
         div()
@@ -72,7 +77,7 @@ impl ForgeView {
     fn nameplate(&self) -> Div {
         let theme = &self.theme;
         let profile = self.draft.profile();
-        let name = Some(profile.name.trim()).filter(|n| !n.is_empty()).map_or_else(|| tr(UNNAMED_KEY), str::to_string);
+        let name = self.display_name();
         let kind_colors = BadgeColors::new(theme.accent_brand, theme.accent_brand_subtle, theme.accent_brand_border);
         let badges = div()
             .flex()

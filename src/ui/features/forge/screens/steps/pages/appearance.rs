@@ -8,6 +8,7 @@ use crate::ui::components::{segment_pill, segmented_track, Segment};
 use crate::ui::features::forge::logic::time_seed;
 use crate::ui::features::forge::text::tr;
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
+use crate::ui::features::forge::widgets::ExplainerButton;
 use crate::ui::icons::LucideIcon;
 use crate::ui::illustration::PortraitView;
 use gpui_kit::component::button::Button;
@@ -74,9 +75,20 @@ impl ForgeView {
             .flex()
             .flex_col()
             .gap(theme.spacing_lg)
-            .child(card(theme).child(heading(tr(STYLE_KEY), theme)).child(self.mode_switch(AvatarKind::of(mode.as_ref()), handle)))
+            .child(card(theme).child(self.style_heading()).child(self.mode_switch(AvatarKind::of(mode.as_ref()), handle)))
             .child(body)
             .into_any_element()
+    }
+
+    /// "Avatar style" with the avatar field's explainer.
+    fn style_heading(&self) -> Div {
+        let theme = &self.theme;
+        div()
+            .flex()
+            .items_center()
+            .gap(theme.spacing_xs)
+            .child(heading(tr(STYLE_KEY), theme))
+            .children(ExplainerButton::for_field(AvatarField::Avatar.path(), theme))
     }
 
     fn mode_switch(&self, current: Option<AvatarKind>, handle: &ForgeHandle) -> Div {

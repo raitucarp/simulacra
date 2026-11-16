@@ -16,18 +16,18 @@ const PERSONALITY_KEY: &str = "forge.ui.sheet.personality";
 const INTELLIGENCE_KEY: &str = "forge.ui.sheet.intelligence";
 const VOICE_KEY: &str = "forge.ui.sheet.voice_sample";
 const RADAR_ID: &str = "forge-sheet-radar";
-/// Value at the radar's outer ring (radar points are normalized to 0..=1).
-const RADAR_MAX: f64 = 1.0;
 /// The sheet is as wide as this many portraits (matching the backdrop).
 const SHEET_SPAN: f32 = 2.0;
 
-pub(super) fn radar(points: Vec<RadarPoint>, theme: &ThemeTokens) -> Div {
+/// A radar of `points` (normalized to 0..=1), shown and hovered as 0..=100 scores.
+pub(super) fn radar(id: &'static str, points: Vec<RadarPoint>, theme: &ThemeTokens) -> Div {
+    let scale = f64::from(MAX_SCORE);
     let chart = RadarChart::new(points)
-        .id(RADAR_ID)
-        .value(|point: &RadarPoint| f64::from(point.value))
+        .id(id)
+        .value(move |point: &RadarPoint| (f64::from(point.value) * scale).round())
         .label(|point: &RadarPoint| tr(&point.label_key))
         .label_color(theme.text_muted)
-        .max_value(RADAR_MAX)
+        .max_value(scale)
         .stroke(theme.accent_brand)
         .fill(theme.accent_brand_subtle)
         .dot();
@@ -70,7 +70,7 @@ impl ForgeView {
             .flex()
             .flex_col()
             .gap(theme.spacing_md)
-            .child(card(theme).child(heading(tr(PERSONALITY_KEY), theme)).child(radar(personality_radar(cfg), theme)))
+            .child(card(theme).child(heading(tr(PERSONALITY_KEY), theme)).child(radar(RADAR_ID, personality_radar(cfg), theme)))
             .child(card(theme).child(heading(tr(INTELLIGENCE_KEY), theme)).children(bars))
             .child(self.voice_bubble())
     }

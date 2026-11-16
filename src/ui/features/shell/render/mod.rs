@@ -21,6 +21,7 @@ impl Render for AppView {
         self.sync_composer_view(cx);
         self.sync_stream(cx);
         self.sync_mind_graph(cx);
+        self.sync_forge_theme(cx);
         let bind = Binder::new(cx);
         let columns = self.render_columns();
 

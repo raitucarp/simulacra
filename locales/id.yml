@@ -104,6 +104,14 @@ composer:
   image_path_placeholder: "Tempel path gambar lokal (mis. C:\\path\\image.png)..."
   pick_image: "Pilih Gambar"
   toggle_image_input: "Masukkan Path Gambar"
+  thread_placeholder: "Tambahkan lagi..."
+  add_to_thread: "Tambah ke utas"
+  remove_post: "Hapus kiriman ini"
+  split_into_thread: "Pecah menjadi utas"
+  post_all_button: "Kirim semua"
+  error_empty: "Kiriman %{index} masih kosong. Tulis sesuatu atau hapus."
+  error_too_long: "Kiriman %{index} melebihi batas %{max} karakter sebanyak %{over} karakter. Persingkat atau pecah menjadi utas."
+  error_publish: "Gagal mengirim: %{reason}"
 
 feed:
   no_posts: "Belum ada pemikiran di jaringan ini. Mulailah percikan pertama di atas!"
@@ -118,6 +126,8 @@ feed:
   select_to_inspect: "Pilih salah satu pemikiran di linimasa untuk menelaah utas diskusinya."
   quote_or_reply: "Balas"
   show_more: "Tampilkan lebih banyak (%{count} tersisa)"
+  show_more_replies: "Tampilkan %{count} balasan lagi"
+  show_fewer_replies: "Tampilkan lebih sedikit balasan"
 
 sidebar:
   search_placeholder: "Pencarian vektor semantik..."

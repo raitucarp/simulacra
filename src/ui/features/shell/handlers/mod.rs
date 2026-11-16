@@ -9,3 +9,4 @@ mod navigation;
 mod posts;
 mod settings;
 mod simulation;
+mod stream;

@@ -1,7 +1,8 @@
-//! Threads-style composer modal dialog organism.
+//! Threads-style composer modal dialog organism: one editor per post of the thread.
 //! 100% tokenized via ThemeTokens adhering strictly to AGENTS.md.
 
 mod attachments;
+mod draft_row;
 mod editor;
 mod footer;
 mod header;
@@ -9,6 +10,7 @@ mod quote_preview;
 mod render;
 mod reply_context;
 mod state;
+mod thread_rows;
 
 use crate::domain::{Post, Profile};
 use crate::theme::ThemeTokens;
@@ -19,6 +21,8 @@ use std::rc::Rc;
 pub type ModalCloseCallback = Rc<dyn Fn(&mut Window, &mut App) + 'static>;
 pub type ModalSubmitCallback = Rc<dyn Fn(&mut Window, &mut App) + 'static>;
 pub type ModalActionCallback = Rc<dyn Fn(&mut Window, &mut App) + 'static>;
+/// Callback acting on the draft at the given thread position.
+pub type DraftActionCallback = Rc<dyn Fn(usize, &mut Window, &mut App) + 'static>;
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum ComposerModalMode {
@@ -27,66 +31,43 @@ pub enum ComposerModalMode {
     Quote(Box<Post>),
 }
 
-#[derive(IntoElement)]
-pub struct ComposerModalView {
-    theme: ThemeTokens,
-    profile: Option<Profile>,
-    mode: ComposerModalMode,
-    composer_input: Entity<TextareaState>,
-    link_input: Entity<InputState>,
-    image_input: Entity<InputState>,
-    image_path: Option<String>,
-    is_link_input_open: bool,
-    is_image_input_open: bool,
-    draft_length: usize,
-    on_close: ModalCloseCallback,
-    on_submit: ModalSubmitCallback,
-    on_toggle_link: ModalActionCallback,
-    on_toggle_image: ModalActionCallback,
-    on_pick_image: ModalActionCallback,
-    on_clear_image: ModalActionCallback,
-    on_clear_link: ModalActionCallback,
+/// One post editor of the thread with its current (trimmed) character count.
+#[derive(Clone)]
+pub struct DraftEditor {
+    pub input: Entity<TextareaState>,
+    pub length: usize,
 }
 
-impl ComposerModalView {
-    #[allow(clippy::too_many_arguments)]
-    pub fn new(
-        theme: ThemeTokens,
-        profile: Option<Profile>,
-        mode: ComposerModalMode,
-        composer_input: Entity<TextareaState>,
-        link_input: Entity<InputState>,
-        image_input: Entity<InputState>,
-        image_path: Option<String>,
-        is_link_input_open: bool,
-        is_image_input_open: bool,
-        draft_length: usize,
-        on_close: impl Fn(&mut Window, &mut App) + 'static,
-        on_submit: impl Fn(&mut Window, &mut App) + 'static,
-        on_toggle_link: impl Fn(&mut Window, &mut App) + 'static,
-        on_toggle_image: impl Fn(&mut Window, &mut App) + 'static,
-        on_pick_image: impl Fn(&mut Window, &mut App) + 'static,
-        on_clear_image: impl Fn(&mut Window, &mut App) + 'static,
-        on_clear_link: impl Fn(&mut Window, &mut App) + 'static,
-    ) -> Self {
-        Self {
-            theme,
-            profile,
-            mode,
-            composer_input,
-            link_input,
-            image_input,
-            image_path,
-            is_link_input_open,
-            is_image_input_open,
-            draft_length,
-            on_close: Rc::new(on_close),
-            on_submit: Rc::new(on_submit),
-            on_toggle_link: Rc::new(on_toggle_link),
-            on_toggle_image: Rc::new(on_toggle_image),
-            on_pick_image: Rc::new(on_pick_image),
-            on_clear_image: Rc::new(on_clear_image),
-            on_clear_link: Rc::new(on_clear_link),
-        }
-    }
+/// Every interaction the dialog dispatches back to its owner.
+#[derive(Clone)]
+pub struct ModalCallbacks {
+    pub on_close: ModalCloseCallback,
+    pub on_submit: ModalSubmitCallback,
+    pub on_toggle_link: ModalActionCallback,
+    pub on_toggle_image: ModalActionCallback,
+    pub on_pick_image: ModalActionCallback,
+    pub on_clear_image: ModalActionCallback,
+    pub on_clear_link: ModalActionCallback,
+    pub on_add_draft: ModalActionCallback,
+    pub on_remove_draft: DraftActionCallback,
+    pub on_split_draft: DraftActionCallback,
+}
+
+/// Stateless dialog rendering a composer snapshot.
+#[derive(IntoElement)]
+pub struct ComposerModalView {
+    pub theme: ThemeTokens,
+    pub profile: Option<Profile>,
+    pub mode: ComposerModalMode,
+    pub drafts: Vec<DraftEditor>,
+    pub link_input: Entity<InputState>,
+    pub image_input: Entity<InputState>,
+    /// The attached image (picked, or a typed path that exists).
+    pub image_path: Option<String>,
+    pub is_link_input_open: bool,
+    pub is_image_input_open: bool,
+    /// Publish error or the reason the thread cannot be posted yet.
+    pub notice: Option<String>,
+    pub can_post: bool,
+    pub callbacks: ModalCallbacks,
 }

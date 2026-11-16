@@ -6,7 +6,7 @@ use crate::error::{AppError, Result};
 
 impl AppState {
     /// Whether a post with this id exists (index lookup, then linear scan).
-    fn post_exists(&self, post_id: &PostId) -> bool {
+    pub(super) fn post_exists(&self, post_id: &PostId) -> bool {
         self.post_index_by_id.contains_key(post_id) || self.posts.iter().any(|p| &p.id == post_id)
     }
 

@@ -2,31 +2,22 @@
 
 use super::super::view::AppView;
 use crate::domain::PostId;
-use crate::ui::features::composer::ComposerModalMode;
+use crate::ui::features::composer::{publish_error_message, ComposerModalMode};
 use crate::ui::features::feed::FEED_WINDOW_INCREMENT;
 use gpui_kit::*;
 
 impl AppView {
-    /// Submits the thought content to the active network timeline.
-    pub fn submit_post_content(&mut self, content: &str, window: &mut Window, cx: &mut Context<Self>) {
-        if content.trim().is_empty() {
-            return;
-        }
-        if let Ok(post_id) = self.state.submit_post(content) {
-            self.feed.selected_thread_post_id = Some(post_id);
-            let composer_view = self.feed.composer_view.clone();
-            window.defer(cx, move |window, cx| {
-                composer_view.update(cx, |composer, cx| composer.reset(window, cx));
-            });
-            self.state.draft_text.clear();
-            cx.notify();
-        }
-    }
-
-    /// Submits the current thought draft to the active network timeline.
-    pub fn submit_post(&mut self, window: &mut Window, cx: &mut Context<Self>) {
-        let content = self.feed.composer_input.read(cx).value().to_string();
-        self.submit_post_content(&content, window, cx);
+    /// Publishes the inline composer's thought and brings it into view; an `Err` carries the
+    /// message the composer shows under its editor.
+    pub fn submit_post_content(
+        &mut self,
+        content: &str,
+        window: &mut Window,
+        cx: &mut Context<Self>,
+    ) -> Result<(), String> {
+        let post_id = self.state.submit_post(content).map_err(|err| publish_error_message(&err))?;
+        self.reveal_post(post_id, window, cx);
+        Ok(())
     }
 
     /// Appends helper syntax such as `[[` or `#` to the composer and focuses it.
@@ -41,8 +32,11 @@ impl AppView {
         cx.notify();
     }
 
-    /// Focuses `post_id` in the thread inspector.
+    /// Focuses `post_id` in the thread inspector (collapsing replies of a newly focused post).
     pub(crate) fn select_post(&mut self, post_id: PostId, _: &mut Window, cx: &mut Context<Self>) {
+        if self.feed.selected_thread_post_id.as_ref() != Some(&post_id) {
+            self.feed.inspector_expanded = false;
+        }
         self.feed.selected_thread_post_id = Some(post_id);
         cx.notify();
     }

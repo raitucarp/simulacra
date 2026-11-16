@@ -1,39 +1,70 @@
 //! Renders the panel through the stateless [`ComposerModalView`] dialog.
 
-use super::super::modal::ComposerModalView;
+use super::super::messages::visible_problem_message;
+use super::super::modal::{ComposerModalView, DraftActionCallback, DraftEditor, ModalCallbacks};
 use super::ComposerModalPanel;
 use gpui_kit::*;
+use std::rc::Rc;
 
 type PanelAction = fn(&mut ComposerModalPanel, &mut Window, &mut Context<ComposerModalPanel>);
+type PanelDraftAction = fn(&mut ComposerModalPanel, usize, &mut Window, &mut Context<ComposerModalPanel>);
 
 /// Wraps a panel method as a `(Window, App)` callback.
-fn act(entity: &Entity<ComposerModalPanel>, action: PanelAction) -> impl Fn(&mut Window, &mut App) + 'static {
+fn act(entity: &Entity<ComposerModalPanel>, action: PanelAction) -> Rc<dyn Fn(&mut Window, &mut App)> {
     let entity = entity.clone();
-    move |window, cx| entity.update(cx, |this, cx| action(this, window, cx))
+    Rc::new(move |window, cx| entity.update(cx, |this, cx| action(this, window, cx)))
+}
+
+/// Wraps a per-draft panel method as an `(index, Window, App)` callback.
+fn act_at(entity: &Entity<ComposerModalPanel>, action: PanelDraftAction) -> DraftActionCallback {
+    let entity = entity.clone();
+    Rc::new(move |index, window, cx| entity.update(cx, |this, cx| action(this, index, window, cx)))
+}
+
+fn callbacks(entity: &Entity<ComposerModalPanel>) -> ModalCallbacks {
+    type P = ComposerModalPanel;
+    ModalCallbacks {
+        on_close: act(entity, P::close),
+        on_submit: act(entity, P::submit),
+        on_toggle_link: act(entity, P::toggle_link),
+        on_toggle_image: act(entity, P::toggle_image),
+        on_pick_image: act(entity, P::pick_image),
+        on_clear_image: act(entity, P::clear_image),
+        on_clear_link: act(entity, P::clear_link),
+        on_add_draft: act(entity, P::add_draft),
+        on_remove_draft: act_at(entity, P::remove_draft),
+        on_split_draft: act_at(entity, P::split_draft),
+    }
 }
 
 impl Render for ComposerModalPanel {
     fn render(&mut self, _: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
-        let entity = cx.entity();
-        let draft_length = self.composer_input.read(cx).value().chars().count();
-        ComposerModalView::new(
-            self.theme.clone(),
-            self.profile.clone(),
-            self.mode.clone(),
-            self.composer_input.clone(),
-            self.link_input.clone(),
-            self.image_input.clone(),
-            self.image_path.clone(),
-            self.is_link_input_open,
-            self.is_image_input_open,
-            draft_length,
-            act(&entity, Self::close),
-            act(&entity, Self::submit),
-            act(&entity, Self::toggle_link),
-            act(&entity, Self::toggle_image),
-            act(&entity, Self::pick_image),
-            act(&entity, Self::clear_image),
-            act(&entity, Self::clear_link),
-        )
+        let problem = self.submit_problem(cx);
+        let notice = self
+            .error
+            .clone()
+            .or_else(|| visible_problem_message(problem, self.drafts.len()));
+        let drafts = self
+            .drafts
+            .iter()
+            .map(|slot| {
+                let length = slot.input.read(cx).value().trim().chars().count();
+                DraftEditor { input: slot.input.clone(), length }
+            })
+            .collect();
+        ComposerModalView {
+            theme: self.theme.clone(),
+            profile: self.profile.clone(),
+            mode: self.mode.clone(),
+            drafts,
+            link_input: self.link_input.clone(),
+            image_input: self.image_input.clone(),
+            image_path: self.image_attachment(cx),
+            is_link_input_open: self.is_link_input_open,
+            is_image_input_open: self.is_image_input_open,
+            notice,
+            can_post: problem.is_none(),
+            callbacks: callbacks(&cx.entity()),
+        }
     }
 }

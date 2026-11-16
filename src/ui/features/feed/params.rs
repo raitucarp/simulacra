@@ -1,10 +1,10 @@
 //! Main feed configuration parameters and callback types.
 
 use crate::domain::{PostId, Profile};
-use crate::state::AppState;
+use crate::state::{AppState, FeedTab};
 use crate::theme::ThemeTokens;
 use gpui_kit::component::input::{InputState, TextareaState};
-use gpui_kit::{App, Entity, Window};
+use gpui_kit::{App, Entity, ScrollHandle, Window};
 
 pub type LikePostCallback = Box<dyn Fn(PostId, &mut Window, &mut App) + 'static>;
 pub type ReplyPostCallback = Box<dyn Fn(PostId, &str, &mut Window, &mut App) + 'static>;
@@ -15,6 +15,8 @@ pub type AddDocCallback = Box<dyn Fn(String, String, &mut Window, &mut App) + 's
 pub type DeleteDocCallback = Box<dyn Fn(String, &mut Window, &mut App) + 'static>;
 pub type CycleProfileCallback = Box<dyn Fn(&mut Window, &mut App) + 'static>;
 pub type LoadMoreCallback = Box<dyn Fn(&mut Window, &mut App) + 'static>;
+pub type SelectFeedTabCallback = Box<dyn Fn(FeedTab, &mut Window, &mut App) + 'static>;
+pub type ToggleRepliesCallback = Box<dyn Fn(&mut Window, &mut App) + 'static>;
 
 /// Configuration parameters for rendering the main feed organism.
 pub struct FeedParams<'a, C> {
@@ -27,7 +29,13 @@ pub struct FeedParams<'a, C> {
     pub search_query: &'a str,
     pub theme: &'a ThemeTokens,
     pub feed_visible_count: Option<usize>,
+    pub feed_tab: FeedTab,
+    /// Whether the inspector shows every reply instead of the collapsed preview.
+    pub inspector_expanded: bool,
+    pub stream_scroll: &'a ScrollHandle,
     pub on_load_more: Option<LoadMoreCallback>,
+    pub on_select_feed_tab: SelectFeedTabCallback,
+    pub on_toggle_replies: ToggleRepliesCallback,
     pub on_select_post: SelectPostCallback,
     pub on_like_post: LikePostCallback,
     pub on_reply_post: ReplyPostCallback,

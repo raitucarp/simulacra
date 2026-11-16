@@ -16,7 +16,7 @@ impl AppState {
         }
     }
 
-    /// Returns direct and linked replies to `root_id` in O(1) lookup time via precomputed index.
+    /// Returns the direct replies (`reply_to_id == root_id`) in store order via the precomputed index.
     #[inline]
     pub fn replies_for_post(&self, root_id: &PostId) -> Vec<&Post> {
         if self.post_index_by_id.len() == self.posts.len() {
@@ -28,14 +28,9 @@ impl AppState {
             }
             return Vec::new();
         }
-        let root_id_str = root_id.as_str();
         self.posts
             .iter()
-            .filter(|reply| {
-                reply.id != *root_id
-                    && (reply.reply_to_id.as_deref() == Some(root_id_str)
-                        || reply.linked_posts.iter().any(|id| id.as_str() == root_id_str))
-            })
+            .filter(|reply| reply.id != *root_id && reply.reply_to_id.as_ref() == Some(root_id))
             .collect()
     }
 
@@ -49,7 +44,8 @@ impl AppState {
         self.sync_post_index();
     }
 
-    /// Synchronizes `post_index_by_id`, `network_post_indices`, and `replies_index` without re-evaluating `wikilink_cache`.
+    /// Synchronizes `post_index_by_id`, `network_post_indices`, and `replies_index` (direct
+    /// `reply_to_id` children only) without re-evaluating `wikilink_cache`.
     #[inline]
     pub fn sync_post_index(&mut self) {
         self.post_index_by_id.clear();
@@ -61,21 +57,9 @@ impl AppState {
                 .entry(post.network_id.clone())
                 .or_default()
                 .push(idx);
-            if let Some(ref parent_id) = post.reply_to_id {
-                if parent_id != &post.id {
-                    self.replies_index
-                        .entry(parent_id.clone())
-                        .or_default()
-                        .push(idx);
-                }
-            }
-            for linked_id in &post.linked_posts {
-                if linked_id != &post.id && post.reply_to_id.as_ref() != Some(linked_id) {
-                    self.replies_index
-                        .entry(linked_id.clone())
-                        .or_default()
-                        .push(idx);
-                }
+            // Only explicit `reply_to_id` relations are replies; quotes and wikilinks are not.
+            if let Some(parent_id) = post.reply_to_id.as_ref().filter(|id| *id != &post.id) {
+                self.replies_index.entry(parent_id.clone()).or_default().push(idx);
             }
         }
     }

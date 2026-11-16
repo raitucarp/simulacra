@@ -63,8 +63,9 @@ impl Database {
         Ok(())
     }
 
-    /// Updates the serialized `author_json` snapshot on all posts authored by `profile`.
-    pub fn update_post_author_snapshots(&self, profile: &Profile) -> Result<()> {
+    /// Archives `profile` as the `author_json` snapshot of its posts, so they keep a
+    /// displayable author after the profile itself is deleted.
+    pub fn archive_post_author(&self, profile: &Profile) -> Result<()> {
         let author_json = serde_json::to_string(profile).map_err(db_err)?;
         self.conn
             .execute(UPDATE_AUTHOR_SNAPSHOTS, params![author_json, profile.id.as_str()])

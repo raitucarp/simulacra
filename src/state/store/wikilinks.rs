@@ -1,7 +1,7 @@
 //! Obsidian-style wikilink excerpts and resolution.
 
 use super::{AppState, POST_ID_PREFIX};
-use crate::domain::Post;
+use crate::domain::{Post, PostId};
 
 /// Number of content words shown in a wikilink preview.
 const EXCERPT_WORD_COUNT: usize = 3;
@@ -49,8 +49,8 @@ impl AppState {
     /// Otherwise, generates a fallback 4-character slug without linear searching.
     pub fn resolve_wikilink_fast(&self, target_id: &str) -> String {
         let clean = target_id.trim();
-        if let Some(cached) = self.wikilink_cache.get(clean) {
-            return cached.clone();
+        if let Some(meta) = self.index.meta(clean) {
+            return meta.excerpt.clone();
         }
         if clean.starts_with(POST_ID_PREFIX) {
             let slug = clean.strip_prefix(POST_ID_PREFIX).unwrap_or(clean);
@@ -60,4 +60,24 @@ impl AppState {
         }
         clean.to_string()
     }
+
+    /// What a `[[target]]` wikilink names: a post id, else a document id or (case-insensitive) title.
+    pub fn resolve_wikilink_target(&self, target: &str) -> Option<WikilinkTarget> {
+        let clean = target.trim();
+        if let Some(post) = self.get_post_by_id(clean) {
+            return Some(WikilinkTarget::Post(post.id.clone()));
+        }
+        let title = clean.to_lowercase();
+        self.documents
+            .iter()
+            .find(|d| d.id == clean || d.title.trim().to_lowercase() == title)
+            .map(|d| WikilinkTarget::Document(d.id.clone()))
+    }
+}
+
+/// The entity a wikilink points at.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub enum WikilinkTarget {
+    Post(PostId),
+    Document(String),
 }

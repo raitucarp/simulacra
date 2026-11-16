@@ -49,7 +49,7 @@ pub(crate) fn render_inspector_pane(ctx: &InspectorContext<'_>, focused: Option<
         .child(render_inspector_header(theme, replies_count))
         .child(render_thread_scroll(ctx, conversation.as_ref()))
         .when_some(focused, |this, root| {
-            this.child(render_quick_reply_bar(root, theme, ctx.callbacks.on_reply.clone()))
+            this.child(render_quick_reply_bar(root, ctx.state.author_of(root), theme, ctx.callbacks.on_reply.clone()))
         })
 }
 

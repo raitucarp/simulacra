@@ -2,7 +2,7 @@
 
 use super::actions::render_action_bar;
 use super::attachments::{render_image_embed, render_link_preview};
-use super::body::render_post_body;
+use super::body::render_body_tokens;
 use super::consts::POST_ITEM_ID_PREFIX;
 use super::controls::{collect_references, PostCardHandlers};
 use super::header::{render_author_row, render_repost_header};
@@ -45,7 +45,7 @@ pub fn render_post_item<L: PostLookup>(
         .flex()
         .items_start()
         .gap(theme.spacing_md)
-        .child(render_avatar_column(&effective_post.author, threadline_style, has_repost_header, theme))
+        .child(render_avatar_column(lookup.author_of(effective_post), threadline_style, has_repost_header, theme))
         .child(render_content_column(post, effective_post, is_instant_repost, lookup, theme, handlers))
 }
 
@@ -88,21 +88,21 @@ fn render_content_column<L: PostLookup>(
         .flex()
         .flex_col()
         .gap(theme.spacing_xs)
-        .when(post.repost_id.is_some(), |this| this.child(render_repost_header(&post.author.name, theme)))
-        .child(render_author_row(effective, is_instant_repost, theme, &handlers))
+        .when(post.repost_id.is_some(), |this| this.child(render_repost_header(&lookup.author_of(post).name, theme)))
+        .child(render_author_row(effective, lookup.author_of(effective), is_instant_repost, theme, &handlers))
         .child(
             div()
                 .w_full()
                 .min_w_0()
                 .py(theme.spacing_2xs)
-                .child(render_post_body(&effective.content, lookup, theme)),
+                .child(render_body_tokens(&lookup.body_tokens(effective), lookup, theme, &handlers.links)),
         )
         .when_some(image_path, |this, path| this.child(render_image_embed(path, theme)))
         .when_some(effective.link_url.as_ref(), |this, url| {
             this.child(render_link_preview(effective.id.as_str(), url, theme))
         })
         .when_some(effective.quote_id.as_ref(), |this, quote_id| {
-            this.child(render_quote_embed(quote_id.as_str(), lookup, handlers.on_open_post.clone(), theme))
+            this.child(render_quote_embed(quote_id.as_str(), lookup, handlers.on_open_post.clone(), &handlers.links, theme))
         })
-        .child(render_action_bar(effective, refs, theme, &handlers))
+        .child(render_action_bar(effective, lookup.author_of(effective), refs, theme, &handlers))
 }

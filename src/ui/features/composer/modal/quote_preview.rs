@@ -1,11 +1,11 @@
 //! Card previewing the post being quoted, shown under the editor in quote mode.
 
-use crate::domain::Post;
+use crate::domain::AuthoredPost;
 use crate::theme::ThemeTokens;
 use gpui_kit::*;
 
 /// Card previewing the post being quoted.
-pub(super) fn render_quote_preview(target: &Post, theme: &ThemeTokens) -> Div {
+pub(super) fn render_quote_preview(target: &AuthoredPost, theme: &ThemeTokens) -> Div {
     div()
         .w_full()
         .p(theme.spacing_sm)

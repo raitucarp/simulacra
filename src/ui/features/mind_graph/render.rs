@@ -87,8 +87,12 @@ impl MindGraphPanel {
     }
 }
 
+/// Name of the graph view in the dev render counter.
+const STATS_NAME: &str = "MindGraph";
+
 impl Render for MindGraphPanel {
     fn render(&mut self, _: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
+        crate::ui::render_stats::record(STATS_NAME);
         let model = &self.scene.model;
         let header = render_header(model.node_count(), model.edge_count(), &self.theme);
         div()

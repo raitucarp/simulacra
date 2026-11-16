@@ -4,7 +4,7 @@
 use super::super::scheduler_state::HEARTBEAT_INTERVAL;
 use super::super::view::AppView;
 use crate::agent::schedule::{due_agents, latest_activity, AgentSlot, Clock, ScheduleContext, SystemClock};
-use crate::domain::{NetworkId, Post, Profile, ProfileId};
+use crate::domain::{AuthoredPost, NetworkId, Profile, ProfileId};
 use chrono::Utc;
 use gpui_kit::*;
 
@@ -78,15 +78,15 @@ impl AppView {
     }
 
     /// The agent, the post it should answer and its network, if it has anything to answer.
-    fn scheduled_job(&self, id: &ProfileId) -> Option<(Profile, Post, NetworkId)> {
+    fn scheduled_job(&self, id: &ProfileId) -> Option<(Profile, AuthoredPost, NetworkId)> {
         let agent = self.state.user_profiles.iter().find(|p| &p.id == id && p.is_agent())?;
         let network = agent.network_id.clone().unwrap_or_else(|| self.state.active_network_id.clone());
         let parent = self
             .state
             .posts
             .iter()
-            .filter(|post| post.network_id == network && post.author.id != agent.id)
+            .filter(|post| post.network_id == network && post.author_id != agent.id)
             .max_by_key(|post| post.created_at)?;
-        Some((agent.clone(), parent.clone(), network))
+        Some((agent.clone(), self.state.authored(parent), network))
     }
 }

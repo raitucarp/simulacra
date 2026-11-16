@@ -2,7 +2,7 @@
 
 use super::consts::{LIKE_BTN_ID_PREFIX, QUOTE_BTN_ID_PREFIX, REPLY_BTN_ID_PREFIX, REPOST_BTN_ID_PREFIX};
 use super::controls::{render_refs_button, render_share_button, PostAction, PostCardHandlers, PostReference};
-use crate::domain::Post;
+use crate::domain::{Post, Profile};
 use crate::theme::ThemeTokens;
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::Icon;
@@ -57,6 +57,7 @@ fn render_action_btn(
 /// Full action bar for `post` wired to `handlers`; `refs` feeds the references menu.
 pub(crate) fn render_action_bar(
     post: &Post,
+    author: &Profile,
     refs: Vec<PostReference>,
     theme: &ThemeTokens,
     handlers: &PostCardHandlers,
@@ -79,5 +80,5 @@ pub(crate) fn render_action_bar(
         .child(render_action_btn(format!("{REPOST_BTN_ID_PREFIX}{id}"), repost, theme, handlers.on_repost.clone()))
         .child(render_action_btn(format!("{QUOTE_BTN_ID_PREFIX}{id}"), quote, theme, handlers.on_quote.clone()))
         .child(render_refs_button(post, refs, handlers.on_open_post.clone()))
-        .child(render_share_button(post, theme))
+        .child(render_share_button(post, author, theme))
 }

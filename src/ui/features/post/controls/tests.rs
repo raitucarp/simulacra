@@ -15,7 +15,8 @@ fn permalink_names_network_and_post() {
 
 #[test]
 fn share_text_carries_thought_author_and_permalink() {
-    let shared = share_text(&post("post_9", "  Know thyself.  "));
+    let author = Profile::new_primary("u1", "Ada Lovelace", "@ada");
+    let shared = share_text(&post("post_9", "  Know thyself.  "), &author);
     assert_eq!(shared, "Know thyself.\n\n— Ada Lovelace @ada\nsimulacra://net_agora/post/post_9");
 }
 

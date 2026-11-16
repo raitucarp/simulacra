@@ -7,7 +7,7 @@ use crate::error::{AppError, Result};
 impl AppState {
     /// Whether a post with this id exists (index lookup, then linear scan).
     pub(super) fn post_exists(&self, post_id: &PostId) -> bool {
-        self.post_index_by_id.contains_key(post_id) || self.posts.iter().any(|p| &p.id == post_id)
+        self.post_position(post_id).is_some()
     }
 
     /// Submits a quoted thought referencing another thought with commentary and optional attachments.
@@ -54,15 +54,7 @@ impl AppState {
 
     /// Toggles like on a post by id and persists the change to SQLite.
     pub fn toggle_like(&mut self, post_id: &PostId) {
-        let indexed = self
-            .post_index_by_id
-            .get(post_id)
-            .copied()
-            .filter(|&idx| idx < self.posts.len());
-        let post = match indexed {
-            Some(idx) => self.posts.get_mut(idx),
-            None => self.posts.iter_mut().find(|p| &p.id == post_id),
-        };
+        let post = self.post_position(post_id).and_then(|idx| self.posts.get_mut(idx));
 
         if let Some(post) = post {
             post.toggle_like();

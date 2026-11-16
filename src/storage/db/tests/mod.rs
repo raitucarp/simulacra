@@ -4,3 +4,4 @@ mod location;
 mod posts;
 mod schema;
 mod settings;
+mod versions;

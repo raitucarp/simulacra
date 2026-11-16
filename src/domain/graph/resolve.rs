@@ -3,7 +3,7 @@
 use super::NodeRef;
 use crate::domain::post::HASHTAG_SIGIL;
 use crate::domain::profile::HANDLE_PREFIX;
-use crate::domain::{GroundingDocument, Post, PostId, Profile};
+use crate::domain::{GroundingDocument, Post, PostId, Profile, ProfileId};
 use std::collections::{HashMap, HashSet};
 
 /// Lower-cased handle without its `@` prefix.
@@ -22,6 +22,7 @@ pub(super) struct Lookup<'a> {
     doc_ids: HashSet<&'a str>,
     docs_by_title: HashMap<String, &'a str>,
     profiles_by_handle: HashMap<String, &'a Profile>,
+    authors_by_id: HashMap<&'a ProfileId, &'a Profile>,
 }
 
 impl<'a> Lookup<'a> {
@@ -29,6 +30,7 @@ impl<'a> Lookup<'a> {
         posts: &[&'a Post],
         docs: &[&'a GroundingDocument],
         profiles: &[&'a Profile],
+        authors: &'a [Profile],
     ) -> Self {
         let mut profiles_by_handle = HashMap::new();
         for profile in profiles {
@@ -39,7 +41,13 @@ impl<'a> Lookup<'a> {
             doc_ids: docs.iter().map(|d| d.id.as_str()).collect(),
             docs_by_title: docs.iter().map(|d| (d.title.trim().to_lowercase(), d.id.as_str())).collect(),
             profiles_by_handle,
+            authors_by_id: authors.iter().map(|p| (&p.id, p)).collect(),
         }
+    }
+
+    /// Display name of the author `id` (the id itself when the profile is unknown).
+    pub(super) fn author_name(&self, id: &ProfileId) -> String {
+        self.authors_by_id.get(id).map_or_else(|| id.to_string(), |p| p.name.clone())
     }
 
     /// Node of a post of this network.

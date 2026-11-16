@@ -8,18 +8,18 @@ use super::params::{
 use crate::domain::PostId;
 use crate::state::FeedTab;
 use gpui_kit::component::input::{InputState, TextareaState};
-use gpui_kit::{Entity, ScrollHandle};
+use super::stream::StreamInputs;
+use crate::ui::features::post::BodyLinks;
+use gpui_kit::Entity;
 use std::rc::Rc;
 
 /// Timeline-only feed inputs.
-pub(crate) struct TimelineInputs<'a, C> {
+pub(crate) struct TimelineInputs<C> {
     pub composer: C,
     pub selected_post_id: Option<PostId>,
-    pub search_query: &'a str,
-    pub feed_visible_count: Option<usize>,
     pub feed_tab: FeedTab,
     pub inspector_expanded: bool,
-    pub stream_scroll: &'a ScrollHandle,
+    pub stream: StreamInputs,
     pub on_load_more: Option<LoadMoreCallback>,
     pub on_select_feed_tab: SelectFeedTabCallback,
     pub on_toggle_replies: ToggleRepliesCallback,
@@ -35,7 +35,7 @@ pub(crate) struct ToolViewInputs<'a> {
 }
 
 /// Distributes feed parameters to the post callbacks, timeline, and tool views.
-pub(crate) fn split_params<C>(params: FeedParams<'_, C>) -> (PostCallbacks, TimelineInputs<'_, C>, ToolViewInputs<'_>) {
+pub(crate) fn split_params<C>(params: FeedParams<'_, C>) -> (PostCallbacks, TimelineInputs<C>, ToolViewInputs<'_>) {
     let callbacks = PostCallbacks {
         on_like: Rc::new(params.on_like_post),
         on_reply: Rc::new(params.on_reply_post),
@@ -43,15 +43,14 @@ pub(crate) fn split_params<C>(params: FeedParams<'_, C>) -> (PostCallbacks, Time
         on_repost: Rc::new(params.on_repost_post),
         on_quote: Rc::new(params.on_quote_post),
         on_delete: Rc::new(params.on_delete_post),
+        links: BodyLinks { on_tag: Some(params.on_open_tag), on_wikilink: Some(params.on_open_wikilink) },
     };
     let timeline = TimelineInputs {
         composer: params.composer,
         selected_post_id: params.selected_post_id,
-        search_query: params.search_query,
-        feed_visible_count: params.feed_visible_count,
         feed_tab: params.feed_tab,
         inspector_expanded: params.inspector_expanded,
-        stream_scroll: params.stream_scroll,
+        stream: params.stream,
         on_load_more: params.on_load_more,
         on_select_feed_tab: params.on_select_feed_tab,
         on_toggle_replies: params.on_toggle_replies,

@@ -1,103 +1,116 @@
-//! Main dialectic stream: windowed post selection and the scrollable stream body.
+//! Main dialectic stream: a virtualized `list()` over the cached stream rows.
+//!
+//! Only the rows in (and just around) the viewport are rendered. Each row reads the store
+//! through a [`FeedReader`] at layout time, so the list closure owns no borrowed state.
 
 use super::callbacks::{CardMode, PostCallbacks};
-use super::consts::{DEFAULT_FEED_WINDOW_SIZE, STREAM_SCROLL_ID};
 use super::load_more::render_load_more;
 use super::params::LoadMoreCallback;
 use super::threadline::compute_stream_threadline_style;
 use crate::domain::Post;
-use crate::state::{feed_entries, AppState, FeedTab};
+use crate::state::AppState;
 use crate::theme::ThemeTokens;
 use gpui_kit::component::scroll::ScrollableElement;
 use gpui_kit::prelude::FluentBuilder;
-use gpui_kit::{
-    div, AnyElement, InteractiveElement, IntoElement, ParentElement, ScrollHandle,
-    StatefulInteractiveElement, Styled,
-};
+use gpui_kit::{div, list, AnyElement, App, IntoElement, ListState, ParentElement, Styled, Window};
 use rust_i18n::t;
 use std::rc::Rc;
 
-/// Windowed slice of the stream to render progressively.
-pub(crate) struct StreamWindow<'a> {
-    /// Total number of thoughts matching the stream (before windowing).
-    pub total: usize,
-    /// Every matching post in display order (conversations grouped when not searching).
-    pub posts: Vec<&'a Post>,
-    /// Number of posts actually rendered.
-    pub limit: usize,
+/// Read access to the store and theme while the list lays out its visible rows.
+pub type FeedReader = Rc<dyn for<'a> Fn(&'a App) -> (&'a AppState, &'a ThemeTokens)>;
+
+/// Windowed stream rows: store positions in display order and how many are shown.
+#[derive(Debug, Clone, Default, PartialEq, Eq)]
+pub struct StreamRows {
+    /// Store positions of every matching post, in display order.
+    pub positions: Rc<[usize]>,
+    /// Number of posts shown before the load-more row.
+    pub shown: usize,
 }
 
-/// Selects the visible stream: the tab's grouped conversations, or flat search matches.
-pub(crate) fn compute_stream_window<'a>(
-    state: &'a AppState,
-    tab: FeedTab,
-    search_query: &'a str,
-    feed_visible_count: Option<usize>,
-) -> StreamWindow<'a> {
-    let query_trimmed = search_query.trim();
-    let requested_window = feed_visible_count.unwrap_or(DEFAULT_FEED_WINDOW_SIZE);
-    let posts: Vec<&Post> = if query_trimmed.is_empty() {
-        feed_entries(state, tab)
-    } else {
-        state.day_scoped(state.filtered_posts(query_trimmed)).collect()
-    };
-    let total = posts.len();
-    StreamWindow { total, posts, limit: requested_window.min(total) }
+impl StreamRows {
+    /// Windows `positions` to at most `limit` posts.
+    pub fn new(positions: Rc<[usize]>, limit: usize) -> Self {
+        let shown = limit.min(positions.len());
+        Self { positions, shown }
+    }
+
+    /// Whether a load-more row follows the shown posts.
+    pub fn has_more(&self) -> bool {
+        self.shown < self.positions.len()
+    }
+
+    /// Number of list rows (shown posts plus the load-more row).
+    pub fn row_count(&self) -> usize {
+        self.shown + usize::from(self.has_more())
+    }
+
+    /// The post at display `row`, if it is a shown post.
+    pub fn post<'a>(&self, state: &'a AppState, row: usize) -> Option<&'a Post> {
+        (row < self.shown).then(|| self.positions.get(row)).flatten().and_then(|&idx| state.posts.get(idx))
+    }
 }
 
-/// Renders windowed stream cards followed by the load-more trigger when more remain.
-pub(crate) fn render_stream_elements(
-    window: &StreamWindow<'_>,
-    state: &AppState,
-    theme: &ThemeTokens,
+/// The virtualized stream's state and row source, supplied by the shell.
+#[derive(Clone)]
+pub struct StreamInputs {
+    pub list: ListState,
+    pub rows: StreamRows,
+    pub reader: FeedReader,
+}
+
+/// Renders stream `row`: a post card (with its threadline joins) or the load-more trigger.
+fn render_row(
+    row: usize,
+    rows: &StreamRows,
+    reader: &FeedReader,
     callbacks: &PostCallbacks,
-    on_load_more: Option<Rc<LoadMoreCallback>>,
-) -> Vec<AnyElement> {
-    let mut elements = Vec::with_capacity(window.limit + 1);
-    for (idx, post) in window.posts.iter().take(window.limit).enumerate() {
-        // Stream posts render with seamless flat OLED black background without card boxes (R2)
-        let style = compute_stream_threadline_style(&window.posts, idx);
-        let mode = CardMode { is_focused: false, style, selectable: true };
-        // Rigid rows keep each card's full height inside the scrolling column.
-        let card = callbacks.render_post(post, state, theme, mode);
-        elements.push(div().w_full().flex_shrink_0().child(card).into_any_element());
-    }
-    if window.limit < window.total {
-        elements.push(render_load_more(window.limit, window.total, theme, on_load_more));
-    }
-    elements
+    on_load_more: &Option<Rc<LoadMoreCallback>>,
+    cx: &App,
+) -> AnyElement {
+    let (state, theme) = reader(cx);
+    let Some(post) = rows.post(state, row) else {
+        return render_load_more(rows.shown, rows.positions.len(), theme, on_load_more.clone());
+    };
+    let neighbours: Vec<&Post> = [row.checked_sub(1), Some(row), Some(row + 1)]
+        .into_iter()
+        .flatten()
+        .filter_map(|r| rows.post(state, r))
+        .collect();
+    let at = usize::from(row > 0);
+    let style = compute_stream_threadline_style(&neighbours, at);
+    let mode = CardMode { is_focused: false, style, selectable: true };
+    let card = callbacks.render_post(post, state, theme, mode);
+    div().w_full().child(card).into_any_element()
 }
 
-/// Scrollable stream body with an empty-state fallback. The cards are the direct children of
-/// the area tracked by `scroll`, so `scroll.scroll_to_item(i)` targets the i-th stream entry.
-pub(crate) fn render_stream_scroll(
-    elements: Vec<AnyElement>,
-    scroll: &ScrollHandle,
+/// Virtualized stream body with an empty-state fallback.
+pub(crate) fn render_stream_list(
+    stream: StreamInputs,
+    callbacks: PostCallbacks,
+    on_load_more: Option<Rc<LoadMoreCallback>>,
     theme: &ThemeTokens,
 ) -> impl IntoElement {
-    let is_empty = elements.is_empty();
-    let area = div()
-        .id(STREAM_SCROLL_ID)
-        .absolute()
-        .inset_0()
-        .overflow_y_scroll()
-        .track_scroll(scroll)
-        .flex()
-        .flex_col()
+    let is_empty = stream.rows.row_count() == 0;
+    let scrollbar_handle = stream.list.clone();
+    let (rows, reader) = (stream.rows, stream.reader);
+    let body = list(stream.list, move |row, _: &mut Window, cx: &mut App| {
+        render_row(row, &rows, &reader, &callbacks, &on_load_more, cx)
+    })
+    .size_full();
+    div()
+        .relative()
+        .flex_1()
+        .w_full()
+        .min_h_0()
+        .overflow_hidden()
         .when(is_empty, |this| {
-            this.p(theme.spacing_2xl).items_center().justify_center().child(
+            this.p(theme.spacing_2xl).flex().items_center().justify_center().child(
                 div()
                     .text_size(theme.font_size_sm)
                     .text_color(theme.text_muted)
                     .child(t!("feed.no_posts").to_string()),
             )
         })
-        .when(!is_empty, |this| this.children(elements));
-    div()
-        .relative()
-        .flex_1()
-        .w_full()
-        .overflow_hidden()
-        .child(area)
-        .vertical_scrollbar(scroll)
+        .when(!is_empty, |this| this.child(body).vertical_scrollbar(&scrollbar_handle))
 }

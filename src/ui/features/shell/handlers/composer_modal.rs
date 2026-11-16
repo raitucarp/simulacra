@@ -67,8 +67,8 @@ fn thread_from_submission(submission: ComposerSubmission) -> (Vec<ThreadDraft>, 
     }
     let anchor = match mode {
         ComposerModalMode::NewThread => ThreadAnchor::default(),
-        ComposerModalMode::Reply(parent) => ThreadAnchor { reply_to: Some(parent.id), quote_of: None },
-        ComposerModalMode::Quote(quoted) => ThreadAnchor { reply_to: None, quote_of: Some(quoted.id) },
+        ComposerModalMode::Reply(parent) => ThreadAnchor { reply_to: Some(parent.post.id), quote_of: None },
+        ComposerModalMode::Quote(quoted) => ThreadAnchor { reply_to: None, quote_of: Some(quoted.post.id) },
     };
     (thread, anchor)
 }

@@ -55,7 +55,7 @@ fn test_store_repost_flow() {
 fn test_store_post_indexing_and_fast_lookup() {
     let state = AppState::new_in_memory();
     assert!(!state.posts.is_empty());
-    assert_eq!(state.post_index_by_id.len(), state.posts.len());
+    assert_eq!(state.index.len(), state.posts.len());
 
     for post in &state.posts {
         let found_by_ref = state.get_post(&post.id);
@@ -73,7 +73,7 @@ fn test_store_post_indexing_and_fast_lookup() {
 #[test]
 fn test_store_wikilink_cache_and_resolution() {
     let state = AppState::new_in_memory();
-    assert!(!state.wikilink_cache.is_empty());
+    assert!(state.index.meta(state.posts[0].id.as_str()).is_some());
 
     let _post_1 = state.get_post_by_id("post_1").expect("post_1 exists");
     let excerpt = state.resolve_wikilink_fast("post_1");
@@ -96,29 +96,29 @@ fn test_store_indices_sync_on_mutations() {
     // 1. Submit post (human top-level thought is placed directly at index 0 without auto-spawning agent post above it)
     let post_id = state.submit_post("Brand new indexed thought").unwrap();
     assert_eq!(state.posts.len(), initial_count + 1);
-    assert_eq!(state.post_index_by_id.get(&post_id), Some(&0));
-    assert!(state.wikilink_cache.contains_key(post_id.as_str()));
-    assert_eq!(state.post_index_by_id.len(), state.posts.len());
+    assert_eq!(state.index.position(&post_id), Some(0));
+    assert!(state.index.meta(post_id.as_str()).is_some());
+    assert_eq!(state.index.len(), state.posts.len());
 
     // 2. Submit reply (1 post added)
     let reply_id = state.submit_reply(&post_id, "Reply to indexed thought", None, None).unwrap();
-    assert_eq!(state.post_index_by_id.get(&reply_id), Some(&0));
-    assert_eq!(state.post_index_by_id.get(&post_id), Some(&1));
-    assert_eq!(state.post_index_by_id.len(), state.posts.len());
+    assert_eq!(state.index.position(&reply_id), Some(0));
+    assert_eq!(state.index.position(&post_id), Some(1));
+    assert_eq!(state.index.len(), state.posts.len());
 
     // 3. Submit quote (1 post added at index 0)
     let quote_id = state.submit_quote(&post_id, "Quote indexed thought", None, None).unwrap();
-    assert_eq!(state.post_index_by_id.get(&quote_id), Some(&0));
-    assert_eq!(state.post_index_by_id.len(), state.posts.len());
+    assert_eq!(state.index.position(&quote_id), Some(0));
+    assert_eq!(state.index.len(), state.posts.len());
 
     // 4. Repost & un-repost
     let repost_id = state.repost(&post_id).unwrap();
-    assert_eq!(state.post_index_by_id.get(&repost_id), Some(&0));
-    assert_eq!(state.post_index_by_id.len(), state.posts.len());
+    assert_eq!(state.index.position(&repost_id), Some(0));
+    assert_eq!(state.index.len(), state.posts.len());
 
     let _ = state.repost(&post_id).unwrap(); // un-repost
-    assert_eq!(state.post_index_by_id.len(), state.posts.len());
-    assert!(!state.post_index_by_id.contains_key(&repost_id));
+    assert_eq!(state.index.len(), state.posts.len());
+    assert!(state.index.position(&repost_id).is_none());
 }
 
 #[test]
@@ -131,6 +131,6 @@ fn test_submit_post_does_not_auto_spawn_agent_above_user_post() {
     assert_eq!(state.posts.len(), initial_len + 1);
     assert_eq!(state.posts[0].id, post_id);
     assert_eq!(state.posts[0].content, "My independent epistemic reflection");
-    assert_eq!(state.posts[0].author.id, state.active_profile_id);
+    assert_eq!(state.posts[0].author_id, state.active_profile_id);
     assert_eq!(state.posts[0].replies_count, 0);
 }

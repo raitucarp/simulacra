@@ -1,7 +1,7 @@
 //! Clipboard sharing of a thought: permalink, share text and the share button.
 
 use super::super::consts::SHARE_BTN_ID_PREFIX;
-use crate::domain::Post;
+use crate::domain::{Post, Profile};
 use crate::theme::ThemeTokens;
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::notification::Notification;
@@ -32,12 +32,12 @@ pub fn post_permalink(post: &Post) -> String {
 }
 
 /// Shareable text: the thought, an attribution line and its permalink.
-pub fn share_text(post: &Post) -> String {
+pub fn share_text(post: &Post, author: &Profile) -> String {
     format!(
         "{}{SHARE_PARAGRAPH_BREAK}{SHARE_ATTRIBUTION_DASH}{} {}{SHARE_LINE_BREAK}{}",
         post.content.trim(),
-        post.author.name,
-        post.author.handle,
+        author.name,
+        author.handle,
         post_permalink(post)
     )
 }
@@ -49,9 +49,9 @@ pub(super) fn copy_with_toast(text: String, toast: String, window: &mut Window, 
 }
 
 /// Share icon: copies the share text (thought, author, permalink) to the clipboard.
-pub(crate) fn render_share_button(post: &Post, theme: &ThemeTokens) -> Stateful<Div> {
+pub(crate) fn render_share_button(post: &Post, author: &Profile, theme: &ThemeTokens) -> Stateful<Div> {
     let hover_color = theme.text_primary;
-    let text = share_text(post);
+    let text = share_text(post, author);
     div()
         .id(format!("{SHARE_BTN_ID_PREFIX}{}", post.id))
         .flex()

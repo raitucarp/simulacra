@@ -5,9 +5,8 @@
 //! its slot in the scheduler's generation queue when it finishes.
 
 use super::super::view::AppView;
-use crate::agent::{DialecticEngine, LlmClient, SimulationOutcome};
-use crate::domain::{NetworkId, Post, Profile, ProfileId};
-use crate::state::AppState;
+use crate::agent::{DialecticEngine, LlmClient, PromptContext, SimulationOutcome};
+use crate::domain::{AuthoredPost, NetworkId, Post, Profile, ProfileId};
 use gpui_kit::*;
 use tokio::sync::oneshot::error::RecvError;
 
@@ -20,7 +19,7 @@ impl AppView {
         window: &mut Window,
         cx: &mut Context<Self>,
     ) {
-        let parent = self.state.current_network_posts().next().cloned();
+        let parent = self.state.current_network_posts().next().map(|p| self.state.authored(p));
         let (Some(agent), Some(parent)) = (self.simulation_agent(agent_id.as_ref()), parent) else {
             return;
         };
@@ -42,14 +41,15 @@ impl AppView {
     pub(super) fn spawn_generation(
         &mut self,
         agent: Profile,
-        parent: Post,
+        parent: AuthoredPost,
         network: NetworkId,
         window: &mut Window,
         cx: &mut Context<Self>,
     ) {
         let agent_id = agent.id.clone();
         let client = LlmClient::new(self.state.llm_settings.clone());
-        let rx = DialecticEngine::spawn_background_simulation(parent, agent, network, client);
+        let context = self.prompt_context(&network);
+        let rx = DialecticEngine::spawn_grounded_simulation(parent, agent, network, client, context);
         cx.spawn_in(window, async move |entity, cx| {
             let outcome = rx.await;
             let _ = entity.update_in(cx, |this, window, cx| {
@@ -73,7 +73,7 @@ impl AppView {
                 if let Some(failure) = llm_error {
                     self.report_llm_failure(failure, window, cx);
                 }
-                self.insert_simulated_reply(reply);
+                self.insert_simulated_reply(reply, window, cx);
             }
             Err(_) => self.report_worker_failure(window, cx),
         }
@@ -99,29 +99,23 @@ impl AppView {
             .map(|p| (*p).clone())
     }
 
-    /// Persists `reply`, bumps its parent's reply count and inserts it after the parent.
-    fn insert_simulated_reply(&mut self, reply: Post) {
-        let state = &mut self.state;
-        let parent_idx_opt = reply
-            .reply_to_id
-            .as_ref()
-            .and_then(|parent_id| state.post_index_by_id.get(parent_id).copied());
+    /// Persists `reply` and inserts it after its parent, reporting a failed vault write.
+    fn insert_simulated_reply(&mut self, reply: Post, window: &mut Window, cx: &mut Context<Self>) {
+        if let Err(err) = self.state.insert_reply_after_parent(reply) {
+            self.report_storage_failure(&err, window, cx);
+        }
+    }
 
-        if let (Some(parent_id), Some(parent_idx)) = (&reply.reply_to_id, parent_idx_opt) {
-            if let Some(parent) = state.posts.get_mut(parent_idx) {
-                parent.replies_count += 1;
-                if let Some(ref db) = state.db {
-                    let _ = db.update_post_replies_count(parent_id, parent.replies_count);
-                }
-            }
-        }
-        if let Some(ref db) = state.db {
-            let _ = db.save_post(&reply);
-        }
-        let excerpt = AppState::compute_wikilink_excerpt(&reply);
-        state.wikilink_cache.insert(reply.id.as_str().to_string(), excerpt);
-        let insert_pos = parent_idx_opt.map_or(0, |idx| (idx + 1).min(state.posts.len()));
-        state.posts.insert(insert_pos, reply);
-        state.sync_post_index();
+    /// The network's name and grounding document titles, for the agent's system prompt.
+    fn prompt_context(&self, network: &NetworkId) -> PromptContext {
+        let network_name = self.state.networks.iter().find(|n| &n.id == network).map(|n| n.name.clone());
+        let grounding_docs = self
+            .state
+            .documents
+            .iter()
+            .filter(|d| &d.network_id == network)
+            .map(|d| d.title.clone())
+            .collect();
+        PromptContext { network_name: network_name.unwrap_or_default(), grounding_docs }
     }
 }

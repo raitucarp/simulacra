@@ -4,10 +4,10 @@ use super::params::{
     DeletePostCallback, LikePostCallback, QuotePostCallback, ReplyPostCallback, RepostPostCallback,
     SelectPostCallback,
 };
-use crate::domain::{Post, PostId};
+use crate::domain::{Post, PostId, Profile};
 use crate::state::AppState;
 use crate::theme::ThemeTokens;
-use crate::ui::features::post::{render_post_item, PostAction, PostCardHandlers, ThreadlineStyle};
+use crate::ui::features::post::{render_post_item, BodyLinks, PostAction, PostCardHandlers, ThreadlineStyle};
 use gpui_kit::{AnyElement, App, IntoElement, Window};
 use std::rc::Rc;
 
@@ -20,6 +20,8 @@ pub(crate) struct PostCallbacks {
     pub on_repost: Rc<RepostPostCallback>,
     pub on_quote: Rc<QuotePostCallback>,
     pub on_delete: Rc<DeletePostCallback>,
+    /// Hashtag and wikilink clicks inside post bodies.
+    pub links: BodyLinks,
 }
 
 /// Visual and interaction mode of a rendered card.
@@ -39,8 +41,8 @@ fn bind<F: Fn(PostId, &mut Window, &mut App) + ?Sized + 'static>(cb: &Rc<Box<F>>
 
 impl PostCallbacks {
     /// Card handlers for `post`; delete is offered only on thoughts written by a user persona.
-    fn handlers_for(&self, post: &Post, selectable: bool) -> PostCardHandlers {
-        let (reply, reply_id, handle) = (self.on_reply.clone(), post.id.clone(), post.author.handle.clone());
+    fn handlers_for(&self, post: &Post, author: &Profile, selectable: bool) -> PostCardHandlers {
+        let (reply, reply_id, handle) = (self.on_reply.clone(), post.id.clone(), author.handle.clone());
         let select = self.on_select.clone();
         PostCardHandlers {
             on_select: if selectable { bind(&self.on_select, &post.id) } else { Rc::new(|_, _| {}) },
@@ -49,7 +51,8 @@ impl PostCallbacks {
             on_repost: bind(&self.on_repost, &post.id),
             on_quote: bind(&self.on_quote, &post.id),
             on_open_post: Rc::new(move |id, window, cx| select(id, window, cx)),
-            on_delete: post.author.is_human_persona().then(|| bind(&self.on_delete, &post.id)),
+            on_delete: author.is_human_persona().then(|| bind(&self.on_delete, &post.id)),
+            links: self.links.clone(),
         }
     }
 
@@ -61,7 +64,7 @@ impl PostCallbacks {
         theme: &ThemeTokens,
         mode: CardMode,
     ) -> AnyElement {
-        let handlers = self.handlers_for(post, mode.selectable);
+        let handlers = self.handlers_for(post, state.author_of(post), mode.selectable);
         render_post_item(post, state, theme, mode.is_focused, mode.style, handlers).into_any_element()
     }
 }

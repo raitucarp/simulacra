@@ -243,6 +243,9 @@ cadence:
   month_11: "Nov"
   month_12: "Des"
 
+storage:
+  write_failed: "Gagal menyimpan ke vault lokal: %{error}"
+
 post:
   menu_tooltip: "Tindakan lainnya"
   menu_copy_text: "Salin teks"

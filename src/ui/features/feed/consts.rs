@@ -20,8 +20,6 @@ pub(crate) const ACTIVE_TAB_INDICATOR_WIDTH: f32 = 48.0;
 
 /// Element id of the stream / inspector resizable group.
 pub(crate) const TIMELINE_RESIZABLE_ID: &str = "timeline-stream-inspector-resizable";
-/// Element id of the scrollable main stream.
-pub(crate) const STREAM_SCROLL_ID: &str = "general-feed-scroll-stream";
 /// Element id of the scrollable focus thread body.
 pub(crate) const INSPECTOR_SCROLL_ID: &str = "focus-thread-scroll-stream";
 /// Element id of the load-more container.

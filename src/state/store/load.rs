@@ -1,13 +1,15 @@
 //! Store construction: opening the vault, loading persisted state, or seeding a first run.
+//!
+//! Startup reads happen synchronously (one round trip to the vault worker); every later
+//! write is queued on the worker thread.
 
 use super::bootstrap::StoreData;
-use super::{AppState, ACTIVE_NETWORK_KEY, ACTIVE_PROFILE_KEY, DEFAULT_ENTITY_ID};
+use super::snapshot::{StoredSettings, VaultSnapshot};
+use super::{AppState, DEFAULT_ENTITY_ID};
 use crate::agent::LlmSettings;
-use crate::domain::{Network, NetworkId, Profile, ProfileId};
+use crate::domain::{Network, Profile};
 use crate::error::Result;
-use crate::storage::Database;
-use crate::theme::ThemeTokens;
-use std::rc::Rc;
+use crate::storage::{Database, Vault};
 
 impl AppState {
     /// Initializes state, loading from the local SQLite database if available,
@@ -18,121 +20,66 @@ impl AppState {
 
     /// Initializes state with a specific database path (or in-memory if invalid/failed).
     pub fn with_db_path(path: impl AsRef<std::path::Path>) -> Self {
-        match Database::open(path) {
-            Ok(db) => {
-                let rc_db = Rc::new(db);
-                match Self::load_from_db(&rc_db) {
-                    Ok(state) => state,
-                    Err(_) => Self::fallback_seed(Some(rc_db)),
-                }
+        match Database::open(path).and_then(Vault::spawn) {
+            Ok(vault) => Self::load_from_db(&vault).unwrap_or_else(|_| Self::fallback_seed(Some(vault))),
+            Err(err) => {
+                eprintln!("simulacra: vault unavailable, running without persistence: {err}");
+                Self::fallback_seed(None)
             }
-            Err(_) => Self::fallback_seed(None),
         }
     }
 
     /// Creates an in-memory test state.
     pub fn new_in_memory() -> Self {
-        match Database::in_memory() {
-            Ok(db) => {
-                let rc_db = Rc::new(db);
-                Self::fallback_seed(Some(rc_db))
-            }
-            Err(_) => Self::fallback_seed(None),
-        }
+        Self::fallback_seed(Database::in_memory().and_then(Vault::spawn).ok())
     }
 
-    /// Loads persisted data from SQLite database.
-    pub(super) fn load_from_db(db: &Rc<Database>) -> Result<Self> {
-        if db.is_empty()? {
-            return Ok(Self::fallback_seed(Some(db.clone())));
-        }
-
-        let data = StoreData::load(db)?;
-        let active_network_id = persisted_network_id(db, &data.networks);
-        let active_profile_id = persisted_profile_id(db, &data.user_profiles);
-        let llm_settings = LlmSettings::load_from_db(db);
-        let theme_tokens = stored_theme_tokens(db);
-
-        let mut state = Self::assemble(
-            data,
-            active_network_id,
-            active_profile_id,
-            llm_settings,
-            theme_tokens,
-            Some(db.clone()),
-        );
+    /// Loads persisted data from the vault (seeding it first when it is empty).
+    pub(crate) fn load_from_db(vault: &Vault) -> Result<Self> {
+        let Some(snapshot) = vault.read(VaultSnapshot::read)? else {
+            return Ok(Self::fallback_seed(Some(vault.clone())));
+        };
+        let VaultSnapshot { data, settings, active_network, active_profile } = snapshot;
+        let active_network_id = persisted_or_first(active_network, &data.networks, |n| &n.id);
+        let active_profile_id = persisted_or_first(active_profile, &data.user_profiles, |p| &p.id);
+        let mut state = Self::assemble(data, active_network_id, active_profile_id, settings, Some(vault.clone()));
         state.upgrade_legacy_profiles_if_needed();
         state.sync_network_counts();
         state.rebuild_indices();
         Ok(state)
     }
 
-    /// Populates initial seed data into state and optionally syncs it to SQLite.
-    pub(super) fn fallback_seed(db: Option<Rc<Database>>) -> Self {
+    /// Populates initial seed data into state and queues it for the vault.
+    pub(super) fn fallback_seed(vault: Option<Vault>) -> Self {
         let data = StoreData::seeded();
-        if let Some(ref database) = db {
-            data.persist(database);
-        }
-
-        let active_network_id = first_network_id(&data.networks);
-        let active_profile_id = first_profile_id(&data.user_profiles);
-        let llm_settings = match db.as_ref() {
-            Some(d) => LlmSettings::load_from_db(d),
-            None => LlmSettings::default(),
+        let settings = match vault.as_ref() {
+            Some(vault) => {
+                let seed = data.clone();
+                let _ = vault.write(move |db| seed.persist(db));
+                vault.read(|db| Ok(StoredSettings::read(db))).unwrap_or_else(|_| default_settings())
+            }
+            None => default_settings(),
         };
-        let theme_tokens = match db.as_ref() {
-            Some(d) => stored_theme_tokens(d),
-            None => crate::theme::minimalist_dark(),
-        };
-
-        let mut state = Self::assemble(
-            data,
-            active_network_id,
-            active_profile_id,
-            llm_settings,
-            theme_tokens,
-            db,
-        );
+        let active_network_id = persisted_or_first(None, &data.networks, |n: &Network| &n.id);
+        let active_profile_id = persisted_or_first(None, &data.user_profiles, |p: &Profile| &p.id);
+        let mut state = Self::assemble(data, active_network_id, active_profile_id, settings, vault);
         state.rebuild_indices();
         state
     }
 }
 
-/// Persisted theme tokens, or the default dark theme when absent or unreadable.
-fn stored_theme_tokens(db: &Database) -> ThemeTokens {
-    db.load_theme_tokens()
-        .unwrap_or(None)
-        .unwrap_or_else(crate::theme::minimalist_dark)
+fn default_settings() -> StoredSettings {
+    StoredSettings { llm: LlmSettings::default(), theme: None }
 }
 
-/// Restores the persisted active network when it still exists, else the first network.
-fn persisted_network_id(db: &Database, networks: &[Network]) -> NetworkId {
-    db.get_setting(ACTIVE_NETWORK_KEY)
-        .unwrap_or(None)
-        .map(NetworkId::new)
-        .filter(|id| networks.iter().any(|n| &n.id == id))
-        .unwrap_or_else(|| first_network_id(networks))
-}
-
-/// Restores the persisted active profile when it still exists, else the first profile.
-fn persisted_profile_id(db: &Database, profiles: &[Profile]) -> ProfileId {
-    db.get_setting(ACTIVE_PROFILE_KEY)
-        .unwrap_or(None)
-        .map(ProfileId::new)
-        .filter(|id| profiles.iter().any(|p| &p.id == id))
-        .unwrap_or_else(|| first_profile_id(profiles))
-}
-
-fn first_network_id(networks: &[Network]) -> NetworkId {
-    networks
-        .first()
-        .map(|n| n.id.clone())
-        .unwrap_or_else(|| NetworkId::new(DEFAULT_ENTITY_ID))
-}
-
-fn first_profile_id(profiles: &[Profile]) -> ProfileId {
-    profiles
-        .first()
-        .map(|p| p.id.clone())
-        .unwrap_or_else(|| ProfileId::new(DEFAULT_ENTITY_ID))
+/// The persisted id when it still names an entity, else the first entity's id, else the default.
+fn persisted_or_first<T, Id>(persisted: Option<String>, entities: &[T], id_of: impl Fn(&T) -> &Id) -> Id
+where
+    Id: Clone + From<String> + From<&'static str> + PartialEq,
+{
+    persisted
+        .map(Id::from)
+        .filter(|id| entities.iter().any(|e| id_of(e) == id))
+        .or_else(|| entities.first().map(|e| id_of(e).clone()))
+        .unwrap_or_else(|| Id::from(DEFAULT_ENTITY_ID))
 }

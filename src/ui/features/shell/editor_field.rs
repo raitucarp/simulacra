@@ -104,6 +104,7 @@ impl EditorTextField {
             F::Name | F::Handle | F::PrimaryLanguage => {}
             F::AvatarPath => {
                 let path = trimmed.trim_matches(PATH_QUOTE);
+                crate::ui::atoms::forget_avatar(path);
                 profile.avatar_path = (!path.is_empty()).then(|| path.to_string());
             }
             _ => self.apply_config_text(&mut profile.config, raw),

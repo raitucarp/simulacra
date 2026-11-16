@@ -25,7 +25,7 @@ pub use agent_config::{
 pub use document::GroundingDocument;
 pub use ids::{NetworkId, PostId, ProfileId};
 pub use network::Network;
-pub use post::{Post, MAX_POST_CHARS};
+pub use post::{AuthoredPost, Post, MAX_POST_CHARS};
 pub use profile::{Profile, ProfileRole};
 pub use thread::{draft_issue, first_thread_problem, split_into_thread, DraftIssue, ThreadProblem};
 pub use topic::TrendingTopic;

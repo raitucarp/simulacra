@@ -1,6 +1,6 @@
 //! The single constructor for agent reply posts.
 
-use crate::domain::{NetworkId, Post, PostId, Profile};
+use crate::domain::{AuthoredPost, NetworkId, Post, PostId, Profile};
 use chrono::Utc;
 use uuid::Uuid;
 
@@ -10,7 +10,7 @@ const POST_ID_PREFIX: &str = "post_";
 /// Builds a fresh reply `Post` authored by `agent_profile`, threaded under and
 /// linked to `parent_post`, mentioning the parent's author.
 pub(super) fn build_reply(
-    parent_post: &Post,
+    parent_post: &AuthoredPost,
     agent_profile: Profile,
     network_id: NetworkId,
     content: String,
@@ -20,7 +20,7 @@ pub(super) fn build_reply(
     Post {
         id: new_id,
         network_id,
-        author: agent_profile,
+        author_id: agent_profile.id,
         content,
         created_at: Utc::now(),
         likes: 0,

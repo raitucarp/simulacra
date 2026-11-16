@@ -1,4 +1,5 @@
 use super::*;
+use crate::domain::Profile;
 use crate::error::AppError;
 
 #[test]
@@ -127,6 +128,7 @@ fn test_post_serde_backward_compatibility() {
     }"#;
 
     let post: Post = serde_json::from_str(legacy_json).expect("Deserialize legacy JSON");
+    assert_eq!(post.author_id.as_str(), "u1", "legacy embedded author keeps only its id");
     assert_eq!(post.reply_to_id, None);
     assert_eq!(post.quote_id, None);
     assert_eq!(post.repost_id, None);

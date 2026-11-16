@@ -7,7 +7,6 @@ use crate::state::graph::{GraphCache, GraphScene};
 use crate::state::{AppState, NavigationTab};
 use crate::ui::features::mind_graph::{MindGraphEvent, MindGraphPanel};
 use gpui_kit::*;
-use std::rc::Rc;
 
 /// Graph scene cache (shared by the full view and the sidebar mini graph) and the view entity.
 pub struct GraphState {
@@ -16,11 +15,11 @@ pub struct GraphState {
 }
 
 impl GraphState {
-    /// Builds the initial scene and graph view, returning the view's event subscription.
+    /// Creates the graph view (empty until the first background layout lands), returning
+    /// the view's event subscription.
     pub(super) fn new(state: &AppState, window: &mut Window, cx: &mut Context<AppView>) -> (Self, Subscription) {
-        let mut cache = GraphCache::default();
-        let scene = cache.scene(state);
-        let theme = state.theme_tokens.clone();
+        let cache = GraphCache::default();
+        let (scene, theme) = (cache.current(), state.theme_tokens.clone());
         let panel = cx.new(|_| MindGraphPanel::new(scene, theme));
         let subscription = cx.subscribe_in(&panel, window, AppView::handle_mind_graph_event);
         (Self { cache, panel }, subscription)
@@ -28,14 +27,26 @@ impl GraphState {
 }
 
 impl AppView {
-    /// Current scene, rebuilt only when posts, documents, profiles or the network changed.
-    pub(super) fn graph_scene(&mut self) -> Rc<GraphScene> {
-        self.graph.cache.scene(&self.state)
+    /// Starts a background layout when posts, documents, profiles or the network changed;
+    /// the finished scene is swapped in (the previous one stays on screen meanwhile).
+    fn request_graph_layout(&mut self, cx: &mut Context<Self>) {
+        let Some((generation, job)) = self.graph.cache.refresh(&self.state) else { return };
+        let layout = cx.background_executor().spawn(async move { job.run() });
+        cx.spawn(async move |this, cx| {
+            let scene: GraphScene = layout.await;
+            let _ = this.update(cx, |this, cx| {
+                if this.graph.cache.install(generation, scene) {
+                    cx.notify();
+                }
+            });
+        })
+        .detach();
     }
 
     /// Pushes the current scene and theme into the graph view entity.
     pub(super) fn sync_mind_graph(&mut self, cx: &mut Context<Self>) {
-        let scene = self.graph_scene();
+        self.request_graph_layout(cx);
+        let scene = self.graph.cache.current();
         let theme = &self.theme;
         self.graph.panel.update(cx, |panel, cx| panel.set_scene(scene, theme, cx));
     }

@@ -20,9 +20,10 @@ impl AppState {
         if let Some(ref db) = self.db {
             db.delete_post_with_reposts(post_id)?;
         }
-        self.posts.retain(|p| p.id != *post_id && !is_instant_repost_of(p, post_id));
-        self.wikilink_cache.remove(post_id.as_str());
-        self.sync_post_index();
+        let doomed = |p: &Post| p.id == *post_id || is_instant_repost_of(p, post_id);
+        while let Some(position) = self.posts.iter().position(doomed) {
+            self.remove_post_at(position);
+        }
         self.release_parent_counter(&post);
         self.release_repost_counter(&post);
         Ok(())
@@ -55,7 +56,7 @@ impl AppState {
 
     /// Mutable access to a post by id through the index.
     fn post_mut(&mut self, id: &PostId) -> Option<&mut Post> {
-        let idx = self.post_index_by_id.get(id).copied()?;
+        let idx = self.post_position(id)?;
         self.posts.get_mut(idx)
     }
 }

@@ -37,15 +37,16 @@ impl GraphSource<'_> {
     /// Profiles mentionable in the network: members first, then post authors.
     fn mentionable<'a>(&'a self, posts: &[&'a Post]) -> Vec<&'a Profile> {
         let members = self.profiles.iter().filter(|p| p.belongs_to_network(self.network));
-        members.chain(posts.iter().map(|p| &p.author)).collect()
+        let authors = posts.iter().filter_map(|post| self.profiles.iter().find(|p| p.id == post.author_id));
+        members.chain(authors).collect()
     }
 }
 
 /// Label of a post node: its excerpt, or the author's name for text-less reposts.
-fn post_label(post: &Post) -> String {
+fn post_label(post: &Post, lookup: &Lookup<'_>) -> String {
     let text = excerpt(&post.content, LABEL_MAX_CHARS);
     if text.is_empty() {
-        excerpt(&post.author.name, LABEL_MAX_CHARS)
+        excerpt(&lookup.author_name(&post.author_id), LABEL_MAX_CHARS)
     } else {
         text
     }
@@ -61,17 +62,17 @@ impl GraphModel {
     pub fn build(source: &GraphSource<'_>) -> Self {
         let posts = source.posts();
         let docs = source.documents();
-        let lookup = Lookup::new(&posts, &docs, &source.mentionable(&posts));
+        let lookup = Lookup::new(&posts, &docs, &source.mentionable(&posts), source.profiles);
         let mut raw = RawGraph::default();
         let agents = source.profiles.iter().filter(|p| p.is_agent() && p.belongs_to_network(source.network));
         agents.for_each(|agent| raw.add_profile(agent));
         posts.iter().for_each(|post| raw.add_post(post, &lookup));
-        Self::assemble(&posts, &docs, raw)
+        Self::assemble(&posts, &docs, raw, &lookup)
     }
 
-    fn assemble(posts: &[&Post], docs: &[&GroundingDocument], raw: RawGraph) -> Self {
+    fn assemble(posts: &[&Post], docs: &[&GroundingDocument], raw: RawGraph, lookup: &Lookup<'_>) -> Self {
         let mut nodes: Vec<GraphNode> = Vec::new();
-        nodes.extend(posts.iter().map(|p| node(NodeRef::Post(p.id.clone()), post_label(p))));
+        nodes.extend(posts.iter().map(|p| node(NodeRef::Post(p.id.clone()), post_label(p, lookup))));
         nodes.extend(docs.iter().map(|d| node(NodeRef::Document(d.id.clone()), excerpt(&d.title, LABEL_MAX_CHARS))));
         nodes.extend(raw.tags.iter().map(|t| node(NodeRef::Hashtag(t.clone()), format!("{HASHTAG_SIGIL}{t}"))));
         nodes.extend(

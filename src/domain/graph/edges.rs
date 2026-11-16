@@ -28,8 +28,9 @@ impl RawGraph {
         self.add_wikilinks(&source, post, lookup);
         self.add_tags(&source, post);
         self.add_mentions(&source, post, lookup);
-        self.add_profile(&post.author);
-        self.push(NodeRef::Profile(post.author.id.clone()), source, EdgeKind::Authored);
+        let author = &post.author_id;
+        self.profiles.entry(author.clone()).or_insert_with(|| lookup.author_name(author));
+        self.push(NodeRef::Profile(author.clone()), source, EdgeKind::Authored);
     }
 
     fn add_relations(&mut self, source: &NodeRef, post: &Post, lookup: &Lookup<'_>) {

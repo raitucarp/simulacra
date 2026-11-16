@@ -18,6 +18,11 @@ impl Binder {
         Self(cx.entity().clone())
     }
 
+    /// A binder for callbacks built outside the root view's own render (cached panels).
+    pub(super) fn from_entity(entity: Entity<AppView>) -> Self {
+        Self(entity)
+    }
+
     /// A no-argument callback running `handler` on the view.
     pub(super) fn act(
         &self,

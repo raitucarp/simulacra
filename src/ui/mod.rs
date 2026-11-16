@@ -6,6 +6,7 @@ pub mod features;
 pub mod icons;
 pub mod molecules;
 pub mod organisms;
+pub mod render_stats;
 pub mod views;
 
 pub use icons::{Lucide, LucideIcon};

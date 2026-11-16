@@ -12,7 +12,7 @@ mod reply_context;
 mod state;
 mod thread_rows;
 
-use crate::domain::{Post, Profile};
+use crate::domain::{AuthoredPost, Profile};
 use crate::theme::ThemeTokens;
 use gpui_kit::component::input::{InputState, TextareaState};
 use gpui_kit::*;
@@ -27,8 +27,8 @@ pub type DraftActionCallback = Rc<dyn Fn(usize, &mut Window, &mut App) + 'static
 #[derive(Debug, Clone, PartialEq)]
 pub enum ComposerModalMode {
     NewThread,
-    Reply(Box<Post>),
-    Quote(Box<Post>),
+    Reply(Box<AuthoredPost>),
+    Quote(Box<AuthoredPost>),
 }
 
 /// One post editor of the thread with its current (trimmed) character count.

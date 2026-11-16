@@ -5,7 +5,7 @@
 use crate::domain::{Profile, ProfileRole};
 use crate::theme::ThemeTokens;
 use gpui_kit::*;
-use std::path::PathBuf;
+use super::avatar_cache::resolve_avatar;
 
 /// Avatars at or below this diameter use the 2xs initial font size.
 const SMALL_AVATAR_MAX_PX: f32 = 24.0;
@@ -59,32 +59,26 @@ pub fn render_profile_avatar(
     size: Pixels,
     theme: &ThemeTokens,
 ) -> Div {
-    if let Some(ref path_str) = profile.avatar_path {
-        let trimmed = path_str.trim();
-        if !trimmed.is_empty() {
-            let path = PathBuf::from(trimmed);
-            if path.exists() {
-                return div()
+    if let Some(path) = profile.avatar_path.as_deref().and_then(resolve_avatar) {
+        return div()
+            .w(size)
+            .h(size)
+            .flex_shrink_0()
+            .rounded(theme.radius_full)
+            .bg(theme.bg_card)
+            .border(theme.border_width_hairline)
+            .border_color(theme.border_subtle)
+            .overflow_hidden()
+            .flex()
+            .items_center()
+            .justify_center()
+            .child(
+                img(path)
                     .w(size)
                     .h(size)
-                    .flex_shrink_0()
                     .rounded(theme.radius_full)
-                    .bg(theme.bg_card)
-                    .border(theme.border_width_hairline)
-                    .border_color(theme.border_subtle)
-                    .overflow_hidden()
-                    .flex()
-                    .items_center()
-                    .justify_center()
-                    .child(
-                        img(path)
-                            .w(size)
-                            .h(size)
-                            .rounded(theme.radius_full)
-                            .object_fit(ObjectFit::Cover),
-                    );
-            }
-        }
+                    .object_fit(ObjectFit::Cover),
+            );
     }
 
     render_avatar(&profile.avatar_initial, &profile.role, size, theme)

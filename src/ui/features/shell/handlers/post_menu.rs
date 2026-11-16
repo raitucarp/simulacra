@@ -10,7 +10,7 @@ use rust_i18n::t;
 impl AppView {
     /// Deletes `post_id` (confirmed by the card's dialog), clearing it from the inspector.
     pub(crate) fn delete_post(&mut self, post_id: PostId, window: &mut Window, cx: &mut Context<Self>) {
-        let is_own = self.state.get_post(&post_id).is_some_and(|p| p.author.is_human_persona());
+        let is_own = self.state.get_post(&post_id).is_some_and(|p| self.state.author_of(p).is_human_persona());
         if !is_own {
             return;
         }

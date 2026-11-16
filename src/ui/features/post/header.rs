@@ -2,7 +2,7 @@
 
 use super::consts::{META_SEPARATOR, ORIGINAL_MARKER_LABEL, REPOSTED_SUFFIX, TIME_FORMAT};
 use super::controls::{render_overflow_menu, PostCardHandlers};
-use crate::domain::{Post, ProfileRole};
+use crate::domain::{Post, Profile, ProfileRole};
 use crate::theme::ThemeTokens;
 use crate::ui::atoms::render_role_badge;
 use crate::ui::icons::LucideIcon;
@@ -37,6 +37,7 @@ pub(crate) fn render_repost_header(reposter_name: &str, theme: &ThemeTokens) -> 
 /// Top row: author name, handle, role badge, timestamp, and the "…" overflow menu.
 pub(crate) fn render_author_row(
     post: &Post,
+    author: &Profile,
     is_instant_repost: bool,
     theme: &ThemeTokens,
     handlers: &PostCardHandlers,
@@ -46,12 +47,12 @@ pub(crate) fn render_author_row(
         .flex()
         .items_center()
         .justify_between()
-        .child(render_author_meta(post, is_instant_repost, theme))
+        .child(render_author_meta(post, author, is_instant_repost, theme))
         .child(render_overflow_menu(post, handlers))
 }
 
-fn render_author_meta(post: &Post, is_instant_repost: bool, theme: &ThemeTokens) -> Div {
-    let is_agent = matches!(post.author.role, ProfileRole::Agent { .. });
+fn render_author_meta(post: &Post, author: &Profile, is_instant_repost: bool, theme: &ThemeTokens) -> Div {
+    let is_agent = matches!(author.role, ProfileRole::Agent { .. });
     let time_str = post.created_at.format(TIME_FORMAT).to_string();
     div()
         .flex()
@@ -65,7 +66,7 @@ fn render_author_meta(post: &Post, is_instant_repost: bool, theme: &ThemeTokens)
                 .text_size(theme.font_size_sm)
                 .font_weight(FontWeight::SEMIBOLD)
                 .text_color(theme.text_primary)
-                .child(post.author.name.clone()),
+                .child(author.name.clone()),
         )
         // Author Handle (secondary muted)
         .child(
@@ -74,9 +75,9 @@ fn render_author_meta(post: &Post, is_instant_repost: bool, theme: &ThemeTokens)
                 .text_size(theme.font_size_xs)
                 .font_weight(FontWeight::NORMAL)
                 .text_color(theme.text_muted)
-                .child(post.author.handle.clone()),
+                .child(author.handle.clone()),
         )
-        .when(is_agent, |this| this.child(render_role_badge(&post.author.role, theme)))
+        .when(is_agent, |this| this.child(render_role_badge(&author.role, theme)))
         .child(mono_meta(theme, theme.font_size_xs).child(format!("{META_SEPARATOR} {time_str}")))
         .when(is_instant_repost, |this| {
             this.child(mono_meta(theme, theme.font_size_2xs).text_color(theme.accent_agent).child(ORIGINAL_MARKER_LABEL))

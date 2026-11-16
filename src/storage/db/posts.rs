@@ -1,14 +1,10 @@
 //! Post persistence: full upsert and timeline loading.
 
 use super::{collect_rows, db_err, parse_timestamp, sql_bool, Database};
-use crate::domain::{NetworkId, Post, PostId, Profile};
+use super::EMPTY_AUTHOR_SNAPSHOT;
+use crate::domain::{NetworkId, Post, PostId, ProfileId};
 use crate::error::Result;
 use rusqlite::{params, Row};
-
-/// Placeholder author used when a stored author snapshot cannot be decoded.
-const UNKNOWN_AUTHOR_ID: &str = "unknown";
-const UNKNOWN_AUTHOR_NAME: &str = "Author";
-const UNKNOWN_AUTHOR_HANDLE: &str = "@unknown";
 
 const UPSERT_POST: &str = r#"
                 INSERT INTO posts (
@@ -21,7 +17,6 @@ const UPSERT_POST: &str = r#"
                 ON CONFLICT(id) DO UPDATE SET
                     network_id = excluded.network_id,
                     author_id = excluded.author_id,
-                    author_json = excluded.author_json,
                     content = excluded.content,
                     created_at = excluded.created_at,
                     likes = excluded.likes,
@@ -40,7 +35,7 @@ const UPSERT_POST: &str = r#"
 
 const SELECT_POSTS: &str = r#"
                 SELECT
-                    id, network_id, author_json, content, created_at,
+                    id, network_id, author_id, content, created_at,
                     likes, is_liked, replies_count, mentions_json, linked_posts_json,
                     reply_to_id, quote_id, repost_id, link_url, image_path,
                     reposts_count, is_reposted
@@ -51,7 +46,6 @@ const SELECT_POSTS: &str = r#"
 impl Database {
     /// Saves or updates a post in the database with full attachments and relation metadata.
     pub fn save_post(&self, post: &Post) -> Result<()> {
-        let author_json = serde_json::to_string(&post.author).map_err(db_err)?;
         let mentions_json = serde_json::to_string(&post.mentions).map_err(db_err)?;
         let linked_posts_json = serde_json::to_string(&post.linked_posts).map_err(db_err)?;
         let created_at_str = post.created_at.to_rfc3339();
@@ -62,8 +56,8 @@ impl Database {
                 params![
                     post.id.as_str(),
                     post.network_id.as_str(),
-                    post.author.id.as_str(),
-                    author_json,
+                    post.author_id.as_str(),
+                    EMPTY_AUTHOR_SNAPSHOT,
                     post.content,
                     created_at_str,
                     post.likes as i64,
@@ -96,7 +90,7 @@ impl Database {
 fn post_from_row(row: &Row<'_>) -> rusqlite::Result<Post> {
     let id: String = row.get(0)?;
     let network_id: String = row.get(1)?;
-    let author_json: String = row.get(2)?;
+    let author_id: String = row.get(2)?;
     let content: String = row.get(3)?;
     let created_at_str: String = row.get(4)?;
     let likes: i64 = row.get(5)?;
@@ -115,7 +109,7 @@ fn post_from_row(row: &Row<'_>) -> rusqlite::Result<Post> {
     Ok(Post {
         id: PostId::new(id),
         network_id: NetworkId::new(network_id),
-        author: decode_author(&author_json),
+        author_id: ProfileId::new(author_id),
         content,
         created_at: parse_timestamp(&created_at_str),
         likes: likes as usize,
@@ -130,12 +124,5 @@ fn post_from_row(row: &Row<'_>) -> rusqlite::Result<Post> {
         image_path,
         reposts_count: reposts_count as usize,
         is_reposted: is_reposted != 0,
-    })
-}
-
-/// Decodes an author snapshot, falling back to a placeholder primary profile.
-fn decode_author(author_json: &str) -> Profile {
-    serde_json::from_str(author_json).unwrap_or_else(|_| {
-        Profile::new_primary(UNKNOWN_AUTHOR_ID, UNKNOWN_AUTHOR_NAME, UNKNOWN_AUTHOR_HANDLE)
     })
 }

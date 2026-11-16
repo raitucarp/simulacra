@@ -243,6 +243,9 @@ cadence:
   month_11: "Nov"
   month_12: "Dec"
 
+storage:
+  write_failed: "Could not save to the local vault: %{error}"
+
 post:
   menu_tooltip: "More actions"
   menu_copy_text: "Copy text"

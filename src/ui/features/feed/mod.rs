@@ -28,4 +28,5 @@ pub use params::{
     SelectFeedTabCallback, SelectPostCallback, ToggleRepliesCallback,
 };
 pub use render::render_main_feed;
+pub use stream::{FeedReader, StreamInputs, StreamRows};
 pub use threadline::compute_stream_threadline_style;

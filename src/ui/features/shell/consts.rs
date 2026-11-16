@@ -1,6 +1,9 @@
 //! Named literals of the application shell: column sizes, element ids, placeholders,
 //! the avatar dialog title and the curated identities offered by "new agent / persona".
 
+/// Pixels of stream rows rendered beyond the viewport so scrolling never pops in.
+pub(super) const STREAM_LIST_OVERDRAW: f32 = 600.0;
+
 /// Width of the left sidebar in its collapsed icon-rail mode.
 pub(super) const LEFT_SIDEBAR_COLLAPSED_WIDTH: f32 = 64.0;
 /// Resize range of the collapsed left sidebar.

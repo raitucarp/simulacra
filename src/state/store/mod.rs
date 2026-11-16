@@ -3,6 +3,7 @@
 //! `AppState` is a single type whose `impl` blocks are spread across the sibling
 //! modules by concern (loading, networks, profiles, posts, indices, ...).
 
+mod authors;
 mod bootstrap;
 mod day_filter;
 mod documents;
@@ -11,6 +12,8 @@ mod interactions;
 mod load;
 mod network_create;
 mod networks;
+mod post_index;
+mod post_meta;
 mod post_delete;
 mod posts;
 mod profile_create;
@@ -18,6 +21,7 @@ mod profiles;
 mod reposts;
 mod search;
 mod settings;
+mod snapshot;
 mod threads;
 mod upgrade;
 mod wikilinks;
@@ -25,13 +29,15 @@ mod wikilinks;
 #[cfg(test)]
 mod tests;
 
+pub use post_index::PostIndex;
+pub use post_meta::PostMeta;
 pub use network_create::{network_slug, validate_network_name, NetworkNameError, MAX_NETWORK_NAME_CHARS};
 pub use threads::{ThreadAnchor, ThreadDraft};
+pub use wikilinks::WikilinkTarget;
 
-use crate::domain::{GroundingDocument, Network, NetworkId, Post, PostId, Profile, ProfileId, TrendingTopic};
-use crate::storage::Database;
+use crate::domain::{GroundingDocument, Network, NetworkId, Post, Profile, ProfileId, TrendingTopic};
+use crate::storage::Vault;
 use std::collections::HashMap;
-use std::rc::Rc;
 
 /// Settings key persisting the active network selection.
 const ACTIVE_NETWORK_KEY: &str = "active_network_id";
@@ -60,13 +66,14 @@ pub struct AppState {
     pub networks: Vec<Network>,
     pub active_network_id: NetworkId,
     pub user_profiles: Vec<Profile>,
+    /// Last known profile of deleted authors whose posts remain, by author id.
+    pub archived_authors: HashMap<ProfileId, Profile>,
     pub active_profile_id: ProfileId,
     pub active_tab: NavigationTab,
+    /// Every post, newest first. Mutate through the store methods so `index` stays in sync.
     pub posts: Vec<Post>,
-    pub post_index_by_id: HashMap<PostId, usize>,
-    pub network_post_indices: HashMap<NetworkId, Vec<usize>>,
-    pub replies_index: HashMap<PostId, Vec<usize>>,
-    pub wikilink_cache: HashMap<String, String>,
+    /// Incrementally maintained lookups and derived body data over `posts`.
+    pub index: PostIndex,
     pub documents: Vec<GroundingDocument>,
     pub trending: Vec<TrendingTopic>,
     pub draft_text: String,
@@ -74,7 +81,8 @@ pub struct AppState {
     pub feed_day_filter: Option<chrono::NaiveDate>,
     pub llm_settings: crate::agent::LlmSettings,
     pub theme_tokens: crate::theme::ThemeTokens,
-    pub db: Option<Rc<Database>>,
+    /// Handle to the vault worker thread (`None` when running without persistence).
+    pub db: Option<Vault>,
 }
 
 impl Default for AppState {

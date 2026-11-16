@@ -2,7 +2,7 @@
 
 use super::super::consts::{QUOTE_TITLE_PREFIX, REPLY_TITLE_PREFIX};
 use super::{ComposerModalMode, ComposerModalView};
-use crate::domain::Post;
+use crate::domain::AuthoredPost;
 use rust_i18n::t;
 
 impl ComposerModalView {
@@ -19,14 +19,14 @@ impl ComposerModalView {
         }
     }
 
-    pub(super) fn reply_parent(&self) -> Option<&Post> {
+    pub(super) fn reply_parent(&self) -> Option<&AuthoredPost> {
         match &self.mode {
             ComposerModalMode::Reply(parent) => Some(parent),
             _ => None,
         }
     }
 
-    pub(super) fn quote_target(&self) -> Option<&Post> {
+    pub(super) fn quote_target(&self) -> Option<&AuthoredPost> {
         match &self.mode {
             ComposerModalMode::Quote(target) => Some(target),
             _ => None,

@@ -69,8 +69,8 @@ impl AppState {
         Some(next_id)
     }
 
-    /// Updates an existing agent or human persona profile, synchronizes derived fields and post author snapshots,
-    /// and persists to SQLite.
+    /// Updates an existing agent or human persona profile, synchronizes derived fields,
+    /// and persists to SQLite. Posts reference authors by id, so they pick the change up as is.
     pub fn update_profile(&mut self, mut updated: Profile) -> Result<()> {
         updated.sync_derived_fields();
         let target_id = updated.id.clone();
@@ -81,15 +81,9 @@ impl AppState {
             self.user_profiles.push(updated.clone());
         }
 
-        for post in &mut self.posts {
-            if post.author.id == target_id {
-                post.author = updated.clone();
-            }
-        }
-
+        self.archived_authors.remove(&target_id);
         if let Some(ref db) = self.db {
             db.save_profile(&updated)?;
-            let _ = db.update_post_author_snapshots(&updated);
         }
 
         self.sync_network_counts();
@@ -103,10 +97,14 @@ impl AppState {
             return Ok(());
         }
 
-        self.user_profiles.retain(|p| &p.id != profile_id);
+        let position = self.user_profiles.iter().position(|p| &p.id == profile_id);
+        let Some(removed) = position.map(|idx| self.user_profiles.remove(idx)) else {
+            return Ok(());
+        };
         if let Some(ref db) = self.db {
-            db.delete_profile(profile_id)?;
+            db.archive_and_delete_profile(&removed)?;
         }
+        self.archived_authors.insert(removed.id.clone(), removed);
 
         if &self.active_profile_id == profile_id {
             self.activate_first_human_persona();

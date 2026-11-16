@@ -1,7 +1,9 @@
 //! Post entity lookup abstraction shared by feed renderers.
 
 use super::excerpt::excerpt_with;
-use crate::domain::Post;
+use crate::domain::post::{tokenize_post_body, BodyToken};
+use crate::domain::{Post, Profile};
+use std::rc::Rc;
 use std::borrow::Borrow;
 
 /// Trait abstracting post entity lookup and wikilink excerpt resolution.
@@ -9,6 +11,10 @@ use std::borrow::Borrow;
 pub trait PostLookup: Copy {
     fn find_post(&self, id: &str) -> Option<&Post>;
     fn resolve_wikilink(&self, target_id: &str) -> String;
+    /// The resolved author of `post` (collections without profiles answer the placeholder).
+    fn author_of(&self, post: &Post) -> &Profile;
+    /// Body tokens of `post` (cached by the store; collections tokenize on demand).
+    fn body_tokens(&self, post: &Post) -> Rc<[BodyToken]>;
 }
 
 /// Linear id search over any collection of owned or borrowed posts.
@@ -34,6 +40,14 @@ macro_rules! impl_collection_lookup {
             fn resolve_wikilink(&self, target_id: &str) -> String {
                 excerpt_with(target_id, |id| self.find_post(id))
             }
+            #[inline]
+            fn author_of(&self, _post: &Post) -> &Profile {
+                Profile::unknown()
+            }
+            #[inline]
+            fn body_tokens(&self, post: &Post) -> Rc<[BodyToken]> {
+                tokenize_post_body(&post.content).into()
+            }
         }
     )*};
 }
@@ -53,5 +67,16 @@ impl PostLookup for &crate::state::AppState {
     #[inline]
     fn resolve_wikilink(&self, target_id: &str) -> String {
         self.resolve_wikilink_fast(target_id)
+    }
+    #[inline]
+    fn author_of(&self, post: &Post) -> &Profile {
+        crate::state::AppState::author_of(self, post)
+    }
+    #[inline]
+    fn body_tokens(&self, post: &Post) -> Rc<[BodyToken]> {
+        match self.index.meta(post.id.as_str()) {
+            Some(meta) => Rc::clone(&meta.tokens),
+            None => tokenize_post_body(&post.content).into(),
+        }
     }
 }

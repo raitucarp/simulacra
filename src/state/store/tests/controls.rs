@@ -31,7 +31,7 @@ fn delete_post_takes_its_instant_reposts_but_keeps_replies() {
     assert!(state.get_post(&root_id).is_none());
     assert!(state.get_post(&repost_id).is_none(), "empty repost goes with its target");
     assert!(state.get_post(&reply_id).is_some(), "replies are kept");
-    assert_eq!(state.post_index_by_id.len(), state.posts.len(), "indices resynced");
+    assert_eq!(state.index.len(), state.posts.len(), "indices resynced");
 }
 
 #[test]

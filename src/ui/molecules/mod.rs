@@ -7,7 +7,7 @@ pub mod nav_button;
 pub mod network_card;
 pub mod persona_roster;
 pub mod post_composer;
-pub mod post_item;
+pub use crate::ui::features::post as post_item;
 pub mod topic_item;
 pub mod user_card;
 pub mod workspace_dropdown;

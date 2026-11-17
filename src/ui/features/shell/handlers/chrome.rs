@@ -5,6 +5,7 @@ use crate::i18n::Language;
 use crate::state::NavigationTab;
 use crate::ui::features::feed::DEFAULT_FEED_WINDOW_SIZE;
 use crate::ui::features::sidebar_right::RightSidebarTab;
+use crate::ui::responsive::LayoutClass;
 use chrono::NaiveDate;
 use gpui_kit::*;
 
@@ -21,8 +22,19 @@ impl AppView {
         cx.notify();
     }
 
-    pub(crate) fn toggle_right_sidebar(&mut self, _: &mut Window, cx: &mut Context<Self>) {
-        self.chrome.is_right_sidebar_open = !self.chrome.is_right_sidebar_open;
+    /// Shows or hides the right panel: its drawer in the compact layout, else its column.
+    pub(crate) fn toggle_right_sidebar(&mut self, window: &mut Window, cx: &mut Context<Self>) {
+        let chrome = &mut self.chrome;
+        if LayoutClass::of_window(window, &self.theme).is_compact() {
+            chrome.is_right_drawer_open = !chrome.is_right_drawer_open;
+        } else {
+            chrome.is_right_sidebar_open = !chrome.is_right_sidebar_open;
+        }
+        cx.notify();
+    }
+
+    pub(crate) fn close_right_drawer(&mut self, _: &mut Window, cx: &mut Context<Self>) {
+        self.chrome.is_right_drawer_open = false;
         cx.notify();
     }
 

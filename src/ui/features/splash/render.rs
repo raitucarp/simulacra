@@ -1,33 +1,32 @@
-//! Splash visuals: a bare title bar (drag zone and window controls), the brand mark, the app
-//! name and tagline, Mnemo beside the progress line and stage label, and the version.
+//! Splash visuals: the brand mark, the app name and tagline, Mnemo beside the progress line
+//! and stage label, and the version. The whole window is a drag area (it has no title bar).
 
-use super::{AppRoot, SplashPhase};
+use super::{SplashPhase, SplashView};
 use crate::theme::ThemeTokens;
-use crate::ui::features::title_bar::render_window_controls;
 use crate::ui::illustration::{GuidePose, Illustration, IllustrationKind};
 use gpui_kit::*;
 use rust_i18n::t;
 
 /// Brand mark template (trait-card canvas, see `assets/illustrations/STYLE.md`).
 const BRAND_MARK: &str = "illustrations/splash/brand.svg";
-/// Element id of the splash overlay (also keys its fade animation).
+/// Element id of the splash content (also keys its fade animation).
 const SPLASH_ID: &str = "app-splash";
 /// Version shown under the splash.
 const APP_VERSION: &str = env!("CARGO_PKG_VERSION");
 
-impl AppRoot {
-    /// The full-window splash, fading out once the shell is ready.
-    pub(super) fn render_splash(&self, window: &Window) -> AnyElement {
+impl SplashView {
+    /// The splash content, fading out once the main window is ready.
+    pub(super) fn render_splash(&self) -> AnyElement {
         let theme = &self.theme;
         let splash = div()
             .id(SPLASH_ID)
             .absolute()
             .inset_0()
-            .occlude()
-            .bg(theme.bg_app)
             .flex()
             .flex_col()
-            .child(title_bar(window.is_maximized(), theme))
+            .border(theme.border_width_hairline)
+            .border_color(theme.border)
+            .window_control_area(WindowControlArea::Drag)
             .child(self.center(theme))
             .child(version(theme));
         if self.phase != SplashPhase::Fading {
@@ -41,6 +40,7 @@ impl AppRoot {
     fn center(&self, theme: &ThemeTokens) -> Div {
         div()
             .flex_1()
+            .min_h_0()
             .flex()
             .flex_col()
             .items_center()
@@ -76,19 +76,6 @@ impl AppRoot {
             .child(Illustration::guide(GuidePose::Read).width(theme.splash_guide_size))
             .child(div().flex().flex_col().gap(theme.spacing_sm).child(track).child(label))
     }
-}
-
-/// Drag zone and window controls, so the window can be moved or closed while loading.
-fn title_bar(is_maximized: bool, theme: &ThemeTokens) -> Div {
-    div()
-        .w_full()
-        .h(theme.titlebar_height)
-        .flex_none()
-        .flex()
-        .items_center()
-        .px(theme.spacing_md)
-        .child(div().flex_1().h_full().window_control_area(WindowControlArea::Drag))
-        .child(render_window_controls(is_maximized, theme))
 }
 
 /// The app version, bottom center.

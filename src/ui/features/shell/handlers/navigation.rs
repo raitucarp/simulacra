@@ -35,6 +35,8 @@ impl AppView {
             // Default to selecting the currently active user persona when opening Persona Lab
             let active_id = self.state.active_profile_id.clone();
             self.select_lab_profile(active_id, window, cx);
+        } else if tab == NavigationTab::MindGraph {
+            self.graph.panel.update(cx, |panel, cx| panel.fit_to_view(cx));
         }
         cx.notify();
     }

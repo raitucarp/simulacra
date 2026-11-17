@@ -24,10 +24,14 @@ impl ThemeSettings {
         }
     }
 
-    /// Activates palette `id`, keeping edits made to the previous custom palette.
+    /// Activates palette `id`, keeping edits made to the previous custom palette, and makes
+    /// it the preferred palette of its mode.
     pub fn select(&mut self, id: &str) {
         self.commit_overrides();
         self.preset_id = id.to_string();
+        if let Some(mode) = self.palette(id).map(|palette| palette.mode) {
+            self.preferred.set(mode, id);
+        }
     }
 
     /// Copies the effective palette into a new custom palette named `name` and activates it.
@@ -76,7 +80,8 @@ impl ThemeSettings {
         if self.preset_id == id {
             self.overrides.clear();
             let fallback = removed.based_on.filter(|origin| self.palette(origin).is_some());
-            self.preset_id = fallback.unwrap_or_else(|| ThemeRegistry::global().default_palette().id.clone());
+            let fallback = fallback.unwrap_or_else(|| ThemeRegistry::global().default_palette().id.clone());
+            self.select(&fallback);
         }
     }
 }

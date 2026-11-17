@@ -2640,3 +2640,15 @@ forge.palette.thread_weaver.pitch: "Répond par une première publication suivie
 # Gallery search across categories and the blank custom tool name (flat keys).
 forge.palette.ui.search_all: "Résultats de toutes les catégories pour « %{query} »."
 forge.issue.unnamed_tool: "outil sans nom"
+
+# sb A1
+# Splash warm-up stage, appearance mode (Dark / Light / System) and its title bar toggle.
+splash.stage.warming_up: "Préparation…"
+appearance.mode_title: "MODE D’APPARENCE"
+appearance.mode_hint: "Système suit le réglage clair ou sombre de votre ordinateur et change avec lui."
+appearance.mode_dark: "Sombre"
+appearance.mode_light: "Clair"
+appearance.mode_system: "Système"
+appearance.preferred_dark: "Thème sombre"
+appearance.preferred_light: "Thème clair"
+appearance.toggle_tooltip: "Apparence : %{current} (cliquer pour %{next})"

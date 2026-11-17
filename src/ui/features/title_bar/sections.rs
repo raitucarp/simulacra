@@ -1,13 +1,15 @@
 //! Left brand breadcrumb and right action-button cluster of the title bar.
 
+use super::appearance_toggle::render_appearance_toggle;
 use super::window_controls::render_window_controls;
 use super::TitleBarAction;
 use crate::i18n::Language;
-use crate::theme::ThemeTokens;
+use crate::theme::{AppearanceMode, ThemeTokens};
 use crate::ui::icons::LucideIcon;
 use gpui_kit::base::StyledExt;
 use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::Icon;
+use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::{div, Div, ParentElement, Styled};
 use rust_i18n::t;
 
@@ -21,6 +23,7 @@ pub(super) struct ActionCallbacks {
     pub on_toggle_right: TitleBarAction,
     pub on_toggle_lang: TitleBarAction,
     pub on_toggle_settings: TitleBarAction,
+    pub appearance: Option<(AppearanceMode, TitleBarAction)>,
 }
 
 /// Compact ghost icon button that forwards clicks to a title bar action.
@@ -43,6 +46,7 @@ pub(super) fn render_brand_section(
     div()
         .flex()
         .items_center()
+        .min_w_0()
         .gap(theme.spacing_sm)
         .child(ghost_icon_button(TOGGLE_LEFT_SIDEBAR_ID, LucideIcon::PanelLeft, on_toggle_left))
         .child(render_breadcrumb(active_net_name, theme))
@@ -52,9 +56,11 @@ fn render_breadcrumb(active_net_name: String, theme: &ThemeTokens) -> Div {
     div()
         .flex()
         .items_center()
+        .min_w_0()
         .gap(theme.spacing_xs_plus)
         .child(
             div()
+                .flex_none()
                 .text_size(theme.font_size_label)
                 .font_bold()
                 .text_color(theme.text_primary)
@@ -62,12 +68,15 @@ fn render_breadcrumb(active_net_name: String, theme: &ThemeTokens) -> Div {
         )
         .child(
             div()
+                .flex_none()
                 .text_size(theme.font_size_label)
                 .text_color(theme.text_muted)
                 .child(Icon::new(LucideIcon::ChevronRight)),
         )
         .child(
             div()
+                .min_w_0()
+                .truncate()
                 .text_size(theme.font_size_label)
                 .font_medium()
                 .text_color(theme.accent_agent)
@@ -85,6 +94,7 @@ pub(super) fn render_action_cluster(
     let on_toggle_lang = callbacks.on_toggle_lang;
     div()
         .flex()
+        .flex_none()
         .items_center()
         .gap(theme.spacing_xs_plus)
         // Toggle Right Sidebar Inspector
@@ -104,6 +114,8 @@ pub(super) fn render_action_cluster(
                     on_toggle_lang(window, cx);
                 }),
         )
+        // Dark / Light / System toggle
+        .when_some(callbacks.appearance, |row, (mode, on_cycle)| row.child(render_appearance_toggle(mode, on_cycle)))
         // Global Settings Trigger
         .child(ghost_icon_button(SETTINGS_ID, LucideIcon::Settings, callbacks.on_toggle_settings))
         // Window Controls (Min, Max, Close)

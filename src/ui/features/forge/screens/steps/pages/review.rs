@@ -3,7 +3,7 @@
 
 use super::super::super::common::{card, heading, muted};
 use super::issue_text;
-use crate::state::forge::{can_save, ForgeKind, Severity, ValidationIssue};
+use crate::state::forge::{can_save, EngineSection, ForgeKind, Severity, ValidationIssue};
 use crate::theme::ThemeTokens;
 use crate::ui::features::forge::text::{tr, tr_count};
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
@@ -30,8 +30,13 @@ fn issue_row(at: usize, issue: &ValidationIssue, theme: &ThemeTokens, handle: &F
         Severity::Error => (LucideIcon::CircleAlert, theme.accent_danger),
         Severity::Warning => (LucideIcon::Info, theme.warning),
     };
-    let step = issue.step;
-    let fix = handle.act(move |this, window, cx| this.go_to(step, window, cx));
+    let (step, section) = (issue.step, EngineSection::of_field(issue.field));
+    let fix = handle.act(move |this, window, cx| {
+        if let Some(section) = section {
+            this.engine.section = section;
+        }
+        this.go_to(step, window, cx);
+    });
     div()
         .flex()
         .items_center()

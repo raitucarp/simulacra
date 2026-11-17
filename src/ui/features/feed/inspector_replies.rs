@@ -6,7 +6,7 @@ use super::inspector::InspectorContext;
 use super::inspector_header::render_grounding_callout;
 use crate::domain::Post;
 use crate::state::{Conversation, ReplyBranch};
-use crate::ui::features::post::ThreadlineStyle;
+use crate::ui::features::post::{render_extras_detail, ThreadlineStyle};
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::{Icon, Sizable};
@@ -58,6 +58,7 @@ fn focused_card(ctx: &InspectorContext<'_>, conversation: &Conversation<'_>) -> 
         .w_full()
         .bg(ctx.theme.bg_elevated)
         .child(ctx.callbacks.render_post(conversation.focused, ctx.state, ctx.theme, mode))
+        .children(render_extras_detail(&conversation.focused.extras, ctx.theme, ctx.callbacks.links.on_source.as_ref()))
         .into_any_element()
 }
 

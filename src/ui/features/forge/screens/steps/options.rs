@@ -50,6 +50,7 @@ impl ForgeView {
             ForgeStep::DailyLife => self.daily_life_page(handle),
             ForgeStep::Relationships => self.relationships_page(handle),
             ForgeStep::Grimoire => self.grimoire_page(handle),
+            ForgeStep::Engine => self.engine_page(handle),
             ForgeStep::Review => self.review_page(handle),
         }
     }

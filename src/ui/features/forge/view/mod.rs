@@ -7,12 +7,15 @@ mod actions;
 mod begin;
 mod describe;
 mod dismiss;
+mod engine;
+mod engine_probe;
 mod handle;
 mod hear;
 mod keys;
 mod lifecycle;
 mod state;
 
+pub use engine::{CallReply, EngineUi, Probe};
 pub use handle::ForgeHandle;
 pub use hear::HearStatus;
 pub use keys::{init_key_bindings, Dismiss, Redo, Undo, FORGE_KEY_CONTEXT};
@@ -41,6 +44,8 @@ pub enum ForgeEvent {
     GuideHidden(bool),
     /// Import this image as the draft's photo avatar, then call [`ForgeView::apply_avatar`].
     ImportPhoto(PathBuf),
+    /// Show Settings › AI (where credentials are stored) over the forge.
+    OpenAiSettings,
 }
 
 /// The Agent Forge entity.
@@ -66,6 +71,8 @@ pub struct ForgeView {
     pub(crate) hear: HearStatus,
     /// Whether the Grimoire's advanced settings are unfolded.
     pub(crate) grimoire_open: bool,
+    /// The Engine step's open section, sample answer and probes.
+    pub(crate) engine: EngineUi,
     pub(crate) focus: FocusHandle,
 }
 

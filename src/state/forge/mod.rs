@@ -13,6 +13,7 @@ mod class;
 pub mod describe;
 mod draft;
 mod edit;
+pub mod engine;
 pub mod fields;
 pub mod roll;
 mod step;
@@ -27,6 +28,7 @@ pub use class::{apply_class, preview_diff, set_class, ChangeValue, FieldChange};
 pub use describe::{describe_prompt, parse_described, DraftPatch, ParseError, PatchWarning};
 pub use draft::{normalize_handle, AgentDraft, AutosaveError, StepProgress, AUTOSAVE_VERSION, HISTORY_LIMIT};
 pub use edit::DraftEdit;
+pub use engine::EngineSection;
 pub use fields::{
     field_label_key, field_step, fields_for_step, AvatarField, CountField, HourField, OptionalTextField,
     ScoreField, TextField, ToggleField, TraitField, TraitSet, TraitSetValue, TraitSetVisitor, TraitValue,
@@ -34,7 +36,7 @@ pub use fields::{
 };
 pub use roll::{avatar_edits, avatar_for_body, body_edits, body_for_form, body_for_kind, roll_being, roll_into, roll_random, BeingScope};
 pub use step::{steps_for, ForgeKind, ForgeStep, FORGE_I18N_ROOT};
-pub use validate::{can_save, issues_for_step, suggest_handle, validate, IssueKind, Severity, ValidationIssue};
+pub use validate::{can_save, issues_for_step, suggest_handle, validate, validate_with, IssueKind, Severity, ValidationIssue};
 pub use voice::{voice_sample, voice_sample_for};
 
 #[cfg(test)]

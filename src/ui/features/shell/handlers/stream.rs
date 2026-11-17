@@ -1,7 +1,8 @@
 //! Stream navigation: feed tabs, reply expansion, and revealing freshly published posts.
 
 use super::super::view::AppView;
-use crate::domain::PostId;
+use crate::domain::post::{SourceKind, SourceRef};
+use crate::domain::{PostId, ProfileId};
 use crate::state::{feed_position, FeedTab, NavigationTab, WikilinkTarget};
 use gpui_kit::*;
 
@@ -57,6 +58,25 @@ impl AppView {
             Some(WikilinkTarget::Post(id)) => self.reveal_post(id, window, cx),
             Some(WikilinkTarget::Document(_)) => self.select_nav(NavigationTab::Knowledge, window, cx),
             None => {}
+        }
+    }
+
+    /// Opens what an agent post's source chip names: the vault (for a document), the post in
+    /// the stream, the profile in the roster, or the web page in the browser.
+    pub(crate) fn open_source(&mut self, source: SourceRef, window: &mut Window, cx: &mut Context<Self>) {
+        match source.kind {
+            SourceKind::VaultDoc => self.select_nav(NavigationTab::Knowledge, window, cx),
+            SourceKind::Post => self.reveal_post(PostId::from(source.id), window, cx),
+            SourceKind::Profile => {
+                let id = ProfileId::from(source.id);
+                let tab = match self.state.user_profiles.iter().find(|p| p.id == id) {
+                    Some(profile) if !profile.is_agent() => NavigationTab::PersonaLab,
+                    _ => NavigationTab::AgentLab,
+                };
+                self.select_nav(tab, window, cx);
+                self.select_lab_profile(id, window, cx);
+            }
+            SourceKind::Web => cx.open_url(&source.id),
         }
     }
 

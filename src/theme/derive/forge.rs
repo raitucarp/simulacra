@@ -22,7 +22,9 @@ pub(super) fn apply_forge_layout(t: &mut ThemeTokens) {
         forge_clock_label_size: px(18.0), forge_key_cap_min_width: px(52.0),
         // First-run welcome overlay
         onboarding_width: px(620.0), onboarding_art_size: px(112.0),
+        // Engine step: the "Test image" result and the sample-answer editor
+        forge_probe_image_size: px(220.0), forge_sample_height: px(180.0),
 
-        forge_disabled_opacity: 0.45, forge_backdrop_opacity: 0.35,
+        forge_disabled_opacity: 0.45, forge_backdrop_opacity: 0.35, post_failed_tool_opacity: 0.55,
     });
 }

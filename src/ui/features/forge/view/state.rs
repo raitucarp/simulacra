@@ -1,6 +1,7 @@
 //! Plain state records of the forge: what it was opened with, which screen shows, the start
 //! screen, Mnemo, and the transient notice.
 
+use crate::agent::credentials::CredentialStore;
 use crate::agent::{LlmSettings, PromptContext};
 use crate::domain::{ArchetypeClass, NetworkId, Profile};
 use crate::state::forge::{AgentDraft, ForgeKind};
@@ -18,6 +19,8 @@ pub struct ForgeContext {
     pub guide_hidden: bool,
     /// The active network's name and grounding sources, for compiled-prompt previews.
     pub prompt: PromptContext,
+    /// Stored keys, for the Engine step's pickers, readiness badges and probes.
+    pub credentials: CredentialStore,
 }
 
 /// How the forge was opened.

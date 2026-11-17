@@ -87,7 +87,7 @@ impl AppState {
 }
 
 fn default_settings() -> StoredSettings {
-    StoredSettings { llm: LlmSettings::default(), theme: ThemeSettings::default() }
+    StoredSettings { llm: LlmSettings::default(), theme: ThemeSettings::default(), credentials: Default::default() }
 }
 
 /// The persisted id when it still names an entity, else the first entity's id, else the default.

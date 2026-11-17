@@ -40,6 +40,15 @@ impl LlmSettings {
         !self.api_key.trim().is_empty()
     }
 
+    /// The model id, or the provider default when blank.
+    pub fn model_or_default(&self) -> &str {
+        if self.model.trim().is_empty() {
+            self.provider.default_model()
+        } else {
+            self.model.trim()
+        }
+    }
+
     /// Loads saved LLM settings from the SQLite database.
     pub fn load_from_db(db: &Database) -> Self {
         let mut settings = Self::default();

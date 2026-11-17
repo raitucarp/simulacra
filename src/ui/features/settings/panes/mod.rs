@@ -3,7 +3,7 @@
 mod ai;
 mod ai_fields;
 mod appearance;
-mod common;
+pub(super) mod common;
 mod engine;
 mod general;
 mod vault;

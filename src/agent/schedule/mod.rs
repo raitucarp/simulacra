@@ -28,7 +28,7 @@ mod window;
 #[cfg(test)]
 mod tests;
 
-pub use backoff::{backoff_delay, FailureCause, FailureGate, BACKOFF_BASE_MINUTES, BACKOFF_MAX_MINUTES};
+pub use backoff::{backoff_delay, FailureCause, FailureGate, FailureGates, BACKOFF_BASE_MINUTES, BACKOFF_MAX_MINUTES};
 pub use cadence::{cadence_rule, CadenceRule};
 pub use chronotype::{peak_window, posting_chance};
 pub use clock::{Clock, FixedClock, SystemClock};

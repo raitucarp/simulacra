@@ -3,6 +3,7 @@
 
 mod chrome;
 mod composer_modal;
+mod credentials;
 mod lab;
 mod navigation;
 mod networks;

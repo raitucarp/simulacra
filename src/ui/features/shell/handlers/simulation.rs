@@ -5,7 +5,10 @@
 //! its slot in the scheduler's generation queue when it finishes.
 
 use super::super::view::AppView;
-use crate::agent::{DialecticEngine, LlmClient, PromptContext, SimulationOutcome};
+use crate::agent::runtime::EnginePlan;
+use crate::agent::schedule::roll_percent;
+use crate::agent::tools::ToolContext;
+use crate::agent::{DialecticEngine, EngineJob, PromptContext, SimulationOutcome};
 use crate::domain::{AuthoredPost, NetworkId, Post, Profile, ProfileId};
 use gpui_kit::*;
 use tokio::sync::oneshot::error::RecvError;
@@ -47,9 +50,8 @@ impl AppView {
         cx: &mut Context<Self>,
     ) {
         let agent_id = agent.id.clone();
-        let client = LlmClient::new(self.state.llm_settings.clone());
-        let context = self.prompt_context(&network);
-        let rx = DialecticEngine::spawn_grounded_simulation(parent, agent, network, client, context);
+        let job = self.engine_job(agent, parent, network);
+        let rx = DialecticEngine::spawn_engine_simulation(job);
         cx.spawn_in(window, async move |entity, cx| {
             let outcome = rx.await;
             let _ = entity.update_in(cx, |this, window, cx| {
@@ -69,12 +71,17 @@ impl AppView {
     ) {
         self.scheduler.queue.complete(agent_id);
         match outcome {
-            Ok(SimulationOutcome { reply, llm_error }) => {
+            Ok(SimulationOutcome { reply, thread, llm_error, gate_key, image_error }) => {
                 match llm_error {
-                    Some(failure) => self.report_llm_failure(failure, window, cx),
-                    None => self.reset_llm_failures(),
+                    Some(failure) => self.report_llm_failure(&gate_key, failure, window, cx),
+                    None => self.scheduler.failures.reset(&gate_key),
                 }
-                self.insert_simulated_reply(reply, window, cx);
+                if let Some(err) = image_error {
+                    eprintln!("simulacra: image generation failed: {err}");
+                }
+                for post in std::iter::once(reply).chain(thread) {
+                    self.insert_simulated_reply(post, window, cx);
+                }
             }
             Err(_) => self.report_worker_failure(window, cx),
         }
@@ -105,6 +112,18 @@ impl AppView {
         if let Err(err) = self.state.insert_reply_after_parent(reply) {
             self.report_storage_failure(&err, window, cx);
         }
+    }
+
+    /// The agent's engine resolved into a job: its plan, a tool snapshot when it has tools,
+    /// and the image-chance roll.
+    fn engine_job(&self, agent: Profile, parent: AuthoredPost, network: NetworkId) -> EngineJob {
+        let engine = &agent.config.engine;
+        let plan = EnginePlan::resolve(engine, &self.state.llm_settings, &self.state.credentials, self.state.media_dir());
+        let tools = (!engine.tools.is_empty())
+            .then(|| ToolContext::capture(&network, &self.state.posts, &self.state.user_profiles, &self.state.documents));
+        let roll = roll_percent(self.scheduler.seed, agent.id.as_str(), self.scheduler.tick ^ self.state.posts.len() as u64);
+        let context = self.prompt_context(&network);
+        EngineJob { parent, agent, network, context, plan, tools, roll }
     }
 
     /// The network's name and grounding document titles, for the agent's system prompt.

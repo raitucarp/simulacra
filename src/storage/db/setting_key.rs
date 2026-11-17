@@ -42,6 +42,8 @@ setting_keys! {
     LlmEndpoint => "llm_endpoint",
     LlmTemperature => "llm_temperature",
     LlmMaxTokens => "llm_max_tokens",
+    /// JSON array of stored credentials (provider/service keys referenced by agents).
+    Credentials => "llm.credentials",
     /// Active palette id (bundled or custom).
     ThemePresetId => "theme.preset_id",
     /// Partial palette JSON applied over the active palette.

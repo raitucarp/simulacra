@@ -199,5 +199,6 @@ fn sample_post() -> crate::domain::Post {
         image_path: None,
         reposts_count: 0,
         is_reposted: false,
+        extras: Default::default(),
     }
 }

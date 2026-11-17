@@ -35,17 +35,17 @@ impl Default for AgentConfig {
             punctuation_habit: PunctuationHabit::EmDashAndSemicolon, emoji_usage: EmojiUsage::Never,
             typing_quirks: v::TYPING_QUIRKS.to_string(), signature_phrases: v::SIGNATURE_PHRASES.to_string(),
             avoided_words: v::AVOIDED_WORDS.to_string(),
-
             is_active: true, posting_cadence: PostingCadence::OnEveryNewPost, chronotype: HumanChronotype::TwilightContemplative,
             active_hours_start: v::ACTIVE_HOURS_START, active_hours_end: v::ACTIVE_HOURS_END, spontaneity_rate: v::SPONTANEITY_RATE,
             preferred_topics: v::PREFERRED_TOPICS.to_string(), mention_attitude: MentionAttitude::SocraticQuestioning,
             conflict_handling: ConflictHandlingStyle::DialecticalSynthesis,
             custom_mention_instruction: v::CUSTOM_MENTION_INSTRUCTION.to_string(),
-
             system_prompt: v::SYSTEM_PROMPT.to_string(), assembly_strategy: PromptAssemblyStrategy::FullHumanSynthesis,
             pre_post_reasoning: PrePostReasoningMode::EmbodiedHumanPerspective, prompt_template: v::PROMPT_TEMPLATE.to_string(),
             inject_identity_and_bio: true, inject_psychological_profile: true, inject_intelligence_profile: true,
             inject_linguistic_stylistics: true, inject_social_and_schedule: true, inject_network_grounding: true, avatar: None, archetype_class: None,
+            // --- p7 engine ---
+            engine: crate::domain::engine::EngineConfig::default(),
         }
     }
 }

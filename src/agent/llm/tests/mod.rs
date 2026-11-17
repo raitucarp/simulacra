@@ -1,3 +1,5 @@
+mod wire;
+
 use super::provider::PROVIDER_META;
 use super::*;
 

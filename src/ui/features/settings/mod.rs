@@ -4,6 +4,7 @@
 mod callbacks;
 mod consts;
 mod content;
+mod credentials;
 mod general_props;
 mod modal;
 mod panes;
@@ -16,6 +17,7 @@ pub use callbacks::{
     SelectTabCallback, ToggleSchedulerCallback,
 };
 pub use panes::{AppearanceEvent, AppearancePanel};
+pub use credentials::{CredentialEditorView, CredentialRowView, CredentialsPaneProps};
 pub use general_props::GeneralPaneProps;
 pub use modal::SettingsModal;
 pub use tabs::SettingsTab;

@@ -4,7 +4,7 @@ use crate::theme::ThemeTokens;
 use gpui_kit::{div, Div, FontWeight, IntoElement, ParentElement, SharedString, Styled};
 
 /// Uppercase muted bold section heading.
-pub(super) fn section_label(theme: &ThemeTokens, text: impl Into<SharedString>) -> Div {
+pub(in crate::ui::features::settings) fn section_label(theme: &ThemeTokens, text: impl Into<SharedString>) -> Div {
     div()
         .text_size(theme.font_size_label)
         .font_weight(FontWeight::BOLD)
@@ -13,12 +13,12 @@ pub(super) fn section_label(theme: &ThemeTokens, text: impl Into<SharedString>) 
 }
 
 /// Vertical section: a header element stacked above a body element.
-pub(super) fn section(header: impl IntoElement, body: impl IntoElement, theme: &ThemeTokens) -> Div {
+pub(in crate::ui::features::settings) fn section(header: impl IntoElement, body: impl IntoElement, theme: &ThemeTokens) -> Div {
     div().flex().flex_col().gap(theme.spacing_sm).child(header).child(body)
 }
 
 /// Bordered card surface laid out as a vertical stack (caller adds the gap).
-pub(super) fn card(theme: &ThemeTokens) -> Div {
+pub(in crate::ui::features::settings) fn card(theme: &ThemeTokens) -> Div {
     div()
         .p(theme.spacing_md_plus)
         .rounded(theme.radius_md)
@@ -30,22 +30,22 @@ pub(super) fn card(theme: &ThemeTokens) -> Div {
 }
 
 /// Horizontal row with content pushed to both ends.
-pub(super) fn spaced_row() -> Div {
+pub(in crate::ui::features::settings) fn spaced_row() -> Div {
     div().flex().items_center().justify_between()
 }
 
 /// Small muted explanatory paragraph.
-pub(super) fn muted_note(theme: &ThemeTokens, text: impl Into<SharedString>) -> Div {
+pub(in crate::ui::features::settings) fn muted_note(theme: &ThemeTokens, text: impl Into<SharedString>) -> Div {
     div().text_size(theme.font_size_hint).text_color(theme.text_muted).child(text.into())
 }
 
 /// Primary body-sized text line.
-pub(super) fn body_text(theme: &ThemeTokens, text: impl Into<SharedString>) -> Div {
+pub(in crate::ui::features::settings) fn body_text(theme: &ThemeTokens, text: impl Into<SharedString>) -> Div {
     div().text_size(theme.font_size_label).text_color(theme.text_primary).child(text.into())
 }
 
 /// Medium-weight title over a secondary subtitle in the given font family.
-pub(super) fn title_with_subtitle(
+pub(in crate::ui::features::settings) fn title_with_subtitle(
     theme: &ThemeTokens,
     title: impl IntoElement,
     subtitle: impl Into<SharedString>,
@@ -66,7 +66,7 @@ pub(super) fn title_with_subtitle(
 }
 
 /// Medium-weight primary field title.
-pub(super) fn field_title(theme: &ThemeTokens, text: impl IntoElement) -> Div {
+pub(in crate::ui::features::settings) fn field_title(theme: &ThemeTokens, text: impl IntoElement) -> Div {
     div()
         .text_size(theme.font_size_label)
         .font_weight(FontWeight::MEDIUM)
@@ -75,13 +75,13 @@ pub(super) fn field_title(theme: &ThemeTokens, text: impl IntoElement) -> Div {
 }
 
 /// Field title on the left with a muted caption hint on the right.
-pub(super) fn field_header(theme: &ThemeTokens, title: impl IntoElement, hint: String) -> Div {
+pub(in crate::ui::features::settings) fn field_header(theme: &ThemeTokens, title: impl IntoElement, hint: String) -> Div {
     spaced_row()
         .child(field_title(theme, title))
         .child(div().text_size(theme.font_size_2xs).text_color(theme.text_muted).child(hint))
 }
 
 /// Vertical field group (label + input + extras).
-pub(super) fn field_group(theme: &ThemeTokens) -> Div {
+pub(in crate::ui::features::settings) fn field_group(theme: &ThemeTokens) -> Div {
     div().flex().flex_col().gap(theme.spacing_xs_plus)
 }

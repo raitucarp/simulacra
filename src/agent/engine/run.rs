@@ -1,21 +1,18 @@
 //! Reply generation entry points: LLM (async, blocking, background thread) and heuristic.
 //!
 //! Every LLM path keeps the offline heuristic reply as a fallback, but never hides the
-//! failure: it is returned alongside the reply in a [`SimulationOutcome`].
+//! failure: it is returned alongside the reply in a [`SimulationOutcome`]. The background
+//! paths run through the per-agent engine runtime ([`super::job`]).
 
+use super::job::EngineJob;
 use super::outcome::SimulationOutcome;
-use super::reply::build_reply;
 use super::prompts::PromptContext;
+use super::reply::build_reply;
 use super::DialecticEngine;
-use crate::agent::llm::{LlmClient, LlmFailure};
+use crate::agent::llm::LlmClient;
+use crate::agent::runtime::{EnginePlan, GLOBAL_GATE_KEY};
 use crate::domain::{AuthoredPost, NetworkId, Post, Profile};
 use tokio::sync::oneshot;
-
-/// Name of the dedicated OS thread that runs background agent simulations.
-const AGENT_SIM_THREAD_NAME: &str = "simulacra-agent-sim";
-
-/// Generated text and the LLM failure that forced the heuristic fallback, if any.
-type TextOutcome = (String, Option<LlmFailure>);
 
 impl DialecticEngine {
     /// Asynchronously generates a persona reply using the configured LLM provider,
@@ -28,15 +25,15 @@ impl DialecticEngine {
     ) -> SimulationOutcome {
         let system_prompt = Self::persona_system_prompt(agent_profile);
         let user_prompt = Self::persona_user_prompt(parent_post, agent_profile);
-        let result = client.generate(&system_prompt, &user_prompt).await;
-        let text = Self::text_or_heuristic(result, client, parent_post, agent_profile);
-        Self::outcome(parent_post, agent_profile.clone(), network_id.clone(), text)
+        let (content, llm_error) = match client.generate(&system_prompt, &user_prompt).await {
+            Ok(text) => (text, None),
+            Err(raw) => (Self::generate_heuristic_text(parent_post, agent_profile), Some(client.describe_failure(&raw))),
+        };
+        let reply = build_reply(parent_post, agent_profile.clone(), network_id.clone(), content);
+        SimulationOutcome { reply, thread: Vec::new(), llm_error, gate_key: GLOBAL_GATE_KEY.to_string(), image_error: None }
     }
 
-    /// Spawns an asynchronous background simulation on a dedicated worker thread,
-    /// returning a oneshot receiver. This completely decouples LLM network latency
-    /// from the UI event loop. The sender is dropped (the receiver errors) only if
-    /// the worker thread cannot be spawned.
+    /// Spawns a classic (global model, free text) simulation on a worker thread.
     pub fn spawn_background_simulation(
         parent_post: AuthoredPost,
         agent_profile: Profile,
@@ -55,29 +52,19 @@ impl DialecticEngine {
         client: LlmClient,
         context: PromptContext,
     ) -> oneshot::Receiver<SimulationOutcome> {
-        let (tx, rx) = oneshot::channel();
-        let _ = std::thread::Builder::new()
-            .name(AGENT_SIM_THREAD_NAME.into())
-            .spawn(move || {
-                let system_prompt = Self::system_prompt_in(&agent_profile, &context);
-                let text = Self::generate_text_blocking(&parent_post, &agent_profile, &client, &system_prompt);
-                let _ = tx.send(Self::outcome(&parent_post, agent_profile, network_id, text));
-            });
-
-        rx
+        Self::spawn_engine_simulation(Self::classic_job(parent_post, agent_profile, network_id, client, context))
     }
 
-    /// Synchronously generates a persona reply using the configured LLM provider,
-    /// falling back to heuristic text (and reporting why) when the request fails.
+    /// Synchronously generates a classic persona reply, falling back to heuristic text
+    /// (and reporting why) when the request fails.
     pub fn generate_llm_response_sync(
         parent_post: &AuthoredPost,
         agent_profile: &Profile,
         network_id: &NetworkId,
-        client: &LlmClient,
+        client: LlmClient,
     ) -> SimulationOutcome {
-        let system_prompt = Self::persona_system_prompt(agent_profile);
-        let text = Self::generate_text_blocking(parent_post, agent_profile, client, &system_prompt);
-        Self::outcome(parent_post, agent_profile.clone(), network_id.clone(), text)
+        let job = Self::classic_job(parent_post.clone(), agent_profile.clone(), network_id.clone(), client, PromptContext::default());
+        Self::run_engine_job(job)
     }
 
     /// Generates an autonomous persona reply to a newly published thought (synchronous heuristic mode).
@@ -90,42 +77,8 @@ impl DialecticEngine {
         build_reply(parent_post, agent_profile.clone(), network_id.clone(), response_text)
     }
 
-    /// Runs the LLM request on a fresh current-thread Tokio runtime, falling back to the
-    /// heuristic text if the runtime cannot be built or the request fails.
-    fn generate_text_blocking(
-        parent_post: &AuthoredPost,
-        agent_profile: &Profile,
-        client: &LlmClient,
-        system_prompt: &str,
-    ) -> TextOutcome {
-        let user_prompt = Self::persona_user_prompt(parent_post, agent_profile);
-        let runtime = tokio::runtime::Builder::new_current_thread().enable_all().build();
-        let result = match runtime {
-            Ok(rt) => rt.block_on(client.generate(system_prompt, &user_prompt)),
-            Err(e) => Err(e.to_string()),
-        };
-        Self::text_or_heuristic(result, client, parent_post, agent_profile)
-    }
-
-    /// The LLM text on success; otherwise the heuristic text plus the described failure.
-    fn text_or_heuristic(
-        result: Result<String, String>,
-        client: &LlmClient,
-        parent_post: &AuthoredPost,
-        agent_profile: &Profile,
-    ) -> TextOutcome {
-        match result {
-            Ok(text) => (text, None),
-            Err(raw) => {
-                let failure = client.describe_failure(&raw);
-                (Self::generate_heuristic_text(parent_post, agent_profile), Some(failure))
-            }
-        }
-    }
-
-    /// Wraps generated text into a reply outcome threaded under `parent_post`.
-    fn outcome(parent_post: &AuthoredPost, agent: Profile, network_id: NetworkId, text: TextOutcome) -> SimulationOutcome {
-        let (content, llm_error) = text;
-        SimulationOutcome { reply: build_reply(parent_post, agent, network_id, content), llm_error }
+    /// A job for the classic engine: `client`, free text, no tools, no image.
+    fn classic_job(parent: AuthoredPost, agent: Profile, network: NetworkId, client: LlmClient, context: PromptContext) -> EngineJob {
+        EngineJob { parent, agent, network, context, plan: EnginePlan::from_client(client), tools: None, roll: 0 }
     }
 }

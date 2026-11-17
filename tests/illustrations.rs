@@ -11,7 +11,7 @@ use simulacra::domain::TraitOption;
 const ASSETS_DIR: &str = "assets";
 const ILLUSTRATIONS_DIR: &str = "assets/illustrations";
 const SAMPLE_THEME: &str = "assets/themes/simulacra-midnight.json";
-const PORTRAIT_FILLS: [(&str, &str); 2] = [("skin", "#e0ac7e"), ("hair", "#5b3a29")];
+const PORTRAIT_FILLS: [(&str, &str); 4] = [("skin", "#e0ac7e"), ("hair", "#5b3a29"), ("primary", "#b8bec6"), ("secondary", "#d9534f")];
 const ALLOWED_HEX: [&str; 2] = ["000", "fff"];
 const CARD_LIMIT_BYTES: usize = 3 * 1024;
 const WIDE_LIMIT_BYTES: usize = 6 * 1024;
@@ -19,12 +19,13 @@ const WIDE_KINDS: [&str; 2] = ["classes", "steps"];
 const FORBIDDEN_TAGS: [&str; 4] = ["<style", "<image", "<text", "<script"];
 
 /// Expected `viewBox` per top-level folder; anything else is a trait option card.
-const CANVASES: [(&str, &str); 6] = [
+const CANVASES: [(&str, &str); 7] = [
     ("steps", "0 0 320 120"),
     ("classes", "0 0 200 240"),
     ("guide", "0 0 128 128"),
     ("empty", "0 0 240 160"),
     ("portrait", "0 0 256 256"),
+    ("forms", "0 0 256 256"),
     ("", "0 0 160 120"),
 ];
 

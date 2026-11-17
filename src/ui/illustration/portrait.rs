@@ -13,8 +13,9 @@ pub const PORTRAIT_SOURCE_PREFIX: &str = "pcg/";
 pub const EMBLEM_SOURCE_PREFIX: &str = "emblem/";
 /// Root of a composed portrait (the shared 256-unit part canvas).
 const COMPOSED_ROOT: &str = r#"<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">"#;
-/// Group re-applying the part templates' root presentation attributes to each layer.
-const LAYER_GROUP_OPEN: &str = r#"<g fill="none" stroke-linecap="round" stroke-linejoin="round">"#;
+/// Group re-applying the part templates' root presentation attributes to each layer (closed
+/// after any per-layer attributes, e.g. a clip path or transform).
+const LAYER_GROUP_OPEN: &str = r#"<g fill="none" stroke-linecap="round" stroke-linejoin="round""#;
 const LAYER_GROUP_CLOSE: &str = "</g>";
 const SVG_OPEN: &str = "<svg";
 const SVG_CLOSE: &str = "</svg>";
@@ -32,9 +33,16 @@ pub fn layer_body(svg: &str) -> Option<&str> {
 
 /// One SVG stacking `bodies` bottom to top, each in its own presentation group.
 pub fn compose_layers<'a>(bodies: impl IntoIterator<Item = &'a str>) -> String {
+    compose_groups(bodies.into_iter().map(|body| (String::new(), body)))
+}
+
+/// [`compose_layers`] with extra attributes on each layer's group (`(attributes, body)`).
+pub fn compose_groups<'a>(layers: impl IntoIterator<Item = (String, &'a str)>) -> String {
     let mut out = String::from(COMPOSED_ROOT);
-    for body in bodies {
+    for (attributes, body) in layers {
         out.push_str(LAYER_GROUP_OPEN);
+        out.push_str(&attributes);
+        out.push(TAG_END);
         out.push_str(body);
         out.push_str(LAYER_GROUP_CLOSE);
     }

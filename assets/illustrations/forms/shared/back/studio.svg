@@ -1,0 +1,1 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M0 0 H256 V256 H0 Z" fill="{{elevated}}"/><path d="M100 0 H156 L232 256 H24 Z" fill="{{surface}}" fill-opacity=".18"/><ellipse cx="128" cy="232" rx="110" ry="18" fill="{{bg}}" fill-opacity=".25"/></svg>

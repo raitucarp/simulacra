@@ -1,0 +1,118 @@
+{
+  "kind": "object",
+  "stack": ["back", "aura", "body", "finish", "markings", "mouth", "eyes", "accessory"],
+  "layers": {
+    "back": {
+      "variants": ["plain", "dawn", "night", "grid", "waves", "studio"],
+      "dir": "shared"
+    },
+    "aura": {
+      "variants": ["none", "glow", "sparkles", "steam", "shine"],
+      "bare": [1, 3]
+    },
+    "body": {
+      "variants": ["tin_can", "book", "chair", "lamp", "clock", "mirror", "key", "teacup"]
+    },
+    "finish": {
+      "variants": ["none", "gloss", "rust", "worn", "patina"],
+      "clip": true,
+      "bare": [1, 3]
+    },
+    "markings": {
+      "variants": ["none", "label", "stripes", "polka", "stickers"],
+      "clip": true,
+      "bare": [1, 2]
+    },
+    "mouth": {
+      "variants": ["smile", "flat", "open", "grin", "ooh", "wavy", "none"],
+      "dir": "shared",
+      "anchor": true
+    },
+    "eyes": {
+      "variants": ["dot", "round", "happy", "sleepy", "wide", "wink", "glow", "none"],
+      "dir": "shared",
+      "anchor": true
+    },
+    "accessory": {
+      "variants": ["none", "monocle", "bow_tie", "glasses", "mustache"],
+      "anchor": true,
+      "bare": [1, 2]
+    }
+  },
+  "primary": [
+    {"key": "tin", "hex": "#b8bec6"},
+    {"key": "copper", "hex": "#c27c4e"},
+    {"key": "brass", "hex": "#c9a646"},
+    {"key": "porcelain", "hex": "#eceff1"},
+    {"key": "cherry", "hex": "#c0392b"},
+    {"key": "teal", "hex": "#2f8f8a"},
+    {"key": "navy", "hex": "#34495e"},
+    {"key": "oak", "hex": "#a0703c"}
+  ],
+  "secondary": [
+    {"key": "red", "hex": "#d9534f"},
+    {"key": "cream", "hex": "#f2e6c9"},
+    {"key": "cobalt", "hex": "#3b6fb6"},
+    {"key": "mint", "hex": "#7fc8a9"},
+    {"key": "gold", "hex": "#e0b84c"},
+    {"key": "charcoal", "hex": "#3a3a40"},
+    {"key": "rose", "hex": "#e58fa0"},
+    {"key": "walnut", "hex": "#6b4a2f"}
+  ],
+  "forms": {
+    "tin_can": {
+      "prefer": {
+        "primary": ["tin", "brass", "copper"],
+        "secondary": ["red", "cobalt", "cream", "mint"]
+      }
+    },
+    "book": {
+      "prefer": {
+        "primary": ["cherry", "navy", "teal", "oak"],
+        "secondary": ["gold", "cream"]
+      }
+    },
+    "chair": {
+      "anchor": [0, -30, 0.9],
+      "prefer": {
+        "primary": ["oak", "cherry", "teal"],
+        "secondary": ["walnut", "cream", "red"]
+      }
+    },
+    "lamp": {
+      "anchor": [0, -26, 0.9],
+      "prefer": {
+        "primary": ["porcelain", "teal", "cherry", "brass"],
+        "secondary": ["gold", "charcoal", "walnut"]
+      }
+    },
+    "clock": {
+      "anchor": [0, -2, 0.95],
+      "prefer": {
+        "primary": ["cherry", "teal", "navy", "brass"],
+        "secondary": ["gold", "cream", "charcoal"]
+      }
+    },
+    "mirror": {
+      "anchor": [0, -16, 1],
+      "prefer": {
+        "primary": ["porcelain", "tin"],
+        "secondary": ["gold", "walnut", "rose"]
+      }
+    },
+    "key": {
+      "anchor": [0, -38, 0.85],
+      "prefer": {
+        "primary": ["brass", "copper", "tin"],
+        "secondary": ["gold", "charcoal"]
+      }
+    },
+    "teacup": {
+      "anchor": [0, 6, 0.95],
+      "prefer": {
+        "primary": ["porcelain", "teal", "cherry"],
+        "secondary": ["rose", "cobalt", "gold", "mint"]
+      }
+    }
+  }
+}

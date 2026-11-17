@@ -1,0 +1,121 @@
+{
+  "kind": "element",
+  "stack": ["back", "aura", "body", "finish", "markings", "mouth", "eyes", "accessory"],
+  "layers": {
+    "back": {
+      "variants": ["plain", "dawn", "night", "grid", "waves", "studio"],
+      "dir": "shared"
+    },
+    "aura": {
+      "variants": ["none", "glow", "embers", "swirl", "rainbow"],
+      "bare": [1, 3]
+    },
+    "body": {
+      "variants": ["water", "fire", "wind", "stone", "light", "ice", "cloud", "sand"]
+    },
+    "finish": {
+      "variants": ["none", "shimmer", "radiant", "turbulent", "crystalline"],
+      "clip": true,
+      "bare": [1, 3]
+    },
+    "markings": {
+      "variants": ["none", "ripples", "sparks", "cracks", "swirls"],
+      "clip": true,
+      "bare": [1, 2]
+    },
+    "mouth": {
+      "variants": ["smile", "flat", "open", "grin", "ooh", "wavy", "none"],
+      "dir": "shared",
+      "anchor": true
+    },
+    "eyes": {
+      "variants": ["dot", "round", "happy", "sleepy", "wide", "wink", "glow", "none"],
+      "dir": "shared",
+      "anchor": true
+    },
+    "accessory": {
+      "variants": ["none", "crown", "scarf", "shades", "leaf"],
+      "anchor": true,
+      "bare": [1, 2]
+    }
+  },
+  "primary": [
+    {"key": "water", "hex": "#3d9be9"},
+    {"key": "aqua", "hex": "#4fd1c5"},
+    {"key": "ember", "hex": "#f26b1d"},
+    {"key": "gold", "hex": "#f5b82e"},
+    {"key": "stone", "hex": "#8d8a85"},
+    {"key": "frost", "hex": "#bfe6f5"},
+    {"key": "storm", "hex": "#6c7a89"},
+    {"key": "dune", "hex": "#e0c08c"}
+  ],
+  "secondary": [
+    {"key": "foam", "hex": "#e6f6ff"},
+    {"key": "flame", "hex": "#ffd23f"},
+    {"key": "ash", "hex": "#4a4a4f"},
+    {"key": "lichen", "hex": "#6f8f4e"},
+    {"key": "violet", "hex": "#9b7fd1"},
+    {"key": "coral", "hex": "#ff8a65"},
+    {"key": "ice", "hex": "#dff4ff"},
+    {"key": "umber", "hex": "#8a5a2b"}
+  ],
+  "forms": {
+    "water": {
+      "anchor": [0, 18, 1],
+      "prefer": {
+        "primary": ["water", "aqua"],
+        "secondary": ["foam", "ice"]
+      }
+    },
+    "fire": {
+      "anchor": [0, 8, 1],
+      "prefer": {
+        "primary": ["ember"],
+        "secondary": ["flame", "coral"]
+      }
+    },
+    "wind": {
+      "anchor": [-6, 0, 0.95],
+      "prefer": {
+        "primary": ["frost", "aqua", "storm"],
+        "secondary": ["foam", "ice", "violet"],
+        "mouth": ["ooh", "wavy"]
+      }
+    },
+    "stone": {
+      "anchor": [0, 10, 1],
+      "prefer": {
+        "primary": ["stone", "storm"],
+        "secondary": ["lichen", "ash", "umber"]
+      }
+    },
+    "light": {
+      "anchor": [0, -6, 1],
+      "prefer": {
+        "primary": ["gold", "frost"],
+        "secondary": ["flame", "foam"]
+      }
+    },
+    "ice": {
+      "anchor": [-12, 18, 0.82],
+      "prefer": {
+        "primary": ["frost", "aqua"],
+        "secondary": ["ice", "foam"]
+      }
+    },
+    "cloud": {
+      "anchor": [0, 14, 1],
+      "prefer": {
+        "primary": ["frost", "storm"],
+        "secondary": ["foam", "violet", "ice"]
+      }
+    },
+    "sand": {
+      "anchor": [0, 34, 0.9],
+      "prefer": {
+        "primary": ["dune", "gold"],
+        "secondary": ["umber", "coral"]
+      }
+    }
+  }
+}

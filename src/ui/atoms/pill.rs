@@ -15,7 +15,7 @@ pub fn render_obsidian_pill(target_id: &str, theme: &ThemeTokens) -> impl IntoEl
     div()
         .flex()
         .items_center()
-        .gap(theme.spacing_px3)
+        .gap(theme.inline_gap)
         .px(theme.spacing_xs)
         .py(theme.spacing_3xs)
         .rounded(theme.radius_xs)

@@ -45,7 +45,7 @@ fn render_feed_header(theme: &ThemeTokens) -> Div {
         t!("sidebar.sparks_feed_title").to_string(),
         theme,
     );
-    render_section_header(title, render_scroll_badge(theme)).px(theme.spacing_md)
+    render_section_header(title, render_scroll_badge(theme)).px(theme.panel_padding_compact)
 }
 
 /// Renders a scrollable feed of random / serendipitous thoughts from the database.
@@ -75,7 +75,7 @@ pub fn render_random_spark_feed_with_lookup<L: PostLookup>(
         .min_h_0()
         .flex()
         .flex_col()
-        .gap(theme.spacing_sm_plus)
+        .gap(theme.stack_gap)
         .child(render_feed_header(theme))
         .child(
             div()
@@ -84,7 +84,7 @@ pub fn render_random_spark_feed_with_lookup<L: PostLookup>(
                 .flex_1()
                 .min_h_0()
                 .overflow_y_scrollbar()
-                .px(theme.spacing_md)
+                .px(theme.panel_padding_compact)
                 .flex()
                 .flex_col()
                 .gap(theme.spacing_sm)

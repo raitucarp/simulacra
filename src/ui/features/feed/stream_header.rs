@@ -23,7 +23,7 @@ pub(crate) fn render_stream_header(
         .map(|(position, tab)| render_tab(theme, tab, position, tab == active, on_select.clone()));
     div()
         .w_full()
-        .px(theme.spacing_lg)
+        .px(theme.panel_padding)
         .h(theme.feed_header_height)
         .border_b(theme.border_width_hairline)
         .border_color(theme.border_subtle)

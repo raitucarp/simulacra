@@ -71,8 +71,8 @@ fn render_status_row(theme: &ThemeTokens) -> Div {
         .pt(theme.spacing_xs)
         .child(
             div()
-                .w(theme.spacing_xs)
-                .h(theme.spacing_xs)
+                .w(theme.dot_size_xs)
+                .h(theme.dot_size_xs)
                 .rounded(theme.radius_full)
                 .bg(theme.accent_agent),
         )
@@ -98,14 +98,14 @@ where
     div()
         .id(format!("ground-doc-card-{}", idx))
         .w_full()
-        .p(theme.spacing_lg)
+        .p(theme.card_padding)
         .rounded(theme.radius_lg)
         .border(theme.border_width_hairline)
         .border_color(theme.border)
         .bg(theme.bg_card)
         .flex()
         .flex_col()
-        .gap(theme.spacing_sm)
+        .gap(theme.stack_gap)
         .child(
             div()
                 .flex()

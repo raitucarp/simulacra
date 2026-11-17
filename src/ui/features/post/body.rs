@@ -113,7 +113,7 @@ fn push_text_lines(text: &str, theme: &ThemeTokens, elements: &mut Vec<AnyElemen
         let clean_line = line.trim_end_matches(CARRIAGE_RETURN);
         if index > 0 {
             let line_break = if clean_line.trim().is_empty() {
-                div().w_full().h(theme.spacing_sm)
+                div().w_full().h(theme.paragraph_break_height)
             } else {
                 div().w_full()
             };

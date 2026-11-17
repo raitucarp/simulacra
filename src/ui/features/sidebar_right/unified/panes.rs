@@ -28,7 +28,7 @@ pub(super) struct MindPaneParams<'a> {
 }
 
 fn padded_row(theme: &ThemeTokens) -> Div {
-    div().w_full().px(theme.spacing_md)
+    div().w_full().px(theme.panel_padding_compact)
 }
 
 /// Dot graph, cadence heatmap and spark feed.
@@ -39,7 +39,7 @@ pub(super) fn render_mind_cadence_pane(params: MindPaneParams<'_>, theme: &Theme
         .min_h_0()
         .flex()
         .flex_col()
-        .gap(theme.spacing_md)
+        .gap(theme.stack_gap)
         .child(padded_row(theme).child(render_mini_graph(params.graph, params.on_open_graph, theme)))
         .child(padded_row(theme).child(render_clickable_heatmap(
             HeatmapParams {
@@ -53,7 +53,7 @@ pub(super) fn render_mind_cadence_pane(params: MindPaneParams<'_>, theme: &Theme
 }
 
 fn divided_block(theme: &ThemeTokens) -> Div {
-    div().w_full().pb(theme.spacing_md_plus).border_b(theme.border_width_hairline).border_color(theme.border)
+    div().w_full().pb(theme.stack_gap).border_b(theme.border_width_hairline).border_color(theme.border)
 }
 
 fn render_search_box(search_input: &Entity<InputState>, theme: &ThemeTokens) -> Div {
@@ -80,18 +80,18 @@ pub(super) fn render_vault_telemetry_pane(
         .flex_1()
         .min_h_0()
         .overflow_y_scrollbar()
-        .px(theme.spacing_md)
-        .pb(theme.spacing_md)
+        .px(theme.panel_padding_compact)
+        .pb(theme.panel_padding_compact)
         .flex()
         .flex_col()
-        .gap(theme.spacing_md)
+        .gap(theme.stack_gap)
         .child(render_search_box(search_input, theme))
         .child(divided_block(theme).child(render_knowledge_card(doc_count, on_import, theme)))
         .child(
             divided_block(theme)
                 .flex()
                 .flex_col()
-                .gap(theme.spacing_sm_plus)
+                .gap(theme.stack_gap)
                 .child(render_popular_tags_title(theme))
                 .child(render_trending_list(trending, theme)),
         )

@@ -82,9 +82,9 @@ pub(super) fn render_month_row(heatmap: &ActivityHeatmap, theme: &ThemeTokens) -
     let slots = (0..HEATMAP_WEEKS).map(|week| {
         let label = labels.iter().find(|l| l.week == week).map(|l| month_label(l.month));
         cell_slot(theme)
-            .h(theme.spacing_md)
+            .h(theme.heatmap_month_row_height)
             .relative()
-            .when_some(label, |slot, text| slot.child(slot_label(text, theme.spacing_md, theme)))
+            .when_some(label, |slot, text| slot.child(slot_label(text, theme.heatmap_month_row_height, theme)))
     });
     div()
         .w_full()

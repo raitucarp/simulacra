@@ -56,7 +56,7 @@ pub(crate) fn render_link_preview(post_id: &str, link_url: &str, theme: &ThemeTo
     div()
         .id(format!("{LINK_PREVIEW_ID_PREFIX}{post_id}"))
         .w_full()
-        .p(theme.spacing_md)
+        .p(theme.card_padding)
         .rounded(theme.radius_md)
         .bg(theme.bg_card)
         .border(theme.border_width_hairline)

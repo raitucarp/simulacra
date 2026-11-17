@@ -70,7 +70,7 @@ impl ForgeView {
             .id(PREVIEW_ID)
             .max_h(theme.prompt_preview_height)
             .overflow_y_scrollbar()
-            .p(theme.spacing_md)
+            .p(theme.card_padding)
             .rounded(theme.radius_md)
             .bg(theme.bg_app)
             .border(theme.border_width_hairline)

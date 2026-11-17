@@ -28,7 +28,7 @@ impl ForgeView {
         div()
             .flex()
             .flex_col()
-            .gap(theme.spacing_lg)
+            .gap(theme.section_gap)
             .child(
                 card(theme)
                     .child(heading(tr(IDENTITY_KEY), theme))

@@ -42,12 +42,12 @@ pub(super) fn render_section_header(title: Div, badge: impl IntoElement) -> Div 
 pub(super) fn render_divided_section(theme: &ThemeTokens) -> Div {
     div()
         .w_full()
-        .pb(theme.spacing_lg)
+        .pb(theme.stack_gap)
         .border_b(theme.border_width_hairline)
         .border_color(theme.border)
         .flex()
         .flex_col()
-        .gap(theme.spacing_sm_plus)
+        .gap(theme.stack_gap)
 }
 
 /// Small hover-tinted mono badge (padding `px_2 py_0p5`) with an accent text color.

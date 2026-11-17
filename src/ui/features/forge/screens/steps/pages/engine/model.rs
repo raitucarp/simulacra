@@ -50,7 +50,7 @@ impl ForgeView {
             TextModel::UseGlobal => self.global_card(),
             TextModel::Own(own) => self.own_model_card(own, handle),
         };
-        div().flex().flex_col().gap(theme.spacing_lg).child(head).child(body)
+        div().flex().flex_col().gap(theme.section_gap).child(head).child(body)
     }
 
     /// What "use the global model" means right now.
@@ -86,7 +86,7 @@ impl ForgeView {
             }
         });
         card(theme)
-            .gap(theme.spacing_lg)
+            .gap(theme.section_gap)
             .child(self.engine_field("engine_provider", providers))
             .child(self.engine_field("engine_model", div().flex().flex_col().gap(theme.spacing_xs).child(model_input).child(self.model_presets(model, handle))))
             .child(self.engine_field("engine_sampling", self.sampling(model, handle)))

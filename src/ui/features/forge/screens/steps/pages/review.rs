@@ -52,7 +52,7 @@ impl ForgeView {
         div()
             .flex()
             .flex_col()
-            .gap(theme.spacing_lg)
+            .gap(theme.section_gap)
             .child(self.trading_card())
             .child(self.issue_list(handle))
             .child(self.bring_to_life_panel(handle))

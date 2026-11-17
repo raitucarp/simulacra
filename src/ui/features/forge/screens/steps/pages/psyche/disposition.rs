@@ -22,7 +22,7 @@ impl ForgeView {
         div()
             .flex()
             .flex_col()
-            .gap(self.theme.spacing_lg)
+            .gap(self.theme.section_gap)
             .child(self.trait_card(BONDS_KEY, &BONDS, handle))
             .child(self.trait_card(VALUES_KEY, &VALUES, handle).child(self.text_row(VALUES_TEXT, handle)))
             .child(self.trait_card(WEATHER_KEY, &WEATHER, handle).child(self.text_row(WEATHER_TEXT, handle)))

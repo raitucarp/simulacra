@@ -20,7 +20,7 @@ pub(in crate::ui::features::settings) fn section(header: impl IntoElement, body:
 /// Bordered card surface laid out as a vertical stack (caller adds the gap).
 pub(in crate::ui::features::settings) fn card(theme: &ThemeTokens) -> Div {
     div()
-        .p(theme.spacing_md_plus)
+        .p(theme.card_padding)
         .rounded(theme.radius_md)
         .bg(theme.bg_card)
         .border(theme.border_width_hairline)

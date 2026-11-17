@@ -16,7 +16,7 @@ pub(super) fn apply_shell_layout(t: &mut ThemeTokens) {
     });
 }
 
-/// Navigation indicators, workspace and language popovers, and avatar initial thresholds.
+/// Navigation indicators, workspace and language popovers, avatar initial thresholds and dots.
 pub(super) fn apply_chrome_layout(t: &mut ThemeTokens) {
     set_tokens!(t {
         nav_icon_slot_width: px(20.0), nav_active_dot_size: px(6.0), workspace_dot_size: px(8.0),
@@ -24,6 +24,8 @@ pub(super) fn apply_chrome_layout(t: &mut ThemeTokens) {
         workspace_popover_width: px(260.0), language_popover_right: px(100.0),
         language_popover_width: px(220.0),
         avatar_initial_small_max: px(24.0), avatar_initial_medium_max: px(36.0),
+        // Status and legend dots, and the round dismiss button of a filter chip
+        dot_size_xs: px(4.0), dot_size_sm: px(8.0), chip_dismiss_size: px(16.0),
     });
 }
 

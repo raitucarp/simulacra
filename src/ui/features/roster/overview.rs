@@ -71,17 +71,17 @@ pub(super) fn render_overview(profile: &Profile, params: &RosterParams<'_>, call
     });
     let card = div()
         .w(theme.forge_trading_card_width)
-        .p(theme.spacing_xl)
+        .p(theme.panel_padding)
         .flex()
         .flex_col()
         .items_center()
-        .gap(theme.spacing_lg)
+        .gap(theme.section_gap)
         .rounded(theme.radius_xl)
         .bg(theme.bg_card)
         .border(theme.border_width_hairline)
         .border_color(theme.border_subtle)
         .child(identity(profile, active_persona, theme))
         .children(bio)
-        .child(actions(profile, callbacks).gap(theme.spacing_sm));
-    div().id(OVERVIEW_ID).flex_1().h_full().overflow_y_scrollbar().p(theme.spacing_2xl).flex().items_start().justify_center().child(card)
+        .child(actions(profile, callbacks).gap(theme.control_gap));
+    div().id(OVERVIEW_ID).flex_1().h_full().overflow_y_scrollbar().p(theme.panel_padding).flex().items_start().justify_center().child(card)
 }

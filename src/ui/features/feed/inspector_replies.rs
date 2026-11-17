@@ -94,7 +94,7 @@ fn replies_toggle(ctx: &InspectorContext<'_>, conversation: &Conversation<'_>) -
         .label(label)
         .on_click(move |_, window, cx| on_toggle(window, cx));
     let theme = ctx.theme;
-    Some(div().w_full().px(theme.spacing_lg).py(theme.spacing_sm).child(button).into_any_element())
+    Some(div().w_full().px(theme.panel_padding).py(theme.spacing_sm).child(button).into_any_element())
 }
 
 /// Whether the collapsed preview would hide any of the replies shown now.

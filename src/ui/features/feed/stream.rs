@@ -105,7 +105,7 @@ pub(crate) fn render_stream_list(
         .min_h_0()
         .overflow_hidden()
         .when(is_empty, |this| {
-            this.p(theme.spacing_2xl).flex().items_center().justify_center().child(
+            this.p(theme.panel_padding).flex().items_center().justify_center().child(
                 div()
                     .text_size(theme.font_size_sm)
                     .text_color(theme.text_muted)

@@ -28,16 +28,16 @@ impl ForgeView {
         let theme = &self.theme;
         let cards = |title_key: &str, fields: &[TraitField]| {
             let blocks: Vec<Div> = fields.iter().map(|&field| self.trait_block(field, handle)).collect();
-            card(theme).gap(theme.spacing_lg).child(heading(tr(title_key), theme)).children(blocks)
+            card(theme).gap(theme.section_gap).child(heading(tr(title_key), theme)).children(blocks)
         };
         let look = (SMALL_COLUMNS, theme.forge_option_card_width);
         div()
             .flex()
             .flex_col()
-            .gap(theme.spacing_lg)
+            .gap(theme.section_gap)
             .child(
                 card(theme)
-                    .gap(theme.spacing_lg)
+                    .gap(theme.section_gap)
                     .child(heading(tr(PERSUASION_KEY), theme))
                     .child(self.trait_grid(TraitField::RhetoricalMode, TraitGridLook::Illustrated, handle))
                     .child(muted(tr(DEVICES_HINT_KEY), theme))

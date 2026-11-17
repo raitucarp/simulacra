@@ -53,7 +53,7 @@ fn row(caps_key: &str, action_key: &str, theme: &ThemeTokens) -> Div {
 fn card(theme: &ThemeTokens) -> Div {
     div()
         .w(theme.forge_explainer_width)
-        .p(theme.spacing_md)
+        .p(theme.card_padding)
         .flex()
         .flex_col()
         .gap(theme.spacing_sm)

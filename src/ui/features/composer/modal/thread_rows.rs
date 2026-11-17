@@ -39,7 +39,7 @@ impl ComposerModalView {
         let can_add = self.drafts.last().is_some_and(|draft| draft.length > 0);
         div()
             .w_full()
-            .px(theme.spacing_lg)
+            .px(theme.panel_padding)
             .py(theme.spacing_md)
             .flex()
             .items_center()
@@ -70,6 +70,6 @@ impl ComposerModalView {
     /// Publish error or the reason posting is blocked, shown under the editors.
     pub(super) fn notice_row(&self, notice: String) -> Div {
         let theme = &self.theme;
-        render_notice(notice, theme).px(theme.spacing_lg).py(theme.spacing_xs)
+        render_notice(notice, theme).px(theme.panel_padding).py(theme.spacing_xs)
     }
 }

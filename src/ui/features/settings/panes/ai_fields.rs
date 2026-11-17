@@ -50,6 +50,6 @@ pub(super) fn render_model_section(
                 .gap(theme.spacing_sm)
                 .mt(theme.spacing_xs)
                 .child(div().text_size(theme.font_size_hint).text_color(theme.text_muted).child(t!("settings.presets_label").to_string()))
-                .child(div().flex().flex_wrap().gap(theme.spacing_xs_plus).children(preset_chips)),
+                .child(div().flex().flex_wrap().gap(theme.control_gap).children(preset_chips)),
         )
 }

@@ -79,7 +79,7 @@ impl PersonalityPanel {
             let on_score = self.on_score.clone();
             ScoreSlider::new(field, &self.cfg, theme, move |value, w, cx| on_score((field, value), w, cx)).budgeted(balanced)
         });
-        card(theme).gap(theme.spacing_lg).child(heading(tr(title_key), theme)).child(muted(tr(hint_key), theme)).children(sliders)
+        card(theme).gap(theme.section_gap).child(heading(tr(title_key), theme)).child(muted(tr(hint_key), theme)).children(sliders)
     }
 }
 
@@ -91,7 +91,7 @@ impl RenderOnce for PersonalityPanel {
         div()
             .flex()
             .flex_col()
-            .gap(self.theme.spacing_lg)
+            .gap(self.theme.section_gap)
             .child(self.budget_card(balanced, mode))
             .child(self.slider_card(BIG_FIVE_KEY, BIG_FIVE_HINT_KEY, &BIG_FIVE, balanced))
             .child(self.slider_card(HEXACO_KEY, HEXACO_HINT_KEY, &HEXACO, balanced))

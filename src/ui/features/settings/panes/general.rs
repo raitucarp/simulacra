@@ -19,7 +19,7 @@ pub(in crate::ui::features::settings) fn render_general_pane(
     div()
         .flex()
         .flex_col()
-        .gap(theme.spacing_xl)
+        .gap(theme.section_gap)
         .child(render_engine_section(theme, &mut props))
         .child(render_storage_section(theme, &props.db_path))
         .child(render_locale_section(theme, props.language_label))
@@ -49,7 +49,7 @@ fn render_locale_section(theme: &ThemeTokens, language_label: &str) -> Div {
     section(
         section_label(theme, t!("settings.locale_title").to_string()),
         div()
-            .p(theme.spacing_md)
+            .p(theme.card_padding)
             .rounded(theme.radius_md)
             .bg(theme.bg_card)
             .border(theme.border_width_hairline)

@@ -42,12 +42,12 @@ impl ForgeView {
         let grid = self.engine_cards("output", (Some(kind), &OutputKind::ALL), handle, mutate::set_output_kind);
         let head = card(theme).child(self.engine_field("engine_output", grid)).children(option_line(kind, theme));
         let Some(structured) = self.engine().structured() else {
-            return div().flex().flex_col().gap(theme.spacing_lg).child(head);
+            return div().flex().flex_col().gap(theme.section_gap).child(head);
         };
         div()
             .flex()
             .flex_col()
-            .gap(theme.spacing_lg)
+            .gap(theme.section_gap)
             .child(head)
             .child(self.schema_card(structured, handle))
             .child(self.mapping_card(&structured.mapping, handle))
@@ -63,7 +63,7 @@ impl ForgeView {
         let presets = IllustratedOptionGrid::new(engine_id("preset"), Some(output.preset), theme, move |p, w, cx| pick(p, w, cx));
         let schema = self.engine_input("schema", &output.schema, (SECTION, handle), mutate::edit_schema);
         card(theme)
-            .gap(theme.spacing_lg)
+            .gap(theme.section_gap)
             .child(self.engine_field("engine_schema_preset", presets))
             .children(option_line(output.preset, theme))
             .child(self.engine_field("engine_schema", schema.multiline(CODE_ROWS.0, CODE_ROWS.1)))

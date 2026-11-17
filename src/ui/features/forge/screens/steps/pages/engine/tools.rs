@@ -40,7 +40,7 @@ impl ForgeView {
         });
         let customs = granted.contains(ToolKind::CustomHttp).then(|| self.custom_tools_card(handle));
         let steps = (!granted.is_empty()).then(|| self.steps_card(engine.max_tool_steps, handle));
-        div().flex().flex_col().gap(theme.spacing_lg).child(head).children(search).children(customs).children(steps)
+        div().flex().flex_col().gap(theme.section_gap).child(head).children(search).children(customs).children(steps)
     }
 
     fn search_card(&self, search: &WebSearchConfig, handle: &ForgeHandle) -> Div {

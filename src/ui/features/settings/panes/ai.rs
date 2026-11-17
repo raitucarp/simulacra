@@ -31,7 +31,7 @@ pub(in crate::ui::features::settings) fn render_ai_pane(
     div()
         .flex()
         .flex_col()
-        .gap(theme.spacing_lg)
+        .gap(theme.section_gap)
         // 1. Provider Grid Header & Selection
         .child(render_provider_section(theme, active_provider, row1_buttons, row2_buttons))
         // 2. API Key Configuration

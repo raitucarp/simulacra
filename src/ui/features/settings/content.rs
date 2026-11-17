@@ -31,7 +31,7 @@ pub(super) fn render_content_pane(
         .flex_col()
         .child(header)
         // Scrollable Tab Body
-        .child(div().flex_1().overflow_y_scrollbar().p(theme.spacing_2xl).child(tab_content))
+        .child(div().flex_1().overflow_y_scrollbar().p(theme.panel_padding).child(tab_content))
         .child(footer)
 }
 
@@ -43,7 +43,7 @@ pub(super) fn render_content_header(
 ) -> Div {
     div()
         .h(theme.settings_header_height)
-        .px(theme.spacing_2xl)
+        .px(theme.panel_padding)
         .border_b(theme.border_width_hairline)
         .border_color(theme.border)
         .flex()
@@ -81,7 +81,7 @@ pub(super) fn render_footer_bar(
 ) -> Div {
     div()
         .h(theme.modal_footer_height)
-        .px(theme.spacing_2xl)
+        .px(theme.panel_padding)
         .border_t(theme.border_width_hairline)
         .border_color(theme.border)
         .bg(theme.bg_elevated)

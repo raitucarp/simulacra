@@ -42,7 +42,7 @@ impl ForgeView {
     pub(in super::super) fn embodiment_page(&self, handle: &ForgeHandle) -> AnyElement {
         let theme = &self.theme;
         let body = self.draft.profile().config.embodiment;
-        let page = div().flex().flex_col().gap(theme.spacing_lg).child(self.kind_card(body, handle));
+        let page = div().flex().flex_col().gap(theme.section_gap).child(self.kind_card(body, handle));
         if body.is_human() {
             return page.into_any_element();
         }
@@ -104,6 +104,6 @@ impl ForgeView {
     fn fields_card(&self, title_key: &str, fields: &[TraitField], handle: &ForgeHandle) -> Div {
         let theme = &self.theme;
         let blocks: Vec<Div> = fields.iter().map(|&field| self.trait_block(field, handle)).collect();
-        card(theme).gap(theme.spacing_lg).child(heading(tr(title_key), theme)).children(blocks)
+        card(theme).gap(theme.section_gap).child(heading(tr(title_key), theme)).children(blocks)
     }
 }

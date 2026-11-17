@@ -49,8 +49,19 @@ theme_tokens! {
         // Root (rem) size handed to gpui-component, whose widgets size their text in rems
         font_size_root,
         // Micro-Spacing Tokens
-        spacing_3xs, spacing_2xs, spacing_px3, spacing_xs, spacing_sm, spacing_md, spacing_lg,
+        spacing_3xs, spacing_2xs, spacing_xs, spacing_sm, spacing_md, spacing_lg,
         spacing_xl, spacing_2xl,
+        // Semantic layout spacing: roles mapped onto the spacing grid, so they follow density
+        #[doc = "Content inset of a panel: Forge stage, options and gallery, settings, vault, roster overview, Mind Graph, dialogs."] panel_padding,
+        #[doc = "Inset of narrow rails and sidebars whose rows carry their own padding (shell sidebars, Forge rail, roster list)."] panel_padding_compact,
+        #[doc = "Gap between sections or cards stacked in a panel; pairs with `panel_padding`."] section_gap,
+        #[doc = "Gap between blocks stacked inside a section, card or sidebar (heading, hint, controls)."] stack_gap,
+        #[doc = "Gap between an icon and its label and other tight inline pairs."] inline_gap,
+        #[doc = "Inset of a card or tile surface; pairs with `stack_gap` inside it."] card_padding,
+        #[doc = "Gap between adjacent controls: buttons in a toolbar, chips in a strip, field and button."] control_gap,
+        #[doc = "Height of the blank line between paragraphs of post prose."] paragraph_break_height,
+        // Indicator dots, the chip dismiss button and the cadence heatmap month row
+        dot_size_xs, dot_size_sm, chip_dismiss_size, heatmap_month_row_height,
         // Radii Tokens
         radius_xs, radius_sm, radius_md, radius_lg, radius_xl, radius_full,
         // Border Widths
@@ -73,7 +84,7 @@ theme_tokens! {
         config_tab_height, trait_bar_height, prompt_preview_height,
         // Dense chrome ramps (type-scaled text and icons, density-scaled half steps)
         font_size_micro, font_size_hint, font_size_label, icon_size_xs, icon_size_sm, icon_size_md,
-        icon_size_lg, icon_size_xl, icon_size_2xl, spacing_xs_plus, spacing_sm_plus, spacing_md_plus,
+        icon_size_lg, icon_size_xl, icon_size_2xl, spacing_xs_plus, spacing_sm_plus,
         // Shell columns, sidebars, popovers, indicators and window-control corners
         left_sidebar_collapsed_width, left_sidebar_collapsed_min, left_sidebar_collapsed_max,
         left_sidebar_expanded_width, left_sidebar_expanded_min, left_sidebar_expanded_max,

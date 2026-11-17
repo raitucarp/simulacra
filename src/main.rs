@@ -2,7 +2,8 @@
 
 use gpui_kit::component::TitleBar;
 use gpui_kit::*;
-use simulacra::prelude::*;
+use simulacra::theme::ThemeTokens;
+use simulacra::ui::features::splash::AppRoot;
 
 rust_i18n::i18n!("locales", fallback = "en");
 
@@ -15,19 +16,19 @@ fn main() {
             KeyBinding::new("ctrl-enter", simulacra::ui::molecules::post_composer::SubmitPostDraft, Some("Input")),
             KeyBinding::new("cmd-enter", simulacra::ui::molecules::post_composer::SubmitPostDraft, Some("Input")),
         ]);
+        // Opens maximized; un-maximizing restores a centered window of the default size.
+        let tokens = ThemeTokens::default();
+        let restore = size(tokens.window_default_width, tokens.window_default_height);
         let window_options = WindowOptions {
             titlebar: Some(TitleBar::title_bar_options()),
             app_owns_titlebar_drag: true,
+            window_bounds: Some(WindowBounds::Maximized(Bounds::centered(None, restore, cx))),
             ..TitleBar::window_options()
         };
 
-        open_window(window_options, cx, |window, cx| {
-            let view = cx.new(|cx| AppView::new(window, cx));
-            // Kit widgets (buttons, inputs, popovers, menus) follow the persisted app theme.
-            let tokens = view.read(cx).theme.clone();
-            simulacra::theme::sync_kit_theme(&tokens, cx);
-            view
-        })
-        .expect("Failed to open Simulacra main window");
+        // The root view paints the splash first, then loads the vault and builds the shell
+        // over the next frames (it also keeps the kit theme in sync with the persisted one).
+        open_window(window_options, cx, |window, cx| cx.new(|cx| AppRoot::new(window, cx)))
+            .expect("Failed to open Simulacra main window");
     });
 }

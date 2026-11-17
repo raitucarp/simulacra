@@ -24,8 +24,19 @@ impl AppState {
     /// A vault that cannot be opened or read is never written to (no re-seeding over the
     /// user's data): the session runs on unsaved seed data and records `load_error`.
     pub fn with_db_path(path: impl AsRef<std::path::Path>) -> Self {
-        let loaded = Database::open(path).and_then(Vault::spawn).and_then(|vault| Self::load_from_db(&vault));
-        loaded.unwrap_or_else(Self::unsaved_after_failure)
+        Self::from_vault(Database::open(path).and_then(Vault::spawn))
+    }
+
+    /// Opens (creating and migrating if needed) the database at the default path: the first
+    /// step of a staged startup, which reads the theme from it before the rest loads.
+    pub fn open_default_database() -> Result<Database> {
+        Database::open(Database::prepare_default_path())
+    }
+
+    /// Loads the state from a started vault worker; a vault that failed to open or read
+    /// leaves the session on unsaved seed data with `load_error` set.
+    pub fn from_vault(vault: Result<Vault>) -> Self {
+        vault.and_then(|vault| Self::load_from_db(&vault)).unwrap_or_else(Self::unsaved_after_failure)
     }
 
     /// Seed data without persistence, carrying the reason the vault was unavailable.

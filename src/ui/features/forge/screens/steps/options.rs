@@ -19,7 +19,7 @@ impl ForgeView {
         let theme = &self.theme;
         div()
             .id(OPTIONS_ID)
-            .w(theme.forge_options_width)
+            .w_full()
             .flex_shrink_0()
             .h_full()
             .overflow_y_scrollbar()

@@ -16,11 +16,6 @@ impl AppView {
         cx.notify();
     }
 
-    pub(crate) fn toggle_left_sidebar(&mut self, _: &mut Window, cx: &mut Context<Self>) {
-        self.chrome.is_left_sidebar_collapsed = !self.chrome.is_left_sidebar_collapsed;
-        cx.notify();
-    }
-
     pub(crate) fn toggle_right_sidebar(&mut self, _: &mut Window, cx: &mut Context<Self>) {
         self.chrome.is_right_sidebar_open = !self.chrome.is_right_sidebar_open;
         cx.notify();

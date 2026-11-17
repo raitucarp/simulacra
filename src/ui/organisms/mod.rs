@@ -13,7 +13,7 @@ pub use crate::ui::features::vault as knowledge_vault_view;
 pub use app_title_bar::AppTitleBar;
 pub use composer_modal::{ComposerModalMode, ComposerModalView};
 pub use knowledge_vault_view::render_knowledge_vault_view;
-pub use left_sidebar::{render_left_sidebar, LeftSidebarParams, NewThreadCallback};
+pub use left_sidebar::{render_left_sidebar, LeftSidebarParams, SidebarCallbacks};
 pub use main_feed::{
     compute_stream_threadline_style, render_main_feed, FeedParams, DEFAULT_FEED_WINDOW_SIZE,
     FEED_WINDOW_INCREMENT,

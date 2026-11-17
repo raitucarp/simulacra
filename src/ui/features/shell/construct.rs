@@ -8,8 +8,10 @@ use super::scheduler_state::SchedulerState;
 use super::view::{AppView, ChromeState};
 use crate::i18n::Language;
 use crate::state::AppState;
+use crate::ui::features::command_palette::PaletteHost;
 use crate::ui::features::composer::ComposerModalPanel;
 use crate::ui::features::settings::AppearancePanel;
+use crate::ui::features::sidebar_left::SidebarState;
 use gpui_kit::*;
 
 impl AppView {
@@ -37,12 +39,11 @@ impl AppView {
             cx.subscribe_in(&composer_modal, window, Self::publish_composer_draft),
             graph_subscription,
             cx.subscribe_in(&appearance, window, Self::on_appearance_event),
-            Self::observe_own_changes(cx),
+            Self::observe_own_changes(cx), Self::observe_window_width(window, cx), Self::refocus_on_focus_loss(window, cx),
         ];
         let llm_inputs = LlmInputs::new(&state, window, cx);
-        let (lab, onboarding) = (LabState::new(&state), state.should_offer_onboarding());
-        let scheduler = SchedulerState::new(state.scheduler_enabled());
-
+        let (lab, onboarding, scheduler) = (LabState::new(&state), state.should_offer_onboarding(), SchedulerState::new(state.scheduler_enabled()));
+        let (sidebar, palette) = (SidebarState::load(state.db.as_ref(), window.viewport_size().width), PaletteHost::new(state.db.as_ref(), cx));
         let mut view = Self {
             theme: state.theme_tokens.clone(),
             state,
@@ -55,6 +56,7 @@ impl AppView {
             scheduler,
             graph,
             forge: None,
+            sidebar, palette,
             panels: ShellPanels::new(cx),
             _subscriptions: subscriptions,
         };
@@ -62,9 +64,8 @@ impl AppView {
         view
     }
 
-    /// Key bindings and the long-running tasks every window needs.
+    /// The long-running tasks every window needs (key bindings are the central keymap's).
     fn start_background_work(&mut self, window: &mut Window, cx: &mut Context<Self>) {
-        crate::ui::features::forge::view::init_key_bindings(cx);
         self.start_scheduler_heartbeat(window, cx);
         self.watch_vault_failures(window, cx);
     }

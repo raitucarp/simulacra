@@ -40,7 +40,7 @@ impl AppView {
             WorkspacePopover::new(
                 self.state.current_network().cloned(),
                 self.state.networks.clone(),
-                self.chrome.is_left_sidebar_collapsed,
+                self.is_left_rail(),
                 self.theme.clone(),
                 bind.with(Self::select_network),
                 bind.act(Self::dismiss_workspace),

@@ -2,24 +2,28 @@
 
 use super::super::binder::Binder;
 use super::super::view::AppView;
-use crate::ui::features::sidebar_left::{render_left_sidebar, LeftSidebarParams};
+use crate::ui::features::sidebar_left::{render_left_sidebar, LeftSidebarParams, SidebarCallbacks};
 use crate::ui::features::sidebar_right::{render_unified_right_sidebar, UnifiedRightSidebarParams};
 use gpui_kit::*;
 use std::rc::Rc;
 
 impl AppView {
-    /// Navigation, workspace switcher, members and persona switcher.
+    /// Network switcher, New menu, places, pinned / recent / sources / members and the footer.
     pub(in crate::ui::features::shell) fn left_sidebar(&self, bind: &Binder) -> impl IntoElement {
         render_left_sidebar(LeftSidebarParams {
             state: &self.state,
             theme: &self.theme,
+            sidebar: &self.sidebar,
             is_workspace_open: self.chrome.is_workspace_open,
-            is_collapsed: self.chrome.is_left_sidebar_collapsed,
-            on_toggle_workspace: bind.boxed_act(Self::toggle_workspace),
-            on_select_nav: bind.boxed(Self::select_nav),
-            on_new_thread: bind.boxed_act(Self::new_thread),
-            on_select_agent: Some(bind.boxed(Self::select_sidebar_agent)),
-            on_switch_persona: Some(bind.boxed_act(Self::switch_persona)),
+            shell_focus: self.palette.shell_focus.clone(),
+            callbacks: SidebarCallbacks {
+                on_select_nav: Rc::new(bind.with(Self::select_nav)),
+                on_command: Rc::new(bind.with(Self::run_command)),
+                on_open: Rc::new(bind.with(Self::open_nav_item)),
+                on_toggle_pin: Rc::new(bind.with(Self::toggle_pin)),
+                on_toggle_section: Rc::new(bind.with(Self::toggle_sidebar_section)),
+                on_toggle_show_all: Rc::new(bind.with(Self::toggle_sidebar_show_all)),
+            },
         })
     }
 

@@ -44,7 +44,7 @@ impl AppView {
         self.open_composer_modal(ComposerModalMode::NewThread, window, cx);
     }
 
-    /// Opens `agent_id` in the Agent Lab from the sidebar member list.
+    /// Opens `agent_id` in the Agent Lab (Mind Graph agent nodes).
     pub(crate) fn select_sidebar_agent(&mut self, agent_id: ProfileId, window: &mut Window, cx: &mut Context<Self>) {
         self.close_forge(window, cx);
         self.state.active_tab = NavigationTab::AgentLab;

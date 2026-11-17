@@ -2,6 +2,7 @@
 
 mod center;
 mod columns;
+mod navigation;
 mod overlays;
 mod settings;
 mod sidebars;
@@ -9,6 +10,7 @@ mod workspace;
 
 use super::binder::Binder;
 use super::view::AppView;
+use crate::ui::keymap::SHELL_KEY_CONTEXT;
 use crate::ui::render_stats;
 use gpui_kit::*;
 
@@ -16,8 +18,9 @@ use gpui_kit::*;
 const ROOT_STATS_NAME: &str = "AppView";
 
 impl Render for AppView {
-    fn render(&mut self, _window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
+    fn render(&mut self, window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
         render_stats::record(ROOT_STATS_NAME);
+        self.claim_idle_focus(window, cx);
         self.sync_composer_view(cx);
         self.sync_stream(cx);
         self.sync_mind_graph(cx);
@@ -30,6 +33,10 @@ impl Render for AppView {
             .h_full()
             .bg(self.theme.bg_app)
             .relative()
+            // Global shortcuts (the central keymap's `RunCommand`) reach the shell from anywhere
+            .key_context(SHELL_KEY_CONTEXT)
+            .track_focus(&self.palette.shell_focus)
+            .on_action(cx.listener(Self::on_run_command))
             .flex()
             .flex_col()
             .child(self.title_bar(&bind))
@@ -40,6 +47,8 @@ impl Render for AppView {
             .children(self.workspace_popover(&bind))
             .children(self.composer_modal_view(cx))
             .children(self.welcome_overlay(&bind))
+            .children(self.palette.palette.clone())
+            .children(self.shortcut_sheet(&bind))
     }
 }
 

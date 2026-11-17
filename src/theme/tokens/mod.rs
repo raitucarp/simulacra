@@ -122,6 +122,10 @@ theme_tokens! {
         onboarding_width, onboarding_art_size,
         // Agent Forge Engine step: the "Test image" result and the sample-answer editor
         forge_probe_image_size, forge_sample_height,
+        // sb A2: compact left navigation, its auto-rail breakpoint, the command palette and shortcut sheet
+        nav_row_height, nav_rail_button_size, nav_active_bar_width, nav_active_bar_height, sidebar_badge_size,
+        left_sidebar_rail_breakpoint, new_menu_width, palette_width, palette_results_max_height, palette_top_offset,
+        key_cap_min_width, shortcut_sheet_width, shortcut_sheet_max_height, shortcut_sheet_section_width,
     ],
     // Typography Hierarchy & Line Height; heatmap level opacities; graph dimming & curvature
     floats: [

@@ -16,7 +16,7 @@ impl AppView {
     fn left_column(&self) -> (&'static str, Pixels, Pixels, Pixels) {
         let forge = self.forge.is_some();
         let t = &self.theme;
-        if self.chrome.is_left_sidebar_collapsed {
+        if self.is_left_rail() {
             let id = if forge { LAYOUT_ID_FORGE_COLLAPSED } else { LAYOUT_ID_COLLAPSED };
             (id, t.left_sidebar_collapsed_width, t.left_sidebar_collapsed_min, t.left_sidebar_collapsed_max)
         } else {

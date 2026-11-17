@@ -12,10 +12,7 @@ fn main() {
         use gpui_kit::component as gpui_component;
         rust_i18n::extend!(gpui_component);
         init(cx);
-        cx.bind_keys([
-            KeyBinding::new("ctrl-enter", simulacra::ui::molecules::post_composer::SubmitPostDraft, Some("Input")),
-            KeyBinding::new("cmd-enter", simulacra::ui::molecules::post_composer::SubmitPostDraft, Some("Input")),
-        ]);
+        simulacra::ui::keymap::install_keymap(cx);
         // Opens maximized; un-maximizing restores a centered window of the default size.
         let tokens = ThemeTokens::default();
         let restore = size(tokens.window_default_width, tokens.window_default_height);

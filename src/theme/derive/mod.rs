@@ -7,6 +7,7 @@ mod accents;
 mod chrome;
 mod forge;
 mod metrics;
+mod navigation;
 mod panels;
 mod scales;
 mod spacing;
@@ -38,6 +39,7 @@ pub fn derive_tokens(
     chrome::apply_settings_layout(&mut t);
     forge::apply_forge_layout(&mut t);
     panels::apply_panel_layout(&mut t);
+    navigation::apply_navigation_layout(&mut t);
     surfaces::apply_surfaces(&mut t, palette);
     text::apply_text(&mut t, palette);
     accents::apply_accents(&mut t, palette);

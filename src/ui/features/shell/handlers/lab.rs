@@ -4,11 +4,13 @@ use super::super::view::AppView;
 use crate::domain::ProfileId;
 use crate::state::NavigationTab;
 use crate::ui::features::roster::LabMode;
+use crate::ui::features::sidebar_left::NavRef;
 use gpui_kit::*;
 
 impl AppView {
     /// Roster click: selects `profile_id`.
     pub(crate) fn lab_select_profile(&mut self, profile_id: ProfileId, window: &mut Window, cx: &mut Context<Self>) {
+        self.note_recent(NavRef::Profile(profile_id.clone()));
         self.select_lab_profile(profile_id, window, cx);
     }
 

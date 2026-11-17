@@ -1,0 +1,19 @@
+{
+  "order": 5,
+  "config": {
+    "rhetorical_mode": "Pathos",
+    "rhetorical_devices": [
+      "Metaphor",
+      "Hyperbole",
+      "Paradox"
+    ],
+    "stylistic_school": "Surrealist",
+    "semiotic_mode": "Ellipsis",
+    "sentence_structure": "StreamOfConsciousness",
+    "post_format": "Poem",
+    "lexical_fields": [
+      "Astronomy",
+      "Music"
+    ]
+  }
+}

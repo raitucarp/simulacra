@@ -2,7 +2,7 @@
 //! screen, Mnemo, and the transient notice.
 
 use crate::agent::{LlmSettings, PromptContext};
-use crate::domain::{ArchetypeClass, NetworkId, Profile};
+use crate::domain::{ArchetypeClass, NetworkId, Palette, PaletteCategory, Profile};
 use crate::state::forge::{AgentDraft, ForgeKind};
 
 /// Everything the forge needs to know about the rest of the app, captured when it opens.
@@ -66,12 +66,16 @@ pub enum DescribeStatus {
     Failed(String),
 }
 
-/// State of the "choose your class" screen.
+/// State of the "choose a palette" screen.
 #[derive(Debug, Clone)]
 pub struct StartState {
     pub kind: ForgeKind,
-    /// Class whose preview shows (hovered or clicked).
-    pub preview: Option<ArchetypeClass>,
+    /// Palette whose preview shows (hovered or clicked).
+    pub preview: Option<&'static Palette>,
+    /// Gallery shelf shown (`None`: every category).
+    pub category: Option<PaletteCategory>,
+    /// Gallery search text.
+    pub search: String,
     /// The class of the last dice roll, while its result shows.
     pub rolled: Option<ArchetypeClass>,
     /// Whether the describe panel is open.
@@ -85,6 +89,8 @@ impl StartState {
         Self {
             kind,
             preview: None,
+            category: None,
+            search: String::new(),
             rolled: None,
             describing: false,
             describe_text: String::new(),

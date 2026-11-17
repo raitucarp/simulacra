@@ -38,6 +38,13 @@ fn forge_keys() -> Vec<String> {
     for class in ArchetypeClass::ALL {
         keys.extend([class.label_key(), class.pitch_key(), class.description_key()]);
     }
+    for palette in crate::domain::Palette::all() {
+        keys.extend([palette.label_key(), palette.pitch_key()]);
+        keys.extend(palette.is_full().then(|| palette.description_key()));
+    }
+    keys.extend(crate::domain::PaletteCategory::ALL.iter().map(|category| category.label_key()));
+    keys.push(crate::domain::palette::category_label_key(crate::domain::palette::ALL_CATEGORIES_KEY));
+    keys.extend(engine_change_keys());
     keys.extend(ForgeKind::ALL.iter().map(|kind| kind.label_key()));
     keys.extend(mapped_fields().into_iter().map(|(path, _)| field_label_key(path)));
     keys.extend(IssueKind::ALL.iter().map(|kind| kind.message_key()));

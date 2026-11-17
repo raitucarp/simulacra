@@ -1,0 +1,13 @@
+{
+  "order": 4,
+  "config": {
+    "intelligence_style": "LateralDivergent",
+    "epistemic_stance": "DialecticalCritic",
+    "cognitive_pace": "RapidAssociative",
+    "fluid_intelligence": 90,
+    "crystallized_intelligence": 64,
+    "emotional_intelligence": 70,
+    "social_intelligence": 88,
+    "existential_intelligence": 58
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "order": 4,
+  "config": {
+    "engine": {
+      "tools": [
+        {
+          "tool": "web_search"
+        },
+        {
+          "tool": "web_fetch"
+        }
+      ],
+      "max_tool_steps": 6
+    }
+  }
+}

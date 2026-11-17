@@ -87,6 +87,8 @@ pub struct AgentConfig {
     #[serde(skip_serializing_if = "Option::is_none")] pub avatar: Option<AvatarMode>,
     #[doc = "Class the Agent Forge started them from (shown as a badge); absent in older JSON."]
     #[serde(skip_serializing_if = "Option::is_none")] pub archetype_class: Option<ArchetypeClass>,
+    #[doc = "Key of the full palette the Agent Forge started them from (shown as a badge); absent in older JSON."]
+    #[serde(skip_serializing_if = "Option::is_none")] pub palette: Option<String>,
 
     // --- p7 ontology ---
     #[doc = "The body: human, creature, plant, object, element, machine, place or abstraction (flattened keys)."]

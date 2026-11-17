@@ -1,0 +1,14 @@
+{
+  "order": 2,
+  "config": {
+    "code_switching": "MonolingualPure",
+    "grammar_style": "MinimalistLowercase",
+    "diction_register": "LiteraryPoetic",
+    "vocabulary_complexity": 68,
+    "sentence_length": "ShortPunchy",
+    "capitalization": "AllLowercase",
+    "punctuation_habit": "EllipsisContemplative",
+    "emoji_usage": "Never",
+    "typing_quirks": "writes everything in lowercase; line breaks instead of commas."
+  }
+}

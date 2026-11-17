@@ -1,0 +1,12 @@
+{
+  "order": 1,
+  "config": {
+    "engine": {
+      "output": {
+        "format": "free_text"
+      },
+      "tools": [],
+      "max_tool_steps": 1
+    }
+  }
+}

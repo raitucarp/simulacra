@@ -3,13 +3,14 @@
 
 mod options;
 mod pages;
+mod palette_strip;
 mod rail;
 mod save_bar;
 mod sheet;
 mod stage;
 mod topbar;
 
-pub(super) use stage::{class_badge, stage_portrait};
+pub(super) use stage::{palette_badge, stage_portrait};
 
 use crate::domain::portrait::{AvatarMode, PortraitSpec};
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};

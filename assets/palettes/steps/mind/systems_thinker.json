@@ -1,0 +1,13 @@
+{
+  "order": 2,
+  "config": {
+    "intelligence_style": "SystemsArchitect",
+    "epistemic_stance": "RationalistDeductive",
+    "cognitive_pace": "DeliberateMeasured",
+    "fluid_intelligence": 92,
+    "crystallized_intelligence": 85,
+    "emotional_intelligence": 52,
+    "social_intelligence": 58,
+    "existential_intelligence": 70
+  }
+}

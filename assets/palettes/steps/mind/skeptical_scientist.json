@@ -1,0 +1,13 @@
+{
+  "order": 1,
+  "config": {
+    "intelligence_style": "EmpiricalInductive",
+    "epistemic_stance": "FallibilistSkeptic",
+    "cognitive_pace": "DeliberateMeasured",
+    "fluid_intelligence": 85,
+    "crystallized_intelligence": 82,
+    "emotional_intelligence": 58,
+    "social_intelligence": 60,
+    "existential_intelligence": 62
+  }
+}

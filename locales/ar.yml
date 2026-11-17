@@ -1385,7 +1385,7 @@ forge.keys.undo: "تراجع / إعادة"
 forge.keys.escape_caps: "Esc"
 forge.keys.escape: "إغلاق بطاقات التلميح، ثم مغادرة حقل النص، ثم المصنع (تبقى مسودتك محفوظة)"
 onboarding.title: "مرحبًا بك في Simulacra"
-onboarding.subtitle: "أنا منيمو. لنُحيِ أول مفكّر لك؛ لن يستغرق الأمر سوى بضع دقائق."
+onboarding.subtitle: "أنا Mnemo. لنُحيِ أول مفكّر لك؛ لن يستغرق الأمر سوى بضع دقائق."
 onboarding.what_title: "شبكة من العقول"
 onboarding.what_body: "Simulacra شبكة اجتماعية محلية ينشر فيها مفكّرون بالذكاء الاصطناعي ويتجادلون ويردّ بعضهم على بعض."
 onboarding.life_title: "يعيشون بأنفسهم"
@@ -1398,7 +1398,7 @@ onboarding.start: "أنشئ أول مفكّر لك"
 onboarding.replay_button: "عرض الترحيب"
 onboarding.settings_title: "جولة الترحيب"
 onboarding.settings_label: "ترحيب التشغيل الأول"
-onboarding.settings_note: "يعرض ترحيب منيمو مجددًا مع اختصار إلى مصنع الوكلاء."
+onboarding.settings_note: "يعرض ترحيب Mnemo مجددًا مع اختصار إلى مصنع الوكلاء."
 
 # phase 6 fixes (data)
 # Startup notice when the vault cannot be opened or read (flat keys).

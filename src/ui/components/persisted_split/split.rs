@@ -1,5 +1,6 @@
 //! [`PersistedSplit`]: a resizable panel group restored from, and saved to, the layout store.
 
+use super::fit::{fit_panes, PaneBounds};
 use super::handle::reset_on_double_click;
 use super::layouts::restored_size;
 use super::store::{record, saved_size, state_for};
@@ -41,15 +42,20 @@ impl SplitPane {
         self
     }
 
-    fn into_panel(self, saved: Option<f32>) -> ResizablePanel {
-        let panel = resizable_panel().visible(self.visible);
-        let panel = match self.size {
+    /// Its bounds along the axis, opening at the `saved` size when there is one.
+    fn bounds(&self, saved: Option<f32>) -> PaneBounds {
+        match &self.size {
             PaneSize::Sized { default, range } => {
-                let size = restored_size(saved, default.as_f32(), range.start.as_f32(), range.end.as_f32());
-                panel.size(px(size)).size_range(range).fixed()
+                let (min, max) = (range.start.as_f32(), range.end.as_f32());
+                PaneBounds { min, max, want: restored_size(saved, default.as_f32(), min, max), flex: false }
             }
-            PaneSize::Flex { min } => panel.size_range(min..Pixels::MAX),
-        };
+            PaneSize::Flex { min } => PaneBounds { min: min.as_f32(), max: Pixels::MAX.as_f32(), want: min.as_f32(), flex: true },
+        }
+    }
+
+    fn into_panel(self, fitted: PaneBounds) -> ResizablePanel {
+        let panel = resizable_panel().visible(self.visible).size_range(px(fitted.min)..px(fitted.max));
+        let panel = if fitted.flex { panel } else { panel.size(px(fitted.want)).fixed() };
         panel.children(self.children)
     }
 }
@@ -102,7 +108,13 @@ impl RenderOnce for PersistedSplit {
                 let sizes = state.read(cx).sizes().clone();
                 record(&recorded, &sizes, cx);
             });
-        let id = self.id;
-        self.panes.into_iter().enumerate().fold(group, |group, (ix, pane)| group.child(pane.into_panel(saved_size(&id, ix, cx))))
+        // Hidden panes take no room; the visible ones fit the container measured last frame.
+        let bounds: Vec<PaneBounds> = self.panes.iter().enumerate().map(|(ix, pane)| pane.bounds(saved_size(&self.id, ix, cx))).collect();
+        let visible: Vec<PaneBounds> = self.panes.iter().zip(&bounds).filter(|(pane, _)| pane.visible).map(|(_, b)| *b).collect();
+        let mut fitted = fit_panes(&visible, state.read(cx).container_size().as_f32()).into_iter();
+        self.panes.into_iter().zip(bounds).fold(group, |group, (pane, own)| {
+            let fit = if pane.visible { fitted.next().unwrap_or(own) } else { own };
+            group.child(pane.into_panel(fit))
+        })
     }
 }

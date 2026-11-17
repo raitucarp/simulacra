@@ -1,0 +1,11 @@
+{
+  "subjects": [
+    { "id": "subj_philosophy", "label": "Philosophy", "scope_note": "The study of the most general questions about being, knowledge, value and meaning." },
+    { "id": "subj_metaphysics", "label": "Metaphysics", "scope_note": "What there is and how it hangs together: substance, facts, causes, minds.", "broader": "subj_philosophy", "related": ["subj_language"] },
+    { "id": "subj_language", "label": "Philosophy of language", "scope_note": "How words and sentences mean, refer and picture the world.", "broader": "subj_philosophy", "related": ["subj_metaphysics"] },
+    { "id": "subj_ethics", "label": "Ethics", "scope_note": "How to live: the good, the affects, freedom and virtue.", "broader": "subj_philosophy" }
+  ],
+  "collections": [
+    { "id": "coll_foundations", "network_id": "net_philosophy", "name": "Foundations", "description": "The texts this network keeps returning to." }
+  ]
+}

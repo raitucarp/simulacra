@@ -58,7 +58,7 @@ impl AppView {
     pub(crate) fn open_wikilink(&mut self, target: String, window: &mut Window, cx: &mut Context<Self>) {
         match self.state.resolve_wikilink_target(&target) {
             Some(WikilinkTarget::Post(id)) => self.reveal_post(id, window, cx),
-            Some(WikilinkTarget::Document(_)) => self.select_nav(NavigationTab::Knowledge, window, cx),
+            Some(WikilinkTarget::Document(id)) => self.open_vault_document(&id, window, cx),
             None => {}
         }
     }
@@ -67,7 +67,7 @@ impl AppView {
     /// the stream, the profile in the roster, or the web page in the browser.
     pub(crate) fn open_source(&mut self, source: SourceRef, window: &mut Window, cx: &mut Context<Self>) {
         match source.kind {
-            SourceKind::VaultDoc => self.select_nav(NavigationTab::Knowledge, window, cx),
+            SourceKind::VaultDoc => self.open_vault_document(&source.id, window, cx),
             SourceKind::Post => self.reveal_post(PostId::from(source.id), window, cx),
             SourceKind::Profile => {
                 let id = ProfileId::from(source.id);

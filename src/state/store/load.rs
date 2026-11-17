@@ -64,6 +64,7 @@ impl AppState {
         let active_profile_id = persisted_or_first(active_profile, &data.user_profiles, |p| &p.id);
         let mut state = Self::assemble(data, active_network_id, active_profile_id, settings, Some(vault.clone()));
         state.upgrade_legacy_profiles_if_needed(&dismissed_seeds);
+        state.adopt_seed_catalogue();
         state.sync_network_counts();
         state.rebuild_indices();
         Ok(state)

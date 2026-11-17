@@ -1,4 +1,4 @@
-//! Center column: the main feed (timeline, vault), the Mind Graph or the agent workspace.
+//! Center column: the main feed (timeline), the Knowledge Vault, the Mind Graph or the agent workspace.
 
 use super::super::binder::Binder;
 use super::super::view::AppView;
@@ -19,6 +19,8 @@ impl AppView {
             self.agent_workspace(bind).into_any_element()
         } else if self.state.active_tab == NavigationTab::MindGraph {
             self.graph.panel.clone().into_any_element()
+        } else if self.state.active_tab == NavigationTab::Knowledge {
+            self.vault.panel.clone().into_any_element()
         } else {
             self.filtered_feed(bind, class).into_any_element()
         }
@@ -42,14 +44,12 @@ impl AppView {
             .custom_feed_profile_id
             .as_ref()
             .and_then(|id| self.state.user_profiles.iter().find(|p| &p.id == id));
-        let (reply_entity, doc_entity) = (bind.entity().clone(), bind.entity().clone());
+        let reply_entity = bind.entity().clone();
         render_main_feed(FeedParams {
             state: &self.state,
             custom_profile,
             selected_post_id: self.feed.selected_thread_post_id.clone(),
             composer: self.feed.composer_view.clone(),
-            doc_title_input: &self.feed.doc_title_input,
-            doc_content_input: &self.feed.doc_content_input,
             theme: &self.theme,
             feed_tab: self.feed.feed_tab,
             inspector_expanded: self.feed.inspector_expanded, layout,
@@ -68,11 +68,6 @@ impl AppView {
             on_open_tag: Rc::new(bind.with(|this, tag: String, window, cx| this.search_topic(&tag, window, cx))),
             on_open_wikilink: Rc::new(bind.with(Self::open_wikilink)),
             on_open_source: Rc::new(bind.with(Self::open_source)),
-            on_add_document: Box::new(move |title, content, window, cx| {
-                doc_entity.update(cx, |this, cx| this.add_document(title, content, window, cx));
-            }),
-            on_delete_document: bind.boxed(|this, doc_id, _, cx| this.delete_document(doc_id, cx)),
-            on_import_document: bind.boxed_act(Self::import_document),
             on_cycle_profile: bind.boxed_act(Self::cycle_profile),
         })
     }

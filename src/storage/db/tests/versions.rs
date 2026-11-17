@@ -1,5 +1,5 @@
 use crate::domain::{Profile, ProfileId};
-use crate::storage::db::versions::AUTHOR_ID_VERSION;
+use crate::storage::db::versions::LATEST_VERSION;
 use crate::storage::db::Database;
 
 /// Schema of an unversioned (v0) vault: posts embed the full author profile as JSON.
@@ -44,7 +44,7 @@ fn v0_vault_migrates_to_author_ids_and_archives_orphans() {
     let db = v0_vault();
     assert_eq!(db.schema_version().unwrap(), 0);
     db.init_schema().expect("v0 -> v1 migration");
-    assert_eq!(db.schema_version().unwrap(), AUTHOR_ID_VERSION);
+    assert_eq!(db.schema_version().unwrap(), LATEST_VERSION);
 
     let posts = db.load_posts().unwrap();
     let author = |id: &str| posts.iter().find(|p| p.id.as_str() == id).unwrap().author_id.clone();
@@ -64,7 +64,7 @@ fn versioned_migration_is_idempotent() {
     db.init_schema().unwrap();
     let ghost_snapshot = author_json(&db, "p2");
     db.init_schema().expect("second run is a no-op");
-    assert_eq!(db.schema_version().unwrap(), AUTHOR_ID_VERSION);
+    assert_eq!(db.schema_version().unwrap(), LATEST_VERSION);
     assert_eq!(author_json(&db, "p2"), ghost_snapshot);
     assert_eq!(db.load_posts().unwrap().len(), 3);
 }
@@ -72,7 +72,7 @@ fn versioned_migration_is_idempotent() {
 #[test]
 fn fresh_vault_starts_at_current_version_and_archives_deleted_authors() {
     let db = Database::in_memory().unwrap();
-    assert_eq!(db.schema_version().unwrap(), AUTHOR_ID_VERSION);
+    assert_eq!(db.schema_version().unwrap(), LATEST_VERSION);
     let gone = Profile::new_primary("gone", "Gone", "@gone");
     db.save_profile(&gone).unwrap();
     let post = crate::domain::Post::create("p1", "net1", &gone, "hello").unwrap();

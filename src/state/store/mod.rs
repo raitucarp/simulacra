@@ -5,6 +5,7 @@
 
 mod action_target;
 mod authors;
+mod catalogue;
 mod avatar;
 mod bootstrap;
 mod day_filter;
@@ -26,6 +27,7 @@ mod profiles;
 mod reposts;
 mod search;
 mod settings;
+mod seed_catalogue;
 mod snapshot;
 mod threads;
 mod upgrade;
@@ -77,6 +79,8 @@ pub struct AppState {
     /// Incrementally maintained lookups and derived body data over `posts`.
     pub index: PostIndex,
     pub documents: Vec<GroundingDocument>,
+    /// The vault catalogue's subject vocabulary and collections.
+    pub library: crate::domain::document::Library,
     pub trending: Vec<TrendingTopic>,
     pub draft_text: String,
     /// Local calendar day the timeline is narrowed to (set from the cadence heatmap).

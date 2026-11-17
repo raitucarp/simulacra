@@ -1,14 +1,12 @@
 //! Core design tokens for typography, surfaces, borders, spacing, and radii.
 //! Strictly tokenized to eliminate magic strings and hardcoded values.
 
-#[macro_use]
-mod macros;
+#[macro_use] mod macros;
 mod serde_helpers;
 
 use gpui_kit::{px, rgba, Pixels, Rgba};
 use crate::theme::palette::PaletteMode;
-use serde::{Deserialize, Serialize};
-use serde_helpers::{px_serde, rgba_serde};
+use serde::{Deserialize, Serialize}; use serde_helpers::{px_serde, rgba_serde};
 
 theme_tokens! {
     // Light/dark appearance the colors were derived for
@@ -127,6 +125,7 @@ theme_tokens! {
         forge_probe_image_size, forge_sample_height, // Agent Forge Engine step: "Test image" result, sample-answer editor
         nav_row_height, // sb A2: compact left navigation (rows, rail, active bar, badge, New menu), palette, shortcut sheet
         nav_rail_button_size, nav_active_bar_width, nav_active_bar_height, sidebar_badge_size, new_menu_width, palette_width, palette_results_max_height, palette_top_offset, key_cap_min_width, shortcut_sheet_width, shortcut_sheet_max_height, shortcut_sheet_section_width,
+        vault_facet_rail_width, vault_facet_drawer_width, vault_cover_width, vault_cover_height, vault_cover_thumb_width, vault_entry_cover_width, reader_measure_width, reader_measure_narrow_width, reader_measure_wide_width, vault_entry_side_width, vault_search_width, vault_editor_width, vault_meta_label_width, vault_column_creator_width, vault_column_kind_width, vault_column_year_width, vault_column_added_width, vault_column_links_width, vault_progress_height, vault_empty_art_width, vault_banner_width, vault_kind_art_width, vault_letter_cell_size, vault_tree_indent, // sb B1: Knowledge Vault catalogue
     ],
     // Typography Hierarchy & Line Height; heatmap level opacities; graph dimming & curvature
     floats: [
@@ -136,6 +135,7 @@ theme_tokens! {
         splash_min_duration_ms, splash_fade_duration_ms, splash_warm_up_limit_ms, graph_mini_aspect,
         // Forge disabled option cards and stage backdrop art; feed failed tools; settings rows switched off
         forge_disabled_opacity, forge_backdrop_opacity, post_failed_tool_opacity, settings_disabled_opacity,
+        line_height_reading, vault_motion_duration_ms, vault_muted_opacity, // sb B1: reader leading, calm entry fade, read-state dimming
     ],
 }
 

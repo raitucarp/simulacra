@@ -5,5 +5,5 @@ pub mod db;
 pub mod media;
 pub mod vault;
 
-pub use db::{Database, SettingKey};
+pub use db::{Database, DocumentText, SettingKey};
 pub use vault::Vault;

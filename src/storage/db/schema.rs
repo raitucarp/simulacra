@@ -91,6 +91,7 @@ impl Database {
     /// and performs safe, non-destructive column migrations.
     pub(super) fn init_schema(&self) -> Result<()> {
         self.conn.execute_batch(CREATE_TABLES).map_err(db_err)?;
+        self.create_catalogue_tables()?;
         self.migrate_posts_schema()?;
         self.conn
             .execute_batch(CREATE_MIGRATED_INDEXES)

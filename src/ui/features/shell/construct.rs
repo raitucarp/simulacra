@@ -6,6 +6,7 @@ use super::lab_state::{LabState, LlmInputs};
 use super::panels::ShellPanels;
 use super::scheduler_state::SchedulerState;
 use super::settings_ui::SettingsUi;
+use super::vault_host::VaultHost;
 use super::view::{AppView, ChromeState};
 use crate::state::AppState;
 use crate::ui::features::command_palette::PaletteHost;
@@ -33,13 +34,13 @@ impl AppView {
         let feed = FeedState::new(&state, window, cx);
         let profile = state.current_profile().cloned();
         let composer_modal = cx.new(|cx| ComposerModalPanel::new(state.theme_tokens.clone(), profile, window, cx));
-        let (graph, graph_subscription) = GraphState::new(&state, window, cx);
+        let ((graph, graph_subscription), (vault, vault_subscription)) = (GraphState::new(&state, window, cx), VaultHost::new(&state, window, cx));
         let appearance = cx.new(|cx| AppearancePanel::new(state.theme_settings.clone(), window, cx));
         let (settings_ui, settings_subscriptions) = SettingsUi::new(state.preferences(), window, cx);
         let mut subscriptions = vec![
             feed.subscribe_search(cx),
             cx.subscribe_in(&composer_modal, window, Self::publish_composer_draft),
-            graph_subscription,
+            graph_subscription, vault_subscription,
             cx.subscribe_in(&appearance, window, Self::on_appearance_event),
             Self::observe_own_changes(cx), Self::observe_window_width(window, cx), Self::refocus_on_focus_loss(window, cx),
             cx.observe_window_appearance(window, |this, window, cx| this.follow_system_appearance(window, cx)),
@@ -54,7 +55,7 @@ impl AppView {
             state,
             chrome: ChromeState { is_onboarding_open: onboarding, ..ChromeState::new(initial_lang) },
             feed, composer_modal, appearance, llm_inputs, settings_ui,
-            lab, scheduler, graph,
+            lab, scheduler, graph, vault,
             forge: None,
             sidebar, palette,
             panels: ShellPanels::new(cx),

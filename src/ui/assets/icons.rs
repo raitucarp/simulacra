@@ -15,5 +15,7 @@ gpui_kit::assets::icon_assets!(
         // sb A2
         Command, CornerDownLeft, FileUp, MessageSquarePlus, PanelLeftClose, PanelLeftOpen, PinOff, Star,
         StickyNote, UserPlus,
+        // sb B1
+        LayoutGrid, List, Bookmark, Quote, ArrowUpDown, BookMarked, Languages, MapPin,
     ]
 );

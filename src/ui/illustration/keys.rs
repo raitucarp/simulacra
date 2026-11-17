@@ -94,5 +94,6 @@ art_keys! {
     EmptyKey in "empty" as Empty {
         NoPosts => "no_posts", NoAgents => "no_agents", NoDocuments => "no_documents",
         NoNetwork => "no_network", NoResults => "no_results", GraphEmpty => "graph_empty",
+        VaultEmpty => "vault_empty", VaultNoMatches => "vault_no_matches",
     }
 }

@@ -80,25 +80,4 @@ impl AppView {
         let _ = self.state.cycle_active_persona();
         cx.notify();
     }
-
-    /// Adds a new grounding document to the Knowledge Vault.
-    pub fn add_document(
-        &mut self,
-        title: String,
-        content: String,
-        window: &mut Window,
-        cx: &mut Context<Self>,
-    ) {
-        if self.state.add_document(&title, &content).is_ok() {
-            self.feed.doc_title_input.update(cx, |state, cx| state.set_value("", window, cx));
-            self.feed.doc_content_input.update(cx, |state, cx| state.set_value("", window, cx));
-            cx.notify();
-        }
-    }
-
-    /// Removes a document from the vault.
-    pub fn delete_document(&mut self, doc_id: String, cx: &mut Context<Self>) {
-        let _ = self.state.delete_document(&doc_id);
-        cx.notify();
-    }
 }

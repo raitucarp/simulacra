@@ -1451,18 +1451,109 @@
     {
       "id": "doc_tractatus",
       "network_id": "net_philosophy",
-      "title": "Tractatus Logico-Philosophicus (Semiotics)",
-      "content": "The world is everything that is the case. What can be said at all can be said clearly, and what we cannot talk about we must pass over in silence. The proposition is a picture of reality.",
+      "title": "Tractatus Logico-Philosophicus",
+      "content": "# 1 The world as facts\nThe world is everything that is the case. It is made of facts, not of things: what happens to hold, out of everything that could hold.\n\nA fact is a combination of objects. Objects are simple and fixed; their possible combinations make up the space in which facts can occur.\n\n# 2 Pictures of reality\nWe make pictures of facts to ourselves. A picture shares a form with what it depicts, and that shared form is what lets it be right or wrong.\n\n> The proposition is a picture of reality.\n\nA picture cannot depict its own form of depiction; it can only display it.\n\n# 3 Thought and the proposition\nA thought is a logical picture of facts, and a proposition is a thought made perceptible in signs. Ordinary language disguises this form, which is why philosophy is a critique of language.\n\n# 4 Saying and showing\nWhat can be said at all can be said clearly. Logic is not a body of doctrine but a mirror-image of the world: it shows itself in every proposition and cannot itself be stated.\n\n# 7 Silence\nThe book ends where saying ends. Ethics, value and the sense of the world lie outside the world of facts, and so outside what propositions can picture.\n\nWhat we cannot talk about we must pass over in silence.",
       "chunk_count": 1,
-      "created_at": "<now>"
+      "created_at": "<now>",
+      "record": {
+        "kind": "book",
+        "creators": [
+          {
+            "name": "Ludwig Wittgenstein",
+            "role": "author"
+          },
+          {
+            "name": "C. K. Ogden",
+            "role": "translator"
+          }
+        ],
+        "date": "1922",
+        "publisher": "Kegan Paul",
+        "language": "en",
+        "rights": "Public domain",
+        "description": "Seven numbered propositions on how language pictures the world: facts, pictures, logical form, and the limit between what can be said and what can only be shown.",
+        "extent": {
+          "pages": 75,
+          "words": 229
+        },
+        "provenance": {
+          "added_by": "Arya Wiratama",
+          "origin": "seed",
+          "checksum": "fnv1a64:0e75a1cce1caa722"
+        },
+        "subjects": [
+          "subj_language",
+          "subj_metaphysics"
+        ],
+        "classification": {
+          "discipline": "philosophy",
+          "form": "aphorisms",
+          "period": "modern",
+          "place": "Vienna"
+        },
+        "collections": [
+          "coll_foundations"
+        ],
+        "reading": {
+          "status": "reading",
+          "progress": 35
+        },
+        "format": "text/plain"
+      }
     },
     {
       "id": "doc_ethics",
       "network_id": "net_philosophy",
-      "title": "Ethics: On Substance & Modes (Spinoza)",
-      "content": "By substance I understand what is in itself and is conceived through itself. Except God, no substance can be or be conceived. Mind and body are one and the same individual, conceived now under the attribute of thought, now under extension.",
+      "title": "Ethics",
+      "content": "# Part I: Of God\nBy substance I understand what is in itself and is conceived through itself. Except God, no substance can be or be conceived; whatever is, is in God.\n\nA mode is an affection of substance: something that is in another and is conceived through another. Particular things are modes of the one substance.\n\n# Part II: Of the mind\nMind and body are one and the same individual, conceived now under the attribute of thought, now under the attribute of extension.\n\n> The order and connection of ideas is the same as the order and connection of things.\n\n# Part III: Of the affects\nEach thing, as far as it lies in itself, strives to persevere in its being. Joy is the passage to a greater perfection, sadness the passage to a lesser one.\n\n# Part V: Of freedom\nAn affect that is a passion ceases to be a passion as soon as we form a clear and distinct idea of it. Understanding is the road from bondage to freedom.",
       "chunk_count": 1,
-      "created_at": "<now>"
+      "created_at": "<now>",
+      "record": {
+        "kind": "book",
+        "subtitle": "Demonstrated in Geometrical Order",
+        "creators": [
+          {
+            "name": "Baruch Spinoza",
+            "role": "author"
+          },
+          {
+            "name": "R. H. M. Elwes",
+            "role": "translator"
+          }
+        ],
+        "date": "1677",
+        "publisher": "Jan Rieuwertsz",
+        "language": "en",
+        "rights": "Public domain",
+        "description": "Definitions, axioms and propositions in geometric order: one infinite substance, mind and body as two attributes of it, the affects, and freedom through understanding.",
+        "extent": {
+          "pages": 260,
+          "words": 174
+        },
+        "provenance": {
+          "added_by": "Arya Wiratama",
+          "origin": "seed",
+          "checksum": "fnv1a64:9ab93eb43491027e"
+        },
+        "subjects": [
+          "subj_metaphysics",
+          "subj_ethics"
+        ],
+        "classification": {
+          "discipline": "philosophy",
+          "form": "treatise",
+          "period": "early_modern",
+          "place": "Amsterdam"
+        },
+        "collections": [
+          "coll_foundations"
+        ],
+        "format": "text/plain",
+        "reading": {
+          "status": "unread",
+          "progress": 0
+        }
+      }
     },
     {
       "id": "doc_systems",
@@ -1470,7 +1561,30 @@
       "title": "Async Runtimes & Lockless Channels",
       "content": "Actor models and message passing concurrency minimize mutable state contention across thread pools. Epoll and IOCP abstractions allow microsecond scheduling for vector search pipelines.",
       "chunk_count": 1,
-      "created_at": "<now>"
+      "created_at": "<now>",
+      "record": {
+        "kind": "note",
+        "language": "en",
+        "description": "Working notes on message passing, actors and event loops for low-latency pipelines.",
+        "provenance": {
+          "added_by": "Arya Wiratama",
+          "origin": "seed",
+          "checksum": "fnv1a64:07bf5618c83aee7d"
+        },
+        "classification": {
+          "discipline": "technology",
+          "form": "report",
+          "period": "contemporary"
+        },
+        "format": "text/markdown",
+        "extent": {
+          "words": 24
+        },
+        "reading": {
+          "status": "unread",
+          "progress": 0
+        }
+      }
     }
   ]
 }

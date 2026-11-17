@@ -4,7 +4,6 @@
 use super::super::view::AppView;
 use crate::domain::post::{SourceKind, SourceRef};
 use crate::domain::ProfileId;
-use crate::state::NavigationTab;
 use crate::ui::features::sidebar_left::{toggled_preference, NavRef, SidebarMode, SidebarSection};
 use crate::ui::responsive::LayoutClass;
 use gpui_kit::*;
@@ -62,8 +61,8 @@ impl AppView {
         match item {
             NavRef::Thread(post_id) => self.reveal_post(post_id, window, cx),
             NavRef::Document(id) => {
-                self.sidebar.note_recent(NavRef::Document(id), self.state.db.as_ref());
-                self.select_nav(NavigationTab::Knowledge, window, cx);
+                self.sidebar.note_recent(NavRef::Document(id.clone()), self.state.db.as_ref());
+                self.open_vault_document(&id, window, cx);
             }
             NavRef::Profile(id) => self.open_profile(id, window, cx),
         }

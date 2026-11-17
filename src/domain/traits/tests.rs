@@ -50,6 +50,9 @@ fn every_trait_enum_has_snake_case_unique_keys_and_stable_wire_format() {
         PunctuationHabit, EmojiUsage, SentenceLengthPreference, PostingCadence,
         HumanChronotype, MentionAttitude, ConflictHandlingStyle, PromptAssemblyStrategy,
         PrePostReasoningMode,
+        BodyKind, BodyForm, Material, Scale, Temporality, Perception, Mobility, Anthropomorphism,
+        RelationToHumans, Withdrawal, RhetoricalMode, RhetoricalDevice, StylisticSchool, SemioticMode,
+        SentenceStructure, PostFormat, LexicalField, Weekday,
     );
 }
 

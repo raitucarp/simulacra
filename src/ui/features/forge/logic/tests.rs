@@ -31,7 +31,7 @@ fn rail_marks_finished_steps_complete() {
     let issues = validate(&draft, &[]);
     draft.sync_completion(&issues);
     let items = rail_items(&draft, &issues);
-    assert_eq!(items.len(), 4, "personas walk four steps");
+    assert_eq!(items.len(), 6, "personas walk six steps");
     assert_eq!(items[0].status, RailStatus::Complete);
     assert!(items[1].is_current);
 }

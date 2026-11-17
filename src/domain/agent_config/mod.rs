@@ -19,6 +19,8 @@ pub use crate::domain::traits::{
     MoralFoundation, PostingCadence, PrePostReasoningMode, PromptAssemblyStrategy,
     PunctuationHabit, SentenceLengthPreference,
 };
+// --- p7 ontology ---
+pub use crate::domain::traits::{ActiveDays, Embodiment, Rhetoric};
 use crate::domain::archetype::ArchetypeClass;
 use crate::domain::portrait::AvatarMode;
 use serde::{Deserialize, Serialize};
@@ -84,6 +86,14 @@ pub struct AgentConfig {
     #[serde(skip_serializing_if = "Option::is_none")] pub avatar: Option<AvatarMode>,
     #[doc = "Class the Agent Forge started them from (shown as a badge); absent in older JSON."]
     #[serde(skip_serializing_if = "Option::is_none")] pub archetype_class: Option<ArchetypeClass>,
+
+    // --- p7 ontology ---
+    #[doc = "The body: human, creature, plant, object, element, machine, place or abstraction (flattened keys)."]
+    #[serde(flatten)] pub embodiment: Embodiment,
+    #[doc = "Rhetorical mode and devices, style, semiotics, sentence structure, post format (flattened keys)."]
+    #[serde(flatten)] pub rhetoric: Rhetoric,
+    #[doc = "Weekdays the agent posts on by itself."]
+    pub active_days: ActiveDays,
 }
 
 #[cfg(test)]

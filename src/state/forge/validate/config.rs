@@ -3,7 +3,7 @@
 use super::{IssueKind, Severity, ValidationIssue, ARG_MAX, ARG_VALUE};
 use crate::domain::agent_config::TEMPLATE_PLACEHOLDERS;
 use crate::domain::{Profile, PromptAssemblyStrategy};
-use crate::state::forge::fields::{CountField, HourField, TextField, MAX_HOUR};
+use crate::state::forge::fields::{CountField, HourField, TextField, TraitField, TraitSet, MAX_HOUR};
 use std::ops::RangeInclusive;
 
 /// Ages outside this range are allowed but flagged.
@@ -29,6 +29,7 @@ pub(super) fn check(profile: &Profile, issues: &mut Vec<ValidationIssue>) {
         issues.push(issue.with_arg(ARG_VALUE, cfg.age));
     }
     check_hours(profile, issues);
+    check_body_and_days(profile, issues);
     if cfg.assembly_strategy == PromptAssemblyStrategy::CustomTemplate {
         check_template(&cfg.prompt_template, issues);
     }
@@ -46,6 +47,20 @@ fn check_hours(profile: &Profile, issues: &mut Vec<ValidationIssue>) {
         let field = HourField::ActiveHoursEnd;
         let issue = ValidationIssue::new(field.step(), field.path(), Severity::Warning, IssueKind::HoursAroundTheClock);
         issues.push(issue);
+    }
+}
+
+/// A form of another kind (only reachable through hand-edited or imported JSON), and an agent
+/// that posts on its own but on no day of the week.
+fn check_body_and_days(profile: &Profile, issues: &mut Vec<ValidationIssue>) {
+    let cfg = &profile.config;
+    if !cfg.embodiment.is_coherent() {
+        let form = TraitField::Form;
+        issues.push(ValidationIssue::new(form.step(), form.path(), Severity::Warning, IssueKind::FormKindMismatch));
+    }
+    if cfg.is_active && cfg.active_days.is_empty() {
+        let days = TraitSet::ActiveDays;
+        issues.push(ValidationIssue::new(days.step(), days.path(), Severity::Warning, IssueKind::NoActiveDays));
     }
 }
 

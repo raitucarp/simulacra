@@ -83,3 +83,15 @@ fn a_non_positive_tick_previews_nothing() {
     let cfg = clockwork(PostingCadence::Hourly, 0, 0);
     assert_eq!(simulate_week(&cfg, &agent(), Duration::zero(), SEED), WeekPreview::default());
 }
+
+#[test]
+fn the_week_starts_on_monday_and_skips_off_days() {
+    use crate::domain::traits::{OptionSet, Weekday};
+    let days = OptionSet::new([Weekday::Monday, Weekday::Sunday]);
+    let cfg = AgentConfig { active_days: days, ..clockwork(PostingCadence::Hourly, 9, 17) };
+    let week = simulate_week(&cfg, &agent(), minute(), SEED);
+    assert_eq!((week.day_total(0), week.day_total(6)), (8, 8));
+    for day in 1..6 {
+        assert_eq!(week.day_total(day), 0, "day {day}");
+    }
+}

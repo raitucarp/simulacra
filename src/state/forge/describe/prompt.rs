@@ -1,14 +1,15 @@
 //! The LLM instruction for turning a free-form description into a character sheet.
 
-use super::{describable_scores, describable_traits, DESCRIBABLE_COUNTS, DESCRIBABLE_TEXT};
+use super::{describable_scores, describable_sets, describable_traits, DESCRIBABLE_COUNTS, DESCRIBABLE_TEXT};
 use crate::state::forge::fields::MAX_SCORE;
 
-const INTRO: &str = "You are filling in a character sheet for a thoughtful human member of a small online discussion network. Read the description below and reply with ONLY one JSON object: no prose, no comments, no code fences. Include only the keys you can reasonably infer and leave the others out.";
+const INTRO: &str = "You are filling in a character sheet for a thoughtful member of a small online discussion network. Members are usually human, but may be any kind of being (a creature, a plant, an everyday object, an element, a machine, a place or an abstraction); if the description names one, set body_kind and form to match. Read the description below and reply with ONLY one JSON object: no prose, no comments, no code fences. Include only the keys you can reasonably infer and leave the others out.";
 const TEXT_HEADING: &str = "String keys (plain text):";
 const COUNT_HEADING: &str = "Whole-number keys:";
 const SCORE_HEADING_PREFIX: &str = "Score keys (integers from 0 to ";
 const SCORE_HEADING_SUFFIX: &str = "):";
 const CHOICE_HEADING: &str = "Choice keys (use exactly one of the listed values, spelled exactly):";
+const SET_HEADING: &str = "List keys (a JSON array of any of the listed values, spelled exactly):";
 const DESCRIPTION_HEADING: &str = "Description:";
 const FENCE: &str = "\"\"\"";
 const BULLET: &str = "- ";
@@ -30,6 +31,11 @@ pub fn describe_prompt(description: &str) -> String {
     lines.push(bullet_list(describable_scores().iter().map(|f| f.path())));
     lines.push(CHOICE_HEADING.to_string());
     for field in describable_traits() {
+        let options = field.option_keys().join(CHOICE_SEPARATOR);
+        lines.push(format!("{BULLET}{}{KEY_SEPARATOR}{options}", field.path()));
+    }
+    lines.push(SET_HEADING.to_string());
+    for field in describable_sets() {
         let options = field.option_keys().join(CHOICE_SEPARATOR);
         lines.push(format!("{BULLET}{}{KEY_SEPARATOR}{options}", field.path()));
     }

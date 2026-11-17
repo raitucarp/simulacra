@@ -89,6 +89,20 @@
     "crystallized_intelligence": 78,
     "emotional_intelligence": 88,
     "social_intelligence": 55,
-    "existential_intelligence": 99
+    "existential_intelligence": 99,
+    "rhetorical_mode": "Meditative",
+    "rhetorical_devices": [
+      "Metaphor",
+      "Paradox",
+      "Alliteration"
+    ],
+    "stylistic_school": "Surrealist",
+    "semiotic_mode": "Iconic",
+    "sentence_structure": "StreamOfConsciousness",
+    "post_format": "Aphorism",
+    "lexical_fields": [
+      "Astronomy",
+      "Theology"
+    ]
   }
 }

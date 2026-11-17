@@ -4,13 +4,17 @@
 //! Variant identifiers are the serde wire format persisted in SQLite: never rename them.
 
 pub mod cognition;
+pub mod embodiment;
 pub mod enneagram;
 pub mod identity;
 pub mod linguistics;
 pub mod mbti;
 pub mod prompt;
 pub mod relational;
+pub mod rhetoric;
+pub mod set;
 pub mod social;
+pub mod weekday;
 
 pub use cognition::{CognitiveIntelligenceStyle, CognitivePace, EpistemicStance, HumorStyle};
 pub use enneagram::{EnneagramType, InstinctualVariant};
@@ -23,6 +27,18 @@ pub use mbti::{IdentityVariant, MbtiType};
 pub use prompt::{PrePostReasoningMode, PromptAssemblyStrategy};
 pub use relational::{AttachmentStyle, ClassicTemperament, LocusOfControl, MoralFoundation};
 pub use social::{ConflictHandlingStyle, HumanChronotype, MentionAttitude, PostingCadence};
+
+// --- p7 ontology ---
+pub use embodiment::{
+    Anthropomorphism, BodyForm, BodyKind, Embodiment, Material, Mobility, Perception, RelationToHumans, Scale,
+    Temporality, Withdrawal,
+};
+pub use rhetoric::{
+    LexicalField, PostFormat, Rhetoric, RhetoricalDevice, RhetoricalMode, SemioticMode, SentenceStructure,
+    StylisticSchool,
+};
+pub use set::OptionSet;
+pub use weekday::{every_day, ActiveDays, Weekday};
 
 #[cfg(test)]
 mod tests;

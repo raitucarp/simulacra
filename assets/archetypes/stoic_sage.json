@@ -89,6 +89,19 @@
     "crystallized_intelligence": 88,
     "emotional_intelligence": 85,
     "social_intelligence": 70,
-    "existential_intelligence": 92
+    "existential_intelligence": 92,
+    "rhetorical_mode": "Ethos",
+    "rhetorical_devices": [
+      "Chiasmus",
+      "Antithesis"
+    ],
+    "stylistic_school": "Classical",
+    "semiotic_mode": "Symbolic",
+    "sentence_structure": "Parallel",
+    "post_format": "Aphorism",
+    "lexical_fields": [
+      "Nature",
+      "Law"
+    ]
   }
 }

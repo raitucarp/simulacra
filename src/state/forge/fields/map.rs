@@ -1,6 +1,6 @@
 //! The field → step table, assembled from the typed field enums.
 
-use super::{AvatarField, CountField, HourField, OptionalTextField, ScoreField, TextField, ToggleField, TraitField};
+use super::{AvatarField, CountField, HourField, OptionalTextField, ScoreField, TextField, ToggleField, TraitField, TraitSet};
 use crate::state::forge::step::{ForgeStep, FORGE_I18N_ROOT};
 
 const FIELD_GROUP: &str = "field";
@@ -22,6 +22,7 @@ pub fn mapped_fields() -> Vec<(&'static str, ForgeStep)> {
     all.extend(CountField::ALL.iter().map(|f| (f.path(), f.step())));
     all.extend(ToggleField::ALL.iter().map(|f| (f.path(), f.step())));
     all.extend(TraitField::ALL.iter().map(|f| (f.path(), f.step())));
+    all.extend(TraitSet::ALL.iter().map(|f| (f.path(), f.step())));
     all
 }
 
@@ -44,3 +45,10 @@ pub fn fields_for_step(step: ForgeStep) -> Vec<&'static str> {
 pub fn field_label_key(path: &str) -> String {
     format!("{FORGE_I18N_ROOT}.{FIELD_GROUP}.{path}")
 }
+
+/// Upper bound of every [`ScoreField`].
+pub const MAX_SCORE: u8 = 100;
+/// Last hour of the day for [`HourField`]s.
+pub const MAX_HOUR: u8 = 23;
+/// Upper bound of [`CountField::Age`].
+pub const MAX_AGE: u16 = 150;

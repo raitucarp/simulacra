@@ -6,6 +6,10 @@ use crate::domain::post::MAX_POST_CHARS;
 use crate::domain::profile::Profile;
 use crate::domain::traits::PromptAssemblyStrategy;
 
+/// Whose linguistic voice the voice-focused strategy insists on.
+const HUMAN_VOICE: &str = "human ";
+const BEING_VOICE: &str = "own ";
+
 impl AgentConfig {
     /// Assembles the complete system prompt for LLM inference or live inspection,
     /// injecting all configured human parameters, network context, and grounding documents.
@@ -37,19 +41,38 @@ impl AgentConfig {
         )
     }
 
+    /// "You are …" and the embodiment rule: a living human, or the being the agent is.
+    fn opening(&self, profile: &Profile, network_name: &str) -> String {
+        match self.being() {
+            None => format!(
+                "You are {} ({}), a real human member of the '{}' network.\n\
+                 CRITICAL EMBODIMENT RULE: You are a living human person, NOT an AI, bot, or language model. Never break character.",
+                profile.name,
+                profile.display_handle(),
+                network_name,
+            ),
+            Some(noun) => format!(
+                "You are {} ({}), {}, a member of the '{}' network.\n\
+                 CRITICAL EMBODIMENT RULE: You are {}, NOT a human, an AI, a bot, or a language model. Speak from inside your form. Never break character.",
+                profile.name,
+                profile.display_handle(),
+                noun,
+                network_name,
+                noun,
+            ),
+        }
+    }
+
     fn full_synthesis_body(&self, profile: &Profile, network_name: &str, blocks: &PromptBlocks) -> String {
         format!(
-            "You are {} ({}), a real human member of the '{}' network.\n\
-             CRITICAL EMBODIMENT RULE: You are a living human person, NOT an AI, bot, or language model. Never break character.\n\n\
+            "{}\n\n\
              {}\n\n\
              [NETWORK & KNOWLEDGE CONTEXT]\n\
              {}\n\n\
              [CORE PERSONAL DIRECTIVE]\n\
              {}\n\n\
              {}",
-            profile.name,
-            profile.display_handle(),
-            network_name,
+            self.opening(profile, network_name),
             blocks.full_dossier,
             blocks.grounding_summary,
             self.system_prompt,
@@ -59,8 +82,8 @@ impl AgentConfig {
 
     fn voice_focused_body(&self, profile: &Profile, blocks: &PromptBlocks) -> String {
         format!(
-            "You are {} ({}) — {} ({}-{}, {}).\n\
-             CRITICAL RULE: Write strictly in your human linguistic voice ({}, {}, {}, {}).\n\n\
+            "You are {} ({}) — {}{} ({}-{}, {}).\n\
+             CRITICAL RULE: Write strictly in your {}linguistic voice ({}, {}, {}, {}).\n\n\
              {}\n\n\
              {}\n\n\
              {}\n\n\
@@ -69,10 +92,12 @@ impl AgentConfig {
              {}",
             profile.name,
             profile.display_handle(),
+            self.being().map(|noun| format!("{noun}: ")).unwrap_or_default(),
             self.description,
             self.mbti.code(),
             self.identity_variant.suffix(),
             self.enneagram.code(),
+            if self.being().is_some() { BEING_VOICE } else { HUMAN_VOICE },
             self.primary_language,
             self.grammar_style.label(),
             self.diction_register.label(),

@@ -1,7 +1,7 @@
 //! Applying an archetype class to a draft, and previewing what that would change.
 
 use super::draft::AgentDraft;
-use super::fields::{field_label_key, field_step, TraitField, TraitValue};
+use super::fields::{field_label_key, field_step, TraitField, TraitSet, TraitSetValue, TraitValue};
 use super::step::ForgeStep;
 use crate::domain::archetype::{ArchetypeClass, ConfigChange};
 use crate::domain::agent_config::AgentConfig;
@@ -15,6 +15,8 @@ pub enum ChangeValue {
     Flag(bool),
     /// A trait option; show it through `TraitValue::label_key`.
     Trait(TraitValue),
+    /// Several options of a multi-select; show them through `TraitSetValue::label_keys`.
+    Set(TraitSetValue),
 }
 
 impl ChangeValue {
@@ -42,12 +44,12 @@ pub struct FieldChange {
 }
 
 fn describe(change: ConfigChange, current: &AgentConfig, target: &AgentConfig) -> FieldChange {
-    let (before, after) = match TraitField::from_path(&change.field) {
-        Some(trait_field) => (
-            ChangeValue::Trait(trait_field.read(current)),
-            ChangeValue::Trait(trait_field.read(target)),
-        ),
-        None => (ChangeValue::from_json(&change.before), ChangeValue::from_json(&change.after)),
+    let (before, after) = if let Some(field) = TraitField::from_path(&change.field) {
+        (ChangeValue::Trait(field.read(current)), ChangeValue::Trait(field.read(target)))
+    } else if let Some(field) = TraitSet::from_path(&change.field) {
+        (ChangeValue::Set(field.read(current)), ChangeValue::Set(field.read(target)))
+    } else {
+        (ChangeValue::from_json(&change.before), ChangeValue::from_json(&change.after))
     };
     FieldChange {
         step: field_step(&change.field).unwrap_or(ForgeStep::Review),

@@ -6,6 +6,7 @@ mod describe;
 mod draft;
 mod history;
 mod locales;
+mod ontology;
 mod roll;
 mod steps;
 mod validate;

@@ -55,6 +55,9 @@ fn every_trait_variant_has_an_option_card() {
         IdentityVariant, MbtiType, PrePostReasoningMode, PromptAssemblyStrategy,
         AttachmentStyle, ClassicTemperament, LocusOfControl, MoralFoundation,
         ConflictHandlingStyle, HumanChronotype, MentionAttitude, PostingCadence,
+        BodyKind, BodyForm, Material, Scale, Temporality, Perception, Mobility, Anthropomorphism,
+        RelationToHumans, Withdrawal, RhetoricalMode, RhetoricalDevice, StylisticSchool, SemioticMode,
+        SentenceStructure, PostFormat, LexicalField, Weekday,
     );
     assert!(total > 100, "expected the full trait catalogue, saw {total} variants");
     assert!(missing.is_empty(), "missing trait illustrations:\n{}", missing.join("\n"));

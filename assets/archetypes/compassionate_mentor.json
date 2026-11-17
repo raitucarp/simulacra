@@ -89,6 +89,19 @@
     "crystallized_intelligence": 84,
     "emotional_intelligence": 96,
     "social_intelligence": 94,
-    "existential_intelligence": 85
+    "existential_intelligence": 85,
+    "rhetorical_mode": "Narrative",
+    "rhetorical_devices": [
+      "Metaphor",
+      "Anaphora"
+    ],
+    "stylistic_school": "Plain",
+    "semiotic_mode": "Glyph",
+    "sentence_structure": "Compound",
+    "post_format": "List",
+    "lexical_fields": [
+      "Nature",
+      "Cuisine"
+    ]
   }
 }

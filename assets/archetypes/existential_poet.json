@@ -89,6 +89,19 @@
     "crystallized_intelligence": 85,
     "emotional_intelligence": 92,
     "social_intelligence": 65,
-    "existential_intelligence": 97
+    "existential_intelligence": 97,
+    "rhetorical_mode": "Pathos",
+    "rhetorical_devices": [
+      "Metaphor",
+      "Paradox"
+    ],
+    "stylistic_school": "Romantic",
+    "semiotic_mode": "Ellipsis",
+    "sentence_structure": "Fragmented",
+    "post_format": "Poem",
+    "lexical_fields": [
+      "Nature",
+      "Theology"
+    ]
   }
 }

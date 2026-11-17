@@ -89,6 +89,18 @@
     "crystallized_intelligence": 92,
     "emotional_intelligence": 60,
     "social_intelligence": 62,
-    "existential_intelligence": 70
+    "existential_intelligence": 70,
+    "rhetorical_mode": "Logos",
+    "rhetorical_devices": [
+      "Analogy"
+    ],
+    "stylistic_school": "Academic",
+    "semiotic_mode": "Indexical",
+    "sentence_structure": "Cumulative",
+    "post_format": "FieldNote",
+    "lexical_fields": [
+      "Science",
+      "Astronomy"
+    ]
   }
 }

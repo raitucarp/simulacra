@@ -46,14 +46,17 @@ pub enum IssueKind {
     TemplateUnclosed,
     BioEmpty,
     AgeUnusual,
+    FormKindMismatch,
+    NoActiveDays,
 }
 
 impl IssueKind {
-    pub const ALL: [Self; 16] = [
+    pub const ALL: [Self; 18] = [
         Self::NameRequired, Self::NameTooShort, Self::NameTooLong, Self::NameJunk,
         Self::HandleRequired, Self::HandleFormat, Self::HandleLength, Self::HandleTaken,
         Self::LanguageRequired, Self::HoursOutOfRange, Self::HoursAroundTheClock, Self::TemplateEmpty,
         Self::TemplateUnknownPlaceholder, Self::TemplateUnclosed, Self::BioEmpty, Self::AgeUnusual,
+        Self::FormKindMismatch, Self::NoActiveDays,
     ];
 
     pub const fn key(self) -> &'static str {
@@ -74,6 +77,8 @@ impl IssueKind {
             Self::TemplateUnclosed => "template_unclosed",
             Self::BioEmpty => "bio_empty",
             Self::AgeUnusual => "age_unusual",
+            Self::FormKindMismatch => "form_kind_mismatch",
+            Self::NoActiveDays => "no_active_days",
         }
     }
 

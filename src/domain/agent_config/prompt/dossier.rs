@@ -3,8 +3,8 @@
 use crate::domain::agent_config::AgentConfig;
 use crate::domain::profile::Profile;
 
-/// Upper bound on the number of human dossier sections (network grounding is injected separately).
-const DOSSIER_SECTION_CAPACITY: usize = 5;
+/// Upper bound on the number of dossier sections (network grounding is injected separately).
+const DOSSIER_SECTION_CAPACITY: usize = 7;
 /// Separator placed between consecutive dossier sections.
 pub(super) const SECTION_SEPARATOR: &str = "\n\n";
 
@@ -63,9 +63,13 @@ impl AgentConfig {
         )
     }
 
-    /// Compiles the complete human dossier combining all enabled sections.
+    /// Compiles the complete dossier combining all enabled sections. A non-human being always
+    /// opens with its embodiment; rhetoric travels with the linguistic section.
     pub fn format_full_human_dossier(&self, profile: &Profile) -> String {
         let mut sections = Vec::with_capacity(DOSSIER_SECTION_CAPACITY);
+        if !self.embodiment.is_human() {
+            sections.push(self.format_embodiment_section());
+        }
         if self.inject_identity_and_bio {
             sections.push(self.format_identity_section(profile));
         }
@@ -77,6 +81,7 @@ impl AgentConfig {
         }
         if self.inject_linguistic_stylistics {
             sections.push(self.format_linguistics_section());
+            sections.push(self.format_rhetoric_section());
         }
         if self.inject_social_and_schedule {
             sections.push(self.format_social_schedule_section());

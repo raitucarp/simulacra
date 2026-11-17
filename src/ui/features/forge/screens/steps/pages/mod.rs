@@ -4,6 +4,7 @@ mod appearance;
 mod attributes;
 mod birthsign;
 mod daily;
+mod embodiment;
 mod grimoire;
 mod origin;
 mod origin_life;
@@ -13,6 +14,7 @@ mod psyche;
 mod relationships;
 mod review;
 mod review_card;
+mod rhetoric;
 mod trait_block;
 mod voice;
 

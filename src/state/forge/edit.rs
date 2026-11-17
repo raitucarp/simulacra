@@ -1,7 +1,7 @@
 //! One typed change to a draft profile.
 
 use super::fields::{
-    AvatarField, CountField, HourField, OptionalTextField, ScoreField, TextField, ToggleField, TraitValue,
+    AvatarField, CountField, HourField, OptionalTextField, ScoreField, TextField, ToggleField, TraitSetValue, TraitValue,
     MAX_AGE, MAX_HOUR, MAX_SCORE,
 };
 use super::step::ForgeStep;
@@ -20,6 +20,8 @@ pub enum DraftEdit {
     Count(CountField, u16),
     Toggle(ToggleField, bool),
     Trait(TraitValue),
+    /// A multi-select field set to exactly these options.
+    TraitSet(TraitSetValue),
 }
 
 /// Writes `value` into `slot`, reporting whether anything changed.
@@ -43,6 +45,7 @@ impl DraftEdit {
             Self::Count(field, _) => field.path(),
             Self::Toggle(field, _) => field.path(),
             Self::Trait(value) => value.field().path(),
+            Self::TraitSet(value) => value.field().path(),
         }
     }
 
@@ -57,6 +60,7 @@ impl DraftEdit {
             Self::Count(field, _) => field.step(),
             Self::Toggle(field, _) => field.step(),
             Self::Trait(value) => value.field().step(),
+            Self::TraitSet(value) => value.field().step(),
         }
     }
 
@@ -79,6 +83,12 @@ impl DraftEdit {
             Self::Count(field, value) => assign(field.get_mut(profile), (*value).min(MAX_AGE)),
             Self::Toggle(field, value) => assign(field.get_mut(profile), *value),
             Self::Trait(value) => {
+                let (before, embodiment) = (value.field().read(&profile.config), profile.config.embodiment);
+                value.write(&mut profile.config);
+                // A kind or form edit may also adjust its partner, so compare the whole body.
+                before != *value || embodiment != profile.config.embodiment
+            }
+            Self::TraitSet(value) => {
                 let before = value.field().read(&profile.config);
                 value.write(&mut profile.config);
                 before != *value

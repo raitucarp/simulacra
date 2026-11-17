@@ -3,7 +3,7 @@
 
 use super::{Database, SettingKey};
 use crate::error::{AppError, Result};
-use crate::theme::settings::ThemeSettings;
+use crate::theme::settings::{AppearanceMode, PreferredThemes, ThemeSettings};
 use crate::theme::{Density, RadiusScale, ThemeTokens, TypeScale};
 use serde::de::DeserializeOwned;
 
@@ -38,9 +38,27 @@ impl Database {
             font_family: self
                 .setting_with(SettingKey::ThemeFontFamily, |f| (!f.trim().is_empty()).then(|| f.to_string()))
                 .unwrap_or(defaults.font_family),
+            ..defaults
         };
         self.migrate_legacy_theme(&mut settings);
+        self.load_appearance(&mut settings);
         settings
+    }
+
+    /// Reads the appearance mode and preferred palettes; settings saved before they existed
+    /// keep their look: the active palette becomes the preferred one of its own mode.
+    fn load_appearance(&self, settings: &mut ThemeSettings) {
+        let Some(mode) = self.setting_with(SettingKey::ThemeAppearance, AppearanceMode::from_id) else {
+            settings.adopt_active_as_preferred();
+            return;
+        };
+        let text = |key| self.setting_with(key, |id: &str| (!id.trim().is_empty()).then(|| id.to_string()));
+        let defaults = PreferredThemes::default();
+        settings.appearance = mode;
+        settings.preferred = PreferredThemes {
+            dark: text(SettingKey::ThemeDarkPalette).unwrap_or(defaults.dark),
+            light: text(SettingKey::ThemeLightPalette).unwrap_or(defaults.light),
+        };
     }
 
     /// Folds a legacy `theme_tokens` row into `settings`, persists the result and drops the row.
@@ -50,6 +68,7 @@ impl Database {
         }
         if let Some(tokens) = self.setting_json::<ThemeTokens>(SettingKey::LegacyThemeTokens) {
             settings.adopt_legacy_tokens(&tokens);
+            settings.adopt_active_as_preferred();
         }
         let migrated = self.save_theme_settings(settings).and_then(|()| self.delete_setting(SettingKey::LegacyThemeTokens));
         if let Err(err) = migrated {
@@ -67,6 +86,9 @@ impl Database {
             (SettingKey::ThemeTypeScale, settings.type_scale.id().to_string()),
             (SettingKey::ThemeRadiusScale, settings.radius_scale.id().to_string()),
             (SettingKey::ThemeFontFamily, settings.font_family.clone()),
+            (SettingKey::ThemeAppearance, settings.appearance.id().to_string()),
+            (SettingKey::ThemeDarkPalette, settings.preferred.dark.clone()),
+            (SettingKey::ThemeLightPalette, settings.preferred.light.clone()),
         ];
         rows.iter().try_for_each(|(key, value)| self.set_setting(*key, value))
     }

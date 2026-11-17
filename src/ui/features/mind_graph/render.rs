@@ -74,11 +74,11 @@ impl MindGraphPanel {
         let on_reset = Box::new(cx.listener(|this, _: &ClickEvent, _, cx| this.reset_view(cx)));
         let details = div().size_full().pt(theme.stack_gap).child(render_details(selection, on_open, on_reset, theme).w_full());
         let split = persisted_v_resizable(SPLIT_ID, theme)
-            .pane(SplitPane::flex(theme.split_flex_min).child(self.render_canvas(cx)))
+            .pane(SplitPane::flex(theme.graph_canvas_height).child(self.render_canvas(cx)))
             .pane(SplitPane::sized(theme.graph_details_height, theme.graph_details_min..theme.graph_details_max).child(details));
         div()
             .flex_1()
-            .min_h(theme.graph_view_min_height)
+            .min_h_0()
             .w_full()
             .p(theme.card_padding)
             .rounded(theme.radius_lg)

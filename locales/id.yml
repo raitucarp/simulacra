@@ -2743,3 +2743,15 @@ keymap.target.palette_confirm: "Buka hasil terpilih"
 keymap.target.palette_dismiss: "Tutup palet"
 keymap.target.palette_next_group: "Grup berikutnya"
 keymap.target.palette_previous_group: "Grup sebelumnya"
+
+# sb A1
+# Splash warm-up stage, appearance mode (Dark / Light / System) and its title bar toggle.
+splash.stage.warming_up: "Menyiapkan…"
+appearance.mode_title: "MODE TAMPILAN"
+appearance.mode_hint: "Sistem mengikuti pengaturan terang atau gelap komputer Anda dan ikut berganti."
+appearance.mode_dark: "Gelap"
+appearance.mode_light: "Terang"
+appearance.mode_system: "Sistem"
+appearance.preferred_dark: "Tema gelap"
+appearance.preferred_light: "Tema terang"
+appearance.toggle_tooltip: "Tampilan: %{current} (klik untuk %{next})"

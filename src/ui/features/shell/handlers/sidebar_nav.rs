@@ -6,15 +6,16 @@ use crate::domain::post::{SourceKind, SourceRef};
 use crate::domain::ProfileId;
 use crate::state::NavigationTab;
 use crate::ui::features::sidebar_left::{toggled_preference, NavRef, SidebarMode, SidebarSection};
+use crate::ui::responsive::LayoutClass;
 use gpui_kit::*;
 
 impl AppView {
     /// Whether the left sidebar renders as the icon rail.
     pub(crate) fn is_left_rail(&self) -> bool {
-        self.sidebar.mode(self.theme.left_sidebar_rail_breakpoint) == SidebarMode::Rail
+        self.sidebar.mode(&self.theme) == SidebarMode::Rail
     }
 
-    /// Follows window resizes, so the sidebar folds below the breakpoint.
+    /// Follows window resizes, so the sidebar folds outside the wide layout class.
     pub(in crate::ui::features::shell) fn observe_window_width(window: &mut Window, cx: &mut Context<Self>) -> Subscription {
         cx.observe_window_bounds(window, |this, window, cx| {
             let width = window.viewport_size().width;
@@ -26,8 +27,8 @@ impl AppView {
     }
 
     pub(crate) fn toggle_left_sidebar(&mut self, _: &mut Window, cx: &mut Context<Self>) {
-        let (width, breakpoint) = (self.sidebar.window_width, self.theme.left_sidebar_rail_breakpoint);
-        let prefs = self.sidebar.prefs.with_preference(toggled_preference(width, self.sidebar.prefs.preference, breakpoint));
+        let layout = LayoutClass::for_width(self.sidebar.window_width, &self.theme);
+        let prefs = self.sidebar.prefs.with_preference(toggled_preference(layout, self.sidebar.prefs.preference));
         self.sidebar.update_prefs(prefs, self.state.db.as_ref());
         cx.notify();
     }

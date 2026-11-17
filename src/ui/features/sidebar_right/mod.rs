@@ -4,6 +4,8 @@
 pub mod dot_graph;
 pub mod heatmap;
 mod heatmap_chrome;
+mod heatmap_geometry;
+mod heatmap_grid;
 pub mod knowledge_card;
 pub mod roster;
 pub mod secondary;
@@ -12,6 +14,9 @@ pub mod spark_feed;
 pub mod topic_item;
 mod trending;
 pub mod unified;
+
+#[cfg(test)]
+mod tests;
 
 pub use knowledge_card::render_knowledge_card;
 pub use roster::render_network_agent_roster;

@@ -1,7 +1,7 @@
 //! The Mind Graph view entity: owns the viewport, hover and selection over a shared scene.
 
 use super::paint::{Focus, PaintOptions};
-use super::viewport::{Frame, Viewport};
+use super::viewport::{Fit, Frame, Viewport};
 use crate::domain::graph::{GraphNode, NodeRef};
 use crate::state::graph::GraphScene;
 use crate::theme::ThemeTokens;
@@ -87,12 +87,23 @@ impl MindGraphPanel {
         self.theme.spacing_xl.as_f32()
     }
 
+    /// How the scene's nodes are fitted to the canvas.
+    pub(super) fn fit(&self) -> Fit {
+        Fit::new(self.padding(), self.scene.layout.extent())
+    }
+
     pub(super) fn radius_range(&self) -> (f32, f32) {
         (self.theme.graph_node_radius_min.as_f32(), self.theme.graph_node_radius_max.as_f32())
     }
 
     pub(super) fn options(&self) -> PaintOptions {
         PaintOptions { padding: self.padding(), radius_range: self.radius_range(), labels: true }
+    }
+
+    /// Fits the whole graph to the canvas (on opening; it stays fitted while resizing until
+    /// the user pans or zooms).
+    pub fn fit_to_view(&mut self, cx: &mut Context<Self>) {
+        self.reset_view(cx);
     }
 
     /// Restores the fitted, unzoomed view.

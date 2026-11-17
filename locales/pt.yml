@@ -2743,3 +2743,15 @@ keymap.target.palette_confirm: "Abrir o resultado escolhido"
 keymap.target.palette_dismiss: "Fechar a paleta"
 keymap.target.palette_next_group: "Próximo grupo"
 keymap.target.palette_previous_group: "Grupo anterior"
+
+# sb A1
+# Splash warm-up stage, appearance mode (Dark / Light / System) and its title bar toggle.
+splash.stage.warming_up: "Preparando…"
+appearance.mode_title: "MODO DE APARÊNCIA"
+appearance.mode_hint: "Sistema segue a configuração clara ou escura do seu computador e muda junto com ela."
+appearance.mode_dark: "Escuro"
+appearance.mode_light: "Claro"
+appearance.mode_system: "Sistema"
+appearance.preferred_dark: "Tema escuro"
+appearance.preferred_light: "Tema claro"
+appearance.toggle_tooltip: "Aparência: %{current} (clique para %{next})"

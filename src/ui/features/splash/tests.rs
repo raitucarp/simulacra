@@ -1,4 +1,4 @@
-use super::stage::{fade_delay, millis, SplashStage};
+use super::stage::{fade_delay, millis, warm_up_done, SplashStage};
 use std::time::Duration;
 
 #[test]
@@ -51,4 +51,23 @@ fn default_tokens_keep_the_splash_brief() {
     let minimum = millis(theme.splash_min_duration_ms);
     assert!(minimum > Duration::ZERO && minimum < Duration::from_secs(3), "{minimum:?}");
     assert!(millis(theme.splash_fade_duration_ms) < minimum);
+}
+
+#[test]
+fn warm_up_ends_when_everything_is_ready_or_time_runs_out() {
+    let limit = Duration::from_millis(1500);
+    assert!(warm_up_done(0, Duration::ZERO, limit));
+    assert!(!warm_up_done(3, Duration::from_millis(200), limit));
+    assert!(warm_up_done(3, limit, limit), "a slow image never blocks startup");
+    assert!(SplashStage::WarmingUp.progress() < SplashStage::Ready.progress());
+}
+
+#[test]
+fn the_splash_window_is_smaller_than_the_main_windows_restore_size() {
+    let theme = crate::theme::ThemeTokens::default();
+    assert!(theme.splash_window_width < theme.window_default_width);
+    assert!(theme.splash_window_height < theme.window_default_height);
+    assert!(theme.window_min_width <= theme.window_default_width && theme.window_min_height <= theme.window_default_height);
+    assert!(theme.splash_progress_width < theme.splash_window_width);
+    assert!(millis(theme.splash_warm_up_limit_ms) > Duration::ZERO);
 }

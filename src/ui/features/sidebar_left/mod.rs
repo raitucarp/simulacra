@@ -1,5 +1,5 @@
 //! The left navigation sidebar: an expanded column or a collapsed icon rail (Ctrl+B, and
-//! automatically below the theme's `left_sidebar_rail_breakpoint`).
+//! automatically outside the wide layout class of `crate::ui::responsive`).
 //!
 //! Information architecture, top to bottom:
 //! - **Context**: the network switcher (the scope everything below belongs to) and the
@@ -34,7 +34,7 @@ pub mod user_card;
 #[cfg(test)]
 mod tests;
 
-pub use mode::{sidebar_mode, toggled_preference, SidebarMode, SidebarPreference};
+pub use mode::{sidebar_mode, sidebar_mode_for, toggled_preference, SidebarMode, SidebarPreference};
 pub use nav_button::{render_nav_button, NavButtonSpec};
 pub use prefs::{NavRef, SidebarPrefs, SidebarSection, PIN_CAPACITY, RECENT_CAPACITY};
 pub use render::render_left_sidebar;

@@ -20,6 +20,7 @@ impl AppView {
             bind.act(Self::toggle_lang_menu),
             bind.act(Self::toggle_settings),
         )
+        .appearance_toggle(self.state.theme_settings.appearance, bind.act(Self::cycle_appearance))
     }
 
     /// Language menu, while open.

@@ -4,6 +4,7 @@
 use super::mode::{sidebar_mode, SidebarMode};
 use super::prefs::{load_prefs, save_prefs, NavRef, SidebarPrefs, SidebarSection};
 use crate::storage::Vault;
+use crate::theme::ThemeTokens;
 use gpui_kit::Pixels;
 
 /// The sidebar's state as the shell holds it.
@@ -22,9 +23,9 @@ impl SidebarState {
         Self { prefs: load_prefs(vault), window_width, showing_all: Vec::new() }
     }
 
-    /// The width to render at, given the theme's rail breakpoint.
-    pub fn mode(&self, breakpoint: Pixels) -> SidebarMode {
-        sidebar_mode(self.window_width, self.prefs.preference, breakpoint)
+    /// The width to render at, given the theme's layout breakpoints.
+    pub fn mode(&self, theme: &ThemeTokens) -> SidebarMode {
+        sidebar_mode(self.window_width, self.prefs.preference, theme)
     }
 
     pub fn is_showing_all(&self, section: SidebarSection) -> bool {

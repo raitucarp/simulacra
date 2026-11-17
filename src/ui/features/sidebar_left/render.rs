@@ -19,7 +19,7 @@ const SECTIONS_ID: &str = "sidebar-sections-scroll";
 
 pub fn render_left_sidebar(params: LeftSidebarParams<'_>) -> impl IntoElement {
     let LeftSidebarParams { state, theme, sidebar, is_workspace_open, shell_focus, callbacks } = params;
-    let is_rail = sidebar.mode(theme.left_sidebar_rail_breakpoint) == SidebarMode::Rail;
+    let is_rail = sidebar.mode(theme) == SidebarMode::Rail;
     let switcher = render_network_switcher(state.current_network(), is_workspace_open, is_rail, &callbacks, theme);
     let search = render_icon_button(SEARCH_ID, LucideIcon::Search, spec(CommandId::OpenPalette).title(), CommandId::OpenPalette, &callbacks, theme);
     let new_button = div().when(!is_rail, |slot| slot.flex_1().min_w_0()).child(render_new_button(is_rail, shell_focus, theme));

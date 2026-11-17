@@ -2743,3 +2743,15 @@ keymap.target.palette_confirm: "فتح النتيجة المحددة"
 keymap.target.palette_dismiss: "إغلاق اللوحة"
 keymap.target.palette_next_group: "المجموعة التالية"
 keymap.target.palette_previous_group: "المجموعة السابقة"
+
+# sb A1
+# Splash warm-up stage, appearance mode (Dark / Light / System) and its title bar toggle.
+splash.stage.warming_up: "جارٍ التحضير…"
+appearance.mode_title: "وضع المظهر"
+appearance.mode_hint: "يتبع وضع النظام إعداد الفاتح أو الداكن في حاسوبك ويتغيّر معه."
+appearance.mode_dark: "داكن"
+appearance.mode_light: "فاتح"
+appearance.mode_system: "النظام"
+appearance.preferred_dark: "السمة الداكنة"
+appearance.preferred_light: "السمة الفاتحة"
+appearance.toggle_tooltip: "المظهر: %{current} (انقر للتبديل إلى %{next})"

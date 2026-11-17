@@ -2743,3 +2743,15 @@ keymap.target.palette_confirm: "選択した結果を開く"
 keymap.target.palette_dismiss: "パレットを閉じる"
 keymap.target.palette_next_group: "次のグループ"
 keymap.target.palette_previous_group: "前のグループ"
+
+# sb A1
+# Splash warm-up stage, appearance mode (Dark / Light / System) and its title bar toggle.
+splash.stage.warming_up: "準備しています…"
+appearance.mode_title: "外観モード"
+appearance.mode_hint: "「システム」はコンピューターのライト／ダーク設定に従い、切り替えにも追従します。"
+appearance.mode_dark: "ダーク"
+appearance.mode_light: "ライト"
+appearance.mode_system: "システム"
+appearance.preferred_dark: "ダークテーマ"
+appearance.preferred_light: "ライトテーマ"
+appearance.toggle_tooltip: "外観: %{current}（クリックで%{next}）"

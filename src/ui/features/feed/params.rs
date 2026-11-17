@@ -3,6 +3,7 @@
 use crate::domain::{PostId, Profile};
 use crate::state::{AppState, FeedTab};
 use crate::theme::ThemeTokens;
+use crate::ui::responsive::LayoutClass;
 use gpui_kit::component::input::{InputState, TextareaState};
 use super::stream::StreamInputs;
 use crate::ui::features::post::{OpenSourceAction, OpenTextAction};
@@ -34,6 +35,8 @@ pub struct FeedParams<'a, C> {
     pub feed_tab: FeedTab,
     /// Whether the inspector shows every reply instead of the collapsed preview.
     pub inspector_expanded: bool,
+    /// Window layout class (below the wide class the inspector stacks under the stream).
+    pub layout: LayoutClass,
     /// Virtualized stream state and its cached rows.
     pub stream: StreamInputs,
     pub on_load_more: Option<LoadMoreCallback>,

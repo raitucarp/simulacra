@@ -2,6 +2,7 @@
 
 mod center;
 mod columns;
+mod drawer;
 mod navigation;
 mod overlays;
 mod settings;
@@ -12,6 +13,7 @@ use super::binder::Binder;
 use super::view::AppView;
 use crate::ui::keymap::SHELL_KEY_CONTEXT;
 use crate::ui::render_stats;
+use crate::ui::responsive::LayoutClass;
 use gpui_kit::*;
 
 /// Name of the root view in the dev render counter.
@@ -26,7 +28,8 @@ impl Render for AppView {
         self.sync_mind_graph(cx);
         self.sync_forge_theme(cx);
         let bind = Binder::new(cx);
-        let columns = self.render_columns();
+        let class = LayoutClass::of_window(window, &self.theme);
+        let columns = self.render_columns(class);
 
         div()
             .w_full()
@@ -41,7 +44,8 @@ impl Render for AppView {
             .flex_col()
             .child(self.title_bar(&bind))
             // Fully Resizable Multi-Column Layout Container
-            .child(div().w_full().flex_1().overflow_hidden().child(columns))
+            .child(div().w_full().flex_1().min_h_0().overflow_hidden().child(columns))
+            .children(self.right_drawer(&bind, class))
             .children(self.language_popover(&bind))
             .children(self.settings_modal(&bind))
             .children(self.workspace_popover(&bind))

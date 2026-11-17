@@ -9,6 +9,7 @@ mod forge;
 mod metrics;
 mod navigation;
 mod panels;
+mod responsive;
 mod scales;
 mod spacing;
 mod surfaces;
@@ -40,6 +41,7 @@ pub fn derive_tokens(
     forge::apply_forge_layout(&mut t);
     panels::apply_panel_layout(&mut t);
     navigation::apply_navigation_layout(&mut t);
+    responsive::apply_responsive_layout(&mut t);
     surfaces::apply_surfaces(&mut t, palette);
     text::apply_text(&mut t, palette);
     accents::apply_accents(&mut t, palette);

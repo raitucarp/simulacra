@@ -9,7 +9,7 @@ mod tests;
 use super::super::super::common::{card, heading, labeled, muted};
 use super::trait_block::chosen_line;
 use crate::domain::traits::{BodyForm, BodyKind, Embodiment};
-use crate::state::forge::{body_edits, body_for_form, body_for_kind, roll_being, BeingScope, TraitField};
+use crate::state::forge::{avatar_edits, body_edits, body_for_form, body_for_kind, roll_being, BeingScope, TraitField};
 use crate::ui::features::forge::logic::time_seed;
 use crate::ui::features::forge::text::tr;
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
@@ -57,7 +57,7 @@ impl ForgeView {
         let theme = &self.theme;
         let pick = handle.with(move |this: &mut ForgeView, kind: BodyKind, _, cx| {
             let current = this.draft.profile().config.embodiment;
-            this.apply_edits(&body_edits(body_for_kind(current, kind)), cx);
+            this.become_body(body_for_kind(current, kind), cx);
         });
         let grid = IllustratedOptionGrid::new(KIND_GRID_ID, Some(body.body_kind), theme, move |kind, w, cx| pick(kind, w, cx));
         let roll = handle.act(|this, _, cx| {
@@ -79,7 +79,7 @@ impl ForgeView {
         let theme = &self.theme;
         let pick = handle.with(move |this: &mut ForgeView, form: BodyForm, _, cx| {
             let current = this.draft.profile().config.embodiment;
-            this.apply_edits(&body_edits(body_for_form(current, form)), cx);
+            this.become_body(body_for_form(current, form), cx);
         });
         let grid = IllustratedOptionGrid::new(FORM_GRID_ID, Some(body.form), theme, move |form, w, cx| pick(form, w, cx))
             .options(body.body_kind.forms());
@@ -91,6 +91,13 @@ impl ForgeView {
             .children(chosen_line(TraitField::Form.read(&self.draft.profile().config), theme))
             .children(self.issue_lines(TraitField::Form.path()))
             .child(div().child(natural))
+    }
+
+    /// Turns the draft into `body` with a matching generated avatar, as one undo step.
+    fn become_body(&mut self, body: Embodiment, cx: &mut Context<Self>) {
+        let mut edits = body_edits(body);
+        edits.extend(avatar_edits(body, self.draft.profile().config.avatar.as_ref(), time_seed()));
+        self.apply_edits(&edits, cx);
     }
 
     /// A titled card of small trait grids.

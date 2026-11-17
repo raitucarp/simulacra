@@ -80,3 +80,19 @@ fn reset_clears_the_backoff_and_the_streak() {
     assert!(gate.allows_generation(at(1)));
     assert_eq!(gate.streak(), 0);
 }
+
+#[test]
+fn gates_back_off_per_engine_key() {
+    use super::FailureGates;
+    let mut gates = FailureGates::default();
+    assert!(gates.allows_generation("cred_a", at(0)));
+    assert!(gates.gate_mut("cred_a").record_failure(request("API error (401)"), at(0)));
+    assert!(!gates.allows_generation("cred_a", at(1)), "the failing key backs off");
+    assert!(gates.allows_generation("cred_b", at(1)), "other keys keep going");
+    assert_eq!(gates.gate("cred_a").map(|g| g.streak()), Some(1));
+    gates.reset("cred_a");
+    assert!(gates.allows_generation("cred_a", at(1)) && gates.gate("cred_a").is_none());
+    gates.gate_mut("x").record_failure(request("boom"), at(0));
+    gates.reset_all();
+    assert!(gates.allows_generation("x", at(0)));
+}

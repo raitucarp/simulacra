@@ -13,7 +13,7 @@ const WIN_CONTROL_MAX_ID: &str = "win-control-max";
 const WIN_CONTROL_CLOSE_ID: &str = "win-control-close";
 
 /// Min, Max/Restore and Close controls (hover fill and its readable icon color per control), right-aligned in the title bar.
-pub(super) fn render_window_controls(is_maximized: bool, theme: &ThemeTokens) -> Div {
+pub(crate) fn render_window_controls(is_maximized: bool, theme: &ThemeTokens) -> Div {
     let max_icon = if is_maximized {
         LucideIcon::Minimize2
     } else {

@@ -8,6 +8,12 @@ use crate::domain::Post;
 #[derive(Debug, Clone)]
 pub struct SimulationOutcome {
     pub reply: Post,
+    /// Follow-up posts chained under `reply` (structured thread parts), in order.
+    pub thread: Vec<Post>,
     /// `Some` when the reply text is the offline heuristic fallback.
     pub llm_error: Option<LlmFailure>,
+    /// Failure-gate key of the engine that ran (credential, provider or custom URL).
+    pub gate_key: String,
+    /// Why a triggered image could not be generated (redacted); the post was kept.
+    pub image_error: Option<String>,
 }

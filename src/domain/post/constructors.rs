@@ -66,7 +66,7 @@ impl Post {
             link_url: clean_link,
             image_path: clean_image,
             reposts_count: 0,
-            is_reposted: false,
+            is_reposted: false, extras: Default::default(),
         })
     }
 }

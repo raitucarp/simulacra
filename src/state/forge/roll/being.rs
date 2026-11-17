@@ -1,6 +1,7 @@
 //! "Roll a being": a coherent random body. A normal roll keeps whatever the draft is (people
 //! stay people); rolling a being picks a form within the current kind, or any form at all.
 
+use super::avatar::avatar_for_body;
 use super::rng::SplitMix64;
 use crate::domain::traits::{BodyForm, BodyKind, Embodiment, RelationToHumans, Withdrawal};
 use crate::domain::TraitOption;
@@ -39,10 +40,16 @@ pub fn rolled_embodiment(seed: u64, current: BodyKind, scope: BeingScope) -> Emb
     body
 }
 
-/// Re-rolls the draft's body as one undo step and returns it.
+/// Re-rolls the draft's body (and a generated avatar to match it) as one undo step and
+/// returns it.
 pub fn roll_being(draft: &mut AgentDraft, seed: u64, scope: BeingScope) -> Embodiment {
     let body = rolled_embodiment(seed, draft.profile().config.embodiment.body_kind, scope);
-    draft.transform(|profile| profile.config.embodiment = body);
+    draft.transform(|profile| {
+        profile.config.embodiment = body;
+        if let Some(avatar) = avatar_for_body(body, profile.config.avatar.as_ref(), seed) {
+            profile.config.avatar = Some(avatar);
+        }
+    });
     body
 }
 

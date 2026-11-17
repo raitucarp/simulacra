@@ -1,8 +1,10 @@
-//! Appearance: switch between a generated portrait, a personality emblem and a photo, then
-//! edit the chosen one (portrait parts in `portrait`, photo framing in `photo`).
+//! Appearance: switch between a generated portrait, a non-human form, a personality emblem and
+//! a photo, then edit the chosen one (portrait parts in `portrait`, form parts in
+//! `form_editor`, photo framing in `photo`).
 
+use super::avatar_kind::AvatarKind;
 use super::super::super::common::{card, heading, muted};
-use crate::domain::portrait::{suggested_outfit, AvatarMode, EmblemSpec, PortraitSpec};
+use crate::domain::portrait::{suggested_outfit, AvatarMode, EmblemSpec, FormKind, FormSpec, PortraitSpec};
 use crate::state::forge::{AvatarField, DraftEdit};
 use crate::ui::components::{segment_pill, segmented_track, Segment};
 use crate::ui::features::forge::logic::time_seed;
@@ -24,49 +26,13 @@ const REDERIVE_ID: &str = "forge-emblem-rederive";
 /// The emblem preview is this fraction of the stage portrait.
 const PREVIEW_SCALE: f32 = 0.5;
 
-/// The three kinds of avatar, as offered by the mode switch.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub(super) enum AvatarKind {
-    Portrait,
-    Emblem,
-    Photo,
-}
-
-impl AvatarKind {
-    const ALL: [Self; 3] = [Self::Portrait, Self::Emblem, Self::Photo];
-
-    fn of(mode: Option<&AvatarMode>) -> Option<Self> {
-        mode.map(|mode| match mode {
-            AvatarMode::Pcg(_) => Self::Portrait,
-            AvatarMode::Emblem(_) => Self::Emblem,
-            AvatarMode::Photo { .. } => Self::Photo,
-        })
-    }
-
-    /// `portrait.mode_*` label key and icon.
-    fn label_key(self) -> &'static str {
-        match self {
-            Self::Portrait => "portrait.mode_pcg",
-            Self::Emblem => "portrait.mode_emblem",
-            Self::Photo => "portrait.mode_photo",
-        }
-    }
-
-    fn icon(self) -> LucideIcon {
-        match self {
-            Self::Portrait => LucideIcon::User,
-            Self::Emblem => LucideIcon::Sparkles,
-            Self::Photo => LucideIcon::Image,
-        }
-    }
-}
-
 impl ForgeView {
     pub(in super::super) fn appearance_page(&self, handle: &ForgeHandle) -> AnyElement {
         let theme = &self.theme;
         let mode = self.draft.profile().config.avatar.clone();
         let body = match &mode {
             Some(AvatarMode::Pcg(spec)) => self.portrait_editor(*spec, handle).into_any_element(),
+            Some(AvatarMode::Form(spec)) => self.form_editor(spec, handle).into_any_element(),
             Some(AvatarMode::Emblem(spec)) => self.emblem_panel(*spec, handle).into_any_element(),
             Some(AvatarMode::Photo { crop, .. }) => self.photo_panel(Some(*crop), handle).into_any_element(),
             None => muted(tr(NONE_KEY), theme).into_any_element(),
@@ -118,6 +84,7 @@ impl ForgeView {
                 let spec = PortraitSpec::random(time_seed());
                 AvatarMode::Pcg(PortraitSpec { outfit: suggested_outfit(&cfg.occupation).unwrap_or(spec.outfit), ..spec })
             }
+            AvatarKind::Form => AvatarMode::Form(FormSpec::random_any(FormKind::default(), time_seed())),
             AvatarKind::Emblem => AvatarMode::Emblem(EmblemSpec::for_config(cfg)),
             AvatarKind::Photo => return self.pick_photo(window, cx),
         };

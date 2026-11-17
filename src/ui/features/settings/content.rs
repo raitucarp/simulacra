@@ -1,10 +1,11 @@
 //! Dialog frame of the settings modal: scrim backdrop, tab header, scrollable body and action footer.
 
 use super::callbacks::{ModalCloseCallback, SaveSettingsCallback};
-use super::consts::{BACKDROP_ID, CANCEL_BUTTON_ID, CLOSE_BUTTON_ID, DIALOG_ID, SAVE_BUTTON_ID};
+use super::consts::{BACKDROP_ID, CANCEL_BUTTON_ID, CLOSE_BUTTON_ID, DIALOG_ID, SAVE_BUTTON_ID, SPLIT_ID};
 use super::tabs::SettingsTab;
 use crate::ui::atoms::ElevationExt;
 use crate::theme::ThemeTokens;
+use crate::ui::components::{persisted_h_resizable, SplitPane};
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::scroll::ScrollableElement;
@@ -137,7 +138,10 @@ pub(super) fn render_backdrop(
                 .on_mouse_down(MouseButton::Left, |_ev, _window, cx| {
                     cx.stop_propagation();
                 })
-                .child(rail)
-                .child(content),
+                .child(
+                    persisted_h_resizable(SPLIT_ID, theme)
+                        .pane(SplitPane::sized(theme.modal_rail_width, theme.modal_rail_min..theme.modal_rail_max).child(rail))
+                        .pane(SplitPane::flex(theme.split_flex_min).child(content)),
+                ),
         )
 }

@@ -12,6 +12,7 @@ mod filter;
 mod gallery;
 mod handlers;
 mod layout;
+mod panels;
 mod pickers;
 mod preview_card;
 mod transfer;

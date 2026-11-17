@@ -26,7 +26,7 @@ pub(super) fn render_rail(
         .collect();
 
     div()
-        .w(theme.modal_rail_width)
+        .w_full()
         .h_full()
         .bg(theme.bg_sidebar)
         .border_r(theme.border_width_hairline)

@@ -57,7 +57,10 @@ impl AppView {
     pub(crate) fn save_settings(&mut self, _: &mut Window, cx: &mut Context<Self>) {
         let typed = self.llm_inputs.values(cx);
         let settings = self.chrome.settings_draft.apply(&self.state.llm_settings, typed);
+        let mut credentials = self.state.credentials.clone();
+        credentials.sync_default(&settings);
         self.state.update_llm_settings(settings);
+        self.state.update_credentials(credentials);
         self.reset_llm_failures();
         self.chrome.is_settings_open = false;
         cx.notify();

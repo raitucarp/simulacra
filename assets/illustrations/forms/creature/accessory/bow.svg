@@ -1,0 +1,1 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="none" stroke-linecap="round" stroke-linejoin="round"><g transform="translate(90 88) scale(0.9)"><path d="M0 0 L-22 -12 V12 Z M0 0 L22 -12 V12 Z" fill="{{danger}}" stroke="{{fg}}" stroke-width="2.5"/><circle cx="0" cy="0" r="5" fill="{{danger}}" stroke="{{fg}}" stroke-width="2"/></g></svg>

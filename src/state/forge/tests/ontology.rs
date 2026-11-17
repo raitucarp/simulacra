@@ -110,3 +110,23 @@ fn old_configs_load_as_humans_posting_every_day() {
     let wire = serde_json::to_value(&cfg).expect("serializes");
     assert_eq!(wire["form"], "Cat", "embodiment fields are flat top-level keys");
 }
+
+#[test]
+fn the_avatar_follows_the_body_unless_chosen_by_hand() {
+    use crate::domain::portrait::{AvatarMode, EmblemSpec, FormKind};
+    use crate::state::forge::avatar_for_body;
+    let can = Embodiment::natural(BodyForm::TinCan);
+    match avatar_for_body(can, None, 9) {
+        Some(AvatarMode::Form(spec)) => assert_eq!((spec.kind, spec.form()), (FormKind::Object, "tin_can")),
+        other => panic!("expected a tin-can form body, got {other:?}"),
+    }
+    let shown = avatar_for_body(can, None, 9);
+    assert_eq!(avatar_for_body(can, shown.as_ref(), 10), None, "the matching body stays");
+    assert!(matches!(avatar_for_body(Embodiment::default(), shown.as_ref(), 9), Some(AvatarMode::Pcg(_))));
+    let emblem = AvatarMode::Emblem(EmblemSpec::default());
+    assert_eq!(avatar_for_body(can, Some(&emblem), 9), None, "an emblem is the user's choice");
+    let mut draft = agent();
+    roll_being(&mut draft, 5, BeingScope::AnyBeing);
+    let body = draft.profile().config.embodiment;
+    assert_eq!(body.is_human(), !matches!(draft.profile().config.avatar, Some(AvatarMode::Form(_))));
+}

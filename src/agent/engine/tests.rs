@@ -22,6 +22,7 @@ fn parent_post(id: &str, author_name: &str, content: &str, mentions: Vec<String>
         image_path: None,
         reposts_count: 0,
         is_reposted: false,
+        extras: Default::default(),
     };
     AuthoredPost::new(post, author)
 }

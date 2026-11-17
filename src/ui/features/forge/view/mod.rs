@@ -18,7 +18,7 @@ pub use hear::HearStatus;
 pub use keys::{init_key_bindings, Dismiss, Redo, Undo, FORGE_KEY_CONTEXT};
 pub use state::{DescribeStatus, ForgeContext, ForgeOpen, ForgeScreen, GuideState, Notice, StartState};
 
-use crate::domain::portrait::PortraitSlot;
+use crate::domain::portrait::{FormSlot, PortraitSlot};
 use crate::domain::{ArchetypeClass, Profile};
 use crate::state::forge::{AgentDraft, ValidationIssue};
 use crate::theme::ThemeTokens;
@@ -60,6 +60,8 @@ pub struct ForgeView {
     pub(crate) notice: Option<Notice>,
     /// The portrait part whose options the Appearance step shows.
     pub(crate) portrait_slot: PortraitSlot,
+    /// The form part whose options the Appearance step shows for non-human bodies.
+    pub(crate) form_slot: FormSlot,
     /// "Hear them speak" on the Voice step.
     pub(crate) hear: HearStatus,
     /// Whether the Grimoire's advanced settings are unfolded.

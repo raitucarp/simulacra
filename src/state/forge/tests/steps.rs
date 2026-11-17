@@ -59,9 +59,10 @@ fn every_profile_and_config_field_belongs_to_exactly_one_step() {
         .into_iter()
         .filter(|key| !UNMAPPED_PROFILE_KEYS.contains(&key.as_str()))
         .collect();
-    // `avatar` is skipped when `None`, so enumerate a config that has one.
+    // `avatar` is skipped when `None` and `engine` while classic, so enumerate a config with both.
     let avatar = Some(AvatarMode::Pcg(PortraitSpec::random(0)));
-    expected.extend(json_keys(&AgentConfig { avatar, ..AgentConfig::default() }));
+    let engine = crate::domain::EngineConfig { max_tool_steps: 1, ..Default::default() };
+    expected.extend(json_keys(&AgentConfig { avatar, engine, ..AgentConfig::default() }));
     let mut counts: BTreeMap<&str, usize> = BTreeMap::new();
     for (path, _) in mapped_fields() {
         *counts.entry(path).or_default() += 1;

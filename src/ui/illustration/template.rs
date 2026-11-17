@@ -1,6 +1,6 @@
 //! Pure SVG template handling: `{{token}}` substitution and raster-size scaling.
 
-use crate::domain::portrait::{HairColor, SkinTone};
+use crate::domain::portrait::{FormColor, FormSpec, HairColor, SkinTone};
 use crate::theme::color::to_hex;
 use crate::theme::{PaletteColorKey, PaletteColors};
 
@@ -10,13 +10,16 @@ pub const PLACEHOLDER_CLOSE: &str = "}}";
 /// Non-theme portrait placeholders (see `assets/illustrations/STYLE.md`).
 pub const SKIN_PLACEHOLDER: &str = "skin";
 pub const HAIR_PLACEHOLDER: &str = "hair";
+/// Non-theme form placeholders: `{{primary}}` / `{{secondary}}` (see STYLE.md, "Forms").
+pub const PRIMARY_PLACEHOLDER: &str = FormColor::Primary.key();
+pub const SECONDARY_PLACEHOLDER: &str = FormColor::Secondary.key();
 /// Palette color substituted for unknown placeholders (a neutral that reads on every theme).
 pub const FALLBACK_COLOR_KEY: PaletteColorKey = PaletteColorKey::FgMuted;
 /// Root element prefix the raster size attributes are inserted after.
 const SVG_ROOT: &str = "<svg";
 const VIEW_BOX_ATTR: &str = "viewBox=\"";
 
-/// Extra, non-palette placeholder values (portrait skin and hair), kept sorted so equal
+/// Extra, non-palette placeholder values (portrait skin and hair, form colors), kept sorted so equal
 /// sets hash equally.
 #[derive(Debug, Clone, Default, PartialEq, Eq, Hash)]
 pub struct TemplateExtras(Vec<(&'static str, String)>);
@@ -30,6 +33,15 @@ impl TemplateExtras {
     /// The `{{skin}}` / `{{hair}}` fills of a portrait.
     pub fn portrait(skin: SkinTone, hair: HairColor) -> Self {
         Self::none().with(SKIN_PLACEHOLDER, skin.hex()).with(HAIR_PLACEHOLDER, hair.hex())
+    }
+
+    /// The `{{primary}}` / `{{secondary}}` fills of a form.
+    /// A kind without swatches leaves them unset, so they render in the neutral fallback.
+    pub fn form(spec: &FormSpec) -> Self {
+        [(PRIMARY_PLACEHOLDER, FormColor::Primary), (SECONDARY_PLACEHOLDER, FormColor::Secondary)]
+            .into_iter()
+            .filter(|(_, color)| !spec.hex(*color).is_empty())
+            .fold(Self::none(), |extras, (key, color)| extras.with(key, spec.hex(color)))
     }
 
     /// These extras with `key` filled by `value` (replacing an earlier value).

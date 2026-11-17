@@ -1,0 +1,120 @@
+{
+  "kind": "machine",
+  "stack": ["back", "aura", "body", "finish", "markings", "mouth", "eyes", "accessory"],
+  "layers": {
+    "back": {
+      "variants": ["plain", "dawn", "night", "grid", "waves", "studio"],
+      "dir": "shared"
+    },
+    "aura": {
+      "variants": ["none", "signal", "sparks", "data", "glow"],
+      "bare": [1, 3]
+    },
+    "body": {
+      "variants": ["robot", "satellite", "server", "typewriter", "drone", "radio", "calculator", "train"]
+    },
+    "finish": {
+      "variants": ["none", "chrome", "rust", "matte", "neon"],
+      "clip": true,
+      "bare": [1, 3]
+    },
+    "markings": {
+      "variants": ["none", "hazard", "panels", "rivets", "barcode"],
+      "clip": true,
+      "bare": [1, 2]
+    },
+    "mouth": {
+      "variants": ["smile", "flat", "open", "grin", "ooh", "wavy", "none"],
+      "dir": "shared",
+      "anchor": true
+    },
+    "eyes": {
+      "variants": ["dot", "round", "happy", "sleepy", "wide", "wink", "glow", "none"],
+      "dir": "shared",
+      "anchor": true
+    },
+    "accessory": {
+      "variants": ["none", "headset", "visor", "tie", "gear"],
+      "anchor": true,
+      "bare": [1, 2]
+    }
+  },
+  "primary": [
+    {"key": "steel", "hex": "#9aa5b1"},
+    {"key": "gunmetal", "hex": "#4b525c"},
+    {"key": "signal", "hex": "#e04f3f"},
+    {"key": "cobalt", "hex": "#2f6fd1"},
+    {"key": "mint", "hex": "#59c3a5"},
+    {"key": "cream", "hex": "#efe6d2"},
+    {"key": "amber", "hex": "#f0a83a"},
+    {"key": "onyx", "hex": "#26282d"}
+  ],
+  "secondary": [
+    {"key": "screen", "hex": "#aef0d0"},
+    {"key": "chrome", "hex": "#dfe5ea"},
+    {"key": "copper", "hex": "#c27c4e"},
+    {"key": "yellow", "hex": "#f5c542"},
+    {"key": "cyan", "hex": "#4fd1e8"},
+    {"key": "red", "hex": "#e05050"},
+    {"key": "graphite", "hex": "#3c4048"},
+    {"key": "violet", "hex": "#9b7fd1"}
+  ],
+  "forms": {
+    "robot": {
+      "anchor": [0, 0, 0.95],
+      "prefer": {
+        "primary": ["steel", "cobalt", "mint", "cream", "signal"],
+        "secondary": ["screen", "chrome", "cyan"]
+      }
+    },
+    "satellite": {
+      "anchor": [0, 0, 0.72],
+      "prefer": {
+        "primary": ["steel", "cream", "amber"],
+        "secondary": ["cyan", "violet"]
+      }
+    },
+    "server": {
+      "anchor": [0, 0, 0.9],
+      "prefer": {
+        "primary": ["onyx", "gunmetal", "steel"],
+        "secondary": ["screen", "cyan", "chrome"]
+      }
+    },
+    "typewriter": {
+      "anchor": [0, 18, 0.82],
+      "prefer": {
+        "primary": ["onyx", "mint", "signal", "cream"],
+        "secondary": ["graphite", "chrome", "copper"]
+      }
+    },
+    "drone": {
+      "anchor": [0, 4, 0.78],
+      "prefer": {
+        "primary": ["onyx", "steel", "signal", "cream"],
+        "secondary": ["chrome", "graphite"]
+      }
+    },
+    "radio": {
+      "anchor": [0, 4, 1],
+      "prefer": {
+        "primary": ["cream", "mint", "signal", "amber"],
+        "secondary": ["copper", "graphite", "chrome"]
+      }
+    },
+    "calculator": {
+      "anchor": [0, -54, 0.8],
+      "prefer": {
+        "primary": ["gunmetal", "cream", "onyx"],
+        "secondary": ["screen", "yellow"]
+      }
+    },
+    "train": {
+      "anchor": [0, -8, 1],
+      "prefer": {
+        "primary": ["signal", "cobalt", "onyx", "mint"],
+        "secondary": ["yellow", "graphite", "copper"]
+      }
+    }
+  }
+}

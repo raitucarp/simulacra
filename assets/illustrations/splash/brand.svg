@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 120">
+  <defs><linearGradient id="g-splash-brand" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="{{accent}}"/><stop offset="1" stop-color="{{accent}}" stop-opacity="0.6"/>
+  </linearGradient></defs>
+  <ellipse cx="80" cy="108" rx="46" ry="5" fill="{{fg}}" fill-opacity="0.08"/>
+  <circle cx="64" cy="56" r="34" fill="url(#g-splash-brand)" stroke="{{fg}}" stroke-width="3"/>
+  <circle cx="96" cy="56" r="34" fill="{{accent_2}}" fill-opacity="0.7" stroke="{{fg}}" stroke-width="3"/>
+  <path d="M80 26 A34 34 0 0 1 80 86 A34 34 0 0 1 80 26 Z" fill="{{elevated}}" stroke="{{fg}}" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M80 42 L80 70" stroke="{{accent}}" stroke-width="2" stroke-linecap="round"/>
+  <circle cx="80" cy="42" r="4" fill="{{accent}}"/>
+  <circle cx="80" cy="56" r="4" fill="{{accent_2}}"/>
+  <circle cx="80" cy="70" r="4" fill="{{accent}}"/>
+  <circle cx="48" cy="44" r="5" fill="{{fg}}" fill-opacity="0.12"/>
+  <circle cx="112" cy="68" r="5" fill="{{fg}}" fill-opacity="0.12"/>
+</svg>

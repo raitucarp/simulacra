@@ -1,0 +1,120 @@
+{
+  "kind": "plant",
+  "stack": ["back", "aura", "body", "finish", "markings", "mouth", "eyes", "accessory"],
+  "layers": {
+    "back": {
+      "variants": ["plain", "dawn", "night", "grid", "waves", "studio"],
+      "dir": "shared"
+    },
+    "aura": {
+      "variants": ["none", "pollen", "fireflies", "sunbeam", "falling_leaves"],
+      "bare": [1, 3]
+    },
+    "body": {
+      "variants": ["oak_tree", "cactus", "moss", "mushroom", "sunflower", "vine", "bamboo", "seed"]
+    },
+    "finish": {
+      "variants": ["none", "dewy", "autumn", "frost", "sunlit"],
+      "clip": true,
+      "bare": [1, 3]
+    },
+    "markings": {
+      "variants": ["none", "veins", "spots", "rings", "blossoms"],
+      "clip": true,
+      "bare": [1, 2]
+    },
+    "mouth": {
+      "variants": ["smile", "flat", "open", "grin", "ooh", "wavy", "none"],
+      "dir": "shared",
+      "anchor": true
+    },
+    "eyes": {
+      "variants": ["dot", "round", "happy", "sleepy", "wide", "wink", "glow", "none"],
+      "dir": "shared",
+      "anchor": true
+    },
+    "accessory": {
+      "variants": ["none", "ladybug", "flower", "butterfly", "ribbon"],
+      "anchor": true,
+      "bare": [1, 2]
+    }
+  },
+  "primary": [
+    {"key": "leaf", "hex": "#4caf50"},
+    {"key": "fern", "hex": "#2e7d32"},
+    {"key": "sage", "hex": "#8fae7e"},
+    {"key": "lime", "hex": "#a4c639"},
+    {"key": "autumn", "hex": "#d2691e"},
+    {"key": "crimson", "hex": "#c0392b"},
+    {"key": "sunflower", "hex": "#f2c12e"},
+    {"key": "blossom", "hex": "#f4a6c1"}
+  ],
+  "secondary": [
+    {"key": "bark", "hex": "#7a5230"},
+    {"key": "soil", "hex": "#5b3a29"},
+    {"key": "straw", "hex": "#d9c27a"},
+    {"key": "cream", "hex": "#f3ead3"},
+    {"key": "moss", "hex": "#556b2f"},
+    {"key": "berry", "hex": "#8e3b5e"},
+    {"key": "clay", "hex": "#b8613f"},
+    {"key": "sand", "hex": "#e2c799"}
+  ],
+  "forms": {
+    "oak_tree": {
+      "anchor": [0, -10, 1],
+      "prefer": {
+        "primary": ["leaf", "fern", "autumn", "lime"],
+        "secondary": ["bark", "soil"]
+      }
+    },
+    "cactus": {
+      "anchor": [0, 0, 0.8],
+      "prefer": {
+        "primary": ["sage", "leaf", "fern"],
+        "secondary": ["clay", "sand", "straw"]
+      }
+    },
+    "moss": {
+      "anchor": [0, 22, 0.9],
+      "prefer": {
+        "primary": ["fern", "lime", "leaf", "sage"],
+        "secondary": ["moss", "soil", "berry"]
+      }
+    },
+    "mushroom": {
+      "anchor": [0, 40, 0.75],
+      "prefer": {
+        "primary": ["crimson", "autumn", "blossom"],
+        "secondary": ["cream", "straw", "sand"]
+      }
+    },
+    "sunflower": {
+      "anchor": [0, -26, 0.8],
+      "prefer": {
+        "primary": ["sunflower", "autumn"],
+        "secondary": ["bark", "soil"]
+      }
+    },
+    "vine": {
+      "anchor": [0, -4, 0.95],
+      "prefer": {
+        "primary": ["leaf", "fern", "lime", "sage"],
+        "secondary": ["bark", "moss", "berry"]
+      }
+    },
+    "bamboo": {
+      "anchor": [0, 0, 0.7],
+      "prefer": {
+        "primary": ["lime", "sage", "leaf"],
+        "secondary": ["moss", "straw"]
+      }
+    },
+    "seed": {
+      "anchor": [0, 16, 0.95],
+      "prefer": {
+        "primary": ["autumn", "sunflower", "sage"],
+        "secondary": ["bark", "moss"]
+      }
+    }
+  }
+}

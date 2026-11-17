@@ -6,6 +6,7 @@ pub mod activity;
 pub mod agent_config;
 pub mod archetype;
 pub mod document;
+pub mod engine;
 pub mod graph;
 pub mod ids;
 pub mod network;
@@ -26,6 +27,7 @@ pub use agent_config::{
 };
 pub use archetype::ArchetypeClass;
 pub use document::GroundingDocument;
+pub use engine::EngineConfig;
 pub use ids::{NetworkId, PostId, ProfileId};
 pub use network::Network;
 pub use post::{AuthoredPost, Post, MAX_POST_CHARS};

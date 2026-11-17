@@ -42,7 +42,8 @@ fn swatch_hexes(slot: PortraitSlot) -> Vec<&'static str> {
     }
 }
 
-fn swatch(id: usize, hex: &str, (selected, focused): (bool, bool), theme: &ThemeTokens, on_click: ActionCallback) -> Stateful<Div> {
+/// A round color swatch (shared by the portrait and form editors).
+pub(super) fn swatch(id: usize, hex: &str, (selected, focused): (bool, bool), theme: &ThemeTokens, on_click: ActionCallback) -> Stateful<Div> {
     let fill = parse_hex(hex).unwrap_or(theme.text_muted);
     let ring = if focused { theme.focus_ring } else if selected { theme.accent_brand } else { theme.border };
     div()

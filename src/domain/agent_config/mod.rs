@@ -22,6 +22,7 @@ pub use crate::domain::traits::{
 // --- p7 ontology ---
 pub use crate::domain::traits::{ActiveDays, Embodiment, Rhetoric};
 use crate::domain::archetype::ArchetypeClass;
+use crate::domain::engine::EngineConfig;
 use crate::domain::portrait::AvatarMode;
 use serde::{Deserialize, Serialize};
 
@@ -94,6 +95,9 @@ pub struct AgentConfig {
     #[serde(flatten)] pub rhetoric: Rhetoric,
     #[doc = "Weekdays the agent posts on by itself."]
     pub active_days: ActiveDays,
+    // --- p7 engine ---
+    #[doc = "Per-agent AI engine (model, request, output, image, tools); omitted while classic, and a malformed engine resets only itself."]
+    #[serde(deserialize_with = "crate::domain::engine::lenient", skip_serializing_if = "EngineConfig::is_classic")] pub engine: EngineConfig,
 }
 
 #[cfg(test)]

@@ -1,9 +1,10 @@
 //! Agent avatars as pure data: procedurally generated layered portraits ([`PortraitSpec`]),
-//! personality emblems ([`EmblemSpec`]) and imported photos ([`PhotoCrop`]), unified by
-//! [`AvatarMode`]. Rendering lives in `crate::ui::illustration`.
+//! layered non-human bodies ([`FormSpec`]), personality emblems ([`EmblemSpec`]) and imported
+//! photos ([`PhotoCrop`]), unified by [`AvatarMode`]. Rendering lives in `crate::ui::illustration`.
 
 mod colors;
 pub mod emblem;
+pub mod form;
 mod layer;
 mod mode;
 mod outfit;
@@ -14,6 +15,7 @@ mod spec;
 
 pub use colors::{HairColor, SkinTone};
 pub use emblem::{EmblemGlyph, EmblemHue, EmblemShape, EmblemSpec};
+pub use form::{FormColor, FormKind, FormLayer, FormSlot, FormSpec};
 pub use layer::{PortraitLayer, PortraitSlot, PORTRAIT_ASSET_EXT, PORTRAIT_ASSET_ROOT, PORTRAIT_I18N_ROOT};
 pub use mode::AvatarMode;
 pub use outfit::suggested_outfit;

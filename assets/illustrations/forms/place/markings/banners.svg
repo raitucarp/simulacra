@@ -1,0 +1,1 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M88 50 h20 v50 l-10 -9 l-10 9 Z" fill="{{danger}}" stroke="{{fg}}" stroke-width="2"/><path d="M148 50 h20 v50 l-10 -9 l-10 9 Z" fill="{{accent}}" stroke="{{fg}}" stroke-width="2"/><path d="M60 50 H196" stroke="{{fg}}" stroke-width="3"/></svg>

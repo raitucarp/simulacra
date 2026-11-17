@@ -1,7 +1,7 @@
 //! Runtime state of the autonomous scheduler: the switch, generation queue, heartbeat
 //! task, the most recent LLM failure and the failure dedupe / backoff gate.
 
-use crate::agent::schedule::{FailureGate, GenerationQueue};
+use crate::agent::schedule::{FailureGates, GenerationQueue};
 use crate::agent::LlmFailure;
 use crate::domain::ProfileId;
 use chrono::{DateTime, Utc};
@@ -26,8 +26,8 @@ pub struct SchedulerState {
     pub seed: u64,
     /// The most recent LLM failure, shown in the settings General pane.
     pub last_error: Option<LlmFailure>,
-    /// Which failure notices were shown, and the backoff after failed generations.
-    pub failures: FailureGate,
+    /// Per engine key: which failure notices were shown, and the backoff after failures.
+    pub failures: FailureGates,
     /// The running heartbeat loop; dropping it stops the heartbeat.
     pub(super) heartbeat: Option<Task<()>>,
 }
@@ -46,7 +46,7 @@ impl SchedulerState {
             tick: 0,
             seed,
             last_error: None,
-            failures: FailureGate::default(),
+            failures: FailureGates::default(),
             heartbeat: None,
         }
     }

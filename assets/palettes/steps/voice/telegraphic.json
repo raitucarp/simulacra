@@ -1,0 +1,14 @@
+{
+  "order": 5,
+  "config": {
+    "code_switching": "MonolingualPure",
+    "grammar_style": "FragmentedStream",
+    "diction_register": "TechnicalPrecision",
+    "vocabulary_complexity": 62,
+    "sentence_length": "UltraConciseAphorism",
+    "capitalization": "StandardSentence",
+    "punctuation_habit": "CrispMinimal",
+    "emoji_usage": "Never",
+    "typing_quirks": "Drops articles and pronouns; writes like a telegram."
+  }
+}

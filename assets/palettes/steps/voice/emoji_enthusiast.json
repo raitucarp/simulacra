@@ -1,0 +1,14 @@
+{
+  "order": 4,
+  "config": {
+    "code_switching": "NaturalLoanwords",
+    "grammar_style": "ColloquialExpressive",
+    "diction_register": "SlangColloquial",
+    "vocabulary_complexity": 32,
+    "sentence_length": "ShortPunchy",
+    "capitalization": "ExpressiveEmphasis",
+    "punctuation_habit": "ZeroTrailingPeriod",
+    "emoji_usage": "ModerateExpressive",
+    "typing_quirks": "Uses CAPS for feelings; strings two or three emoji together; no final period."
+  }
+}

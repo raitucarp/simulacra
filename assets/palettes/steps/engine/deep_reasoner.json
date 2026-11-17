@@ -1,0 +1,16 @@
+{
+  "order": 2,
+  "config": {
+    "engine": {
+      "tools": [
+        {
+          "tool": "vault_search"
+        },
+        {
+          "tool": "read_network"
+        }
+      ],
+      "max_tool_steps": 8
+    }
+  }
+}

@@ -101,7 +101,7 @@ impl ForgeView {
 
     fn apply_described(&mut self, patch: DraftPatch, window: &mut Window, cx: &mut Context<Self>) {
         self.draft.apply_patch(&patch);
-        crate::state::forge::set_class(&mut self.draft, None);
+        crate::state::forge::clear_palette(&mut self.draft);
         self.ensure_face();
         self.start.describe_status = DescribeStatus::Idle;
         let headline = tr_count(APPLIED_KEY, patch.edits.len(), &[]);

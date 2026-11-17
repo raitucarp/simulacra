@@ -1,8 +1,8 @@
-//! The right-hand panel of the start screen: Mnemo's welcome, a class preview, the dice
+//! The right-hand panel of the start screen: Mnemo's welcome, a palette preview, the dice
 //! result or the describe-in-words box.
 
 use super::super::common::{heading, message, muted};
-use super::super::steps::{class_badge, stage_portrait};
+use super::super::steps::{palette_badge, stage_portrait};
 use crate::domain::ArchetypeClass;
 use crate::ui::features::forge::text::{tr, tr_with};
 use crate::ui::features::forge::view::{DescribeStatus, ForgeHandle, ForgeView};
@@ -12,7 +12,7 @@ use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::Disableable;
 use gpui_kit::*;
 
-const HINT_KEY: &str = "forge.ui.start.hover_hint";
+const HINT_KEY: &str = "forge.palette.ui.hover_hint";
 const ROLLED_KEY: &str = "forge.ui.start.rolled_as";
 const REROLL_KEY: &str = "forge.ui.start.reroll";
 const KEEP_KEY: &str = "forge.ui.start.keep_roll";
@@ -35,8 +35,8 @@ impl ForgeView {
         if let Some(class) = self.start.rolled {
             return self.roll_panel(class, handle).into_any_element();
         }
-        if let Some(class) = self.start.preview {
-            return self.class_preview(class, handle).into_any_element();
+        if let Some(palette) = self.start.preview {
+            return self.palette_preview(palette, handle).into_any_element();
         }
         let theme = &self.theme;
         div()
@@ -61,7 +61,7 @@ impl ForgeView {
             .child(stage_portrait(profile, theme.forge_portrait_size, theme))
             .child(heading(profile.name.clone(), theme))
             .child(muted(profile.handle.clone(), theme))
-            .child(class_badge(class, theme))
+            .children(class.palette().map(|palette| palette_badge(palette, theme)))
             .child(
                 div()
                     .flex()

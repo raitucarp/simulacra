@@ -1,0 +1,19 @@
+{
+  "order": 2,
+  "config": {
+    "rhetorical_mode": "Narrative",
+    "rhetorical_devices": [
+      "Metaphor",
+      "Analogy",
+      "Alliteration"
+    ],
+    "stylistic_school": "Romantic",
+    "semiotic_mode": "Iconic",
+    "sentence_structure": "Cumulative",
+    "post_format": "SinglePost",
+    "lexical_fields": [
+      "Nature",
+      "Seafaring"
+    ]
+  }
+}

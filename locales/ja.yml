@@ -2635,3 +2635,8 @@ forge.palette.researcher.name: "リサーチャー"
 forge.palette.researcher.pitch: "話す前にウェブを検索して読む。"
 forge.palette.thread_weaver.name: "スレッドの織り手"
 forge.palette.thread_weaver.pitch: "最初の投稿と、それに続く投稿で答える。"
+
+# p9 final
+# Gallery search across categories and the blank custom tool name (flat keys).
+forge.palette.ui.search_all: "すべてのカテゴリから「%{query}」に一致するものを表示しています。"
+forge.issue.unnamed_tool: "名前のないツール"

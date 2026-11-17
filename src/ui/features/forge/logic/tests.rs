@@ -210,3 +210,15 @@ fn palette_notice_goes_stale_once_the_apply_is_undone() {
     assert!(!notice.is_stale_for(draft.profile()));
     assert!(!Notice::info("plain", Vec::new()).is_stale_for(draft.profile()));
 }
+
+#[test]
+fn gallery_columns_follow_the_available_width() {
+    let (card, gap) = (180.0, 12.0);
+    assert_eq!(fit_columns(4.0 * card + 3.0 * gap, card, gap), 4);
+    assert_eq!(fit_columns(4.0 * card + 3.0 * gap - 1.0, card, gap), 3);
+    assert_eq!(fit_columns(7.0 * card + 6.0 * gap + 50.0, card, gap), 7);
+    assert_eq!(fit_columns(card / 2.0, card, gap), 1);
+    assert_eq!(fit_columns(f32::NAN, card, gap), 1);
+    let cursor = GridCursor::new(2, 10, fit_columns(3.0 * card + 2.0 * gap, card, gap));
+    assert_eq!(cursor.moved(NavKey::Down).index, 5);
+}

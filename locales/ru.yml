@@ -2635,3 +2635,8 @@ forge.palette.researcher.name: "Исследователь"
 forge.palette.researcher.pitch: "Ищет и читает в интернете, прежде чем заговорить."
 forge.palette.thread_weaver.name: "Ткач цепочек"
 forge.palette.thread_weaver.pitch: "Отвечает первым постом и продолжениями."
+
+# p9 final
+# Gallery search across categories and the blank custom tool name (flat keys).
+forge.palette.ui.search_all: "Совпадения из всех категорий по запросу «%{query}»."
+forge.issue.unnamed_tool: "инструмент без названия"

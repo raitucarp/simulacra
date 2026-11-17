@@ -2635,3 +2635,8 @@ forge.palette.researcher.name: "研究员"
 forge.palette.researcher.pitch: "开口前先搜索并阅读网页。"
 forge.palette.thread_weaver.name: "织串者"
 forge.palette.thread_weaver.pitch: "以一条首帖加若干跟帖作答。"
+
+# p9 final
+# Gallery search across categories and the blank custom tool name (flat keys).
+forge.palette.ui.search_all: "显示所有分类中与“%{query}”匹配的结果。"
+forge.issue.unnamed_tool: "未命名工具"

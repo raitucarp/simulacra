@@ -2635,3 +2635,8 @@ forge.palette.researcher.name: "الباحث"
 forge.palette.researcher.pitch: "يبحث في الويب ويقرأ قبل أن يتكلم."
 forge.palette.thread_weaver.name: "ناسج السلاسل"
 forge.palette.thread_weaver.pitch: "يجيب بمنشور أول تتبعه منشورات متابعة."
+
+# p9 final
+# Gallery search across categories and the blank custom tool name (flat keys).
+forge.palette.ui.search_all: "عرض النتائج من كل الفئات لـ«%{query}»."
+forge.issue.unnamed_tool: "أداة بلا اسم"

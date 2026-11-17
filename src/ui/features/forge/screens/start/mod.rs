@@ -8,6 +8,9 @@ mod preview;
 mod side;
 mod tiles;
 
+#[cfg(test)]
+mod tests;
+
 pub(super) use preview::step_group;
 
 use super::common::{heading, muted, title};

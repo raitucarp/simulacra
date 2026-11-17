@@ -2,18 +2,19 @@
 //! the search; hovering a card, or moving the keyboard cursor onto it, previews it.
 
 use super::super::common::muted;
-use crate::domain::palette::Palette;
+use crate::domain::palette::{Palette, PaletteCategory};
 use crate::ui::features::forge::text::{tr, tr_with};
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
 use crate::ui::features::forge::widgets::{CardGrid, GridCell, OptionCardSpec};
 use crate::ui::illustration::{Illustration, IllustrationKind};
 use gpui_kit::*;
 
-/// Palette cards per row.
+/// Palette cards per row until the grid's width is first measured.
 const GALLERY_COLUMNS: usize = 4;
 const CARD_ID_PREFIX: &str = "forge-palette";
 const GALLERY_GRID_ID: &str = "forge-palette-grid";
 const NO_RESULTS_KEY: &str = "forge.palette.ui.no_results";
+const SEARCH_ALL_KEY: &str = "forge.palette.ui.search_all";
 const ARG_QUERY: &str = "query";
 
 /// Whether `palette` matches the (lower-cased, trimmed) search `query`.
@@ -23,27 +24,36 @@ fn matches(palette: &Palette, query: &str) -> bool {
         || palette.key.replace('_', " ").contains(query)
 }
 
+/// Full palettes matching `search`: a non-empty query searches every shelf, an empty one shows
+/// the `shelf` (`None`: all), in gallery order.
+pub(super) fn gallery_matches(shelf: Option<PaletteCategory>, search: &str) -> Vec<&'static Palette> {
+    let query = search.trim().to_lowercase();
+    let shelf = if query.is_empty() { shelf } else { None };
+    Palette::full(shelf).filter(|palette| matches(palette, &query)).collect()
+}
+
 /// The illustration of a full palette (class-sized art).
 pub(super) fn palette_art(palette: &Palette) -> Illustration {
     Illustration::asset(palette.illustration(), IllustrationKind::Class)
 }
 
 impl ForgeView {
-    /// Full palettes on the current shelf that match the search, in gallery order.
+    /// Full palettes the gallery shows for the current shelf and search.
     pub(super) fn gallery_palettes(&self) -> Vec<&'static Palette> {
-        let query = self.start.search.trim().to_lowercase();
-        Palette::full(self.start.category).filter(|palette| matches(palette, &query)).collect()
+        gallery_matches(self.start.category, &self.start.search)
     }
 
     /// The card grid, or a line saying nothing matches the search.
     pub(super) fn palette_grid(&self, handle: &ForgeHandle) -> AnyElement {
         let palettes = self.gallery_palettes();
+        let query = self.start.search.trim().to_string();
         if palettes.is_empty() {
-            let text = tr_with(NO_RESULTS_KEY, &[(ARG_QUERY, self.start.search.trim().to_string())]);
-            return muted(text, &self.theme).into_any_element();
+            return muted(tr_with(NO_RESULTS_KEY, &[(ARG_QUERY, query)]), &self.theme).into_any_element();
         }
         let cells = palettes.into_iter().map(|palette| self.palette_card(palette, handle)).collect();
-        CardGrid::new(GALLERY_GRID_ID, cells, GALLERY_COLUMNS, self.theme.stack_gap).into_any_element()
+        let grid = CardGrid::new(GALLERY_GRID_ID, cells, GALLERY_COLUMNS, self.theme.stack_gap).auto_columns(self.theme.forge_class_card_width);
+        let note = (!query.is_empty() && self.start.category.is_some()).then(|| muted(tr_with(SEARCH_ALL_KEY, &[(ARG_QUERY, query)]), &self.theme));
+        div().flex().flex_col().gap(self.theme.stack_gap).children(note).child(grid).into_any_element()
     }
 
     fn palette_card(&self, palette: &'static Palette, handle: &ForgeHandle) -> GridCell {

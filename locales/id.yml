@@ -2635,3 +2635,8 @@ forge.palette.researcher.name: "Peneliti"
 forge.palette.researcher.pitch: "Mencari dan membaca web sebelum bicara."
 forge.palette.thread_weaver.name: "Penenun Utas"
 forge.palette.thread_weaver.pitch: "Menjawab dengan postingan pertama beserta lanjutannya."
+
+# p9 final
+# Gallery search across categories and the blank custom tool name (flat keys).
+forge.palette.ui.search_all: "Menampilkan hasil dari semua kategori untuk “%{query}”."
+forge.issue.unnamed_tool: "alat tanpa nama"

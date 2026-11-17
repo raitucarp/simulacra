@@ -2635,3 +2635,8 @@ forge.palette.researcher.name: "Researcher"
 forge.palette.researcher.pitch: "Searches and reads the web before it speaks."
 forge.palette.thread_weaver.name: "Thread Weaver"
 forge.palette.thread_weaver.pitch: "Answers in a first post plus follow-ups."
+
+# p9 final
+# Gallery search across categories and the blank custom tool name (flat keys).
+forge.palette.ui.search_all: "Showing matches from every category for “%{query}”."
+forge.issue.unnamed_tool: "unnamed tool"

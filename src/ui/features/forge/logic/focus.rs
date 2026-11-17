@@ -29,6 +29,16 @@ impl NavKey {
     }
 }
 
+/// How many cells of at least `min_cell` fit side by side in `available`, `gap` apart
+/// (never fewer than one, so a narrow container still shows a column).
+pub fn fit_columns(available: f32, min_cell: f32, gap: f32) -> usize {
+    let step = min_cell + gap;
+    if !available.is_finite() || !step.is_finite() || step <= 0.0 {
+        return 1;
+    }
+    (((available + gap) / step).floor() as usize).max(1)
+}
+
 /// Position of the highlighted card among `len` cards in rows of `columns`.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct GridCursor {

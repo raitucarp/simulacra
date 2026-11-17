@@ -2635,3 +2635,8 @@ forge.palette.researcher.name: "Pesquisador"
 forge.palette.researcher.pitch: "Busca e lê na web antes de falar."
 forge.palette.thread_weaver.name: "Tecelão de threads"
 forge.palette.thread_weaver.pitch: "Responde com uma primeira publicação e suas continuações."
+
+# p9 final
+# Gallery search across categories and the blank custom tool name (flat keys).
+forge.palette.ui.search_all: "Mostrando resultados de todas as categorias para “%{query}”."
+forge.issue.unnamed_tool: "ferramenta sem nome"

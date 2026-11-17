@@ -41,7 +41,7 @@ fn render_row(theme: &ThemeTokens, row: &CredentialRowView, on_edit: &Credential
     let (edit_id, remove_id) = (row.id.clone(), row.id.clone());
     let (on_edit, on_remove) = (on_edit.clone(), on_remove.clone());
     let details = format!("{} · {}", row.kind.label(), row.masked_secret);
-    let mut info = div().flex().flex_col().gap(theme.spacing_2xs).child(field_title(theme, row.label.clone())).child(
+    let mut info = div().flex_1().min_w_0().flex().flex_col().gap(theme.spacing_2xs).child(field_title(theme, row.label.clone())).child(
         div().text_size(theme.font_size_hint).font_weight(FontWeight::NORMAL).text_color(theme.text_secondary).child(details),
     );
     if !row.endpoint.trim().is_empty() {

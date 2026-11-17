@@ -3,11 +3,7 @@
 use super::AppState;
 use crate::agent::LlmSettings;
 use crate::error::{AppError, Result};
-use crate::storage::SettingKey;
 use crate::theme::ThemeSettings;
-
-/// The scheduler stays off until the user turns it on, so the app never surprise-posts.
-const SCHEDULER_ENABLED_DEFAULT: bool = false;
 
 /// Logs a write the vault worker could not even accept (its thread is gone).
 fn report_unqueued(result: Result<()>) {
@@ -34,24 +30,6 @@ impl AppState {
             report_unqueued(db.write(move |db| saved.save_to_db(db).map_err(AppError::DatabaseError)));
         }
         self.llm_settings = settings;
-    }
-
-    /// Whether the autonomous scheduler is switched on (persisted; off by default).
-    pub fn scheduler_enabled(&self) -> bool {
-        self.db
-            .as_ref()
-            .and_then(|db| db.get_setting(SettingKey::SchedulerEnabled).ok().flatten())
-            .and_then(|raw| raw.parse::<bool>().ok())
-            .unwrap_or(SCHEDULER_ENABLED_DEFAULT)
-    }
-
-    /// Persists the autonomous-scheduler switch.
-    pub fn set_scheduler_enabled(&self, enabled: bool) {
-        if let Some(ref db) = self.db {
-            if let Err(e) = db.set_setting(SettingKey::SchedulerEnabled, &enabled.to_string()) {
-                eprintln!("simulacra: failed to persist scheduler switch: {e}");
-            }
-        }
     }
 }
 

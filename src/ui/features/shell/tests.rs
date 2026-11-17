@@ -52,6 +52,18 @@ mod settings_draft {
     }
 
     #[test]
+    fn unsaved_only_when_saving_would_change_something() {
+        let saved = saved();
+        let typed = |model: &str| (saved.api_key.clone(), model.to_string(), saved.custom_endpoint.clone());
+        let mut draft = SettingsDraft::default();
+        assert!(!draft.is_unsaved(&saved, typed(&saved.model)), "fresh inputs are saved");
+        assert!(!draft.is_unsaved(&saved, typed("")), "a blank model means the default");
+        assert!(draft.is_unsaved(&saved, typed("other-model")));
+        draft.select_provider(&saved, other_provider(saved.provider));
+        assert!(draft.is_unsaved(&saved, typed(&saved.model)), "a provider pick is unsaved");
+    }
+
+    #[test]
     fn discard_reverts_to_the_saved_settings() {
         let saved = saved();
         let mut draft = SettingsDraft::default();

@@ -22,6 +22,7 @@ mod render;
 mod scheduler_state;
 mod stream_list;
 mod settings_draft;
+mod settings_ui;
 mod view;
 
 #[cfg(test)]
@@ -32,4 +33,5 @@ pub use graph_state::GraphState;
 pub use lab_state::{LabState, LlmInputs};
 pub use scheduler_state::SchedulerState;
 pub use settings_draft::SettingsDraft;
+pub use settings_ui::SettingsUi;
 pub use view::{AppView, ChromeState};

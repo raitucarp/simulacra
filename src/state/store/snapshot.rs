@@ -14,6 +14,7 @@ pub(super) struct StoredSettings {
     pub llm: LlmSettings,
     pub theme: ThemeSettings,
     pub credentials: CredentialStore,
+    pub preferences: crate::domain::preferences::Preferences,
 }
 
 impl StoredSettings {
@@ -22,7 +23,7 @@ impl StoredSettings {
     pub fn read(db: &Database) -> Self {
         let llm = LlmSettings::load_from_db(db);
         let credentials = CredentialStore::load_from_db(db, &llm);
-        Self { llm, theme: db.load_theme_settings(), credentials }
+        Self { llm, theme: db.load_theme_settings(), credentials, preferences: db.load_preferences() }
     }
 }
 

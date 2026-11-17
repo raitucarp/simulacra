@@ -14,6 +14,7 @@ impl AppView {
     pub fn switch_language(&mut self, lang: Language, cx: &mut Context<Self>) {
         self.chrome.current_language = lang;
         crate::i18n::set_locale(lang);
+        self.state.set_language(lang);
         cx.notify();
     }
 

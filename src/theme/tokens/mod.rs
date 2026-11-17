@@ -99,10 +99,11 @@ theme_tokens! {
         forge_preview_max, contact_list_pane_min, contact_list_pane_max, modal_rail_min,
         modal_rail_max, graph_details_height, graph_details_min, graph_details_max,
         splash_brand_width, splash_guide_size, splash_progress_width, splash_progress_height,
-        // Settings modal and its appearance editor
-        settings_header_height, settings_input_height, settings_provider_button_height,
-        settings_brand_badge_size, settings_tab_indicator_width, settings_tab_indicator_height,
-        theme_preview_card_width, theme_preview_avatar_size, color_field_width, hex_readout_width,
+        // Settings window (header, inputs, size caps and inset, rail, rows, art) and its appearance editor
+        settings_header_height, settings_input_height, settings_provider_button_height, settings_brand_badge_size, settings_tab_indicator_width,
+        settings_tab_indicator_height, theme_preview_card_width, theme_preview_avatar_size, color_field_width, hex_readout_width,
+        settings_modal_max_width, settings_modal_max_height, settings_modal_inset, settings_rail_item_height, settings_rail_compact_width,
+        settings_row_label_min_width, settings_text_control_width, settings_number_readout_width, settings_header_art_width, settings_empty_art_width,
         // Agent Forge character creator
         forge_rail_width, forge_rail_thumb_width, forge_options_width, forge_preview_width,
         forge_topbar_height, forge_portrait_size, forge_nameplate_avatar_size, forge_class_card_width,
@@ -133,10 +134,8 @@ theme_tokens! {
         graph_dim_opacity, graph_curve_bend,
         // Splash: shortest time on screen, fade, longest avatar warm-up (ms); mini graph width/height
         splash_min_duration_ms, splash_fade_duration_ms, splash_warm_up_limit_ms, graph_mini_aspect,
-        // Agent Forge: opacity of disabled option cards and of the stage backdrop art
-        forge_disabled_opacity, forge_backdrop_opacity,
-        // Feed: tools a post's author tried that failed
-        post_failed_tool_opacity,
+        // Forge disabled option cards and stage backdrop art; feed failed tools; settings rows switched off
+        forge_disabled_opacity, forge_backdrop_opacity, post_failed_tool_opacity, settings_disabled_opacity,
     ],
 }
 

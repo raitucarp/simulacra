@@ -4,6 +4,7 @@ use super::super::view::AppView;
 use crate::domain::PostId;
 use gpui_kit::component::notification::Notification;
 use gpui_kit::component::WindowExt;
+use crate::domain::preferences::ToastKind;
 use gpui_kit::*;
 use rust_i18n::t;
 
@@ -14,14 +15,14 @@ impl AppView {
         if !is_own {
             return;
         }
-        let note = match self.state.delete_post(&post_id) {
-            Ok(()) => Notification::success(t!("post.deleted").to_string()),
-            Err(err) => Notification::error(t!("post.delete_failed", reason = err.to_string()).to_string()),
-        };
+        let deleted = self.state.delete_post(&post_id);
         if self.feed.selected_thread_post_id.as_ref() == Some(&post_id) {
             self.feed.selected_thread_post_id = None;
         }
-        window.push_notification(note, cx);
+        match deleted {
+            Ok(()) => self.toast(ToastKind::Confirmation, Notification::success(t!("post.deleted").to_string()), window, cx),
+            Err(err) => window.push_notification(Notification::error(t!("post.delete_failed", reason = err.to_string()).to_string()), cx),
+        }
         cx.notify();
     }
 }

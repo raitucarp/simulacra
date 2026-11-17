@@ -33,7 +33,8 @@ setting_keys! {
     ActiveNetwork => "active_network_id",
     /// Active authoring profile.
     ActiveProfile => "active_profile_id",
-    /// Global autonomous-scheduler switch.
+    /// Legacy global autonomous-scheduler switch; migrated into
+    /// `preferences.agents.autonomous_posting` on first load, then removed.
     SchedulerEnabled => "scheduler_enabled",
     /// LLM provider identifier, credentials, model and sampling settings.
     LlmProvider => "llm_provider",
@@ -69,6 +70,19 @@ setting_keys! {
     PanelLayouts => "ui.panel_layouts",
     /// JSON array of the seed profile ids the user deleted (never re-seeded).
     DismissedSeeds => "seeds.dismissed",
+    /// Typed preferences, one JSON row per settings category (`domain::preferences`).
+    PrefsGeneral => "preferences.general",
+    PrefsAppearance => "preferences.appearance",
+    PrefsWriting => "preferences.writing",
+    PrefsAi => "preferences.ai",
+    PrefsEmbeddings => "preferences.embeddings",
+    PrefsImages => "preferences.images",
+    PrefsAgents => "preferences.agents",
+    PrefsLearning => "preferences.learning",
+    PrefsImport => "preferences.import",
+    PrefsPrivacy => "preferences.privacy",
+    PrefsNotifications => "preferences.notifications",
+    PrefsAdvanced => "preferences.advanced",
     /// Pre-palette serialized `ThemeTokens`; migrated on load, then removed.
     LegacyThemeTokens => "theme_tokens",
 }

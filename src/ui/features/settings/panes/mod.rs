@@ -1,15 +1,12 @@
-//! Content panes for each settings tab.
+//! Panes hosted by the settings rows: the AI provider pane, the scheduler status and the
+//! Appearance pane (theme gallery and editor).
 
 mod ai;
 mod ai_fields;
 mod appearance;
 pub(super) mod common;
 mod engine;
-mod general;
-mod vault;
-mod welcome;
 
 pub(super) use ai::render_ai_pane;
 pub use appearance::{AppearanceEvent, AppearancePanel};
-pub(super) use general::render_general_pane;
-pub(super) use vault::render_vault_pane;
+pub(super) use engine::render_scheduler_status;

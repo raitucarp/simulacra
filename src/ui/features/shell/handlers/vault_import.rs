@@ -6,6 +6,7 @@ use crate::ui::components::{
 };
 use gpui_kit::component::notification::Notification;
 use gpui_kit::component::WindowExt;
+use crate::domain::preferences::ToastKind;
 use gpui_kit::*;
 use rust_i18n::t;
 use std::path::Path;
@@ -47,12 +48,11 @@ impl AppView {
         let outcome = parsed.map_err(|e| import_error_reason(&e)).and_then(|(title, content)| {
             self.state.add_document(&title, &content).map(|_| title).map_err(|e| e.to_string())
         });
-        let note = match outcome {
-            Ok(title) => Notification::success(t!("vault.imported", title = title).to_string()),
-            Err(reason) => Notification::error(t!("vault.import_failed", file = file, reason = reason).to_string()),
-        };
         self.state.sync_network_counts();
-        window.push_notification(note, cx);
+        match outcome {
+            Ok(title) => self.toast(ToastKind::Confirmation, Notification::success(t!("vault.imported", title = title).to_string()), window, cx),
+            Err(reason) => window.push_notification(Notification::error(t!("vault.import_failed", file = file, reason = reason).to_string()), cx),
+        }
         cx.notify();
     }
 }

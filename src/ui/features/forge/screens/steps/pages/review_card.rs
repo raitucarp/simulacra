@@ -3,7 +3,7 @@
 
 use super::super::super::common::{card, title};
 use super::super::sheet::radar;
-use super::super::{class_badge, stage_portrait};
+use super::super::{palette_badge, stage_portrait};
 use crate::domain::TraitOption;
 use crate::state::forge::{personality_radar, ForgeKind, TraitField, TraitValue, TraitVisitor};
 use crate::theme::ThemeTokens;
@@ -68,7 +68,7 @@ impl ForgeView {
             .child(stage_portrait(profile, theme.forge_portrait_size * CARD_PORTRAIT_SCALE, theme))
             .child(title(self.display_name(), theme))
             .child(div().text_size(theme.font_size_sm).text_color(theme.text_muted).child(crate::state::forge::normalize_handle(&profile.handle)))
-            .children(self.class().map(|class| class_badge(class, theme)))
+            .children(self.palette().map(|palette| palette_badge(palette, theme)))
             .child(div().flex().flex_wrap().justify_center().gap(theme.spacing_xs).children(chips))
             .child(radar(CARD_RADAR_ID, personality_radar(&profile.config), theme))
     }

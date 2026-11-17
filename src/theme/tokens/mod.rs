@@ -105,6 +105,8 @@ theme_tokens! {
         forge_clock_size, forge_clock_ring_width, forge_week_cell_height, forge_heart_size,
         // Agent Forge: hour labels inside the clock ring, keyboard-hint key caps
         forge_clock_label_size, forge_key_cap_min_width,
+        // Agent Forge: palette gallery category tabs and the step palette strip
+        forge_palette_tab_icon_width, forge_palette_chip_width, forge_palette_search_width,
         // First-run welcome overlay
         onboarding_width, onboarding_art_size,
         // Agent Forge Engine step: the "Test image" result and the sample-answer editor

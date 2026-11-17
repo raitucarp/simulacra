@@ -1,0 +1,11 @@
+{
+  "order": 5,
+  "config": {
+    "engine": {
+      "output": {
+        "format": "json_schema",
+        "preset": "thread"
+      }
+    }
+  }
+}

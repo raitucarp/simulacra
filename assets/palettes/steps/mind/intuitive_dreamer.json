@@ -1,0 +1,13 @@
+{
+  "order": 3,
+  "config": {
+    "intelligence_style": "PoeticIntuitive",
+    "epistemic_stance": "PhenomenologicalExistential",
+    "cognitive_pace": "SlowContemplative",
+    "fluid_intelligence": 65,
+    "crystallized_intelligence": 70,
+    "emotional_intelligence": 90,
+    "social_intelligence": 70,
+    "existential_intelligence": 94
+  }
+}

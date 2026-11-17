@@ -1,0 +1,19 @@
+{
+  "order": 1,
+  "config": {
+    "posting_cadence": "MorningAndEvening",
+    "chronotype": "EarlyBirdLark",
+    "active_hours_start": 5,
+    "active_hours_end": 13,
+    "spontaneity_rate": 30,
+    "active_days": [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday"
+    ]
+  }
+}

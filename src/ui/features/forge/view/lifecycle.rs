@@ -37,6 +37,7 @@ impl ForgeView {
             hear: super::HearStatus::Idle,
             grimoire_open: false,
             engine: super::EngineUi::default(),
+            strip_preview: None,
             focus: cx.focus_handle(),
         };
         view.revalidate();

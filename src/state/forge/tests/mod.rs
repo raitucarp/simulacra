@@ -8,6 +8,7 @@ mod engine;
 mod history;
 mod locales;
 mod ontology;
+mod palette;
 mod roll;
 mod steps;
 mod validate;

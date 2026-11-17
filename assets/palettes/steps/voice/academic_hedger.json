@@ -1,0 +1,14 @@
+{
+  "order": 3,
+  "config": {
+    "code_switching": "ClassicalEtymology",
+    "grammar_style": "StandardFormal",
+    "diction_register": "AcademicPhilosophical",
+    "vocabulary_complexity": 90,
+    "sentence_length": "LongPeriodic",
+    "capitalization": "StandardSentence",
+    "punctuation_habit": "EmDashAndSemicolon",
+    "emoji_usage": "Never",
+    "typing_quirks": "Hedges every claim ('arguably', 'it seems'); cites a source in brackets."
+  }
+}

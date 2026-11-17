@@ -1,11 +1,16 @@
-//! "Choose your class": eight illustrated class cards, three other ways to begin (scratch,
-//! dice, describe in words), the Agent / Persona switch and a preview panel on the right.
+//! "Choose a palette": the illustrated palette gallery (shelf tabs, search, cards), three
+//! other ways to begin (scratch, dice, describe in words), the Agent / Persona switch and a
+//! preview panel on the right.
 
-mod classes;
+mod filters;
+mod gallery;
 mod preview;
 mod side;
+mod tiles;
 
-use super::common::{muted, title};
+pub(super) use preview::step_group;
+
+use super::common::{heading, muted, title};
 use crate::state::forge::ForgeKind;
 use crate::theme::ThemeTokens;
 use crate::ui::components::{persisted_h_resizable, segment_pill, segmented_track, Segment, SplitPane};
@@ -17,8 +22,9 @@ use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::scroll::ScrollableElement;
 use gpui_kit::*;
 
-const TITLE_KEY: &str = "forge.ui.start.title";
-const SUBTITLE_KEY: &str = "forge.ui.start.subtitle";
+const TITLE_KEY: &str = "forge.palette.ui.title";
+const SUBTITLE_KEY: &str = "forge.palette.ui.subtitle";
+const OTHER_WAYS_KEY: &str = "forge.palette.ui.other_ways";
 const CLOSE_KEY: &str = "forge.ui.close";
 const CLOSE_ID: &str = "forge-start-close";
 const GRID_SCROLL_ID: &str = "forge-start-grid";
@@ -27,7 +33,7 @@ const KIND_ID_PREFIX: &str = "forge-kind";
 /// Layout id of the class grid | preview split (sizes persist).
 const START_SPLIT_ID: &str = "forge-start-split";
 
-/// The class grid beside the preview panel, both resizable.
+/// The gallery beside the preview panel, both resizable.
 fn start_split(grid: impl IntoElement, side: impl IntoElement, theme: &ThemeTokens) -> impl IntoElement {
     persisted_h_resizable(START_SPLIT_ID, theme)
         .pane(SplitPane::flex(theme.split_flex_min).child(grid))
@@ -55,7 +61,9 @@ impl ForgeView {
             .flex()
             .flex_col()
             .gap(theme.spacing_xl)
-            .child(self.class_grid(handle))
+            .child(self.gallery_filters(handle))
+            .child(self.palette_grid(handle))
+            .child(heading(tr(OTHER_WAYS_KEY), theme))
             .child(self.begin_tiles(handle));
         let side = div()
             .id(SIDE_SCROLL_ID)

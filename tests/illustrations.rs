@@ -20,13 +20,14 @@ const PORTRAIT_FILLS: [(&str, &str); 4] = [("skin", "#e0ac7e"), ("hair", "#5b3a2
 const ALLOWED_HEX: [&str; 2] = ["000", "fff"];
 const CARD_LIMIT_BYTES: usize = 3 * 1024;
 const WIDE_LIMIT_BYTES: usize = 6 * 1024;
-const WIDE_KINDS: [&str; 2] = ["classes", "steps"];
+const WIDE_KINDS: [&str; 3] = ["classes", "steps", "palettes"];
 const FORBIDDEN_TAGS: [&str; 4] = ["<style", "<image", "<text", "<script"];
 
 /// Expected `viewBox` per top-level folder; anything else is a trait option card.
-const CANVASES: [(&str, &str); 7] = [
+const CANVASES: [(&str, &str); 8] = [
     ("steps", "0 0 320 120"),
     ("classes", "0 0 200 240"),
+    ("palettes", "0 0 200 240"),
     ("guide", "0 0 128 128"),
     ("empty", "0 0 240 160"),
     ("portrait", "0 0 256 256"),

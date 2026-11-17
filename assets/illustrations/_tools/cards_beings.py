@@ -219,9 +219,10 @@ def creatures():
     card(g, 'cat', tail + body + head, 'w')
 
     branch = L('M20 98 Q80 92 142 100', 'm', 6)
-    crow = L('M76 88 l-2 8 M88 90 l2 8', 'f', 3) + P('M50 52 Q62 44 80 50 Q100 58 112 72 L140 90 Q126 96 110 88 Q96 94 80 90 Q58 86 52 68 Z', 'f')
-    crow += L('M76 60 Q96 64 108 78 M74 70 Q90 76 100 84', 'm', 2) + C(56, 44, 13, 'f') + P('M47 37 Q34 41 22 50 Q36 53 48 53 Z', 'f')
-    crow += C(55, 42, 3, 'u', None) + C(54.5, 42, 1.6, 'f', None) + L('M26 49 L44 47', 'm', 1.5)
+    # An iridescent (info-hued) crow: a fg silhouette would turn white on dark themes.
+    crow = L('M76 88 l-2 8 M88 90 l2 8', 'f', 3) + P('M50 52 Q62 44 80 50 Q100 58 112 72 L140 90 Q126 96 110 88 Q96 94 80 90 Q58 86 52 68 Z', 'i')
+    crow += L('M76 60 Q96 64 108 78 M74 70 Q90 76 100 84', 'f', 2, '.45') + C(56, 44, 13, 'i') + P('M47 37 Q34 41 22 50 Q36 53 48 53 Z', 'w')
+    crow += C(55, 42, 3.4, 'u', None) + C(54.5, 42, 1.8, 'f', None) + L('M26 49 L44 47', 'f', 1.5, '.5')
     card(g, 'crow', branch + crow, 'a')
 
     oct_ = ''

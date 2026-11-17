@@ -33,6 +33,7 @@ impl ForgeView {
             .border_color(theme.border_subtle)
             .children(self.guide_panel(handle))
             .children(self.notice.as_ref().map(|notice| self.notice_box(notice, handle)))
+            .children(self.palette_strip(handle))
             .child(self.step_page(handle))
     }
 
@@ -74,6 +75,7 @@ impl ForgeView {
             .child(
                 div()
                     .flex_1()
+                    .min_w_0()
                     .flex()
                     .flex_col()
                     .gap(theme.spacing_2xs)

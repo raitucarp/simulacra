@@ -13,6 +13,7 @@ mod scales;
 mod spacing;
 mod surfaces;
 mod text;
+mod vault;
 
 pub use metrics::{DEFAULT_FONT_FAMILY, DEFAULT_MONO_FONT_FAMILY};
 pub use scales::{Density, RadiusScale, TypeScale};
@@ -40,6 +41,7 @@ pub fn derive_tokens(
     forge::apply_forge_layout(&mut t);
     panels::apply_panel_layout(&mut t);
     responsive::apply_responsive_layout(&mut t);
+    vault::apply_vault_layout(&mut t);
     surfaces::apply_surfaces(&mut t, palette);
     text::apply_text(&mut t, palette);
     accents::apply_accents(&mut t, palette);

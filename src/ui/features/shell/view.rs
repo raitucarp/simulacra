@@ -7,6 +7,7 @@ use super::lab_state::{LabState, LlmInputs};
 use super::panels::ShellPanels;
 use super::scheduler_state::SchedulerState;
 use super::settings_draft::SettingsDraft;
+use super::vault_host::VaultHost;
 use crate::i18n::Language;
 use crate::state::AppState;
 use crate::theme::ThemeTokens;
@@ -28,6 +29,8 @@ pub struct AppView {
     pub lab: LabState,
     pub scheduler: SchedulerState,
     pub graph: GraphState,
+    /// The Knowledge Vault view.
+    pub vault: VaultHost,
     /// The Agent Forge while it is open (it replaces the center and right columns).
     pub forge: Option<ForgeSession>,
     /// Cached views of the sidebars and the center column.

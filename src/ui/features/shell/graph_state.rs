@@ -77,7 +77,7 @@ impl AppView {
                 self.select_post(id, window, cx);
                 self.select_nav(NavigationTab::Timeline, window, cx);
             }
-            NodeRef::Document(_) => self.select_nav(NavigationTab::Knowledge, window, cx),
+            NodeRef::Document(id) => self.open_vault_document(&id, window, cx),
             NodeRef::Hashtag(tag) => {
                 self.select_nav(NavigationTab::Timeline, window, cx);
                 self.search_topic(&tag, window, cx);

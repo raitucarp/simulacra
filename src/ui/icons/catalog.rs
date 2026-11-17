@@ -103,4 +103,13 @@ lucide_catalog! {
     Wifi => "icons/wifi.svg",
     X => "icons/x.svg",
     Zap => "icons/zap.svg",
+    // sb B1: Knowledge Vault (view switcher, sort, citations, catalogue fields)
+    LayoutGrid => "icons/layout-grid.svg",
+    List => "icons/list.svg",
+    Bookmark => "icons/bookmark.svg",
+    Quote => "icons/quote.svg",
+    ArrowUpDown => "icons/arrow-up-down.svg",
+    BookMarked => "icons/book-marked.svg",
+    Languages => "icons/languages.svg",
+    MapPin => "icons/map-pin.svg",
 }

@@ -1,6 +1,9 @@
 //! Knowledge vault file import: native picker, background read, add-document path.
 
 use super::super::view::AppView;
+use crate::domain::document::record::OriginKind;
+use crate::domain::document::NewDocument;
+use crate::ui::features::vault::problem_message;
 use crate::ui::components::{
     pick_document_path, read_document_file, DocumentImportError, MAX_DOCUMENT_KB,
 };
@@ -44,15 +47,21 @@ impl AppView {
         cx: &mut Context<Self>,
     ) {
         let file = path.file_name().map(|n| n.to_string_lossy().to_string()).unwrap_or_default();
+        let persona = self.state.current_profile().map(|p| p.name.clone()).unwrap_or_default();
+        let network = self.state.active_network_id.clone();
         let outcome = parsed.map_err(|e| import_error_reason(&e)).and_then(|(title, content)| {
-            self.state.add_document(&title, &content).map(|_| title).map_err(|e| e.to_string())
+            let new = NewDocument::new(network, title.clone(), content).from_origin(OriginKind::File, file.clone()).added_by(persona);
+            let added = self.state.add_new_document(new);
+            added.map(|id| (id, title)).map_err(|problems| problems.into_iter().map(problem_message).collect::<Vec<_>>().join(" "))
         });
-        let note = match outcome {
-            Ok(title) => Notification::success(t!("vault.imported", title = title).to_string()),
+        let note = match &outcome {
+            Ok((_, title)) => Notification::success(t!("vault.imported", title = title).to_string()),
             Err(reason) => Notification::error(t!("vault.import_failed", file = file, reason = reason).to_string()),
         };
-        self.state.sync_network_counts();
         window.push_notification(note, cx);
+        if let Ok((id, _)) = outcome {
+            self.open_vault_document(&id, window, cx);
+        }
         cx.notify();
     }
 }

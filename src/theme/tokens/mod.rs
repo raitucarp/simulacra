@@ -1,14 +1,12 @@
 //! Core design tokens for typography, surfaces, borders, spacing, and radii.
 //! Strictly tokenized to eliminate magic strings and hardcoded values.
 
-#[macro_use]
-mod macros;
+#[macro_use] mod macros;
 mod serde_helpers;
 
 use gpui_kit::{px, rgba, Pixels, Rgba};
 use crate::theme::palette::PaletteMode;
-use serde::{Deserialize, Serialize};
-use serde_helpers::{px_serde, rgba_serde};
+use serde::{Deserialize, Serialize}; use serde_helpers::{px_serde, rgba_serde};
 
 theme_tokens! {
     // Light/dark appearance the colors were derived for
@@ -126,6 +124,7 @@ theme_tokens! {
         inspector_stacked_min, inspector_stacked_max, heatmap_cell_min, heatmap_cell_max, heatmap_month_label_width, graph_label_max_width, graph_mini_node_radius_max,
         // Agent Forge Engine step: the "Test image" result and the sample-answer editor
         forge_probe_image_size, forge_sample_height,
+        vault_facet_rail_width, vault_facet_drawer_width, vault_cover_width, vault_cover_height, vault_cover_thumb_width, vault_entry_cover_width, reader_measure_width, vault_entry_side_width, vault_search_width, vault_editor_width, vault_meta_label_width, vault_column_creator_width, vault_column_kind_width, vault_column_year_width, vault_column_added_width, vault_column_links_width, vault_progress_height, vault_empty_art_width, vault_banner_width, vault_kind_art_width, vault_letter_cell_size, vault_tree_indent, // sb B1: Knowledge Vault catalogue
     ],
     // Typography Hierarchy & Line Height; heatmap level opacities; graph dimming & curvature
     floats: [
@@ -137,6 +136,7 @@ theme_tokens! {
         forge_disabled_opacity, forge_backdrop_opacity,
         // Feed: tools a post's author tried that failed
         post_failed_tool_opacity,
+        line_height_reading, vault_motion_duration_ms, vault_muted_opacity, // sb B1: reader leading, calm entry fade, read-state dimming
     ],
 }
 

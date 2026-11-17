@@ -4,8 +4,8 @@
 //! `Database` is a single type whose `impl` blocks are spread across the sibling
 //! modules by table (networks, profiles, posts, trending, settings, documents).
 
+mod catalogue;
 mod dismissed_seeds;
-mod documents;
 pub mod location;
 mod migrate;
 mod networks;
@@ -23,6 +23,7 @@ pub(super) mod versions;
 #[cfg(test)]
 mod tests;
 
+pub use catalogue::{build_catalogue_search, fts_match_expression, CatalogueSearch, DocumentText};
 pub use setting_key::SettingKey;
 
 use crate::error::{AppError, Result};

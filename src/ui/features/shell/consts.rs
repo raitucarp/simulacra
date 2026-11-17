@@ -17,7 +17,6 @@ pub(super) const LAYOUT_ID_FORGE_EXPANDED: &str = "simulacra-forge-layout-expand
 
 /// Auto-grow row ranges `(min, max)` of the shell's text areas.
 pub(super) const COMPOSER_ROWS: (usize, usize) = (1, 5);
-pub(super) const DOC_CONTENT_ROWS: (usize, usize) = (3, 8);
 
 /// Placeholder of the custom LLM endpoint input (a URL, not translated).
 pub(super) const LLM_ENDPOINT_PLACEHOLDER: &str = "http://localhost:8000/v1/chat/completions";

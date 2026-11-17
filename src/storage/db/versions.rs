@@ -1,7 +1,8 @@
 //! Versioned data migrations tracked with `PRAGMA user_version`.
 //!
 //! Column additions stay in `migrate` (idempotent `ALTER TABLE`s); this module holds
-//! migrations that rewrite data and must run exactly once per vault.
+//! migrations that rewrite data and must run exactly once per vault. Each unit owns its
+//! version number; [`MIGRATIONS`] lists them in order, so new ones are added as new rows.
 
 use super::{collect_rows, db_err, Database, EMPTY_AUTHOR_SNAPSHOT};
 use crate::domain::{Profile, ProfileId};
@@ -10,6 +11,20 @@ use std::collections::HashMap;
 
 /// v1: posts reference their author by `author_id`; `author_json` only archives deleted authors.
 pub(super) const AUTHOR_ID_VERSION: i64 = 1;
+/// v2: every document has a catalogue record and a full-text index row.
+pub(super) const CATALOGUE_VERSION: i64 = 2;
+
+/// One data migration, run inside a transaction.
+type MigrationStep = fn(&Database) -> Result<()>;
+
+/// Every versioned migration, in ascending version order.
+const MIGRATIONS: [(i64, MigrationStep); 2] = [
+    (AUTHOR_ID_VERSION, Database::migrate_author_ids),
+    (CATALOGUE_VERSION, Database::migrate_catalogue_records),
+];
+
+/// The version a fully migrated vault is at.
+pub(super) const LATEST_VERSION: i64 = MIGRATIONS[MIGRATIONS.len() - 1].0;
 
 const READ_VERSION: &str = "PRAGMA user_version";
 const WRITE_VERSION: &str = "PRAGMA user_version = ";
@@ -37,18 +52,27 @@ impl Database {
 
     /// Runs every versioned migration newer than the vault, each in its own transaction.
     pub(super) fn migrate_versions(&self) -> Result<()> {
-        if self.schema_version()? < AUTHOR_ID_VERSION {
-            self.run_migration(MIGRATE_AUTHOR_IDS, AUTHOR_ID_VERSION)?;
+        let current = self.schema_version()?;
+        if current >= LATEST_VERSION {
+            return Ok(());
         }
-        Ok(())
+        MIGRATIONS
+            .iter()
+            .filter(|(version, _)| *version > current)
+            .try_for_each(|(version, step)| self.run_migration(*step, *version))
     }
 
-    fn run_migration(&self, statements: &str, version: i64) -> Result<()> {
-        let batch = format!("BEGIN; {statements} {WRITE_VERSION}{version}; COMMIT;");
-        self.conn.execute_batch(&batch).map_err(|e| {
+    fn run_migration(&self, step: MigrationStep, version: i64) -> Result<()> {
+        self.conn.execute_batch("BEGIN;").map_err(db_err)?;
+        let outcome = step(self).and_then(|_| self.conn.execute_batch(&format!("{WRITE_VERSION}{version}; COMMIT;")).map_err(db_err));
+        if outcome.is_err() {
             let _ = self.conn.execute_batch("ROLLBACK;");
-            db_err(e)
-        })
+        }
+        outcome
+    }
+
+    fn migrate_author_ids(&self) -> Result<()> {
+        self.conn.execute_batch(MIGRATE_AUTHOR_IDS).map_err(db_err)
     }
 
     /// Author snapshots archived on posts whose profile was deleted, by author id.

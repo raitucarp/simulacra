@@ -20,12 +20,13 @@ const PORTRAIT_FILLS: [(&str, &str); 4] = [("skin", "#e0ac7e"), ("hair", "#5b3a2
 const ALLOWED_HEX: [&str; 2] = ["000", "fff"];
 const CARD_LIMIT_BYTES: usize = 3 * 1024;
 const WIDE_LIMIT_BYTES: usize = 6 * 1024;
-const WIDE_KINDS: [&str; 3] = ["classes", "steps", "palettes"];
+const WIDE_KINDS: [&str; 4] = ["classes", "steps", "palettes", "vault"];
 const FORBIDDEN_TAGS: [&str; 4] = ["<style", "<image", "<text", "<script"];
 
 /// Expected `viewBox` per top-level folder; anything else is a trait option card.
-const CANVASES: [(&str, &str); 8] = [
+const CANVASES: [(&str, &str); 9] = [
     ("steps", "0 0 320 120"),
+    ("vault", "0 0 320 120"),
     ("classes", "0 0 200 240"),
     ("palettes", "0 0 200 240"),
     ("guide", "0 0 128 128"),
@@ -70,6 +71,19 @@ fn every_trait_variant_has_an_option_card() {
     );
     assert!(total > 100, "expected the full trait catalogue, saw {total} variants");
     assert!(missing.is_empty(), "missing trait illustrations:\n{}", missing.join("\n"));
+}
+
+#[test]
+fn every_document_kind_and_vault_scene_has_its_art() {
+    use simulacra::domain::document::DocumentKind;
+    use simulacra::ui::features::vault::{EMPTY_VAULT_ART, NO_MATCHES_ART, SUBJECT_INDEX_ART};
+    let paths: Vec<String> = DocumentKind::ALL
+        .iter()
+        .map(|kind| kind.illustration())
+        .chain([EMPTY_VAULT_ART, NO_MATCHES_ART, SUBJECT_INDEX_ART].map(str::to_string))
+        .collect();
+    let missing: Vec<&String> = paths.iter().filter(|path| !Path::new(ASSETS_DIR).join(path).is_file()).collect();
+    assert!(missing.is_empty(), "missing vault illustrations: {missing:?}");
 }
 
 fn collect_svgs(dir: &Path, out: &mut Vec<PathBuf>) {

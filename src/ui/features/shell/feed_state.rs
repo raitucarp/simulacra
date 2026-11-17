@@ -1,6 +1,6 @@
 //! Timeline state of the shell: thread selection, feed window and the feed's inputs.
 
-use super::consts::{COMPOSER_ROWS, DOC_CONTENT_ROWS};
+use super::consts::COMPOSER_ROWS;
 use super::stream_list::StreamList;
 use super::view::AppView;
 use crate::domain::{PostId, ProfileId};
@@ -11,7 +11,7 @@ use gpui_kit::component::input::{InputEvent, InputState, TextareaState};
 use gpui_kit::*;
 use rust_i18n::t;
 
-/// Feed selection, stream tab and scroll, plus the inline composer, search and vault inputs.
+/// Feed selection, stream tab and scroll, plus the inline composer and search inputs.
 pub struct FeedState {
     pub selected_thread_post_id: Option<PostId>,
     pub custom_feed_profile_id: Option<ProfileId>,
@@ -25,8 +25,6 @@ pub struct FeedState {
     pub composer_input: Entity<TextareaState>,
     pub composer_view: Entity<PostComposerView>,
     pub search_input: Entity<InputState>,
-    pub doc_title_input: Entity<InputState>,
-    pub doc_content_input: Entity<TextareaState>,
 }
 
 impl FeedState {
@@ -40,8 +38,6 @@ impl FeedState {
         });
         let search_placeholder = t!("sidebar.search_placeholder").to_string();
         let search_input = cx.new(|cx| InputState::new(window, cx).placeholder(search_placeholder));
-        let title_placeholder = t!("vault.doc_title_placeholder").to_string();
-        let doc_title_input = cx.new(|cx| InputState::new(window, cx).placeholder(title_placeholder));
         let composer_view = Self::composer_view(state, composer_input.clone(), window, cx);
         Self {
             selected_thread_post_id: None,
@@ -53,19 +49,7 @@ impl FeedState {
             composer_input,
             composer_view,
             search_input,
-            doc_title_input,
-            doc_content_input: Self::doc_content_input(window, cx),
         }
-    }
-
-    fn doc_content_input(window: &mut Window, cx: &mut Context<AppView>) -> Entity<TextareaState> {
-        let (min_rows, max_rows) = DOC_CONTENT_ROWS;
-        let placeholder = t!("vault.doc_content_placeholder").to_string();
-        cx.new(|cx| {
-            TextareaState::new(window, cx)
-                .placeholder(placeholder)
-                .auto_grow(min_rows, max_rows)
-        })
     }
 
     /// The isolated inline composer view, submitting through [`AppView::submit_post_content`].

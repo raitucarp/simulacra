@@ -1,17 +1,12 @@
 //! Splits [`FeedParams`] into the inputs of each feed sub-view.
 
 use super::callbacks::PostCallbacks;
-use super::params::{
-    AddDocCallback, DeleteDocCallback, FeedParams, ImportDocCallback, LoadMoreCallback, SelectFeedTabCallback,
-    ToggleRepliesCallback,
-};
+use super::params::{FeedParams, LoadMoreCallback, SelectFeedTabCallback, ToggleRepliesCallback};
 use crate::domain::PostId;
 use crate::state::FeedTab;
-use gpui_kit::component::input::{InputState, TextareaState};
 use super::stream::StreamInputs;
 use crate::ui::features::post::BodyLinks;
 use crate::ui::responsive::LayoutClass;
-use gpui_kit::Entity;
 use std::rc::Rc;
 
 /// Timeline-only feed inputs.
@@ -27,17 +22,8 @@ pub(crate) struct TimelineInputs<C> {
     pub on_toggle_replies: ToggleRepliesCallback,
 }
 
-/// Inputs of the non-timeline tool views (knowledge vault).
-pub(crate) struct ToolViewInputs<'a> {
-    pub doc_title_input: &'a Entity<InputState>,
-    pub doc_content_input: &'a Entity<TextareaState>,
-    pub on_add_document: AddDocCallback,
-    pub on_delete_document: DeleteDocCallback,
-    pub on_import_document: ImportDocCallback,
-}
-
-/// Distributes feed parameters to the post callbacks, timeline, and tool views.
-pub(crate) fn split_params<C>(params: FeedParams<'_, C>) -> (PostCallbacks, TimelineInputs<C>, ToolViewInputs<'_>) {
+/// Distributes feed parameters to the post callbacks and the timeline.
+pub(crate) fn split_params<C>(params: FeedParams<'_, C>) -> (PostCallbacks, TimelineInputs<C>) {
     let callbacks = PostCallbacks {
         on_like: Rc::new(params.on_like_post),
         on_reply: Rc::new(params.on_reply_post),
@@ -62,12 +48,5 @@ pub(crate) fn split_params<C>(params: FeedParams<'_, C>) -> (PostCallbacks, Time
         on_select_feed_tab: params.on_select_feed_tab,
         on_toggle_replies: params.on_toggle_replies,
     };
-    let tools = ToolViewInputs {
-        doc_title_input: params.doc_title_input,
-        doc_content_input: params.doc_content_input,
-        on_add_document: params.on_add_document,
-        on_delete_document: params.on_delete_document,
-        on_import_document: params.on_import_document,
-    };
-    (callbacks, timeline, tools)
+    (callbacks, timeline)
 }

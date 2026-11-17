@@ -66,7 +66,8 @@ impl ForgeView {
     /// Applies a step palette from the strip (one undo step) and says how to take it back.
     pub fn apply_step_palette(&mut self, palette: &'static Palette, _: &mut Window, cx: &mut Context<Self>) {
         if apply_palette(&mut self.draft, palette) {
-            self.notice = Some(Notice::info(tr_with(APPLIED_KEY, &[(ARG_PALETTE, tr(&palette.label_key()))]), Vec::new()));
+            let text = tr_with(APPLIED_KEY, &[(ARG_PALETTE, tr(&palette.label_key()))]);
+            self.notice = Some(Notice::info(text, Vec::new()).anchored(self.draft.profile()));
             self.after_change(cx);
         }
     }

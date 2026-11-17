@@ -194,3 +194,19 @@ fn escape_outside_a_text_field_closes_the_forge() {
     assert_eq!(dismiss_step(false, &contexts(&["Root", FORGE_CONTEXT])), DismissStep::CloseForge);
     assert_eq!(dismiss_step(false, &[]), DismissStep::CloseForge);
 }
+
+#[test]
+fn palette_notice_goes_stale_once_the_apply_is_undone() {
+    use crate::state::forge::apply_palette;
+    use crate::ui::features::forge::view::Notice;
+    let mut draft = blank(ForgeKind::Agent);
+    let palette = crate::domain::Palette::full(None).next().expect("a full palette");
+    assert!(apply_palette(&mut draft, palette));
+    let notice = Notice::info("applied", Vec::new()).anchored(draft.profile());
+    assert!(!notice.is_stale_for(draft.profile()));
+    assert!(draft.undo());
+    assert!(notice.is_stale_for(draft.profile()));
+    assert!(draft.redo());
+    assert!(!notice.is_stale_for(draft.profile()));
+    assert!(!Notice::info("plain", Vec::new()).is_stale_for(draft.profile()));
+}

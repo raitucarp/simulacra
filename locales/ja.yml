@@ -1463,6 +1463,17 @@ forge.ui.daily.week_posts_other: "標準的な一週間で約 %{count} 件の投
 forge.ui.grimoire.chars_one: "%{count} 文字"
 forge.ui.grimoire.chars_other: "%{count} 文字"
 
+# p7 shell
+splash.tagline: "ローカルファーストの弁証法シミュレーター"
+splash.stage.opening_vault: "ボールトを開いています…"
+splash.stage.loading_networks: "ネットワークを読み込んでいます…"
+splash.stage.waking_agents: "エージェントを起こしています…"
+splash.stage.ready: "準備完了"
+splash.version: "バージョン %{version}"
+layout.title: "パネルレイアウト"
+layout.hint: "区切り線をドラッグしてパネルのサイズを変更し、ダブルクリックでその分割を元に戻します。"
+layout.reset: "レイアウトをリセット"
+
 # p7 engine
 # Settings credentials and the per-agent engine field (flat keys).
 settings.credentials_title: "認証情報"

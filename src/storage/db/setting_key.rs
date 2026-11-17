@@ -61,6 +61,8 @@ setting_keys! {
     ForgeHideGuide => "forge.hide_guide",
     /// Whether the first-run welcome was completed or skipped (`true` / `false`).
     OnboardingDone => "onboarding.done",
+    /// JSON map of resizable layout id to its saved panel sizes (logical pixels).
+    PanelLayouts => "ui.panel_layouts",
     /// JSON array of the seed profile ids the user deleted (never re-seeded).
     DismissedSeeds => "seeds.dismissed",
     /// Pre-palette serialized `ThemeTokens`; migrated on load, then removed.

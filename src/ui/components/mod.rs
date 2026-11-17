@@ -10,6 +10,7 @@ pub mod chip;
 pub mod document_picker;
 pub mod hover_row;
 pub mod image_picker;
+pub mod persisted_split;
 pub mod segmented;
 pub mod status_dot;
 pub mod stepper;
@@ -21,6 +22,7 @@ pub use document_picker::{
 };
 pub use hover_row::selectable_row;
 pub use image_picker::pick_image_path;
+pub use persisted_split::{persisted_h_resizable, persisted_v_resizable, PersistedSplit, SplitPane};
 pub use segmented::{segment_pill, segmented_track, Segment};
 pub use status_dot::{status_dot, status_glyph};
 pub use stepper::mini_step_button;

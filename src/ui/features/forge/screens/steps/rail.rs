@@ -44,7 +44,7 @@ impl ForgeView {
         let items: Vec<Stateful<Div>> = rail_items(&self.draft, &self.issues).iter().map(|item| self.rail_entry(item, handle)).collect();
         div()
             .id(RAIL_ID)
-            .w(theme.forge_rail_width)
+            .w_full()
             .flex_shrink_0()
             .h_full()
             .overflow_y_scrollbar()

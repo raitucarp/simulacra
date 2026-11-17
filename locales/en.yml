@@ -1463,6 +1463,17 @@ forge.ui.daily.week_posts_other: "About %{count} posts in a typical week."
 forge.ui.grimoire.chars_one: "%{count} character"
 forge.ui.grimoire.chars_other: "%{count} characters"
 
+# p7 shell
+splash.tagline: "A local-first dialectic simulator"
+splash.stage.opening_vault: "Opening vault…"
+splash.stage.loading_networks: "Loading networks…"
+splash.stage.waking_agents: "Waking agents…"
+splash.stage.ready: "Ready"
+splash.version: "Version %{version}"
+layout.title: "Panel layout"
+layout.hint: "Drag any divider to resize a panel; double-click it to restore that split."
+layout.reset: "Reset layout"
+
 # p7 engine
 # Settings credentials and the per-agent engine field (flat keys).
 settings.credentials_title: "CREDENTIALS"

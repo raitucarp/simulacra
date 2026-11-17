@@ -1463,6 +1463,17 @@ forge.ui.daily.week_posts_other: "Около %{count} публикаций в о
 forge.ui.grimoire.chars_one: "%{count} символ"
 forge.ui.grimoire.chars_other: "Символов: %{count}"
 
+# p7 shell
+splash.tagline: "Локальный симулятор диалектики"
+splash.stage.opening_vault: "Открываем хранилище…"
+splash.stage.loading_networks: "Загружаем сети…"
+splash.stage.waking_agents: "Будим агентов…"
+splash.stage.ready: "Готово"
+splash.version: "Версия %{version}"
+layout.title: "Расположение панелей"
+layout.hint: "Перетащите разделитель, чтобы изменить размер панели; двойной щелчок вернёт исходное разделение."
+layout.reset: "Сбросить расположение"
+
 # p7 engine
 # Settings credentials and the per-agent engine field (flat keys).
 settings.credentials_title: "УЧЁТНЫЕ ДАННЫЕ"

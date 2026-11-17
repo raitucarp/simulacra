@@ -22,6 +22,8 @@ pub type CycleProfileCallback = Box<dyn Fn(&mut Window, &mut App) + 'static>;
 pub type LoadMoreCallback = Box<dyn Fn(&mut Window, &mut App) + 'static>;
 pub type SelectFeedTabCallback = Box<dyn Fn(FeedTab, &mut Window, &mut App) + 'static>;
 pub type ToggleRepliesCallback = Box<dyn Fn(&mut Window, &mut App) + 'static>;
+/// Runs a registry command (the stream header's capture and import buttons).
+pub type RunCommandCallback = std::rc::Rc<dyn Fn(crate::ui::features::command_palette::CommandId, &mut Window, &mut App) + 'static>;
 
 /// Configuration parameters for rendering the main feed organism.
 pub struct FeedParams<'a, C> {
@@ -59,4 +61,5 @@ pub struct FeedParams<'a, C> {
     /// Opens a file picker and adds the chosen text file as a vault document.
     pub on_import_document: ImportDocCallback,
     pub on_cycle_profile: CycleProfileCallback,
+    pub on_run_command: RunCommandCallback,
 }

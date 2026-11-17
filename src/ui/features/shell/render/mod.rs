@@ -4,6 +4,7 @@ mod center;
 mod columns;
 mod drawer;
 mod navigation;
+mod import;
 mod overlays;
 mod settings;
 mod sidebars;
@@ -31,7 +32,7 @@ impl Render for AppView {
         let class = LayoutClass::of_window(window, &self.theme);
         let columns = self.render_columns(class);
 
-        div()
+        let root = div()
             .w_full()
             .h_full()
             .bg(self.theme.bg_app)
@@ -41,7 +42,8 @@ impl Render for AppView {
             .track_focus(&self.palette.shell_focus)
             .on_action(cx.listener(Self::on_run_command))
             .flex()
-            .flex_col()
+            .flex_col();
+        self.with_import_listeners(root, cx)
             .child(self.title_bar(&bind))
             // Fully Resizable Multi-Column Layout Container
             .child(div().w_full().flex_1().min_h_0().overflow_hidden().child(columns))
@@ -53,6 +55,9 @@ impl Render for AppView {
             .children(self.welcome_overlay(&bind))
             .children(self.palette.palette.clone())
             .children(self.shortcut_sheet(&bind))
+            .children(self.import_sheet(&bind, cx))
+            .children(self.capture_box(&bind))
+            .children(self.drop_hint())
     }
 }
 

@@ -1,6 +1,6 @@
 //! Profile constructors and builder-style modifiers.
 
-use super::{avatar_initial_of, Profile, ProfileRole, DEFAULT_AGENT_NETWORK};
+use super::{avatar_initial_of, Profile, ProfileKind, ProfileRole, DEFAULT_AGENT_NETWORK};
 use crate::domain::agent_config::AgentConfig;
 use crate::domain::ids::{NetworkId, ProfileId};
 
@@ -59,7 +59,7 @@ impl Profile {
         description: String,
     ) -> Self {
         let config = AgentConfig { description, ..AgentConfig::default() };
-        Self { id, name, handle, avatar_initial, role, network_id, avatar_path: None, config }
+        Self { id, name, handle, avatar_initial, role, network_id, avatar_path: None, config, kind: ProfileKind::Standard }
     }
 
     /// Assigns this profile/agent to a specific network domain.

@@ -5,12 +5,14 @@ mod authored;
 mod constructors;
 mod extras;
 mod parse;
+mod provenance;
 mod relations;
 mod tokens;
 
 pub use authored::AuthoredPost;
 pub use extras::{PostExtras, SourceKind, SourceRef, ToolUse};
 pub use parse::{HASHTAG_SIGIL, WIKILINK_OPEN};
+pub use provenance::{PostOrigin, SourceLocator};
 pub use tokens::{has_rich_markup, is_trailing_punctuation, tokenize_post_body, BodyToken};
 
 use super::ids::{NetworkId, PostId, ProfileId};

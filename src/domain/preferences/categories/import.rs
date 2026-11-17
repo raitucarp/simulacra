@@ -13,13 +13,13 @@ const DEFAULT_MAX_FILE_MB: u32 = 50;
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(default)]
 pub struct ImportPrefs {
-    /// Consumed by a later wave.
+    /// The unit the import sheet opens with (chapter, paragraph or sentence).
     pub segmentation: ImportSegmentation,
-    /// Consumed by a later wave.
+    /// Who the import sheet posts as by default.
     pub identity: PostIdentity,
-    /// Consumed by a later wave.
+    /// Files above this are refused before they are read.
     pub max_file_mb: u32,
-    /// Copy the source file into the vault. Consumed by a later wave.
+    /// Copy the source file under the media folder (`media/imports/`).
     pub keep_original: bool,
 }
 

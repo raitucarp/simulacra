@@ -45,7 +45,7 @@ impl AppView {
             on_click_topic: Box::new(move |tag, window, cx| {
                 topic_entity.update(cx, |this, cx| this.search_topic(tag, window, cx));
             }),
-            on_import_document: bind.boxed_act(Self::import_document),
+            on_import_document: bind.boxed_act(Self::pick_import_files),
             theme: &self.theme,
         })
     }

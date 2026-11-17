@@ -114,4 +114,9 @@ lucide_catalog! {
     Star => "icons/star.svg",
     StickyNote => "icons/sticky-note.svg",
     UserPlus => "icons/user-plus.svg",
+    // Import and capture
+    Feather => "icons/feather.svg",
+    Inbox => "icons/inbox.svg",
+    Pilcrow => "icons/pilcrow.svg",
+    VenetianMask => "icons/venetian-mask.svg",
 }

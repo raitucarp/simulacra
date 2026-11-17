@@ -79,6 +79,8 @@ pub const SHORTCUTS: &[Shortcut] = &[
     shell("secondary-alt-b", C::ToggleRightSidebar),
     shell("secondary-,", C::OpenSettings),
     shell("secondary-n", C::NewThread),
+    shell("secondary-shift-space", C::NewNote),
+    shell("secondary-o", C::ImportFile),
     shell("secondary-1", C::GoTimeline),
     shell("secondary-2", C::GoKnowledge),
     shell("secondary-3", C::GoAgents),

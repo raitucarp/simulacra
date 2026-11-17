@@ -2,8 +2,8 @@
 
 use super::callbacks::PostCallbacks;
 use super::params::{
-    AddDocCallback, DeleteDocCallback, FeedParams, ImportDocCallback, LoadMoreCallback, SelectFeedTabCallback,
-    ToggleRepliesCallback,
+    AddDocCallback, DeleteDocCallback, FeedParams, ImportDocCallback, LoadMoreCallback, RunCommandCallback,
+    SelectFeedTabCallback, ToggleRepliesCallback,
 };
 use crate::domain::PostId;
 use crate::state::FeedTab;
@@ -25,6 +25,7 @@ pub(crate) struct TimelineInputs<C> {
     pub on_load_more: Option<LoadMoreCallback>,
     pub on_select_feed_tab: SelectFeedTabCallback,
     pub on_toggle_replies: ToggleRepliesCallback,
+    pub on_run_command: RunCommandCallback,
 }
 
 /// Inputs of the non-timeline tool views (knowledge vault).
@@ -61,6 +62,7 @@ pub(crate) fn split_params<C>(params: FeedParams<'_, C>) -> (PostCallbacks, Time
         on_load_more: params.on_load_more,
         on_select_feed_tab: params.on_select_feed_tab,
         on_toggle_replies: params.on_toggle_replies,
+        on_run_command: params.on_run_command,
     };
     let tools = ToolViewInputs {
         doc_title_input: params.doc_title_input,

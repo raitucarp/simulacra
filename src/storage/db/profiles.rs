@@ -1,7 +1,7 @@
 //! Author profile persistence (human personas and autonomous network agents).
 
 use super::{collect_rows, db_err, Database};
-use crate::domain::{AgentConfig, NetworkId, Profile, ProfileId, ProfileRole};
+use crate::domain::{AgentConfig, NetworkId, Profile, ProfileId, ProfileKind, ProfileRole};
 use crate::error::Result;
 use rusqlite::{params, Row};
 
@@ -12,8 +12,8 @@ const LEGACY_AGENT_DESCRIPTION: &str = "Independent Thinker & Network Member";
 const EMPTY_CONFIG_JSON: &str = "{}";
 
 const UPSERT_PROFILE: &str = r#"
-                INSERT INTO profiles (id, name, handle, avatar_initial, role_json, network_id, avatar_path, config_json)
-                VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)
+                INSERT INTO profiles (id, name, handle, avatar_initial, role_json, network_id, avatar_path, config_json, kind)
+                VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)
                 ON CONFLICT(id) DO UPDATE SET
                     name = excluded.name,
                     handle = excluded.handle,
@@ -21,7 +21,8 @@ const UPSERT_PROFILE: &str = r#"
                     role_json = excluded.role_json,
                     network_id = excluded.network_id,
                     avatar_path = excluded.avatar_path,
-                    config_json = excluded.config_json;
+                    config_json = excluded.config_json,
+                    kind = excluded.kind;
                 "#;
 
 const DELETE_PROFILE: &str = "DELETE FROM profiles WHERE id = ?1";
@@ -29,7 +30,7 @@ const DELETE_PROFILE: &str = "DELETE FROM profiles WHERE id = ?1";
 const UPDATE_AUTHOR_SNAPSHOTS: &str = "UPDATE posts SET author_json = ?1 WHERE author_id = ?2";
 
 const SELECT_PROFILES: &str =
-    "SELECT id, name, handle, avatar_initial, role_json, network_id, avatar_path, config_json FROM profiles";
+    "SELECT id, name, handle, avatar_initial, role_json, network_id, avatar_path, config_json, kind FROM profiles";
 
 impl Database {
     /// Saves an author profile (human persona or autonomous network agent) with full configuration.
@@ -49,6 +50,7 @@ impl Database {
                     profile.network_id.as_ref().map(|n| n.as_str()),
                     profile.avatar_path.as_deref(),
                     config_json,
+                    profile.kind.key(),
                 ],
             )
             .map_err(db_err)?;
@@ -95,6 +97,7 @@ fn profile_from_row(row: &Row<'_>) -> rusqlite::Result<Profile> {
         .unwrap_or(None)
         .unwrap_or_else(|| EMPTY_CONFIG_JSON.to_string());
 
+    let kind: Option<String> = row.get(8).unwrap_or(None);
     let role: ProfileRole = serde_json::from_str(&role_json).unwrap_or(ProfileRole::UserPrimary);
     let config = decode_config(&config_json, &role);
 
@@ -107,6 +110,7 @@ fn profile_from_row(row: &Row<'_>) -> rusqlite::Result<Profile> {
         network_id: network_id.map(NetworkId::new),
         avatar_path,
         config,
+        kind: kind.as_deref().map(ProfileKind::from_key).unwrap_or_default(),
     })
 }
 

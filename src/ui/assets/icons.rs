@@ -15,5 +15,7 @@ gpui_kit::assets::icon_assets!(
         // sb A2
         Command, CornerDownLeft, FileUp, MessageSquarePlus, PanelLeftClose, PanelLeftOpen, PinOff, Star,
         StickyNote, UserPlus,
+        // sb B2
+        Feather, Pilcrow, VenetianMask,
     ]
 );

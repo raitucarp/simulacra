@@ -34,7 +34,7 @@ pub use ids::{NetworkId, PostId, ProfileId};
 pub use network::Network;
 pub use palette::{Palette, PaletteCategory, PaletteScope};
 pub use post::{AuthoredPost, Post, MAX_POST_CHARS};
-pub use profile::{Profile, ProfileRole};
+pub use profile::{Profile, ProfileKind, ProfileRole, ANONYMOUS_PROFILE_ID};
 pub use thread::{draft_issue, first_thread_problem, split_into_thread, DraftIssue, ThreadProblem};
 pub use topic::TrendingTopic;
 pub use trait_option::TraitOption;

@@ -2,10 +2,13 @@
 //! UI callback by `super::binder::Binder`.
 
 pub(super) mod appearance;
+mod capture;
 mod chrome;
 mod commands;
 mod composer_modal;
 mod credentials;
+mod import_flow;
+mod import_sheet;
 mod lab;
 mod navigation;
 mod networks;
@@ -22,4 +25,3 @@ mod simulation;
 mod simulation_notices;
 mod storage;
 mod stream;
-mod vault_import;

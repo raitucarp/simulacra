@@ -127,6 +127,7 @@ theme_tokens! {
         forge_probe_image_size, forge_sample_height, // Agent Forge Engine step: "Test image" result, sample-answer editor
         nav_row_height, // sb A2: compact left navigation (rows, rail, active bar, badge, New menu), palette, shortcut sheet
         nav_rail_button_size, nav_active_bar_width, nav_active_bar_height, sidebar_badge_size, new_menu_width, palette_width, palette_results_max_height, palette_top_offset, key_cap_min_width, shortcut_sheet_width, shortcut_sheet_max_height, shortcut_sheet_section_width,
+        import_sheet_width, import_sheet_max_height, import_preview_height, import_preview_row_height, import_art_width, import_meta_label_width, capture_box_width, capture_box_top, drop_art_width, // sb B2: import sheet and preview, quick capture, drop hint
     ],
     // Typography Hierarchy & Line Height; heatmap level opacities; graph dimming & curvature
     floats: [

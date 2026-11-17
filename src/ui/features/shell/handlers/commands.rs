@@ -26,9 +26,9 @@ impl AppView {
             CommandId::GoPersonas => self.select_nav(NavigationTab::PersonaLab, window, cx),
             CommandId::GoMindGraph => self.select_nav(NavigationTab::MindGraph, window, cx),
             CommandId::NewThread => self.new_thread(window, cx),
-            // Quick capture arrives with the import wave (registered as planned until then).
-            CommandId::NewNote => {}
-            CommandId::ImportFile => self.import_document(window, cx),
+            CommandId::NewNote => self.open_quick_capture(window, cx),
+            CommandId::ImportFile => self.pick_import_files(window, cx),
+            CommandId::OpenInbox => self.open_inbox(window, cx),
             CommandId::NewAgent => self.open_forge_new(window, cx),
             CommandId::CreateNetwork => self.open_create_network(window, cx),
             CommandId::SwitchNetwork => self.toggle_workspace(window, cx),

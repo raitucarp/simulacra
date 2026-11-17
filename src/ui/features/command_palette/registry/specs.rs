@@ -51,7 +51,7 @@ const fn action(id: CommandId, icon: LucideIcon, availability: Availability) -> 
     CommandSpec { id, icon, kind: CommandKind::Action, availability }
 }
 
-use Availability::{Planned, Ready, ShortcutOnly};
+use Availability::{Ready, ShortcutOnly};
 use CommandId as C;
 use LucideIcon as I;
 
@@ -63,8 +63,9 @@ pub const COMMANDS: &[CommandSpec] = &[
     screen(C::GoPersonas, I::UserCheck),
     screen(C::GoMindGraph, I::Share2),
     action(C::NewThread, I::MessageSquarePlus, Ready),
-    action(C::NewNote, I::StickyNote, Planned),
+    action(C::NewNote, I::StickyNote, Ready),
     action(C::ImportFile, I::FileUp, Ready),
+    action(C::OpenInbox, I::Inbox, Ready),
     action(C::NewAgent, I::UserPlus, Ready),
     action(C::CreateNetwork, I::Boxes, Ready),
     action(C::SwitchNetwork, I::ChevronsUpDown, Ready),

@@ -16,6 +16,7 @@ mod lab_selection;
 mod feed_state;
 mod graph_state;
 mod handlers;
+mod import_state;
 mod lab_state;
 mod panels;
 mod render;
@@ -30,6 +31,7 @@ mod tests;
 
 pub use feed_state::FeedState;
 pub use graph_state::GraphState;
+pub use import_state::ImportUi;
 pub use lab_state::{LabState, LlmInputs};
 pub use scheduler_state::SchedulerState;
 pub use settings_draft::SettingsDraft;

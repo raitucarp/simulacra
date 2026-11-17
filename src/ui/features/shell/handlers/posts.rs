@@ -2,6 +2,7 @@
 
 use super::super::view::AppView;
 use crate::domain::PostId;
+use crate::ui::features::sidebar_left::NavRef;
 use crate::ui::features::composer::{publish_error_message, ComposerModalMode};
 use crate::ui::features::feed::FEED_WINDOW_INCREMENT;
 use gpui_kit::*;
@@ -39,6 +40,7 @@ impl AppView {
         if self.feed.selected_thread_post_id.as_ref() != Some(&post_id) {
             self.feed.inspector_expanded = false;
         }
+        self.note_recent(NavRef::Thread(post_id.clone()));
         self.feed.selected_thread_post_id = Some(post_id);
         cx.notify();
     }

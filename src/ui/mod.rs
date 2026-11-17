@@ -6,6 +6,7 @@ pub mod components;
 pub mod features;
 pub mod icons;
 pub mod illustration;
+pub mod keymap;
 pub mod molecules;
 pub mod organisms;
 pub mod render_stats;

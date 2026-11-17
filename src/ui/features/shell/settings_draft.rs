@@ -55,6 +55,11 @@ impl SettingsDraft {
         settings
     }
 
+    /// Whether saving now would change `saved` (a pick or a typed value differs).
+    pub fn is_unsaved(&self, saved: &LlmSettings, typed: TypedLlmFields) -> bool {
+        self.clone().apply(saved, typed) != *saved
+    }
+
     /// Forgets every unsaved pick.
     pub fn discard(&mut self) {
         self.draft = None;

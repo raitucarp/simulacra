@@ -55,7 +55,7 @@ impl VaultPanel {
             .gap(theme.section_gap)
             .child(self.render_back_bar(cx))
             .child(columns);
-        entrance(div().size_full().child(page), ElementId::Name(format!("vault-entry-{id}").into()), self.reduced_motion, theme)
+        entrance(div().size_full().child(page), ElementId::Name(format!("vault-entry-{id}").into()), self.data.reduced_motion, theme)
     }
 
     /// "← Back" to wherever the entry was opened from.

@@ -76,10 +76,12 @@ fn test_store_zero_copy_accessors() {
 
 #[test]
 fn scheduler_switch_defaults_off_and_persists() {
-    let state = AppState::new_in_memory();
+    let mut state = AppState::new_in_memory();
     assert!(!state.scheduler_enabled(), "never surprise-post on a fresh vault");
     state.set_scheduler_enabled(true);
     assert!(state.scheduler_enabled());
+    let saved = state.db.as_ref().map(|db| db.read(|db| Ok(db.load_preferences())).unwrap());
+    assert!(saved.is_some_and(|prefs| prefs.agents.autonomous_posting), "the switch reaches the vault");
     state.set_scheduler_enabled(false);
     assert!(!state.scheduler_enabled());
 }

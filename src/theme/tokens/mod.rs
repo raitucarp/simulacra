@@ -97,10 +97,11 @@ theme_tokens! {
         forge_preview_max, contact_list_pane_min, contact_list_pane_max, modal_rail_min,
         modal_rail_max, graph_details_height, graph_details_min, graph_details_max,
         splash_brand_width, splash_guide_size, splash_progress_width, splash_progress_height,
-        // Settings modal and its appearance editor
-        settings_header_height, settings_input_height, settings_provider_button_height,
-        settings_brand_badge_size, settings_tab_indicator_width, settings_tab_indicator_height,
-        theme_preview_card_width, theme_preview_avatar_size, color_field_width, hex_readout_width,
+        // Settings window (header, inputs, size caps and inset, rail, rows, art) and its appearance editor
+        settings_header_height, settings_input_height, settings_provider_button_height, settings_brand_badge_size, settings_tab_indicator_width,
+        settings_tab_indicator_height, theme_preview_card_width, theme_preview_avatar_size, color_field_width, hex_readout_width,
+        settings_modal_max_width, settings_modal_max_height, settings_modal_inset, settings_rail_item_height, settings_rail_compact_width,
+        settings_row_label_min_width, settings_text_control_width, settings_number_readout_width, settings_header_art_width, settings_empty_art_width,
         // Agent Forge character creator
         forge_rail_width, forge_rail_thumb_width, forge_options_width, forge_preview_width,
         forge_topbar_height, forge_portrait_size, forge_nameplate_avatar_size, forge_class_card_width,
@@ -116,15 +117,15 @@ theme_tokens! {
         forge_clock_label_size, forge_key_cap_min_width,
         // Agent Forge: palette gallery category tabs and the step palette strip
         forge_palette_tab_icon_width, forge_palette_chip_width, forge_palette_search_width,
-        // First-run welcome overlay
-        onboarding_width, onboarding_art_size,
+        onboarding_width, onboarding_art_size, // First-run welcome overlay
         // Startup windows, responsive layout (breakpoints, sidebar, drawer, stacked inspector), heatmap cells, graph labels
         splash_window_width, splash_window_height, window_min_width, window_min_height, layout_medium_min_width,
         layout_wide_min_width, right_sidebar_medium_width, right_sidebar_medium_max, right_drawer_width, inspector_stacked_height,
         inspector_stacked_min, inspector_stacked_max, heatmap_cell_min, heatmap_cell_max, heatmap_month_label_width, graph_label_max_width, graph_mini_node_radius_max,
-        // Agent Forge Engine step: the "Test image" result and the sample-answer editor
-        forge_probe_image_size, forge_sample_height,
-        vault_facet_rail_width, vault_facet_drawer_width, vault_cover_width, vault_cover_height, vault_cover_thumb_width, vault_entry_cover_width, reader_measure_width, vault_entry_side_width, vault_search_width, vault_editor_width, vault_meta_label_width, vault_column_creator_width, vault_column_kind_width, vault_column_year_width, vault_column_added_width, vault_column_links_width, vault_progress_height, vault_empty_art_width, vault_banner_width, vault_kind_art_width, vault_letter_cell_size, vault_tree_indent, // sb B1: Knowledge Vault catalogue
+        forge_probe_image_size, forge_sample_height, // Agent Forge Engine step: "Test image" result, sample-answer editor
+        nav_row_height, // sb A2: compact left navigation (rows, rail, active bar, badge, New menu), palette, shortcut sheet
+        nav_rail_button_size, nav_active_bar_width, nav_active_bar_height, sidebar_badge_size, new_menu_width, palette_width, palette_results_max_height, palette_top_offset, key_cap_min_width, shortcut_sheet_width, shortcut_sheet_max_height, shortcut_sheet_section_width,
+        vault_facet_rail_width, vault_facet_drawer_width, vault_cover_width, vault_cover_height, vault_cover_thumb_width, vault_entry_cover_width, reader_measure_width, reader_measure_narrow_width, reader_measure_wide_width, vault_entry_side_width, vault_search_width, vault_editor_width, vault_meta_label_width, vault_column_creator_width, vault_column_kind_width, vault_column_year_width, vault_column_added_width, vault_column_links_width, vault_progress_height, vault_empty_art_width, vault_banner_width, vault_kind_art_width, vault_letter_cell_size, vault_tree_indent, // sb B1: Knowledge Vault catalogue
     ],
     // Typography Hierarchy & Line Height; heatmap level opacities; graph dimming & curvature
     floats: [
@@ -132,10 +133,8 @@ theme_tokens! {
         graph_dim_opacity, graph_curve_bend,
         // Splash: shortest time on screen, fade, longest avatar warm-up (ms); mini graph width/height
         splash_min_duration_ms, splash_fade_duration_ms, splash_warm_up_limit_ms, graph_mini_aspect,
-        // Agent Forge: opacity of disabled option cards and of the stage backdrop art
-        forge_disabled_opacity, forge_backdrop_opacity,
-        // Feed: tools a post's author tried that failed
-        post_failed_tool_opacity,
+        // Forge disabled option cards and stage backdrop art; feed failed tools; settings rows switched off
+        forge_disabled_opacity, forge_backdrop_opacity, post_failed_tool_opacity, settings_disabled_opacity,
         line_height_reading, vault_motion_duration_ms, vault_muted_opacity, // sb B1: reader leading, calm entry fade, read-state dimming
     ],
 }

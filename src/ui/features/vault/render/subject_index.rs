@@ -52,7 +52,7 @@ impl VaultPanel {
             .child(banner)
             .children(groups)
             .when_some(empty, |p, e| p.child(e));
-        entrance(div().size_full().child(page), INDEX_SCROLL_ID, self.reduced_motion, theme)
+        entrance(div().size_full().child(page), INDEX_SCROLL_ID, self.data.reduced_motion, theme)
     }
 
     fn render_index_letter(&self, letter: IndexLetter, cx: &mut Context<Self>) -> AnyElement {

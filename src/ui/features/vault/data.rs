@@ -6,6 +6,7 @@ use crate::domain::document::links::{backlinks, link_counts, ScoredDocument};
 use crate::domain::document::record::fnv1a;
 use crate::domain::document::vocabulary::SubjectTree;
 use crate::domain::document::Library;
+use crate::domain::preferences::{Choice, ReadingWidth};
 use crate::domain::{GroundingDocument, NetworkId, PostId};
 use crate::state::AppState;
 use crate::storage::Vault;
@@ -41,6 +42,9 @@ pub struct VaultData {
     pub vault: Option<Vault>,
     /// Display name of the active persona (recorded as "added by").
     pub persona: String,
+    /// Appearance preferences: instant changes instead of motion, and the reader's measure.
+    pub reduced_motion: bool,
+    pub reading_width: ReadingWidth,
 }
 
 fn excerpt(text: &str) -> String {
@@ -81,6 +85,8 @@ impl VaultData {
             semantic: Rc::default(),
             vault: state.db.clone(),
             persona: state.current_profile().map(|p| p.name.clone()).unwrap_or_default(),
+            reduced_motion: state.preferences().appearance.reduced_motion,
+            reading_width: state.preferences().appearance.reading_width,
         }
     }
 
@@ -91,7 +97,9 @@ impl VaultData {
             .map(|d| format!("{}|{}|{:?}|{}|{}", d.id, d.title, d.record.updated_at, d.record.reading.progress, d.record.reading.status.key()))
             .collect();
         let library = format!("{}|{}", state.library.subjects.len(), state.library.collections.len());
-        let text = format!("{}#{docs}#{library}#{}", state.active_network_id, state.posts.len());
+        let appearance = &state.preferences().appearance;
+        let display = format!("{}|{}|{}", appearance.reduced_motion, appearance.reading_width.key(), state.active_profile_id);
+        let text = format!("{}#{docs}#{library}#{}#{display}", state.active_network_id, state.posts.len());
         fnv1a(text.as_bytes())
     }
 

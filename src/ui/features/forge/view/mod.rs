@@ -18,7 +18,7 @@ mod state;
 pub use engine::{CallReply, EngineUi, Probe};
 pub use handle::ForgeHandle;
 pub use hear::HearStatus;
-pub use keys::{init_key_bindings, Dismiss, Redo, Undo, FORGE_KEY_CONTEXT};
+pub use keys::{Dismiss, Redo, Undo, FORGE_KEY_CONTEXT};
 pub use state::{DescribeStatus, ForgeContext, ForgeOpen, ForgeScreen, GuideState, Notice, StartState};
 
 use crate::domain::portrait::{FormSlot, PortraitSlot};

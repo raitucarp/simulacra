@@ -4,6 +4,7 @@
 use super::common::{entrance, meta_line, progress_bar};
 use crate::domain::document::record::{ReadingStatus, PROGRESS_COMPLETE};
 use crate::domain::document::text::{blocks, BlockKind, TextBlock};
+use crate::domain::preferences::ReadingWidth;
 use crate::ui::features::vault::panel::VaultPanel;
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::button::{Button, ButtonVariants};
@@ -48,7 +49,16 @@ impl VaultPanel {
             .child(top)
             .child(progress_bar(progress.min(PROGRESS_COMPLETE), theme))
             .child(scroller);
-        entrance(page, ElementId::Name(format!("vault-reader-{id}").into()), self.reduced_motion, &self.theme)
+        entrance(page, ElementId::Name(format!("vault-reader-{id}").into()), self.data.reduced_motion, &self.theme)
+    }
+
+    /// The line length the reading-width preference asks for.
+    fn measure(&self) -> Pixels {
+        match self.data.reading_width {
+            ReadingWidth::Narrow => self.theme.reader_measure_narrow_width,
+            ReadingWidth::Comfortable => self.theme.reader_measure_width,
+            ReadingWidth::Wide => self.theme.reader_measure_wide_width,
+        }
     }
 
     /// Back, the title, the progress and "mark as read".
@@ -78,7 +88,8 @@ impl VaultPanel {
     /// The title block, then one child per text block (so a block index scrolls into view).
     fn render_reader_column(&self, doc: &crate::domain::GroundingDocument) -> Vec<AnyElement> {
         let theme = &self.theme;
-        let measured = |el: Div| el.w_full().max_w(theme.reader_measure_width).into_any_element();
+        let measure = self.measure();
+        let measured = |el: Div| el.w_full().max_w(measure).into_any_element();
         let creators = doc.record.authors().iter().map(|c| c.name.clone()).collect::<Vec<_>>().join(", ");
         let heading = div()
             .flex()

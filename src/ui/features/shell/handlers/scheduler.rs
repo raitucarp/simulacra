@@ -6,7 +6,7 @@ use super::super::view::AppView;
 use crate::agent::runtime::EnginePlan;
 use crate::agent::schedule::{due_agents, latest_activity, AgentSlot, Clock, ScheduleContext, SystemClock};
 use crate::domain::{AuthoredPost, NetworkId, Profile, ProfileId};
-use chrono::Utc;
+use chrono::{Local, Timelike, Utc};
 use gpui_kit::*;
 
 impl AppView {
@@ -23,12 +23,10 @@ impl AppView {
         self.scheduler.heartbeat = Some(task);
     }
 
-    /// Turns the global scheduler switch on or off and persists it. Switching on runs a
-    /// heartbeat immediately instead of waiting a full interval; switching off drops
-    /// queued (not yet started) work.
-    pub(crate) fn set_scheduler_enabled(&mut self, enabled: bool, window: &mut Window, cx: &mut Context<Self>) {
+    /// Follows a changed switch. Switching on runs a heartbeat immediately instead of waiting
+    /// a full interval; switching off drops queued (not yet started) work.
+    pub(super) fn on_scheduler_switched(&mut self, enabled: bool, window: &mut Window, cx: &mut Context<Self>) {
         self.scheduler.enabled = enabled;
-        self.state.set_scheduler_enabled(enabled);
         if enabled {
             self.scheduler_tick(window, cx);
         } else {
@@ -37,11 +35,11 @@ impl AppView {
         cx.notify();
     }
 
-    /// One heartbeat: enqueue every due agent, then start queued generations. Paused while
-    /// no API key is configured anywhere (one notice); agents whose engine is backing off
-    /// after failures, or has no key, are skipped when their turn comes.
+    /// One heartbeat: enqueue every due agent, then start queued generations. Paused during
+    /// quiet hours and while no API key is configured anywhere (one notice); agents whose
+    /// engine is backing off after failures, or has no key, are skipped when their turn comes.
     fn scheduler_tick(&mut self, window: &mut Window, cx: &mut Context<Self>) {
-        if !self.scheduler.enabled {
+        if !self.scheduler.enabled || self.state.preferences().agents.is_quiet_at(Local::now().hour()) {
             return;
         }
         if !self.state.llm_settings.has_api_key() && !self.state.credentials.any_secret() {

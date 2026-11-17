@@ -93,6 +93,7 @@ impl AppState {
             credentials: settings.credentials,
             theme_tokens: settings.theme.tokens(),
             theme_settings: settings.theme,
+            preferences: settings.preferences,
             db,
             load_error: None,
         }

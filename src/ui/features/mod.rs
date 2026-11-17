@@ -1,6 +1,7 @@
 //! Feature-oriented UI modules (one directory per product surface),
 //! composed from shared `crate::ui::components`.
 
+pub mod command_palette;
 pub mod composer;
 pub mod day_filter;
 pub mod feed;

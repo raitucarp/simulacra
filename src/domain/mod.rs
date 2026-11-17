@@ -11,6 +11,7 @@ pub mod graph;
 pub mod ids;
 pub mod network;
 pub mod palette;
+pub mod preferences;
 pub mod portrait;
 pub mod post;
 pub mod profile;

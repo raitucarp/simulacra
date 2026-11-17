@@ -29,7 +29,7 @@ fn layout_id(forge: bool, medium: bool, collapsed: bool) -> &'static str {
 impl AppView {
     /// Layout id, width and resize range of the left sidebar.
     fn left_column(&self, class: LayoutClass) -> (&'static str, Pixels, Pixels, Pixels) {
-        let collapsed = self.chrome.is_left_sidebar_collapsed;
+        let collapsed = self.is_left_rail();
         let id = layout_id(self.forge.is_some(), class == LayoutClass::Medium, collapsed);
         let t = &self.theme;
         if collapsed {

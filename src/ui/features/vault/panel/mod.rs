@@ -46,8 +46,6 @@ pub struct VaultPanel {
     /// Text block the reader scrolls to on its next frame (from the contents).
     pub(super) pending_block: Option<usize>,
     pub(super) copied_style: Option<CitationStyle>,
-    /// Replace motion with instant changes.
-    pub(super) reduced_motion: bool,
     _subscriptions: Vec<Subscription>,
 }
 
@@ -85,7 +83,6 @@ impl VaultPanel {
             reader_progress: 0,
             pending_block: None,
             copied_style: None,
-            reduced_motion: false,
             _subscriptions: subscriptions,
         };
         panel.refresh_results();
@@ -114,14 +111,6 @@ impl VaultPanel {
     pub fn set_theme(&mut self, theme: &ThemeTokens, cx: &mut Context<Self>) {
         if &self.theme != theme {
             self.theme = theme.clone();
-            cx.notify();
-        }
-    }
-
-    /// Replaces motion with instant changes when `reduced` (the appearance preference).
-    pub fn set_reduced_motion(&mut self, reduced: bool, cx: &mut Context<Self>) {
-        if self.reduced_motion != reduced {
-            self.reduced_motion = reduced;
             cx.notify();
         }
     }

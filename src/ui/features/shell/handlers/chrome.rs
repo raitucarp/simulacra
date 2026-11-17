@@ -14,11 +14,7 @@ impl AppView {
     pub fn switch_language(&mut self, lang: Language, cx: &mut Context<Self>) {
         self.chrome.current_language = lang;
         crate::i18n::set_locale(lang);
-        cx.notify();
-    }
-
-    pub(crate) fn toggle_left_sidebar(&mut self, _: &mut Window, cx: &mut Context<Self>) {
-        self.chrome.is_left_sidebar_collapsed = !self.chrome.is_left_sidebar_collapsed;
+        self.state.set_language(lang);
         cx.notify();
     }
 

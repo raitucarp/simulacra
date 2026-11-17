@@ -2,6 +2,7 @@
 
 mod action_target;
 mod avatar;
+mod captures;
 mod controls;
 mod data_fixes;
 mod day_filter;

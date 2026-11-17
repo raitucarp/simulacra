@@ -1,0 +1,42 @@
+//! Turning a plan into posts (pure): each draft becomes a root post, later parts of its
+//! thread reply to the part before, every post cites the source and carries the import
+//! origin, and creation times rise in reading order.
+
+use super::ImportPlan;
+use crate::domain::post::{PostExtras, PostOrigin};
+use crate::domain::{NetworkId, Post, PostId, ProfileId};
+use crate::error::Result;
+use chrono::{DateTime, Duration, Utc};
+
+/// Milliseconds between consecutive imported posts, so reading order survives sorting by time.
+pub const IMPORT_POST_SPACING_MS: i64 = 1;
+
+/// The posts of `plan` in reading order (parents before their replies), published by
+/// `author` into `network`, the first created at `start`. `next_id` mints post ids.
+pub fn build_posts(
+    plan: &ImportPlan,
+    author: &ProfileId,
+    network: &NetworkId,
+    start: DateTime<Utc>,
+    origin: PostOrigin,
+    mut next_id: impl FnMut() -> PostId,
+) -> Result<Vec<Post>> {
+    let mut posts: Vec<Post> = Vec::with_capacity(plan.drafts.iter().map(|draft| draft.thread.len()).sum());
+    for draft in &plan.drafts {
+        let mut parent: Option<PostId> = None;
+        for text in &draft.thread {
+            let id = next_id();
+            let mut post = Post::create_with_attachments(id.clone(), network.clone(), author.clone(), text, None, None, parent.clone(), None, None)?;
+            post.created_at = start + Duration::milliseconds(posts.len() as i64 * IMPORT_POST_SPACING_MS);
+            post.extras = PostExtras { sources: vec![draft.source.clone()], origin: Some(origin), ..PostExtras::default() };
+            if parent.is_some() {
+                if let Some(previous) = posts.last_mut() {
+                    previous.replies_count = 1;
+                }
+            }
+            parent = Some(id);
+            posts.push(post);
+        }
+    }
+    Ok(posts)
+}

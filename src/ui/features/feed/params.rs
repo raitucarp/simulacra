@@ -18,6 +18,8 @@ pub type CycleProfileCallback = Box<dyn Fn(&mut Window, &mut App) + 'static>;
 pub type LoadMoreCallback = Box<dyn Fn(&mut Window, &mut App) + 'static>;
 pub type SelectFeedTabCallback = Box<dyn Fn(FeedTab, &mut Window, &mut App) + 'static>;
 pub type ToggleRepliesCallback = Box<dyn Fn(&mut Window, &mut App) + 'static>;
+/// Runs a registry command (the stream header's capture and import buttons).
+pub type RunCommandCallback = std::rc::Rc<dyn Fn(crate::ui::features::command_palette::CommandId, &mut Window, &mut App) + 'static>;
 
 /// Configuration parameters for rendering the main feed organism.
 pub struct FeedParams<'a, C> {
@@ -49,4 +51,5 @@ pub struct FeedParams<'a, C> {
     /// Source chips of agent posts (open the vault document, post, profile or web page).
     pub on_open_source: OpenSourceAction,
     pub on_cycle_profile: CycleProfileCallback,
+    pub on_run_command: RunCommandCallback,
 }

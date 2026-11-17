@@ -19,6 +19,13 @@ rfd = "0.15"
 base64 = "0.22"
 # Already in the graph via gpui-kit-assets; embeds `assets/illustrations` (read from disk in debug builds).
 rust-embed = { version = "8.7", features = ["include-exclude"] }
+# Import pipeline: EPUB/DOCX/ODT containers (deflate through the flate2 already in the graph),
+# the PDF text layer, file checksums and legacy MOBI code pages (markup is read by our own
+# tolerant tokenizer, which XHTML, MOBI HTML, OPF, NCX, DOCX and ODT all share).
+zip = { version = "9", default-features = false, features = ["deflate-flate2"] }
+lopdf = { version = "0.47", default-features = false }
+sha2 = "0.11"
+encoding_rs = "0.8"
 
 [dev-dependencies]
 resvg = "0.45.1"

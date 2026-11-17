@@ -39,9 +39,12 @@ command_ids! {
     GoMindGraph => "go_mind_graph",
     /// Creation ("New" menu).
     NewThread => "new_thread",
-    /// Quick capture of a note; a later wave implements it (registered as planned).
+    /// Quick capture of a note into the Inbox.
     NewNote => "new_note",
+    /// Imports any file through the import sheet.
     ImportFile => "import_file",
+    /// The timeline filtered to captured posts.
+    OpenInbox => "open_inbox",
     NewAgent => "new_agent",
     CreateNetwork => "create_network",
     /// Identity and network.

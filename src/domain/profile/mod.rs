@@ -2,10 +2,12 @@
 
 mod constructors;
 mod handle;
+mod kind;
 mod queries;
 mod unknown;
 
 pub use handle::{canonical_handle, handle_key};
+pub use kind::{ProfileKind, ANONYMOUS_PROFILE_ID};
 
 use super::agent_config::AgentConfig;
 use super::ids::{NetworkId, ProfileId};
@@ -44,6 +46,9 @@ pub struct Profile {
     /// Comprehensive human psychology, intelligence, linguistics, schedule, and prompt assembly configuration.
     #[serde(default)]
     pub config: AgentConfig,
+    /// Regular profile, pseudonym or the anonymous account (omitted from JSON when regular).
+    #[serde(default, skip_serializing_if = "ProfileKind::is_standard")]
+    pub kind: ProfileKind,
 }
 
 impl From<Profile> for ProfileId {

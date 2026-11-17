@@ -17,5 +17,7 @@ gpui_kit::assets::icon_assets!(
         StickyNote, UserPlus,
         // sb B1
         LayoutGrid, List, Bookmark, Quote, ArrowUpDown, BookMarked, Languages, MapPin,
+        // sb B2
+        Feather, Pilcrow, VenetianMask,
     ]
 );

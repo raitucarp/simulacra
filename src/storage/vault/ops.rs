@@ -13,6 +13,11 @@ impl Vault {
         self.write(move |db| db.save_post(&post))
     }
 
+    /// Queues upserting `posts` in one transaction (all or nothing).
+    pub fn save_posts(&self, posts: Vec<Post>) -> Result<()> {
+        self.write(move |db| db.save_posts(&posts))
+    }
+
     /// Queues deleting `post_id` and its instant reposts.
     pub fn delete_post_with_reposts(&self, post_id: &PostId) -> Result<()> {
         let id = post_id.clone();

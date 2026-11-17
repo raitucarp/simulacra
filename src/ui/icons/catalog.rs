@@ -123,4 +123,9 @@ lucide_catalog! {
     BookMarked => "icons/book-marked.svg",
     Languages => "icons/languages.svg",
     MapPin => "icons/map-pin.svg",
+    // Import and capture
+    Feather => "icons/feather.svg",
+    Inbox => "icons/inbox.svg",
+    Pilcrow => "icons/pilcrow.svg",
+    VenetianMask => "icons/venetian-mask.svg",
 }

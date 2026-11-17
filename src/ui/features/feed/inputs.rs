@@ -1,7 +1,7 @@
 //! Splits [`FeedParams`] into the inputs of each feed sub-view.
 
 use super::callbacks::PostCallbacks;
-use super::params::{FeedParams, LoadMoreCallback, SelectFeedTabCallback, ToggleRepliesCallback};
+use super::params::{FeedParams, LoadMoreCallback, RunCommandCallback, SelectFeedTabCallback, ToggleRepliesCallback};
 use crate::domain::PostId;
 use crate::state::FeedTab;
 use super::stream::StreamInputs;
@@ -20,6 +20,7 @@ pub(crate) struct TimelineInputs<C> {
     pub on_load_more: Option<LoadMoreCallback>,
     pub on_select_feed_tab: SelectFeedTabCallback,
     pub on_toggle_replies: ToggleRepliesCallback,
+    pub on_run_command: RunCommandCallback,
 }
 
 /// Distributes feed parameters to the post callbacks and the timeline.
@@ -47,6 +48,7 @@ pub(crate) fn split_params<C>(params: FeedParams<'_, C>) -> (PostCallbacks, Time
         on_load_more: params.on_load_more,
         on_select_feed_tab: params.on_select_feed_tab,
         on_toggle_replies: params.on_toggle_replies,
+        on_run_command: params.on_run_command,
     };
     (callbacks, timeline)
 }

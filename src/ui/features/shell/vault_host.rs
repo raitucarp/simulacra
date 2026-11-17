@@ -60,7 +60,7 @@ impl AppView {
                 let _ = self.state.delete_document(&id);
                 self.push_vault_data(cx);
             }
-            VaultEvent::Import => self.import_document(window, cx),
+            VaultEvent::Import => self.pick_import_files(window, cx),
             VaultEvent::SetReading(id, reading) => {
                 self.state.set_reading(&id, reading);
                 self.push_vault_data(cx);

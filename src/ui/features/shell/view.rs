@@ -3,6 +3,7 @@
 use super::feed_state::FeedState;
 use super::forge_host::ForgeSession;
 use super::graph_state::GraphState;
+use super::import_state::ImportUi;
 use super::lab_state::{LabState, LlmInputs};
 use super::panels::ShellPanels;
 use super::scheduler_state::SchedulerState;
@@ -36,6 +37,8 @@ pub struct AppView {
     pub graph: GraphState,
     /// The Knowledge Vault view.
     pub vault: VaultHost,
+    /// The import sheet, quick capture and file-drop state.
+    pub import: ImportUi,
     /// The Agent Forge while it is open (it replaces the center and right columns).
     pub forge: Option<ForgeSession>,
     /// Left sidebar prefs (width, sections, pins, recents) and the window width.

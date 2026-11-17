@@ -9,6 +9,7 @@ mod dismissed_seeds;
 pub mod location;
 mod migrate;
 mod networks;
+mod post_batch;
 mod post_delete;
 mod post_updates;
 mod posts;

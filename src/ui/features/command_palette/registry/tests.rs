@@ -45,10 +45,11 @@ fn every_command_has_an_english_title_and_keywords() {
 }
 
 #[test]
-fn planned_commands_are_neither_listed_nor_runnable() {
+fn availability_decides_listing_and_running() {
     let note = spec(CommandId::NewNote);
-    assert_eq!(note.availability, Availability::Planned);
-    assert!(!note.is_listed() && !note.is_runnable());
+    assert_eq!(note.availability, Availability::Ready, "quick capture shipped with the import wave");
+    assert!(note.is_listed() && note.is_runnable());
+    assert!(spec(CommandId::OpenInbox).is_listed());
     let palette = spec(CommandId::OpenPalette);
     assert!(!palette.is_listed() && palette.is_runnable(), "shortcut-only commands still run");
     assert!(spec(CommandId::NewThread).is_listed());

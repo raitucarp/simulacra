@@ -6,7 +6,7 @@ use super::super::choice::choice_enum;
 choice_enum! {
     /// Where text embeddings are computed.
     EmbeddingProvider, default: Gemini,
-    [Gemini => "gemini", OpenAi => "open_ai", Custom => "custom"]
+    [Gemini => "gemini", LocalServer => "local_server", OpenAi => "open_ai", Custom => "custom"]
 }
 
 choice_enum! {

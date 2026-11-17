@@ -59,4 +59,7 @@ command_ids! {
     OpenPalette => "open_palette",
     OpenCommands => "open_commands",
     ReplayWelcome => "replay_welcome",
+    /// sb B3: the palette in semantic mode, and "find similar" for the open thought.
+    SemanticSearch => "semantic_search",
+    FindSimilar => "find_similar",
 }

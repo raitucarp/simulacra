@@ -62,9 +62,9 @@ impl AppView {
             on_reply_post: Box::new(move |post_id, _author_handle: &str, window, cx| {
                 reply_entity.update(cx, |this, cx| this.reply_to_post(post_id, window, cx));
             }),
-            on_repost_post: bind.boxed(Self::repost_post),
-            on_quote_post: bind.boxed(Self::quote_post),
+            on_repost_post: bind.boxed(Self::repost_post), on_quote_post: bind.boxed(Self::quote_post),
             on_delete_post: bind.boxed(Self::delete_post),
+            on_find_similar_post: bind.boxed(Self::find_similar_post),
             on_open_tag: Rc::new(bind.with(|this, tag: String, window, cx| this.search_topic(&tag, window, cx))),
             on_open_wikilink: Rc::new(bind.with(Self::open_wikilink)),
             on_open_source: Rc::new(bind.with(Self::open_source)),

@@ -4,7 +4,7 @@
 use super::super::catalog::{SettingRow, ThemeScale};
 use super::super::row::{element_id_of, RowContext};
 use super::super::tabs::SettingsTab;
-use crate::domain::preferences::{ImageField, SettingField, SettingValue};
+use crate::domain::preferences::{EmbeddingField, ImageField, SettingField, SettingValue};
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::button::Button;
 use gpui_kit::component::input::Input;
@@ -33,6 +33,7 @@ pub(super) fn toggle(ctx: &RowContext, row: SettingRow, field: SettingField, on:
 pub(super) fn text_input(ctx: &RowContext, field: SettingField) -> AnyElement {
     let state = match field {
         SettingField::Images(ImageField::StylePrefix) => &ctx.inputs.style_prefix,
+        SettingField::Embeddings(EmbeddingField::Endpoint) => &ctx.inputs.embedding_endpoint,
         _ => &ctx.inputs.embedding_model,
     };
     Input::new(state)

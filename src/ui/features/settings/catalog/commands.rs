@@ -6,8 +6,10 @@
 pub enum SettingsCommand {
     /// Shows the first-run welcome again.
     ReplayWelcome,
-    /// Rebuilds the semantic index (a stub until the embeddings wave lands).
+    /// Re-embeds every post and document with the current model.
     ReindexEmbeddings,
+    /// Stops the indexing that is running (sb B3).
+    CancelReindex,
     OpenDatabaseFolder,
     OpenMediaFolder,
     /// Writes a copy of the vault next to it.
@@ -24,8 +26,8 @@ pub enum SettingsCommand {
 
 impl SettingsCommand {
     /// Every command.
-    pub const ALL: [SettingsCommand; 9] = [
-        Self::ReplayWelcome, Self::ReindexEmbeddings, Self::OpenDatabaseFolder, Self::OpenMediaFolder,
+    pub const ALL: [SettingsCommand; 10] = [
+        Self::ReplayWelcome, Self::ReindexEmbeddings, Self::CancelReindex, Self::OpenDatabaseFolder, Self::OpenMediaFolder,
         Self::Backup, Self::Export, Self::ClearCaches, Self::OpenKeymap, Self::ResetAll,
     ];
 
@@ -34,6 +36,7 @@ impl SettingsCommand {
         match self {
             Self::ReplayWelcome => "onboarding.replay",
             Self::ReindexEmbeddings => "embeddings.reindex",
+            Self::CancelReindex => "embeddings.cancel",
             Self::OpenDatabaseFolder => "data.open_database_folder",
             Self::OpenMediaFolder => "data.open_media_folder",
             Self::Backup => "data.backup",

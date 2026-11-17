@@ -17,6 +17,7 @@ const fn icon(command: SettingsCommand) -> LucideIcon {
     match command {
         SettingsCommand::ReplayWelcome => LucideIcon::Sparkles,
         SettingsCommand::ReindexEmbeddings => LucideIcon::RefreshCw,
+        SettingsCommand::CancelReindex => LucideIcon::X,
         SettingsCommand::OpenDatabaseFolder | SettingsCommand::OpenMediaFolder => LucideIcon::Folder,
         SettingsCommand::Backup => LucideIcon::Archive,
         SettingsCommand::Export => LucideIcon::Share2,

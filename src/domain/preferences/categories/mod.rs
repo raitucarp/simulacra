@@ -17,7 +17,10 @@ pub use advanced::AdvancedPrefs;
 pub use agents::{AgentPrefs, MAX_CONCURRENT, POSTS_PER_HOUR, REPLY_DEPTH};
 pub use ai::{AiPrefs, DAILY_REQUESTS, DAILY_TOKENS, MAX_RETRIES, REQUEST_TIMEOUT_SECONDS};
 pub use appearance::AppearancePrefs;
-pub use embeddings::{EmbeddingPrefs, CHUNK_OVERLAP, CHUNK_SIZE, DEFAULT_EMBEDDING_MODEL};
+pub use embeddings::{
+    default_model, EmbeddingPrefs, CHUNK_OVERLAP, CHUNK_SIZE, DEFAULT_EMBEDDING_MODEL, DEFAULT_LOCAL_ENDPOINT, DIMENSIONS,
+    LOCAL_EMBEDDING_MODEL, OPENAI_EMBEDDING_MODEL,
+};
 pub use general::GeneralPrefs;
 pub use images::ImagePrefs;
 pub use import::{ImportPrefs, MAX_FILE_MB};

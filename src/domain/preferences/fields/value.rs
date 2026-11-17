@@ -28,6 +28,8 @@ pub enum NumberUnit {
     Cards,
     Percent,
     Megabytes,
+    /// Vector components (embedding dimensions).
+    Dimensions,
     /// An hour of the day, shown as `22:00`.
     Hour,
 }
@@ -48,6 +50,7 @@ impl NumberUnit {
             Self::Cards => "cards",
             Self::Percent => "percent",
             Self::Megabytes => "megabytes",
+            Self::Dimensions => "dimensions",
             Self::Hour => "hour",
         }
     }

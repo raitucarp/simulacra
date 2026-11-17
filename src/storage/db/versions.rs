@@ -40,10 +40,11 @@ impl Database {
         if self.schema_version()? < AUTHOR_ID_VERSION {
             self.run_migration(MIGRATE_AUTHOR_IDS, AUTHOR_ID_VERSION)?;
         }
+        self.migrate_embedding_model()?;
         Ok(())
     }
 
-    fn run_migration(&self, statements: &str, version: i64) -> Result<()> {
+    pub(super) fn run_migration(&self, statements: &str, version: i64) -> Result<()> {
         let batch = format!("BEGIN; {statements} {WRITE_VERSION}{version}; COMMIT;");
         self.conn.execute_batch(&batch).map_err(|e| {
             let _ = self.conn.execute_batch("ROLLBACK;");

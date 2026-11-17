@@ -5,6 +5,7 @@ use super::graph_state::GraphState;
 use super::lab_state::{LabState, LlmInputs};
 use super::panels::ShellPanels;
 use super::scheduler_state::SchedulerState;
+use super::semantic_state::SemanticState;
 use super::settings_ui::SettingsUi;
 use super::view::{AppView, ChromeState};
 use crate::state::AppState;
@@ -55,6 +56,7 @@ impl AppView {
             chrome: ChromeState { is_onboarding_open: onboarding, ..ChromeState::new(initial_lang) },
             feed, composer_modal, appearance, llm_inputs, settings_ui,
             lab, scheduler, graph,
+            semantic: SemanticState::new(cx),
             forge: None,
             sidebar, palette,
             panels: ShellPanels::new(cx),

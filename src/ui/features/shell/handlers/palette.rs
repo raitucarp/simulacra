@@ -18,11 +18,15 @@ impl AppView {
     }
 
     fn on_palette_event(&mut self, _: &Entity<CommandPalette>, event: &PaletteEvent, window: &mut Window, cx: &mut Context<Self>) {
-        self.close_palette(window, cx);
-        if let PaletteEvent::Run(target) = event {
-            self.palette.history = self.palette.history.recorded(&target.history_key());
-            save_history(self.state.db.as_ref(), &self.palette.history);
-            self.run_palette_target(target.clone(), window, cx);
+        match event {
+            PaletteEvent::SemanticQuery(text) => self.on_semantic_query(text.clone(), window, cx),
+            PaletteEvent::Dismiss => self.close_palette(window, cx),
+            PaletteEvent::Run(target) => {
+                self.close_palette(window, cx);
+                self.palette.history = self.palette.history.recorded(&target.history_key());
+                save_history(self.state.db.as_ref(), &self.palette.history);
+                self.run_palette_target(target.clone(), window, cx);
+            }
         }
     }
 

@@ -78,6 +78,8 @@ pub const COMMANDS: &[CommandSpec] = &[
     action(C::OpenPalette, I::Search, ShortcutOnly),
     action(C::OpenCommands, I::Command, ShortcutOnly),
     action(C::ReplayWelcome, I::Sparkles, Ready),
+    action(C::SemanticSearch, I::Sparkles, Ready),
+    action(C::FindSimilar, I::Compass, Ready),
 ];
 
 /// The registry row of `id`.

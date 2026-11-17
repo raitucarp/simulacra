@@ -6,12 +6,13 @@ mod actions;
 mod footer;
 mod render;
 mod rows;
+mod semantic;
 
 pub use actions::{ConfirmSelection, DismissPalette, NextGroup, PreviousGroup, SelectNext, SelectPrevious};
 
 use super::model::{
     locate, next_group_start, parse_query, previous_group_start, rank, result_count, stepped, PaletteHistory,
-    PaletteItem, PaletteMode, PaletteQuery, PaletteTarget, ResultGroup, COMMAND_PREFIX,
+    PaletteItem, PaletteMode, PaletteQuery, PaletteTarget, RankedItem, ResultGroup, SemanticPhase,
 };
 use crate::theme::ThemeTokens;
 use gpui_kit::component::input::{InputEvent, InputState, Position};
@@ -25,6 +26,9 @@ pub enum PaletteEvent {
     Run(PaletteTarget),
     /// Close without running anything.
     Dismiss,
+    /// Search posts and documents by the meaning of this text (semantic mode); the shell
+    /// answers with [`CommandPalette::show_semantic_results`].
+    SemanticQuery(String),
 }
 
 /// The open command palette.
@@ -35,6 +39,8 @@ pub struct CommandPalette {
     query: PaletteQuery,
     groups: Vec<ResultGroup>,
     selected: usize,
+    /// Semantic mode: the pending query or its scored rows.
+    semantic: SemanticPhase,
     theme: ThemeTokens,
     scroll: ScrollHandle,
     _subscription: Subscription,
@@ -43,13 +49,11 @@ pub struct CommandPalette {
 impl EventEmitter<PaletteEvent> for CommandPalette {}
 
 impl CommandPalette {
-    /// Opens over `items`, focused, in `mode` (command mode starts the query with `>`).
+    /// Opens over `items`, focused, in `mode` (command mode starts the query with `>`,
+    /// semantic mode with `?`).
     pub fn new(items: Vec<PaletteItem>, history: PaletteHistory, mode: PaletteMode, theme: ThemeTokens, window: &mut Window, cx: &mut Context<Self>) -> Self {
         let placeholder = t!("palette.placeholder").to_string();
-        let initial = match mode {
-            PaletteMode::Commands => COMMAND_PREFIX.to_string(),
-            PaletteMode::Everything => String::new(),
-        };
+        let initial = mode.initial_text();
         let caret = Position::new(0, initial.chars().count() as u32);
         let input = cx.new(|cx| InputState::new(window, cx).placeholder(placeholder).default_value(initial));
         // Focuses the field with the caret after the `>` prefix.
@@ -59,7 +63,8 @@ impl CommandPalette {
                 this.refresh(cx);
             }
         });
-        let mut palette = Self { input, items, history, query: parse_query(""), groups: Vec::new(), selected: 0, theme, scroll: ScrollHandle::new(), _subscription: subscription };
+        let (query, semantic, scroll) = (parse_query(""), SemanticPhase::Prompt, ScrollHandle::new());
+        let mut palette = Self { input, items, history, query, groups: Vec::new(), selected: 0, semantic, theme, scroll, _subscription: subscription };
         palette.refresh(cx);
         palette
     }
@@ -67,7 +72,10 @@ impl CommandPalette {
     /// Re-ranks the results for the current text and selects the best one.
     fn refresh(&mut self, cx: &mut Context<Self>) {
         self.query = parse_query(&self.input.read(cx).value());
-        self.groups = rank(&self.items, &self.query, &self.history);
+        self.groups = match self.query.mode {
+            PaletteMode::Semantic => self.semantic_groups(cx),
+            PaletteMode::Everything | PaletteMode::Commands => rank(&self.items, &self.query, &self.history),
+        };
         self.selected = 0;
         self.scroll.scroll_to_item(0);
         cx.notify();
@@ -107,9 +115,17 @@ impl CommandPalette {
         cx.emit(PaletteEvent::Dismiss);
     }
 
+    /// The item behind a ranked result (a scored row in semantic mode).
+    fn item_at(&self, ranked: &RankedItem) -> &PaletteItem {
+        match self.query.mode {
+            PaletteMode::Semantic => &self.semantic.rows()[ranked.index].item,
+            PaletteMode::Everything | PaletteMode::Commands => &self.items[ranked.index],
+        }
+    }
+
     /// Runs flat result `index` (Enter or a click).
     fn run(&mut self, index: usize, cx: &mut Context<Self>) {
-        let target = locate(&self.groups, index).map(|(group, item)| self.items[self.groups[group].items[item].index].target.clone());
+        let target = locate(&self.groups, index).map(|(group, item)| self.item_at(&self.groups[group].items[item]).target.clone());
         if let Some(target) = target {
             cx.emit(PaletteEvent::Run(target));
         }

@@ -5,6 +5,7 @@ mod columns;
 mod drawer;
 mod navigation;
 mod overlays;
+mod semantic;
 mod settings;
 mod sidebars;
 mod workspace;
@@ -26,6 +27,7 @@ impl Render for AppView {
         self.sync_composer_view(cx);
         self.sync_stream(cx);
         self.sync_mind_graph(cx);
+        self.sync_semantic_index(window, cx);
         self.sync_forge_theme(cx);
         let bind = Binder::new(cx);
         let class = LayoutClass::of_window(window, &self.theme);
@@ -51,6 +53,8 @@ impl Render for AppView {
             .children(self.workspace_popover(&bind))
             .children(self.composer_modal_view(cx))
             .children(self.welcome_overlay(&bind))
+            .children(self.indexing_indicator(&bind))
+            .children(self.similar_sheet(&bind))
             .children(self.palette.palette.clone())
             .children(self.shortcut_sheet(&bind))
     }

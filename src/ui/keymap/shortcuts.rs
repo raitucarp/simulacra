@@ -74,6 +74,7 @@ pub const SHORTCUTS: &[Shortcut] = &[
     shell("secondary-p", C::OpenPalette),
     shell("secondary-k", C::OpenPalette),
     shell("secondary-shift-p", C::OpenCommands),
+    shell("secondary-shift-k", C::SemanticSearch),
     shell("secondary-/", C::ShowShortcuts),
     shell("secondary-b", C::ToggleSidebar),
     shell("secondary-alt-b", C::ToggleRightSidebar),

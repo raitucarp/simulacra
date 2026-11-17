@@ -16,6 +16,10 @@ pub enum PaletteGroup {
     Posts,
     Documents,
     Settings,
+    /// Semantic search results (sb B3).
+    Meaning,
+    /// Word-match results shown when search by meaning is unavailable.
+    Words,
 }
 
 impl PaletteGroup {
@@ -30,6 +34,8 @@ impl PaletteGroup {
             Self::Posts => "palette.group.posts",
             Self::Documents => "palette.group.documents",
             Self::Settings => "palette.group.settings",
+            Self::Meaning => "palette.group.meaning",
+            Self::Words => "palette.group.words",
         }
     }
 }

@@ -50,6 +50,8 @@ pub struct SettingsData {
 pub struct SettingsInputs {
     pub search: Entity<InputState>,
     pub embedding_model: Entity<InputState>,
+    /// The local server (or custom service) URL of the Embeddings category.
+    pub embedding_endpoint: Entity<InputState>,
     pub style_prefix: Entity<InputState>,
     /// Focus of the category rail (arrow keys move between categories).
     pub rail_focus: FocusHandle,

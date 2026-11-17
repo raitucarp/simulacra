@@ -1462,3 +1462,14 @@ forge.ui.daily.week_posts_one: "Environ %{count} publication dans une semaine ty
 forge.ui.daily.week_posts_other: "Environ %{count} publications dans une semaine type."
 forge.ui.grimoire.chars_one: "%{count} caractère"
 forge.ui.grimoire.chars_other: "%{count} caractères"
+
+# p7 shell
+splash.tagline: "Un simulateur dialectique local"
+splash.stage.opening_vault: "Ouverture du coffre…"
+splash.stage.loading_networks: "Chargement des réseaux…"
+splash.stage.waking_agents: "Réveil des agents…"
+splash.stage.ready: "Prêt"
+splash.version: "Version %{version}"
+layout.title: "Disposition des panneaux"
+layout.hint: "Faites glisser un séparateur pour redimensionner un panneau ; double-cliquez pour rétablir cette division."
+layout.reset: "Réinitialiser la disposition"

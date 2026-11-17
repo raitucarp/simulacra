@@ -13,12 +13,19 @@ use crate::ui::features::settings::AppearancePanel;
 use gpui_kit::*;
 
 impl AppView {
-    /// Constructs a new AppView with default state, frameless window setup, and dark minimalist theme.
+    /// Constructs a new AppView, loading the store from the default vault synchronously.
     pub fn new(window: &mut Window, cx: &mut Context<Self>) -> Self {
+        Self::with_state(AppState::new(), window, cx)
+    }
+
+    /// Constructs the AppView around an already loaded store (the splash screen loads it in
+    /// stages): points the render globals at it, restores the saved panel layouts and builds
+    /// every section.
+    pub fn with_state(state: AppState, window: &mut Window, cx: &mut Context<Self>) -> Self {
         let initial_lang = Language::English;
         crate::i18n::set_locale(initial_lang);
-
-        let state = load_state();
+        register_render_globals(&state);
+        crate::ui::components::persisted_split::init_panel_layouts(state.db.as_ref(), cx);
         let feed = FeedState::new(&state, window, cx);
         let profile = state.current_profile().cloned();
         let theme = state.theme_tokens.clone();
@@ -63,11 +70,9 @@ impl AppView {
     }
 }
 
-/// Opens the store and points the render-side globals at it: the vault folder (relative
-/// avatar photos) and the active palette (themed illustrations).
-fn load_state() -> AppState {
-    let state = AppState::new();
+/// Points the render-side globals at the store: the vault folder (relative avatar photos) and
+/// the active palette (themed illustrations).
+fn register_render_globals(state: &AppState) {
     crate::storage::avatars::register_vault_dir(state.vault_dir());
     let _ = crate::ui::illustration::set_active_palette(&state.theme_settings.effective_palette().colors);
-    state
 }

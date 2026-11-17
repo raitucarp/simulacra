@@ -82,6 +82,12 @@ theme_tokens! {
         nav_active_dot_size, workspace_dot_size, workspace_badge_size, workspace_trigger_height,
         workspace_popover_width, language_popover_right, language_popover_width, win_control_radius,
         avatar_initial_small_max, avatar_initial_medium_max,
+        // Window restore size, resizable panel ranges, splitter hit band and the splash screen
+        window_default_width, window_default_height, splitter_hit_padding, split_flex_min,
+        forge_rail_min, forge_rail_max, forge_options_min, forge_options_max, forge_preview_min,
+        forge_preview_max, contact_list_pane_min, contact_list_pane_max, modal_rail_min,
+        modal_rail_max, graph_details_height, graph_details_min, graph_details_max,
+        splash_brand_width, splash_guide_size, splash_progress_width, splash_progress_height,
         // Settings modal and its appearance editor
         settings_header_height, settings_input_height, settings_provider_button_height,
         settings_brand_badge_size, settings_tab_indicator_width, settings_tab_indicator_height,
@@ -106,6 +112,8 @@ theme_tokens! {
     floats: [
         line_height_body, cadence_alpha_1, cadence_alpha_2, cadence_alpha_3, cadence_alpha_4,
         graph_dim_opacity, graph_curve_bend,
+        // Splash screen: shortest time on screen and fade into the shell (milliseconds)
+        splash_min_duration_ms, splash_fade_duration_ms,
         // Agent Forge: opacity of disabled option cards and of the stage backdrop art
         forge_disabled_opacity, forge_backdrop_opacity,
     ],

@@ -5,6 +5,8 @@ mod render;
 mod sections;
 mod window_controls;
 
+pub(crate) use window_controls::render_window_controls;
+
 use crate::domain::Network;
 use crate::i18n::Language;
 use crate::theme::ThemeTokens;

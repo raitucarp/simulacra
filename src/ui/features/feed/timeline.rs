@@ -8,7 +8,7 @@ use super::stream::render_stream_list;
 use super::stream_header::render_stream_header;
 use crate::state::AppState;
 use crate::theme::ThemeTokens;
-use gpui_kit::component::resizable::{h_resizable, resizable_panel};
+use crate::ui::components::{persisted_h_resizable, SplitPane};
 use gpui_kit::{div, Div, IntoElement, ParentElement, Styled};
 use std::rc::Rc;
 
@@ -39,16 +39,14 @@ pub(crate) fn render_timeline<C: IntoElement>(
     let header = render_stream_header(theme, inputs.feed_tab, Rc::new(inputs.on_select_feed_tab));
     let stream = render_stream_list(inputs.stream, callbacks.clone(), on_load_more, theme);
 
-    h_resizable(TIMELINE_RESIZABLE_ID)
+    persisted_h_resizable(TIMELINE_RESIZABLE_ID, theme)
         // PANE 1: Main Dialectic Stream
-        .child(
-            resizable_panel()
-                .size(theme.stream_pane_width)
-                .size_range(theme.stream_pane_min_width..theme.stream_pane_max_width)
+        .pane(
+            SplitPane::sized(theme.stream_pane_width, theme.stream_pane_min_width..theme.stream_pane_max_width)
                 .child(render_stream_pane(header, inputs.composer, stream, theme)),
         )
         // PANE 2: Focus Thread & Epistemic Inspector
-        .child(resizable_panel().child(inspector))
+        .pane(SplitPane::flex(theme.split_flex_min).child(inspector))
 }
 
 /// Stream pane: header, composer, and scrollable stream.

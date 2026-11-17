@@ -30,7 +30,7 @@ const DRAWER_SCRIM_ID: &str = "vault-drawer-scrim";
 impl Render for VaultPanel {
     fn render(&mut self, window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
         let compact = LayoutClass::of_window(window, &self.theme).is_compact();
-        let browsing = self.nav.current == Screen::Browse;
+        let browsing = self.nav.current == Screen::Browse && !self.data.documents.is_empty();
         let screen = match self.nav.current.clone() {
             Screen::Browse => self.render_browse(compact, cx).into_any_element(),
             Screen::Entry(id) => self.render_entry(&id, compact, cx),

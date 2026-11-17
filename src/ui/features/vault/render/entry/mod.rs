@@ -41,7 +41,7 @@ impl VaultPanel {
             .child(self.render_backlinks(doc, cx));
         let side = self.render_entry_side(doc, compact);
         let columns = if compact {
-            div().flex().flex_col().gap(theme.section_gap).child(side).child(main)
+            div().flex().flex_col().gap(theme.section_gap).child(main).child(side)
         } else {
             div().flex().items_start().gap(theme.section_gap).child(main).child(side)
         };
@@ -69,11 +69,11 @@ impl VaultPanel {
         div().flex().child(button)
     }
 
-    /// Cover and metadata (beside the entry, or above it on compact windows).
+    /// Cover and metadata (beside the entry, or below it on compact windows).
     fn render_entry_side(&self, doc: &GroundingDocument, compact: bool) -> impl IntoElement {
         let theme = &self.theme;
-        let side = div().flex().flex_col().gap(theme.section_gap).child(cover(doc, theme.vault_entry_cover_width, theme));
-        let side = if compact { side.w_full().items_center() } else { side.w(theme.vault_entry_side_width).flex_shrink_0() };
+        let side = div().flex().flex_col().items_center().gap(theme.section_gap).child(cover(doc, theme.vault_entry_cover_width, theme));
+        let side = if compact { side.w_full() } else { side.w(theme.vault_entry_side_width).flex_shrink_0() };
         side.child(self.render_metadata(doc))
     }
 }

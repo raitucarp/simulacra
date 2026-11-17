@@ -30,6 +30,11 @@ fn byline(doc: &GroundingDocument) -> Vec<String> {
     ]
 }
 
+/// Whether any item has text.
+fn has_any(items: &[String]) -> bool {
+    items.iter().any(|item| !item.trim().is_empty())
+}
+
 impl VaultPanel {
     pub(super) fn render_title_block(&self, doc: &GroundingDocument, cx: &mut Context<Self>) -> impl IntoElement {
         let theme = &self.theme;
@@ -49,8 +54,8 @@ impl VaultPanel {
             )
             .child(div().font_family(theme.font_family_display.clone()).text_size(theme.font_size_xl).font_weight(FontWeight::BOLD).text_color(theme.text_primary).child(doc.title.clone()))
             .when(!record.subtitle.is_empty(), |b| b.child(div().text_size(theme.font_size_md).text_color(theme.text_secondary).child(record.subtitle.clone())))
-            .child(meta_line(byline(doc), theme).text_size(theme.font_size_sm).text_color(theme.text_secondary))
-            .child(meta_line(imprint, theme))
+            .when(has_any(&byline(doc)), |b| b.child(meta_line(byline(doc), theme).text_size(theme.font_size_sm).text_color(theme.text_secondary)))
+            .when(has_any(&imprint), |b| b.child(meta_line(imprint.clone(), theme)))
             .when(reading.status == ReadingStatus::Reading, |b| b.child(div().max_w(theme.vault_search_width).child(progress_bar(reading.progress, theme))))
             .child(self.render_entry_actions(doc, cx))
     }

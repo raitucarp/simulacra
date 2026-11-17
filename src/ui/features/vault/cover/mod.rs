@@ -4,8 +4,10 @@
 //! The template uses palette placeholders only (`{{accent}}`, `{{fg}}`, ...) and `#000` /
 //! `#fff` shading with an opacity, like the illustration assets, so covers follow the theme.
 
+mod book;
 mod motifs;
 mod seed;
+mod shapes;
 #[cfg(test)]
 mod tests;
 

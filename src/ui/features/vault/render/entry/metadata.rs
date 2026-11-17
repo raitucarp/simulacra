@@ -23,7 +23,7 @@ fn metadata_rows(doc: &GroundingDocument) -> Vec<(&'static str, String)> {
     let extent = [
         record.extent.pages.map(|p| t_count("vault.count.pages", p as usize)),
         Some(t_count("vault.count.words", record.extent.words)),
-        Some(t!("vault.minutes_read", minutes = reading_minutes(record.extent.words)).to_string()),
+        (record.extent.words > 0).then(|| t!("vault.minutes_read", minutes = reading_minutes(record.extent.words)).to_string()),
     ];
     let added_by = record.provenance.added_by.trim();
     let added = doc.created_at.format(ADDED_FORMAT).to_string();

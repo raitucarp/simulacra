@@ -6,44 +6,7 @@ use super::{CoverSeed, COVER_HEIGHT, COVER_WIDTH};
 use crate::domain::document::DocumentKind;
 use std::f32::consts::TAU;
 
-const WHITE: &str = "#fff";
-const BLACK: &str = "#000";
-
-fn n(value: f32) -> String {
-    format!("{:.1}", value)
-}
-
-fn paint(color: &str) -> String {
-    if color.starts_with('#') { color.to_string() } else { format!("{{{{{color}}}}}") }
-}
-
-fn rect(x: f32, y: f32, w: f32, h: f32, color: &str, opacity: f32) -> String {
-    format!(r#"<rect x="{}" y="{}" width="{}" height="{}" rx="1.5" fill="{}" fill-opacity="{}"/>"#, n(x), n(y), n(w), n(h), paint(color), n(opacity))
-}
-
-fn circle(cx: f32, cy: f32, r: f32, stroke: &str, width: f32, opacity: f32) -> String {
-    format!(r#"<circle cx="{}" cy="{}" r="{}" stroke="{}" stroke-width="{}" stroke-opacity="{}"/>"#, n(cx), n(cy), n(r), paint(stroke), n(width), n(opacity))
-}
-
-fn polygon(cx: f32, cy: f32, r: f32, sides: u64, turn: f32, fill: &str) -> String {
-    let points: Vec<String> = (0..sides)
-        .map(|i| {
-            let angle = turn + TAU * i as f32 / sides as f32;
-            format!("{},{}", n(cx + r * angle.cos()), n(cy + r * angle.sin()))
-        })
-        .collect();
-    format!(r#"<polygon points="{}" fill="{}"/>"#, points.join(" "), paint(fill))
-}
-
-fn book(seed: &CoverSeed, ink: &str) -> String {
-    let (cx, cy) = (COVER_WIDTH / 2.0 + 4.0, COVER_HEIGHT * 0.45);
-    let rings: String = (0..2 + seed.pick(2, 3)).map(|i| circle(cx, cy, 18.0 + i as f32 * 9.0, WHITE, 1.5, 0.35)).collect();
-    let emblem = polygon(cx, cy, seed.between(3, 12.0, 20.0), 4 + seed.pick(4, 5), seed.between(5, 0.0, TAU), ink);
-    let band_y = seed.between(6, 118.0, 140.0);
-    let band = rect(10.0, band_y, COVER_WIDTH - 10.0, seed.between(7, 6.0, 14.0), ink, 0.85);
-    let rules = rect(18.0, 22.0, 90.0, 2.0, WHITE, 0.6) + &rect(18.0, 156.0, 90.0, 2.0, WHITE, 0.6);
-    rect(0.0, 0.0, 10.0, COVER_HEIGHT, BLACK, 0.28) + &rules + &rings + &emblem + &band
-}
+use super::shapes::{circle, n, polygon, rect, BLACK, WHITE};
 
 fn article(seed: &CoverSeed, ink: &str) -> String {
     let header = rect(12.0, 14.0, 96.0, 26.0, ink, 1.0);
@@ -117,7 +80,7 @@ fn other(seed: &CoverSeed, ink: &str) -> String {
 /// The kind's motif in `ink` over the ground.
 pub fn motif(kind: DocumentKind, seed: &CoverSeed, ink: &str) -> String {
     match kind {
-        DocumentKind::Book => book(seed, ink),
+        DocumentKind::Book => super::book::book(seed, ink),
         DocumentKind::Article => article(seed, ink),
         DocumentKind::Note => note(seed, ink),
         DocumentKind::WebPage => web_page(seed, ink),

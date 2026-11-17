@@ -5,7 +5,7 @@ use crate::state::{AppState, FeedTab};
 use crate::theme::ThemeTokens;
 use gpui_kit::component::input::{InputState, TextareaState};
 use super::stream::StreamInputs;
-use crate::ui::features::post::OpenTextAction;
+use crate::ui::features::post::{OpenSourceAction, OpenTextAction};
 use gpui_kit::{App, Entity, Window};
 
 pub type LikePostCallback = Box<dyn Fn(PostId, &mut Window, &mut App) + 'static>;
@@ -49,6 +49,8 @@ pub struct FeedParams<'a, C> {
     /// Hashtag / wikilink clicks in post bodies (tag search, open the linked post or doc).
     pub on_open_tag: OpenTextAction,
     pub on_open_wikilink: OpenTextAction,
+    /// Source chips of agent posts (open the vault document, post, profile or web page).
+    pub on_open_source: OpenSourceAction,
     pub on_add_document: AddDocCallback,
     pub on_delete_document: DeleteDocCallback,
     /// Opens a file picker and adds the chosen text file as a vault document.

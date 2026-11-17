@@ -36,6 +36,7 @@ impl ForgeView {
             form_slot: FormSlot::Layer(FormLayer::Body),
             hear: super::HearStatus::Idle,
             grimoire_open: false,
+            engine: super::EngineUi::default(),
             strip_preview: None,
             focus: cx.focus_handle(),
         };

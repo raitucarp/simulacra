@@ -12,10 +12,13 @@
 //! - [`image`]: the image engine and when it fires.
 //! - [`tools`]: tool grants (vault search, network reading, web, custom HTTP).
 //! - [`path`]: dotted-path lookups into JSON (`choices.0.message.content`).
+//! - [`picker`] / `picker_options`: the Engine step's card options (as `TraitOption`s).
 
 mod image;
 mod output;
 mod path;
+mod picker;
+mod picker_options;
 mod presets;
 mod request;
 mod text;
@@ -27,6 +30,7 @@ mod tests;
 pub use image::{ImageEngine, ImageEngineConfig, ImageEngineKind, ImageTrigger, SdFlavor, IMAGE_PLACEHOLDERS};
 pub use output::{OutputMapping, OutputMode, StructuredOutput};
 pub use path::{value_at, value_text};
+pub use picker::{ImageSize, OutputKind, RequestKind, TextSource, TriggerKind, DEFAULT_IMAGE_CHANCE};
 pub use presets::SchemaPreset;
 pub use request::{CustomRequest, HeaderPair, HttpMethod, RequestMode, API_KEY_PLACEHOLDER, REQUEST_PLACEHOLDERS};
 pub use text::{OwnModel, TextModel};

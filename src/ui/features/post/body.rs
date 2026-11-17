@@ -23,6 +23,8 @@ pub struct BodyLinks {
     pub on_tag: Option<OpenTextAction>,
     /// Wikilink pill click, with the raw `[[target]]`.
     pub on_wikilink: Option<OpenTextAction>,
+    /// Source chip click (vault document, post, profile or web page an agent drew on).
+    pub on_source: Option<super::extras::OpenSourceAction>,
 }
 
 /// Tokenizes `content` and renders it with inert links (previews, tests, the spark feed).

@@ -50,15 +50,15 @@ impl ForgeKind {
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
 pub enum ForgeStep {
     Origin, Embodiment, Appearance, Birthsign, Attributes, Disposition, Mind,
-    Voice, Rhetoric, DailyLife, Relationships, Grimoire, Review,
+    Voice, Rhetoric, DailyLife, Relationships, Grimoire, Engine, Review,
 }
 
 use ForgeStep as S;
 
 /// Every step an agent walks through.
-const AGENT_STEPS: [ForgeStep; 13] = [
+const AGENT_STEPS: [ForgeStep; 14] = [
     S::Origin, S::Embodiment, S::Appearance, S::Birthsign, S::Attributes, S::Disposition, S::Mind,
-    S::Voice, S::Rhetoric, S::DailyLife, S::Relationships, S::Grimoire, S::Review,
+    S::Voice, S::Rhetoric, S::DailyLife, S::Relationships, S::Grimoire, S::Engine, S::Review,
 ];
 /// Personas only describe who (and what) they are, how they look and how they write.
 const PERSONA_STEPS: [ForgeStep; 6] = [S::Origin, S::Embodiment, S::Appearance, S::Voice, S::Rhetoric, S::Review];
@@ -72,7 +72,7 @@ pub fn steps_for(kind: ForgeKind) -> &'static [ForgeStep] {
 }
 
 impl ForgeStep {
-    pub const ALL: [Self; 13] = AGENT_STEPS;
+    pub const ALL: [Self; 14] = AGENT_STEPS;
 
     /// Stable snake_case id; also the banner file stem under `illustrations/steps/`.
     pub const fn key(self) -> &'static str {
@@ -89,6 +89,7 @@ impl ForgeStep {
             S::DailyLife => "daily_life",
             S::Relationships => "relationships",
             S::Grimoire => "grimoire",
+            S::Engine => "engine",
             S::Review => "review",
         }
     }

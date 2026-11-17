@@ -1,7 +1,7 @@
 //! Bounded snapshot history behind the draft's undo / redo.
 
 use crate::domain::Profile;
-use crate::state::forge::fields::TextField;
+use crate::state::forge::edit::CoalesceKey;
 use std::collections::VecDeque;
 
 /// Maximum number of undo snapshots kept; the oldest is dropped beyond this.
@@ -12,13 +12,13 @@ pub const HISTORY_LIMIT: usize = 64;
 pub(super) struct History {
     undo: VecDeque<Profile>,
     redo: Vec<Profile>,
-    /// Text field whose run of edits is still merging into the newest snapshot.
-    coalescing: Option<TextField>,
+    /// Field (or engine section) whose run of typing still merges into the newest snapshot.
+    coalescing: Option<CoalesceKey>,
 }
 
 impl History {
     /// Records `before` as an undo point, unless it continues the current text run.
-    pub(super) fn record(&mut self, before: Profile, coalesce: Option<TextField>) {
+    pub(super) fn record(&mut self, before: Profile, coalesce: Option<CoalesceKey>) {
         self.redo.clear();
         if coalesce.is_some() && coalesce == self.coalescing {
             return;

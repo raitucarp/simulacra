@@ -5,10 +5,13 @@ use super::host::extract_host_domain;
 use crate::theme::ThemeTokens;
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::Icon;
+use crate::domain::engine::ImageEngineKind;
+use crate::ui::illustration::Illustration;
 use gpui_kit::{
-    div, img, Div, FontWeight, InteractiveElement, ObjectFit, ParentElement, Stateful,
+    div, img, AnyElement, Div, FontWeight, InteractiveElement, IntoElement, ObjectFit, ParentElement, Stateful,
     StatefulInteractiveElement, Styled, StyledImage,
 };
+use rust_i18n::t;
 use std::path::PathBuf;
 
 /// Local image attachment embed (zero synchronous filesystem syscalls).
@@ -24,8 +27,26 @@ pub(crate) fn render_image_embed(image_path: &str, theme: &ThemeTokens) -> Div {
             img(PathBuf::from(image_path))
                 .w_full()
                 .h_full()
-                .object_fit(ObjectFit::Cover),
+                .object_fit(ObjectFit::Cover)
+                .with_fallback(missing_image(theme)),
         )
+}
+
+/// An illustrated stand-in for an attached image whose file is gone or unreadable.
+fn missing_image(theme: &ThemeTokens) -> impl Fn() -> AnyElement + 'static {
+    let (width, padding, color, size) = (theme.forge_option_card_width, theme.spacing_md, theme.text_muted, theme.font_size_xs);
+    move || {
+        div()
+            .w_full()
+            .p(padding)
+            .flex()
+            .flex_col()
+            .items_center()
+            .gap(padding)
+            .child(Illustration::trait_card(ImageEngineKind::None).width(width))
+            .child(div().text_size(size).text_color(color).child(t!("post.image_missing").to_string()))
+            .into_any_element()
+    }
 }
 
 /// Rich link preview card opening the URL on click.

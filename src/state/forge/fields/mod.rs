@@ -6,7 +6,7 @@ mod map;
 mod sets;
 mod traits;
 
-pub use map::{field_label_key, field_step, fields_for_step, mapped_fields, MAX_AGE, MAX_HOUR, MAX_SCORE, SYSTEM_FIELDS};
+pub use map::{field_label_key, field_step, fields_for_step, mapped_fields, ENGINE_PATH, MAX_AGE, MAX_HOUR, MAX_SCORE, SYSTEM_FIELDS};
 pub use sets::{TraitSet, TraitSetValue, TraitSetVisitor};
 pub use traits::{TraitField, TraitValue, TraitVisitor};
 

@@ -66,6 +66,7 @@ impl AppView {
             on_delete_post: bind.boxed(Self::delete_post),
             on_open_tag: Rc::new(bind.with(|this, tag: String, window, cx| this.search_topic(&tag, window, cx))),
             on_open_wikilink: Rc::new(bind.with(Self::open_wikilink)),
+            on_open_source: Rc::new(bind.with(Self::open_source)),
             on_add_document: Box::new(move |title, content, window, cx| {
                 doc_entity.update(cx, |this, cx| this.add_document(title, content, window, cx));
             }),

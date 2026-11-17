@@ -109,6 +109,8 @@ theme_tokens! {
         forge_palette_tab_icon_width, forge_palette_chip_width, forge_palette_search_width,
         // First-run welcome overlay
         onboarding_width, onboarding_art_size,
+        // Agent Forge Engine step: the "Test image" result and the sample-answer editor
+        forge_probe_image_size, forge_sample_height,
     ],
     // Typography Hierarchy & Line Height; heatmap level opacities; graph dimming & curvature
     floats: [
@@ -118,6 +120,8 @@ theme_tokens! {
         splash_min_duration_ms, splash_fade_duration_ms,
         // Agent Forge: opacity of disabled option cards and of the stage backdrop art
         forge_disabled_opacity, forge_backdrop_opacity,
+        // Feed: tools a post's author tried that failed
+        post_failed_tool_opacity,
     ],
 }
 

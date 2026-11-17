@@ -11,8 +11,10 @@ pub const SYSTEM_FIELDS: [(&str, ForgeStep); 2] = [
     ("network_id", ForgeStep::Origin),
 ];
 
-/// Nested engine config: edited as a whole (Grimoire for now; the Engine step comes later).
-pub const ENGINE_FIELDS: [(&str, ForgeStep); 1] = [("engine", ForgeStep::Grimoire)];
+/// Nested engine config: edited as a whole on the Engine step (see `forge::engine`).
+pub const ENGINE_FIELDS: [(&str, ForgeStep); 1] = [(ENGINE_PATH, ForgeStep::Engine)];
+/// Serde name of the nested engine config.
+pub const ENGINE_PATH: &str = "engine";
 
 /// Every `(serde path, step)` pair the forge knows about.
 pub fn mapped_fields() -> Vec<(&'static str, ForgeStep)> {

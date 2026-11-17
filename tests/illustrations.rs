@@ -6,6 +6,11 @@ use std::fs;
 use std::path::{Path, PathBuf};
 
 use simulacra::domain::traits::*;
+use simulacra::agent::llm::LlmProvider;
+use simulacra::domain::engine::{
+    HttpMethod, ImageEngineKind, ImageSize, OutputKind, RequestKind, SchemaPreset, SdFlavor, SearchBackend, TextSource, ToolKind,
+    TriggerKind,
+};
 use simulacra::domain::TraitOption;
 
 const ASSETS_DIR: &str = "assets";
@@ -60,6 +65,8 @@ fn every_trait_variant_has_an_option_card() {
         BodyKind, BodyForm, Material, Scale, Temporality, Perception, Mobility, Anthropomorphism,
         RelationToHumans, Withdrawal, RhetoricalMode, RhetoricalDevice, StylisticSchool, SemioticMode,
         SentenceStructure, PostFormat, LexicalField, Weekday,
+        TextSource, LlmProvider, RequestKind, HttpMethod, OutputKind, SchemaPreset, ImageEngineKind, SdFlavor,
+        ImageSize, TriggerKind, ToolKind, SearchBackend,
     );
     assert!(total > 100, "expected the full trait catalogue, saw {total} variants");
     assert!(missing.is_empty(), "missing trait illustrations:\n{}", missing.join("\n"));

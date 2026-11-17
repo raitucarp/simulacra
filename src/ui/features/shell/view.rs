@@ -46,6 +46,8 @@ pub struct ChromeState {
     pub is_workspace_open: bool,
     pub is_left_sidebar_collapsed: bool,
     pub is_right_sidebar_open: bool,
+    /// The right panel's drawer is open (compact layout class, where it is not a column).
+    pub is_right_drawer_open: bool,
     pub right_sidebar_tab: RightSidebarTab,
     /// The first-run welcome overlay is showing.
     pub is_onboarding_open: bool,
@@ -63,6 +65,7 @@ impl ChromeState {
             is_workspace_open: false,
             is_left_sidebar_collapsed: false,
             is_right_sidebar_open: true,
+            is_right_drawer_open: false,
             right_sidebar_tab: RightSidebarTab::MindCadence,
             is_onboarding_open: false,
         }

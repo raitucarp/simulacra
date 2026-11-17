@@ -66,10 +66,10 @@ pub(super) fn apply_layout(t: &mut ThemeTokens) {
         modal_rail_width: px(220.0), modal_footer_height: px(54.0), cadence_cell_size: px(10.0),
         graph_canvas_height: px(140.0),
 
-        heatmap_cell_height: px(5.0), heatmap_cell_gap: px(1.0), heatmap_cell_radius: px(1.0),
+        heatmap_cell_height: px(5.0), heatmap_cell_gap: px(2.0), heatmap_cell_radius: px(2.0),
         heatmap_label_width: px(24.0), heatmap_month_row_height: px(12.0),
         graph_view_min_height: px(420.0), graph_node_radius_min: px(3.5),
-        graph_node_radius_max: px(11.0), graph_mini_node_radius: px(2.0), graph_edge_width: px(1.0),
+        graph_node_radius_max: px(11.0), graph_mini_node_radius: px(2.5), graph_edge_width: px(1.0),
 
         modal_composer_width: px(580.0), modal_composer_max_height: px(620.0),
         post_image_max_height: px(280.0), post_image_preview_height: px(140.0),

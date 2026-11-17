@@ -20,7 +20,9 @@ pub(super) fn apply_panel_layout(t: &mut ThemeTokens) {
         graph_details_height: px(56.0), graph_details_min: px(48.0), graph_details_max: px(240.0),
         splash_brand_width: px(160.0), splash_guide_size: px(96.0),
         splash_progress_width: px(240.0), splash_progress_height: px(3.0),
+        splash_window_width: px(560.0), splash_window_height: px(420.0),
+        window_min_width: px(720.0), window_min_height: px(520.0),
 
-        splash_min_duration_ms: 900.0, splash_fade_duration_ms: 280.0,
+        splash_min_duration_ms: 900.0, splash_fade_duration_ms: 280.0, splash_warm_up_limit_ms: 1500.0,
     });
 }

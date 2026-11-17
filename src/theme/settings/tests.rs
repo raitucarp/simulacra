@@ -98,3 +98,67 @@ fn customized_legacy_tokens_become_a_migrated_palette() {
     assert_eq!(settings.font_family, "Georgia");
     assert_eq!(settings.tokens().accent_brand, rgb(0xff00aa));
 }
+
+mod appearance {
+    use super::super::{AppearanceMode, PreferredThemes, ThemeSettings};
+    use crate::theme::palette::PaletteMode::{Dark, Light};
+    use crate::theme::registry::{DEFAULT_LIGHT_PALETTE_ID, DEFAULT_PALETTE_ID, OBSIDIAN_ZINC_ID};
+
+    const ONE_LIGHT: &str = "one-light";
+
+    #[test]
+    fn modes_round_trip_cycle_and_resolve() {
+        for mode in AppearanceMode::ALL {
+            assert_eq!(AppearanceMode::from_id(mode.id()), Some(*mode));
+        }
+        assert_eq!(AppearanceMode::from_id("sepia"), None);
+        let cycle: Vec<_> = AppearanceMode::ALL.iter().map(|mode| mode.next()).collect();
+        assert_eq!(cycle, [AppearanceMode::Light, AppearanceMode::System, AppearanceMode::Dark]);
+        assert_eq!(AppearanceMode::System.resolve(Light), Light);
+        assert_eq!(AppearanceMode::Dark.resolve(Light), Dark);
+    }
+
+    #[test]
+    fn system_mode_follows_the_os_with_each_preferred_palette() {
+        let mut settings = ThemeSettings::default();
+        settings.set_preferred(Light, ONE_LIGHT, Dark);
+        assert_eq!(settings.preset_id, DEFAULT_PALETTE_ID, "light is not showing yet");
+        settings.set_appearance(AppearanceMode::System, Light);
+        assert_eq!(settings.preset_id, ONE_LIGHT);
+        settings.apply_appearance(Dark);
+        assert_eq!(settings.preset_id, DEFAULT_PALETTE_ID);
+        assert_eq!(settings.tokens().mode, Dark);
+    }
+
+    #[test]
+    fn picking_a_palette_makes_it_preferred_and_shows_its_mode() {
+        let mut settings = ThemeSettings::default();
+        settings.select(OBSIDIAN_ZINC_ID);
+        assert_eq!(settings.preferred.dark, OBSIDIAN_ZINC_ID);
+        settings.select(ONE_LIGHT);
+        settings.follow_active_palette(Dark);
+        assert_eq!(settings.appearance, AppearanceMode::Light);
+        settings.apply_appearance(Dark);
+        assert_eq!(settings.preset_id, ONE_LIGHT, "the pick is kept");
+        settings.set_appearance(AppearanceMode::Dark, Light);
+        assert_eq!(settings.preset_id, OBSIDIAN_ZINC_ID, "each mode remembers its palette");
+    }
+
+    #[test]
+    fn missing_or_mismatched_preferences_fall_back_to_the_mode_default() {
+        let preferred = PreferredThemes { dark: ONE_LIGHT.into(), light: "gone".into() };
+        let settings = ThemeSettings { preferred, ..ThemeSettings::default() };
+        assert_eq!(settings.preferred_id(Dark), DEFAULT_PALETTE_ID);
+        assert_eq!(settings.preferred_id(Light), DEFAULT_LIGHT_PALETTE_ID);
+    }
+
+    #[test]
+    fn old_settings_keep_their_palette_as_the_preferred_one_of_its_mode() {
+        let mut settings = ThemeSettings { preset_id: ONE_LIGHT.into(), ..ThemeSettings::default() };
+        settings.adopt_active_as_preferred();
+        assert_eq!(settings.appearance, AppearanceMode::Light);
+        assert_eq!(settings.preferred, PreferredThemes { dark: DEFAULT_PALETTE_ID.into(), light: ONE_LIGHT.into() });
+        settings.apply_appearance(Dark);
+        assert_eq!(settings.preset_id, ONE_LIGHT, "the look survives the upgrade");
+    }
+}

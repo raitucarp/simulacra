@@ -8,6 +8,9 @@ pub(super) const STREAM_LIST_OVERDRAW: f32 = 600.0;
 pub(super) const LAYOUT_ID_COLLAPSED: &str = "simulacra-main-layout-collapsed";
 /// Element id of the three-column layout while the left sidebar is expanded.
 pub(super) const LAYOUT_ID_EXPANDED: &str = "simulacra-main-layout-expanded";
+/// Element ids of the three-column layout in the medium layout class (narrower right column).
+pub(super) const LAYOUT_ID_MEDIUM_COLLAPSED: &str = "simulacra-main-layout-medium-collapsed";
+pub(super) const LAYOUT_ID_MEDIUM_EXPANDED: &str = "simulacra-main-layout-medium-expanded";
 /// Element ids of the two-column layout while the Agent Forge is open.
 pub(super) const LAYOUT_ID_FORGE_COLLAPSED: &str = "simulacra-forge-layout-collapsed";
 pub(super) const LAYOUT_ID_FORGE_EXPANDED: &str = "simulacra-forge-layout-expanded";

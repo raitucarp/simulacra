@@ -22,5 +22,5 @@ pub use kit::{kit_theme_config, sync_kit_theme};
 pub use palette::{PaletteColorKey, PaletteColors, PaletteMode, PaletteOverrides, ThemePalette};
 pub use palettes::{midnight_slate, minimalist_dark, obsidian_zinc};
 pub use registry::ThemeRegistry;
-pub use settings::ThemeSettings;
+pub use settings::{AppearanceMode, ThemeSettings};
 pub use tokens::ThemeTokens;

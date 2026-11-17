@@ -1,5 +1,6 @@
-//! Sidebar mini Mind Graph: the same cached scene as the full view, fitted into a small
-//! canvas (no labels), with matching node/edge counts. Clicking it opens the full graph.
+//! Sidebar mini Mind Graph: the same cached scene as the full view, fitted into a canvas as
+//! wide as the sidebar at a token aspect ratio (no labels), with matching node/edge counts.
+//! Clicking it opens the full graph.
 
 use super::section::{render_divided_section, render_mono_badge, render_section_header, render_section_title};
 use crate::state::graph::GraphScene;
@@ -16,8 +17,6 @@ use std::rc::Rc;
 pub type OpenGraphCallback = Rc<dyn Fn(&mut Window, &mut App) + 'static>;
 
 const MINI_GRAPH_ID: &str = "sidebar-mini-graph";
-/// Hub nodes in the mini graph are at most this many times the base radius.
-const MINI_HUB_SCALE: f32 = 2.0;
 
 fn render_graph_header(scene: &GraphScene, theme: &ThemeTokens) -> Div {
     let counts = [
@@ -37,10 +36,9 @@ fn render_graph_header(scene: &GraphScene, theme: &ThemeTokens) -> Div {
 }
 
 fn mini_options(theme: &ThemeTokens) -> PaintOptions {
-    let base = theme.graph_mini_node_radius.as_f32();
     PaintOptions {
-        padding: theme.spacing_md.as_f32(),
-        radius_range: (base, base * MINI_HUB_SCALE),
+        padding: theme.card_padding.as_f32(),
+        radius_range: (theme.graph_mini_node_radius.as_f32(), theme.graph_mini_node_radius_max.as_f32()),
         labels: false,
     }
 }
@@ -64,7 +62,7 @@ fn render_canvas(scene: Rc<GraphScene>, on_open: OpenGraphCallback, theme: &Them
         .id(MINI_GRAPH_ID)
         .relative()
         .w_full()
-        .h(theme.graph_canvas_height)
+        .aspect_ratio(theme.graph_mini_aspect)
         .rounded(theme.radius_lg)
         .border(theme.border_width_hairline)
         .border_color(theme.border)

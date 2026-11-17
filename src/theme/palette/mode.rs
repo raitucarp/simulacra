@@ -1,5 +1,6 @@
 //! Light/dark appearance of a palette.
 
+use gpui_kit::WindowAppearance;
 use serde::{Deserialize, Serialize};
 
 /// Whether a palette is a dark or a light theme (JSON `"mode": "dark" | "light"`).
@@ -25,6 +26,14 @@ impl PaletteMode {
         match self {
             PaletteMode::Dark => "dark",
             PaletteMode::Light => "light",
+        }
+    }
+
+    /// The mode of the operating system's window appearance.
+    pub const fn of_window(appearance: WindowAppearance) -> Self {
+        match appearance {
+            WindowAppearance::Dark | WindowAppearance::VibrantDark => PaletteMode::Dark,
+            WindowAppearance::Light | WindowAppearance::VibrantLight => PaletteMode::Light,
         }
     }
 }

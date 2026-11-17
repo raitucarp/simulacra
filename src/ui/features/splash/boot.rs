@@ -1,13 +1,20 @@
 //! Staged startup: each step runs right after the frame showing its stage label, so the
-//! splash visibly advances while the store loads and the shell is built.
+//! splash visibly advances while the store loads, the hidden main window is built and the
+//! avatars rasterize. Then the splash fades, the main window is shown maximized and the
+//! splash window closes.
 
-use super::stage::{fade_delay, millis, SplashStage};
-use super::{AppRoot, SplashPhase};
+use super::reveal::AppRoot;
+use super::stage::{fade_delay, millis, warm_up_done, SplashStage};
+use super::warm::{avatar_images, still_loading};
+use super::window::main_window_options;
+use super::{SplashPhase, SplashView};
 use crate::error::Result;
 use crate::state::AppState;
 use crate::storage::{Database, Vault};
-use crate::ui::features::shell::AppView;
+use gpui_kit::gpui::Image;
 use gpui_kit::*;
+use std::sync::Arc;
+use std::time::Instant;
 
 /// What has been loaded so far.
 pub(super) enum Boot {
@@ -15,10 +22,14 @@ pub(super) enum Boot {
     Opened(Result<Database>),
     /// The vault worker is running (or failed); the store loads next.
     Started(Result<Vault>),
-    /// The store is loaded; the shell is built next.
+    /// The store is loaded; the main window is built next.
     Loaded(Box<AppState>),
-    /// The shell is built.
-    Built,
+    /// The main window is built (hidden); these avatars are still rasterizing.
+    Warming(AnyWindowHandle, Vec<Arc<Image>>, Instant),
+    /// Everything is ready; the main window waits to be shown.
+    Built(AnyWindowHandle),
+    /// The main window could not be opened.
+    Failed,
 }
 
 impl Boot {
@@ -28,47 +39,64 @@ impl Boot {
             Self::Opened(_) => SplashStage::OpeningVault,
             Self::Started(_) => SplashStage::LoadingNetworks,
             Self::Loaded(_) => SplashStage::WakingAgents,
-            Self::Built => SplashStage::Ready,
+            Self::Warming(..) => SplashStage::WarmingUp,
+            Self::Built(_) | Self::Failed => SplashStage::Ready,
         }
     }
 }
 
-impl AppRoot {
+impl SplashView {
     /// Runs the step of the current stage, shows the next stage and schedules its step.
     pub(super) fn advance(&mut self, window: &mut Window, cx: &mut Context<Self>) {
-        self.boot = match std::mem::replace(&mut self.boot, Boot::Built) {
+        self.boot = match std::mem::replace(&mut self.boot, Boot::Failed) {
             Boot::Opened(database) => Boot::Started(database.and_then(Vault::spawn)),
             Boot::Started(vault) => Boot::Loaded(Box::new(AppState::from_vault(vault))),
-            Boot::Loaded(state) => {
-                self.build_shell(*state, window, cx);
-                Boot::Built
-            }
-            Boot::Built => return,
+            Boot::Loaded(state) => self.open_main_window(*state, cx),
+            Boot::Warming(main, images, started) => self.warm(main, images, started, window, cx),
+            done => done,
         };
         cx.notify();
-        match self.boot {
-            Boot::Built => self.finish(window, cx),
+        match &self.boot {
+            Boot::Built(main) => self.finish(*main, window, cx),
+            Boot::Failed => window.remove_window(),
             _ => cx.on_next_frame(window, Self::advance),
         }
     }
 
-    /// Builds the shell around the loaded store and hands the kit its theme.
-    fn build_shell(&mut self, state: AppState, window: &mut Window, cx: &mut Context<Self>) {
-        let app = cx.new(|cx| AppView::with_state(state, window, cx));
-        self.theme = app.read(cx).theme.clone();
-        crate::theme::sync_kit_theme(&self.theme, cx);
-        self.app = Some(app);
+    /// Opens the main window hidden and builds the shell in it.
+    fn open_main_window(&mut self, state: AppState, cx: &mut Context<Self>) -> Boot {
+        let images = avatar_images(&state, &self.theme);
+        let options = main_window_options(&self.theme, cx);
+        match open_window(options, cx, |window, cx| cx.new(|cx| AppRoot::new(state, window, cx))) {
+            Ok((main, _)) => Boot::Warming(main, images, Instant::now()),
+            Err(err) => {
+                eprintln!("simulacra: failed to open the main window: {err}");
+                Boot::Failed
+            }
+        }
     }
 
-    /// Keeps the splash up for its minimum time, then fades it out and drops it.
-    fn finish(&mut self, window: &mut Window, cx: &mut Context<Self>) {
+    /// One warm-up poll: done once every avatar is rasterized or the time limit passed.
+    fn warm(&mut self, main: AnyWindowHandle, images: Vec<Arc<Image>>, started: Instant, window: &mut Window, cx: &mut Context<Self>) -> Boot {
+        let pending = still_loading(images, window, cx);
+        if warm_up_done(pending.len(), started.elapsed(), millis(self.theme.splash_warm_up_limit_ms)) {
+            Boot::Built(main)
+        } else {
+            Boot::Warming(main, pending, started)
+        }
+    }
+
+    /// Keeps the splash up for its minimum time, fades it out, then shows the main window
+    /// (maximized) and closes the splash window.
+    fn finish(&mut self, main: AnyWindowHandle, window: &mut Window, cx: &mut Context<Self>) {
         let wait = fade_delay(self.shown_at.elapsed(), millis(self.theme.splash_min_duration_ms));
         let fade = millis(self.theme.splash_fade_duration_ms);
         cx.spawn_in(window, async move |this, cx| {
             cx.background_executor().timer(wait).await;
             let _ = this.update(cx, |this, cx| this.set_phase(SplashPhase::Fading, cx));
             cx.background_executor().timer(fade).await;
-            let _ = this.update(cx, |this, cx| this.set_phase(SplashPhase::Done, cx));
+            let _ = main.update(cx, |_, window, _| window.activate_window());
+            let _ = this.update_in(cx, |_, window, _| window.remove_window());
         })
         .detach();
     }

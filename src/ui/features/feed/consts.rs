@@ -11,6 +11,8 @@ pub const MAX_INSPECTOR_NESTED_REPLIES: usize = 1;
 
 /// Element id of the stream / inspector resizable group.
 pub(crate) const TIMELINE_RESIZABLE_ID: &str = "timeline-stream-inspector-resizable";
+/// Element id of the stream / inspector stack of the compact layout (sizes persist apart).
+pub(crate) const TIMELINE_STACKED_ID: &str = "timeline-stream-inspector-stacked";
 /// Element id of the scrollable focus thread body.
 pub(crate) const INSPECTOR_SCROLL_ID: &str = "focus-thread-scroll-stream";
 /// Element id of the load-more container.

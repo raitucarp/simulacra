@@ -2640,3 +2640,15 @@ forge.palette.thread_weaver.pitch: "Menjawab dengan postingan pertama beserta la
 # Gallery search across categories and the blank custom tool name (flat keys).
 forge.palette.ui.search_all: "Menampilkan hasil dari semua kategori untuk “%{query}”."
 forge.issue.unnamed_tool: "alat tanpa nama"
+
+# sb A1
+# Splash warm-up stage, appearance mode (Dark / Light / System) and its title bar toggle.
+splash.stage.warming_up: "Menyiapkan…"
+appearance.mode_title: "MODE TAMPILAN"
+appearance.mode_hint: "Sistem mengikuti pengaturan terang atau gelap komputer Anda dan ikut berganti."
+appearance.mode_dark: "Gelap"
+appearance.mode_light: "Terang"
+appearance.mode_system: "Sistem"
+appearance.preferred_dark: "Tema gelap"
+appearance.preferred_light: "Tema terang"
+appearance.toggle_tooltip: "Tampilan: %{current} (klik untuk %{next})"

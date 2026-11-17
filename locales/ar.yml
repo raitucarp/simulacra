@@ -2640,3 +2640,15 @@ forge.palette.thread_weaver.pitch: "يجيب بمنشور أول تتبعه من
 # Gallery search across categories and the blank custom tool name (flat keys).
 forge.palette.ui.search_all: "عرض النتائج من كل الفئات لـ«%{query}»."
 forge.issue.unnamed_tool: "أداة بلا اسم"
+
+# sb A1
+# Splash warm-up stage, appearance mode (Dark / Light / System) and its title bar toggle.
+splash.stage.warming_up: "جارٍ التحضير…"
+appearance.mode_title: "وضع المظهر"
+appearance.mode_hint: "يتبع وضع النظام إعداد الفاتح أو الداكن في حاسوبك ويتغيّر معه."
+appearance.mode_dark: "داكن"
+appearance.mode_light: "فاتح"
+appearance.mode_system: "النظام"
+appearance.preferred_dark: "السمة الداكنة"
+appearance.preferred_light: "السمة الفاتحة"
+appearance.toggle_tooltip: "المظهر: %{current} (انقر للتبديل إلى %{next})"

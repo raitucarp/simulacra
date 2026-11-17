@@ -16,11 +16,14 @@ const SPARK_TIME_FORMAT: &str = "%H:%M";
 fn render_author(author: &Profile, theme: &ThemeTokens) -> Div {
     div()
         .flex()
+        .min_w_0()
         .items_center()
         .gap(theme.spacing_xs_plus)
-        .child(render_profile_avatar(author, theme.avatar_size_sm, theme))
+        .child(div().flex_none().child(render_profile_avatar(author, theme.avatar_size_sm, theme)))
         .child(
             div()
+                .min_w_0()
+                .truncate()
                 .font_family(theme.font_family_display.clone())
                 .text_size(theme.font_size_label)
                 .font_bold()
@@ -29,6 +32,8 @@ fn render_author(author: &Profile, theme: &ThemeTokens) -> Div {
         )
         .child(
             div()
+                .min_w_0()
+                .truncate()
                 .font_family(theme.font_family_ui.clone())
                 .text_size(theme.font_size_label)
                 .text_color(theme.text_muted)
@@ -41,9 +46,11 @@ fn render_item_header(post: &Post, author: &Profile, theme: &ThemeTokens) -> Div
         .flex()
         .items_center()
         .justify_between()
+        .gap(theme.inline_gap)
         .child(render_author(author, theme))
         .child(
             div()
+                .flex_none()
                 .font_family(theme.font_family_mono.clone())
                 .text_size(theme.font_size_label)
                 .text_color(theme.text_muted)

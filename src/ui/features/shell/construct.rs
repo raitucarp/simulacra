@@ -12,6 +12,9 @@ use crate::ui::features::composer::ComposerModalPanel;
 use crate::ui::features::settings::AppearancePanel;
 use gpui_kit::*;
 
+/// Interface language at startup.
+const INITIAL_LANGUAGE: Language = Language::English;
+
 impl AppView {
     /// Constructs a new AppView, loading the store from the default vault synchronously.
     pub fn new(window: &mut Window, cx: &mut Context<Self>) -> Self {
@@ -21,15 +24,14 @@ impl AppView {
     /// Constructs the AppView around an already loaded store (the splash screen loads it in
     /// stages): points the render globals at it, restores the saved panel layouts and builds
     /// every section.
-    pub fn with_state(state: AppState, window: &mut Window, cx: &mut Context<Self>) -> Self {
-        let initial_lang = Language::English;
-        crate::i18n::set_locale(initial_lang);
+    pub fn with_state(mut state: AppState, window: &mut Window, cx: &mut Context<Self>) -> Self {
+        super::handlers::appearance::resolve_startup_appearance(&mut state, window);
+        crate::i18n::set_locale(INITIAL_LANGUAGE);
         register_render_globals(&state);
         crate::ui::components::persisted_split::init_panel_layouts(state.db.as_ref(), cx);
         let feed = FeedState::new(&state, window, cx);
         let profile = state.current_profile().cloned();
-        let theme = state.theme_tokens.clone();
-        let composer_modal = cx.new(|cx| ComposerModalPanel::new(theme, profile, window, cx));
+        let composer_modal = cx.new(|cx| ComposerModalPanel::new(state.theme_tokens.clone(), profile, window, cx));
         let (graph, graph_subscription) = GraphState::new(&state, window, cx);
         let appearance = cx.new(|cx| AppearancePanel::new(state.theme_settings.clone(), window, cx));
         let subscriptions = vec![
@@ -38,6 +40,7 @@ impl AppView {
             graph_subscription,
             cx.subscribe_in(&appearance, window, Self::on_appearance_event),
             Self::observe_own_changes(cx),
+            cx.observe_window_appearance(window, |this, window, cx| this.follow_system_appearance(window, cx)),
         ];
         let llm_inputs = LlmInputs::new(&state, window, cx);
         let (lab, onboarding) = (LabState::new(&state), state.should_offer_onboarding());
@@ -46,7 +49,7 @@ impl AppView {
         let mut view = Self {
             theme: state.theme_tokens.clone(),
             state,
-            chrome: ChromeState { is_onboarding_open: onboarding, ..ChromeState::new(initial_lang) },
+            chrome: ChromeState { is_onboarding_open: onboarding, ..ChromeState::new(INITIAL_LANGUAGE) },
             feed,
             composer_modal,
             appearance,

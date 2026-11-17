@@ -2640,3 +2640,15 @@ forge.palette.thread_weaver.pitch: "以一条首帖加若干跟帖作答。"
 # Gallery search across categories and the blank custom tool name (flat keys).
 forge.palette.ui.search_all: "显示所有分类中与“%{query}”匹配的结果。"
 forge.issue.unnamed_tool: "未命名工具"
+
+# sb A1
+# Splash warm-up stage, appearance mode (Dark / Light / System) and its title bar toggle.
+splash.stage.warming_up: "正在准备…"
+appearance.mode_title: "外观模式"
+appearance.mode_hint: "“跟随系统”会采用电脑的浅色或深色设置，并随之切换。"
+appearance.mode_dark: "深色"
+appearance.mode_light: "浅色"
+appearance.mode_system: "跟随系统"
+appearance.preferred_dark: "深色主题"
+appearance.preferred_light: "浅色主题"
+appearance.toggle_tooltip: "外观：%{current}（点击切换为%{next}）"

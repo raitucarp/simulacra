@@ -2640,3 +2640,15 @@ forge.palette.thread_weaver.pitch: "Отвечает первым постом �
 # Gallery search across categories and the blank custom tool name (flat keys).
 forge.palette.ui.search_all: "Совпадения из всех категорий по запросу «%{query}»."
 forge.issue.unnamed_tool: "инструмент без названия"
+
+# sb A1
+# Splash warm-up stage, appearance mode (Dark / Light / System) and its title bar toggle.
+splash.stage.warming_up: "Подготовка…"
+appearance.mode_title: "РЕЖИМ ОФОРМЛЕНИЯ"
+appearance.mode_hint: "«Системный» следует светлой или тёмной настройке компьютера и меняется вместе с ней."
+appearance.mode_dark: "Тёмный"
+appearance.mode_light: "Светлый"
+appearance.mode_system: "Системный"
+appearance.preferred_dark: "Тёмная тема"
+appearance.preferred_light: "Светлая тема"
+appearance.toggle_tooltip: "Оформление: %{current} (нажмите для режима «%{next}»)"

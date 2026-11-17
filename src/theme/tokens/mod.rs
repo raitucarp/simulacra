@@ -120,6 +120,10 @@ theme_tokens! {
         forge_palette_tab_icon_width, forge_palette_chip_width, forge_palette_search_width,
         // First-run welcome overlay
         onboarding_width, onboarding_art_size,
+        // Startup windows, responsive layout (breakpoints, sidebar, drawer, stacked inspector), heatmap cells, graph labels
+        splash_window_width, splash_window_height, window_min_width, window_min_height, layout_medium_min_width,
+        layout_wide_min_width, right_sidebar_medium_width, right_sidebar_medium_max, right_drawer_width, inspector_stacked_height,
+        inspector_stacked_min, inspector_stacked_max, heatmap_cell_min, heatmap_cell_max, heatmap_month_label_width, graph_label_max_width, graph_mini_node_radius_max,
         // Agent Forge Engine step: the "Test image" result and the sample-answer editor
         forge_probe_image_size, forge_sample_height,
     ],
@@ -127,8 +131,8 @@ theme_tokens! {
     floats: [
         line_height_body, cadence_alpha_1, cadence_alpha_2, cadence_alpha_3, cadence_alpha_4,
         graph_dim_opacity, graph_curve_bend,
-        // Splash screen: shortest time on screen and fade into the shell (milliseconds)
-        splash_min_duration_ms, splash_fade_duration_ms,
+        // Splash: shortest time on screen, fade, longest avatar warm-up (ms); mini graph width/height
+        splash_min_duration_ms, splash_fade_duration_ms, splash_warm_up_limit_ms, graph_mini_aspect,
         // Agent Forge: opacity of disabled option cards and of the stage backdrop art
         forge_disabled_opacity, forge_backdrop_opacity,
         // Feed: tools a post's author tried that failed

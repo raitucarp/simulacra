@@ -12,6 +12,7 @@ mod filter;
 mod gallery;
 mod handlers;
 mod layout;
+mod mode_picker;
 mod panels;
 mod pickers;
 mod preview_card;
@@ -71,6 +72,7 @@ impl AppearancePanel {
     fn edit(&mut self, window: &mut Window, cx: &mut Context<Self>, edit: impl FnOnce(&mut ThemeSettings)) {
         let mut next = self.settings.clone();
         edit(&mut next);
+        next.follow_active_palette(crate::theme::PaletteMode::of_window(window.appearance()));
         if next == self.settings {
             return;
         }
@@ -87,6 +89,7 @@ impl Render for AppearancePanel {
             .flex()
             .flex_col()
             .gap(theme.section_gap)
+            .child(mode_picker::render(self, &entity))
             .child(section(gallery::header(self, &entity, theme), gallery::body(self, &entity, cx), theme))
             .child(editor::render(self, &entity))
             .child(layout::render(self, &entity))

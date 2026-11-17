@@ -23,7 +23,7 @@ impl MindGraphPanel {
     /// Node under `pos` in the last painted frame.
     fn hit(&self, pos: (f32, f32)) -> Option<usize> {
         let frame = self.frame.get()?;
-        hit_test(&self.scene, &self.view, &frame, self.padding(), self.radius_range(), pos)
+        hit_test(&self.scene, &self.view, &frame, self.fit(), self.radius_range(), pos)
     }
 
     pub(super) fn on_press(&mut self, event: &MouseDownEvent, _: &mut Window, _: &mut Context<Self>) {
@@ -74,7 +74,7 @@ impl MindGraphPanel {
             return;
         };
         let delta = event.delta.pixel_delta(px(SCROLL_LINE_HEIGHT)).y.as_f32();
-        self.view.zoom_at(&frame, self.padding(), xy(event.position), wheel_factor(delta));
+        self.view.zoom_at(&frame, self.fit(), xy(event.position), wheel_factor(delta));
         cx.notify();
     }
 }

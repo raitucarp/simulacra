@@ -19,7 +19,7 @@ mod seed;
 pub use autosave::{AutosavePolicy, AUTOSAVE_EVERY_EDITS};
 pub use bands::{score_level_key, ScoreBand, BAND_THRESHOLDS};
 pub use dismiss::{dismiss_step, DismissStep, TEXT_INPUT_KEY_CONTEXT};
-pub use focus::{GridCursor, NavKey, ACTIVATE_KEYS};
+pub use focus::{fit_columns, GridCursor, NavKey, ACTIVATE_KEYS};
 pub use guide::{guide_pose, guide_tip_key, GuideMoment};
 pub use keys::{hour_key_change, slider_key_value, PAGE_NOTCHES};
 pub use occupation::OccupationPreset;

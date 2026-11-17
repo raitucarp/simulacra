@@ -7,6 +7,7 @@
 //! [`SettingKey::PanelLayouts`](crate::storage::SettingKey). Double-clicking a splitter
 //! restores that split's defaults; [`reset_panel_layouts`] restores them all.
 
+mod fit;
 mod handle;
 mod layouts;
 mod split;

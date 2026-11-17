@@ -101,3 +101,15 @@ fn descriptions_are_translations_not_copies() {
         assert!(same.is_empty(), "untranslated: {same:?}");
     }
 }
+
+#[test]
+fn a_blank_custom_tool_name_reads_as_unnamed() {
+    use super::super::issue_args;
+    use crate::state::forge::{Severity, ValidationIssue, ARG_VALUE};
+    let blank = ValidationIssue::new(ForgeStep::Engine, "engine", Severity::Error, IssueKind::EngineToolName).with_arg(ARG_VALUE, "  ");
+    assert_eq!(issue_args(&blank, "unnamed tool"), vec![(ARG_VALUE, "unnamed tool".to_string())]);
+    let named = ValidationIssue::new(ForgeStep::Engine, "engine", Severity::Error, IssueKind::EngineToolParams).with_arg(ARG_VALUE, "lookup");
+    assert_eq!(issue_args(&named, "unnamed tool"), vec![(ARG_VALUE, "lookup".to_string())]);
+    let other = ValidationIssue::new(ForgeStep::Engine, "engine", Severity::Error, IssueKind::EngineBodyInvalid).with_arg(ARG_VALUE, "");
+    assert_eq!(issue_args(&other, "unnamed tool"), vec![(ARG_VALUE, String::new())]);
+}

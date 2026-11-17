@@ -85,6 +85,6 @@ impl<T: TraitOption> IllustratedOptionGrid<T> {
 impl<T: TraitOption> RenderOnce for IllustratedOptionGrid<T> {
     fn render(self, _: &mut Window, _: &mut App) -> impl IntoElement {
         let cells = self.options.iter().enumerate().map(|(at, option)| self.cell(at, *option)).collect();
-        CardGrid::new(self.id, cells, self.columns, self.theme.spacing_sm)
+        CardGrid::new(self.id, cells, self.columns, self.theme.spacing_sm).auto_columns(self.card_width)
     }
 }

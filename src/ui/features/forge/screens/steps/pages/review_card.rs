@@ -36,8 +36,11 @@ impl TraitVisitor for TraitChip<'_> {
 
     fn visit<T: TraitOption>(self, current: T, _: fn(T) -> TraitValue) -> Div {
         let theme = self.theme;
+        // Sized to the label between the compact and preset widths, so a long one-word label
+        // ("Self-deprecating") stays whole instead of breaking mid-word.
         div()
-            .w(theme.forge_compact_card_width)
+            .min_w(theme.forge_compact_card_width)
+            .max_w(theme.forge_preset_card_width)
             .flex()
             .flex_col()
             .items_center()

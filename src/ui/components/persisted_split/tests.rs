@@ -1,3 +1,4 @@
+use super::fit::{fit_panes, PaneBounds};
 use super::layouts::{restored_size, PanelLayouts};
 
 #[test]
@@ -63,4 +64,40 @@ fn restored_size_clamps_to_the_range() {
     assert_eq!(restored_size(Some(-10.0), 240.0, 180.0, 380.0), 240.0);
     // An inverted range resolves to its minimum.
     assert_eq!(restored_size(Some(300.0), 240.0, 400.0, 200.0), 400.0);
+}
+
+fn sized(min: f32, max: f32, want: f32) -> PaneBounds {
+    PaneBounds { min, max, want, flex: false }
+}
+
+fn flex(min: f32) -> PaneBounds {
+    PaneBounds { min, max: f32::MAX, want: min, flex: true }
+}
+
+#[test]
+fn panes_that_fit_keep_their_bounds() {
+    let panes = [sized(200.0, 400.0, 260.0), flex(300.0), sized(240.0, 480.0, 320.0)];
+    assert_eq!(fit_panes(&panes, 1600.0), panes.to_vec());
+    assert_eq!(fit_panes(&panes, 0.0), panes.to_vec(), "unmeasured container");
+}
+
+#[test]
+fn a_narrow_container_scales_minimums_and_sized_panes_down_to_fit() {
+    let panes = [sized(200.0, 400.0, 260.0), flex(300.0), sized(240.0, 480.0, 320.0)];
+    let available = 600.0;
+    let fitted = fit_panes(&panes, available);
+    let total_min: f32 = fitted.iter().map(|pane| pane.min).sum();
+    assert!((total_min - available).abs() < 0.01, "minimums scale to the container: {total_min}");
+    let opened: f32 = fitted.iter().map(|pane| if pane.flex { pane.min } else { pane.want }).sum();
+    assert!(opened <= available + 0.01, "sized panes leave the flex pane its minimum: {opened}");
+    assert!(fitted.iter().all(|pane| pane.min <= pane.want && pane.want <= pane.max));
+}
+
+#[test]
+fn sized_panes_give_way_before_minimums_shrink() {
+    let panes = [sized(200.0, 400.0, 400.0), flex(300.0)];
+    let fitted = fit_panes(&panes, 600.0);
+    assert_eq!(fitted[0].min, 200.0);
+    assert_eq!(fitted[1].min, 300.0);
+    assert!((fitted[0].want - 300.0).abs() < 0.01 && fitted[0].max <= 300.01);
 }

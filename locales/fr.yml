@@ -495,7 +495,7 @@ forge:
     name_too_short: "Le nom doit comporter au moins %{min} caractères."
     name_too_long: "Limite le nom à %{max} caractères maximum."
     name_junk: "Cela ne ressemble pas encore à un vrai nom."
-    handle_required: "Choisis un identifiant, comme @platon."
+    handle_required: "Choisis un identifiant, comme @plato."
     handle_format: "Les identifiants ne peuvent contenir que des lettres, des chiffres et des tirets bas."
     handle_length: "Les identifiants doivent comporter de %{min} à %{max} caractères."
     handle_taken: "%{value} est déjà pris."
@@ -623,7 +623,7 @@ forge:
     handle:
       what: "Leur @pseudo unique, comme un identifiant Twitter ou Bluesky."
       effect: "Les autres les @mentionnent avec ; deux profils ne peuvent pas avoir le même."
-      example: "@hypatie"
+      example: "@hypatia"
     description:
       what: "Un court titre de rôle affiché à côté de leur identifiant."
       effect: "Il cadre la façon dont les lecteurs (et les autres agents) comprennent leur point de vue."
@@ -1471,14 +1471,14 @@ splash.stage.waking_agents: "Réveil des agents…"
 splash.stage.ready: "Prêt"
 splash.version: "Version %{version}"
 layout.title: "Disposition des panneaux"
-layout.hint: "Faites glisser un séparateur pour redimensionner un panneau ; double-cliquez pour rétablir cette division."
+layout.hint: "Fais glisser un séparateur pour redimensionner un panneau ; double-clique dessus pour rétablir cette répartition."
 layout.reset: "Réinitialiser la disposition"
 
 # p7 bodies
 # Non-human form avatars: kinds, forms, layers and part variants (flat keys).
 portrait.mode_form: "Forme"
 forms.kind: "Quel genre d'être ?"
-forms.kind_hint: "Choisissez un genre ; ses formes apparaissent ci-dessous dans Forme."
+forms.kind_hint: "Choisis un genre ; ses formes apparaissent ci-dessous dans Forme."
 forms.primary: "Couleur principale"
 forms.secondary: "Couleur d'accent"
 forms.kind_creature: "Créature"
@@ -1673,7 +1673,7 @@ forms.v_ripple: "Onde"
 # p7 engine
 # Settings credentials and the per-agent engine field (flat keys).
 settings.credentials_title: "IDENTIFIANTS"
-settings.credentials_note: "Les clés de chaque fournisseur et service utilisés par vos agents. Les agents choisissent un identifiant par son nom ; les clés restent dans ce coffre local et ne sont envoyées qu'à leur propre service."
+settings.credentials_note: "Les clés de chaque fournisseur et service utilisés par tes agents. Les agents choisissent un identifiant par son nom ; les clés restent dans ce coffre local et ne sont envoyées qu'à leur propre service."
 settings.credentials_empty: "Aucun identifiant pour l'instant. Le fournisseur global ci-dessus est utilisé par tous les agents."
 settings.credentials_add: "Ajouter un identifiant"
 settings.credentials_edit: "Modifier"
@@ -1682,7 +1682,7 @@ settings.credentials_kind: "Service"
 settings.credentials_label: "Nom"
 settings.credentials_label_placeholder: "ex. Clé OpenAI personnelle"
 settings.credentials_secret: "Clé API"
-settings.credentials_secret_keep: "Laissez vide pour conserver la clé enregistrée"
+settings.credentials_secret_keep: "Laisse vide pour conserver la clé enregistrée"
 settings.credentials_endpoint: "Point de terminaison (facultatif)"
 settings.credentials_endpoint_placeholder: "Remplace l'URL de base, ex. http://localhost:8000/v1/chat/completions"
 settings.credentials_save: "Enregistrer l'identifiant"
@@ -2635,3 +2635,8 @@ forge.palette.researcher.name: "Chercheur"
 forge.palette.researcher.pitch: "Cherche et lit sur le web avant de parler."
 forge.palette.thread_weaver.name: "Tisseur de fils"
 forge.palette.thread_weaver.pitch: "Répond par une première publication suivie de compléments."
+
+# p9 final
+# Gallery search across categories and the blank custom tool name (flat keys).
+forge.palette.ui.search_all: "Résultats de toutes les catégories pour « %{query} »."
+forge.issue.unnamed_tool: "outil sans nom"

@@ -26,7 +26,7 @@ const KIND_GRID_ID: &str = "forge-form-kinds";
 const SLOT_ID_PREFIX: &str = "forge-form-slot";
 const RANDOMIZE_ID: &str = "forge-form-randomize-all";
 const RANDOMIZE_PART_ID: &str = "forge-form-randomize-part";
-/// Kind cards per row.
+/// Kind cards per row until the grid's width is first measured.
 const KIND_COLUMNS: usize = 4;
 
 impl ForgeView {
@@ -55,7 +55,8 @@ impl ForgeView {
     /// "Which being": one card per kind showing its first form.
     fn kind_picker(&self, current: FormKind, handle: &ForgeHandle) -> Div {
         let theme = &self.theme;
-        let width = theme.forge_compact_card_width;
+        // Preset-sized cards keep one-word kind names ("Abstraction") on one line.
+        let width = theme.forge_preset_card_width;
         let cells = FormKind::ALL.iter().enumerate().map(|(at, &kind)| {
             let first = FormSpec::new(kind, "").catalog().default_variant(FormLayer::Body);
             let art = PortraitView::new(AvatarMode::Form(FormSpec::new(kind, first)), width, theme);
@@ -71,7 +72,7 @@ impl ForgeView {
         card(theme)
             .child(heading(tr(KIND_KEY), theme))
             .child(muted(tr(KIND_HINT_KEY), theme))
-            .child(CardGrid::new(KIND_GRID_ID, cells.collect(), KIND_COLUMNS, theme.spacing_xs))
+            .child(CardGrid::new(KIND_GRID_ID, cells.collect(), KIND_COLUMNS, theme.spacing_xs).auto_columns(width))
     }
 
     fn form_slot_chips(&self, handle: &ForgeHandle) -> Div {

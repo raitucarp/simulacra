@@ -109,14 +109,27 @@ pub struct Notice {
     /// Extra lines (e.g. skipped fields of a description).
     pub details: Vec<String>,
     pub is_error: bool,
+    /// The draft the notice describes (e.g. right after a palette apply); once the draft
+    /// differs (undo, redo, a later edit) the notice is stale and goes away.
+    pub anchor: Option<Box<Profile>>,
 }
 
 impl Notice {
     pub fn info(text: impl Into<String>, details: Vec<String>) -> Self {
-        Self { text: text.into(), details, is_error: false }
+        Self { text: text.into(), details, is_error: false, anchor: None }
+    }
+
+    /// Ties the notice to `draft`: it only stays while the working copy still equals it.
+    pub fn anchored(self, draft: &Profile) -> Self {
+        Self { anchor: Some(Box::new(draft.clone())), ..self }
+    }
+
+    /// Whether an anchored notice no longer matches the working copy.
+    pub fn is_stale_for(&self, draft: &Profile) -> bool {
+        self.anchor.as_deref().is_some_and(|anchor| anchor != draft)
     }
 
     pub fn error(text: impl Into<String>) -> Self {
-        Self { text: text.into(), details: Vec::new(), is_error: true }
+        Self { text: text.into(), details: Vec::new(), is_error: true, anchor: None }
     }
 }

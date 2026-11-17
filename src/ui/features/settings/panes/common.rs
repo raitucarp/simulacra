@@ -6,6 +6,7 @@ use gpui_kit::{div, Div, FontWeight, IntoElement, ParentElement, SharedString, S
 /// Uppercase muted bold section heading.
 pub(in crate::ui::features::settings) fn section_label(theme: &ThemeTokens, text: impl Into<SharedString>) -> Div {
     div()
+        .min_w_0()
         .text_size(theme.font_size_label)
         .font_weight(FontWeight::BOLD)
         .text_color(theme.text_muted)
@@ -36,12 +37,12 @@ pub(in crate::ui::features::settings) fn spaced_row() -> Div {
 
 /// Small muted explanatory paragraph.
 pub(in crate::ui::features::settings) fn muted_note(theme: &ThemeTokens, text: impl Into<SharedString>) -> Div {
-    div().text_size(theme.font_size_hint).text_color(theme.text_muted).child(text.into())
+    div().min_w_0().text_size(theme.font_size_hint).text_color(theme.text_muted).child(text.into())
 }
 
 /// Primary body-sized text line.
 pub(in crate::ui::features::settings) fn body_text(theme: &ThemeTokens, text: impl Into<SharedString>) -> Div {
-    div().text_size(theme.font_size_label).text_color(theme.text_primary).child(text.into())
+    div().min_w_0().text_size(theme.font_size_label).text_color(theme.text_primary).child(text.into())
 }
 
 /// Medium-weight title over a secondary subtitle in the given font family.
@@ -52,6 +53,7 @@ pub(in crate::ui::features::settings) fn title_with_subtitle(
     subtitle_family: impl Into<SharedString>,
 ) -> Div {
     div()
+        .min_w_0()
         .flex()
         .flex_col()
         .gap(theme.spacing_2xs)
@@ -68,6 +70,7 @@ pub(in crate::ui::features::settings) fn title_with_subtitle(
 /// Medium-weight primary field title.
 pub(in crate::ui::features::settings) fn field_title(theme: &ThemeTokens, text: impl IntoElement) -> Div {
     div()
+        .min_w_0()
         .text_size(theme.font_size_label)
         .font_weight(FontWeight::MEDIUM)
         .text_color(theme.text_primary)

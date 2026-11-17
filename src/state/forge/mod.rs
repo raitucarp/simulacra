@@ -41,7 +41,7 @@ pub use fields::{
 };
 pub use roll::{avatar_edits, avatar_for_body, body_edits, body_for_form, body_for_kind, roll_being, roll_into, roll_random, BeingScope};
 pub use step::{steps_for, ForgeKind, ForgeStep, FORGE_I18N_ROOT};
-pub use validate::{can_save, issues_for_step, suggest_handle, validate, validate_with, IssueKind, Severity, ValidationIssue};
+pub use validate::{can_save, issues_for_step, suggest_handle, validate, validate_with, IssueKind, Severity, ValidationIssue, ARG_VALUE};
 pub use voice::{voice_sample, voice_sample_for};
 
 #[cfg(test)]

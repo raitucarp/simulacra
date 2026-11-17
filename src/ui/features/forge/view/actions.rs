@@ -30,6 +30,9 @@ impl ForgeView {
 
     /// Bookkeeping after any change to the working copy.
     pub(crate) fn after_change(&mut self, cx: &mut Context<Self>) {
+        if self.notice.as_ref().is_some_and(|notice| notice.is_stale_for(self.draft.profile())) {
+            self.notice = None;
+        }
         self.revalidate();
         self.guide.fresh_step = false;
         if self.autosave.record_edit() {

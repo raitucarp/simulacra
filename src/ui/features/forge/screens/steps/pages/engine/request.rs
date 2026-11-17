@@ -40,7 +40,7 @@ impl ForgeView {
             RequestMode::Custom(request) => Some(self.request_builder(request, handle)),
             RequestMode::Native => None,
         };
-        div().flex().flex_col().gap(theme.spacing_lg).child(head).children(builder).child(self.call_probe_card(handle))
+        div().flex().flex_col().gap(theme.section_gap).child(head).children(builder).child(self.call_probe_card(handle))
     }
 
     fn request_builder(&self, request: &CustomRequest, handle: &ForgeHandle) -> Div {
@@ -62,7 +62,7 @@ impl ForgeView {
             }
         });
         card(theme)
-            .gap(theme.spacing_lg)
+            .gap(theme.section_gap)
             .child(heading(tr(BUILDER_KEY), theme))
             .child(self.engine_field("engine_method", methods.compact()))
             .child(self.engine_field("engine_url", url.placeholder(tr(URL_HINT_KEY))))

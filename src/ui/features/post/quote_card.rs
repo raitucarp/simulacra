@@ -43,7 +43,7 @@ fn render_quoted_card<L: PostLookup>(
         .cursor_pointer()
         .on_click(move |_, window, cx| on_open(quoted_id.clone(), window, cx))
         .w_full()
-        .p(theme.spacing_md)
+        .p(theme.card_padding)
         .rounded(theme.radius_md)
         .bg(theme.bg_card)
         .border(theme.border_width_hairline)

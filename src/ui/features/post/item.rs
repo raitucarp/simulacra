@@ -36,7 +36,7 @@ pub fn render_post_item<L: PostLookup>(
     div()
         .id(format!("{POST_ITEM_ID_PREFIX}{}", post.id))
         .w_full()
-        .px(theme.spacing_lg)
+        .px(theme.panel_padding)
         .bg(bg_color)
         .hover(move |s| s.bg(hover_bg))
         .border_b(theme.border_width_hairline)

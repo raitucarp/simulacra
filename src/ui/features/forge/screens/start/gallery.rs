@@ -43,7 +43,7 @@ impl ForgeView {
             return muted(text, &self.theme).into_any_element();
         }
         let cells = palettes.into_iter().map(|palette| self.palette_card(palette, handle)).collect();
-        CardGrid::new(GALLERY_GRID_ID, cells, GALLERY_COLUMNS, self.theme.spacing_md).into_any_element()
+        CardGrid::new(GALLERY_GRID_ID, cells, GALLERY_COLUMNS, self.theme.stack_gap).into_any_element()
     }
 
     fn palette_card(&self, palette: &'static Palette, handle: &ForgeHandle) -> GridCell {

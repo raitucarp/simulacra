@@ -53,7 +53,7 @@ fn card((icon, title_key, body_key): (LucideIcon, &str, &str), theme: &ThemeToke
     div()
         .flex_1()
         .min_w_0()
-        .p(theme.spacing_md)
+        .p(theme.card_padding)
         .flex()
         .flex_col()
         .gap(theme.spacing_xs)
@@ -94,7 +94,7 @@ impl WelcomeOverlay {
             .child(
                 div()
                     .flex()
-                    .gap(theme.spacing_sm)
+                    .gap(theme.control_gap)
                     .child(Button::new(SKIP_ID).ghost().label(tr(SKIP_KEY)).on_click(move |_, w, cx| skip(w, cx)))
                     .child(Button::new(START_ID).primary().icon(LucideIcon::ArrowRight).label(tr(START_KEY)).on_click(move |_, w, cx| start(w, cx))),
             )
@@ -107,10 +107,10 @@ impl RenderOnce for WelcomeOverlay {
         let dialog = div()
             .id(DIALOG_ID)
             .w(theme.onboarding_width)
-            .p(theme.spacing_2xl)
+            .p(theme.panel_padding)
             .flex()
             .flex_col()
-            .gap(theme.spacing_lg)
+            .gap(theme.section_gap)
             .rounded(theme.radius_xl)
             .bg(theme.bg_elevated)
             .border(theme.border_width_hairline)
@@ -118,7 +118,7 @@ impl RenderOnce for WelcomeOverlay {
             .elevation_shadow(&theme)
             .on_mouse_down(MouseButton::Left, |_, _, cx| cx.stop_propagation())
             .child(header(&theme))
-            .child(div().flex().gap(theme.spacing_sm).children(CARDS.map(|spec| card(spec, &theme))))
+            .child(div().flex().gap(theme.stack_gap).children(CARDS.map(|spec| card(spec, &theme))))
             .child(self.actions());
         let skip = self.on_skip.clone();
         div()

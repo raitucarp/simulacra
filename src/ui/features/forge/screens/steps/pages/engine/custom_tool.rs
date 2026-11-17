@@ -38,7 +38,7 @@ impl ForgeView {
         let editors: Vec<Div> = tools.enumerate().map(|(index, def)| self.custom_tool_editor(index, def, handle)).collect();
         let add = handle.engine(|e: &mut EngineConfig, ()| mutate::add_custom_tool(e));
         let button = Button::new(engine_id("tool-add")).outline().small().icon(LucideIcon::Plus).label(tr(ADD_KEY)).on_click(move |_, w, cx| add((), w, cx));
-        div().flex().flex_col().gap(theme.spacing_lg).children(editors).child(div().flex().child(button))
+        div().flex().flex_col().gap(theme.section_gap).children(editors).child(div().flex().child(button))
     }
 
     fn custom_tool_editor(&self, index: usize, def: &HttpToolDef, handle: &ForgeHandle) -> Div {
@@ -66,7 +66,7 @@ impl ForgeView {
             }
         });
         card(theme)
-            .gap(theme.spacing_lg)
+            .gap(theme.section_gap)
             .child(self.tool_header(index, handle))
             .child(self.engine_field("engine_tool_name", name))
             .child(self.engine_field("engine_tool_description", description))

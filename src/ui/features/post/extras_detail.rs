@@ -70,7 +70,7 @@ pub(crate) fn render_extras_detail(extras: &PostExtras, theme: &ThemeTokens, on_
     Some(
         div()
             .m(theme.spacing_md)
-            .p(theme.spacing_md)
+            .p(theme.card_padding)
             .flex()
             .flex_col()
             .gap(theme.spacing_md)

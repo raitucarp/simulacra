@@ -84,7 +84,7 @@ impl ForgeView {
         let image = draft.image_prompt.clone().map(|prompt| image_line(prompt, theme));
         let parts = draft.thread_parts.iter().map(|part| thread_part(part.clone(), theme));
         div()
-            .p(theme.spacing_md)
+            .p(theme.card_padding)
             .flex()
             .flex_col()
             .gap(theme.spacing_xs)

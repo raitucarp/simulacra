@@ -9,6 +9,7 @@ mod forge;
 mod metrics;
 mod panels;
 mod scales;
+mod spacing;
 mod surfaces;
 mod text;
 
@@ -29,6 +30,7 @@ pub fn derive_tokens(
     t.mode = palette.mode;
     metrics::apply_typography(&mut t, type_scale);
     metrics::apply_spacing(&mut t, density);
+    spacing::apply_semantic_spacing(&mut t);
     metrics::apply_radii(&mut t, radius_scale);
     metrics::apply_layout(&mut t);
     chrome::apply_shell_layout(&mut t);

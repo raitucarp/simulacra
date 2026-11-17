@@ -42,7 +42,7 @@ pub fn render_left_sidebar(params: LeftSidebarParams<'_>) -> impl IntoElement {
         .flex()
         .flex_col()
         .justify_between()
-        .p(theme.spacing_md)
+        .p(theme.panel_padding_compact)
         // Top section
         .child(top.render(workspace_trigger))
         // Bottom User Profile Anchor (Click to open Persona mode in unified Lab, click Switch to cycle active persona)
@@ -72,7 +72,7 @@ impl TopSection<'_> {
         div()
             .flex()
             .flex_col()
-            .gap(theme.spacing_md)
+            .gap(theme.stack_gap)
             // 1. Workspace Switcher Header
             .child(workspace_trigger)
             // 2. Primary Navigation Views with Lucide Icons (Network Agents & Persona Lab unified!)

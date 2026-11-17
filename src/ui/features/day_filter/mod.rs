@@ -50,8 +50,8 @@ pub fn day_summary(date: NaiveDate, count: u32) -> String {
 pub fn render_day_filter_chip(day: NaiveDate, on_clear: ClearDayFilterCallback, theme: &ThemeTokens) -> impl IntoElement {
     let clear = div()
         .id(CLEAR_ID)
-        .w(theme.spacing_lg)
-        .h(theme.spacing_lg)
+        .w(theme.chip_dismiss_size)
+        .h(theme.chip_dismiss_size)
         .flex()
         .items_center()
         .justify_center()
@@ -61,7 +61,7 @@ pub fn render_day_filter_chip(day: NaiveDate, on_clear: ClearDayFilterCallback, 
         .hover(|s| s.bg(theme.hover_bg).text_color(theme.text_primary))
         .on_click(move |_, window, cx| on_clear(window, cx))
         .child(Icon::new(LucideIcon::X));
-    div().w_full().px(theme.spacing_lg).py(theme.spacing_sm).flex().child(
+    div().w_full().px(theme.panel_padding).py(theme.spacing_sm).flex().child(
         div()
             .id(CHIP_ID)
             .flex()
@@ -77,7 +77,7 @@ pub fn render_day_filter_chip(day: NaiveDate, on_clear: ClearDayFilterCallback, 
             .font_family(theme.font_family_ui.clone())
             .text_size(theme.font_size_xs)
             .text_color(theme.text_primary)
-            .child(div().w(theme.spacing_md).h(theme.spacing_md).text_color(theme.accent_success).child(Icon::new(LucideIcon::Calendar)))
+            .child(div().w(theme.icon_size_sm).h(theme.icon_size_sm).text_color(theme.accent_success).child(Icon::new(LucideIcon::Calendar)))
             .child(t!("cadence.showing", date = format_day(day)).to_string())
             .child(clear),
     )

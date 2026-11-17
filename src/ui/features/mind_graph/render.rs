@@ -72,7 +72,7 @@ impl MindGraphPanel {
         let selection = self.selected_index().map(|idx| (&model.nodes()[idx], self.scene.degrees[idx]));
         let on_open = Box::new(cx.listener(|this, _: &ClickEvent, _, cx| this.open_selected(cx)));
         let on_reset = Box::new(cx.listener(|this, _: &ClickEvent, _, cx| this.reset_view(cx)));
-        let details = div().size_full().pt(theme.spacing_md).child(render_details(selection, on_open, on_reset, theme).w_full());
+        let details = div().size_full().pt(theme.stack_gap).child(render_details(selection, on_open, on_reset, theme).w_full());
         let split = persisted_v_resizable(SPLIT_ID, theme)
             .pane(SplitPane::flex(theme.split_flex_min).child(self.render_canvas(cx)))
             .pane(SplitPane::sized(theme.graph_details_height, theme.graph_details_min..theme.graph_details_max).child(details));
@@ -80,14 +80,14 @@ impl MindGraphPanel {
             .flex_1()
             .min_h(theme.graph_view_min_height)
             .w_full()
-            .p(theme.spacing_lg)
+            .p(theme.card_padding)
             .rounded(theme.radius_lg)
             .border(theme.border_width_hairline)
             .border_color(theme.border)
             .bg(theme.bg_card)
             .flex()
             .flex_col()
-            .gap(theme.spacing_md)
+            .gap(theme.stack_gap)
             .child(render_legend(counts, theme))
             .child(div().flex_1().min_h_0().w_full().child(split))
     }
@@ -106,8 +106,8 @@ impl Render for MindGraphPanel {
             .size_full()
             .flex()
             .flex_col()
-            .gap(self.theme.spacing_lg)
-            .p(self.theme.spacing_xl)
+            .gap(self.theme.section_gap)
+            .p(self.theme.panel_padding)
             .bg(self.theme.bg_app)
             .child(header)
             .child(self.render_card(cx))

@@ -38,7 +38,7 @@ fn contact_list(params: &RosterParams<'_>, data: &RosterData<'_>, callbacks: &Ro
         .id(LIST_ID)
         .flex_1()
         .overflow_y_scrollbar()
-        .p(theme.spacing_xs)
+        .p(theme.panel_padding_compact)
         .flex()
         .flex_col()
         .gap(theme.spacing_2xs)
@@ -62,7 +62,7 @@ pub(super) fn create_label(mode: LabMode) -> String {
 fn create_footer(mode: LabMode, theme: &ThemeTokens, on_create: Rc<dyn Fn(&mut Window, &mut App)>) -> Div {
     div()
         .w_full()
-        .p(theme.spacing_sm)
+        .p(theme.panel_padding_compact)
         .border_t(theme.border_width_hairline)
         .border_color(theme.border_subtle)
         .child(

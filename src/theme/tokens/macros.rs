@@ -4,12 +4,13 @@
 ///
 /// Field order (and therefore the serialized JSON layout) follows the lists in order:
 /// typed enums, strings, colors (`0xRRGGBBAA` numbers), pixels (`f32` numbers), then floats.
+/// Pixel fields may carry attributes (`#[doc = "..."]`) that land on the generated field.
 macro_rules! theme_tokens {
     (
         typed: [$($typed:ident: $ty:ty),* $(,)?],
         strings: [$($string:ident),* $(,)?],
         colors: [$($color:ident),* $(,)?],
-        pixels: [$($pixel:ident),* $(,)?],
+        pixels: [$($(#[$pixel_meta:meta])* $pixel:ident),* $(,)?],
         floats: [$($float:ident),* $(,)?] $(,)?
     ) => {
         /// Structured theme tokens for the application interface.
@@ -19,7 +20,7 @@ macro_rules! theme_tokens {
             $(pub $typed: $ty,)*
             $(pub $string: String,)*
             $(#[serde(with = "rgba_serde")] pub $color: Rgba,)*
-            $(#[serde(with = "px_serde")] pub $pixel: Pixels,)*
+            $($(#[$pixel_meta])* #[serde(with = "px_serde")] pub $pixel: Pixels,)*
             $(pub $float: f32,)*
         }
 

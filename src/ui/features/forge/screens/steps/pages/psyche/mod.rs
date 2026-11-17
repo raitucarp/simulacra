@@ -21,6 +21,6 @@ impl ForgeView {
     fn trait_card(&self, title_key: &str, fields: &[TraitField], handle: &ForgeHandle) -> Div {
         let theme = &self.theme;
         let sections: Vec<Div> = fields.iter().map(|&field| self.trait_grid(field, TraitGridLook::Illustrated, handle)).collect();
-        card(theme).gap(theme.spacing_lg).child(heading(tr(title_key), theme)).children(sections)
+        card(theme).gap(theme.section_gap).child(heading(tr(title_key), theme)).children(sections)
     }
 }

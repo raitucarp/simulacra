@@ -21,7 +21,7 @@ impl ForgeView {
     pub(super) fn quotient_skills(&self, handle: &ForgeHandle) -> Div {
         let theme = &self.theme;
         let rows: Vec<Div> = INTELLIGENCE_FIELDS.iter().map(|&field| self.skill_row(field, handle)).collect();
-        card(theme).gap(theme.spacing_lg).child(heading(tr(SKILLS_KEY), theme)).child(muted(tr(SKILLS_HINT_KEY), theme)).children(rows)
+        card(theme).gap(theme.section_gap).child(heading(tr(SKILLS_KEY), theme)).child(muted(tr(SKILLS_HINT_KEY), theme)).children(rows)
     }
 
     fn skill_row(&self, field: ScoreField, handle: &ForgeHandle) -> Div {

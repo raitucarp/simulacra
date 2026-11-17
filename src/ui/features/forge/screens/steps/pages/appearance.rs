@@ -40,7 +40,7 @@ impl ForgeView {
         div()
             .flex()
             .flex_col()
-            .gap(theme.spacing_lg)
+            .gap(theme.section_gap)
             .child(card(theme).child(self.style_heading()).child(self.mode_switch(AvatarKind::of(mode.as_ref()), handle)))
             .child(body)
             .into_any_element()

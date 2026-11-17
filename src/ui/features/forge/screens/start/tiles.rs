@@ -23,7 +23,7 @@ impl ForgeView {
         let theme = &self.theme;
         div()
             .flex()
-            .gap(theme.spacing_md)
+            .gap(theme.stack_gap)
             .child(tile(SCRATCH_ID, LucideIcon::Plus, SCRATCH_TITLE, SCRATCH_BODY, theme, handle.act(ForgeView::begin_blank)))
             .child(tile(ROLL_ID, LucideIcon::Dices, ROLL_TITLE, ROLL_BODY, theme, handle.act(ForgeView::roll)))
             .child(tile(DESCRIBE_ID, LucideIcon::Sparkles, DESCRIBE_TITLE, DESCRIBE_BODY, theme, handle.act(ForgeView::toggle_describe)))
@@ -38,7 +38,7 @@ fn tile(id: &'static str, icon: LucideIcon, title_key: &str, body_key: &str, the
         .id(id)
         .flex_1()
         .min_h(theme.forge_tile_min_height)
-        .p(theme.spacing_lg)
+        .p(theme.card_padding)
         .flex()
         .flex_col()
         .gap(theme.spacing_xs)

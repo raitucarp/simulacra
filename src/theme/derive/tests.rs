@@ -94,3 +94,25 @@ fn scales_resize_metrics_but_not_colors() {
     assert_eq!(compact.bg_card, cozy.bg_card);
     assert_eq!(compact.titlebar_height, cozy.titlebar_height);
 }
+
+#[test]
+fn semantic_spacing_follows_density_and_pairs_padding_with_gaps() {
+    let p = palette(DEFAULT_PALETTE_ID);
+    let t = derive_default_tokens(p);
+    let roles = [
+        (t.panel_padding, 16.0), (t.section_gap, 16.0), (t.panel_padding_compact, 8.0), (t.stack_gap, 12.0),
+        (t.card_padding, 12.0), (t.control_gap, 8.0), (t.inline_gap, 4.0), (t.paragraph_break_height, 8.0),
+    ];
+    for (value, expected) in roles {
+        assert_eq!(value, px(expected));
+    }
+    assert_eq!(t.panel_padding, t.section_gap);
+    assert_eq!(t.card_padding, t.stack_gap);
+    for density in [Density::Compact, Density::Cozy] {
+        let scaled = derive_tokens(p, density, TypeScale::default(), RadiusScale::default());
+        assert_eq!(scaled.panel_padding, scaled.spacing_lg);
+        assert_eq!(scaled.card_padding, scaled.spacing_md);
+        assert_ne!(scaled.panel_padding, t.panel_padding);
+        assert_eq!(scaled.dot_size_sm, t.dot_size_sm, "indicator sizes do not follow density");
+    }
+}

@@ -68,7 +68,7 @@ pub(super) fn guide_bubble(moment: GuideMoment, theme: &ThemeTokens) -> Div {
         .flex_1()
         .min_w_0()
         .max_w(theme.forge_bubble_max_width)
-        .p(theme.spacing_md)
+        .p(theme.card_padding)
         .rounded(theme.radius_lg)
         .bg(theme.bg_elevated)
         .border(theme.border_width_hairline)

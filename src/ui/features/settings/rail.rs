@@ -31,7 +31,7 @@ pub(super) fn render_rail(
         .bg(theme.bg_sidebar)
         .border_r(theme.border_width_hairline)
         .border_color(theme.border)
-        .p(theme.spacing_lg)
+        .p(theme.panel_padding_compact)
         .flex()
         .flex_col()
         .justify_between()
@@ -39,7 +39,7 @@ pub(super) fn render_rail(
             div()
                 .flex()
                 .flex_col()
-                .gap(theme.spacing_lg)
+                .gap(theme.stack_gap)
                 .child(render_rail_brand(theme))
                 .child(div().flex().flex_col().gap(theme.spacing_xs).children(tab_buttons)),
         )
@@ -51,7 +51,7 @@ fn render_rail_brand(theme: &ThemeTokens) -> Div {
     div()
         .flex()
         .items_center()
-        .gap(theme.spacing_sm_plus)
+        .gap(theme.spacing_sm)
         .child(
             div()
                 .w(theme.settings_brand_badge_size)
@@ -75,7 +75,7 @@ fn render_rail_brand(theme: &ThemeTokens) -> Div {
 /// Rail bottom: epistemic status footer.
 fn render_rail_footer(theme: &ThemeTokens) -> Div {
     div()
-        .p(theme.spacing_sm_plus)
+        .p(theme.card_padding)
         .rounded(theme.radius_md)
         .bg(theme.hover_bg)
         .border(theme.border_width_hairline)
@@ -137,7 +137,7 @@ fn render_tab_label(theme: &ThemeTokens, tab: SettingsTab, is_active: bool) -> D
     div()
         .flex()
         .items_center()
-        .gap(theme.spacing_sm_plus)
+        .gap(theme.spacing_sm)
         .child(Icon::new(tab.icon()).size(theme.icon_size_xl).text_color(icon_color))
         .child(div().text_size(theme.font_size_sm).font_weight(weight).text_color(text_color).child(tab.label()))
 }

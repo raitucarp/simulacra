@@ -49,7 +49,7 @@ impl ForgeView {
             .label(tr_with(RANDOMIZE_PART_KEY, &[(ARG_PART, tr(&slot.label_key()))]))
             .on_click(move |_, w, cx| reroll(w, cx));
         let parts = card(theme).child(header).child(self.form_slot_chips(handle)).child(reroll_button).child(self.form_options(spec, handle));
-        div().flex().flex_col().gap(theme.spacing_lg).child(self.kind_picker(kind, handle)).child(parts)
+        div().flex().flex_col().gap(theme.section_gap).child(self.kind_picker(kind, handle)).child(parts)
     }
 
     /// "Which being": one card per kind showing its first form.

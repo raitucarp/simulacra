@@ -6,11 +6,11 @@ use gpui_kit::*;
 /// Filled-circle glyph used as an inline "active" marker.
 pub const STATUS_GLYPH: &str = "●";
 
-/// Small filled circle sized by the extra-small spacing token.
+/// Small filled circle sized by the extra-small dot token.
 pub fn status_dot(color: Rgba, theme: &ThemeTokens) -> Div {
     div()
-        .w(theme.spacing_xs)
-        .h(theme.spacing_xs)
+        .w(theme.dot_size_xs)
+        .h(theme.dot_size_xs)
         .rounded(theme.radius_full)
         .bg(color)
 }

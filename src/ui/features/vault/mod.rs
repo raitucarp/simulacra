@@ -58,7 +58,7 @@ where
     div()
         .flex()
         .flex_col()
-        .gap(theme.spacing_md)
+        .gap(theme.stack_gap)
         .child(
             div()
                 .font_family(theme.font_family_display.clone())
@@ -70,7 +70,7 @@ where
         .when(documents.is_empty(), |this| {
             this.child(
                 div()
-                    .p(theme.spacing_xl)
+                    .p(theme.panel_padding)
                     .flex()
                     .items_center()
                     .justify_center()
@@ -104,11 +104,11 @@ pub fn render_knowledge_vault_view(
         .flex_1()
         .h_full()
         .overflow_y_scrollbar()
-        .p(theme.spacing_xl)
+        .p(theme.panel_padding)
         .bg(theme.bg_app)
         .flex()
         .flex_col()
-        .gap(theme.spacing_xl)
+        .gap(theme.section_gap)
         .child(render_header(theme))
         .child(form::render_add_form(inputs, on_add, callbacks.on_import, theme))
         .child(render_documents_section(documents, on_delete, theme))

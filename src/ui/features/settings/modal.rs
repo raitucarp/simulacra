@@ -83,7 +83,7 @@ impl SettingsModal {
 
     /// The AI pane followed by the credentials section.
     fn ai_content(theme: &ThemeTokens, ai: impl IntoElement, credentials: Option<CredentialsPaneProps>) -> AnyElement {
-        let column = gpui_kit::div().flex().flex_col().gap(theme.spacing_xl).child(ai);
+        let column = gpui_kit::div().flex().flex_col().gap(theme.section_gap).child(ai);
         match credentials {
             Some(props) => column.child(render_credentials_section(theme, props)).into_any_element(),
             None => column.into_any_element(),

@@ -58,7 +58,7 @@ impl ForgeView {
         div()
             .flex()
             .flex_col()
-            .gap(theme.spacing_lg)
+            .gap(theme.section_gap)
             .child(self.section_tabs(handle))
             .child(intro.children(self.issue_lines(section.issue_field())))
             .child(body)

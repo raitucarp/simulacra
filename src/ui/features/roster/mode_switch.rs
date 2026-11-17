@@ -18,7 +18,7 @@ pub(super) fn render_mode_switch(params: &RosterParams<'_>, data: &RosterData<'_
     let theme = params.theme;
     div()
         .w_full()
-        .p(theme.spacing_sm)
+        .p(theme.panel_padding_compact)
         .border_b(theme.border_width_hairline)
         .border_color(theme.border_subtle)
         .flex()

@@ -49,7 +49,7 @@ fn render_load_more_button(
     let (hover_bg, hover_border) = (theme.hover_bg, theme.border_strong);
     div()
         .id(LOAD_MORE_BUTTON_ID)
-        .px(theme.spacing_lg)
+        .px(theme.panel_padding)
         .py(theme.spacing_sm)
         .rounded(theme.radius_md)
         .bg(theme.bg_card)

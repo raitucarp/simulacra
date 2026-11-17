@@ -36,10 +36,10 @@ pub(super) fn muted(text: impl Into<SharedString>, theme: &ThemeTokens) -> Div {
 /// A rounded card surface.
 pub(super) fn card(theme: &ThemeTokens) -> Div {
     div()
-        .p(theme.spacing_lg)
+        .p(theme.card_padding)
         .flex()
         .flex_col()
-        .gap(theme.spacing_md)
+        .gap(theme.stack_gap)
         .rounded(theme.radius_xl)
         .bg(theme.bg_card)
         .border(theme.border_width_hairline)

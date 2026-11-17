@@ -42,7 +42,7 @@ impl ForgeView {
         let kind = image.engine.kind();
         let grid = self.engine_cards("image", (Some(kind), &ImageEngineKind::ALL), handle, mutate::set_image_kind);
         let head = card(theme).child(self.engine_field("engine_image", grid)).children(option_line(kind, theme));
-        let page = div().flex().flex_col().gap(theme.spacing_lg).child(head);
+        let page = div().flex().flex_col().gap(theme.section_gap).child(head);
         if kind == ImageEngineKind::None {
             return page;
         }
@@ -88,7 +88,7 @@ impl ForgeView {
         let problem = body_error(&request.body_template, &IMAGE_PLACEHOLDERS).map(JsonProblem::Syntax);
         let body = div().flex().flex_col().gap(theme.spacing_xs).child(body.multiline(CODE_ROWS.0, CODE_ROWS.1)).child(json_line(problem, theme)).child(chips);
         card(theme)
-            .gap(theme.spacing_lg)
+            .gap(theme.section_gap)
             .child(self.engine_field("engine_url", url))
             .child(self.engine_field("engine_headers", self.headers_editor("image", &request.headers, (image_headers as HeaderAccess, 0), (SECTION, handle))))
             .child(self.engine_field("engine_body", body))
@@ -104,7 +104,7 @@ impl ForgeView {
         let style = self.engine_input("style-prefix", &image.style_prefix, (SECTION, handle), |e, text| e.image.style_prefix = text);
         let sizes = div().flex().flex_col().gap(theme.spacing_xs).child(sizes.compact().columns(ImageSize::ALL.len()).card_width(theme.forge_compact_card_width)).child(size.placeholder(tr(SIZE_HINT_KEY)));
         card(theme)
-            .gap(theme.spacing_lg)
+            .gap(theme.section_gap)
             .child(self.engine_field("engine_image_model", model.placeholder(tr(MODEL_HINT_KEY))))
             .child(self.engine_field("engine_image_size", sizes))
             .child(self.engine_field("engine_style_prefix", style.multiline(NOTE_ROWS.0, NOTE_ROWS.1)))
@@ -124,7 +124,7 @@ impl ForgeView {
         };
         let key = self.credential_picker("image", (image.credential.as_deref(), image_credential_kind(&image.engine)), handle, |e, id| e.image.credential = id);
         card(theme)
-            .gap(theme.spacing_lg)
+            .gap(theme.section_gap)
             .child(self.engine_field("engine_trigger", grid.compact()))
             .children(option_line(trigger, theme))
             .children(chance)

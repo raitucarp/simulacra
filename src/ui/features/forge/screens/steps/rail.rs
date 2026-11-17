@@ -32,7 +32,7 @@ fn status_badge(item: &RailItem, theme: &ThemeTokens) -> Option<Div> {
         ),
         RailStatus::Complete => Some(div().text_color(theme.accent_success).child(Icon::new(LucideIcon::CircleCheck).size(theme.font_size_md))),
         RailStatus::Pending if item.is_current => {
-            Some(div().size(theme.spacing_sm).rounded(theme.radius_full).bg(theme.accent_brand))
+            Some(div().size(theme.dot_size_sm).rounded(theme.radius_full).bg(theme.accent_brand))
         }
         RailStatus::Pending => None,
     }
@@ -48,7 +48,7 @@ impl ForgeView {
             .flex_shrink_0()
             .h_full()
             .overflow_y_scrollbar()
-            .p(theme.spacing_sm)
+            .p(theme.panel_padding_compact)
             .flex()
             .flex_col()
             .gap(theme.spacing_xs)

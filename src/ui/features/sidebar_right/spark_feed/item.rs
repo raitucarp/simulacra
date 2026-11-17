@@ -87,7 +87,7 @@ pub(super) fn render_spark_item<L: PostLookup>(
     div()
         .id(ElementId::NamedInteger(SPARK_ITEM_ID_PREFIX.into(), idx as u64))
         .w_full()
-        .p(theme.spacing_sm_plus)
+        .p(theme.card_padding)
         .rounded(theme.radius_md)
         .border(theme.border_width_hairline)
         .border_color(theme.border)

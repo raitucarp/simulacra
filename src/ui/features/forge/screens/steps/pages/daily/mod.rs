@@ -68,7 +68,7 @@ impl ForgeView {
         div()
             .flex()
             .flex_col()
-            .gap(theme.spacing_lg)
+            .gap(theme.section_gap)
             .child(card(theme).child(heading(tr(BODY_CLOCK_KEY), theme)).child(self.trait_block(TraitField::Chronotype, handle)).child(self.peak_line()))
             .child(self.online_card(handle))
             .child(

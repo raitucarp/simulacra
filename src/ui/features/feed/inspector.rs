@@ -65,7 +65,7 @@ fn render_thread_scroll(ctx: &InspectorContext<'_>, conversation: Option<&Conver
         .flex_col()
         .when_some(conversation, |this, c| this.children(conversation_children(ctx, c)))
         .when(is_empty, |this| {
-            this.p(theme.spacing_2xl).items_center().justify_center().child(
+            this.p(theme.panel_padding).items_center().justify_center().child(
                 div()
                     .text_size(theme.font_size_sm)
                     .text_color(theme.text_muted)

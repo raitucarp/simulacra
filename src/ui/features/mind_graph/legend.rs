@@ -23,8 +23,8 @@ fn render_entry(kind: NodeKind, count: usize, theme: &ThemeTokens) -> Div {
         .gap(theme.spacing_sm)
         .child(
             div()
-                .w(theme.spacing_sm)
-                .h(theme.spacing_sm)
+                .w(theme.dot_size_sm)
+                .h(theme.dot_size_sm)
                 .rounded(theme.radius_full)
                 .bg(node_color(kind, theme)),
         )

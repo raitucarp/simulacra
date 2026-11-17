@@ -8,6 +8,8 @@ use std::sync::OnceLock;
 
 /// Id of the palette used when nothing (or an unknown id) is selected.
 pub const DEFAULT_PALETTE_ID: &str = "simulacra-midnight";
+/// Id of the light palette preferred until the user picks another one.
+pub const DEFAULT_LIGHT_PALETTE_ID: &str = "github-light";
 /// Ids of the former hard-coded presets, now palettes.
 pub const OBSIDIAN_ZINC_ID: &str = "obsidian-zinc";
 pub const MIDNIGHT_SLATE_ID: &str = "midnight-slate";

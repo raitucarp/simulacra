@@ -3010,3 +3010,15 @@ prefs.ui.backup_failed: "Pencadangan gagal: %{reason}"
 prefs.ui.backup_saved: "Cadangan disimpan ke %{path}"
 prefs.ui.caches_cleared: "Gambar dalam cache dihapus: %{count}."
 prefs.ui.reset_done: "Semua pengaturan kembali ke bawaan."
+
+# sb A1
+# Splash warm-up stage, appearance mode (Dark / Light / System) and its title bar toggle.
+splash.stage.warming_up: "Menyiapkan…"
+appearance.mode_title: "MODE TAMPILAN"
+appearance.mode_hint: "Sistem mengikuti pengaturan terang atau gelap komputer Anda dan ikut berganti."
+appearance.mode_dark: "Gelap"
+appearance.mode_light: "Terang"
+appearance.mode_system: "Sistem"
+appearance.preferred_dark: "Tema gelap"
+appearance.preferred_light: "Tema terang"
+appearance.toggle_tooltip: "Tampilan: %{current} (klik untuk %{next})"

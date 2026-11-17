@@ -20,6 +20,7 @@ impl RenderOnce for AppTitleBar {
             on_toggle_right: self.on_toggle_right_sidebar,
             on_toggle_lang: self.on_toggle_lang,
             on_toggle_settings: self.on_toggle_settings,
+            appearance: self.appearance,
         };
 
         div()

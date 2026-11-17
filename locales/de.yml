@@ -3010,3 +3010,15 @@ prefs.ui.backup_failed: "Sicherung fehlgeschlagen: %{reason}"
 prefs.ui.backup_saved: "Sicherung gespeichert unter %{path}"
 prefs.ui.caches_cleared: "Zwischengespeicherte Bilder gelöscht: %{count}."
 prefs.ui.reset_done: "Alle Einstellungen sind wieder auf Standard."
+
+# sb A1
+# Splash warm-up stage, appearance mode (Dark / Light / System) and its title bar toggle.
+splash.stage.warming_up: "Wird vorbereitet…"
+appearance.mode_title: "DARSTELLUNGSMODUS"
+appearance.mode_hint: "System folgt der Hell- oder Dunkel-Einstellung deines Computers und wechselt mit ihr."
+appearance.mode_dark: "Dunkel"
+appearance.mode_light: "Hell"
+appearance.mode_system: "System"
+appearance.preferred_dark: "Dunkles Design"
+appearance.preferred_light: "Helles Design"
+appearance.toggle_tooltip: "Darstellung: %{current} (klicken für %{next})"

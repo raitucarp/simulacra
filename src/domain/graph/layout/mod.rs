@@ -43,6 +43,16 @@ impl GraphLayout {
     pub fn position(&self, index: usize) -> Option<LayoutPoint> {
         self.positions.get(index).copied()
     }
+
+    /// Width and height of the box around every position (zero when empty).
+    pub fn extent(&self) -> (f32, f32) {
+        let span = |axis: fn(&LayoutPoint) -> f32| {
+            let values = self.positions.iter().map(axis);
+            let (low, high) = values.fold((f32::INFINITY, f32::NEG_INFINITY), |(low, high), v| (low.min(v), high.max(v)));
+            if high >= low { high - low } else { 0.0 }
+        };
+        (span(|p| p.x), span(|p| p.y))
+    }
 }
 
 /// Uniformly scales `points` into the unit square and centers them.

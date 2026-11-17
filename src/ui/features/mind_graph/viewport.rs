@@ -11,6 +11,22 @@ pub(super) const ZOOM_PER_PIXEL: f32 = 0.002;
 const HALF: f32 = 2.0;
 /// Smallest drawable fit size, so a collapsed canvas never divides by zero.
 const MIN_FIT: f32 = 1.0;
+/// Smallest layout span fitted to the frame, so one node (or a line) is not blown up.
+const MIN_EXTENT: f32 = 0.5;
+
+/// How the layout is fitted to the frame: the inner padding (pixels) and the size of the box
+/// around the nodes (layout units), so the nodes, not the unit square, fill the canvas.
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub(crate) struct Fit {
+    pub padding: f32,
+    pub extent: (f32, f32),
+}
+
+impl Fit {
+    pub(crate) fn new(padding: f32, extent: (f32, f32)) -> Self {
+        Self { padding, extent }
+    }
+}
 
 /// Canvas rectangle in window pixels.
 #[derive(Debug, Clone, Copy, PartialEq)]
@@ -46,9 +62,11 @@ impl Default for Viewport {
 }
 
 impl Viewport {
-    /// Pixels per layout unit: the frame's shorter side minus `padding` on both ends, zoomed.
-    fn scale(&self, frame: &Frame, padding: f32) -> f32 {
-        (frame.width.min(frame.height) - padding * HALF).max(MIN_FIT) * self.zoom
+    /// Pixels per layout unit: the node box fitted inside the padded frame (aspect kept), zoomed.
+    fn scale(&self, frame: &Frame, fit: Fit) -> f32 {
+        let inner = |side: f32| (side - fit.padding * HALF).max(MIN_FIT);
+        let (span_x, span_y) = (fit.extent.0.max(MIN_EXTENT), fit.extent.1.max(MIN_EXTENT));
+        (inner(frame.width) / span_x).min(inner(frame.height) / span_y) * self.zoom
     }
 
     fn center(&self, frame: &Frame) -> (f32, f32) {
@@ -56,24 +74,24 @@ impl Viewport {
     }
 
     /// Window position of a layout point.
-    pub(crate) fn to_screen(self, frame: &Frame, padding: f32, p: LayoutPoint) -> (f32, f32) {
-        let scale = self.scale(frame, padding);
+    pub(crate) fn to_screen(self, frame: &Frame, fit: Fit, p: LayoutPoint) -> (f32, f32) {
+        let scale = self.scale(frame, fit);
         let (cx, cy) = self.center(frame);
         (cx + (p.x - LAYOUT_CENTER) * scale, cy + (p.y - LAYOUT_CENTER) * scale)
     }
 
     /// Layout point under a window position.
-    pub(crate) fn to_layout(self, frame: &Frame, padding: f32, (sx, sy): (f32, f32)) -> LayoutPoint {
-        let scale = self.scale(frame, padding);
+    pub(crate) fn to_layout(self, frame: &Frame, fit: Fit, (sx, sy): (f32, f32)) -> LayoutPoint {
+        let scale = self.scale(frame, fit);
         let (cx, cy) = self.center(frame);
         LayoutPoint { x: (sx - cx) / scale + LAYOUT_CENTER, y: (sy - cy) / scale + LAYOUT_CENTER }
     }
 
     /// Multiplies the zoom by `factor` (clamped) keeping the point under `cursor` fixed.
-    pub(crate) fn zoom_at(&mut self, frame: &Frame, padding: f32, cursor: (f32, f32), factor: f32) {
-        let anchor = self.to_layout(frame, padding, cursor);
+    pub(crate) fn zoom_at(&mut self, frame: &Frame, fit: Fit, cursor: (f32, f32), factor: f32) {
+        let anchor = self.to_layout(frame, fit, cursor);
         self.zoom = (self.zoom * factor).clamp(ZOOM_MIN, ZOOM_MAX);
-        let (sx, sy) = self.to_screen(frame, padding, anchor);
+        let (sx, sy) = self.to_screen(frame, fit, anchor);
         self.pan.0 += cursor.0 - sx;
         self.pan.1 += cursor.1 - sy;
     }

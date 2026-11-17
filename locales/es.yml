@@ -3010,3 +3010,15 @@ prefs.ui.backup_failed: "Error en la copia de seguridad: %{reason}"
 prefs.ui.backup_saved: "Copia de seguridad guardada en %{path}"
 prefs.ui.caches_cleared: "Imágenes en caché eliminadas: %{count}."
 prefs.ui.reset_done: "Todos los ajustes han vuelto a su valor predeterminado."
+
+# sb A1
+# Splash warm-up stage, appearance mode (Dark / Light / System) and its title bar toggle.
+splash.stage.warming_up: "Preparando…"
+appearance.mode_title: "MODO DE APARIENCIA"
+appearance.mode_hint: "Sistema sigue el ajuste claro u oscuro de tu ordenador y cambia con él."
+appearance.mode_dark: "Oscuro"
+appearance.mode_light: "Claro"
+appearance.mode_system: "Sistema"
+appearance.preferred_dark: "Tema oscuro"
+appearance.preferred_light: "Tema claro"
+appearance.toggle_tooltip: "Apariencia: %{current} (clic para %{next})"

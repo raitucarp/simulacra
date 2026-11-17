@@ -90,6 +90,7 @@ lucide_catalog! {
     Sliders => "icons/sliders-horizontal.svg",
     Sparkles => "icons/sparkles.svg",
     Sun => "icons/sun.svg",
+    SunMoon => "icons/sun-moon.svg",
     Tag => "icons/tag.svg",
     Terminal => "icons/terminal.svg",
     Trash => "icons/trash.svg",

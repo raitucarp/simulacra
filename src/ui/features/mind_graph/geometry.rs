@@ -1,6 +1,6 @@
 //! Node sizing, colors, edge curvature and hit testing shared by the full and mini graphs.
 
-use super::viewport::{Frame, Viewport};
+use super::viewport::{Fit, Frame, Viewport};
 use crate::domain::graph::NodeKind;
 use crate::state::graph::GraphScene;
 use crate::theme::ThemeTokens;
@@ -49,14 +49,14 @@ pub(super) fn hit_test(
     scene: &GraphScene,
     view: &Viewport,
     frame: &Frame,
-    padding: f32,
+    fit: Fit,
     radius_range: (f32, f32),
     cursor: (f32, f32),
 ) -> Option<usize> {
     let top = max_degree(scene);
     let mut best: Option<(usize, f32)> = None;
     for (idx, point) in scene.layout.positions().iter().enumerate() {
-        let (x, y) = view.to_screen(frame, padding, *point);
+        let (x, y) = view.to_screen(frame, fit, *point);
         let distance = ((x - cursor.0).powi(2) + (y - cursor.1).powi(2)).sqrt();
         let reach = node_radius(scene.degrees[idx], top, radius_range) + HIT_SLOP;
         if distance <= reach && best.is_none_or(|(_, d)| distance < d) {

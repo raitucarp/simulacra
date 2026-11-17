@@ -10,6 +10,7 @@ use crate::state::FeedTab;
 use gpui_kit::component::input::{InputState, TextareaState};
 use super::stream::StreamInputs;
 use crate::ui::features::post::BodyLinks;
+use crate::ui::responsive::LayoutClass;
 use gpui_kit::Entity;
 use std::rc::Rc;
 
@@ -19,6 +20,7 @@ pub(crate) struct TimelineInputs<C> {
     pub selected_post_id: Option<PostId>,
     pub feed_tab: FeedTab,
     pub inspector_expanded: bool,
+    pub layout: LayoutClass,
     pub stream: StreamInputs,
     pub on_load_more: Option<LoadMoreCallback>,
     pub on_select_feed_tab: SelectFeedTabCallback,
@@ -54,6 +56,7 @@ pub(crate) fn split_params<C>(params: FeedParams<'_, C>) -> (PostCallbacks, Time
         selected_post_id: params.selected_post_id,
         feed_tab: params.feed_tab,
         inspector_expanded: params.inspector_expanded,
+        layout: params.layout,
         stream: params.stream,
         on_load_more: params.on_load_more,
         on_select_feed_tab: params.on_select_feed_tab,

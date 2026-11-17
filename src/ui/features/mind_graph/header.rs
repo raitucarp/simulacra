@@ -7,6 +7,7 @@ use rust_i18n::t;
 
 fn render_titles(theme: &ThemeTokens) -> Div {
     div()
+        .min_w_0()
         .flex()
         .flex_col()
         .gap(theme.spacing_xs)
@@ -29,6 +30,8 @@ fn render_titles(theme: &ThemeTokens) -> Div {
 
 fn render_counter(label: String, color: Rgba, theme: &ThemeTokens) -> Div {
     div()
+        .flex_none()
+        .whitespace_nowrap()
         .px(theme.spacing_md)
         .py(theme.spacing_xs)
         .rounded(theme.radius_full)
@@ -42,12 +45,15 @@ fn render_counter(label: String, color: Rgba, theme: &ThemeTokens) -> Div {
         .child(label)
 }
 
-/// Header row with titles on the left and node/link counters on the right.
+/// Header row with titles on the left and node/link counters on the right (wrapping under
+/// the titles when the panel is narrow).
 pub(super) fn render_header(total_nodes: usize, total_links: usize, theme: &ThemeTokens) -> Div {
     div()
         .flex()
+        .flex_wrap()
         .items_center()
         .justify_between()
+        .gap(theme.stack_gap)
         .child(render_titles(theme))
         .child(
             div()

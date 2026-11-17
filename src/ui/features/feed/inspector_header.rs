@@ -24,14 +24,18 @@ pub(crate) fn render_inspector_header(theme: &ThemeTokens, replies_count: Option
         .flex()
         .items_center()
         .justify_between()
+        .gap(theme.control_gap)
         .child(
             div()
                 .flex()
+                .min_w_0()
                 .items_center()
                 .gap(theme.spacing_sm)
                 .child(Icon::new(LucideIcon::MessageSquare).size(theme.font_size_md).text_color(theme.accent_brand))
                 .child(
                     div()
+                        .min_w_0()
+                        .truncate()
                         .font_family(theme.font_family_display.clone())
                         .text_size(theme.font_size_base)
                         .font_weight(FontWeight::BOLD)
@@ -44,6 +48,8 @@ pub(crate) fn render_inspector_header(theme: &ThemeTokens, replies_count: Option
 
 fn render_replies_pill(count: usize, theme: &ThemeTokens) -> Div {
     div()
+        .flex_none()
+        .whitespace_nowrap()
         .flex()
         .items_center()
         .gap(theme.spacing_xs)

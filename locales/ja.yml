@@ -3010,3 +3010,15 @@ prefs.ui.backup_failed: "バックアップに失敗しました: %{reason}"
 prefs.ui.backup_saved: "バックアップを %{path} に保存しました"
 prefs.ui.caches_cleared: "キャッシュ画像を消去しました: %{count} 件。"
 prefs.ui.reset_done: "すべての設定が既定値に戻りました。"
+
+# sb A1
+# Splash warm-up stage, appearance mode (Dark / Light / System) and its title bar toggle.
+splash.stage.warming_up: "準備しています…"
+appearance.mode_title: "外観モード"
+appearance.mode_hint: "「システム」はコンピューターのライト／ダーク設定に従い、切り替えにも追従します。"
+appearance.mode_dark: "ダーク"
+appearance.mode_light: "ライト"
+appearance.mode_system: "システム"
+appearance.preferred_dark: "ダークテーマ"
+appearance.preferred_light: "ライトテーマ"
+appearance.toggle_tooltip: "外観: %{current}（クリックで%{next}）"

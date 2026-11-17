@@ -56,6 +56,10 @@ setting_keys! {
     ThemeTypeScale => "theme.type_scale",
     ThemeRadiusScale => "theme.radius_scale",
     ThemeFontFamily => "theme.font_family",
+    /// Appearance mode (`dark`, `light` or `system`) and the preferred palette of each mode.
+    ThemeAppearance => "theme.appearance_mode",
+    ThemeDarkPalette => "theme.dark_palette_id",
+    ThemeLightPalette => "theme.light_palette_id",
     /// In-progress Agent Forge draft (JSON from `AgentDraft::to_autosave`).
     ForgeAutosave => "forge.autosave",
     /// Whether Mnemo the guide owl is hidden in the Agent Forge (`true` / `false`).

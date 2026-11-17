@@ -3010,3 +3010,15 @@ prefs.ui.backup_failed: "备份失败：%{reason}"
 prefs.ui.backup_saved: "备份已保存到 %{path}"
 prefs.ui.caches_cleared: "已清除缓存图片：%{count} 张。"
 prefs.ui.reset_done: "所有设置已恢复为默认值。"
+
+# sb A1
+# Splash warm-up stage, appearance mode (Dark / Light / System) and its title bar toggle.
+splash.stage.warming_up: "正在准备…"
+appearance.mode_title: "外观模式"
+appearance.mode_hint: "“跟随系统”会采用电脑的浅色或深色设置，并随之切换。"
+appearance.mode_dark: "深色"
+appearance.mode_light: "浅色"
+appearance.mode_system: "跟随系统"
+appearance.preferred_dark: "深色主题"
+appearance.preferred_light: "浅色主题"
+appearance.toggle_tooltip: "外观：%{current}（点击切换为%{next}）"

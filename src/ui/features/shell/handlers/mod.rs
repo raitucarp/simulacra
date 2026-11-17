@@ -1,6 +1,7 @@
 //! `AppView` event handlers, grouped by responsibility. Each is a small method wired to a
 //! UI callback by `super::binder::Binder`.
 
+pub(super) mod appearance;
 mod chrome;
 mod composer_modal;
 mod credentials;

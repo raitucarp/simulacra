@@ -2,15 +2,13 @@
 //! for focused nodes, text labels. Used by both the full view and the sidebar mini graph.
 
 use super::geometry::{faded, max_degree, node_color, node_radius};
-use super::viewport::{Frame, Viewport};
+use super::viewport::{Fit, Frame, Viewport};
 use crate::state::graph::GraphScene;
 use crate::theme::ThemeTokens;
 use gpui_kit::{fill, point, px, size, App, Bounds, Pixels, Point, Window};
 
 /// Diameter as a multiple of the radius.
 const DIAMETER_FACTOR: f32 = 2.0;
-/// From this zoom on, every lit node shows its label.
-const LABEL_ALL_ZOOM: f32 = 2.5;
 
 /// Per-view drawing parameters.
 pub(crate) struct PaintOptions {
@@ -37,6 +35,8 @@ pub(crate) struct ScenePainter<'a> {
     pub options: &'a PaintOptions,
     pub focus: Focus,
     pub theme: &'a ThemeTokens,
+    /// The scene's node box fitted to the frame.
+    fit: Fit,
     /// Per-node full-strength flag (the anchor and its neighbors, or everything).
     lit: Vec<bool>,
 }
@@ -53,7 +53,8 @@ impl<'a> ScenePainter<'a> {
         focus: Focus,
         theme: &'a ThemeTokens,
     ) -> Self {
-        let mut painter = Self { scene, view, frame, options, focus, theme, lit: Vec::new() };
+        let fit = Fit::new(options.padding, scene.layout.extent());
+        let mut painter = Self { scene, view, frame, options, focus, theme, fit, lit: Vec::new() };
         painter.lit = painter.lit_mask();
         painter
     }
@@ -81,7 +82,7 @@ impl<'a> ScenePainter<'a> {
 
     pub(super) fn screen(&self, idx: usize) -> (f32, f32) {
         let p = self.scene.layout.positions()[idx];
-        self.view.to_screen(&self.frame, self.options.padding, p)
+        self.view.to_screen(&self.frame, self.fit, p)
     }
 
     pub(super) fn radius(&self, idx: usize, top: usize) -> f32 {
@@ -124,15 +125,5 @@ impl<'a> ScenePainter<'a> {
                 .border_color(self.theme.text_primary);
         }
         window.paint_quad(quad);
-    }
-
-    fn paint_labels(&self, top: usize, window: &mut Window, cx: &mut App) {
-        let show_all = self.view.zoom >= LABEL_ALL_ZOOM;
-        for idx in 0..self.scene.model.node_count() {
-            let focused = self.focus.selected == Some(idx) || self.focus.hovered == Some(idx);
-            if focused || (show_all && self.is_lit(idx)) {
-                self.paint_label(idx, top, window, cx);
-            }
-        }
     }
 }

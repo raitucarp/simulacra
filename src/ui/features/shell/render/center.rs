@@ -5,13 +5,14 @@ use super::super::view::AppView;
 use crate::state::NavigationTab;
 use crate::ui::features::day_filter::render_day_filter_chip;
 use crate::ui::features::feed::{render_main_feed, FeedParams};
+use crate::ui::responsive::LayoutClass;
 use gpui_kit::*;
 use std::rc::Rc;
 
 impl AppView {
     /// The Agent Forge while it is open, the roster while a lab tab is active, the Mind Graph
     /// view on its tab, otherwise the main feed.
-    pub(in crate::ui::features::shell) fn center_panel(&self, bind: &Binder) -> AnyElement {
+    pub(in crate::ui::features::shell) fn center_panel(&self, bind: &Binder, class: LayoutClass) -> AnyElement {
         if let Some(session) = &self.forge {
             session.view.clone().into_any_element()
         } else if self.is_lab_tab() {
@@ -19,12 +20,12 @@ impl AppView {
         } else if self.state.active_tab == NavigationTab::MindGraph {
             self.graph.panel.clone().into_any_element()
         } else {
-            self.filtered_feed(bind).into_any_element()
+            self.filtered_feed(bind, class).into_any_element()
         }
     }
 
     /// The main feed, topped by the "Showing <date> ×" chip while a day filter is active.
-    fn filtered_feed(&self, bind: &Binder) -> impl IntoElement {
+    fn filtered_feed(&self, bind: &Binder, class: LayoutClass) -> impl IntoElement {
         let day = self.state.feed_day_filter.filter(|_| self.state.active_tab == NavigationTab::Timeline);
         let chip = day.map(|day| render_day_filter_chip(day, bind.boxed_act(Self::clear_day_filter), &self.theme));
         div()
@@ -32,10 +33,10 @@ impl AppView {
             .flex()
             .flex_col()
             .children(chip)
-            .child(div().flex_1().min_h_0().w_full().child(self.main_feed(bind)))
+            .child(div().flex_1().min_h_0().w_full().child(self.main_feed(bind, class)))
     }
 
-    fn main_feed(&self, bind: &Binder) -> impl IntoElement {
+    fn main_feed(&self, bind: &Binder, layout: LayoutClass) -> impl IntoElement {
         let custom_profile = self
             .feed
             .custom_feed_profile_id
@@ -51,7 +52,7 @@ impl AppView {
             doc_content_input: &self.feed.doc_content_input,
             theme: &self.theme,
             feed_tab: self.feed.feed_tab,
-            inspector_expanded: self.feed.inspector_expanded,
+            inspector_expanded: self.feed.inspector_expanded, layout,
             stream: self.feed.stream.inputs(bind.entity()),
             on_load_more: Some(bind.boxed_act(Self::load_more_posts)),
             on_select_feed_tab: bind.boxed(Self::select_feed_tab),

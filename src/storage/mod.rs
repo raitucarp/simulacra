@@ -2,6 +2,7 @@
 
 pub mod avatars;
 pub mod db;
+pub mod media;
 pub mod vault;
 
 pub use db::{Database, SettingKey};

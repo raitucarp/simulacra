@@ -82,6 +82,7 @@ impl AppState {
             draft_text: String::new(),
             feed_day_filter: None,
             llm_settings: settings.llm,
+            credentials: settings.credentials,
             theme_tokens: settings.theme.tokens(),
             theme_settings: settings.theme,
             db,

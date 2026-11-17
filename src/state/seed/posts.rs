@@ -59,6 +59,7 @@ impl PostSeed {
             image_path: self.image_path,
             reposts_count: self.reposts_count,
             is_reposted: self.is_reposted,
+            extras: Default::default(),
         }
     }
 }

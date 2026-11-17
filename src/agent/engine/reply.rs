@@ -1,11 +1,17 @@
-//! The single constructor for agent reply posts.
+//! The constructors for agent reply posts and their chained follow-ups.
 
-use crate::domain::{AuthoredPost, NetworkId, Post, PostId, Profile};
-use chrono::Utc;
+use crate::domain::{AuthoredPost, NetworkId, Post, PostId, Profile, ProfileId};
+use chrono::{Duration, Utc};
 use uuid::Uuid;
 
 /// Prefix of every generated post identifier (`post_<uuid>`).
 const POST_ID_PREFIX: &str = "post_";
+/// Spacing between chained follow-ups so they keep their order.
+const FOLLOWUP_SPACING_MS: i64 = 1;
+
+fn new_post_id() -> PostId {
+    PostId::new(format!("{POST_ID_PREFIX}{}", Uuid::new_v4().simple()))
+}
 
 /// Builds a fresh reply `Post` authored by `agent_profile`, threaded under and
 /// linked to `parent_post`, mentioning the parent's author.
@@ -15,10 +21,8 @@ pub(super) fn build_reply(
     network_id: NetworkId,
     content: String,
 ) -> Post {
-    let new_id = PostId::new(format!("{POST_ID_PREFIX}{}", Uuid::new_v4().simple()));
-
     Post {
-        id: new_id,
+        id: new_post_id(),
         network_id,
         author_id: agent_profile.id,
         content,
@@ -35,5 +39,23 @@ pub(super) fn build_reply(
         image_path: None,
         reposts_count: 0,
         is_reposted: false,
+        extras: Default::default(),
+    }
+}
+
+/// A follow-up by the same author chained under `previous` (a self-reply thread part).
+pub(super) fn build_followup(previous: &Post, author_id: ProfileId, content: String) -> Post {
+    Post {
+        id: new_post_id(),
+        author_id,
+        content,
+        created_at: previous.created_at + Duration::milliseconds(FOLLOWUP_SPACING_MS),
+        replies_count: 0,
+        mentions: Vec::new(),
+        linked_posts: vec![previous.id.clone()],
+        reply_to_id: Some(previous.id.clone()),
+        image_path: None,
+        extras: Default::default(),
+        ..previous.clone()
     }
 }

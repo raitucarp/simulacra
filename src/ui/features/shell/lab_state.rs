@@ -1,6 +1,7 @@
 //! Personas & Agents roster selection and the LLM settings inputs.
 
 use super::consts::LLM_ENDPOINT_PLACEHOLDER;
+use super::credential_state::CredentialInputs;
 use crate::domain::ProfileId;
 use crate::state::AppState;
 use gpui_kit::component::input::InputState;
@@ -25,6 +26,8 @@ pub struct LlmInputs {
     pub api_key: Entity<InputState>,
     pub model: Entity<InputState>,
     pub endpoint: Entity<InputState>,
+    /// The credentials form below the global provider.
+    pub credential: CredentialInputs,
 }
 
 impl LlmInputs {
@@ -39,6 +42,7 @@ impl LlmInputs {
             api_key: input(&settings.api_key, t!("settings.api_key_placeholder").to_string()),
             model: input(&settings.model, t!("settings.model_placeholder").to_string()),
             endpoint: input(&settings.custom_endpoint, LLM_ENDPOINT_PLACEHOLDER.to_string()),
+            credential: CredentialInputs::new(window, cx),
         }
     }
 

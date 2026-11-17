@@ -11,9 +11,9 @@ const UPSERT_POST: &str = r#"
                     id, network_id, author_id, author_json, content, created_at,
                     likes, is_liked, replies_count, mentions_json, linked_posts_json,
                     reply_to_id, quote_id, repost_id, link_url, image_path,
-                    reposts_count, is_reposted
+                    reposts_count, is_reposted, extras_json
                 )
-                VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18)
+                VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18, ?19)
                 ON CONFLICT(id) DO UPDATE SET
                     network_id = excluded.network_id,
                     author_id = excluded.author_id,
@@ -30,7 +30,8 @@ const UPSERT_POST: &str = r#"
                     link_url = excluded.link_url,
                     image_path = excluded.image_path,
                     reposts_count = excluded.reposts_count,
-                    is_reposted = excluded.is_reposted;
+                    is_reposted = excluded.is_reposted,
+                    extras_json = excluded.extras_json;
                 "#;
 
 const SELECT_POSTS: &str = r#"
@@ -38,7 +39,7 @@ const SELECT_POSTS: &str = r#"
                     id, network_id, author_id, content, created_at,
                     likes, is_liked, replies_count, mentions_json, linked_posts_json,
                     reply_to_id, quote_id, repost_id, link_url, image_path,
-                    reposts_count, is_reposted
+                    reposts_count, is_reposted, extras_json
                 FROM posts
                 ORDER BY created_at DESC
                 "#;
@@ -48,6 +49,7 @@ impl Database {
     pub fn save_post(&self, post: &Post) -> Result<()> {
         let mentions_json = serde_json::to_string(&post.mentions).map_err(db_err)?;
         let linked_posts_json = serde_json::to_string(&post.linked_posts).map_err(db_err)?;
+        let extras_json = serde_json::to_string(&post.extras).map_err(db_err)?;
         let created_at_str = post.created_at.to_rfc3339();
 
         self.conn
@@ -72,6 +74,7 @@ impl Database {
                     post.image_path.as_deref(),
                     post.reposts_count as i64,
                     sql_bool(post.is_reposted),
+                    extras_json,
                 ],
             )
             .map_err(db_err)?;
@@ -103,8 +106,8 @@ fn post_from_row(row: &Row<'_>) -> rusqlite::Result<Post> {
     let repost_id: Option<String> = row.get(12)?;
     let link_url: Option<String> = row.get(13)?;
     let image_path: Option<String> = row.get(14)?;
-    let reposts_count: i64 = row.get(15)?;
-    let is_reposted: i64 = row.get(16)?;
+    let (reposts_count, is_reposted): (i64, i64) = (row.get(15)?, row.get(16)?);
+    let extras_json: Option<String> = row.get(17)?;
 
     Ok(Post {
         id: PostId::new(id),
@@ -124,5 +127,6 @@ fn post_from_row(row: &Row<'_>) -> rusqlite::Result<Post> {
         image_path,
         reposts_count: reposts_count as usize,
         is_reposted: is_reposted != 0,
+        extras: extras_json.and_then(|json| serde_json::from_str(&json).ok()).unwrap_or_default(),
     })
 }

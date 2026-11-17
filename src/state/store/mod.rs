@@ -81,6 +81,8 @@ pub struct AppState {
     /// Local calendar day the timeline is narrowed to (set from the cadence heatmap).
     pub feed_day_filter: Option<chrono::NaiveDate>,
     pub llm_settings: crate::agent::LlmSettings,
+    /// Provider and service keys referenced by agent engines (Settings › AI).
+    pub credentials: crate::agent::credentials::CredentialStore,
     /// The user's theme choice; `theme_tokens` is always derived from it.
     pub theme_settings: crate::theme::ThemeSettings,
     pub theme_tokens: crate::theme::ThemeTokens,

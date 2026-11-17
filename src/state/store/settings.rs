@@ -54,3 +54,19 @@ impl AppState {
         }
     }
 }
+
+impl AppState {
+    /// Replaces the credential store and queues it for the vault.
+    pub fn update_credentials(&mut self, credentials: crate::agent::credentials::CredentialStore) {
+        if let Some(ref db) = self.db {
+            let saved = credentials.clone();
+            report_unqueued(db.write(move |db| saved.save_to_db(db).map_err(AppError::DatabaseError)));
+        }
+        self.credentials = credentials;
+    }
+
+    /// Folder where generated agent images are saved (next to the vault).
+    pub fn media_dir(&self) -> std::path::PathBuf {
+        crate::storage::media::media_dir_for(&self.db.as_ref().map(|db| db.path()).unwrap_or_default())
+    }
+}

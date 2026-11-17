@@ -5,6 +5,7 @@
 //! failure cause is shown once until the settings change or a generation succeeds.
 
 use super::super::view::AppView;
+use crate::agent::runtime::GLOBAL_GATE_KEY;
 use crate::agent::schedule::FailureCause;
 use crate::agent::LlmFailure;
 use chrono::Utc;
@@ -24,10 +25,11 @@ struct WorkerFailureNotice;
 struct StorageFailureNotice;
 
 impl AppView {
-    /// Records `failure` and backs autonomous generation off; logs it and shows it as a toast
-    /// (provider + short message) only the first time its cause is seen since the last reset.
-    pub(super) fn report_llm_failure(&mut self, failure: LlmFailure, window: &mut Window, cx: &mut Context<Self>) {
-        let first = self.scheduler.failures.record_failure(FailureCause::of(&failure), Utc::now());
+    /// Records `failure` against the engine `gate_key` and backs its agents off; logs it and
+    /// shows it as a toast (provider + short message) only the first time its cause is seen
+    /// since the last reset.
+    pub(super) fn report_llm_failure(&mut self, gate_key: &str, failure: LlmFailure, window: &mut Window, cx: &mut Context<Self>) {
+        let first = self.scheduler.failures.gate_mut(gate_key).record_failure(FailureCause::of(&failure), Utc::now());
         if first {
             eprintln!("simulacra: {} request failed: {}", failure.provider, failure.message);
             let provider = failure.provider.to_string();
@@ -45,7 +47,7 @@ impl AppView {
     /// Tells the user, once, that autonomous posting waits for an API key.
     pub(super) fn report_scheduler_needs_key(&mut self, window: &mut Window, cx: &mut Context<Self>) {
         let provider = self.state.llm_settings.provider;
-        if !self.scheduler.failures.notice(FailureCause::missing_key(provider)) {
+        if !self.scheduler.failures.gate_mut(GLOBAL_GATE_KEY).notice(FailureCause::missing_key(provider)) {
             return;
         }
         let title = t!("scheduler.paused_title").to_string();
@@ -56,10 +58,10 @@ impl AppView {
         self.scheduler.last_error = Some(LlmFailure::new(provider, &body, "", true));
     }
 
-    /// Forgets shown failure notices and the generation backoff (settings changed or a
-    /// generation succeeded), so the next failure is reported again.
+    /// Forgets every shown failure notice and backoff (settings or credentials changed), so
+    /// the next failure is reported again.
     pub(super) fn reset_llm_failures(&mut self) {
-        self.scheduler.failures.reset();
+        self.scheduler.failures.reset_all();
     }
 
     /// Shows a toast when the background simulation worker could not run at all.

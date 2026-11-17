@@ -11,9 +11,13 @@ pub const SYSTEM_FIELDS: [(&str, ForgeStep); 2] = [
     ("network_id", ForgeStep::Origin),
 ];
 
+/// Nested engine config: edited as a whole (Grimoire for now; the Engine step comes later).
+pub const ENGINE_FIELDS: [(&str, ForgeStep); 1] = [("engine", ForgeStep::Grimoire)];
+
 /// Every `(serde path, step)` pair the forge knows about.
 pub fn mapped_fields() -> Vec<(&'static str, ForgeStep)> {
     let mut all: Vec<(&'static str, ForgeStep)> = SYSTEM_FIELDS.to_vec();
+    all.extend(ENGINE_FIELDS);
     all.extend(TextField::ALL.iter().map(|f| (f.path(), f.step())));
     all.extend(OptionalTextField::ALL.iter().map(|f| (f.path(), f.step())));
     all.extend(AvatarField::ALL.iter().map(|f| (f.path(), f.step())));

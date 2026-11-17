@@ -31,7 +31,7 @@ fn rail_marks_finished_steps_complete() {
     let issues = validate(&draft, &[]);
     draft.sync_completion(&issues);
     let items = rail_items(&draft, &issues);
-    assert_eq!(items.len(), 4, "personas walk four steps");
+    assert_eq!(items.len(), 6, "personas walk six steps");
     assert_eq!(items[0].status, RailStatus::Complete);
     assert!(items[1].is_current);
 }
@@ -193,4 +193,32 @@ fn escape_in_a_text_field_only_leaves_the_field() {
 fn escape_outside_a_text_field_closes_the_forge() {
     assert_eq!(dismiss_step(false, &contexts(&["Root", FORGE_CONTEXT])), DismissStep::CloseForge);
     assert_eq!(dismiss_step(false, &[]), DismissStep::CloseForge);
+}
+
+#[test]
+fn palette_notice_goes_stale_once_the_apply_is_undone() {
+    use crate::state::forge::apply_palette;
+    use crate::ui::features::forge::view::Notice;
+    let mut draft = blank(ForgeKind::Agent);
+    let palette = crate::domain::Palette::full(None).next().expect("a full palette");
+    assert!(apply_palette(&mut draft, palette));
+    let notice = Notice::info("applied", Vec::new()).anchored(draft.profile());
+    assert!(!notice.is_stale_for(draft.profile()));
+    assert!(draft.undo());
+    assert!(notice.is_stale_for(draft.profile()));
+    assert!(draft.redo());
+    assert!(!notice.is_stale_for(draft.profile()));
+    assert!(!Notice::info("plain", Vec::new()).is_stale_for(draft.profile()));
+}
+
+#[test]
+fn gallery_columns_follow_the_available_width() {
+    let (card, gap) = (180.0, 12.0);
+    assert_eq!(fit_columns(4.0 * card + 3.0 * gap, card, gap), 4);
+    assert_eq!(fit_columns(4.0 * card + 3.0 * gap - 1.0, card, gap), 3);
+    assert_eq!(fit_columns(7.0 * card + 6.0 * gap + 50.0, card, gap), 7);
+    assert_eq!(fit_columns(card / 2.0, card, gap), 1);
+    assert_eq!(fit_columns(f32::NAN, card, gap), 1);
+    let cursor = GridCursor::new(2, 10, fit_columns(3.0 * card + 2.0 * gap, card, gap));
+    assert_eq!(cursor.moved(NavKey::Down).index, 5);
 }

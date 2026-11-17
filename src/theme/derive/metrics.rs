@@ -37,10 +37,10 @@ pub(super) fn apply_typography(t: &mut ThemeTokens, scale: TypeScale) {
 pub(super) fn apply_spacing(t: &mut ThemeTokens, density: Density) {
     let f = density.factor();
     set_tokens!(t {
-        spacing_3xs: scaled(1.0, f), spacing_2xs: scaled(2.0, f), spacing_px3: scaled(3.0, f),
+        spacing_3xs: scaled(1.0, f), spacing_2xs: scaled(2.0, f),
         spacing_xs: scaled(4.0, f), spacing_sm: scaled(8.0, f), spacing_md: scaled(12.0, f),
         spacing_lg: scaled(16.0, f), spacing_xl: scaled(20.0, f), spacing_2xl: scaled(24.0, f),
-        spacing_xs_plus: scaled(6.0, f), spacing_sm_plus: scaled(10.0, f), spacing_md_plus: scaled(14.0, f),
+        spacing_xs_plus: scaled(6.0, f), spacing_sm_plus: scaled(10.0, f),
     });
 }
 
@@ -67,7 +67,7 @@ pub(super) fn apply_layout(t: &mut ThemeTokens) {
         graph_canvas_height: px(140.0),
 
         heatmap_cell_height: px(5.0), heatmap_cell_gap: px(1.0), heatmap_cell_radius: px(1.0),
-        heatmap_label_width: px(24.0),
+        heatmap_label_width: px(24.0), heatmap_month_row_height: px(12.0),
         graph_view_min_height: px(420.0), graph_node_radius_min: px(3.5),
         graph_node_radius_max: px(11.0), graph_mini_node_radius: px(2.0), graph_edge_width: px(1.0),
 
@@ -75,7 +75,8 @@ pub(super) fn apply_layout(t: &mut ThemeTokens) {
         post_image_max_height: px(280.0), post_image_preview_height: px(140.0),
         attachment_btn_size: px(28.0),
 
-        contact_list_pane_width: px(236.0), agent_category_rail_width: px(204.0),
+        // 228px of rows plus the compact inset on both sides
+        contact_list_pane_width: px(244.0), agent_category_rail_width: px(204.0),
         contact_avatar_size: px(36.0), hero_avatar_size: px(48.0), config_tab_height: px(36.0),
         trait_bar_height: px(6.0), prompt_preview_height: px(220.0),
 

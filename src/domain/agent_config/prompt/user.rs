@@ -4,6 +4,9 @@ use crate::domain::agent_config::AgentConfig;
 use crate::domain::post::MAX_POST_CHARS;
 use crate::domain::profile::Profile;
 
+/// Qualifies the reply of a human ("your authentic human response"); other beings drop it.
+const HUMAN_RESPONSE: &str = "human ";
+
 impl AgentConfig {
     /// Assembles the user/context turn prompt for replying to or synthesizing a post in a network.
     pub fn assemble_user_prompt(
@@ -25,11 +28,12 @@ impl AgentConfig {
             "{}\n\n\
              Thought in network by {} ({}):\n\
              \"{}\"\n\n\
-             Compose your authentic human response as {} ({}) strictly under {} characters in {}, including reference [[{}]].",
+             Compose your authentic {}response as {} ({}) strictly under {} characters in {}, including reference [[{}]].",
             mention_context,
             parent_author_name,
             parent_author_handle,
             parent_post_content,
+            if self.embodiment.is_human() { HUMAN_RESPONSE } else { "" },
             profile.name,
             profile.display_handle(),
             MAX_POST_CHARS,

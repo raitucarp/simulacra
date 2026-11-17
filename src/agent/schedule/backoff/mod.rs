@@ -2,6 +2,10 @@
 //! an unreachable endpoint) raises one notice per distinct cause instead of one per heartbeat,
 //! and autonomous generation waits longer after each consecutive failure.
 
+mod gates;
+
+pub use gates::FailureGates;
+
 use crate::agent::{LlmFailure, LlmProvider};
 use chrono::{DateTime, Duration, Utc};
 use std::collections::HashSet;

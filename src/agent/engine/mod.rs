@@ -6,11 +6,13 @@
 //!
 //! - [`prompts`]: system/user prompt assembly.
 //! - [`run`]: LLM-backed generation (async, blocking, background thread).
+//! - [`job`]: per-agent engine jobs (tools, structured output, images) on a worker thread.
 //! - [`heuristic`]: offline canned replies used as the LLM fallback.
 //! - [`reply`]: the single reply-`Post` constructor shared by every path.
 //! - [`outcome`]: a reply plus the LLM failure (if any) that forced the fallback.
 
 mod heuristic;
+mod job;
 mod outcome;
 mod prompts;
 mod reply;
@@ -20,6 +22,7 @@ mod voices;
 #[cfg(test)]
 mod tests;
 
+pub use job::EngineJob;
 pub use outcome::SimulationOutcome;
 pub use prompts::PromptContext;
 

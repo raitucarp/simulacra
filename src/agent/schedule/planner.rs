@@ -4,8 +4,9 @@ use super::cadence::cadence_rule;
 use super::chronotype::posting_chance;
 use super::rng::roll_percent;
 use super::window::HourWindow;
+use crate::domain::traits::Weekday;
 use crate::domain::{AgentConfig, Post, ProfileId};
-use chrono::{DateTime, FixedOffset, Timelike, Utc};
+use chrono::{DateTime, Datelike, FixedOffset, Timelike, Utc};
 use std::collections::HashMap;
 
 /// One agent as seen by the scheduler.
@@ -35,6 +36,8 @@ pub enum Decision {
     Inactive,
     /// The cadence is manual-only.
     ManualOnly,
+    /// Today is not one of the agent's active days.
+    OffDay,
     /// The local hour is outside the agent's active hours.
     OutsideActiveHours,
     /// The local hour is outside the cadence's slots (e.g. morning/evening).
@@ -56,6 +59,9 @@ pub fn evaluate(slot: &AgentSlot<'_>, ctx: &ScheduleContext) -> Decision {
     let Some(rule) = cadence_rule(cfg.posting_cadence) else {
         return Decision::ManualOnly;
     };
+    if !cfg.active_days.contains(Weekday::from_chrono(ctx.now.weekday())) {
+        return Decision::OffDay;
+    }
     let hour = ctx.now.hour() as u8;
     if !HourWindow::new(cfg.active_hours_start, cfg.active_hours_end).contains(hour) {
         return Decision::OutsideActiveHours;

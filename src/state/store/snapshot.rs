@@ -1,6 +1,7 @@
 //! Everything the store reads from the vault at startup, gathered in one worker round trip.
 
 use super::bootstrap::StoreData;
+use crate::agent::credentials::CredentialStore;
 use crate::agent::LlmSettings;
 use crate::domain::ProfileId;
 use crate::error::Result;
@@ -12,12 +13,16 @@ use std::collections::BTreeSet;
 pub(super) struct StoredSettings {
     pub llm: LlmSettings,
     pub theme: ThemeSettings,
+    pub credentials: CredentialStore,
 }
 
 impl StoredSettings {
-    /// Reads the LLM and theme settings (migrating a legacy theme on the way).
+    /// Reads the LLM, credential and theme settings (migrating a legacy theme and the legacy
+    /// global key on the way).
     pub fn read(db: &Database) -> Self {
-        Self { llm: LlmSettings::load_from_db(db), theme: db.load_theme_settings() }
+        let llm = LlmSettings::load_from_db(db);
+        let credentials = CredentialStore::load_from_db(db, &llm);
+        Self { llm, theme: db.load_theme_settings(), credentials }
     }
 }
 

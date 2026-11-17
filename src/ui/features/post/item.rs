@@ -5,6 +5,7 @@ use super::attachments::{render_image_embed, render_link_preview};
 use super::body::render_body_tokens;
 use super::consts::POST_ITEM_ID_PREFIX;
 use super::controls::{collect_references, PostCardHandlers};
+use super::extras::render_post_extras;
 use super::header::{render_author_row, render_repost_header};
 use super::lookup::PostLookup;
 use super::quote_card::render_quote_embed;
@@ -35,7 +36,7 @@ pub fn render_post_item<L: PostLookup>(
     div()
         .id(format!("{POST_ITEM_ID_PREFIX}{}", post.id))
         .w_full()
-        .px(theme.spacing_lg)
+        .px(theme.panel_padding)
         .bg(bg_color)
         .hover(move |s| s.bg(hover_bg))
         .border_b(theme.border_width_hairline)
@@ -96,6 +97,7 @@ fn render_content_column<L: PostLookup>(
                 .py(theme.spacing_2xs)
                 .child(render_body_tokens(&lookup.body_tokens(effective), lookup, theme, &handlers.links)),
         )
+        .children(render_post_extras(&effective.extras, theme, handlers.links.on_source.as_ref()))
         .when_some(image_path, |this, path| this.child(render_image_embed(path, theme)))
         .when_some(effective.link_url.as_ref(), |this, url| {
             this.child(render_link_preview(effective.id.as_str(), url, theme))

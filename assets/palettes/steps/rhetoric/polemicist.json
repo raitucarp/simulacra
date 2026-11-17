@@ -1,0 +1,20 @@
+{
+  "order": 3,
+  "config": {
+    "rhetorical_mode": "Polemic",
+    "rhetorical_devices": [
+      "Anaphora",
+      "RhetoricalQuestion",
+      "Hyperbole",
+      "Antithesis"
+    ],
+    "stylistic_school": "Gonzo",
+    "semiotic_mode": "Typographic",
+    "sentence_structure": "Parallel",
+    "post_format": "Thread",
+    "lexical_fields": [
+      "Law",
+      "Commerce"
+    ]
+  }
+}

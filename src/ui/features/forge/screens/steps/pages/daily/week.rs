@@ -1,10 +1,12 @@
 //! "Their week": seven day rows of 24 hour cells, replayed through the real scheduler
 //! (`simulate_week`). Hours with likely posts are violet (deeper for more posts), online hours
-//! without one are tinted, offline hours stay dark; each row ends with the day's count.
+//! without one are tinted, offline hours (and whole days off) stay dark; each row ends with
+//! the day's count.
 
 use super::{week_summary, WeekSummary};
 use crate::agent::schedule::{simulate_week, HourWindow, WeekPreview, DAYS_PER_WEEK, HEARTBEAT_INTERVAL, HOURS_PER_DAY};
 use crate::domain::agent_config::AgentConfig;
+use crate::domain::traits::Weekday;
 use crate::domain::ProfileId;
 use crate::theme::ThemeTokens;
 use crate::ui::features::forge::text::{tr, tr_count};
@@ -35,11 +37,11 @@ fn post_color(posts: u16, busiest: u16, theme: &ThemeTokens) -> Rgba {
     Rgba { a: theme.accent_brand.a * alphas[level - 1], ..theme.accent_brand }
 }
 
-fn day_row(day: usize, week: &WeekPreview, online: HourWindow, theme: &ThemeTokens) -> Div {
+fn day_row(day: usize, week: &WeekPreview, online: Option<HourWindow>, theme: &ThemeTokens) -> Div {
     let busiest = week.busiest_hour();
     let cells = (0..HOURS_PER_DAY).map(|hour| {
         let posts = week.posts[day][usize::from(hour)];
-        let color = match (posts, online.contains(hour)) {
+        let color = match (posts, online.is_some_and(|window| window.contains(hour))) {
             (0, true) => theme.accent_brand_subtle,
             (0, false) => theme.bg_elevated,
             (n, _) => post_color(n, busiest, theme),
@@ -65,7 +67,8 @@ pub(super) fn week_strip(cfg: &AgentConfig, id: &ProfileId, theme: &ThemeTokens)
         WeekSummary::Manual => tr(MANUAL_KEY),
         WeekSummary::Posts(count) => tr_count(POSTS_KEY, count as usize, &[]),
     };
-    let rows: Vec<Div> = (0..DAYS_PER_WEEK).map(|day| day_row(day, &week, online, theme)).collect();
+    let on_day = |day: usize| Weekday::ALL.get(day).is_some_and(|weekday| cfg.active_days.contains(*weekday));
+    let rows: Vec<Div> = (0..DAYS_PER_WEEK).map(|day| day_row(day, &week, on_day(day).then_some(online), theme)).collect();
     div()
         .flex()
         .flex_col()

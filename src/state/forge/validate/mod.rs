@@ -1,18 +1,22 @@
 //! Review-step validation: what blocks saving (errors) and what merely deserves a look (warnings).
 
 mod config;
+mod engine;
+mod engine_parts;
 mod handle;
+mod kind;
 mod name;
 
 pub use handle::{suggest_handle, HANDLE_MAX_CHARS, HANDLE_MIN_CHARS};
+pub use kind::IssueKind;
 pub use name::{NAME_MAX_CHARS, NAME_MIN_CHARS};
 
 use super::draft::AgentDraft;
-use super::step::{steps_for, ForgeStep, FORGE_I18N_ROOT};
+use super::step::{steps_for, ForgeStep};
+use crate::agent::credentials::CredentialStore;
 use crate::domain::Profile;
 use serde::{Deserialize, Serialize};
 
-const ISSUE_GROUP: &str = "issue";
 /// Interpolation argument holding a lower bound (`%{min}`).
 pub const ARG_MIN: &str = "min";
 /// Interpolation argument holding an upper bound (`%{max}`).
@@ -25,62 +29,6 @@ pub const ARG_VALUE: &str = "value";
 pub enum Severity {
     Warning,
     Error,
-}
-
-/// Stable id of every validation message; the i18n key is `forge.issue.{key}`.
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
-pub enum IssueKind {
-    NameRequired,
-    NameTooShort,
-    NameTooLong,
-    NameJunk,
-    HandleRequired,
-    HandleFormat,
-    HandleLength,
-    HandleTaken,
-    LanguageRequired,
-    HoursOutOfRange,
-    HoursAroundTheClock,
-    TemplateEmpty,
-    TemplateUnknownPlaceholder,
-    TemplateUnclosed,
-    BioEmpty,
-    AgeUnusual,
-}
-
-impl IssueKind {
-    pub const ALL: [Self; 16] = [
-        Self::NameRequired, Self::NameTooShort, Self::NameTooLong, Self::NameJunk,
-        Self::HandleRequired, Self::HandleFormat, Self::HandleLength, Self::HandleTaken,
-        Self::LanguageRequired, Self::HoursOutOfRange, Self::HoursAroundTheClock, Self::TemplateEmpty,
-        Self::TemplateUnknownPlaceholder, Self::TemplateUnclosed, Self::BioEmpty, Self::AgeUnusual,
-    ];
-
-    pub const fn key(self) -> &'static str {
-        match self {
-            Self::NameRequired => "name_required",
-            Self::NameTooShort => "name_too_short",
-            Self::NameTooLong => "name_too_long",
-            Self::NameJunk => "name_junk",
-            Self::HandleRequired => "handle_required",
-            Self::HandleFormat => "handle_format",
-            Self::HandleLength => "handle_length",
-            Self::HandleTaken => "handle_taken",
-            Self::LanguageRequired => "language_required",
-            Self::HoursOutOfRange => "hours_out_of_range",
-            Self::HoursAroundTheClock => "hours_around_the_clock",
-            Self::TemplateEmpty => "template_empty",
-            Self::TemplateUnknownPlaceholder => "template_unknown_placeholder",
-            Self::TemplateUnclosed => "template_unclosed",
-            Self::BioEmpty => "bio_empty",
-            Self::AgeUnusual => "age_unusual",
-        }
-    }
-
-    /// i18n key of the message (interpolate the issue's `args`).
-    pub fn message_key(self) -> String {
-        format!("{FORGE_I18N_ROOT}.{ISSUE_GROUP}.{}", self.key())
-    }
 }
 
 /// One problem found in a draft, pinned to the step and field that can fix it.
@@ -112,13 +60,20 @@ impl ValidationIssue {
 }
 
 /// Every issue in `draft`, checked against the other profiles in `existing`
-/// (the draft's own id is ignored there). Only steps the draft's kind walks are reported.
+/// (the draft's own id is ignored there), with no stored credentials.
 pub fn validate(draft: &AgentDraft, existing: &[Profile]) -> Vec<ValidationIssue> {
+    validate_with(draft, existing, &CredentialStore::default())
+}
+
+/// [`validate`] with the engine's credential references checked against `credentials`.
+/// Only steps the draft's kind walks are reported.
+pub fn validate_with(draft: &AgentDraft, existing: &[Profile], credentials: &CredentialStore) -> Vec<ValidationIssue> {
     let profile = draft.profile();
     let mut issues = Vec::new();
     name::check(&profile.name, &mut issues);
     handle::check(profile, existing, &mut issues);
     config::check(profile, &mut issues);
+    engine::check(&profile.config.engine, credentials, &mut issues);
     let steps = steps_for(draft.kind());
     issues.retain(|issue| steps.contains(&issue.step));
     issues

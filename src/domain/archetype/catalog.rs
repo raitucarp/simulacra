@@ -1,56 +1,38 @@
-//! Embedded class presets (`assets/archetypes/*.json`), parsed once on first use.
+//! Class presets, read from the "Thinkers" palettes (`assets/palettes/thinkers/<key>.json`).
 
 use super::ArchetypeClass;
 use crate::domain::agent_config::AgentConfig;
-use crate::domain::{EnneagramType, HumanGender};
-use serde::{Deserialize, Serialize};
+use crate::domain::palette::Palette;
+use crate::domain::EnneagramType;
 use std::sync::OnceLock;
 
-/// Embeds `assets/archetypes/<key>.json` for every class, in `ArchetypeClass::ALL` order.
-macro_rules! class_assets {
-    ($($key:literal),* $(,)?) => {
-        [$(include_str!(concat!("../../../assets/archetypes/", $key, ".json"))),*]
-    };
-}
-
-const CLASS_ASSETS: [&str; 8] = class_assets![
-    "socratic_gadfly", "rationalist_architect", "existential_poet", "stoic_sage",
-    "empirical_scientist", "contrarian_trickster", "compassionate_mentor", "mystic_visionary",
-];
-
-/// A curated name that fits a class, with the pronouns that go with it.
-#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
-pub struct NameSuggestion {
-    pub name: String,
-    pub gender: HumanGender,
-    pub pronouns: String,
-}
+pub use crate::domain::palette::NameSuggestion;
 
 /// Everything a class contributes to a new thinker.
-#[derive(Debug, Clone, PartialEq, Eq, Deserialize)]
+#[derive(Debug, Clone, Default, PartialEq, Eq)]
 pub struct ClassPreset {
     /// Curated names, in suggestion order.
     pub names: Vec<NameSuggestion>,
     /// Enneagram types coherent with the class (the preset's own type first).
     pub enneagram_options: Vec<EnneagramType>,
-    /// The full preset; fields the asset omits take `AgentConfig::default()` values.
+    /// The full preset; fields the palette omits take `AgentConfig::default()` values.
     pub config: AgentConfig,
+}
+
+impl ClassPreset {
+    /// The preset of the thinker palette `palette` (applied to a default config).
+    fn of(palette: Option<&Palette>) -> Self {
+        let Some(palette) = palette else { return Self::default() };
+        let mut config = palette.applied(&AgentConfig::default());
+        config.palette = None;
+        config.archetype_class = None;
+        Self { names: palette.names.clone(), enneagram_options: palette.enneagram_options.clone(), config }
+    }
 }
 
 fn presets() -> &'static [ClassPreset] {
     static PRESETS: OnceLock<Vec<ClassPreset>> = OnceLock::new();
-    PRESETS.get_or_init(|| {
-        CLASS_ASSETS
-            .iter()
-            .zip(ArchetypeClass::ALL)
-            .map(|(json, class)| {
-                serde_json::from_str(json).unwrap_or_else(|e| {
-                    // Compile-time constants covered by the archetype tests: a build defect.
-                    panic!("embedded archetype `{}` is invalid: {e}", class.key())
-                })
-            })
-            .collect()
-    })
+    PRESETS.get_or_init(|| ArchetypeClass::ALL.iter().map(|class| ClassPreset::of(class.palette())).collect())
 }
 
 impl ArchetypeClass {

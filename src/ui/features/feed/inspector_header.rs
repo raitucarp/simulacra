@@ -17,7 +17,7 @@ use std::rc::Rc;
 pub(crate) fn render_inspector_header(theme: &ThemeTokens, replies_count: Option<usize>) -> Div {
     div()
         .w_full()
-        .px(theme.spacing_lg)
+        .px(theme.panel_padding)
         .h(theme.feed_header_height)
         .border_b(theme.border_width_hairline)
         .border_color(theme.border_subtle)
@@ -61,8 +61,8 @@ fn render_replies_pill(count: usize, theme: &ThemeTokens) -> Div {
 /// Grounding context insight shown when the focused thought has no replies yet.
 pub(crate) fn render_grounding_callout(theme: &ThemeTokens) -> Div {
     div()
-        .m(theme.spacing_lg)
-        .p(theme.spacing_md)
+        .m(theme.panel_padding)
+        .p(theme.card_padding)
         .rounded(theme.radius_md)
         .bg(theme.bg_callout)
         .border(theme.border_width_hairline)
@@ -105,7 +105,7 @@ pub(crate) fn render_quick_reply_bar(
     let author_handle = author.handle.clone();
     div()
         .w_full()
-        .px(theme.spacing_md)
+        .px(theme.panel_padding)
         .py(theme.spacing_sm)
         .border_t(theme.border_width_hairline)
         .border_color(theme.border_subtle)

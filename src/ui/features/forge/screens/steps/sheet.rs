@@ -81,7 +81,7 @@ impl ForgeView {
         let bubble = div()
             .flex_1()
             .min_w_0()
-            .p(theme.spacing_md)
+            .p(theme.card_padding)
             .rounded(theme.radius_lg)
             .bg(theme.bg_callout)
             .border_l(theme.border_width_threadline)

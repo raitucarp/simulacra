@@ -19,7 +19,7 @@ impl ComposerModalView {
         };
         div()
             .w_full()
-            .px(theme.spacing_lg)
+            .px(theme.panel_padding)
             .py(theme.spacing_md)
             .border_t(theme.border_width_hairline)
             .border_color(theme.border)

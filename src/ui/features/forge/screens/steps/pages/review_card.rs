@@ -3,7 +3,7 @@
 
 use super::super::super::common::{card, title};
 use super::super::sheet::radar;
-use super::super::{class_badge, stage_portrait};
+use super::super::{palette_badge, stage_portrait};
 use crate::domain::TraitOption;
 use crate::state::forge::{personality_radar, ForgeKind, TraitField, TraitValue, TraitVisitor};
 use crate::theme::ThemeTokens;
@@ -36,8 +36,11 @@ impl TraitVisitor for TraitChip<'_> {
 
     fn visit<T: TraitOption>(self, current: T, _: fn(T) -> TraitValue) -> Div {
         let theme = self.theme;
+        // Sized to the label between the compact and preset widths, so a long one-word label
+        // ("Self-deprecating") stays whole instead of breaking mid-word.
         div()
-            .w(theme.forge_compact_card_width)
+            .min_w(theme.forge_compact_card_width)
+            .max_w(theme.forge_preset_card_width)
             .flex()
             .flex_col()
             .items_center()
@@ -58,14 +61,17 @@ impl ForgeView {
             ForgeKind::Agent => &AGENT_KEY_TRAITS,
             ForgeKind::Persona => &PERSONA_KEY_TRAITS,
         };
-        let chips: Vec<Div> = traits.iter().map(|field| field.read(&profile.config).visit(TraitChip { theme })).collect();
+        // A non-human being leads with its form (the tin can, the oak…).
+        let form = (!profile.config.embodiment.is_human()).then_some(TraitField::Form);
+        let chips: Vec<Div> =
+            form.iter().chain(traits).map(|field| field.read(&profile.config).visit(TraitChip { theme })).collect();
         card(theme)
             .items_center()
             .border_color(theme.accent_dialectic_border)
             .child(stage_portrait(profile, theme.forge_portrait_size * CARD_PORTRAIT_SCALE, theme))
             .child(title(self.display_name(), theme))
             .child(div().text_size(theme.font_size_sm).text_color(theme.text_muted).child(crate::state::forge::normalize_handle(&profile.handle)))
-            .children(self.class().map(|class| class_badge(class, theme)))
+            .children(self.palette().map(|palette| palette_badge(palette, theme)))
             .child(div().flex().flex_wrap().justify_center().gap(theme.spacing_xs).children(chips))
             .child(radar(CARD_RADAR_ID, personality_radar(&profile.config), theme))
     }

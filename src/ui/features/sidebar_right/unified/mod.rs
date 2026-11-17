@@ -75,7 +75,7 @@ pub fn render_unified_right_sidebar(params: UnifiedRightSidebarParams<'_>) -> im
         .border_color(theme.border)
         .flex()
         .flex_col()
-        .gap(theme.spacing_md)
+        .gap(theme.stack_gap)
         .child(tabs::render_tab_switcher(active_tab, Rc::new(params.on_select_tab), theme))
         .when(active_tab == RightSidebarTab::MindCadence, |this| {
             this.child(render_mind_cadence_pane(mind, theme))

@@ -10,6 +10,7 @@
 mod binder;
 mod consts;
 mod construct;
+mod credential_state;
 mod forge_host;
 mod lab_selection;
 mod feed_state;

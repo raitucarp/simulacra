@@ -3,11 +3,13 @@
 mod author_ref;
 mod authored;
 mod constructors;
+mod extras;
 mod parse;
 mod relations;
 mod tokens;
 
 pub use authored::AuthoredPost;
+pub use extras::{PostExtras, SourceKind, SourceRef, ToolUse};
 pub use parse::{HASHTAG_SIGIL, WIKILINK_OPEN};
 pub use tokens::{has_rich_markup, is_trailing_punctuation, tokenize_post_body, BodyToken};
 
@@ -47,6 +49,9 @@ pub struct Post {
     pub reposts_count: usize,
     #[serde(default)]
     pub is_reposted: bool,
+    /// Engine metadata (mood, image prompt, tools used, sources); empty for human posts.
+    #[serde(default, skip_serializing_if = "PostExtras::is_empty")]
+    pub extras: PostExtras,
 }
 
 impl Post {

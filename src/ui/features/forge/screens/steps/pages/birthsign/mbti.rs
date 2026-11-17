@@ -56,7 +56,7 @@ impl ForgeView {
             .flex()
             .flex_col()
             .gap(theme.spacing_2xs)
-            .p(theme.spacing_md)
+            .p(theme.card_padding)
             .rounded(theme.radius_lg)
             .bg(theme.bg_callout)
             .border_l(theme.border_width_threadline)

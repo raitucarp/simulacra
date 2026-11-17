@@ -103,9 +103,9 @@ fn navigation_respects_the_kind_and_tracks_progress() {
     assert!(!draft.go_to(ForgeStep::Mind), "personas have no Mind step");
     assert_eq!(draft.step(), ForgeStep::Origin);
     assert!(draft.advance());
-    assert_eq!(draft.step(), ForgeStep::Appearance);
+    assert_eq!(draft.step(), ForgeStep::Embodiment);
     assert!(draft.progress(ForgeStep::Origin).complete);
-    assert!(draft.progress(ForgeStep::Appearance).visited);
+    assert!(draft.progress(ForgeStep::Embodiment).visited);
     assert!(draft.back());
     assert_eq!(draft.step(), ForgeStep::Origin);
     assert!(!draft.back());

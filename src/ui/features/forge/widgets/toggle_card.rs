@@ -71,7 +71,7 @@ impl RenderOnce for ToggleCard {
             .flex()
             .items_center()
             .gap(theme.spacing_md)
-            .p(theme.spacing_md)
+            .p(theme.card_padding)
             .rounded(theme.radius_lg)
             .border(theme.border_width_hairline)
             .border_color(if checked { theme.accent_brand_border } else { theme.border_subtle })

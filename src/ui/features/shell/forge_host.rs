@@ -8,6 +8,7 @@ use crate::state::forge::ForgeKind;
 use crate::state::NavigationTab;
 use crate::ui::features::forge::view::{ForgeContext, ForgeEvent, ForgeOpen, ForgeView, Notice};
 use crate::ui::features::roster::LabMode;
+use crate::ui::features::settings::SettingsTab;
 use crate::ui::illustration::forget_stored_photo;
 use gpui_kit::*;
 use rust_i18n::t;
@@ -27,6 +28,7 @@ impl AppView {
             llm: self.state.llm_settings.clone(),
             guide_hidden: self.state.forge_guide_hidden(),
             prompt: self.prompt_context(&self.state.active_network_id),
+            credentials: self.state.credentials.clone(),
         }
     }
 
@@ -73,6 +75,7 @@ impl AppView {
                 self.commit_forged(forge, (**profile).clone(), (*bring_to_life, *intro_post), window, cx)
             }
             ForgeEvent::ImportPhoto(path) => self.import_forge_photo(forge, path, cx),
+            ForgeEvent::OpenAiSettings => self.open_ai_settings(window, cx),
         }
         cx.notify();
     }
@@ -117,12 +120,22 @@ impl AppView {
         }
     }
 
-    /// Keeps an open forge on the current theme.
+    /// Keeps an open forge on the current theme and the stored credentials.
     pub(super) fn sync_forge_theme(&self, cx: &mut Context<Self>) {
         if let Some(session) = &self.forge {
-            let theme = self.theme.clone();
-            session.view.update(cx, |forge, cx| forge.set_theme(&theme, cx));
+            let (theme, credentials) = (self.theme.clone(), self.state.credentials.clone());
+            session.view.update(cx, |forge, cx| {
+                forge.set_theme(&theme, cx);
+                forge.set_credentials(&credentials, cx);
+            });
         }
+    }
+
+    /// Opens the settings modal on its AI tab (credentials), keeping the forge underneath.
+    fn open_ai_settings(&mut self, window: &mut Window, cx: &mut Context<Self>) {
+        self.revert_settings_draft(window, cx);
+        self.chrome.is_settings_open = true;
+        self.chrome.active_settings_tab = SettingsTab::AiIntelligence;
     }
 }
 

@@ -49,8 +49,19 @@ theme_tokens! {
         // Root (rem) size handed to gpui-component, whose widgets size their text in rems
         font_size_root,
         // Micro-Spacing Tokens
-        spacing_3xs, spacing_2xs, spacing_px3, spacing_xs, spacing_sm, spacing_md, spacing_lg,
+        spacing_3xs, spacing_2xs, spacing_xs, spacing_sm, spacing_md, spacing_lg,
         spacing_xl, spacing_2xl,
+        // Semantic layout spacing: roles mapped onto the spacing grid, so they follow density
+        #[doc = "Content inset of a panel: Forge stage, options and gallery, settings, vault, roster overview, Mind Graph, dialogs."] panel_padding,
+        #[doc = "Inset of narrow rails and sidebars whose rows carry their own padding (shell sidebars, Forge rail, roster list)."] panel_padding_compact,
+        #[doc = "Gap between sections or cards stacked in a panel; pairs with `panel_padding`."] section_gap,
+        #[doc = "Gap between blocks stacked inside a section, card or sidebar (heading, hint, controls)."] stack_gap,
+        #[doc = "Gap between an icon and its label and other tight inline pairs."] inline_gap,
+        #[doc = "Inset of a card or tile surface; pairs with `stack_gap` inside it."] card_padding,
+        #[doc = "Gap between adjacent controls: buttons in a toolbar, chips in a strip, field and button."] control_gap,
+        #[doc = "Height of the blank line between paragraphs of post prose."] paragraph_break_height,
+        // Indicator dots, the chip dismiss button and the cadence heatmap month row
+        dot_size_xs, dot_size_sm, chip_dismiss_size, heatmap_month_row_height,
         // Radii Tokens
         radius_xs, radius_sm, radius_md, radius_lg, radius_xl, radius_full,
         // Border Widths
@@ -73,7 +84,7 @@ theme_tokens! {
         config_tab_height, trait_bar_height, prompt_preview_height,
         // Dense chrome ramps (type-scaled text and icons, density-scaled half steps)
         font_size_micro, font_size_hint, font_size_label, icon_size_xs, icon_size_sm, icon_size_md,
-        icon_size_lg, icon_size_xl, icon_size_2xl, spacing_xs_plus, spacing_sm_plus, spacing_md_plus,
+        icon_size_lg, icon_size_xl, icon_size_2xl, spacing_xs_plus, spacing_sm_plus,
         // Shell columns, sidebars, popovers, indicators and window-control corners
         left_sidebar_collapsed_width, left_sidebar_collapsed_min, left_sidebar_collapsed_max,
         left_sidebar_expanded_width, left_sidebar_expanded_min, left_sidebar_expanded_max,
@@ -82,6 +93,12 @@ theme_tokens! {
         nav_active_dot_size, workspace_dot_size, workspace_badge_size, workspace_trigger_height,
         workspace_popover_width, language_popover_right, language_popover_width, win_control_radius,
         avatar_initial_small_max, avatar_initial_medium_max,
+        // Window restore size, resizable panel ranges, splitter hit band and the splash screen
+        window_default_width, window_default_height, splitter_hit_padding, split_flex_min,
+        forge_rail_min, forge_rail_max, forge_options_min, forge_options_max, forge_preview_min,
+        forge_preview_max, contact_list_pane_min, contact_list_pane_max, modal_rail_min,
+        modal_rail_max, graph_details_height, graph_details_min, graph_details_max,
+        splash_brand_width, splash_guide_size, splash_progress_width, splash_progress_height,
         // Settings modal and its appearance editor
         settings_header_height, settings_input_height, settings_provider_button_height,
         settings_brand_badge_size, settings_tab_indicator_width, settings_tab_indicator_height,
@@ -99,15 +116,23 @@ theme_tokens! {
         forge_clock_size, forge_clock_ring_width, forge_week_cell_height, forge_heart_size,
         // Agent Forge: hour labels inside the clock ring, keyboard-hint key caps
         forge_clock_label_size, forge_key_cap_min_width,
+        // Agent Forge: palette gallery category tabs and the step palette strip
+        forge_palette_tab_icon_width, forge_palette_chip_width, forge_palette_search_width,
         // First-run welcome overlay
         onboarding_width, onboarding_art_size,
+        // Agent Forge Engine step: the "Test image" result and the sample-answer editor
+        forge_probe_image_size, forge_sample_height,
     ],
     // Typography Hierarchy & Line Height; heatmap level opacities; graph dimming & curvature
     floats: [
         line_height_body, cadence_alpha_1, cadence_alpha_2, cadence_alpha_3, cadence_alpha_4,
         graph_dim_opacity, graph_curve_bend,
+        // Splash screen: shortest time on screen and fade into the shell (milliseconds)
+        splash_min_duration_ms, splash_fade_duration_ms,
         // Agent Forge: opacity of disabled option cards and of the stage backdrop art
         forge_disabled_opacity, forge_backdrop_opacity,
+        // Feed: tools a post's author tried that failed
+        post_failed_tool_opacity,
     ],
 }
 

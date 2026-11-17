@@ -48,7 +48,7 @@ impl ForgeView {
                 .flex()
                 .items_center()
                 .gap(theme.spacing_sm)
-                .px(theme.spacing_lg)
+                .px(theme.panel_padding)
                 .py(theme.spacing_sm)
                 .border_t(theme.border_width_hairline)
                 .border_color(theme.border_strong)

@@ -6,7 +6,9 @@
 //! - raw color literals: `rgb(0x..)`, `rgba(0x..)`, `hsla(<number>..)`;
 //! - Tailwind-style size utilities such as `.text_xs()`, `.p_2()`, `.gap_1p5()`,
 //!   `.rounded_md()`, `.w_4()`, `.size_3()` or `.border_1()` (zero steps like `.min_w_0()` and
-//!   layout utilities like `.w_full()` are fine).
+//!   layout utilities like `.w_full()` are fine);
+//! - a `spacing_*` step passed to a size call (`.w(`, `.h(`, `.size(`, `.min_w(`, `.min_h(`,
+//!   `.max_w(`, `.max_h(`): spacing is for padding and gaps, sizes take a size token.
 //!
 //! Computed geometry (`px(x * zoom)`) and `Pixels::ZERO` are allowed.
 
@@ -20,6 +22,10 @@ const PENDING_CLEANUP: &[&str] = &[];
 const LITERAL_CALLS: &[&str] = &["px(", "rems(", "relative(", "hsla("];
 /// Calls that must never receive a hex color literal.
 const HEX_CALLS: &[&str] = &["rgb(0x", "rgba(0x"];
+/// Size calls whose argument must be a size token, never a step of the spacing grid.
+const SIZE_CALLS: &[&str] = &[".w(", ".h(", ".size(", ".min_w(", ".min_h(", ".max_w(", ".max_h("];
+/// Prefix of the spacing grid tokens (`spacing_sm`, `spacing_xs_plus`, ...).
+const SPACING_TOKEN: &str = "spacing_";
 /// Tailwind text sizes, corner sizes and corner sides.
 const TEXT_SIZES: &[&str] = &["xs", "sm", "base", "lg", "xl", "2xl", "3xl"];
 const CORNER_SIZES: &[&str] = &["xs", "sm", "md", "lg", "xl", "2xl", "3xl", "full"];
@@ -81,6 +87,31 @@ fn starts_with_number(rest: &str) -> bool {
     rest.starts_with(|c: char| c.is_ascii_digit()) || rest.starts_with('.')
 }
 
+/// The argument of a call whose opening parenthesis ends just before `rest` (to the line end
+/// when the call continues on the next line).
+fn call_argument(rest: &str) -> &str {
+    let mut depth = 0usize;
+    for (at, c) in rest.char_indices() {
+        match c {
+            '(' => depth += 1,
+            ')' if depth == 0 => return &rest[..at],
+            ')' => depth -= 1,
+            _ => {}
+        }
+    }
+    rest
+}
+
+/// Size calls in one line of code that are handed a spacing token.
+fn spacing_as_size(code: &str) -> Vec<String> {
+    SIZE_CALLS
+        .iter()
+        .flat_map(|call| code.match_indices(call).map(move |(at, _)| (call, &code[at + call.len()..])))
+        .filter(|(_, rest)| call_argument(rest).contains(SPACING_TOKEN))
+        .map(|(call, _)| format!("{call}<spacing token>)"))
+        .collect()
+}
+
 /// Every offending snippet in one line of code.
 fn line_violations(code: &str) -> Vec<String> {
     let mut found = Vec::new();
@@ -100,6 +131,7 @@ fn line_violations(code: &str) -> Vec<String> {
             found.push(format!(".{}()", &head[start..]));
         }
     }
+    found.extend(spacing_as_size(code));
     found
 }
 
@@ -135,7 +167,8 @@ fn guard_flags_literals_and_utilities() {
         ".w(px(48.0))", ".h(px( 3.))", "px(-1.0)", ".line_height(rems(1.2))", "rgb(0x101010)",
         "rgba(0xffffff0a)", "hsla(0.5, 0.2, 0.1, 1.0)", ".text_xs()", ".p_2()", ".px_2p5()",
         ".gap_0p5()", ".rounded_md()", ".rounded_t_lg()", ".w_4()", ".size_3()", ".border_1()",
-        ".border_b_1()", ".min_w_6()", ".gap_x_2()",
+        ".border_b_1()", ".min_w_6()", ".gap_x_2()", ".w(theme.spacing_sm)", ".h(self.theme.spacing_xs)",
+        ".size(theme.spacing_md * 2.0)", ".min_h(max(theme.spacing_lg, theme.avatar_size_sm))", ".max_w(p.spacing_xl)",
     ];
     for code in bad {
         assert!(!line_violations(code).is_empty(), "missed {code}");
@@ -144,6 +177,8 @@ fn guard_flags_literals_and_utilities() {
         ".w(theme.forge_rail_width)", "px(x * zoom)", "px(r)", ".min_w_0()", ".inset_0()",
         ".w_full()", ".size_full()", ".flex_1()", ".px(theme.spacing_sm)", ".text_size(theme.font_size_xs)",
         ".rounded(theme.radius_full)", "Pixels::ZERO", ".border(theme.border_width_hairline)",
+        ".w(theme.dot_size_sm).gap(theme.spacing_xs)", ".text_size(theme.font_size_sm)", ".max_h(theme.post_image_max_height)",
+        ".p(theme.panel_padding).h(theme.feed_header_height)",
     ];
     for code in good {
         assert!(line_violations(code).is_empty(), "false positive on {code}: {:?}", line_violations(code));

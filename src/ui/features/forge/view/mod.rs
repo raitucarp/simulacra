@@ -7,20 +7,23 @@ mod actions;
 mod begin;
 mod describe;
 mod dismiss;
+mod engine;
+mod engine_probe;
 mod handle;
 mod hear;
 mod keys;
 mod lifecycle;
 mod state;
 
+pub use engine::{CallReply, EngineUi, Probe};
 pub use handle::ForgeHandle;
 pub use hear::HearStatus;
 pub use keys::{init_key_bindings, Dismiss, Redo, Undo, FORGE_KEY_CONTEXT};
 pub use state::{DescribeStatus, ForgeContext, ForgeOpen, ForgeScreen, GuideState, Notice, StartState};
 
-use crate::domain::portrait::PortraitSlot;
-use crate::domain::{ArchetypeClass, Profile};
-use crate::state::forge::{AgentDraft, ValidationIssue};
+use crate::domain::portrait::{FormSlot, PortraitSlot};
+use crate::domain::{Palette, Profile};
+use crate::state::forge::{draft_palette, AgentDraft, ValidationIssue};
 use crate::theme::ThemeTokens;
 use crate::ui::features::forge::logic::AutosavePolicy;
 use gpui_kit::*;
@@ -41,6 +44,8 @@ pub enum ForgeEvent {
     GuideHidden(bool),
     /// Import this image as the draft's photo avatar, then call [`ForgeView::apply_avatar`].
     ImportPhoto(PathBuf),
+    /// Show Settings › AI (where credentials are stored) over the forge.
+    OpenAiSettings,
 }
 
 /// The Agent Forge entity.
@@ -60,19 +65,25 @@ pub struct ForgeView {
     pub(crate) notice: Option<Notice>,
     /// The portrait part whose options the Appearance step shows.
     pub(crate) portrait_slot: PortraitSlot,
+    /// The form part whose options the Appearance step shows for non-human bodies.
+    pub(crate) form_slot: FormSlot,
     /// "Hear them speak" on the Voice step.
     pub(crate) hear: HearStatus,
     /// Whether the Grimoire's advanced settings are unfolded.
     pub(crate) grimoire_open: bool,
+    /// The Engine step's open section, sample answer and probes.
+    pub(crate) engine: EngineUi,
+    /// The step palette hovered in the current step's palette strip (its changes preview).
+    pub(crate) strip_preview: Option<&'static Palette>,
     pub(crate) focus: FocusHandle,
 }
 
 impl EventEmitter<ForgeEvent> for ForgeView {}
 
 impl ForgeView {
-    /// The class the draft was started from (stored on its config), shown on the nameplate.
-    pub(crate) fn class(&self) -> Option<ArchetypeClass> {
-        self.draft.profile().config.archetype_class
+    /// The full palette (or class) the draft was started from, shown on the nameplate.
+    pub(crate) fn palette(&self) -> Option<&'static Palette> {
+        draft_palette(&self.draft)
     }
 }
 

@@ -6,6 +6,8 @@ pub(super) const PROVIDERS_PER_ROW: usize = 3;
 
 pub(super) const BACKDROP_ID: &str = "settings-modal-backdrop";
 pub(super) const DIALOG_ID: &str = "settings-modal-dialog";
+/// Layout id of the rail | content split (sizes persist).
+pub(super) const SPLIT_ID: &str = "settings-modal-split";
 pub(super) const CLOSE_BUTTON_ID: &str = "btn-close-settings-x";
 pub(super) const CANCEL_BUTTON_ID: &str = "btn-cancel-settings";
 pub(super) const SAVE_BUTTON_ID: &str = "btn-save-settings";

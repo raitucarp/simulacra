@@ -11,7 +11,9 @@ const PARENT_NAME: &str = "Spinoza";
 const PARENT_HANDLE: &str = "@spinoza";
 const PARENT_POST_ID: &str = "post_7";
 const PARENT_CONTENT: &str = "God or Nature.";
-const EVERY_PLACEHOLDER_TEMPLATE: &str = "{{name}}|{{handle}}|{{description}}|{{gender}}|{{pronouns}}|{{bio}}|{{hobbies}}|{{mbti}}|{{enneagram}}\n{{identity}}\n{{psychology}}\n{{intelligence}}\n{{linguistics}}\n{{diction}}|{{grammar}}|{{language}}|{{typing_style}}\n{{schedule}}\n{{mention_attitude}}|{{network_context}}|{{directive}}";
+const EVERY_PLACEHOLDER_TEMPLATE: &str = "{{name}}|{{handle}}|{{description}}|{{gender}}|{{pronouns}}|{{bio}}|{{hobbies}}|{{mbti}}|{{enneagram}}\n{{identity}}\n{{psychology}}\n{{intelligence}}\n{{linguistics}}\n{{diction}}|{{grammar}}|{{language}}|{{typing_style}}\n{{schedule}}\n{{mention_attitude}}|{{network_context}}|{{directive}}
+{{embodiment}}
+{{rhetoric}}";
 
 fn seeded() -> Profile {
     let mut prof = Profile::new_agent("agent_golden", "Sokrates of Alopece", "sokrates", "Classical Philosopher");
@@ -80,4 +82,31 @@ fn every_listed_template_placeholder_is_expanded() {
         assert!(!prompt.contains(placeholder), "{placeholder} was not expanded");
         assert!(placeholder == super::ALL_AGENT_INFO_PLACEHOLDER || EVERY_PLACEHOLDER_TEMPLATE.contains(placeholder));
     }
+}
+
+/// The seeded thinker as a dented tin can that likes paradox, mini-threads and seafaring words.
+fn tin_can() -> Profile {
+    let mut p = seeded();
+    p.config.embodiment = Embodiment::natural(BodyForm::TinCan);
+    p.config.rhetoric.rhetorical_devices = OptionSet::new([RhetoricalDevice::Paradox, RhetoricalDevice::Irony]);
+    p.config.rhetoric.post_format = PostFormat::Thread;
+    p.config.rhetoric.lexical_fields = OptionSet::new([LexicalField::Seafaring]);
+    p
+}
+
+#[test]
+fn a_tin_can_speaks_from_inside_its_form() {
+    let p = tin_can();
+    let prompt = p.config.assemble_system_prompt(&p, NETWORK, &docs());
+    assert_eq!(prompt, golden(include_str!("golden/system_tin_can.txt")));
+    let reply = p.config.assemble_user_prompt(&p, PARENT_NAME, PARENT_HANDLE, PARENT_POST_ID, PARENT_CONTENT, false);
+    assert!(reply.contains("Compose your authentic response as"));
+}
+
+#[test]
+fn people_get_no_embodiment_section() {
+    let p = seeded();
+    assert!(p.config.format_embodiment_section().is_empty());
+    let prompt = p.config.assemble_system_prompt(&p, NETWORK, &docs());
+    assert!(!prompt.contains("[EMBODIMENT") && prompt.contains("[RHETORIC, STYLE, SEMIOTICS & POST STRUCTURE]"));
 }

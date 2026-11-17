@@ -2,8 +2,13 @@
 
 mod appearance;
 mod attributes;
+mod avatar_kind;
 mod birthsign;
 mod daily;
+mod embodiment;
+mod engine;
+mod form_editor;
+mod form_options;
 mod grimoire;
 mod origin;
 mod origin_life;
@@ -13,17 +18,20 @@ mod psyche;
 mod relationships;
 mod review;
 mod review_card;
+mod rhetoric;
 mod trait_block;
 mod voice;
 
 use super::super::common::{labeled, message};
-use crate::state::forge::{DraftEdit, Severity, TextField, ValidationIssue};
-use crate::ui::features::forge::text::tr_with;
+use crate::state::forge::{DraftEdit, IssueKind, Severity, TextField, ValidationIssue, ARG_VALUE};
+use crate::ui::features::forge::text::{tr, tr_with};
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
 use crate::ui::features::forge::widgets::ForgeTextInput;
 use gpui_kit::*;
 
 const TEXT_ID_PREFIX: &str = "forge-text";
+/// Shown in place of a custom tool's name while it is still blank.
+const UNNAMED_TOOL_KEY: &str = "forge.issue.unnamed_tool";
 /// Rows (min, max) of long free-text fields.
 const LONG_TEXT_ROWS: (usize, usize) = (3, 8);
 /// Free-text fields edited in a multi-line area.
@@ -37,8 +45,17 @@ const LONG_TEXT_FIELDS: [TextField; 5] = [
 
 /// The translated message of a validation issue, with its arguments filled in.
 pub(super) fn issue_text(issue: &ValidationIssue) -> String {
-    let args: Vec<(&str, String)> = issue.args.iter().map(|(name, value)| (*name, value.clone())).collect();
-    tr_with(&issue.message_key(), &args)
+    tr_with(&issue.message_key(), &issue_args(issue, &tr(UNNAMED_TOOL_KEY)))
+}
+
+/// The arguments of `issue`, with a blank custom tool name shown as `unnamed`.
+pub(super) fn issue_args(issue: &ValidationIssue, unnamed: &str) -> Vec<(&'static str, String)> {
+    let names_tool = matches!(issue.kind, IssueKind::EngineToolName | IssueKind::EngineToolParams);
+    let shown = |name: &str, value: &str| match names_tool && name == ARG_VALUE && value.trim().is_empty() {
+        true => unnamed.to_string(),
+        false => value.to_string(),
+    };
+    issue.args.iter().map(|(name, value)| (*name, shown(name, value))).collect()
 }
 
 impl ForgeView {

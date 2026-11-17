@@ -1,14 +1,14 @@
 //! The eight playable thinker classes of the Agent Forge.
 //!
-//! Each class is a complete `AgentConfig` preset embedded from `assets/archetypes/{key}.json`,
-//! plus curated name suggestions and the Enneagram types that fit it.
+//! Each class is the "Thinkers" palette with its key (`assets/palettes/thinkers/{key}.json`):
+//! a complete `AgentConfig` preset, curated name suggestions and the Enneagram types that fit it.
 
 mod catalog;
 mod legacy;
 mod transfer;
 
 pub use catalog::{ClassPreset, NameSuggestion};
-pub use transfer::{config_changes, ConfigChange, CLASS_PRESERVED_FIELDS};
+pub use transfer::{config_changes, config_changes_in, config_map, ConfigChange, CLASS_PRESERVED_FIELDS};
 
 use crate::domain::trait_option::{TRAIT_ILLUSTRATION_EXT, TRAIT_ILLUSTRATION_ROOT};
 use serde::{Deserialize, Serialize};

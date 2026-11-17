@@ -2,7 +2,7 @@
 
 use super::keys::{Redo, Undo};
 use super::{ForgeEvent, ForgeView};
-use crate::state::forge::{validate, DraftEdit, ForgeKind, ForgeStep, ToggleField};
+use crate::state::forge::{validate_with, DraftEdit, ForgeKind, ForgeStep, ToggleField};
 use crate::ui::features::forge::logic::save_bar_state;
 use crate::ui::features::forge::widgets::close_explainers;
 use gpui_kit::*;
@@ -10,7 +10,7 @@ use gpui_kit::*;
 impl ForgeView {
     /// Re-checks the draft and re-derives which visited steps are complete.
     pub(crate) fn revalidate(&mut self) {
-        self.issues = validate(&self.draft, &self.context.existing);
+        self.issues = validate_with(&self.draft, &self.context.existing, &self.context.credentials);
         self.draft.sync_completion(&self.issues);
     }
 
@@ -30,6 +30,9 @@ impl ForgeView {
 
     /// Bookkeeping after any change to the working copy.
     pub(crate) fn after_change(&mut self, cx: &mut Context<Self>) {
+        if self.notice.as_ref().is_some_and(|notice| notice.is_stale_for(self.draft.profile())) {
+            self.notice = None;
+        }
         self.revalidate();
         self.guide.fresh_step = false;
         if self.autosave.record_edit() {

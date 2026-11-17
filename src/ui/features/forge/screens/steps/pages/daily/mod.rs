@@ -11,7 +11,7 @@ use super::trait_block::explained;
 use crate::agent::schedule::{cadence_rule, peak_window, WeekPreview};
 use crate::domain::agent_config::AgentConfig;
 use crate::domain::HumanChronotype;
-use crate::state::forge::{DraftEdit, HourField, ScoreField, TextField, ToggleField, TraitField};
+use crate::state::forge::{DraftEdit, HourField, ScoreField, TextField, ToggleField, TraitField, TraitSet};
 use crate::ui::features::forge::text::{tr, tr_with};
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
 use crate::ui::features::forge::widgets::{ExplainerButton, HourRangePicker, ToggleCard};
@@ -24,6 +24,9 @@ const PEAK_KEY: &str = "forge.ui.daily.peak";
 const ONLINE_TITLE_KEY: &str = "forge.ui.daily.online_title";
 const RHYTHM_KEY: &str = "forge.ui.daily.rhythm";
 const WEEK_KEY: &str = "forge.ui.daily.week_title";
+const ACTIVE_DAYS_KEY: &str = "forge.ui.daily.active_days_title";
+/// Weekday cards per row until the grid is measured (preset width keeps "Wednesday" whole).
+const DAY_COLUMNS: usize = 4;
 const DAYS_KEY: &str = "forge.ui.daily.days";
 const HOURS_KEY: &str = "forge.ui.daily.hours";
 const ARG_START: &str = "start";
@@ -65,7 +68,7 @@ impl ForgeView {
         div()
             .flex()
             .flex_col()
-            .gap(theme.spacing_lg)
+            .gap(theme.section_gap)
             .child(card(theme).child(heading(tr(BODY_CLOCK_KEY), theme)).child(self.trait_block(TraitField::Chronotype, handle)).child(self.peak_line()))
             .child(self.online_card(handle))
             .child(
@@ -74,6 +77,11 @@ impl ForgeView {
                     .child(self.trait_block(TraitField::PostingCadence, handle))
                     .child(self.score_row(ScoreField::SpontaneityRate, handle)),
             )
+            .child(card(theme).child(heading(tr(ACTIVE_DAYS_KEY), theme)).child(self.trait_set_block(
+                TraitSet::ActiveDays,
+                (DAY_COLUMNS, theme.forge_preset_card_width),
+                handle,
+            )))
             .child(card(theme).child(heading(tr(WEEK_KEY), theme)).child(week::week_strip(&profile.config, self.draft.id(), theme)))
             .child(
                 card(theme)

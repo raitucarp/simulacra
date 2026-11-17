@@ -2,6 +2,7 @@
 
 mod avatars;
 mod cache;
+mod forms;
 mod keys;
 mod preview;
 mod template;

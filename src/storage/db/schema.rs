@@ -51,7 +51,8 @@ const CREATE_TABLES: &str = r#"
                     link_url TEXT,
                     image_path TEXT,
                     reposts_count INTEGER NOT NULL DEFAULT 0,
-                    is_reposted INTEGER NOT NULL DEFAULT 0
+                    is_reposted INTEGER NOT NULL DEFAULT 0,
+                    extras_json TEXT NOT NULL DEFAULT '{}'
                 );
 
                 CREATE TABLE IF NOT EXISTS trending (

@@ -9,7 +9,7 @@ use crate::domain::post::{tokenize_post_body, BodyToken};
 use crate::theme::ThemeTokens;
 use crate::ui::atoms::{render_hashtag_span, render_obsidian_pill};
 use gpui_kit::{
-    div, AnyElement, App, Div, InteractiveElement, IntoElement, MouseButton, ParentElement, Styled, Window,
+    div, AnyElement, App, Div, InteractiveElement, IntoElement, MouseButton, ParentElement, Styled, Window, relative,
 };
 use std::rc::Rc;
 
@@ -23,6 +23,8 @@ pub struct BodyLinks {
     pub on_tag: Option<OpenTextAction>,
     /// Wikilink pill click, with the raw `[[target]]`.
     pub on_wikilink: Option<OpenTextAction>,
+    /// Source chip click (vault document, post, profile or web page an agent drew on).
+    pub on_source: Option<super::extras::OpenSourceAction>,
 }
 
 /// Tokenizes `content` and renders it with inert links (previews, tests, the spark feed).
@@ -39,7 +41,7 @@ pub fn render_body_tokens<L: PostLookup>(
 ) -> AnyElement {
     if let [BodyToken::Text(text)] = tokens {
         if !text.contains(LINE_BREAK) {
-            return body_text(theme).w_full().child(text.clone()).into_any_element();
+            return body_text(theme).w_full().min_w_0().child(text.clone()).into_any_element();
         }
     }
     let mut elements = Vec::with_capacity(tokens.len());
@@ -62,8 +64,8 @@ pub fn render_body_tokens<L: PostLookup>(
         .flex()
         .flex_wrap()
         .items_center()
-        .gap_x(theme.spacing_xs)
-        .gap_y(theme.spacing_2xs)
+        .gap_x(theme.inline_gap)
+        .gap_y_0()
         .children(elements)
         .into_any_element()
 }
@@ -89,6 +91,12 @@ fn body_text(theme: &ThemeTokens) -> Div {
         .font_family(theme.font_family_body.clone())
         .text_size(theme.font_size_md)
         .text_color(theme.text_primary)
+        .line_height(relative(theme.line_height_body))
+}
+
+/// Splits a text line into the words that flow (and wrap) as separate inline items.
+pub(super) fn wrap_units(line: &str) -> impl Iterator<Item = &str> {
+    line.split_whitespace()
 }
 
 /// Wraps an inline element with its trailing punctuation so they never wrap apart.
@@ -111,14 +119,14 @@ fn push_text_lines(text: &str, theme: &ThemeTokens, elements: &mut Vec<AnyElemen
         let clean_line = line.trim_end_matches(CARRIAGE_RETURN);
         if index > 0 {
             let line_break = if clean_line.trim().is_empty() {
-                div().w_full().h(theme.spacing_sm)
+                div().w_full().h(theme.paragraph_break_height)
             } else {
                 div().w_full()
             };
             elements.push(line_break.into_any_element());
         }
-        if !clean_line.is_empty() {
-            elements.push(body_text(theme).child(clean_line.to_string()).into_any_element());
+        for word in wrap_units(clean_line) {
+            elements.push(body_text(theme).min_w_0().child(word.to_string()).into_any_element());
         }
     }
 }

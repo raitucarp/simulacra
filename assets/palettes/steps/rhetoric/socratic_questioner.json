@@ -1,0 +1,19 @@
+{
+  "order": 1,
+  "config": {
+    "rhetorical_mode": "Dialectic",
+    "rhetorical_devices": [
+      "Analogy",
+      "RhetoricalQuestion",
+      "Irony"
+    ],
+    "stylistic_school": "Plain",
+    "semiotic_mode": "Symbolic",
+    "sentence_structure": "Simple",
+    "post_format": "Question",
+    "lexical_fields": [
+      "Mathematics",
+      "Law"
+    ]
+  }
+}

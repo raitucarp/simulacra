@@ -27,7 +27,7 @@ impl ComposerModalView {
         let column = if index == 0 { self.first_post_extras(column) } else { column };
         div()
             .w_full()
-            .px(theme.spacing_lg)
+            .px(theme.panel_padding)
             .pt(theme.spacing_md)
             .flex()
             .gap(theme.spacing_md)

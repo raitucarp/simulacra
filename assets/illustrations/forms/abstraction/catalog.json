@@ -1,0 +1,121 @@
+{
+  "kind": "abstraction",
+  "stack": ["back", "aura", "body", "finish", "markings", "mouth", "eyes", "accessory"],
+  "layers": {
+    "back": {
+      "variants": ["plain", "dawn", "night", "grid", "waves", "studio"],
+      "dir": "shared"
+    },
+    "aura": {
+      "variants": ["none", "orbit", "halo", "sparkles", "ripple"],
+      "bare": [1, 3]
+    },
+    "body": {
+      "variants": ["time", "justice", "number", "silence", "memory", "chance", "love", "entropy"]
+    },
+    "finish": {
+      "variants": ["none", "ethereal", "marble", "ink", "gilded"],
+      "clip": true,
+      "bare": [1, 3]
+    },
+    "markings": {
+      "variants": ["none", "runes", "constellation", "spirals", "fractal"],
+      "clip": true,
+      "bare": [1, 2]
+    },
+    "mouth": {
+      "variants": ["smile", "flat", "open", "grin", "ooh", "wavy", "none"],
+      "dir": "shared",
+      "anchor": true
+    },
+    "eyes": {
+      "variants": ["dot", "round", "happy", "sleepy", "wide", "wink", "glow", "none"],
+      "dir": "shared",
+      "anchor": true
+    },
+    "accessory": {
+      "variants": ["none", "crown", "laurel", "glasses", "quill"],
+      "anchor": true,
+      "bare": [1, 2]
+    }
+  },
+  "primary": [
+    {"key": "aether", "hex": "#9b8cf2"},
+    {"key": "rose", "hex": "#f27aa0"},
+    {"key": "gold", "hex": "#f0c05a"},
+    {"key": "azure", "hex": "#5aa9f0"},
+    {"key": "jade", "hex": "#5cc79a"},
+    {"key": "ink", "hex": "#34324a"},
+    {"key": "pearl", "hex": "#ece9f5"},
+    {"key": "flame", "hex": "#f07a4a"}
+  ],
+  "secondary": [
+    {"key": "silver", "hex": "#c9ccd6"},
+    {"key": "violet", "hex": "#7b5ce0"},
+    {"key": "cream", "hex": "#f6ecd2"},
+    {"key": "teal", "hex": "#3fb5b0"},
+    {"key": "crimson", "hex": "#d14b5a"},
+    {"key": "midnight", "hex": "#22244a"},
+    {"key": "peach", "hex": "#f6b38e"},
+    {"key": "lime", "hex": "#b5e05a"}
+  ],
+  "forms": {
+    "time": {
+      "anchor": [0, -40, 0.8],
+      "prefer": {
+        "primary": ["azure", "pearl", "aether"],
+        "secondary": ["cream", "peach"]
+      }
+    },
+    "justice": {
+      "anchor": [0, -14, 0.85],
+      "prefer": {
+        "primary": ["gold", "pearl"],
+        "secondary": ["silver", "midnight"]
+      }
+    },
+    "number": {
+      "anchor": [2, 14, 0.7],
+      "prefer": {
+        "primary": ["azure", "aether", "jade", "flame"],
+        "secondary": ["violet", "teal", "peach"]
+      }
+    },
+    "silence": {
+      "anchor": [0, -14, 1],
+      "prefer": {
+        "mouth": ["none", "flat"],
+        "primary": ["pearl", "aether", "ink"],
+        "secondary": ["silver", "violet"]
+      }
+    },
+    "memory": {
+      "anchor": [0, 4, 0.95],
+      "prefer": {
+        "primary": ["rose", "aether", "pearl"],
+        "secondary": ["violet", "crimson"]
+      }
+    },
+    "chance": {
+      "anchor": [-16, 22, 0.82],
+      "prefer": {
+        "primary": ["pearl", "flame", "jade"],
+        "secondary": ["midnight", "crimson"]
+      }
+    },
+    "love": {
+      "anchor": [0, -2, 1],
+      "prefer": {
+        "primary": ["rose", "flame"],
+        "secondary": ["crimson", "peach"]
+      }
+    },
+    "entropy": {
+      "anchor": [-14, 0, 1],
+      "prefer": {
+        "primary": ["ink", "aether", "azure"],
+        "secondary": ["teal", "lime", "peach"]
+      }
+    }
+  }
+}

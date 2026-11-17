@@ -6,6 +6,8 @@
 //! - [`CardGrid`]: any selectable cells as one tab stop with an arrow-key cursor;
 //!   [`IllustratedOptionGrid`] fills it with the cards of a `TraitOption`, and
 //!   [`trait_option_grid`] does the same for a runtime [`TraitField`](crate::state::forge::TraitField).
+//! - [`MultiSelectGrid`]: toggleable illustrated cards for a multi-select (`OptionSet`);
+//!   [`trait_set_grid`] for a runtime [`TraitSet`](crate::state::forge::TraitSet).
 //! - [`KeyboardStop`]: tab stop + theme focus ring + Enter / Space for custom controls.
 //! - [`ScoreSlider`]: kit slider for a `ScoreField`, with level name and budget clamp.
 //! - [`NumberSlider`]: a labeled slider over any whole-number range (age, photo zoom).
@@ -22,6 +24,7 @@ mod focus_ring;
 mod grid_cell;
 mod hour_range;
 mod keyboard_hint;
+mod multi_grid;
 mod number_slider;
 mod option_card;
 mod option_grid;
@@ -38,6 +41,7 @@ pub use explainer_card::Explainer;
 pub use focus_ring::{focus_ring_shadow, is_activation, KeyboardStop};
 pub use hour_range::{hour_keys, HourRangePicker};
 pub use keyboard_hint::KeyboardHint;
+pub use multi_grid::{trait_set_grid, MultiSelectGrid};
 pub use number_slider::{NumberSlider, ValueFormat};
 pub use option_card::{option_card, OptionCardSpec};
 pub use option_grid::{IllustratedOptionGrid, GRID_COLUMNS};

@@ -8,7 +8,7 @@ use gpui_kit::*;
 pub(super) fn render_reply_context(parent: &AuthoredPost, theme: &ThemeTokens) -> Div {
     div()
         .w_full()
-        .px(theme.spacing_lg)
+        .px(theme.panel_padding)
         .pt(theme.spacing_md)
         .flex()
         .gap(theme.spacing_md)

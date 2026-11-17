@@ -105,7 +105,33 @@
         "inject_intelligence_profile": true,
         "inject_linguistic_stylistics": true,
         "inject_social_and_schedule": true,
-        "inject_network_grounding": true
+        "inject_network_grounding": true,
+        "body_kind": "Human",
+        "form": "Person",
+        "material": "Flesh",
+        "scale": "HumanSized",
+        "temporality": "Days",
+        "perception": "HumanSenses",
+        "mobility": "Walking",
+        "anthropomorphism": "Full",
+        "relation_to_humans": "Kin",
+        "withdrawal": "Open",
+        "rhetorical_mode": "Dialectic",
+        "rhetorical_devices": [],
+        "stylistic_school": "Plain",
+        "semiotic_mode": "Symbolic",
+        "sentence_structure": "Complex",
+        "post_format": "SinglePost",
+        "lexical_fields": [],
+        "active_days": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
+        ]
       }
     },
     {
@@ -184,7 +210,33 @@
         "inject_intelligence_profile": true,
         "inject_linguistic_stylistics": true,
         "inject_social_and_schedule": true,
-        "inject_network_grounding": true
+        "inject_network_grounding": true,
+        "body_kind": "Human",
+        "form": "Person",
+        "material": "Flesh",
+        "scale": "HumanSized",
+        "temporality": "Days",
+        "perception": "HumanSenses",
+        "mobility": "Walking",
+        "anthropomorphism": "Full",
+        "relation_to_humans": "Kin",
+        "withdrawal": "Open",
+        "rhetorical_mode": "Dialectic",
+        "rhetorical_devices": [],
+        "stylistic_school": "Plain",
+        "semiotic_mode": "Symbolic",
+        "sentence_structure": "Complex",
+        "post_format": "SinglePost",
+        "lexical_fields": [],
+        "active_days": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
+        ]
       }
     },
     {
@@ -263,7 +315,33 @@
         "inject_intelligence_profile": true,
         "inject_linguistic_stylistics": true,
         "inject_social_and_schedule": true,
-        "inject_network_grounding": true
+        "inject_network_grounding": true,
+        "body_kind": "Human",
+        "form": "Person",
+        "material": "Flesh",
+        "scale": "HumanSized",
+        "temporality": "Days",
+        "perception": "HumanSenses",
+        "mobility": "Walking",
+        "anthropomorphism": "Full",
+        "relation_to_humans": "Kin",
+        "withdrawal": "Open",
+        "rhetorical_mode": "Dialectic",
+        "rhetorical_devices": [],
+        "stylistic_school": "Plain",
+        "semiotic_mode": "Symbolic",
+        "sentence_structure": "Complex",
+        "post_format": "SinglePost",
+        "lexical_fields": [],
+        "active_days": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
+        ]
       }
     },
     {
@@ -342,7 +420,33 @@
         "inject_intelligence_profile": true,
         "inject_linguistic_stylistics": true,
         "inject_social_and_schedule": true,
-        "inject_network_grounding": true
+        "inject_network_grounding": true,
+        "body_kind": "Human",
+        "form": "Person",
+        "material": "Flesh",
+        "scale": "HumanSized",
+        "temporality": "Days",
+        "perception": "HumanSenses",
+        "mobility": "Walking",
+        "anthropomorphism": "Full",
+        "relation_to_humans": "Kin",
+        "withdrawal": "Open",
+        "rhetorical_mode": "Dialectic",
+        "rhetorical_devices": [],
+        "stylistic_school": "Plain",
+        "semiotic_mode": "Symbolic",
+        "sentence_structure": "Complex",
+        "post_format": "SinglePost",
+        "lexical_fields": [],
+        "active_days": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
+        ]
       }
     },
     {
@@ -425,7 +529,33 @@
         "inject_intelligence_profile": true,
         "inject_linguistic_stylistics": true,
         "inject_social_and_schedule": true,
-        "inject_network_grounding": true
+        "inject_network_grounding": true,
+        "body_kind": "Human",
+        "form": "Person",
+        "material": "Flesh",
+        "scale": "HumanSized",
+        "temporality": "Days",
+        "perception": "HumanSenses",
+        "mobility": "Walking",
+        "anthropomorphism": "Full",
+        "relation_to_humans": "Kin",
+        "withdrawal": "Open",
+        "rhetorical_mode": "Dialectic",
+        "rhetorical_devices": [],
+        "stylistic_school": "Plain",
+        "semiotic_mode": "Symbolic",
+        "sentence_structure": "Complex",
+        "post_format": "SinglePost",
+        "lexical_fields": [],
+        "active_days": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
+        ]
       }
     },
     {
@@ -508,7 +638,33 @@
         "inject_intelligence_profile": true,
         "inject_linguistic_stylistics": true,
         "inject_social_and_schedule": true,
-        "inject_network_grounding": true
+        "inject_network_grounding": true,
+        "body_kind": "Human",
+        "form": "Person",
+        "material": "Flesh",
+        "scale": "HumanSized",
+        "temporality": "Days",
+        "perception": "HumanSenses",
+        "mobility": "Walking",
+        "anthropomorphism": "Full",
+        "relation_to_humans": "Kin",
+        "withdrawal": "Open",
+        "rhetorical_mode": "Dialectic",
+        "rhetorical_devices": [],
+        "stylistic_school": "Plain",
+        "semiotic_mode": "Symbolic",
+        "sentence_structure": "Complex",
+        "post_format": "SinglePost",
+        "lexical_fields": [],
+        "active_days": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
+        ]
       }
     },
     {
@@ -591,7 +747,33 @@
         "inject_intelligence_profile": true,
         "inject_linguistic_stylistics": true,
         "inject_social_and_schedule": true,
-        "inject_network_grounding": true
+        "inject_network_grounding": true,
+        "body_kind": "Human",
+        "form": "Person",
+        "material": "Flesh",
+        "scale": "HumanSized",
+        "temporality": "Days",
+        "perception": "HumanSenses",
+        "mobility": "Walking",
+        "anthropomorphism": "Full",
+        "relation_to_humans": "Kin",
+        "withdrawal": "Open",
+        "rhetorical_mode": "Dialectic",
+        "rhetorical_devices": [],
+        "stylistic_school": "Plain",
+        "semiotic_mode": "Symbolic",
+        "sentence_structure": "Complex",
+        "post_format": "SinglePost",
+        "lexical_fields": [],
+        "active_days": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
+        ]
       }
     },
     {
@@ -674,7 +856,33 @@
         "inject_intelligence_profile": true,
         "inject_linguistic_stylistics": true,
         "inject_social_and_schedule": true,
-        "inject_network_grounding": true
+        "inject_network_grounding": true,
+        "body_kind": "Human",
+        "form": "Person",
+        "material": "Flesh",
+        "scale": "HumanSized",
+        "temporality": "Days",
+        "perception": "HumanSenses",
+        "mobility": "Walking",
+        "anthropomorphism": "Full",
+        "relation_to_humans": "Kin",
+        "withdrawal": "Open",
+        "rhetorical_mode": "Dialectic",
+        "rhetorical_devices": [],
+        "stylistic_school": "Plain",
+        "semiotic_mode": "Symbolic",
+        "sentence_structure": "Complex",
+        "post_format": "SinglePost",
+        "lexical_fields": [],
+        "active_days": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
+        ]
       }
     },
     {
@@ -757,7 +965,33 @@
         "inject_intelligence_profile": true,
         "inject_linguistic_stylistics": true,
         "inject_social_and_schedule": true,
-        "inject_network_grounding": true
+        "inject_network_grounding": true,
+        "body_kind": "Human",
+        "form": "Person",
+        "material": "Flesh",
+        "scale": "HumanSized",
+        "temporality": "Days",
+        "perception": "HumanSenses",
+        "mobility": "Walking",
+        "anthropomorphism": "Full",
+        "relation_to_humans": "Kin",
+        "withdrawal": "Open",
+        "rhetorical_mode": "Dialectic",
+        "rhetorical_devices": [],
+        "stylistic_school": "Plain",
+        "semiotic_mode": "Symbolic",
+        "sentence_structure": "Complex",
+        "post_format": "SinglePost",
+        "lexical_fields": [],
+        "active_days": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
+        ]
       }
     },
     {
@@ -840,7 +1074,33 @@
         "inject_intelligence_profile": true,
         "inject_linguistic_stylistics": true,
         "inject_social_and_schedule": true,
-        "inject_network_grounding": true
+        "inject_network_grounding": true,
+        "body_kind": "Human",
+        "form": "Person",
+        "material": "Flesh",
+        "scale": "HumanSized",
+        "temporality": "Days",
+        "perception": "HumanSenses",
+        "mobility": "Walking",
+        "anthropomorphism": "Full",
+        "relation_to_humans": "Kin",
+        "withdrawal": "Open",
+        "rhetorical_mode": "Dialectic",
+        "rhetorical_devices": [],
+        "stylistic_school": "Plain",
+        "semiotic_mode": "Symbolic",
+        "sentence_structure": "Complex",
+        "post_format": "SinglePost",
+        "lexical_fields": [],
+        "active_days": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
+        ]
       }
     },
     {
@@ -923,7 +1183,33 @@
         "inject_intelligence_profile": true,
         "inject_linguistic_stylistics": true,
         "inject_social_and_schedule": true,
-        "inject_network_grounding": true
+        "inject_network_grounding": true,
+        "body_kind": "Human",
+        "form": "Person",
+        "material": "Flesh",
+        "scale": "HumanSized",
+        "temporality": "Days",
+        "perception": "HumanSenses",
+        "mobility": "Walking",
+        "anthropomorphism": "Full",
+        "relation_to_humans": "Kin",
+        "withdrawal": "Open",
+        "rhetorical_mode": "Dialectic",
+        "rhetorical_devices": [],
+        "stylistic_school": "Plain",
+        "semiotic_mode": "Symbolic",
+        "sentence_structure": "Complex",
+        "post_format": "SinglePost",
+        "lexical_fields": [],
+        "active_days": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
+        ]
       }
     },
     {
@@ -1006,7 +1292,33 @@
         "inject_intelligence_profile": true,
         "inject_linguistic_stylistics": true,
         "inject_social_and_schedule": true,
-        "inject_network_grounding": true
+        "inject_network_grounding": true,
+        "body_kind": "Human",
+        "form": "Person",
+        "material": "Flesh",
+        "scale": "HumanSized",
+        "temporality": "Days",
+        "perception": "HumanSenses",
+        "mobility": "Walking",
+        "anthropomorphism": "Full",
+        "relation_to_humans": "Kin",
+        "withdrawal": "Open",
+        "rhetorical_mode": "Dialectic",
+        "rhetorical_devices": [],
+        "stylistic_school": "Plain",
+        "semiotic_mode": "Symbolic",
+        "sentence_structure": "Complex",
+        "post_format": "SinglePost",
+        "lexical_fields": [],
+        "active_days": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
+        ]
       }
     }
   ],

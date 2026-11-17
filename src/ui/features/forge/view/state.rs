@@ -1,8 +1,9 @@
 //! Plain state records of the forge: what it was opened with, which screen shows, the start
 //! screen, Mnemo, and the transient notice.
 
+use crate::agent::credentials::CredentialStore;
 use crate::agent::{LlmSettings, PromptContext};
-use crate::domain::{ArchetypeClass, NetworkId, Profile};
+use crate::domain::{ArchetypeClass, NetworkId, Palette, PaletteCategory, Profile};
 use crate::state::forge::{AgentDraft, ForgeKind};
 
 /// Everything the forge needs to know about the rest of the app, captured when it opens.
@@ -18,6 +19,8 @@ pub struct ForgeContext {
     pub guide_hidden: bool,
     /// The active network's name and grounding sources, for compiled-prompt previews.
     pub prompt: PromptContext,
+    /// Stored keys, for the Engine step's pickers, readiness badges and probes.
+    pub credentials: CredentialStore,
 }
 
 /// How the forge was opened.
@@ -66,12 +69,16 @@ pub enum DescribeStatus {
     Failed(String),
 }
 
-/// State of the "choose your class" screen.
+/// State of the "choose a palette" screen.
 #[derive(Debug, Clone)]
 pub struct StartState {
     pub kind: ForgeKind,
-    /// Class whose preview shows (hovered or clicked).
-    pub preview: Option<ArchetypeClass>,
+    /// Palette whose preview shows (hovered or clicked).
+    pub preview: Option<&'static Palette>,
+    /// Gallery shelf shown (`None`: every category).
+    pub category: Option<PaletteCategory>,
+    /// Gallery search text.
+    pub search: String,
     /// The class of the last dice roll, while its result shows.
     pub rolled: Option<ArchetypeClass>,
     /// Whether the describe panel is open.
@@ -85,6 +92,8 @@ impl StartState {
         Self {
             kind,
             preview: None,
+            category: None,
+            search: String::new(),
             rolled: None,
             describing: false,
             describe_text: String::new(),
@@ -100,14 +109,27 @@ pub struct Notice {
     /// Extra lines (e.g. skipped fields of a description).
     pub details: Vec<String>,
     pub is_error: bool,
+    /// The draft the notice describes (e.g. right after a palette apply); once the draft
+    /// differs (undo, redo, a later edit) the notice is stale and goes away.
+    pub anchor: Option<Box<Profile>>,
 }
 
 impl Notice {
     pub fn info(text: impl Into<String>, details: Vec<String>) -> Self {
-        Self { text: text.into(), details, is_error: false }
+        Self { text: text.into(), details, is_error: false, anchor: None }
+    }
+
+    /// Ties the notice to `draft`: it only stays while the working copy still equals it.
+    pub fn anchored(self, draft: &Profile) -> Self {
+        Self { anchor: Some(Box::new(draft.clone())), ..self }
+    }
+
+    /// Whether an anchored notice no longer matches the working copy.
+    pub fn is_stale_for(&self, draft: &Profile) -> bool {
+        self.anchor.as_deref().is_some_and(|anchor| anchor != draft)
     }
 
     pub fn error(text: impl Into<String>) -> Self {
-        Self { text: text.into(), details: Vec::new(), is_error: true }
+        Self { text: text.into(), details: Vec::new(), is_error: true, anchor: None }
     }
 }

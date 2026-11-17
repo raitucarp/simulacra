@@ -1,9 +1,9 @@
 //! Tolerant parsing of the LLM's character-sheet reply.
 
-use super::{describable_traits, DraftPatch, PatchWarning, DESCRIBABLE_COUNTS, DESCRIBABLE_TEXT, DESCRIBE_GROUP};
+use super::{describable_sets, describable_traits, DraftPatch, PatchWarning, DESCRIBABLE_COUNTS, DESCRIBABLE_TEXT, DESCRIBE_GROUP};
 use crate::state::forge::step::FORGE_I18N_ROOT;
 use crate::state::forge::edit::DraftEdit;
-use crate::state::forge::fields::{ScoreField, MAX_AGE, MAX_SCORE};
+use crate::state::forge::fields::{ScoreField, TraitSet, MAX_AGE, MAX_SCORE};
 use serde_json::{Map, Value};
 use thiserror::Error;
 
@@ -80,6 +80,8 @@ fn parse_entry(key: &str, value: &Value, patch: &mut DraftPatch) {
             Some(parsed) => Ok(DraftEdit::Trait(parsed)),
             None => return patch.warnings.push(PatchWarning::InvalidOption { field, value: text.to_string() }),
         }
+    } else if let Some(field) = describable_sets().iter().find(|f| f.path() == key) {
+        return parse_set(*field, value, patch);
     } else {
         return patch.warnings.push(PatchWarning::UnknownField(key.to_string()));
     };
@@ -87,6 +89,21 @@ fn parse_entry(key: &str, value: &Value, patch: &mut DraftPatch) {
         Ok(edit) => patch.edits.push(edit),
         Err(()) => wrong_type(key, patch),
     }
+}
+
+/// A multi-select from a JSON array of strings (or a single string); unknown entries warn.
+fn parse_set(field: TraitSet, value: &Value, patch: &mut DraftPatch) {
+    let texts: Option<Vec<&str>> = match value {
+        Value::Array(items) => items.iter().map(Value::as_str).collect(),
+        Value::String(text) => Some(vec![text.as_str()]),
+        _ => None,
+    };
+    let Some(texts) = texts else { return wrong_type(field.path(), patch) };
+    let (parsed, unknown) = field.parse(&texts);
+    for text in unknown {
+        patch.warnings.push(PatchWarning::InvalidSetOption { field, value: text.to_string() });
+    }
+    patch.edits.push(DraftEdit::TraitSet(parsed));
 }
 
 fn wrong_type(key: &str, patch: &mut DraftPatch) {

@@ -2,15 +2,19 @@
 //! `%{name}` interpolation of argument lists built at runtime (validation issues, cadence gaps).
 
 use crate::agent::schedule::cadence_rule;
+use crate::domain::traits::OptionSet;
 use crate::domain::{PostingCadence, TraitOption};
 use crate::i18n::plural_key;
-use crate::state::forge::field_label_key;
+use crate::state::forge::{field_label_key, TraitSetValue, TraitSetVisitor};
 use rust_i18n::t;
 
 const ARG_OPEN: &str = "%{";
 const ARG_CLOSE: &str = "}";
 /// Placeholder of the number a count label is chosen by.
 const ARG_COUNT: &str = "count";
+/// What an empty multi-select shows.
+const NONE_SELECTED_KEY: &str = "forge.ui.multi.none";
+const LABEL_SEPARATOR: &str = ", ";
 /// Placeholder of a posting cadence's minimum gap in its label and description.
 pub const ARG_MINUTES: &str = "minutes";
 
@@ -71,4 +75,23 @@ pub fn trait_description<T: TraitOption>(option: T) -> Option<String> {
 /// Display name of the field with serde name `path`.
 pub fn field_label(path: &str) -> String {
     tr(&field_label_key(path))
+}
+
+/// Display names of a multi-select's options, comma-separated.
+struct SetLabels;
+
+impl TraitSetVisitor for SetLabels {
+    type Output = String;
+
+    fn visit<T: TraitOption>(self, current: &OptionSet<T>, _: fn(OptionSet<T>) -> TraitSetValue) -> String {
+        if current.is_empty() {
+            return tr(NONE_SELECTED_KEY);
+        }
+        current.iter().map(trait_label).collect::<Vec<_>>().join(LABEL_SEPARATOR)
+    }
+}
+
+/// The chosen options of a multi-select by name ("None selected" when empty).
+pub fn set_labels(value: &TraitSetValue) -> String {
+    value.visit(SetLabels)
 }

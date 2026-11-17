@@ -48,7 +48,7 @@ fn section(heading_key: &str, body: String, theme: &ThemeTokens) -> Div {
 pub(super) fn card(explainer: &Explainer, theme: &ThemeTokens) -> Div {
     div()
         .w(theme.forge_explainer_width)
-        .p(theme.spacing_md)
+        .p(theme.card_padding)
         .flex()
         .flex_col()
         .gap(theme.spacing_sm)

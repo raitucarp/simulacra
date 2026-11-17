@@ -66,7 +66,7 @@ impl ForgeView {
             .child(div().text_size(theme.font_size_sm).font_weight(FontWeight::SEMIBOLD).text_color(theme.text_primary).child(self.display_name()))
             .child(div().text_size(theme.font_size_xs).text_color(theme.text_muted).child(profile.display_handle()));
         let body = div()
-            .p(theme.spacing_md)
+            .p(theme.card_padding)
             .rounded(theme.radius_lg)
             .bg(theme.bg_callout)
             .border_l(theme.border_width_threadline)

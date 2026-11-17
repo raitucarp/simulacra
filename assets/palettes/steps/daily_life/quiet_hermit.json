@@ -1,0 +1,14 @@
+{
+  "order": 5,
+  "config": {
+    "posting_cadence": "MorningAndEvening",
+    "chronotype": "TwilightContemplative",
+    "active_hours_start": 17,
+    "active_hours_end": 22,
+    "spontaneity_rate": 10,
+    "active_days": [
+      "Wednesday",
+      "Sunday"
+    ]
+  }
+}

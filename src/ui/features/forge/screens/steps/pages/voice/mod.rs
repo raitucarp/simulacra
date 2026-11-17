@@ -23,7 +23,7 @@ impl ForgeView {
         div()
             .flex()
             .flex_col()
-            .gap(theme.spacing_lg)
+            .gap(theme.section_gap)
             .child(self.voice_sample_card(handle))
             .child(
                 card(theme)

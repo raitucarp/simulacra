@@ -3,7 +3,7 @@
 
 use super::super::super::common::{card, heading, message};
 use crate::domain::archetype::NameSuggestion;
-use crate::domain::ArchetypeClass;
+use crate::domain::Palette;
 use crate::state::forge::{normalize_handle, suggest_handle, DraftEdit, TextField, TraitValue};
 use crate::ui::features::forge::text::{tr, tr_with};
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
@@ -28,7 +28,7 @@ impl ForgeView {
         div()
             .flex()
             .flex_col()
-            .gap(theme.spacing_lg)
+            .gap(theme.section_gap)
             .child(
                 card(theme)
                     .child(heading(tr(IDENTITY_KEY), theme))
@@ -41,13 +41,13 @@ impl ForgeView {
             .into_any_element()
     }
 
-    /// Curated names of the draft's class (or of every class) nobody uses yet.
+    /// Curated names of the draft's palette (or of every full palette) nobody uses yet.
     fn idea_pool(&self) -> Vec<NameSuggestion> {
-        let classes: Vec<ArchetypeClass> = self.class().map_or_else(|| ArchetypeClass::ALL.to_vec(), |class| vec![class]);
+        let palettes: Vec<&Palette> = self.palette().map_or_else(|| Palette::full(None).collect(), |palette| vec![palette]);
         let taken = |name: &str| self.context.existing.iter().any(|p| p.name.eq_ignore_ascii_case(name));
-        classes
+        palettes
             .iter()
-            .flat_map(|class| class.name_suggestions().iter().cloned())
+            .flat_map(|palette| palette.names.iter().cloned())
             .filter(|idea| !taken(&idea.name) && idea.name != self.draft.profile().name)
             .take(MAX_IDEAS)
             .collect()

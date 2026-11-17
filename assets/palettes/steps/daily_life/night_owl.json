@@ -1,0 +1,19 @@
+{
+  "order": 2,
+  "config": {
+    "posting_cadence": "NightOwlHours",
+    "chronotype": "NightOwlInsomniac",
+    "active_hours_start": 21,
+    "active_hours_end": 4,
+    "spontaneity_rate": 60,
+    "active_days": [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+      "Sunday"
+    ]
+  }
+}

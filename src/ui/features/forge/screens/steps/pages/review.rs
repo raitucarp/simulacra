@@ -3,7 +3,7 @@
 
 use super::super::super::common::{card, heading, muted};
 use super::issue_text;
-use crate::state::forge::{can_save, ForgeKind, Severity, ValidationIssue};
+use crate::state::forge::{can_save, EngineSection, ForgeKind, Severity, ValidationIssue};
 use crate::theme::ThemeTokens;
 use crate::ui::features::forge::text::{tr, tr_count};
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
@@ -30,14 +30,19 @@ fn issue_row(at: usize, issue: &ValidationIssue, theme: &ThemeTokens, handle: &F
         Severity::Error => (LucideIcon::CircleAlert, theme.accent_danger),
         Severity::Warning => (LucideIcon::Info, theme.warning),
     };
-    let step = issue.step;
-    let fix = handle.act(move |this, window, cx| this.go_to(step, window, cx));
+    let (step, section) = (issue.step, EngineSection::of_field(issue.field));
+    let fix = handle.act(move |this, window, cx| {
+        if let Some(section) = section {
+            this.engine.section = section;
+        }
+        this.go_to(step, window, cx);
+    });
     div()
         .flex()
         .items_center()
         .gap(theme.spacing_sm)
         .child(div().text_color(color).child(Icon::new(icon).size(theme.font_size_md)))
-        .child(div().flex_1().text_size(theme.font_size_sm).child(issue_text(issue)))
+        .child(div().flex_1().min_w_0().text_size(theme.font_size_sm).child(issue_text(issue)))
         .child(Button::new((FIX_ID_PREFIX, at)).ghost().xsmall().label(tr(FIX_KEY)).on_click(move |_, w, cx| fix(w, cx)))
 }
 
@@ -47,7 +52,7 @@ impl ForgeView {
         div()
             .flex()
             .flex_col()
-            .gap(theme.spacing_lg)
+            .gap(theme.section_gap)
             .child(self.trading_card())
             .child(self.issue_list(handle))
             .child(self.bring_to_life_panel(handle))

@@ -86,8 +86,8 @@ pub(super) fn render_tab_switcher(
         .map(|spec| render_tab(spec, active_tab, on_select.clone(), theme));
     div()
         .w_full()
-        .px(theme.spacing_md)
-        .pt(theme.spacing_md)
+        .px(theme.panel_padding_compact)
+        .pt(theme.panel_padding_compact)
         .child(
             div()
                 .w_full()

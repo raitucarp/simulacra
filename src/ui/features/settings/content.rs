@@ -1,18 +1,16 @@
 //! Dialog frame of the settings modal: scrim backdrop, tab header, scrollable body and action footer.
 
 use super::callbacks::{ModalCloseCallback, SaveSettingsCallback};
-use super::consts::{BACKDROP_ID, CANCEL_BUTTON_ID, CLOSE_BUTTON_ID, DIALOG_ID, SAVE_BUTTON_ID};
+use super::consts::{BACKDROP_ID, CANCEL_BUTTON_ID, CLOSE_BUTTON_ID, DIALOG_ID, SAVE_BUTTON_ID, SPLIT_ID};
 use super::tabs::SettingsTab;
 use crate::ui::atoms::ElevationExt;
 use crate::theme::ThemeTokens;
+use crate::ui::components::{persisted_h_resizable, SplitPane};
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::scroll::ScrollableElement;
 use gpui_kit::component::Icon;
-use gpui_kit::{
-    div, AnyElement, Div, FontWeight, InteractiveElement, IntoElement, MouseButton,
-    ParentElement, Styled,
-};
+use gpui_kit::{div, AnyElement, Div, FontWeight, InteractiveElement, IntoElement, MouseButton, ParentElement, Styled};
 use std::rc::Rc;
 use rust_i18n::t;
 
@@ -23,14 +21,16 @@ pub(super) fn render_content_pane(
     footer: impl IntoElement,
     theme: &ThemeTokens,
 ) -> Div {
+    // `min_w_0`: long lines wrap instead of widening the pane past the dialog's edge.
     div()
         .flex_1()
+        .min_w_0()
         .h_full()
+        .overflow_hidden()
         .flex()
         .flex_col()
         .child(header)
-        // Scrollable Tab Body
-        .child(div().flex_1().overflow_y_scrollbar().p(theme.spacing_2xl).child(tab_content))
+        .child(div().flex_1().min_w_0().overflow_y_scrollbar().p(theme.panel_padding).child(tab_content))
         .child(footer)
 }
 
@@ -42,14 +42,17 @@ pub(super) fn render_content_header(
 ) -> Div {
     div()
         .h(theme.settings_header_height)
-        .px(theme.spacing_2xl)
+        .px(theme.panel_padding)
         .border_b(theme.border_width_hairline)
         .border_color(theme.border)
         .flex()
         .items_center()
         .justify_between()
+        .gap(theme.control_gap)
         .child(
             div()
+                .flex_1()
+                .min_w_0()
                 .flex()
                 .flex_col()
                 .gap(theme.spacing_2xs)
@@ -80,10 +83,11 @@ pub(super) fn render_footer_bar(
 ) -> Div {
     div()
         .h(theme.modal_footer_height)
-        .px(theme.spacing_2xl)
+        .px(theme.panel_padding)
         .border_t(theme.border_width_hairline)
         .border_color(theme.border)
         .bg(theme.bg_elevated)
+        .flex_none()
         .flex()
         .items_center()
         .justify_between()
@@ -119,14 +123,14 @@ pub(super) fn render_backdrop(
         .flex()
         .items_center()
         .justify_center()
-        .on_mouse_down(MouseButton::Left, move |_ev, window, cx| {
-            (on_close)(window, cx);
-        })
+        .on_mouse_down(MouseButton::Left, move |_ev, window, cx| (on_close)(window, cx))
         .child(
             div()
                 .id(DIALOG_ID)
                 .w(theme.modal_width)
                 .h(theme.modal_height)
+                .max_w_full()
+                .max_h_full()
                 .rounded(theme.radius_lg)
                 .border(theme.border_width_hairline)
                 .border_color(theme.border)
@@ -134,10 +138,11 @@ pub(super) fn render_backdrop(
                 .elevation_shadow(theme)
                 .flex()
                 .overflow_hidden()
-                .on_mouse_down(MouseButton::Left, |_ev, _window, cx| {
-                    cx.stop_propagation();
-                })
-                .child(rail)
-                .child(content),
+                .on_mouse_down(MouseButton::Left, |_ev, _window, cx| cx.stop_propagation())
+                .child(
+                    persisted_h_resizable(SPLIT_ID, theme)
+                        .pane(SplitPane::sized(theme.modal_rail_width, theme.modal_rail_min..theme.modal_rail_max).child(rail))
+                        .pane(SplitPane::flex(theme.split_flex_min).child(content)),
+                ),
         )
 }

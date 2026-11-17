@@ -1,0 +1,14 @@
+{
+  "order": 1,
+  "config": {
+    "code_switching": "MonolingualPure",
+    "grammar_style": "RelaxedConversational",
+    "diction_register": "EverydayNatural",
+    "vocabulary_complexity": 40,
+    "sentence_length": "BalancedCadence",
+    "capitalization": "StandardSentence",
+    "punctuation_habit": "CrispMinimal",
+    "emoji_usage": "RareSubtle",
+    "typing_quirks": "Says it plainly; one idea per post; no jargon."
+  }
+}

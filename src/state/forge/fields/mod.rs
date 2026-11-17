@@ -1,10 +1,13 @@
 //! Typed handles on every editable `Profile` / `AgentConfig` field, each owned by one forge step.
 //! `path` is the serde name (the two structs share none); these tables are the field → step map.
 
+mod lenient;
 mod map;
+mod sets;
 mod traits;
 
-pub use map::{field_label_key, field_step, fields_for_step, mapped_fields, SYSTEM_FIELDS};
+pub use map::{field_label_key, field_step, fields_for_step, mapped_fields, ENGINE_PATH, MAX_AGE, MAX_HOUR, MAX_SCORE, SYSTEM_FIELDS};
+pub use sets::{TraitSet, TraitSetValue, TraitSetVisitor};
 pub use traits::{TraitField, TraitValue, TraitVisitor};
 
 use super::step::ForgeStep;
@@ -141,10 +144,3 @@ forge_fields! {
         InjectNetworkGrounding => [config] inject_network_grounding @ Grimoire,
     }
 }
-
-/// Upper bound of every [`ScoreField`].
-pub const MAX_SCORE: u8 = 100;
-/// Last hour of the day for [`HourField`]s.
-pub const MAX_HOUR: u8 = 23;
-/// Upper bound of [`CountField::Age`].
-pub const MAX_AGE: u16 = 150;

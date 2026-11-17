@@ -1,4 +1,4 @@
-"""Render a contact sheet: fills {{skin}}/{{hair}} in a temp copy, then runs the render_illustrations example.
+"""Render a contact sheet: fills {{skin}}/{{hair}}/{{primary}}/{{secondary}} in a temp copy, then runs the render_illustrations example.
 
 usage: python sheet.py <theme-id> <out.png> <svg-dir>...   (run from the repo root; build the example first)
 """
@@ -8,7 +8,7 @@ import subprocess
 import sys
 import tempfile
 
-SAMPLE = {'skin': '#e0ac7e', 'hair': '#5b3a29'}
+SAMPLE = {'skin': '#e0ac7e', 'hair': '#5b3a29', 'primary': '#b8bec6', 'secondary': '#d9534f'}
 EXE = os.environ.get('SHEET_EXE') or os.path.join(os.environ.get('CARGO_TARGET_DIR', 'target'), 'debug', 'examples', 'render_illustrations')
 
 

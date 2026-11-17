@@ -58,6 +58,8 @@ fn render_provider_button(
     div()
         .id(format!("{}{:?}", PROVIDER_BUTTON_ID_PREFIX, provider))
         .flex_1()
+        .min_w_0()
+        .overflow_hidden()
         .h(theme.settings_provider_button_height)
         .px(theme.spacing_md)
         .rounded(theme.radius_md)

@@ -3,11 +3,15 @@
 use crate::domain::agent_config::AgentConfig;
 use crate::domain::profile::Profile;
 
+const HUMAN_IDENTITY_HEADING: &str = "[HUMAN IDENTITY & BIOGRAPHY]";
+const BEING_IDENTITY_HEADING: &str = "[IDENTITY & BIOGRAPHY]";
+
 impl AgentConfig {
     /// Formats the complete human identity and biography section for prompt injection.
     pub fn format_identity_section(&self, profile: &Profile) -> String {
+        let heading = if self.embodiment.is_human() { HUMAN_IDENTITY_HEADING } else { BEING_IDENTITY_HEADING };
         format!(
-            "[HUMAN IDENTITY & BIOGRAPHY]\n\
+            "{}\n\
              - Full Name: {} ({})\n\
              - Headline / Role: {}\n\
              - Gender & Pronouns: {} ({})\n\
@@ -19,6 +23,7 @@ impl AgentConfig {
              - Core Human Values: {}\n\
              - Daily Routine & Lifestyle: {}\n\
              - Current Affective Mood: {}",
+            heading,
             profile.name,
             profile.display_handle(),
             self.description,

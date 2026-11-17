@@ -1,36 +1,12 @@
-//! The 26 trait-enum fields of `AgentConfig` as one typed field / value pair.
+//! The single-choice trait-enum fields of `AgentConfig` as one typed field / value pair
+//! (`field in group` reaches into a flattened sub-struct such as `embodiment`).
 
 use crate::domain::agent_config::AgentConfig;
 use crate::domain::traits::*;
 use crate::domain::TraitOption;
+use super::lenient::find_option;
 use crate::state::forge::step::ForgeStep;
 use serde::{Deserialize, Serialize};
-
-/// Separators an LLM or a human may use in place of the snake_case `_`.
-const KEY_SEPARATORS: [char; 2] = ['-', ' '];
-const KEY_SEPARATOR: &str = "_";
-
-/// Normalizes free-form option text towards a snake_case key.
-fn normalize(raw: &str) -> String {
-    raw.trim().to_lowercase().replace(KEY_SEPARATORS, KEY_SEPARATOR)
-}
-
-/// The first word of a label, lower-cased (`"5w4 · The Iconoclast"` → `"5w4"`).
-fn first_word(label: &str) -> String {
-    label.split_whitespace().next().unwrap_or_default().to_lowercase()
-}
-
-/// The option of `T` whose key, label, short label or label's first word matches `raw`
-/// (case-insensitively).
-fn find_option<T: TraitOption>(raw: &str) -> Option<T> {
-    let wanted = normalize(raw);
-    T::ALL.iter().copied().find(|option| {
-        option.key() == wanted
-            || normalize(option.label()) == wanted
-            || normalize(option.short_label()) == wanted
-            || first_word(option.label()) == wanted
-    })
-}
 
 /// Generic code over "whichever option type this trait field uses" (see [`TraitValue::visit`]).
 pub trait TraitVisitor {
@@ -42,7 +18,7 @@ pub trait TraitVisitor {
 
 /// Generates `TraitField` (which trait) and `TraitValue` (which trait, set to what).
 macro_rules! trait_fields {
-    ($($variant:ident($ty:ty) => $field:ident @ $step:ident),+ $(,)?) => {
+    ($($variant:ident($ty:ty) => $field:ident $(in $group:ident)? @ $step:ident),+ $(,)?) => {
         /// Every trait-enum field of `AgentConfig`.
         #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
         pub enum TraitField { $($variant),+ }
@@ -62,7 +38,7 @@ macro_rules! trait_fields {
             pub const fn step(self) -> ForgeStep { match self { $(Self::$variant => ForgeStep::$step),+ } }
 
             /// The value currently set on `cfg`.
-            pub fn read(self, cfg: &AgentConfig) -> TraitValue { match self { $(Self::$variant => TraitValue::$variant(cfg.$field)),+ } }
+            pub fn read(self, cfg: &AgentConfig) -> TraitValue { match self { $(Self::$variant => TraitValue::$variant(cfg$(.$group)?.$field)),+ } }
 
             /// Stable keys of every allowed option, in display order.
             pub fn option_keys(self) -> Vec<&'static str> {
@@ -85,8 +61,8 @@ macro_rules! trait_fields {
             /// i18n key of the chosen option's label.
             pub fn label_key(self) -> String { match self { $(Self::$variant(v) => TraitOption::label_key(v)),+ } }
 
-            /// Writes the value into `cfg`.
-            pub fn write(self, cfg: &mut AgentConfig) { match self { $(Self::$variant(v) => cfg.$field = v),+ } }
+            /// Writes the value into `cfg` as is (see [`TraitValue::write`]).
+            fn write_raw(self, cfg: &mut AgentConfig) { match self { $(Self::$variant(v) => cfg$(.$group)?.$field = v),+ } }
 
             /// Hands the chosen option to `visitor` at its concrete type, with the constructor
             /// that turns any option of that type back into a value of this field.
@@ -124,6 +100,34 @@ trait_fields! {
     ConflictHandling(ConflictHandlingStyle) => conflict_handling @ Relationships,
     AssemblyStrategy(PromptAssemblyStrategy) => assembly_strategy @ Grimoire,
     PrePostReasoning(PrePostReasoningMode) => pre_post_reasoning @ Grimoire,
+    // --- p7 ontology ---
+    BodyKind(BodyKind) => body_kind in embodiment @ Embodiment,
+    Form(BodyForm) => form in embodiment @ Embodiment,
+    Material(Material) => material in embodiment @ Embodiment,
+    Scale(Scale) => scale in embodiment @ Embodiment,
+    Temporality(Temporality) => temporality in embodiment @ Embodiment,
+    Perception(Perception) => perception in embodiment @ Embodiment,
+    Mobility(Mobility) => mobility in embodiment @ Embodiment,
+    Anthropomorphism(Anthropomorphism) => anthropomorphism in embodiment @ Embodiment,
+    RelationToHumans(RelationToHumans) => relation_to_humans in embodiment @ Embodiment,
+    Withdrawal(Withdrawal) => withdrawal in embodiment @ Embodiment,
+    RhetoricalMode(RhetoricalMode) => rhetorical_mode in rhetoric @ Rhetoric,
+    StylisticSchool(StylisticSchool) => stylistic_school in rhetoric @ Rhetoric,
+    SemioticMode(SemioticMode) => semiotic_mode in rhetoric @ Rhetoric,
+    SentenceStructure(SentenceStructure) => sentence_structure in rhetoric @ Rhetoric,
+    PostFormat(PostFormat) => post_format in rhetoric @ Rhetoric,
+}
+
+impl TraitValue {
+    /// Writes the value into `cfg`. A body kind and its form stay coherent: setting the form
+    /// sets its kind, and a new kind replaces a form of another kind with its own first form.
+    pub fn write(self, cfg: &mut AgentConfig) {
+        match self {
+            Self::BodyKind(kind) => cfg.embodiment.set_kind(kind),
+            Self::Form(form) => cfg.embodiment.set_form(form),
+            other => other.write_raw(cfg),
+        }
+    }
 }
 
 impl TraitField {

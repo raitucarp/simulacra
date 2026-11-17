@@ -20,6 +20,7 @@ pub const GRID_COLUMNS: usize = 3;
 pub struct IllustratedOptionGrid<T: TraitOption> {
     id: ElementId,
     selected: Option<T>,
+    options: Vec<T>,
     columns: usize,
     card_width: Pixels,
     descriptions: bool,
@@ -38,12 +39,19 @@ impl<T: TraitOption> IllustratedOptionGrid<T> {
         Self {
             id: id.into(),
             selected,
+            options: T::ALL.to_vec(),
             columns: GRID_COLUMNS,
             card_width: theme.forge_option_card_width,
             descriptions: true,
             theme: theme.clone(),
             on_select: Rc::new(on_select),
         }
+    }
+
+    /// Shows only `options` (in the given order) instead of every option of `T`.
+    pub fn options(mut self, options: Vec<T>) -> Self {
+        self.options = options;
+        self
     }
 
     /// Cards per row (also the step of Up / Down).
@@ -76,7 +84,7 @@ impl<T: TraitOption> IllustratedOptionGrid<T> {
 
 impl<T: TraitOption> RenderOnce for IllustratedOptionGrid<T> {
     fn render(self, _: &mut Window, _: &mut App) -> impl IntoElement {
-        let cells = T::ALL.iter().enumerate().map(|(at, option)| self.cell(at, *option)).collect();
-        CardGrid::new(self.id, cells, self.columns, self.theme.spacing_sm)
+        let cells = self.options.iter().enumerate().map(|(at, option)| self.cell(at, *option)).collect();
+        CardGrid::new(self.id, cells, self.columns, self.theme.spacing_sm).auto_columns(self.card_width)
     }
 }

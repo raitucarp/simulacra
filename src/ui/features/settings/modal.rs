@@ -6,12 +6,13 @@ use super::callbacks::{
 };
 use super::general_props::GeneralPaneProps;
 use super::content::{render_backdrop, render_content_header, render_content_pane, render_footer_bar};
+use super::credentials::{render_credentials_section, CredentialsPaneProps};
 use super::panes::{render_ai_pane, render_general_pane, render_vault_pane, AppearancePanel};
 use super::rail::render_rail;
 use super::tabs::SettingsTab;
 use crate::agent::{LlmProvider, LlmSettings};
 use crate::theme::ThemeTokens;
-use gpui_kit::{AnyElement, App, Entity, IntoElement, RenderOnce, Window};
+use gpui_kit::{AnyElement, App, Entity, IntoElement, ParentElement, RenderOnce, Styled, Window};
 use gpui_kit::component::input::InputState;
 use std::rc::Rc;
 
@@ -31,6 +32,7 @@ pub struct SettingsModal {
     on_save: SaveSettingsCallback,
     on_close: ModalCloseCallback,
     general: GeneralPaneProps,
+    credentials: Option<CredentialsPaneProps>,
 }
 
 impl SettingsModal {
@@ -63,6 +65,7 @@ impl SettingsModal {
             on_save: Box::new(on_save),
             on_close: Box::new(on_close),
             general: GeneralPaneProps::default(),
+            credentials: None,
         }
     }
 
@@ -70,6 +73,21 @@ impl SettingsModal {
     pub fn general(mut self, general: GeneralPaneProps) -> Self {
         self.general = general;
         self
+    }
+
+    /// Supplies the AI pane's credential list, editor and callbacks.
+    pub fn credentials(mut self, credentials: CredentialsPaneProps) -> Self {
+        self.credentials = Some(credentials);
+        self
+    }
+
+    /// The AI pane followed by the credentials section.
+    fn ai_content(theme: &ThemeTokens, ai: impl IntoElement, credentials: Option<CredentialsPaneProps>) -> AnyElement {
+        let column = gpui_kit::div().flex().flex_col().gap(theme.section_gap).child(ai);
+        match credentials {
+            Some(props) => column.child(render_credentials_section(theme, props)).into_any_element(),
+            None => column.into_any_element(),
+        }
     }
 
     /// Dispatches tab content to individual pane helpers to prevent stack frame exhaustion.
@@ -80,22 +98,16 @@ impl SettingsModal {
         inputs: [&Entity<InputState>; 3],
         callbacks: (SelectProviderCallback, SelectPresetModelCallback),
         appearance: Entity<AppearancePanel>,
-        general: GeneralPaneProps,
+        (general, credentials): (GeneralPaneProps, Option<CredentialsPaneProps>),
     ) -> AnyElement {
         let [api_key_input, model_input, endpoint_input] = inputs;
         let (on_provider, on_preset) = callbacks;
         match active_tab {
             SettingsTab::General => render_general_pane(theme, general).into_any_element(),
-            SettingsTab::AiIntelligence => render_ai_pane(
-                theme,
-                settings,
-                api_key_input,
-                model_input,
-                endpoint_input,
-                on_provider,
-                on_preset,
-            )
-            .into_any_element(),
+            SettingsTab::AiIntelligence => {
+                let ai = render_ai_pane(theme, settings, api_key_input, model_input, endpoint_input, on_provider, on_preset);
+                Self::ai_content(theme, ai, credentials)
+            }
             SettingsTab::Appearance => appearance.into_any_element(),
             SettingsTab::KnowledgeVault => render_vault_pane(theme).into_any_element(),
         }
@@ -116,7 +128,7 @@ impl RenderOnce for SettingsModal {
             [&self.api_key_input, &self.model_input, &self.endpoint_input],
             (self.on_select_provider, self.on_select_preset_model),
             self.appearance,
-            self.general,
+            (self.general, self.credentials),
         );
         let content = render_content_pane(header, tab_content, footer, theme);
         render_backdrop(theme, on_close, rail, content)

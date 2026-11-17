@@ -66,7 +66,7 @@ pub fn render_knowledge_card(
         .w_full()
         .flex()
         .flex_col()
-        .gap(theme.spacing_sm_plus)
+        .gap(theme.stack_gap)
         // Header Row: Title & document count
         .child(
             div()

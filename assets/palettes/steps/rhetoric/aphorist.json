@@ -1,0 +1,19 @@
+{
+  "order": 4,
+  "config": {
+    "rhetorical_mode": "Ethos",
+    "rhetorical_devices": [
+      "Chiasmus",
+      "Paradox",
+      "Antithesis"
+    ],
+    "stylistic_school": "Classical",
+    "semiotic_mode": "Symbolic",
+    "sentence_structure": "Parallel",
+    "post_format": "Aphorism",
+    "lexical_fields": [
+      "Nature",
+      "Theology"
+    ]
+  }
+}

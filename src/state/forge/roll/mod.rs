@@ -1,8 +1,12 @@
 //! "Roll the dice": a coherent random thinker from a seed.
 
+mod avatar;
+mod being;
 mod coherence;
 pub(crate) mod rng;
 
+pub use avatar::{avatar_edits, avatar_for_body};
+pub use being::{body_edits, body_for_form, body_for_kind, roll_being, rolled_embodiment, BeingScope};
 pub use coherence::{drift_identity, drift_mbti, drift_temperament, HIGH_SCORE};
 
 use super::attributes::{budget_remaining, score, BUDGET_FIELDS, INTELLIGENCE_FIELDS};

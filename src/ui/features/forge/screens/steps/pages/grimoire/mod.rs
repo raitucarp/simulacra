@@ -36,7 +36,7 @@ const INJECTIONS: [ToggleField; 6] = [
 impl ForgeView {
     pub(in super::super) fn grimoire_page(&self, handle: &ForgeHandle) -> AnyElement {
         let theme = &self.theme;
-        let page = div().flex().flex_col().gap(theme.spacing_lg).child(self.grimoire_cover(handle));
+        let page = div().flex().flex_col().gap(theme.section_gap).child(self.grimoire_cover(handle));
         if !self.grimoire_unfolded() {
             return page.into_any_element();
         }

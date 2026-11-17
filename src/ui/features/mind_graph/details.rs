@@ -51,7 +51,7 @@ fn render_selection(node: Option<(&GraphNode, usize)>, theme: &ThemeTokens) -> D
         .items_center()
         .gap(theme.spacing_sm)
         .min_w_0()
-        .child(div().w(theme.spacing_sm).h(theme.spacing_sm).rounded(theme.radius_full).bg(node_color(kind, theme)))
+        .child(div().w(theme.dot_size_sm).h(theme.dot_size_sm).rounded(theme.radius_full).bg(node_color(kind, theme)))
         .child(div().text_color(theme.text_muted).child(t!(kind_label_key(kind)).to_string()))
         .child(div().font_weight(FontWeight::MEDIUM).text_color(theme.text_primary).truncate().child(node.label.clone()))
         .child(div().text_color(theme.text_muted).child(t_count("graph.links_count", degree)))
@@ -77,7 +77,7 @@ pub(super) fn render_details(
             div()
                 .flex()
                 .items_center()
-                .gap(theme.spacing_sm)
+                .gap(theme.control_gap)
                 .when_some(open_key, |row, key| row.child(render_button(OPEN_BUTTON_ID, t!(key).to_string(), on_open, theme)))
                 .child(render_button(RESET_BUTTON_ID, t!("graph.reset_view").to_string(), on_reset, theme)),
         )

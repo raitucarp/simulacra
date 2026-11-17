@@ -31,6 +31,16 @@ impl LlmFailure {
     }
 }
 
+/// Replaces every secret in `secrets` (and every `key=` query value) with a redaction mark.
+pub fn redact_secrets(text: &str, secrets: &[String]) -> String {
+    let redacted = secrets
+        .iter()
+        .map(|s| s.trim())
+        .filter(|s| s.chars().count() >= MIN_REDACTABLE_KEY_CHARS)
+        .fold(text.to_string(), |acc, secret| acc.replace(secret, REDACTED));
+    redact_query_keys(&redacted)
+}
+
 /// Removes the configured key and any `key=` query value, then collapses whitespace.
 fn redact(raw: &str, api_key: &str) -> String {
     let key = api_key.trim();

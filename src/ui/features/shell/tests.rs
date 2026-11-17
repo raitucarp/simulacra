@@ -62,3 +62,30 @@ mod settings_draft {
         assert_eq!(draft.view(&saved).model, saved.model);
     }
 }
+
+mod credential_form {
+    use super::super::credential_state::{credential_from_form, CredentialEdit};
+    use crate::agent::credentials::{Credential, CredentialKind};
+
+    fn typed(label: &str, secret: &str) -> (String, String, String) {
+        (label.to_string(), secret.to_string(), "http://x.test".to_string())
+    }
+
+    #[test]
+    fn new_credentials_get_an_id_and_a_default_label() {
+        let edit = CredentialEdit { id: None, kind: CredentialKind::Tavily };
+        let made = credential_from_form(&edit, None, typed("", "tv-1"));
+        assert!(made.id.starts_with("cred_"));
+        assert_eq!((made.label.as_str(), made.secret.as_str(), made.endpoint.as_str()), ("Tavily", "tv-1", "http://x.test"));
+    }
+
+    #[test]
+    fn editing_with_a_blank_key_keeps_the_stored_secret() {
+        let stored = Credential::new(CredentialKind::OpenAi, "Old", "sk-stored", "");
+        let edit = CredentialEdit { id: Some(stored.id.clone()), kind: CredentialKind::OpenRouter };
+        let kept = credential_from_form(&edit, Some(&stored), typed("Renamed", ""));
+        assert_eq!((kept.id.as_str(), kept.secret.as_str(), kept.kind), (stored.id.as_str(), "sk-stored", CredentialKind::OpenRouter));
+        let replaced = credential_from_form(&edit, Some(&stored), typed("Renamed", "sk-new"));
+        assert_eq!(replaced.secret, "sk-new");
+    }
+}

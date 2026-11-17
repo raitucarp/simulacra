@@ -1,15 +1,14 @@
-//! The class preview: art, description and "What changes", grouped by step, plus
-//! "Begin as <class>".
+//! The palette preview: art, description and "What this palette sets", grouped by step, plus
+//! "Begin as <palette>". The change rows are shared with the step palette strip.
 
 use super::super::common::{heading, muted};
-use super::classes::class_key;
-use crate::domain::{ArchetypeClass, TraitOption};
-use crate::state::forge::{preview_diff, ChangeValue, FieldChange, ForgeStep, TraitValue, TraitVisitor};
+use super::gallery::palette_art;
+use crate::domain::{Palette, TraitOption};
+use crate::state::forge::{preview_palette, ChangeValue, FieldChange, ForgeStep, TraitValue, TraitVisitor};
 use crate::theme::ThemeTokens;
-use crate::ui::features::forge::text::{tr, tr_count, tr_with, trait_label};
+use crate::ui::features::forge::text::{set_labels, tr, tr_count, tr_with, trait_label};
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
 use crate::ui::icons::LucideIcon;
-use crate::ui::illustration::Illustration;
 use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::*;
 
@@ -17,12 +16,14 @@ use gpui_kit::*;
 const ROWS_PER_STEP: usize = 3;
 const BEGIN_ID: &str = "forge-begin-as";
 const BEGIN_KEY: &str = "forge.ui.start.begin_as";
-const CHANGES_KEY: &str = "forge.ui.start.what_changes";
-const NO_CHANGES_KEY: &str = "forge.ui.start.no_changes";
+const CHANGES_KEY: &str = "forge.palette.ui.what_sets";
+const NO_CHANGES_KEY: &str = "forge.palette.ui.no_changes";
 const MORE_KEY: &str = "forge.ui.start.more_changes";
 const ON_KEY: &str = "forge.ui.on";
 const OFF_KEY: &str = "forge.ui.off";
 const ARG_CLASS: &str = "class";
+const NONE_KEY: &str = "forge.ui.multi.none";
+const LIST_SEPARATOR: &str = ", ";
 const ARROW: &str = "→";
 /// Longest value shown in a change row before it is cut with an ellipsis.
 const MAX_VALUE_CHARS: usize = 32;
@@ -55,6 +56,10 @@ fn value_text(value: &ChangeValue) -> String {
         ChangeValue::Number(number) => number.to_string(),
         ChangeValue::Flag(flag) => tr(if *flag { ON_KEY } else { OFF_KEY }),
         ChangeValue::Trait(value) => value.visit(LabelOf),
+        ChangeValue::Set(value) => set_labels(value),
+        ChangeValue::Key(key) => tr(key),
+        ChangeValue::Keys(keys) if keys.is_empty() => tr(NONE_KEY),
+        ChangeValue::Keys(keys) => keys.iter().map(|key| tr(key)).collect::<Vec<_>>().join(LIST_SEPARATOR),
     })
 }
 
@@ -70,7 +75,8 @@ fn change_row(change: &FieldChange, theme: &ThemeTokens) -> Div {
         .child(div().text_color(theme.accent_brand).child(value_text(&change.after)))
 }
 
-fn step_group(step: ForgeStep, changes: &[&FieldChange], theme: &ThemeTokens) -> Div {
+/// The changes of one step under its name ("+N more" past the first few).
+pub(in crate::ui::features::forge::screens) fn step_group(step: ForgeStep, changes: &[&FieldChange], theme: &ThemeTokens) -> Div {
     let more = changes.len().saturating_sub(ROWS_PER_STEP);
     div()
         .flex()
@@ -82,17 +88,17 @@ fn step_group(step: ForgeStep, changes: &[&FieldChange], theme: &ThemeTokens) ->
 }
 
 impl ForgeView {
-    pub(super) fn class_preview(&self, class: ArchetypeClass, handle: &ForgeHandle) -> Div {
+    pub(super) fn palette_preview(&self, palette: &'static Palette, handle: &ForgeHandle) -> Div {
         let theme = &self.theme;
-        let name = tr(&class.label_key());
-        let begin = handle.act(move |this, window, cx| this.begin_as(class, window, cx));
+        let name = tr(&palette.label_key());
+        let begin = handle.act(move |this, window, cx| this.begin_as(palette, window, cx));
         div()
             .flex()
             .flex_col()
             .gap(theme.spacing_md)
-            .child(div().flex().justify_center().child(Illustration::class(class_key(class)).width(theme.forge_class_card_width)))
+            .child(div().flex().justify_center().child(palette_art(palette).width(theme.forge_class_card_width)))
             .child(heading(name.clone(), theme))
-            .child(muted(tr(&class.description_key()), theme))
+            .child(muted(tr(&palette.description_key()), theme))
             .child(
                 Button::new(BEGIN_ID)
                     .primary()
@@ -100,12 +106,12 @@ impl ForgeView {
                     .label(tr_with(BEGIN_KEY, &[(ARG_CLASS, name)]))
                     .on_click(move |_, w, cx| begin(w, cx)),
             )
-            .child(self.what_changes(class))
+            .child(self.what_changes(palette))
     }
 
-    fn what_changes(&self, class: ArchetypeClass) -> Div {
+    fn what_changes(&self, palette: &Palette) -> Div {
         let theme = &self.theme;
-        let changes = preview_diff(&self.draft, class);
+        let changes = preview_palette(&self.draft, palette);
         let groups: Vec<Div> = self
             .draft
             .steps()

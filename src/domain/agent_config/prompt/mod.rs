@@ -1,6 +1,7 @@
 //! Prompt assembly: dossier sections, system prompt strategies, templates, and user turns.
 
 mod dossier;
+mod ontology;
 mod sections;
 mod system;
 mod template;
@@ -17,11 +18,14 @@ const GROUNDING_DOC_SEPARATOR: &str = " ; ";
 
 const EMBODIED_REASONING: &str = "PRE-POST COGNITIVE PROCESS: First inhabit your personal biography, current mood, hobbies, and psychological traits. Write as a real human individual—never sound like an AI assistant or bot.";
 const WEAVER_REASONING: &str = "PRE-POST COGNITIVE PROCESS: Synthesize the network's grounding knowledge with your personal intellectual lens and link relevant thoughts using [[post_id]].";
+const BEING_REASONING: &str = "PRE-POST COGNITIVE PROCESS: First inhabit your form: what you are made of, how you sense and move, the time scale you live in; then your mood, history and psychological traits. Write as the being you are—never sound like an AI assistant or bot.";
 const SPONTANEOUS_REASONING: &str = "PRE-POST COGNITIVE PROCESS: Express an immediate, natural human microblog thought in your authentic typing style and language.";
 
-/// Pre-post cognitive process instruction appended to every system prompt.
-const fn reasoning_instruction(mode: PrePostReasoningMode) -> &'static str {
+/// Pre-post cognitive process instruction appended to every system prompt (a non-human being
+/// inhabits its form instead of a human biography).
+const fn reasoning_instruction(mode: PrePostReasoningMode, human: bool) -> &'static str {
     match mode {
+        PrePostReasoningMode::EmbodiedHumanPerspective if !human => BEING_REASONING,
         PrePostReasoningMode::EmbodiedHumanPerspective => EMBODIED_REASONING,
         PrePostReasoningMode::DialecticalNetworkWeaver => WEAVER_REASONING,
         PrePostReasoningMode::DirectSpontaneous => SPONTANEOUS_REASONING,
@@ -35,6 +39,8 @@ struct PromptBlocks {
     intelligence: String,
     linguistics: String,
     schedule: String,
+    embodiment: String,
+    rhetoric: String,
     full_dossier: String,
     grounding_summary: String,
     reasoning: &'static str,
@@ -48,9 +54,11 @@ impl PromptBlocks {
             intelligence: cfg.format_intelligence_section(),
             linguistics: cfg.format_linguistics_section(),
             schedule: cfg.format_social_schedule_section(),
+            embodiment: cfg.format_embodiment_section(),
+            rhetoric: cfg.format_rhetoric_section(),
             full_dossier: cfg.format_full_human_dossier(profile),
             grounding_summary: grounding_summary(cfg, network_name, docs),
-            reasoning: reasoning_instruction(cfg.pre_post_reasoning),
+            reasoning: reasoning_instruction(cfg.pre_post_reasoning, cfg.embodiment.is_human()),
         }
     }
 }

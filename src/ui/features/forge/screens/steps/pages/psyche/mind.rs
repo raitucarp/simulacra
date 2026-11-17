@@ -15,7 +15,7 @@ impl ForgeView {
         div()
             .flex()
             .flex_col()
-            .gap(self.theme.spacing_lg)
+            .gap(self.theme.section_gap)
             .child(self.trait_card(REASONING_KEY, &REASONING, handle))
             .child(self.quotient_skills(handle))
             .into_any_element()

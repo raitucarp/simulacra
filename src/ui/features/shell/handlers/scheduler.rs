@@ -3,6 +3,7 @@
 
 use super::super::scheduler_state::HEARTBEAT_INTERVAL;
 use super::super::view::AppView;
+use crate::agent::runtime::EnginePlan;
 use crate::agent::schedule::{due_agents, latest_activity, AgentSlot, Clock, ScheduleContext, SystemClock};
 use crate::domain::{AuthoredPost, NetworkId, Profile, ProfileId};
 use chrono::Utc;
@@ -37,16 +38,14 @@ impl AppView {
     }
 
     /// One heartbeat: enqueue every due agent, then start queued generations. Paused while
-    /// no API key is configured (one notice) and while backing off after failures.
+    /// no API key is configured anywhere (one notice); agents whose engine is backing off
+    /// after failures, or has no key, are skipped when their turn comes.
     fn scheduler_tick(&mut self, window: &mut Window, cx: &mut Context<Self>) {
         if !self.scheduler.enabled {
             return;
         }
-        if !self.state.llm_settings.has_api_key() {
+        if !self.state.llm_settings.has_api_key() && !self.state.credentials.any_secret() {
             self.report_scheduler_needs_key(window, cx);
-            return;
-        }
-        if !self.scheduler.failures.allows_generation(Utc::now()) {
             return;
         }
         self.scheduler.tick = self.scheduler.tick.wrapping_add(1);
@@ -74,20 +73,25 @@ impl AppView {
         due_agents(&slots, &ctx)
     }
 
-    /// Starts queued generations while a concurrency slot is free; queued agents wait
-    /// while no API key is configured or a failure backoff is pending.
+    /// Starts queued generations while a concurrency slot is free; an agent whose engine has
+    /// no key or is backing off after failures is dropped from the queue (it is re-queued
+    /// when next due).
     pub(super) fn pump_generation_queue(&mut self, window: &mut Window, cx: &mut Context<Self>) {
-        let ready = self.state.llm_settings.has_api_key() && self.scheduler.failures.allows_generation(Utc::now());
-        if !ready {
-            return;
-        }
         while let Some(id) = self.scheduler.queue.start_next() {
-            self.scheduler.last_dispatch.insert(id.clone(), Utc::now());
-            match self.scheduled_job(&id) {
-                Some((agent, parent, network)) => self.spawn_generation(agent, parent, network, window, cx),
+            match self.scheduled_job(&id).filter(|(agent, _, _)| self.engine_allowed(agent)) {
+                Some((agent, parent, network)) => {
+                    self.scheduler.last_dispatch.insert(id.clone(), Utc::now());
+                    self.spawn_generation(agent, parent, network, window, cx);
+                }
                 None => self.scheduler.queue.complete(&id),
             }
         }
+    }
+
+    /// Whether `agent`'s engine has a key and is not backing off.
+    fn engine_allowed(&self, agent: &Profile) -> bool {
+        let (key, ready) = EnginePlan::gate_of(&agent.config.engine, &self.state.llm_settings, &self.state.credentials);
+        ready && self.scheduler.failures.allows_generation(&key, Utc::now())
     }
 
     /// The agent, the post it should answer and its network, if it has anything to answer.

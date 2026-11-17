@@ -12,7 +12,7 @@ pub(super) fn composer_row(
 ) -> Div {
     div()
         .w_full()
-        .px(theme.spacing_lg)
+        .px(theme.panel_padding)
         .py(theme.spacing_md)
         .border_b(theme.border_width_hairline)
         .border_color(theme.border_subtle)

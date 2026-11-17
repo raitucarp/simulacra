@@ -15,7 +15,7 @@ impl ComposerModalView {
         div()
             .w_full()
             .h(theme.feed_header_height)
-            .px(theme.spacing_lg)
+            .px(theme.panel_padding)
             .border_b(theme.border_width_hairline)
             .border_color(theme.border)
             .flex()

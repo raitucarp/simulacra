@@ -2,7 +2,7 @@
 //! character sheet underneath.
 
 use super::step_key;
-use crate::domain::{ArchetypeClass, Profile};
+use crate::domain::{Palette, Profile};
 use crate::theme::ThemeTokens;
 use crate::ui::atoms::render_profile_avatar;
 use crate::ui::components::{meta_badge, BadgeColors};
@@ -25,10 +25,10 @@ pub(in crate::ui::features::forge::screens) fn stage_portrait(profile: &Profile,
     }
 }
 
-/// A gold badge naming the class.
-pub(in crate::ui::features::forge::screens) fn class_badge(class: ArchetypeClass, theme: &ThemeTokens) -> Div {
+/// A gold badge naming the palette (or class) the draft started from.
+pub(in crate::ui::features::forge::screens) fn palette_badge(palette: &Palette, theme: &ThemeTokens) -> Div {
     let colors = BadgeColors::new(theme.accent_dialectic, theme.accent_dialectic_subtle, theme.accent_dialectic_border);
-    meta_badge(&tr(&class.label_key()), colors, theme)
+    meta_badge(&tr(&palette.label_key()), colors, theme)
 }
 
 impl ForgeView {
@@ -45,11 +45,11 @@ impl ForgeView {
             .min_w_0()
             .h_full()
             .overflow_y_scrollbar()
-            .p(theme.spacing_xl)
+            .p(theme.panel_padding)
             .flex()
             .flex_col()
             .items_center()
-            .gap(theme.spacing_lg)
+            .gap(theme.section_gap)
             .child(self.backdrop())
             .child(self.nameplate())
             .child(self.character_sheet(handle))
@@ -83,7 +83,7 @@ impl ForgeView {
             .flex()
             .gap(theme.spacing_xs)
             .child(meta_badge(&tr(&self.draft.kind().label_key()), kind_colors, theme))
-            .children(self.class().map(|class| class_badge(class, theme)));
+            .children(self.palette().map(|palette| palette_badge(palette, theme)));
         div()
             .flex()
             .flex_col()

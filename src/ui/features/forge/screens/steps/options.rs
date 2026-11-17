@@ -19,35 +19,39 @@ impl ForgeView {
         let theme = &self.theme;
         div()
             .id(OPTIONS_ID)
-            .w(theme.forge_options_width)
+            .w_full()
             .flex_shrink_0()
             .h_full()
             .overflow_y_scrollbar()
             .id(options_scroll_id(self.draft.step()))
-            .p(theme.spacing_lg)
+            .p(theme.panel_padding)
             .flex()
             .flex_col()
-            .gap(theme.spacing_lg)
+            .gap(theme.section_gap)
             .bg(theme.bg_sidebar)
             .border_l(theme.border_width_hairline)
             .border_color(theme.border_subtle)
             .children(self.guide_panel(handle))
             .children(self.notice.as_ref().map(|notice| self.notice_box(notice, handle)))
+            .children(self.palette_strip(handle))
             .child(self.step_page(handle))
     }
 
     fn step_page(&self, handle: &ForgeHandle) -> AnyElement {
         match self.draft.step() {
             ForgeStep::Origin => self.origin_page(handle),
+            ForgeStep::Embodiment => self.embodiment_page(handle),
             ForgeStep::Appearance => self.appearance_page(handle),
             ForgeStep::Birthsign => self.birthsign_page(handle),
             ForgeStep::Attributes => self.attributes_page(handle),
             ForgeStep::Disposition => self.disposition_page(handle),
             ForgeStep::Mind => self.mind_page(handle),
             ForgeStep::Voice => self.voice_page(handle),
+            ForgeStep::Rhetoric => self.rhetoric_page(handle),
             ForgeStep::DailyLife => self.daily_life_page(handle),
             ForgeStep::Relationships => self.relationships_page(handle),
             ForgeStep::Grimoire => self.grimoire_page(handle),
+            ForgeStep::Engine => self.engine_page(handle),
             ForgeStep::Review => self.review_page(handle),
         }
     }
@@ -62,8 +66,8 @@ impl ForgeView {
         div()
             .flex()
             .items_start()
-            .gap(theme.spacing_sm)
-            .p(theme.spacing_md)
+            .gap(theme.control_gap)
+            .p(theme.card_padding)
             .rounded(theme.radius_lg)
             .border(theme.border_width_hairline)
             .border_color(color)
@@ -71,6 +75,7 @@ impl ForgeView {
             .child(
                 div()
                     .flex_1()
+                    .min_w_0()
                     .flex()
                     .flex_col()
                     .gap(theme.spacing_2xs)

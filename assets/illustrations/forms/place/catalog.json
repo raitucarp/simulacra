@@ -1,0 +1,120 @@
+{
+  "kind": "place",
+  "stack": ["back", "aura", "body", "finish", "markings", "mouth", "eyes", "accessory"],
+  "layers": {
+    "back": {
+      "variants": ["plain", "dawn", "night", "grid", "waves", "studio"],
+      "dir": "shared"
+    },
+    "aura": {
+      "variants": ["none", "clouds", "stars", "sunrise", "fog"],
+      "bare": [1, 3]
+    },
+    "body": {
+      "variants": ["city", "island", "library", "cathedral", "desert", "forest", "harbor", "ruin"]
+    },
+    "finish": {
+      "variants": ["none", "dusk", "night", "snow", "overgrown"],
+      "clip": true,
+      "bare": [1, 3]
+    },
+    "markings": {
+      "variants": ["none", "windows", "banners", "lanterns", "mosaic"],
+      "clip": true,
+      "bare": [1, 2]
+    },
+    "mouth": {
+      "variants": ["smile", "flat", "open", "grin", "ooh", "wavy", "none"],
+      "dir": "shared",
+      "anchor": true
+    },
+    "eyes": {
+      "variants": ["dot", "round", "happy", "sleepy", "wide", "wink", "glow", "none"],
+      "dir": "shared",
+      "anchor": true
+    },
+    "accessory": {
+      "variants": ["none", "flag", "balloon", "birds", "kite"],
+      "anchor": true,
+      "bare": [1, 2]
+    }
+  },
+  "primary": [
+    {"key": "stone", "hex": "#b9b2a3"},
+    {"key": "brick", "hex": "#b8573e"},
+    {"key": "sandstone", "hex": "#d9b77e"},
+    {"key": "slate", "hex": "#6e7a87"},
+    {"key": "marble", "hex": "#ece8e1"},
+    {"key": "jade", "hex": "#4f9a7b"},
+    {"key": "dusk", "hex": "#7b5ea7"},
+    {"key": "terracotta", "hex": "#c8714a"}
+  ],
+  "secondary": [
+    {"key": "roof", "hex": "#8e3b3b"},
+    {"key": "sea", "hex": "#3d8fd1"},
+    {"key": "pine", "hex": "#3f7d4a"},
+    {"key": "gold", "hex": "#e2b84b"},
+    {"key": "ivory", "hex": "#f4efe2"},
+    {"key": "night", "hex": "#2c3350"},
+    {"key": "sand", "hex": "#e8d3a2"},
+    {"key": "copper", "hex": "#b87333"}
+  ],
+  "forms": {
+    "city": {
+      "anchor": [0, 6, 0.75],
+      "prefer": {
+        "primary": ["slate", "dusk", "brick"],
+        "secondary": ["night", "gold", "ivory"]
+      }
+    },
+    "island": {
+      "anchor": [0, 38, 0.82],
+      "prefer": {
+        "primary": ["sandstone", "jade"],
+        "secondary": ["pine", "sea"]
+      }
+    },
+    "library": {
+      "anchor": [0, 8, 0.9],
+      "prefer": {
+        "primary": ["marble", "stone", "sandstone"],
+        "secondary": ["roof", "copper", "gold"]
+      }
+    },
+    "cathedral": {
+      "anchor": [0, 18, 0.82],
+      "prefer": {
+        "primary": ["stone", "marble", "sandstone"],
+        "secondary": ["night", "copper", "roof"]
+      }
+    },
+    "desert": {
+      "anchor": [0, 40, 0.85],
+      "prefer": {
+        "primary": ["sandstone", "terracotta"],
+        "secondary": ["sand", "gold"]
+      }
+    },
+    "forest": {
+      "anchor": [0, 22, 0.82],
+      "prefer": {
+        "primary": ["jade"],
+        "secondary": ["pine", "night"]
+      }
+    },
+    "harbor": {
+      "anchor": [0, 14, 0.7],
+      "prefer": {
+        "primary": ["marble", "stone"],
+        "secondary": ["roof", "sea"]
+      }
+    },
+    "ruin": {
+      "anchor": [0, 6, 0.95],
+      "prefer": {
+        "primary": ["stone", "sandstone", "slate"],
+        "secondary": ["pine", "sand"]
+      }
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "order": 4,
+  "config": {
+    "posting_cadence": "Every30Minutes",
+    "chronotype": "DaytimeDiurnal",
+    "active_hours_start": 10,
+    "active_hours_end": 22,
+    "spontaneity_rate": 70,
+    "active_days": [
+      "Saturday",
+      "Sunday"
+    ]
+  }
+}

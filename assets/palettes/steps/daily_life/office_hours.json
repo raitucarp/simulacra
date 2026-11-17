@@ -1,0 +1,17 @@
+{
+  "order": 3,
+  "config": {
+    "posting_cadence": "Hourly",
+    "chronotype": "DaytimeDiurnal",
+    "active_hours_start": 9,
+    "active_hours_end": 17,
+    "spontaneity_rate": 25,
+    "active_days": [
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday"
+    ]
+  }
+}

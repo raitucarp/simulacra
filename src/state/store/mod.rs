@@ -19,6 +19,7 @@ mod post_index;
 mod post_meta;
 mod post_delete;
 mod posts;
+mod preferences;
 mod forge_autosave;
 mod profile_create;
 mod profiles;
@@ -86,6 +87,9 @@ pub struct AppState {
     /// The user's theme choice; `theme_tokens` is always derived from it.
     pub theme_settings: crate::theme::ThemeSettings,
     pub theme_tokens: crate::theme::ThemeTokens,
+    /// Typed global preferences; read through `preferences()`, replaced through
+    /// `update_preferences` (which validates and persists them).
+    pub(crate) preferences: crate::domain::preferences::Preferences,
     /// Handle to the vault worker thread (`None` when running without persistence).
     pub db: Option<Vault>,
     /// Why the vault could not be opened or read at startup (the session then runs on

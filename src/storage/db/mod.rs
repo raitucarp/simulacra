@@ -12,6 +12,7 @@ mod networks;
 mod post_delete;
 mod post_updates;
 mod posts;
+mod preferences;
 mod profiles;
 mod schema;
 mod setting_key;
@@ -23,6 +24,7 @@ pub(super) mod versions;
 #[cfg(test)]
 mod tests;
 
+pub use preferences::{preference_rows, PREFERENCE_KEYS};
 pub use setting_key::SettingKey;
 
 use crate::error::{AppError, Result};

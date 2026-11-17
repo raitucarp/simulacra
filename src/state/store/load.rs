@@ -59,6 +59,8 @@ impl AppState {
         };
         let VaultSnapshot { data, settings, active_network, active_profile, dismissed_seeds } = snapshot;
         let active_network_id = persisted_or_first(active_network, &data.networks, |n| &n.id);
+        let default_persona = Some(settings.preferences.general.default_persona.clone()).filter(|id| !id.is_empty());
+        let active_profile = default_persona.filter(|id| data.user_profiles.iter().any(|p| p.id.as_str() == id && p.is_human_persona())).or(active_profile);
         let active_profile_id = persisted_or_first(active_profile, &data.user_profiles, |p| &p.id);
         let mut state = Self::assemble(data, active_network_id, active_profile_id, settings, Some(vault.clone()));
         state.upgrade_legacy_profiles_if_needed(&dismissed_seeds);
@@ -87,7 +89,12 @@ impl AppState {
 }
 
 fn default_settings() -> StoredSettings {
-    StoredSettings { llm: LlmSettings::default(), theme: ThemeSettings::default(), credentials: Default::default() }
+    StoredSettings {
+        llm: LlmSettings::default(),
+        theme: ThemeSettings::default(),
+        credentials: Default::default(),
+        preferences: Default::default(),
+    }
 }
 
 /// The persisted id when it still names an entity, else the first entity's id, else the default.

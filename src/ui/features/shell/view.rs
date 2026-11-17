@@ -7,6 +7,7 @@ use super::lab_state::{LabState, LlmInputs};
 use super::panels::ShellPanels;
 use super::scheduler_state::SchedulerState;
 use super::settings_draft::SettingsDraft;
+use super::settings_ui::SettingsUi;
 use crate::i18n::Language;
 use crate::state::AppState;
 use crate::theme::ThemeTokens;
@@ -25,6 +26,8 @@ pub struct AppView {
     /// Appearance settings pane (theme gallery and editor).
     pub appearance: Entity<AppearancePanel>,
     pub llm_inputs: LlmInputs,
+    /// Search box, text inputs and flags of the settings window.
+    pub settings_ui: SettingsUi,
     pub lab: LabState,
     pub scheduler: SchedulerState,
     pub graph: GraphState,
@@ -58,7 +61,7 @@ impl ChromeState {
             current_language,
             is_lang_menu_open: false,
             is_settings_open: false,
-            active_settings_tab: SettingsTab::AiIntelligence,
+            active_settings_tab: SettingsTab::General,
             settings_draft: SettingsDraft::default(),
             is_workspace_open: false,
             is_left_sidebar_collapsed: false,

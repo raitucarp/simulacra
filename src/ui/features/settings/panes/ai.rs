@@ -1,32 +1,24 @@
-//! AI Intelligence tab pane: provider grid, API key, endpoint, model presets and status banner.
+//! AI & Models provider pane: provider grid, API key, endpoint and model presets.
 
-use super::super::callbacks::{SelectPresetModelCallback, SelectProviderCallback};
+use super::super::props::AiPaneProps;
 use super::super::provider_grid::{render_preset_chips, render_provider_rows};
 use super::ai_fields::{render_api_key_section, render_endpoint_section, render_model_section};
 use super::common::{section, section_label, spaced_row};
-use crate::agent::{LlmProvider, LlmSettings};
+use crate::agent::LlmProvider;
 use crate::theme::ThemeTokens;
-use gpui_kit::component::input::InputState;
 use gpui_kit::prelude::FluentBuilder;
-use gpui_kit::{div, Div, Entity, IntoElement, ParentElement, Stateful, Styled};
+use gpui_kit::{div, Div, IntoElement, ParentElement, Stateful, Styled};
 use std::rc::Rc;
 use rust_i18n::t;
 
-/// Helper function to render AI Intelligence Tab Pane
-pub(in crate::ui::features::settings) fn render_ai_pane(
-    theme: &ThemeTokens,
-    current_settings: &LlmSettings,
-    api_key_input: &Entity<InputState>,
-    model_input: &Entity<InputState>,
-    endpoint_input: &Entity<InputState>,
-    on_select_provider: SelectProviderCallback,
-    on_select_preset_model: SelectPresetModelCallback,
-) -> impl IntoElement {
+/// The provider grid, API key, custom endpoint and default model of the AI & Models category.
+pub(in crate::ui::features::settings) fn render_ai_pane(theme: &ThemeTokens, props: AiPaneProps) -> impl IntoElement {
+    let AiPaneProps { settings, api_key, model, endpoint, on_select_provider, on_select_preset } = props;
+    let (current_settings, api_key_input, model_input, endpoint_input) = (&settings, &api_key, &model, &endpoint);
     let active_provider = current_settings.provider;
     let is_custom = active_provider == LlmProvider::Custom;
-    let (row1_buttons, row2_buttons) =
-        render_provider_rows(theme, active_provider, Rc::new(on_select_provider));
-    let preset_chips = render_preset_chips(theme, current_settings, Rc::new(on_select_preset_model));
+    let (row1_buttons, row2_buttons) = render_provider_rows(theme, active_provider, Rc::new(on_select_provider));
+    let preset_chips = render_preset_chips(theme, current_settings, Rc::new(on_select_preset));
 
     div()
         .flex()

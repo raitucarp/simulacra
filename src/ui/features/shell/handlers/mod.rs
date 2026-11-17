@@ -10,6 +10,8 @@ mod networks;
 mod onboarding;
 mod post_menu;
 mod posts;
+mod preferences;
+mod settings_commands;
 mod scheduler;
 mod settings;
 mod simulation;

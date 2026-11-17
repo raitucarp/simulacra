@@ -100,6 +100,12 @@ impl Vault {
         self.write(move |db| db.save_theme_settings(&settings))
     }
 
+    /// Queues persisting every preference category.
+    pub fn save_preferences(&self, prefs: &crate::domain::preferences::Preferences) -> Result<()> {
+        let prefs = prefs.clone();
+        self.write(move |db| db.save_preferences(&prefs))
+    }
+
     /// Reads a setting (after every queued write).
     pub fn get_setting(&self, key: SettingKey) -> Result<Option<String>> {
         self.read(move |db| db.get_setting(key))

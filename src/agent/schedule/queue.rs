@@ -43,6 +43,11 @@ impl GenerationQueue {
         Self { pending: VecDeque::new(), in_flight: HashSet::new(), capacity, max_in_flight }
     }
 
+    /// Changes how many generations may run at once (running ones finish either way).
+    pub fn set_max_in_flight(&mut self, max_in_flight: usize) {
+        self.max_in_flight = max_in_flight.max(1);
+    }
+
     /// Adds `id` to the back of the queue unless it is already queued, running, or full.
     pub fn enqueue(&mut self, id: ProfileId) -> EnqueueOutcome {
         if self.in_flight.contains(&id) {

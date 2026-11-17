@@ -8,6 +8,7 @@ use super::super::view::AppView;
 use crate::agent::runtime::GLOBAL_GATE_KEY;
 use crate::agent::schedule::FailureCause;
 use crate::agent::LlmFailure;
+use crate::domain::preferences::ToastKind;
 use chrono::Utc;
 use crate::error::AppError;
 use gpui_kit::component::notification::Notification;
@@ -39,7 +40,7 @@ impl AppView {
             } else {
                 Notification::error(failure.message.clone())
             };
-            window.push_notification(note.title(title).id1::<LlmFailureNotice>(failure.provider.id_str()), cx);
+            self.toast(ToastKind::AiFailure, note.title(title).id1::<LlmFailureNotice>(failure.provider.id_str()), window, cx);
         }
         self.scheduler.last_error = Some(failure);
     }
@@ -54,7 +55,7 @@ impl AppView {
         let body = t!("scheduler.paused_no_key", provider = provider.to_string()).to_string();
         eprintln!("simulacra: {title}: {body}");
         let note = Notification::warning(body.clone()).title(title).id1::<LlmFailureNotice>(provider.id_str());
-        window.push_notification(note, cx);
+        self.toast(ToastKind::AiFailure, note, window, cx);
         self.scheduler.last_error = Some(LlmFailure::new(provider, &body, "", true));
     }
 

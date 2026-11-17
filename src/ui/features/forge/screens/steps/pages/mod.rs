@@ -2,8 +2,11 @@
 
 mod appearance;
 mod attributes;
+mod avatar_kind;
 mod birthsign;
 mod daily;
+mod form_editor;
+mod form_options;
 mod grimoire;
 mod origin;
 mod origin_life;

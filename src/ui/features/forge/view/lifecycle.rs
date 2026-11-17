@@ -2,7 +2,7 @@
 
 use super::state::{ForgeContext, ForgeOpen, ForgeScreen, GuideState, Notice, StartState};
 use super::{ForgeEvent, ForgeView};
-use crate::domain::portrait::{AvatarMode, PortraitSlot};
+use crate::domain::portrait::{AvatarMode, FormLayer, FormSlot, PortraitSlot};
 use crate::domain::Profile;
 use crate::state::forge::{AgentDraft, AvatarField, DraftEdit, ForgeKind};
 use crate::theme::ThemeTokens;
@@ -33,6 +33,7 @@ impl ForgeView {
             intro_post: true,
             notice: None,
             portrait_slot: PortraitSlot::Face,
+            form_slot: FormSlot::Layer(FormLayer::Body),
             hear: super::HearStatus::Idle,
             grimoire_open: false,
             focus: cx.focus_handle(),

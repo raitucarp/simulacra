@@ -1,5 +1,6 @@
 //! [`PortraitView`]: a circular avatar for any [`AvatarMode`] at any size.
 
+use super::form::form_image;
 use super::photo::{is_croppable, photo_image};
 use super::portrait::{emblem_image, portrait_image};
 use super::template::raster_width;
@@ -15,6 +16,7 @@ pub fn avatar_source(mode: &AvatarMode, size: Pixels) -> Option<ImageSource> {
     let width = Some(raster_width(size.as_f32()));
     match mode {
         AvatarMode::Pcg(spec) => Some(portrait_image(spec, width).into()),
+        AvatarMode::Form(spec) => Some(form_image(spec, width).into()),
         AvatarMode::Emblem(spec) => Some(emblem_image(spec, width).into()),
         AvatarMode::Photo { path, crop } => photo_source(path, *crop, width),
     }

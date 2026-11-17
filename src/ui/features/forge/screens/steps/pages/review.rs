@@ -42,7 +42,7 @@ fn issue_row(at: usize, issue: &ValidationIssue, theme: &ThemeTokens, handle: &F
         .items_center()
         .gap(theme.spacing_sm)
         .child(div().text_color(color).child(Icon::new(icon).size(theme.font_size_md)))
-        .child(div().flex_1().text_size(theme.font_size_sm).child(issue_text(issue)))
+        .child(div().flex_1().min_w_0().text_size(theme.font_size_sm).child(issue_text(issue)))
         .child(Button::new((FIX_ID_PREFIX, at)).ghost().xsmall().label(tr(FIX_KEY)).on_click(move |_, w, cx| fix(w, cx)))
 }
 

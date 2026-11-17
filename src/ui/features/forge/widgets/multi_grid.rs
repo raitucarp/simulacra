@@ -100,7 +100,7 @@ impl<T: TraitOption> MultiSelectGrid<T> {
 impl<T: TraitOption> RenderOnce for MultiSelectGrid<T> {
     fn render(self, _: &mut Window, _: &mut App) -> impl IntoElement {
         let cells = T::ALL.iter().enumerate().map(|(at, option)| self.cell(at, *option)).collect();
-        CardGrid::new(self.id, cells, self.columns, self.theme.spacing_sm)
+        CardGrid::new(self.id, cells, self.columns, self.theme.spacing_sm).auto_columns(self.card_width)
     }
 }
 

@@ -25,7 +25,7 @@ const ONLINE_TITLE_KEY: &str = "forge.ui.daily.online_title";
 const RHYTHM_KEY: &str = "forge.ui.daily.rhythm";
 const WEEK_KEY: &str = "forge.ui.daily.week_title";
 const ACTIVE_DAYS_KEY: &str = "forge.ui.daily.active_days_title";
-/// Weekday cards per row (two rows for the seven days).
+/// Weekday cards per row until the grid is measured (preset width keeps "Wednesday" whole).
 const DAY_COLUMNS: usize = 4;
 const DAYS_KEY: &str = "forge.ui.daily.days";
 const HOURS_KEY: &str = "forge.ui.daily.hours";
@@ -79,7 +79,7 @@ impl ForgeView {
             )
             .child(card(theme).child(heading(tr(ACTIVE_DAYS_KEY), theme)).child(self.trait_set_block(
                 TraitSet::ActiveDays,
-                (DAY_COLUMNS, theme.forge_compact_card_width),
+                (DAY_COLUMNS, theme.forge_preset_card_width),
                 handle,
             )))
             .child(card(theme).child(heading(tr(WEEK_KEY), theme)).child(week::week_strip(&profile.config, self.draft.id(), theme)))

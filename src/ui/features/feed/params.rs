@@ -14,6 +14,7 @@ pub type SelectPostCallback = Box<dyn Fn(PostId, &mut Window, &mut App) + 'stati
 pub type RepostPostCallback = Box<dyn Fn(PostId, &mut Window, &mut App) + 'static>;
 pub type QuotePostCallback = Box<dyn Fn(PostId, &mut Window, &mut App) + 'static>;
 pub type DeletePostCallback = Box<dyn Fn(PostId, &mut Window, &mut App) + 'static>;
+pub type FindSimilarCallback = Box<dyn Fn(PostId, &mut Window, &mut App) + 'static>;
 pub type CycleProfileCallback = Box<dyn Fn(&mut Window, &mut App) + 'static>;
 pub type LoadMoreCallback = Box<dyn Fn(&mut Window, &mut App) + 'static>;
 pub type SelectFeedTabCallback = Box<dyn Fn(FeedTab, &mut Window, &mut App) + 'static>;
@@ -45,6 +46,8 @@ pub struct FeedParams<'a, C> {
     pub on_quote_post: QuotePostCallback,
     /// Deletes one of the user's own thoughts (after the card's confirmation dialog).
     pub on_delete_post: DeletePostCallback,
+    /// Post "…" menu › Find similar.
+    pub on_find_similar_post: FindSimilarCallback,
     /// Hashtag / wikilink clicks in post bodies (tag search, open the linked post or doc).
     pub on_open_tag: OpenTextAction,
     pub on_open_wikilink: OpenTextAction,

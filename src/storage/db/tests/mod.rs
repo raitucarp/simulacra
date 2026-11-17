@@ -1,6 +1,7 @@
 //! Unit tests for the SQLite persistence layer.
 
 mod catalogue;
+mod embeddings;
 mod location;
 mod posts;
 mod preferences;

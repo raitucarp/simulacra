@@ -92,6 +92,7 @@ impl Database {
     pub(super) fn init_schema(&self) -> Result<()> {
         self.conn.execute_batch(CREATE_TABLES).map_err(db_err)?;
         self.create_catalogue_tables()?;
+        self.conn.execute_batch(super::embeddings_schema::CREATE_EMBEDDINGS).map_err(db_err)?;
         self.migrate_posts_schema()?;
         self.conn
             .execute_batch(CREATE_MIGRATED_INDEXES)

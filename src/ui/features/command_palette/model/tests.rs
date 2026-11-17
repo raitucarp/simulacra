@@ -176,3 +176,25 @@ fn flat_indices_locate_their_group_and_row() {
     assert_eq!(locate(&groups, 3), Some((1, 1)));
     assert_eq!(locate(&groups, 5), None);
 }
+
+#[test]
+fn a_leading_question_mark_searches_by_meaning_and_ranks_nothing_itself() {
+    assert_eq!(parse_query("  ? free will "), PaletteQuery { mode: PaletteMode::Semantic, text: "free will".into() });
+    assert_eq!(PaletteMode::Semantic.initial_text(), "?");
+    let query = parse_query("?graph");
+    assert!(rank(&items(), &query, &PaletteHistory::default()).is_empty(), "semantic results come from the shell");
+}
+
+#[test]
+fn semantic_results_form_one_group_by_their_source() {
+    let row = |title: &str, score: f32| SemanticRow { item: item(PaletteTarget::Post(PostId::new(title)), PaletteGroup::Meaning, title, ""), excerpt: String::new(), score };
+    let ready = SemanticPhase::Ready { query: "mind".into(), source: SemanticSource::Meaning, rows: vec![row("a", 0.9), row("b", 0.4)] };
+    let groups = ready.groups();
+    assert_eq!(groups.len(), 1);
+    assert_eq!((groups[0].group, groups[0].items.len()), (PaletteGroup::Meaning, 2));
+    assert_eq!(ready.query(), Some("mind"));
+    let words = SemanticPhase::Ready { query: "mind".into(), source: SemanticSource::Words { note: "no key".into() }, rows: vec![row("a", 1.0)] };
+    assert_eq!(words.groups()[0].group, PaletteGroup::Words);
+    assert!(SemanticPhase::Searching { query: "mind".into() }.groups().is_empty());
+    assert!(SemanticPhase::Prompt.rows().is_empty() && SemanticPhase::Prompt.query().is_none());
+}

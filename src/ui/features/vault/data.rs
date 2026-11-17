@@ -103,6 +103,11 @@ impl VaultData {
         fnv1a(text.as_bytes())
     }
 
+    /// The same data with `neighbours` as the semantic related-entries hook.
+    pub fn with_semantic(self, neighbours: HashMap<String, Vec<ScoredDocument>>) -> Self {
+        Self { semantic: Rc::new(neighbours), ..self }
+    }
+
     pub fn document(&self, id: &str) -> Option<&GroundingDocument> {
         self.documents.iter().find(|d| d.id == id)
     }

@@ -4,6 +4,7 @@ pub mod forge;
 pub mod graph;
 pub mod mock;
 pub mod seed;
+pub mod semantic;
 pub mod store;
 pub mod threads;
 

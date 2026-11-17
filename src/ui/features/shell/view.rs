@@ -7,6 +7,7 @@ use super::import_state::ImportUi;
 use super::lab_state::{LabState, LlmInputs};
 use super::panels::ShellPanels;
 use super::scheduler_state::SchedulerState;
+use super::semantic_state::SemanticState;
 use super::settings_draft::SettingsDraft;
 use super::settings_ui::SettingsUi;
 use super::vault_host::VaultHost;
@@ -39,6 +40,8 @@ pub struct AppView {
     pub vault: VaultHost,
     /// The import sheet, quick capture and file-drop state.
     pub import: ImportUi,
+    /// Vector index, indexing queue and the "find similar" sheet (sb B3).
+    pub semantic: SemanticState,
     /// The Agent Forge while it is open (it replaces the center and right columns).
     pub forge: Option<ForgeSession>,
     /// Left sidebar prefs (width, sections, pins, recents) and the window width.

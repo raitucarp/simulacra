@@ -3,7 +3,8 @@
 //! open a linking post).
 
 use super::view::AppView;
-use crate::domain::document::record::{CatalogueRecord, OriginKind};
+use crate::domain::document::record::{fnv1a, CatalogueRecord, OriginKind};
+use crate::domain::embedding::{document_neighbours, NEIGHBOURS_PER_DOCUMENT};
 use crate::domain::document::NewDocument;
 use crate::state::{AppState, NavigationTab};
 use crate::ui::features::vault::{EditorSubmission, VaultData, VaultEvent, VaultPanel};
@@ -31,7 +32,7 @@ impl VaultHost {
 impl AppView {
     /// Hands the vault fresh data when the store changed (cheap otherwise).
     pub(super) fn sync_vault(&mut self, cx: &mut Context<Self>) {
-        let fingerprint = VaultData::fingerprint(&self.state);
+        let fingerprint = self.vault_fingerprint();
         if fingerprint != self.vault.fingerprint {
             self.push_vault_data(cx);
         } else {
@@ -40,9 +41,22 @@ impl AppView {
         }
     }
 
+    /// The store fingerprint plus the vector count, so new embeddings refresh related entries.
+    fn vault_fingerprint(&self) -> u64 {
+        fnv1a(format!("{}|{}", VaultData::fingerprint(&self.state), self.semantic.index.len()).as_bytes())
+    }
+
+    /// The vault's data with each document's neighbours in meaning.
+    fn vault_data(&self) -> VaultData {
+        let data = VaultData::from_state(&self.state);
+        let model = self.embedding_config().model;
+        let neighbours = document_neighbours(&self.semantic.index, &model, data.documents.iter().map(|doc| doc.id.as_str()), NEIGHBOURS_PER_DOCUMENT);
+        data.with_semantic(neighbours)
+    }
+
     fn push_vault_data(&mut self, cx: &mut Context<Self>) {
-        self.vault.fingerprint = VaultData::fingerprint(&self.state);
-        let (data, theme) = (VaultData::from_state(&self.state), self.theme.clone());
+        self.vault.fingerprint = self.vault_fingerprint();
+        let (data, theme) = (self.vault_data(), self.theme.clone());
         self.vault.panel.update(cx, |panel, cx| panel.set_data(data, &theme, cx));
     }
 

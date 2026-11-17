@@ -4,6 +4,7 @@
 //! migrations that rewrite data and must run exactly once per vault. Each unit owns its
 //! version number; [`MIGRATIONS`] lists them in order, so new ones are added as new rows.
 
+use super::embeddings_schema::EMBEDDING_MODEL_VERSION;
 use super::{collect_rows, db_err, Database, EMPTY_AUTHOR_SNAPSHOT};
 use crate::domain::{Profile, ProfileId};
 use crate::error::Result;
@@ -18,9 +19,10 @@ pub(super) const CATALOGUE_VERSION: i64 = 2;
 type MigrationStep = fn(&Database) -> Result<()>;
 
 /// Every versioned migration, in ascending version order.
-const MIGRATIONS: [(i64, MigrationStep); 2] = [
+const MIGRATIONS: [(i64, MigrationStep); 3] = [
     (AUTHOR_ID_VERSION, Database::migrate_author_ids),
     (CATALOGUE_VERSION, Database::migrate_catalogue_records),
+    (EMBEDDING_MODEL_VERSION, Database::migrate_embedding_model),
 ];
 
 /// The version a fully migrated vault is at.

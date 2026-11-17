@@ -1,4 +1,5 @@
-//! "…" overflow menu of a post card: copy, reply, quote and (own thoughts) delete.
+//! "…" overflow menu of a post card: copy, reply, quote, find similar and (own thoughts)
+//! delete.
 
 use super::super::consts::OVERFLOW_BTN_ID_PREFIX;
 use super::handlers::{PostAction, PostCardHandlers};
@@ -31,7 +32,8 @@ fn build_menu(menu: PopupMenu, text: &str, link: &str, handlers: &PostCardHandle
         .item(copy_item(LucideIcon::Link2, t!("post.menu_copy_link"), link, t!("post.copied_link")))
         .separator()
         .item(action_item(LucideIcon::MessageSquare, t!("post.menu_reply"), &handlers.on_reply))
-        .item(action_item(LucideIcon::Edit, t!("post.menu_quote"), &handlers.on_quote));
+        .item(action_item(LucideIcon::Edit, t!("post.menu_quote"), &handlers.on_quote))
+        .item(action_item(LucideIcon::Compass, t!("post.menu_find_similar"), &handlers.on_find_similar));
     match &handlers.on_delete {
         Some(on_delete) => menu.separator().item(delete_item(on_delete.clone())),
         None => menu,

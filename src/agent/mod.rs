@@ -2,6 +2,7 @@
 
 pub mod credentials;
 pub mod custom_request;
+pub mod embedding;
 pub mod engine;
 pub mod image;
 pub mod llm;

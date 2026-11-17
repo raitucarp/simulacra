@@ -51,9 +51,9 @@ const AI: &[SettingsGroup] = &[
     group("budget", &[Field(F::Ai(Ai::DailyRequestBudget)), Field(F::Ai(Ai::DailyTokenCap)), Field(F::Ai(Ai::AskBeforeSpending))]),
 ];
 const EMBEDDINGS: &[SettingsGroup] = &[
-    group("model", &[Field(F::Embeddings(Emb::Provider)), Field(F::Embeddings(Emb::Model))]),
+    group("model", &[Field(F::Embeddings(Emb::Provider)), Field(F::Embeddings(Emb::Model)), Field(F::Embeddings(Emb::Endpoint)), Field(F::Embeddings(Emb::Dimensions))]),
     group("chunking", &[Field(F::Embeddings(Emb::ChunkSize)), Field(F::Embeddings(Emb::ChunkOverlap))]),
-    group("index", &[Field(F::Embeddings(Emb::SemanticSearch)), Action(Cmd::ReindexEmbeddings)]),
+    group("index", &[Field(F::Embeddings(Emb::SemanticSearch)), Action(Cmd::ReindexEmbeddings), Action(Cmd::CancelReindex)]),
 ];
 const IMAGES: &[SettingsGroup] = &[
     group("engine", &[Field(F::Images(Img::DefaultEngine)), Field(F::Images(Img::Size)), Field(F::Images(Img::StylePrefix))]),

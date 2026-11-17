@@ -3,7 +3,7 @@
 use super::macros::category_fields;
 use super::value::{choice, choice_value, choices, count, limit, number, number_value, text, toggle, FieldKind, NumberUnit, SettingValue};
 use crate::domain::preferences::{AiPrefs, DAILY_REQUESTS, DAILY_TOKENS, MAX_RETRIES, REQUEST_TIMEOUT_SECONDS};
-use crate::domain::preferences::{EmbeddingPrefs, EmbeddingProvider, CHUNK_OVERLAP, CHUNK_SIZE};
+use crate::domain::preferences::{EmbeddingPrefs, EmbeddingProvider, CHUNK_OVERLAP, CHUNK_SIZE, DIMENSIONS};
 use crate::domain::preferences::{ImageAspect, ImageEngineChoice, ImagePrefs};
 
 category_fields! {
@@ -50,8 +50,8 @@ impl AiField {
 category_fields! {
     /// An Embeddings preference.
     EmbeddingField {
-        Provider => "provider", Model => "model", ChunkSize => "chunk_size", ChunkOverlap => "chunk_overlap",
-        SemanticSearch => "semantic_search",
+        Provider => "provider", Model => "model", Endpoint => "endpoint", Dimensions => "dimensions",
+        ChunkSize => "chunk_size", ChunkOverlap => "chunk_overlap", SemanticSearch => "semantic_search",
     }
 }
 
@@ -59,7 +59,8 @@ impl EmbeddingField {
     pub fn kind(self) -> FieldKind {
         match self {
             Self::Provider => choices::<EmbeddingProvider>(),
-            Self::Model => FieldKind::Text,
+            Self::Model | Self::Endpoint => FieldKind::Text,
+            Self::Dimensions => number(DIMENSIONS, NumberUnit::Dimensions),
             Self::ChunkSize => number(CHUNK_SIZE, NumberUnit::Tokens),
             Self::ChunkOverlap => number(CHUNK_OVERLAP, NumberUnit::Tokens),
             Self::SemanticSearch => FieldKind::Toggle,
@@ -70,6 +71,8 @@ impl EmbeddingField {
         match self {
             Self::Provider => choice_value(prefs.provider),
             Self::Model => SettingValue::Text(prefs.model.clone()),
+            Self::Endpoint => SettingValue::Text(prefs.endpoint.clone()),
+            Self::Dimensions => number_value(prefs.dimensions),
             Self::ChunkSize => number_value(prefs.chunk_size),
             Self::ChunkOverlap => number_value(prefs.chunk_overlap),
             Self::SemanticSearch => SettingValue::Toggle(prefs.semantic_search),
@@ -80,6 +83,8 @@ impl EmbeddingField {
         match self {
             Self::Provider => EmbeddingPrefs { provider: choice(value, prefs.provider), ..prefs },
             Self::Model => EmbeddingPrefs { model: text(value, prefs.model.clone()), ..prefs },
+            Self::Endpoint => EmbeddingPrefs { endpoint: text(value, prefs.endpoint.clone()), ..prefs },
+            Self::Dimensions => EmbeddingPrefs { dimensions: count(value, prefs.dimensions), ..prefs },
             Self::ChunkSize => EmbeddingPrefs { chunk_size: count(value, prefs.chunk_size), ..prefs },
             Self::ChunkOverlap => EmbeddingPrefs { chunk_overlap: count(value, prefs.chunk_overlap), ..prefs },
             Self::SemanticSearch => EmbeddingPrefs { semantic_search: toggle(value, prefs.semantic_search), ..prefs },

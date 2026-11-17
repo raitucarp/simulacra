@@ -35,6 +35,9 @@ pub struct ResultGroup {
 
 /// The result groups for `query`; the best match comes first.
 pub fn rank(items: &[PaletteItem], query: &PaletteQuery, history: &PaletteHistory) -> Vec<ResultGroup> {
+    if query.mode == PaletteMode::Semantic {
+        return Vec::new();
+    }
     if query.is_blank() {
         return blank_groups(items, query.mode, history);
     }
@@ -52,7 +55,11 @@ pub fn rank(items: &[PaletteItem], query: &PaletteQuery, history: &PaletteHistor
 }
 
 fn in_mode(item: &PaletteItem, mode: PaletteMode) -> bool {
-    mode == PaletteMode::Everything || item.target.is_command()
+    match mode {
+        PaletteMode::Everything => true,
+        PaletteMode::Commands => item.target.is_command(),
+        PaletteMode::Semantic => false,
+    }
 }
 
 /// Whether matched positions sit close enough together to be a real hit (scattered letters

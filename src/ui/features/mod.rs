@@ -12,6 +12,7 @@ pub mod onboarding;
 pub mod popovers;
 pub mod post;
 pub mod roster;
+pub mod semantic;
 pub mod settings;
 pub mod shell;
 pub mod sidebar_left;

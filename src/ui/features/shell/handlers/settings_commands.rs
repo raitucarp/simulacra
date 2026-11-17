@@ -38,7 +38,9 @@ impl AppView {
                 self.chrome.is_settings_open = false;
                 self.toggle_shortcut_sheet(window, cx);
             }
-            SettingsCommand::ReindexEmbeddings | SettingsCommand::Export => {
+            SettingsCommand::ReindexEmbeddings => self.rebuild_semantic_index(window, cx),
+            SettingsCommand::CancelReindex => self.cancel_semantic_index(window, cx),
+            SettingsCommand::Export => {
                 let key = format!("{PENDING_PREFIX}.{}", command.id());
                 let note = Notification::info(t!(key.as_str()).to_string());
                 window.push_notification(note, cx);

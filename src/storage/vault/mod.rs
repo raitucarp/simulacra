@@ -6,6 +6,7 @@
 //! every earlier write. Dropping the last handle flushes the queue and joins the worker.
 
 mod catalogue_ops;
+mod embeddings;
 mod ops;
 #[cfg(test)]
 mod tests;

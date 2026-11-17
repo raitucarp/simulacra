@@ -12,6 +12,7 @@ mod navigation;
 mod panels;
 mod responsive;
 mod scales;
+mod semantic;
 mod spacing;
 mod surfaces;
 mod text;
@@ -44,6 +45,7 @@ pub fn derive_tokens(
     panels::apply_panel_layout(&mut t);
     navigation::apply_navigation_layout(&mut t);
     import::apply_import_layout(&mut t);
+    semantic::apply_semantic_layout(&mut t);
     responsive::apply_responsive_layout(&mut t);
     vault::apply_vault_layout(&mut t);
     surfaces::apply_surfaces(&mut t, palette);

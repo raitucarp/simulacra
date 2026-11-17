@@ -12,7 +12,12 @@ use gpui_kit::*;
 impl AppView {
     /// Sets one preference.
     pub(crate) fn edit_preference(&mut self, field: SettingField, value: SettingValue, window: &mut Window, cx: &mut Context<Self>) {
-        let next = field.set(self.state.preferences().clone(), &value);
+        let mut next = field.set(self.state.preferences().clone(), &value);
+        // A model still at the old embedding provider's default follows the provider.
+        let previous = self.state.preferences().embeddings.clone();
+        if next.embeddings.provider != previous.provider {
+            next.embeddings = previous.with_provider(next.embeddings.provider);
+        }
         self.apply_preferences(next, window, cx);
     }
 
@@ -39,6 +44,9 @@ impl AppView {
             crate::i18n::set_locale(current.general.language);
         }
         self.scheduler.queue.set_max_in_flight(current.agents.max_concurrent as usize);
+        if current.embeddings.provider != previous.embeddings.provider {
+            self.settings_ui.sync_inputs(&current, window, cx);
+        }
         if current.agents.autonomous_posting != previous.agents.autonomous_posting {
             self.on_scheduler_switched(current.agents.autonomous_posting, window, cx);
         }

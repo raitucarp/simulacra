@@ -103,18 +103,11 @@ theme_tokens! {
         settings_modal_max_width, settings_modal_max_height, settings_modal_inset, settings_rail_item_height, settings_rail_compact_width,
         settings_row_label_min_width, settings_text_control_width, settings_number_readout_width, settings_header_art_width, settings_empty_art_width,
         // Agent Forge character creator
-        forge_rail_width, forge_rail_thumb_width, forge_options_width, forge_preview_width,
-        forge_topbar_height, forge_portrait_size, forge_nameplate_avatar_size, forge_class_card_width,
-        forge_option_card_width, forge_part_thumb_size, forge_swatch_size, forge_guide_size,
-        forge_radar_size, forge_skill_bar_height, forge_trading_card_width, forge_explainer_width,
-        forge_empty_art_width, forge_tile_min_height, forge_bubble_max_width, forge_preset_card_width,
-        forge_compact_card_width,
+        forge_rail_width, forge_rail_thumb_width, forge_options_width, forge_preview_width, forge_topbar_height, forge_portrait_size, forge_nameplate_avatar_size, forge_class_card_width, forge_option_card_width, forge_part_thumb_size, forge_swatch_size, forge_guide_size, forge_radar_size, forge_skill_bar_height, forge_trading_card_width, forge_explainer_width, forge_empty_art_width, forge_tile_min_height, forge_bubble_max_width, forge_preset_card_width, forge_compact_card_width,
         // Agent Forge Birthsign: the Enneagram wheel and its clickable points
         forge_wheel_size, forge_wheel_dot_size,
-        // Agent Forge: Daily Life clock ring and week strip, Relationships heart pips
-        forge_clock_size, forge_clock_ring_width, forge_week_cell_height, forge_heart_size,
-        // Agent Forge: hour labels inside the clock ring, keyboard-hint key caps
-        forge_clock_label_size, forge_key_cap_min_width,
+        // Agent Forge: Daily Life clock ring and week strip, Relationships heart pips, clock hour labels, key caps
+        forge_clock_size, forge_clock_ring_width, forge_week_cell_height, forge_heart_size, forge_clock_label_size, forge_key_cap_min_width,
         // Agent Forge: palette gallery category tabs and the step palette strip
         forge_palette_tab_icon_width, forge_palette_chip_width, forge_palette_search_width,
         onboarding_width, onboarding_art_size, // First-run welcome overlay
@@ -126,7 +119,7 @@ theme_tokens! {
         nav_row_height, // sb A2: compact left navigation (rows, rail, active bar, badge, New menu), palette, shortcut sheet
         nav_rail_button_size, nav_active_bar_width, nav_active_bar_height, sidebar_badge_size, new_menu_width, palette_width, palette_results_max_height, palette_top_offset, key_cap_min_width, shortcut_sheet_width, shortcut_sheet_max_height, shortcut_sheet_section_width,
         vault_facet_rail_width, vault_facet_drawer_width, vault_cover_width, vault_cover_height, vault_cover_thumb_width, vault_entry_cover_width, reader_measure_width, reader_measure_narrow_width, reader_measure_wide_width, vault_entry_side_width, vault_search_width, vault_editor_width, vault_meta_label_width, vault_column_creator_width, vault_column_kind_width, vault_column_year_width, vault_column_added_width, vault_column_links_width, vault_progress_height, vault_empty_art_width, vault_banner_width, vault_kind_art_width, vault_letter_cell_size, vault_tree_indent, // sb B1: Knowledge Vault catalogue
-        import_sheet_width, import_sheet_max_height, import_preview_height, import_preview_row_height, import_art_width, import_meta_label_width, capture_box_width, capture_box_top, drop_art_width, // sb B2: import sheet and preview, quick capture, drop hint
+        import_sheet_width, import_sheet_max_height, import_preview_height, import_preview_row_height, import_art_width, import_meta_label_width, capture_box_width, capture_box_top, drop_art_width, similarity_bar_width, similarity_bar_height, similarity_readout_width, indexing_indicator_width, similar_sheet_width, similar_sheet_max_height, // sb B2: import sheet and preview, quick capture, drop hint; sb B3: semantic search
     ],
     // Typography Hierarchy & Line Height; heatmap level opacities; graph dimming & curvature
     floats: [

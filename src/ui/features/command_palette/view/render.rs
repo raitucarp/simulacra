@@ -60,8 +60,11 @@ impl Render for CommandPalette {
 
 impl CommandPalette {
     fn render_search_row(&self, theme: &ThemeTokens) -> Div {
-        let is_commands = self.query.mode == PaletteMode::Commands;
-        let icon = if is_commands { LucideIcon::Command } else { LucideIcon::Search };
+        let (icon, chip) = match self.query.mode {
+            PaletteMode::Commands => (LucideIcon::Command, Some("palette.mode_commands")),
+            PaletteMode::Semantic => (LucideIcon::Sparkles, Some("palette.mode_semantic")),
+            PaletteMode::Everything => (LucideIcon::Search, None),
+        };
         div()
             .flex()
             .items_center()
@@ -72,10 +75,13 @@ impl CommandPalette {
             .border_color(theme.border_subtle)
             .child(div().text_color(theme.text_muted).child(Icon::new(icon)))
             .child(div().flex_1().min_w_0().text_size(theme.font_size_sm).child(Input::new(&self.input).appearance(false)))
-            .when(is_commands, |row| row.child(render_mode_chip(theme)))
+            .when_some(chip, |row, key| row.child(render_mode_chip(key, theme)))
     }
 
     fn render_results(&self, theme: &ThemeTokens, cx: &mut Context<Self>) -> AnyElement {
+        if self.query.mode == PaletteMode::Semantic {
+            return self.render_semantic_results(theme, cx);
+        }
         if self.groups.is_empty() {
             let text = t!("palette.empty", query = self.query.text.as_str()).to_string();
             return div().p(theme.panel_padding).text_size(theme.font_size_xs).text_color(theme.text_muted).child(text).into_any_element();
@@ -92,6 +98,11 @@ impl CommandPalette {
                 flat += 1;
             }
         }
+        self.results_list(theme, children)
+    }
+
+    /// The scrolling list of result rows.
+    pub(super) fn results_list(&self, theme: &ThemeTokens, children: Vec<AnyElement>) -> AnyElement {
         div()
             .id(LIST_ID)
             .max_h(theme.palette_results_max_height)
@@ -105,7 +116,7 @@ impl CommandPalette {
     }
 }
 
-fn render_mode_chip(theme: &ThemeTokens) -> Div {
+fn render_mode_chip(label_key: &str, theme: &ThemeTokens) -> Div {
     div()
         .px(theme.spacing_sm)
         .py(theme.spacing_3xs)
@@ -115,5 +126,5 @@ fn render_mode_chip(theme: &ThemeTokens) -> Div {
         .border_color(theme.accent_brand_border)
         .text_size(theme.font_size_2xs)
         .text_color(theme.accent_brand)
-        .child(t!("palette.mode_commands").to_string())
+        .child(t!(label_key).to_string())
 }

@@ -42,6 +42,8 @@ impl AppView {
             CommandId::OpenPalette => self.open_palette(PaletteMode::Everything, window, cx),
             CommandId::OpenCommands => self.open_palette(PaletteMode::Commands, window, cx),
             CommandId::ReplayWelcome => self.replay_welcome(window, cx),
+            CommandId::SemanticSearch => self.open_palette(PaletteMode::Semantic, window, cx),
+            CommandId::FindSimilar => self.find_similar_to_open_thought(window, cx),
         }
     }
 

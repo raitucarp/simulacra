@@ -6,6 +6,7 @@ pub mod activity;
 pub mod agent_config;
 pub mod archetype;
 pub mod document;
+pub mod embedding;
 pub mod engine;
 pub mod graph;
 pub mod ids;

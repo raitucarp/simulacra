@@ -89,4 +89,6 @@ setting_keys! {
     SidebarNavigation => "ui.sidebar_navigation",
     /// sb A2: JSON of the command palette's recently and frequently opened items.
     PaletteHistory => "ui.palette_history",
+    /// sb B3: JSON of today's embedding requests and estimated tokens (the daily AI budget).
+    EmbeddingUsage => "embeddings.usage",
 }

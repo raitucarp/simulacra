@@ -6,6 +6,7 @@ mod drawer;
 mod navigation;
 mod import;
 mod overlays;
+mod semantic;
 mod settings;
 mod sidebars;
 mod workspace;
@@ -23,12 +24,7 @@ const ROOT_STATS_NAME: &str = "AppView";
 impl Render for AppView {
     fn render(&mut self, window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
         render_stats::record(ROOT_STATS_NAME);
-        self.claim_idle_focus(window, cx);
-        self.sync_composer_view(cx);
-        self.sync_stream(cx);
-        self.sync_mind_graph(cx);
-        self.sync_vault(cx);
-        self.sync_forge_theme(cx);
+        self.sync_views(window, cx);
         let bind = Binder::new(cx);
         let class = LayoutClass::of_window(window, &self.theme);
         let columns = self.render_columns(class);
@@ -54,6 +50,8 @@ impl Render for AppView {
             .children(self.workspace_popover(&bind))
             .children(self.composer_modal_view(cx))
             .children(self.welcome_overlay(&bind))
+            .children(self.indexing_indicator(&bind))
+            .children(self.similar_sheet(&bind))
             .children(self.palette.palette.clone())
             .children(self.shortcut_sheet(&bind))
             .children(self.import_sheet(&bind, cx))
@@ -63,6 +61,17 @@ impl Render for AppView {
 }
 
 impl AppView {
+    /// Render hook: focus, then every child view and background index brought up to date.
+    fn sync_views(&mut self, window: &mut Window, cx: &mut Context<Self>) {
+        self.claim_idle_focus(window, cx);
+        self.sync_composer_view(cx);
+        self.sync_stream(cx);
+        self.sync_mind_graph(cx);
+        self.sync_vault(cx);
+        self.sync_semantic_index(window, cx);
+        self.sync_forge_theme(cx);
+    }
+
     /// Pushes the active profile and theme into the isolated composer entities.
     fn sync_composer_view(&self, cx: &mut Context<Self>) {
         let current_profile = self.state.current_profile();

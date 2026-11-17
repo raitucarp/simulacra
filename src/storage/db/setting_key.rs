@@ -85,4 +85,8 @@ setting_keys! {
     PrefsAdvanced => "preferences.advanced",
     /// Pre-palette serialized `ThemeTokens`; migrated on load, then removed.
     LegacyThemeTokens => "theme_tokens",
+    /// sb A2: JSON of the left sidebar's width preference, collapsed sections, pins and recents.
+    SidebarNavigation => "ui.sidebar_navigation",
+    /// sb A2: JSON of the command palette's recently and frequently opened items.
+    PaletteHistory => "ui.palette_history",
 }

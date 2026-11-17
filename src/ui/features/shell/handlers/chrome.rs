@@ -18,11 +18,6 @@ impl AppView {
         cx.notify();
     }
 
-    pub(crate) fn toggle_left_sidebar(&mut self, _: &mut Window, cx: &mut Context<Self>) {
-        self.chrome.is_left_sidebar_collapsed = !self.chrome.is_left_sidebar_collapsed;
-        cx.notify();
-    }
-
     /// Shows or hides the right panel: its drawer in the compact layout, else its column.
     pub(crate) fn toggle_right_sidebar(&mut self, window: &mut Window, cx: &mut Context<Self>) {
         let chrome = &mut self.chrome;

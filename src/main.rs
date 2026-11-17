@@ -11,10 +11,7 @@ fn main() {
         use gpui_kit::component as gpui_component;
         rust_i18n::extend!(gpui_component);
         init(cx);
-        cx.bind_keys([
-            KeyBinding::new("ctrl-enter", simulacra::ui::molecules::post_composer::SubmitPostDraft, Some("Input")),
-            KeyBinding::new("cmd-enter", simulacra::ui::molecules::post_composer::SubmitPostDraft, Some("Input")),
-        ]);
+        simulacra::ui::keymap::install_keymap(cx);
         // A small splash window loads everything, builds the shell in a hidden main window,
         // then shows that window maximized and closes itself.
         let window_options = splash_window_options(&ThemeTokens::default(), cx);

@@ -103,4 +103,15 @@ lucide_catalog! {
     Wifi => "icons/wifi.svg",
     X => "icons/x.svg",
     Zap => "icons/zap.svg",
+    // sb A2: navigation rail, "New" menu, pins and the command palette
+    Command => "icons/command.svg",
+    CornerDownLeft => "icons/corner-down-left.svg",
+    FileUp => "icons/file-up.svg",
+    MessageSquarePlus => "icons/message-square-plus.svg",
+    PanelLeftClose => "icons/panel-left-close.svg",
+    PanelLeftOpen => "icons/panel-left-open.svg",
+    PinOff => "icons/pin-off.svg",
+    Star => "icons/star.svg",
+    StickyNote => "icons/sticky-note.svg",
+    UserPlus => "icons/user-plus.svg",
 }

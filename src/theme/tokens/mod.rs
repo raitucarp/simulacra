@@ -119,14 +119,14 @@ theme_tokens! {
         forge_clock_label_size, forge_key_cap_min_width,
         // Agent Forge: palette gallery category tabs and the step palette strip
         forge_palette_tab_icon_width, forge_palette_chip_width, forge_palette_search_width,
-        // First-run welcome overlay
-        onboarding_width, onboarding_art_size,
+        onboarding_width, onboarding_art_size, // First-run welcome overlay
         // Startup windows, responsive layout (breakpoints, sidebar, drawer, stacked inspector), heatmap cells, graph labels
         splash_window_width, splash_window_height, window_min_width, window_min_height, layout_medium_min_width,
         layout_wide_min_width, right_sidebar_medium_width, right_sidebar_medium_max, right_drawer_width, inspector_stacked_height,
         inspector_stacked_min, inspector_stacked_max, heatmap_cell_min, heatmap_cell_max, heatmap_month_label_width, graph_label_max_width, graph_mini_node_radius_max,
-        // Agent Forge Engine step: the "Test image" result and the sample-answer editor
-        forge_probe_image_size, forge_sample_height,
+        forge_probe_image_size, forge_sample_height, // Agent Forge Engine step: "Test image" result, sample-answer editor
+        nav_row_height, // sb A2: compact left navigation (rows, rail, active bar, badge, New menu), palette, shortcut sheet
+        nav_rail_button_size, nav_active_bar_width, nav_active_bar_height, sidebar_badge_size, new_menu_width, palette_width, palette_results_max_height, palette_top_offset, key_cap_min_width, shortcut_sheet_width, shortcut_sheet_max_height, shortcut_sheet_section_width,
     ],
     // Typography Hierarchy & Line Height; heatmap level opacities; graph dimming & curvature
     floats: [

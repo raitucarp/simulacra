@@ -4,6 +4,7 @@ use super::super::view::AppView;
 use crate::domain::post::{SourceKind, SourceRef};
 use crate::domain::{PostId, ProfileId};
 use crate::state::{feed_position, FeedTab, NavigationTab, WikilinkTarget};
+use crate::ui::features::sidebar_left::NavRef;
 use gpui_kit::*;
 
 impl AppView {
@@ -28,6 +29,7 @@ impl AppView {
         if !self.feed.search_input.read(cx).value().trim().is_empty() {
             self.feed.search_input.update(cx, |input, cx| input.set_value("", window, cx));
         }
+        self.note_recent(NavRef::Thread(post_id.clone()));
         self.feed.selected_thread_post_id = Some(post_id.clone());
         self.feed.inspector_expanded = false;
         // Clearing the search re-windows the stream on its change event; scroll after that.

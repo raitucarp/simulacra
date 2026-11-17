@@ -12,5 +12,8 @@ gpui_kit::assets::icon_assets!(
         MessageSquare, Minimize2, Minus, Moon, Palette, PanelLeft, PanelRight, Pin, Plus, RefreshCw,
         Repeat, Search, Send, Settings, Share2, SlidersHorizontal, Sparkles, SquarePen, Sun, SunMoon, Tag,
         Terminal, Trash, User, UserCheck, Users, Volume2, Wifi, X, Zap,
+        // sb A2
+        Command, CornerDownLeft, FileUp, MessageSquarePlus, PanelLeftClose, PanelLeftOpen, PinOff, Star,
+        StickyNote, UserPlus,
     ]
 );

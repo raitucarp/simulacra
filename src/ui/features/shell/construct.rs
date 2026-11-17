@@ -8,8 +8,10 @@ use super::scheduler_state::SchedulerState;
 use super::settings_ui::SettingsUi;
 use super::view::{AppView, ChromeState};
 use crate::state::AppState;
+use crate::ui::features::command_palette::PaletteHost;
 use crate::ui::features::composer::ComposerModalPanel;
 use crate::ui::features::settings::AppearancePanel;
+use crate::ui::features::sidebar_left::SidebarState;
 use gpui_kit::*;
 
 /// Interface language at startup.
@@ -39,13 +41,14 @@ impl AppView {
             cx.subscribe_in(&composer_modal, window, Self::publish_composer_draft),
             graph_subscription,
             cx.subscribe_in(&appearance, window, Self::on_appearance_event),
-            Self::observe_own_changes(cx),
+            Self::observe_own_changes(cx), Self::observe_window_width(window, cx), Self::refocus_on_focus_loss(window, cx),
             cx.observe_window_appearance(window, |this, window, cx| this.follow_system_appearance(window, cx)),
         ];
         subscriptions.extend(settings_subscriptions);
         let llm_inputs = LlmInputs::new(&state, window, cx);
         let (lab, onboarding) = (LabState::new(&state), state.should_offer_onboarding());
         let scheduler = SchedulerState::new(state.scheduler_enabled(), state.preferences().agents.max_concurrent as usize);
+        let (sidebar, palette) = (SidebarState::load(state.db.as_ref(), window.viewport_size().width), PaletteHost::new(state.db.as_ref(), cx));
         let mut view = Self {
             theme: state.theme_tokens.clone(),
             state,
@@ -53,6 +56,7 @@ impl AppView {
             feed, composer_modal, appearance, llm_inputs, settings_ui,
             lab, scheduler, graph,
             forge: None,
+            sidebar, palette,
             panels: ShellPanels::new(cx),
             _subscriptions: subscriptions,
         };
@@ -70,9 +74,8 @@ impl AppView {
         }
     }
 
-    /// Key bindings and the long-running tasks every window needs.
+    /// The long-running tasks every window needs (key bindings are the central keymap's).
     fn start_background_work(&mut self, window: &mut Window, cx: &mut Context<Self>) {
-        crate::ui::features::forge::view::init_key_bindings(cx);
         self.start_scheduler_heartbeat(window, cx);
         self.watch_vault_failures(window, cx);
     }

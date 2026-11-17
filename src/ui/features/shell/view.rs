@@ -11,8 +11,10 @@ use super::settings_ui::SettingsUi;
 use crate::i18n::Language;
 use crate::state::AppState;
 use crate::theme::ThemeTokens;
+use crate::ui::features::command_palette::PaletteHost;
 use crate::ui::features::composer::ComposerModalPanel;
 use crate::ui::features::settings::{AppearancePanel, SettingsTab};
+use crate::ui::features::sidebar_left::SidebarState;
 use crate::ui::features::sidebar_right::RightSidebarTab;
 use gpui_kit::{Entity, Subscription};
 
@@ -33,6 +35,10 @@ pub struct AppView {
     pub graph: GraphState,
     /// The Agent Forge while it is open (it replaces the center and right columns).
     pub forge: Option<ForgeSession>,
+    /// Left sidebar prefs (width, sections, pins, recents) and the window width.
+    pub sidebar: SidebarState,
+    /// Command palette, its history and the shortcut sheet.
+    pub palette: PaletteHost,
     /// Cached views of the sidebars and the center column.
     pub(super) panels: ShellPanels,
     pub(super) _subscriptions: Vec<Subscription>,
@@ -47,7 +53,6 @@ pub struct ChromeState {
     /// Unsaved provider/model picks of the open settings modal.
     pub settings_draft: SettingsDraft,
     pub is_workspace_open: bool,
-    pub is_left_sidebar_collapsed: bool,
     pub is_right_sidebar_open: bool,
     /// The right panel's drawer is open (compact layout class, where it is not a column).
     pub is_right_drawer_open: bool,
@@ -57,7 +62,7 @@ pub struct ChromeState {
 }
 
 impl ChromeState {
-    /// Initial chrome: expanded left column, open right column, every menu closed.
+    /// Initial chrome: open right column, every menu closed.
     pub(super) fn new(current_language: Language) -> Self {
         Self {
             current_language,
@@ -66,7 +71,6 @@ impl ChromeState {
             active_settings_tab: SettingsTab::General,
             settings_draft: SettingsDraft::default(),
             is_workspace_open: false,
-            is_left_sidebar_collapsed: false,
             is_right_sidebar_open: true,
             is_right_drawer_open: false,
             right_sidebar_tab: RightSidebarTab::MindCadence,

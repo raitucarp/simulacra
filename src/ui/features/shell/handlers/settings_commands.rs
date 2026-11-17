@@ -34,7 +34,11 @@ impl AppView {
             SettingsCommand::Backup => self.backup_vault(window, cx),
             SettingsCommand::ClearCaches => self.clear_caches(window, cx),
             SettingsCommand::ResetAll => self.reset_all_settings(window, cx),
-            SettingsCommand::ReindexEmbeddings | SettingsCommand::Export | SettingsCommand::OpenKeymap => {
+            SettingsCommand::OpenKeymap => {
+                self.chrome.is_settings_open = false;
+                self.toggle_shortcut_sheet(window, cx);
+            }
+            SettingsCommand::ReindexEmbeddings | SettingsCommand::Export => {
                 let key = format!("{PENDING_PREFIX}.{}", command.id());
                 let note = Notification::info(t!(key.as_str()).to_string());
                 window.push_notification(note, cx);

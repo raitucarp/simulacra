@@ -30,7 +30,9 @@ fn request(client: &LlmClient, prompt: &str) -> Result<String, String> {
 /// A user-facing line for one skipped part of the reply.
 fn warning_text(warning: &PatchWarning) -> String {
     let value = match warning {
-        PatchWarning::InvalidOption { value, .. } | PatchWarning::OutOfRange { value, .. } => value.clone(),
+        PatchWarning::InvalidOption { value, .. }
+        | PatchWarning::InvalidSetOption { value, .. }
+        | PatchWarning::OutOfRange { value, .. } => value.clone(),
         PatchWarning::UnknownField(_) | PatchWarning::WrongType(_) => String::new(),
     };
     let args = [(ARG_FIELD, field_label(warning.field())), (ARG_VALUE, value)];

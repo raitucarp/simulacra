@@ -7,14 +7,14 @@ use crate::domain::profile::Profile;
 /// Placeholder that injects the full human dossier; appended automatically when absent.
 pub const ALL_AGENT_INFO_PLACEHOLDER: &str = "{{all_agent_info}}";
 /// Number of supported template placeholders.
-const PLACEHOLDER_COUNT: usize = 22;
+const PLACEHOLDER_COUNT: usize = 24;
 /// Every placeholder a custom template may use (same order as the expansion table).
 pub const TEMPLATE_PLACEHOLDERS: [&str; PLACEHOLDER_COUNT] = [
     "{{name}}", "{{handle}}", "{{description}}", "{{gender}}", "{{pronouns}}", "{{bio}}",
     "{{hobbies}}", "{{mbti}}", "{{enneagram}}", "{{identity}}", "{{psychology}}",
     "{{intelligence}}", "{{linguistics}}", "{{diction}}", "{{grammar}}", "{{language}}",
     "{{typing_style}}", "{{schedule}}", "{{mention_attitude}}", "{{network_context}}",
-    "{{directive}}", ALL_AGENT_INFO_PLACEHOLDER,
+    "{{directive}}", "{{embodiment}}", "{{rhetoric}}", ALL_AGENT_INFO_PLACEHOLDER,
 ];
 
 impl AgentConfig {
@@ -59,6 +59,8 @@ impl AgentConfig {
             ("{{mention_attitude}}", self.mention_attitude.label()),
             ("{{network_context}}", blocks.grounding_summary.as_str()),
             ("{{directive}}", self.system_prompt.as_str()),
+            ("{{embodiment}}", blocks.embodiment.as_str()),
+            ("{{rhetoric}}", blocks.rhetoric.as_str()),
             (ALL_AGENT_INFO_PLACEHOLDER, blocks.full_dossier.as_str()),
         ]
     }

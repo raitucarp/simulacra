@@ -5,9 +5,10 @@ use crate::domain::agent_config::AgentConfig;
 use serde_json::{Map, Value};
 
 /// Personal fields a class never overwrites: who the person is, where they live, which
-/// languages they speak, their avatar, the advanced prompt-assembly settings and their AI
-/// engine (credentials and model choices are the user's, not the class's).
-pub const CLASS_PRESERVED_FIELDS: [&str; 17] = [
+/// languages they speak, their avatar, the advanced prompt-assembly settings, their AI
+/// engine (credentials and model choices are the user's, not the class's), their body
+/// (a tin can stays a tin can when it adopts a thinker's mind) and the days they post.
+pub const CLASS_PRESERVED_FIELDS: [&str; 28] = [
     "gender",
     "pronouns",
     "age",
@@ -25,6 +26,18 @@ pub const CLASS_PRESERVED_FIELDS: [&str; 17] = [
     "inject_social_and_schedule",
     "inject_network_grounding",
     "engine",
+    // --- p7 ontology ---
+    "body_kind",
+    "form",
+    "material",
+    "scale",
+    "temporality",
+    "perception",
+    "mobility",
+    "anthropomorphism",
+    "relation_to_humans",
+    "withdrawal",
+    "active_days",
 ];
 
 /// One field whose value differs between two configs (values in their JSON form).

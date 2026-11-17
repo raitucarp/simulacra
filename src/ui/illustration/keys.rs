@@ -68,6 +68,7 @@ art_keys! {
         Birthsign => "birthsign", Mind => "mind", Disposition => "disposition", Voice => "voice",
         Relationships => "relationships", DailyLife => "daily_life", Grimoire => "grimoire",
         Review => "review",
+        Embodiment => "embodiment", Rhetoric => "rhetoric",
     }
 }
 

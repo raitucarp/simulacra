@@ -17,9 +17,10 @@ fn json_keys<T: serde::Serialize>(value: &T) -> Vec<String> {
 }
 
 #[test]
-fn personas_walk_four_steps_and_agents_walk_all() {
+fn personas_walk_six_steps_and_agents_walk_all() {
     use ForgeStep as S;
-    assert_eq!(steps_for(ForgeKind::Persona), &[S::Origin, S::Appearance, S::Voice, S::Review]);
+    let persona = [S::Origin, S::Embodiment, S::Appearance, S::Voice, S::Rhetoric, S::Review];
+    assert_eq!(steps_for(ForgeKind::Persona), &persona);
     assert_eq!(steps_for(ForgeKind::Agent), &ForgeStep::ALL);
     assert_eq!(steps_for(ForgeKind::Agent).first(), Some(&S::Origin));
     assert_eq!(steps_for(ForgeKind::Agent).last(), Some(&S::Review));
@@ -43,6 +44,9 @@ fn next_and_previous_follow_the_kind() {
     use ForgeStep as S;
     assert_eq!(S::Appearance.next(ForgeKind::Persona), Some(S::Voice));
     assert_eq!(S::Appearance.next(ForgeKind::Agent), Some(S::Birthsign));
+    assert_eq!(S::Origin.next(ForgeKind::Persona), Some(S::Embodiment));
+    assert_eq!(S::Voice.next(ForgeKind::Agent), Some(S::Rhetoric));
+    assert_eq!(S::Rhetoric.next(ForgeKind::Persona), Some(S::Review));
     assert_eq!(S::Voice.previous(ForgeKind::Persona), Some(S::Appearance));
     assert_eq!(S::Review.next(ForgeKind::Agent), None);
     assert_eq!(S::Origin.previous(ForgeKind::Agent), None);
@@ -77,6 +81,9 @@ fn field_lookup_and_step_contents() {
     assert_eq!(field_step("prompt_template"), Some(ForgeStep::Grimoire));
     assert_eq!(field_step("inject_network_grounding"), Some(ForgeStep::Grimoire));
     assert_eq!(field_step("emoji_usage"), Some(ForgeStep::Voice));
+    assert_eq!(field_step("form"), Some(ForgeStep::Embodiment));
+    assert_eq!(field_step("rhetorical_devices"), Some(ForgeStep::Rhetoric));
+    assert_eq!(field_step("active_days"), Some(ForgeStep::DailyLife));
     assert_eq!(field_step("no_such_field"), None);
     assert!(fields_for_step(ForgeStep::Review).is_empty());
     for step in ForgeStep::ALL.into_iter().filter(|s| *s != ForgeStep::Review) {

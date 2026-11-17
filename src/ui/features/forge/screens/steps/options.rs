@@ -39,12 +39,14 @@ impl ForgeView {
     fn step_page(&self, handle: &ForgeHandle) -> AnyElement {
         match self.draft.step() {
             ForgeStep::Origin => self.origin_page(handle),
+            ForgeStep::Embodiment => self.embodiment_page(handle),
             ForgeStep::Appearance => self.appearance_page(handle),
             ForgeStep::Birthsign => self.birthsign_page(handle),
             ForgeStep::Attributes => self.attributes_page(handle),
             ForgeStep::Disposition => self.disposition_page(handle),
             ForgeStep::Mind => self.mind_page(handle),
             ForgeStep::Voice => self.voice_page(handle),
+            ForgeStep::Rhetoric => self.rhetoric_page(handle),
             ForgeStep::DailyLife => self.daily_life_page(handle),
             ForgeStep::Relationships => self.relationships_page(handle),
             ForgeStep::Grimoire => self.grimoire_page(handle),

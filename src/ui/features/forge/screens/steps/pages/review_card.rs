@@ -58,7 +58,10 @@ impl ForgeView {
             ForgeKind::Agent => &AGENT_KEY_TRAITS,
             ForgeKind::Persona => &PERSONA_KEY_TRAITS,
         };
-        let chips: Vec<Div> = traits.iter().map(|field| field.read(&profile.config).visit(TraitChip { theme })).collect();
+        // A non-human being leads with its form (the tin can, the oak…).
+        let form = (!profile.config.embodiment.is_human()).then_some(TraitField::Form);
+        let chips: Vec<Div> =
+            form.iter().chain(traits).map(|field| field.read(&profile.config).visit(TraitChip { theme })).collect();
         card(theme)
             .items_center()
             .border_color(theme.accent_dialectic_border)

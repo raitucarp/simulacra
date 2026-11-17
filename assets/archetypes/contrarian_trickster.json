@@ -89,6 +89,20 @@
     "crystallized_intelligence": 70,
     "emotional_intelligence": 72,
     "social_intelligence": 86,
-    "existential_intelligence": 75
+    "existential_intelligence": 75,
+    "rhetorical_mode": "Polemic",
+    "rhetorical_devices": [
+      "Irony",
+      "Hyperbole",
+      "Paradox"
+    ],
+    "stylistic_school": "Gonzo",
+    "semiotic_mode": "Meme",
+    "sentence_structure": "Fragmented",
+    "post_format": "SinglePost",
+    "lexical_fields": [
+      "Commerce",
+      "Technology"
+    ]
   }
 }

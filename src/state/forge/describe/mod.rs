@@ -10,7 +10,7 @@ pub use prompt::describe_prompt;
 
 use super::draft::AgentDraft;
 use super::edit::DraftEdit;
-use super::fields::{CountField, ScoreField, TextField, TraitField};
+use super::fields::{CountField, ScoreField, TextField, TraitField, TraitSet};
 use super::step::{ForgeStep, FORGE_I18N_ROOT};
 
 pub(crate) const DESCRIBE_GROUP: &str = "describe";
@@ -45,6 +45,11 @@ pub fn describable_traits() -> Vec<TraitField> {
     TraitField::ALL.iter().copied().filter(|f| f.step() != ForgeStep::Grimoire).collect()
 }
 
+/// Multi-select fields the LLM may fill (all of them), as JSON arrays.
+pub fn describable_sets() -> &'static [TraitSet] {
+    TraitSet::ALL
+}
+
 /// Something in the LLM reply that was skipped.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum PatchWarning {
@@ -52,6 +57,8 @@ pub enum PatchWarning {
     UnknownField(String),
     /// A choice value that is not one of the field's options.
     InvalidOption { field: TraitField, value: String },
+    /// An array entry that is not one of a multi-select's options (the rest are kept).
+    InvalidSetOption { field: TraitSet, value: String },
     /// A value of the wrong JSON type for its field.
     WrongType(String),
     /// A number outside its field's range (it was clamped).
@@ -62,7 +69,7 @@ impl PatchWarning {
     pub const fn key(&self) -> &'static str {
         match self {
             Self::UnknownField(_) => "warn_unknown_field",
-            Self::InvalidOption { .. } => "warn_invalid_option",
+            Self::InvalidOption { .. } | Self::InvalidSetOption { .. } => "warn_invalid_option",
             Self::WrongType(_) => "warn_wrong_type",
             Self::OutOfRange { .. } => "warn_out_of_range",
         }
@@ -78,6 +85,7 @@ impl PatchWarning {
         match self {
             Self::UnknownField(field) | Self::WrongType(field) | Self::OutOfRange { field, .. } => field,
             Self::InvalidOption { field, .. } => field.path(),
+            Self::InvalidSetOption { field, .. } => field.path(),
         }
     }
 }

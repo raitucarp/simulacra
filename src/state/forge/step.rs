@@ -49,28 +49,19 @@ impl ForgeKind {
 /// One page of the character-creator wizard, in walking order.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize, Deserialize)]
 pub enum ForgeStep {
-    Origin,
-    Appearance,
-    Birthsign,
-    Attributes,
-    Disposition,
-    Mind,
-    Voice,
-    DailyLife,
-    Relationships,
-    Grimoire,
-    Review,
+    Origin, Embodiment, Appearance, Birthsign, Attributes, Disposition, Mind,
+    Voice, Rhetoric, DailyLife, Relationships, Grimoire, Review,
 }
 
 use ForgeStep as S;
 
 /// Every step an agent walks through.
-const AGENT_STEPS: [ForgeStep; 11] = [
-    S::Origin, S::Appearance, S::Birthsign, S::Attributes, S::Disposition, S::Mind,
-    S::Voice, S::DailyLife, S::Relationships, S::Grimoire, S::Review,
+const AGENT_STEPS: [ForgeStep; 13] = [
+    S::Origin, S::Embodiment, S::Appearance, S::Birthsign, S::Attributes, S::Disposition, S::Mind,
+    S::Voice, S::Rhetoric, S::DailyLife, S::Relationships, S::Grimoire, S::Review,
 ];
-/// Personas only describe who they are, how they look and how they write.
-const PERSONA_STEPS: [ForgeStep; 4] = [S::Origin, S::Appearance, S::Voice, S::Review];
+/// Personas only describe who (and what) they are, how they look and how they write.
+const PERSONA_STEPS: [ForgeStep; 6] = [S::Origin, S::Embodiment, S::Appearance, S::Voice, S::Rhetoric, S::Review];
 
 /// The steps `kind` walks through, in order.
 pub fn steps_for(kind: ForgeKind) -> &'static [ForgeStep] {
@@ -81,18 +72,20 @@ pub fn steps_for(kind: ForgeKind) -> &'static [ForgeStep] {
 }
 
 impl ForgeStep {
-    pub const ALL: [Self; 11] = AGENT_STEPS;
+    pub const ALL: [Self; 13] = AGENT_STEPS;
 
     /// Stable snake_case id; also the banner file stem under `illustrations/steps/`.
     pub const fn key(self) -> &'static str {
         match self {
             S::Origin => "origin",
+            S::Embodiment => "embodiment",
             S::Appearance => "appearance",
             S::Birthsign => "birthsign",
             S::Attributes => "attributes",
             S::Disposition => "disposition",
             S::Mind => "mind",
             S::Voice => "voice",
+            S::Rhetoric => "rhetoric",
             S::DailyLife => "daily_life",
             S::Relationships => "relationships",
             S::Grimoire => "grimoire",

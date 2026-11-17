@@ -6,7 +6,7 @@ use super::classes::class_key;
 use crate::domain::{ArchetypeClass, TraitOption};
 use crate::state::forge::{preview_diff, ChangeValue, FieldChange, ForgeStep, TraitValue, TraitVisitor};
 use crate::theme::ThemeTokens;
-use crate::ui::features::forge::text::{tr, tr_count, tr_with, trait_label};
+use crate::ui::features::forge::text::{set_labels, tr, tr_count, tr_with, trait_label};
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
 use crate::ui::icons::LucideIcon;
 use crate::ui::illustration::Illustration;
@@ -55,6 +55,7 @@ fn value_text(value: &ChangeValue) -> String {
         ChangeValue::Number(number) => number.to_string(),
         ChangeValue::Flag(flag) => tr(if *flag { ON_KEY } else { OFF_KEY }),
         ChangeValue::Trait(value) => value.visit(LabelOf),
+        ChangeValue::Set(value) => set_labels(value),
     })
 }
 

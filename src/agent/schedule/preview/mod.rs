@@ -10,10 +10,12 @@ use chrono::{DateTime, Duration, Timelike, Utc};
 
 /// Days in the previewed week.
 pub const DAYS_PER_WEEK: usize = 7;
+/// Days from the Unix epoch (a Thursday) to the first Monday, where the previewed week starts.
+const FIRST_MONDAY_OFFSET_DAYS: i64 = 4;
 /// Hours in one previewed day.
 const HOURS: usize = HOURS_PER_DAY as usize;
 
-/// Simulated post counts per hour of each day of one week (day 0 is the first).
+/// Simulated post counts per hour of each day of one week (day 0 is a Monday).
 #[derive(Debug, Clone, Default, PartialEq, Eq)]
 pub struct WeekPreview {
     pub posts: [[u16; HOURS]; DAYS_PER_WEEK],
@@ -37,14 +39,14 @@ impl WeekPreview {
 }
 
 /// Replays one week of heartbeat ticks spaced `tick` apart for an agent with `cfg`, starting
-/// at midnight, with the session `seed` driving the spontaneity rolls. A post resets the
+/// at midnight on a Monday, with the session `seed` driving the spontaneity rolls. A post resets the
 /// cooldown, exactly as a dispatch does on the live heartbeat.
 pub fn simulate_week(cfg: &AgentConfig, id: &ProfileId, tick: Duration, seed: u64) -> WeekPreview {
     let mut preview = WeekPreview::default();
     if tick <= Duration::zero() {
         return preview;
     }
-    let start = DateTime::<Utc>::UNIX_EPOCH;
+    let start = DateTime::<Utc>::UNIX_EPOCH + Duration::days(FIRST_MONDAY_OFFSET_DAYS);
     let end = start + Duration::days(DAYS_PER_WEEK as i64);
     let mut last_activity = None;
     let (mut now, mut count) = (start, 0_u64);

@@ -5,6 +5,7 @@ mod attributes;
 mod avatar_kind;
 mod birthsign;
 mod daily;
+mod embodiment;
 mod form_editor;
 mod form_options;
 mod grimoire;
@@ -16,6 +17,7 @@ mod psyche;
 mod relationships;
 mod review;
 mod review_card;
+mod rhetoric;
 mod trait_block;
 mod voice;
 

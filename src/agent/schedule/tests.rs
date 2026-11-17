@@ -202,3 +202,16 @@ fn sample_post() -> crate::domain::Post {
         extras: Default::default(),
     }
 }
+
+#[test]
+fn off_days_are_never_due() {
+    use crate::domain::traits::{OptionSet, Weekday};
+    // 2026-11-16 is a Monday.
+    let mut cfg = clockwork(PostingCadence::Hourly);
+    cfg.active_days = OptionSet::new([Weekday::Tuesday, Weekday::Sunday]);
+    assert_eq!(decide(&cfg, None, local(12, 0)), Decision::OffDay);
+    cfg.active_days = OptionSet::new([Weekday::Monday]);
+    assert_eq!(decide(&cfg, None, local(12, 0)), Decision::Due);
+    cfg.active_days = OptionSet::default();
+    assert_eq!(decide(&cfg, None, local(12, 0)), Decision::OffDay);
+}

@@ -1,21 +1,22 @@
 //! The category rail: the search box, one keyboard-reachable button per category (with its
 //! match count while searching and a dot on unsaved AI changes) and the privacy footer.
 //! Up / Down move between categories while the category list has focus (not the search box).
+//! In a compact window the rail shows icons only (with tooltips) and the search box moves to
+//! the content column.
 
 use super::super::callbacks::TabAction;
 use super::super::catalog::{hits_in, SearchHit};
 use super::super::consts::{KEY_DOWN, KEY_UP, RAIL_ID, TAB_BUTTON_ID_PREFIX};
 use super::super::props::{SettingsData, SettingsInputs};
 use super::super::tabs::SettingsTab;
+use super::rail_parts::{count_badge, render_footer, search_box, tab_label};
 use crate::theme::ThemeTokens;
 use crate::ui::features::forge::widgets::KeyboardStop;
-use crate::ui::icons::LucideIcon;
-use gpui_kit::component::input::Input;
 use gpui_kit::component::scroll::ScrollableElement;
+use gpui_kit::component::tooltip::Tooltip;
 use gpui_kit::component::Icon;
 use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::*;
-use rust_i18n::t;
 use std::rc::Rc;
 
 /// What the rail shows.
@@ -26,6 +27,19 @@ pub(in crate::ui::features::settings) struct RailView<'a> {
     /// Search hits (empty when not searching).
     pub hits: &'a [SearchHit],
     pub on_select: TabAction,
+    /// Icons only (compact window).
+    pub compact: bool,
+}
+
+/// How one category button looks.
+#[derive(Clone, Copy)]
+struct TabLook {
+    active: bool,
+    /// Matches while searching.
+    count: Option<usize>,
+    /// Unsaved AI provider changes.
+    dirty: bool,
+    compact: bool,
 }
 
 /// The whole rail.
@@ -36,9 +50,11 @@ pub(in crate::ui::features::settings) fn render_rail(theme: &ThemeTokens, view: 
         .map(|tab| {
             let count = searching.then(|| hits_in(view.hits, tab));
             let dirty = tab == SettingsTab::AiIntelligence && view.data.ai_dirty;
-            tab_button(theme, tab, !searching && tab == view.active, count, dirty, view.on_select.clone())
+            let look = TabLook { active: !searching && tab == view.active, count, dirty, compact: view.compact };
+            tab_button(theme, tab, look, view.on_select.clone())
         })
         .collect();
+    let search = (!view.compact).then(|| search_box(theme, view.inputs));
     div()
         .size_full()
         .bg(theme.bg_sidebar)
@@ -48,9 +64,9 @@ pub(in crate::ui::features::settings) fn render_rail(theme: &ThemeTokens, view: 
         .flex()
         .flex_col()
         .gap(theme.stack_gap)
-        .child(Input::new(&view.inputs.search).cleanable(true).prefix(Icon::new(LucideIcon::Search).size(theme.icon_size_sm)).text_size(theme.font_size_label))
+        .children(search)
         .child(category_list(theme, &view, buttons))
-        .child(render_footer(theme))
+        .when(!view.compact, |rail| rail.child(render_footer(theme)))
 }
 
 /// The scrolling, keyboard-navigable list of category buttons.
@@ -75,9 +91,11 @@ fn category_list(theme: &ThemeTokens, view: &RailView, buttons: Vec<Stateful<Div
 }
 
 /// One category button.
-fn tab_button(theme: &ThemeTokens, tab: SettingsTab, active: bool, count: Option<usize>, dirty: bool, on_select: TabAction) -> Stateful<Div> {
+fn tab_button(theme: &ThemeTokens, tab: SettingsTab, look: TabLook, on_select: TabAction) -> Stateful<Div> {
+    let TabLook { active, count, dirty, compact } = look;
     let hover_bg = theme.hover_bg;
     let dim = count == Some(0);
+    let title = tab.title();
     let pick: Rc<dyn Fn(&mut Window, &mut App)> = Rc::new(move |window, cx| on_select(tab, window, cx));
     let click = pick.clone();
     div()
@@ -94,45 +112,12 @@ fn tab_button(theme: &ThemeTokens, tab: SettingsTab, active: bool, count: Option
         .flex()
         .items_center()
         .gap(theme.inline_gap)
+        .when(compact, |button| button.justify_center().tooltip(move |window, cx| Tooltip::new(title.clone()).build(window, cx)))
         .when(dim, |button| button.opacity(theme.settings_disabled_opacity))
         .on_click(move |_, window, cx| click(window, cx))
         .keyboard_stop(theme, pick)
         .child(Icon::new(tab.icon()).size(theme.icon_size_lg).text_color(if active { theme.accent_brand } else { theme.text_muted }))
-        .child(
-            div()
-                .flex_1()
-                .min_w_0()
-                .truncate()
-                .text_size(theme.font_size_sm)
-                .font_weight(if active { FontWeight::SEMIBOLD } else { FontWeight::NORMAL })
-                .text_color(if active { theme.text_primary } else { theme.text_secondary })
-                .child(tab.title()),
-        )
+        .when(!compact, |button| button.child(tab_label(theme, tab, active)))
         .when(dirty, |button| button.child(div().size(theme.dot_size_sm).rounded(theme.radius_full).bg(theme.warning)))
-        .children(count.filter(|count| *count > 0).map(|count| count_badge(theme, count)))
-}
-
-/// Matches in a category while searching.
-fn count_badge(theme: &ThemeTokens, count: usize) -> Div {
-    div()
-        .px(theme.spacing_xs)
-        .rounded(theme.radius_full)
-        .bg(theme.accent_dialectic_subtle)
-        .text_size(theme.font_size_2xs)
-        .font_weight(FontWeight::SEMIBOLD)
-        .text_color(theme.accent_dialectic)
-        .child(count.to_string())
-}
-
-/// "Everything stays on this computer."
-fn render_footer(theme: &ThemeTokens) -> Div {
-    div()
-        .p(theme.card_padding)
-        .rounded(theme.radius_md)
-        .bg(theme.hover_bg)
-        .flex()
-        .items_center()
-        .gap(theme.inline_gap)
-        .child(Icon::new(LucideIcon::Lock).size(theme.icon_size_sm).text_color(theme.text_muted))
-        .child(div().flex_1().min_w_0().text_size(theme.font_size_2xs).text_color(theme.text_muted).child(t!("settings.rail_footer").to_string()))
+        .children(count.filter(|count| *count > 0 && !compact).map(|count| count_badge(theme, count)))
 }

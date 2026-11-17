@@ -5,12 +5,13 @@ use super::callbacks::SettingsActions;
 use super::catalog::{search, search_entries, SearchHit};
 use super::consts::BODY_ID;
 use super::credentials::CredentialsPaneProps;
-use super::layout::{render_category, render_footer, render_frame, render_header, render_rail, render_search, EmbeddedPanes, HeaderSubject, RailView};
+use super::layout::{render_category, render_footer, render_frame, render_header, render_rail, render_search, search_box, EmbeddedPanes, HeaderSubject, RailView};
 use super::panes::AppearancePanel;
 use super::props::{AiPaneProps, SettingsData, SettingsInputs};
 use super::row::RowContext;
 use super::tabs::SettingsTab;
 use crate::theme::ThemeTokens;
+use crate::ui::responsive::LayoutClass;
 use gpui_kit::component::scroll::ScrollableElement;
 use gpui_kit::*;
 
@@ -69,12 +70,15 @@ impl RenderOnce for SettingsModal {
         let subject = if searching { HeaderSubject::Search(hits.len()) } else { HeaderSubject::Tab(active_tab) };
         let body = if searching { render_search(&ctx, &hits) } else { render_category(&ctx, active_tab, panes) };
         let show_save = !searching && active_tab == SettingsTab::AiIntelligence;
+        let compact = LayoutClass::of_window(window, theme).is_compact();
+        let top_search = compact.then(|| div().flex_none().px(theme.panel_padding).pt(theme.panel_padding_compact).child(search_box(theme, &inputs)));
         let content = div()
             .size_full()
             .min_w_0()
             .overflow_hidden()
             .flex()
             .flex_col()
+            .children(top_search)
             .child(render_header(theme, subject, actions.on_close.clone()))
             .child(
                 div()
@@ -87,7 +91,7 @@ impl RenderOnce for SettingsModal {
                     .child(body),
             )
             .child(render_footer(theme, &actions, data.ai_dirty, show_save));
-        let rail = render_rail(theme, RailView { active: active_tab, data: &data, inputs: &inputs, hits: &hits, on_select: actions.on_select.clone() });
-        render_frame(theme, window, actions.on_close.clone(), rail, content)
+        let rail = RailView { active: active_tab, data: &data, inputs: &inputs, hits: &hits, on_select: actions.on_select.clone(), compact };
+        render_frame(theme, window, (actions.on_close.clone(), compact), render_rail(theme, rail), content)
     }
 }

@@ -6,6 +6,7 @@ mod footer;
 mod frame;
 mod header;
 mod rail;
+mod rail_parts;
 
 pub(super) use body::{render_category, render_search};
 pub(super) use embedded::EmbeddedPanes;
@@ -15,3 +16,4 @@ pub(super) use frame::dialog_size;
 pub(super) use frame::render_frame;
 pub(super) use header::{render_header, HeaderSubject};
 pub(super) use rail::{render_rail, RailView};
+pub(super) use rail_parts::search_box;

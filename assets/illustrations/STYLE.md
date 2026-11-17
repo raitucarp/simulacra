@@ -28,6 +28,7 @@ and garments that must stay white/black on every theme (lab coat, scholar gown).
 | Class art | `0 0 200 240` | `illustrations/classes/<class>.svg` |
 | Guide pose | `0 0 128 128` | `illustrations/guide/<pose>.svg` |
 | Empty state | `0 0 240 160` | `illustrations/empty/<name>.svg` |
+| Splash brand mark | `0 0 160 120` (hand-drawn, like the guide owl) | `illustrations/splash/brand.svg` |
 | Portrait part | `0 0 256 256` (layered, shared origin) | `illustrations/portrait/<layer>/<variant>.svg` |
 | Form part | `0 0 256 256` (layered, shared origin) | `illustrations/forms/<kind or shared>/<layer>/<variant>.svg` |
 

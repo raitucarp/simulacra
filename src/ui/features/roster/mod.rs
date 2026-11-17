@@ -12,6 +12,7 @@ mod params;
 pub use params::{LabMode, RosterCallbacks, RosterParams};
 
 use crate::theme::ThemeTokens;
+use crate::ui::components::{persisted_h_resizable, SplitPane};
 use empty::render_empty_roster;
 use gpui_kit::*;
 use overview::render_overview;
@@ -19,6 +20,8 @@ use pane::render_roster_pane;
 use params::RosterData;
 
 const ROOT_ID: &str = "roster-workspace-root";
+/// Layout id of the contact list | overview split (sizes persist).
+const SPLIT_ID: &str = "roster-split";
 
 /// The roster pane and the overview of the selected profile.
 pub fn render_roster_view(params: RosterParams<'_>, callbacks: RosterCallbacks) -> impl IntoElement {
@@ -34,6 +37,12 @@ pub fn render_roster_view(params: RosterParams<'_>, callbacks: RosterCallbacks) 
         .bg(theme.bg_app)
         .flex()
         .overflow_hidden()
-        .child(render_roster_pane(&params, &data, &callbacks))
-        .child(body)
+        .child(
+            persisted_h_resizable(SPLIT_ID, theme)
+                .pane(
+                    SplitPane::sized(theme.contact_list_pane_width, theme.contact_list_pane_min..theme.contact_list_pane_max)
+                        .child(render_roster_pane(&params, &data, &callbacks)),
+                )
+                .pane(SplitPane::flex(theme.split_flex_min).child(body)),
+        )
 }

@@ -8,7 +8,7 @@ mod side;
 use super::common::{muted, title};
 use crate::state::forge::ForgeKind;
 use crate::theme::ThemeTokens;
-use crate::ui::components::{segment_pill, segmented_track, Segment};
+use crate::ui::components::{persisted_h_resizable, segment_pill, segmented_track, Segment, SplitPane};
 use crate::ui::features::forge::text::tr;
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
 use crate::ui::features::forge::widgets::{KeyboardHint, KeyboardStop};
@@ -24,6 +24,15 @@ const CLOSE_ID: &str = "forge-start-close";
 const GRID_SCROLL_ID: &str = "forge-start-grid";
 const SIDE_SCROLL_ID: &str = "forge-start-side";
 const KIND_ID_PREFIX: &str = "forge-kind";
+/// Layout id of the class grid | preview split (sizes persist).
+const START_SPLIT_ID: &str = "forge-start-split";
+
+/// The class grid beside the preview panel, both resizable.
+fn start_split(grid: impl IntoElement, side: impl IntoElement, theme: &ThemeTokens) -> impl IntoElement {
+    persisted_h_resizable(START_SPLIT_ID, theme)
+        .pane(SplitPane::flex(theme.split_flex_min).child(grid))
+        .pane(SplitPane::sized(theme.forge_preview_width, theme.forge_preview_min..theme.forge_preview_max).child(side))
+}
 
 /// Icon of each kind on the switch.
 fn kind_icon(kind: ForgeKind) -> LucideIcon {
@@ -50,9 +59,7 @@ impl ForgeView {
             .child(self.begin_tiles(handle));
         let side = div()
             .id(SIDE_SCROLL_ID)
-            .w(theme.forge_preview_width)
-            .flex_shrink_0()
-            .h_full()
+            .size_full()
             .overflow_y_scrollbar()
             .border_l(theme.border_width_hairline)
             .border_color(theme.border_subtle)
@@ -64,7 +71,7 @@ impl ForgeView {
             .flex()
             .flex_col()
             .child(self.start_header(handle))
-            .child(div().flex_1().min_h_0().flex().child(grid).child(side))
+            .child(div().flex_1().min_h_0().flex().child(start_split(grid, side, theme)))
             .into_any_element()
     }
 

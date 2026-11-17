@@ -1463,6 +1463,17 @@ forge.ui.daily.week_posts_other: "Etwa %{count} Beiträge in einer typischen Woc
 forge.ui.grimoire.chars_one: "%{count} Zeichen"
 forge.ui.grimoire.chars_other: "%{count} Zeichen"
 
+# p7 shell
+splash.tagline: "Ein lokaler Dialektik-Simulator"
+splash.stage.opening_vault: "Tresor wird geöffnet…"
+splash.stage.loading_networks: "Netzwerke werden geladen…"
+splash.stage.waking_agents: "Agenten werden geweckt…"
+splash.stage.ready: "Bereit"
+splash.version: "Version %{version}"
+layout.title: "Panel-Layout"
+layout.hint: "Ziehe eine Trennlinie, um ein Panel anzupassen; Doppelklick stellt die Aufteilung wieder her."
+layout.reset: "Layout zurücksetzen"
+
 # p7 bodies
 # Non-human form avatars: kinds, forms, layers and part variants (flat keys).
 portrait.mode_form: "Gestalt"

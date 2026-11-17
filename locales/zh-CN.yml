@@ -1463,6 +1463,17 @@ forge.ui.daily.week_posts_other: "典型的一周约发 %{count} 条帖子。"
 forge.ui.grimoire.chars_one: "%{count} 个字符"
 forge.ui.grimoire.chars_other: "%{count} 个字符"
 
+# p7 shell
+splash.tagline: "本地优先的辩证模拟器"
+splash.stage.opening_vault: "正在打开知识库…"
+splash.stage.loading_networks: "正在加载网络…"
+splash.stage.waking_agents: "正在唤醒智能体…"
+splash.stage.ready: "就绪"
+splash.version: "版本 %{version}"
+layout.title: "面板布局"
+layout.hint: "拖动分隔线调整面板大小；双击可恢复该分割。"
+layout.reset: "重置布局"
+
 # p7 bodies
 # Non-human form avatars: kinds, forms, layers and part variants (flat keys).
 portrait.mode_form: "形态"

@@ -1463,6 +1463,17 @@ forge.ui.daily.week_posts_other: "Cerca de %{count} publicações numa semana t�
 forge.ui.grimoire.chars_one: "%{count} caractere"
 forge.ui.grimoire.chars_other: "%{count} caracteres"
 
+# p7 shell
+splash.tagline: "Um simulador dialético local"
+splash.stage.opening_vault: "Abrindo o cofre…"
+splash.stage.loading_networks: "Carregando redes…"
+splash.stage.waking_agents: "Despertando agentes…"
+splash.stage.ready: "Pronto"
+splash.version: "Versão %{version}"
+layout.title: "Layout dos painéis"
+layout.hint: "Arraste um divisor para redimensionar um painel; clique duas vezes para restaurar essa divisão."
+layout.reset: "Redefinir layout"
+
 # p7 bodies
 # Non-human form avatars: kinds, forms, layers and part variants (flat keys).
 portrait.mode_form: "Forma"

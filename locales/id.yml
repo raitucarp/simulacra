@@ -1463,6 +1463,17 @@ forge.ui.daily.week_posts_other: "Sekitar %{count} postingan dalam seminggu bias
 forge.ui.grimoire.chars_one: "%{count} karakter"
 forge.ui.grimoire.chars_other: "%{count} karakter"
 
+# p7 shell
+splash.tagline: "Simulator dialektika lokal"
+splash.stage.opening_vault: "Membuka brankas…"
+splash.stage.loading_networks: "Memuat jaringan…"
+splash.stage.waking_agents: "Membangunkan agen…"
+splash.stage.ready: "Siap"
+splash.version: "Versi %{version}"
+layout.title: "Tata letak panel"
+layout.hint: "Seret pembatas untuk mengubah ukuran panel; klik dua kali untuk memulihkan pembagian itu."
+layout.reset: "Atur ulang tata letak"
+
 # p7 bodies
 # Non-human form avatars: kinds, forms, layers and part variants (flat keys).
 portrait.mode_form: "Wujud"

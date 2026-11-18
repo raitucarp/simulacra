@@ -28,10 +28,13 @@ pub(super) fn render_section_title(
         )
 }
 
-/// Header row placing a title on the left and a badge on the right.
+/// Header row placing a title on the left and a badge on the right; on a narrow sidebar the
+/// badge wraps under the title instead of running past the edge.
 pub(super) fn render_section_header(title: Div, badge: impl IntoElement) -> Div {
     div()
+        .w_full()
         .flex()
+        .flex_wrap()
         .items_center()
         .justify_between()
         .child(title)

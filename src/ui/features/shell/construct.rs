@@ -46,8 +46,7 @@ impl AppView {
         let appearance = cx.new(|cx| AppearancePanel::new(state.theme_settings.clone(), window, cx));
         let (settings_ui, settings_subscriptions) = SettingsUi::new(state.preferences(), window, cx);
         let (import, import_subscriptions) = ImportUi::new(window, cx);
-        let (review, review_subscriptions) = ReviewHost::new(&state, window, cx);
-        let (insights, insights_subscription) = InsightsHost::new(&state, window, cx);
+        let ((review, review_subscriptions), (insights, insights_subscription)) = (ReviewHost::new(&state, window, cx), InsightsHost::new(&state, window, cx));
         let mut subscriptions = vec![
             feed.subscribe_search(cx),
             cx.subscribe_in(&composer_modal, window, Self::publish_composer_draft),

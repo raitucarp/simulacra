@@ -60,6 +60,9 @@ fn palette_comes_from_tokens_in_both_modes() {
         let opaque = |c: gpui_kit::Rgba| gpui_kit::Rgba { a: 1.0, ..c };
         let faint = colours.iter().filter(|c| contrast(opaque(**c), opaque(theme.bg_card)) < MIN_MARK_CONTRAST - 0.05).count();
         assert_eq!(faint, 0, "palette {} has marks below 3:1 on its cards", palette.id);
+        let near = |a: gpui_kit::Rgba, b: gpui_kit::Rgba| (a.r - b.r).abs() + (a.g - b.g).abs() + (a.b - b.b).abs() < 0.05;
+        let clashes = (0..colours.len()).flat_map(|i| (0..i).map(move |j| (i, j))).filter(|&(i, j)| near(colours[i], colours[j])).count();
+        assert_eq!(clashes, 0, "palette {} repeats a series colour", palette.id);
         assert_eq!(series(8, &theme), colours[0], "series wrap");
         assert!(colours.iter().all(|c| c.a > 0.0));
         assert_eq!(sequential(0.0, &theme), theme.border_subtle);

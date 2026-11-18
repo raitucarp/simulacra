@@ -35,20 +35,37 @@ pub fn legible(colour: Rgba, surface: Rgba, toward: Rgba, ratio: f32) -> Rgba {
         .unwrap_or(toward)
 }
 
-/// The categorical series colours, in order (each kept legible on the card surface); series
-/// past the end wrap around.
+/// Channel distance under which two series colours read as the same hue.
+const SAME_COLOUR: f32 = 0.25;
+/// How far a repeated colour moves towards the text (or the card) colour to stand apart;
+/// failing that, its hue turns round the wheel.
+const REPEAT_SHIFT: f32 = 0.45;
+
+/// `colour` with its hue turned by `turn` (a share of the colour wheel).
+fn rotate_hue(colour: Rgba, turn: f32) -> Rgba {
+    let mut hsla: gpui_kit::Hsla = colour.into();
+    hsla.h = (hsla.h + turn).rem_euclid(1.0);
+    hsla.to_rgb()
+}
+
+fn distance(a: Rgba, b: Rgba) -> f32 {
+    (a.r - b.r).abs() + (a.g - b.g).abs() + (a.b - b.b).abs()
+}
+
+/// The categorical series colours, in order: the semantic accents, each kept legible on the
+/// card surface, and a palette's near-duplicate accents (two blues) moved apart in lightness.
+/// Series past the end wrap around.
 pub fn categorical(theme: &ThemeTokens) -> [Rgba; SERIES_COUNT] {
     let keep = |c: Rgba| legible(c, theme.bg_card, theme.text_primary, MIN_MARK_CONTRAST);
-    [
-        keep(theme.accent_brand),
-        keep(theme.accent_success),
-        keep(theme.accent_dialectic),
-        keep(theme.info),
-        keep(theme.accent_danger),
-        keep(theme.accent_alt),
-        keep(theme.accent_user),
-        keep(theme.warning),
-    ]
+    let accents = [theme.accent_brand, theme.accent_success, theme.accent_dialectic, theme.info, theme.accent_danger, theme.accent_alt, theme.accent_user, theme.warning];
+    let mut series = [theme.accent_brand; SERIES_COUNT];
+    for (i, accent) in accents.into_iter().enumerate() {
+        let fresh = |c: &Rgba| series[..i].iter().all(|earlier| distance(*c, *earlier) >= SAME_COLOUR);
+        let shifted = [keep(mix(accent, theme.text_primary, REPEAT_SHIFT)), keep(mix(accent, theme.bg_card, REPEAT_SHIFT))];
+        let turned = (1..SERIES_COUNT).map(|k| keep(rotate_hue(accent, k as f32 / SERIES_COUNT as f32)));
+        series[i] = std::iter::once(keep(accent)).chain(shifted).chain(turned).find(fresh).unwrap_or(shifted[0]);
+    }
+    series
 }
 
 /// Colour of series `index`.

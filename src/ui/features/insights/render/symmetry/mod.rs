@@ -19,6 +19,8 @@ use rust_i18n::t;
 use std::rc::Rc;
 
 const TIP_HEIGHT: f32 = 70.0;
+/// Tiles above the thread drawing.
+const THREAD_TILES: u16 = 3;
 /// Largest group order written out in full; beyond it a power of ten.
 const LOG_THRESHOLD: f64 = 9.0;
 
@@ -39,6 +41,25 @@ pub fn group_order(thread: &ThreadSymmetry) -> String {
 pub fn cycle_notation(thread: &ThreadSymmetry, report: &InsightsReport) -> String {
     let name = |a: &usize| report.authors.get(*a).map_or_else(String::new, |f| f.name.clone());
     thread.rotation.cycles.iter().map(|c| format!("({})", c.iter().map(name).collect::<Vec<_>>().join(" "))).collect()
+}
+
+/// A tile whose value is words (cycle notation), in the body size so long names fit.
+fn word_tile(value: String, label: String, colour: Rgba, theme: &crate::theme::ThemeTokens) -> Div {
+    let words = div().text_size(theme.font_size_md).font_weight(FontWeight::SEMIBOLD).text_color(colour).child(value);
+    let caption = div().text_size(theme.font_size_xs).text_color(theme.text_secondary).child(label);
+    div()
+        .min_w(theme.insights_tile_width)
+        .flex_1()
+        .flex()
+        .flex_col()
+        .gap(theme.spacing_3xs)
+        .p(theme.card_padding)
+        .rounded(theme.radius_md)
+        .bg(theme.bg_card)
+        .border(theme.border_width_hairline)
+        .border_color(theme.border_subtle)
+        .child(words)
+        .child(caption)
 }
 
 impl InsightsPanel {
@@ -79,10 +100,10 @@ impl InsightsPanel {
             .children(tip);
         let orbits = thread.symmetry.nontrivial_orbits().len();
         let summary = t!("insights.summary.thread", posts = thread.posts.len(), order = group_order(thread), orbits = orbits, depth = thread.symmetry.depth).to_string();
-        let numbers = tile_row(theme)
+        let numbers = tile_row(THREAD_TILES, theme)
             .child(tile(group_order(thread), tr("insights.tile.group_order"), theme.accent_brand, theme))
             .child(tile(compact(orbits as f64), tr("insights.tile.orbits"), theme.accent_success, theme))
-            .child(tile(cycle_notation(thread, report), t!("insights.tile.rotation", order = thread.rotation.order, parity = tr(if thread.rotation.even { "insights.parity.even" } else { "insights.parity.odd" })).to_string(), theme.accent_dialectic, theme));
+            .child(word_tile(cycle_notation(thread, report), t!("insights.tile.rotation", order = thread.rotation.order, parity = tr(if thread.rotation.even { "insights.parity.even" } else { "insights.parity.odd" })).to_string(), theme.accent_dialectic, theme));
         card(theme)
             .child(card_title(LucideIcon::GitBranch, tr("insights.card.thread"), None, theme))
             .child(numbers)

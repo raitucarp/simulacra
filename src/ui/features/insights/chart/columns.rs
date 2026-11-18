@@ -94,7 +94,8 @@ impl ColumnChart {
         let cells = (0..self.columns.len()).step_by(stride.max(1)).map(|i| {
             let span = stride.min(count - i) as f32 / count as f32;
             let text = self.labels.get(i).cloned().unwrap_or_default();
-            div().w(relative(span)).flex_none().overflow_hidden().whitespace_nowrap().text_size(theme.font_size_2xs).text_color(theme.text_muted).child(text)
+            let cell = div().w(relative(span)).flex_none().overflow_hidden().whitespace_nowrap().text_size(theme.font_size_2xs).text_color(theme.text_muted);
+            if stride == 1 { cell.flex().justify_center().child(text) } else { cell.child(text) }
         });
         div().flex().pl(theme.insights_axis_width + theme.spacing_xs).children(cells)
     }

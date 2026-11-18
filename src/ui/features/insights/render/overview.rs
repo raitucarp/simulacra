@@ -3,7 +3,7 @@
 
 use super::super::panel::InsightsPanel;
 use super::super::view::InsightsView;
-use super::common::{card, card_title, pair, tile, tile_row, tr};
+use super::common::{card, card_title, pair, tile, tile_columns, tile_row, tr};
 use super::Room;
 use crate::domain::insights::graph::metrics::Measure;
 use crate::domain::insights::sets::SetDimension;
@@ -23,7 +23,7 @@ use std::rc::Rc;
 const SMALL_RANKING: usize = 5;
 
 impl InsightsPanel {
-    fn key_numbers(&self, report: &InsightsReport) -> Div {
+    fn key_numbers(&self, report: &InsightsReport, room: Room) -> Div {
         let theme = &self.theme;
         let metrics = &report.network.metrics;
         let agents = report.authors.iter().filter(|a| a.is_agent).count();
@@ -35,7 +35,7 @@ impl InsightsPanel {
             (format!("{:.2}", metrics.communities.modularity), "insights.tile.modularity", theme.accent_dialectic),
             (percent(metrics.average_clustering), "insights.tile.clustering", theme.info),
         ];
-        tile_row(theme).children(tiles.into_iter().map(|(value, key, colour)| tile(value, tr(key), colour, theme)))
+        tile_row(tile_columns(room, tiles.len()), theme).children(tiles.into_iter().map(|(value, key, colour)| tile(value, tr(key), colour, theme)))
     }
 
     /// A "see more" button opening `view`.
@@ -109,7 +109,7 @@ impl InsightsPanel {
             .flex()
             .flex_col()
             .gap(theme.section_gap)
-            .child(self.key_numbers(report))
+            .child(self.key_numbers(report, room))
             .child(pair(room, timeline, self.kinds_card(report, cx), theme))
             .child(pair(room, self.influence_card(report, cx), self.concepts_card(report, cx), theme))
     }

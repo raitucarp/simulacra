@@ -63,9 +63,19 @@ pub fn tile(value: String, label: String, colour: Rgba, theme: &ThemeTokens) -> 
         .child(div().text_size(theme.font_size_xs).text_color(theme.text_secondary).child(label))
 }
 
-/// A wrapping row of tiles.
-pub fn tile_row(theme: &ThemeTokens) -> Div {
-    div().w_full().flex().flex_wrap().gap(theme.control_gap)
+/// A grid of `columns` equal tile columns (no stretched orphan tile on the last row).
+pub fn tile_row(columns: u16, theme: &ThemeTokens) -> Div {
+    div().w_full().grid().grid_cols(columns.max(1)).gap(theme.control_gap)
+}
+
+/// Columns for `count` tiles: all in one row when the page is wide, else rows of three
+/// (or two when three does not divide them).
+pub fn tile_columns(room: Room, count: usize) -> u16 {
+    match room {
+        Room::Wide => count as u16,
+        _ if count % 3 == 0 => 3,
+        _ => 2,
+    }
 }
 
 /// Charts side by side when the page has room, stacked otherwise.

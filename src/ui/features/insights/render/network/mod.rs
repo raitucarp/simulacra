@@ -7,7 +7,7 @@ mod colours;
 mod paint;
 mod side;
 
-use super::common::{card, card_title, option_chip, option_group, tile, tile_row, tr};
+use super::common::{card, card_title, option_chip, option_group, tile, tile_columns, tile_row, tr};
 use super::Room;
 use crate::domain::graph::NODE_KINDS;
 use crate::domain::insights::graph::metrics::Measure;
@@ -41,7 +41,7 @@ impl InsightsPanel {
             .child(option_group(tr("insights.control.colour"), colours.into(), theme))
     }
 
-    fn network_numbers(&self, report: &InsightsReport) -> Div {
+    fn network_numbers(&self, report: &InsightsReport, room: Room) -> Div {
         let theme = &self.theme;
         let n = &report.network;
         let m = &n.metrics;
@@ -53,7 +53,7 @@ impl InsightsPanel {
             (compact(m.diameter as f64), "insights.tile.diameter"),
             (format!("{} · {}", m.cuts.bridges.len(), m.cuts.articulation_points.len()), "insights.tile.cuts"),
         ];
-        tile_row(theme).children(tiles.into_iter().map(|(value, key)| tile(value, tr(key), theme.text_primary, theme)))
+        tile_row(tile_columns(room, tiles.len()), theme).children(tiles.into_iter().map(|(value, key)| tile(value, tr(key), theme.text_primary, theme)))
     }
 
     fn network_legend(&self, report: &InsightsReport, cx: &mut Context<Self>) -> Div {
@@ -102,6 +102,6 @@ impl InsightsPanel {
             .child(self.network_controls(cx))
             .child(main)
             .child(summary_line(self.network_summary(report), theme));
-        div().w_full().flex().flex_col().gap(theme.section_gap).child(self.network_numbers(report)).child(body)
+        div().w_full().flex().flex_col().gap(theme.section_gap).child(self.network_numbers(report, room)).child(body)
     }
 }

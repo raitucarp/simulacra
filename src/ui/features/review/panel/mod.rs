@@ -1,19 +1,28 @@
-//! The Review page entity: which screen shows, the running session or quiz, and the typed
-//! answer field. Changes to the deck go out as [`ReviewEvent`]s; the shell applies them and
-//! hands back fresh [`ReviewData`].
+//! The Review page entity: which screen shows, the running session (with the drill of a
+//! connection map), quiz, map editor or post picker, and their text fields. Changes to the
+//! deck go out as [`ReviewEvent`]s; the shell applies them and hands back [`ReviewData`].
 
+mod drill;
+mod editor;
+mod fields;
 mod keys;
+mod picker;
 mod quiz;
 mod session;
+
+pub use drill::DrillRun;
+pub use editor::MapEditor;
+pub use fields::PanelFields;
+pub use picker::Picker;
+#[cfg(test)]
+pub use picker::matches_query;
 
 use super::data::ReviewData;
 use super::events::ReviewEvent;
 use crate::domain::review::quiz::{ChoiceRun, OrderPuzzle, RecallRun};
 use crate::domain::review::Session;
 use crate::theme::ThemeTokens;
-use gpui_kit::component::input::{InputEvent, InputState};
-use gpui_kit::{AppContext, Context, Entity, EventEmitter, FocusHandle, Subscription, Window};
-use rust_i18n::t;
+use gpui_kit::{Context, EventEmitter, FocusHandle, Subscription, Window};
 
 /// The page's screens.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
@@ -26,18 +35,22 @@ pub enum Screen {
     Summary,
     Quiz,
     Stats,
-    Cards,
+    Items,
+    /// Posts of the stream to learn or to map.
+    Picker,
+    /// A connection map being made or edited.
+    MapEditor,
 }
 
 impl Screen {
     /// The tabs of the page header (the other screens are entered from them).
-    pub const TABS: [Self; 3] = [Self::Today, Self::Stats, Self::Cards];
+    pub const TABS: [Self; 3] = [Self::Today, Self::Stats, Self::Items];
 
     pub const fn key(self) -> &'static str {
         match self {
             Self::Today | Self::Session | Self::Summary | Self::Quiz => "today",
             Self::Stats => "stats",
-            Self::Cards => "cards",
+            Self::Items | Self::Picker | Self::MapEditor => "items",
         }
     }
 }
@@ -58,9 +71,12 @@ pub struct ReviewPanel {
     pub(super) data: ReviewData,
     pub(super) screen: Screen,
     pub(super) session: Session,
+    pub(super) drill: Option<DrillRun>,
     pub(super) quiz: Option<QuizRunState>,
+    pub(super) editor: Option<MapEditor>,
+    pub(super) picker: Option<Picker>,
     pub(super) focus: FocusHandle,
-    pub(super) answer_input: Entity<InputState>,
+    pub(super) fields: PanelFields,
     _subscriptions: Vec<Subscription>,
 }
 
@@ -68,30 +84,26 @@ impl EventEmitter<ReviewEvent> for ReviewPanel {}
 
 impl ReviewPanel {
     pub fn new(data: ReviewData, theme: ThemeTokens, window: &mut Window, cx: &mut Context<Self>) -> Self {
-        let placeholder = t!("review.recall.placeholder").to_string();
-        let answer_input = cx.new(|cx| InputState::new(window, cx).placeholder(placeholder));
-        let subscription = cx.subscribe_in(&answer_input, window, |this: &mut Self, _, event: &InputEvent, window, cx| {
-            if matches!(event, InputEvent::PressEnter { .. }) {
-                this.check_recall(window, cx);
-            }
-        });
+        let (fields, subscriptions) = PanelFields::new(window, cx);
         Self {
             theme,
             data,
             screen: Screen::Today,
             session: Session::default(),
+            drill: None,
             quiz: None,
+            editor: None,
+            picker: None,
             focus: cx.focus_handle(),
-            answer_input,
-            _subscriptions: vec![subscription],
+            fields,
+            _subscriptions: subscriptions,
         }
     }
 
-    /// Swaps in fresh deck data; a different network ends any session or quiz.
+    /// Swaps in fresh deck data; a different network ends any session, quiz or editor.
     pub fn set_data(&mut self, data: ReviewData, cx: &mut Context<Self>) {
         if data.network_id != self.data.network_id {
-            self.session = Session::default();
-            self.quiz = None;
+            (self.session, self.drill, self.quiz, self.editor, self.picker) = (Session::default(), None, None, None, None);
             self.screen = Screen::Today;
         }
         self.data = data;
@@ -112,7 +124,7 @@ impl ReviewPanel {
         cx.notify();
     }
 
-    /// Whether a card is waiting for a reveal, a grade or a choice (the review keys are live).
+    /// Whether an item is waiting for a reveal, a grade or a choice (the review keys are live).
     pub(super) fn keys_active(&self) -> bool {
         match (self.screen, &self.quiz) {
             (Screen::Session, _) => !self.session.is_finished(),

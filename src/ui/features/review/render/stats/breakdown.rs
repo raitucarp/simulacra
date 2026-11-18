@@ -4,32 +4,32 @@
 use super::super::super::panel::ReviewPanel;
 use super::super::super::text::{percent, tr};
 use super::super::common::{block_title, caption, control_row, legend_item, progress_bar, surface};
-use crate::domain::review::stats::{calibration, state_counts, CardState};
+use crate::domain::review::stats::{calibration, state_counts, ItemState};
 use crate::theme::ThemeTokens;
 use crate::ui::icons::LucideIcon;
 use gpui_kit::*;
 use rust_i18n::t;
 
-/// The color of a card state.
-fn state_color(state: CardState, theme: &ThemeTokens) -> Rgba {
+/// The color of an item state.
+fn state_color(state: ItemState, theme: &ThemeTokens) -> Rgba {
     match state {
-        CardState::New => theme.info,
-        CardState::Learning => theme.warning,
-        CardState::Young => theme.accent_success,
-        CardState::Mature => theme.accent_agent,
-        CardState::Suspended => theme.text_muted,
+        ItemState::New => theme.info,
+        ItemState::Learning => theme.warning,
+        ItemState::Young => theme.accent_success,
+        ItemState::Mature => theme.accent_agent,
+        ItemState::Suspended => theme.text_muted,
     }
 }
 
 impl ReviewPanel {
     pub(super) fn states_panel(&self) -> Div {
         let theme = &self.theme;
-        let counts = state_counts(&self.data.cards);
+        let counts = state_counts(&self.data.live_items());
         let total = counts.total().max(1) as f32;
-        let segments = CardState::ALL.into_iter().filter(|s| counts.get(*s) > 0).map(|state| {
+        let segments = ItemState::ALL.into_iter().filter(|s| counts.get(*s) > 0).map(|state| {
             div().h_full().w(relative(counts.get(state) as f32 / total)).bg(state_color(state, theme))
         });
-        let legend = CardState::ALL.into_iter().map(|state| {
+        let legend = ItemState::ALL.into_iter().map(|state| {
             legend_item(state_color(state, theme), format!("{} {}", tr(&format!("review.state.{}", state.key())), counts.get(state)), theme)
         });
         surface(theme)

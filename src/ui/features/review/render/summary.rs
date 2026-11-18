@@ -1,4 +1,4 @@
-//! After a session: how many cards, first-try recall, the grade spread, and what comes next.
+//! After a session: how many items, first-try recall, the grade spread, and what comes next.
 
 use super::super::panel::{ReviewPanel, Screen};
 use super::super::text::{grade_label, percent, tr};
@@ -26,10 +26,10 @@ impl ReviewPanel {
         let recall = session.first_try_recall().map_or_else(|| tr("review.none"), percent);
         let counts = session.grade_counts();
         let tiles = control_row(theme)
-            .child(count_tile(session.done().to_string(), tr("review.summary.cards"), theme.accent_brand, theme))
+            .child(count_tile(session.done().to_string(), tr("review.summary.items"), theme.accent_brand, theme))
             .child(count_tile(recall, tr("review.summary.first_try"), theme.accent_success, theme))
             .child(count_tile(counts[Grade::Again.index()].to_string(), tr("review.summary.again"), theme.accent_danger, theme));
-        let tomorrow = due_forecast(&self.data.cards, self.data.today, TOMORROW_WINDOW)[1];
+        let tomorrow = due_forecast(&self.data.items, self.data.today, TOMORROW_WINDOW)[1];
         let back = Button::new(BACK_ID).primary().small().icon(Icon::new(LucideIcon::ArrowLeft)).label(tr("review.back_today")).on_click(cx.listener(|this, _, _, cx| this.show(Screen::Today, cx)));
         let stats = Button::new(STATS_ID).ghost().small().icon(Icon::new(LucideIcon::ChartColumn)).label(tr("review.tab.stats")).on_click(cx.listener(|this, _, _, cx| this.show(Screen::Stats, cx)));
         surface(theme)

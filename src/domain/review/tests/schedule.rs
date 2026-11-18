@@ -1,6 +1,6 @@
 use super::day;
 use crate::domain::review::day::{review_day, DAY_ROLLOVER_HOUR};
-use crate::domain::review::schedule::{preview, review, CardSchedule, Phase, Policy, SAME_DAY};
+use crate::domain::review::schedule::{preview, review, ItemSchedule, Phase, Policy, SAME_DAY};
 use crate::domain::review::Grade;
 use chrono::{FixedOffset, NaiveDate, TimeZone};
 
@@ -9,10 +9,10 @@ fn policy() -> Policy {
 }
 
 /// Reviews a new card with `grades`, each on its due day.
-fn run(grades: &[Grade], policy: &Policy) -> Vec<CardSchedule> {
+fn run(grades: &[Grade], policy: &Policy) -> Vec<ItemSchedule> {
     grades
         .iter()
-        .scan(CardSchedule::new_card(day(0)), |schedule, grade| {
+        .scan(ItemSchedule::new_item(day(0)), |schedule, grade| {
             let today = schedule.due.max(day(0));
             *schedule = review(schedule, *grade, today, policy);
             Some(schedule.clone())
@@ -61,7 +61,7 @@ fn the_buttons_promise_ordered_intervals() {
 
 #[test]
 fn a_new_card_answered_again_stays_in_learning() {
-    let after = review(&CardSchedule::new_card(day(0)), Grade::Again, day(0), &policy());
+    let after = review(&ItemSchedule::new_item(day(0)), Grade::Again, day(0), &policy());
     assert_eq!((after.phase, after.lapses, after.due), (Phase::Learning, 0, day(0)));
 }
 

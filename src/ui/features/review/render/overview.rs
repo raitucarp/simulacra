@@ -24,7 +24,7 @@ fn mode_icon(kind: QuizKind) -> LucideIcon {
 
 impl ReviewPanel {
     pub(super) fn render_overview(&self, cx: &mut Context<Self>) -> impl IntoElement {
-        if self.data.cards.is_empty() {
+        if self.data.live_items().is_empty() {
             return div().child(self.render_empty_deck(cx));
         }
         let today = if self.data.plan().queued() == 0 { self.render_caught_up(cx).into_any_element() } else { self.render_today(cx).into_any_element() };

@@ -46,7 +46,7 @@ impl AppView {
             .custom_feed_profile_id
             .as_ref()
             .and_then(|id| self.state.user_profiles.iter().find(|p| &p.id == id));
-        let reply_entity = bind.entity().clone();
+        let (reply_entity, learn_entity) = (bind.entity().clone(), bind.entity().clone());
         render_main_feed(FeedParams {
             state: &self.state,
             custom_profile,
@@ -67,7 +67,8 @@ impl AppView {
             on_repost_post: bind.boxed(Self::repost_post), on_quote_post: bind.boxed(Self::quote_post),
             on_delete_post: bind.boxed(Self::delete_post),
             on_find_similar_post: bind.boxed(Self::find_similar_post),
-            on_make_flashcard_post: bind.boxed(Self::make_flashcard_post),
+            on_learn_post: Box::new(move |post_id, kind, window, cx| learn_entity.update(cx, |this, cx| this.learn_post_menu(post_id, kind, window, cx))),
+            learning_posts: self.learning_posts(),
             on_open_tag: Rc::new(bind.with(|this, tag: String, window, cx| this.search_topic(&tag, window, cx))),
             on_open_wikilink: Rc::new(bind.with(Self::open_wikilink)),
             on_open_source: Rc::new(bind.with(Self::open_source)),

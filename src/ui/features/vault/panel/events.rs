@@ -26,6 +26,8 @@ pub enum VaultEvent {
     SetReading(String, Reading),
     /// Show a linking post in the timeline.
     OpenPost(PostId),
-    /// Open the card maker on a document's sentences (sb C1).
-    MakeFlashcards(String),
+    /// Learn passages of a document: pick sentences or paragraphs (sb C1b).
+    LearnPassages(String),
+    /// A connection map of a document's related entries (sb C1b).
+    LearnConnections(String),
 }

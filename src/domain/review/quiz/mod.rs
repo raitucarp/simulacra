@@ -9,13 +9,12 @@ pub mod recall;
 pub mod run;
 pub mod shuffle;
 
-pub use run::{ChoiceRun, RecallRun};
-
 pub use affinity::SourceVectors;
-pub use choice::{build_choice, pick_distractors, ChoiceQuestion, DISTRACTORS};
+pub use choice::{build_choice, pick_distractors, ChoiceQuestion, ChoiceSources, DISTRACTORS};
 pub use order::{OrderPuzzle, OrderScore, MAX_PIECES, MIN_PIECES};
 pub use order_source::{piece_text, prose_paragraphs, sentence_window, thread_line, PIECE_CHARS};
-pub use recall::{judge_recall, normalize_answer, similarity, RecallVerdict};
+pub use run::{ChoiceRun, RecallRun};
+pub use recall::{CHECKABLE_ANSWER_CHARS, judge_recall, normalize_answer, similarity, RecallVerdict};
 pub use shuffle::{mix_seed, shuffled};
 
 /// Which quiz is running.

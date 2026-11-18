@@ -26,7 +26,7 @@ impl ReviewPanel {
             let score = t!("review.choice.score", right = run.right, total = total).to_string();
             return self.render_quiz_done(QuizKind::Choice, score, cx);
         };
-        let Some(card) = self.data.card(&question.card_id) else { return div() };
+        let Some(item) = self.data.item(&question.item_id) else { return div() };
         let progress = t!("review.choice.progress", index = run.index + 1, total = total, right = run.right).to_string();
         div()
             .w_full()
@@ -36,7 +36,7 @@ impl ReviewPanel {
             .flex_col()
             .gap(theme.section_gap)
             .child(self.quiz_top(progress, run.index as f64 / total.max(1) as f64, cx))
-            .child(self.render_card(card, false, cx))
+            .child(self.render_item(item, false, cx))
             .child(self.confidence_row(run, cx))
             .child(div().flex().flex_col().gap(theme.spacing_xs).children(question.options.iter().enumerate().map(|(i, option)| self.option_row(question, run.picked, i, option, cx))))
             .when(run.picked.is_some(), |screen| screen.child(self.choice_feedback(question, run.picked, cx)))

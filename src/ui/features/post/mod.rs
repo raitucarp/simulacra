@@ -19,7 +19,7 @@ mod threadline;
 
 pub use actions::ActionClickCallback;
 pub use body::{render_body_tokens, render_post_body, BodyLinks, OpenTextAction};
-pub use controls::{post_permalink, share_text, OpenPostAction, PostAction, PostCardHandlers};
+pub use controls::{post_permalink, share_text, LearnAction, LearnControls, LearnRequestKind, LearnStatus, OpenPostAction, PostAction, PostCardHandlers};
 pub use excerpt::resolve_wikilink_excerpt;
 pub use extras::{mood_chip, source_chip, tool_chip, OpenSourceAction};
 pub(crate) use extras_detail::render_extras_detail;

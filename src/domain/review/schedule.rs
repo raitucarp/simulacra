@@ -32,7 +32,7 @@ pub enum Phase {
 
 /// The persisted schedule of one card.
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct CardSchedule {
+pub struct ItemSchedule {
     pub phase: Phase,
     pub memory: Option<Memory>,
     /// Review day the card is due on.
@@ -44,9 +44,9 @@ pub struct CardSchedule {
     pub lapses: u32,
 }
 
-impl CardSchedule {
+impl ItemSchedule {
     /// A card nobody has reviewed, available from `today`.
-    pub fn new_card(today: NaiveDate) -> Self {
+    pub fn new_item(today: NaiveDate) -> Self {
         Self { phase: Phase::New, memory: None, due: today, last_review: None, interval: 0, reps: 0, lapses: 0 }
     }
 
@@ -89,7 +89,7 @@ impl Policy {
 }
 
 /// The memory after answering `grade` on `today`.
-pub fn next_memory(schedule: &CardSchedule, grade: Grade, today: NaiveDate, params: &Params) -> Memory {
+pub fn next_memory(schedule: &ItemSchedule, grade: Grade, today: NaiveDate, params: &Params) -> Memory {
     let (Some(memory), Some(last)) = (schedule.memory, schedule.last_review) else {
         return Memory { stability: fsrs::initial_stability(params, grade), difficulty: fsrs::initial_difficulty(params, grade) };
     };
@@ -108,7 +108,7 @@ pub fn next_memory(schedule: &CardSchedule, grade: Grade, today: NaiveDate, para
 }
 
 /// Intervals of the four grades, kept in order (Hard ≤ Good < Easy) as the buttons promise.
-pub fn preview(schedule: &CardSchedule, today: NaiveDate, policy: &Policy) -> [u32; 4] {
+pub fn preview(schedule: &ItemSchedule, today: NaiveDate, policy: &Policy) -> [u32; 4] {
     let raw = Grade::ALL.map(|grade| match grade {
         Grade::Again => SAME_DAY,
         _ => policy.interval_for(next_memory(schedule, grade, today, &policy.params)),
@@ -120,7 +120,7 @@ pub fn preview(schedule: &CardSchedule, today: NaiveDate, policy: &Policy) -> [u
 }
 
 /// The schedule after answering `grade` on `today`.
-pub fn review(schedule: &CardSchedule, grade: Grade, today: NaiveDate, policy: &Policy) -> CardSchedule {
+pub fn review(schedule: &ItemSchedule, grade: Grade, today: NaiveDate, policy: &Policy) -> ItemSchedule {
     let memory = next_memory(schedule, grade, today, &policy.params);
     let interval = preview(schedule, today, policy)[grade.index()];
     let was_learnt = matches!(schedule.phase, Phase::Review | Phase::Relearning);
@@ -130,7 +130,7 @@ pub fn review(schedule: &CardSchedule, grade: Grade, today: NaiveDate, policy: &
         _ => Phase::Review,
     };
     let lapses = schedule.lapses + u32::from(grade == Grade::Again && schedule.phase == Phase::Review);
-    CardSchedule {
+    ItemSchedule {
         phase,
         memory: Some(memory),
         due: add_days(today, interval),

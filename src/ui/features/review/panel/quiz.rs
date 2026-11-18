@@ -22,14 +22,14 @@ impl ReviewPanel {
         };
         self.quiz = Some(match content {
             QuizContent::Choice(questions) => QuizRunState::Choice(ChoiceRun::new(questions)),
-            QuizContent::Recall(cards) => QuizRunState::Recall(RecallRun::new(cards)),
+            QuizContent::Recall(items) => QuizRunState::Recall(RecallRun::new(items)),
             QuizContent::Order(puzzle) => QuizRunState::Order { puzzle, solved, rounds },
             QuizContent::Unavailable(reason) => QuizRunState::Unavailable(reason),
         });
         self.screen = Screen::Quiz;
-        self.answer_input.update(cx, |input, cx| input.set_value("", window, cx));
+        self.fields.answer.update(cx, |input, cx| input.set_value("", window, cx));
         match self.quiz {
-            Some(QuizRunState::Recall(_)) => self.answer_input.update(cx, |input, cx| input.focus(window, cx)),
+            Some(QuizRunState::Recall(_)) => self.fields.answer.update(cx, |input, cx| input.focus(window, cx)),
             _ => self.focus.focus(window, cx),
         }
         cx.notify();
@@ -70,9 +70,9 @@ impl ReviewPanel {
 
     /// Compares the typed answer with the current card's (Enter in the field).
     pub(in crate::ui::features::review) fn check_recall(&mut self, window: &mut Window, cx: &mut Context<Self>) {
-        let typed = self.answer_input.read(cx).value().to_string();
+        let typed = self.fields.answer.read(cx).value().to_string();
         let Some(QuizRunState::Recall(run)) = &self.quiz else { return };
-        let expected = run.current().and_then(|id| self.data.card(id)).map(|card| card.kind.answer_text()).unwrap_or_default();
+        let expected = run.current().and_then(|id| self.data.item(id)).map(|item| self.data.answer_text(item)).unwrap_or_default();
         self.step_quiz(|quiz| match quiz {
             QuizRunState::Recall(run) => (QuizRunState::Recall(run.check(&typed, &expected)), None),
             other => (other, None),
@@ -89,7 +89,7 @@ impl ReviewPanel {
             other => (other, None),
         }, cx);
         if answered {
-            self.answer_input.update(cx, |input, cx| {
+            self.fields.answer.update(cx, |input, cx| {
                 input.set_value("", window, cx);
                 input.focus(window, cx);
             });

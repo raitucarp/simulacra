@@ -22,5 +22,7 @@ gpui_kit::assets::icon_assets!(
         // sb C1
         GraduationCap, Layers, ListOrdered, ChartColumn, Flame, Target, Lightbulb, RotateCcw, WandSparkles,
         TextCursorInput, Trophy, Pause, Play,
+        // sb C1b
+        MessageSquareReply, CircleStop, Eraser, ArrowLeftRight, ListChecks,
     ]
 );

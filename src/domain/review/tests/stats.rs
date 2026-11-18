@@ -7,7 +7,7 @@ use chrono::Utc;
 
 fn entry(on: i64, grade: Grade, phase_before: Phase) -> ReviewEntry {
     let card = basic("c", "q", "a");
-    let answer = Answer { card_id: card.id.clone(), grade, mode: ReviewMode::Flashcard, confidence: None, correct: None };
+    let answer = Answer { item_id: card.id.clone(), grade, mode: ReviewMode::Review, confidence: None, correct: None };
     let (_, entry) = apply_answer(&card, &answer, Utc::now(), day(on), &Policy::with_retention_percent(90));
     ReviewEntry { phase_before, ..entry }
 }
@@ -54,7 +54,7 @@ fn cards_are_counted_by_state() {
     cards[4].suspended = true;
     let counts = state_counts(&cards);
     assert_eq!(counts.0, [1, 1, 1, 1, 1]);
-    assert_eq!((counts.get(CardState::Mature), counts.total()), (1, 5));
+    assert_eq!((counts.get(ItemState::Mature), counts.total()), (1, 5));
 }
 
 #[test]

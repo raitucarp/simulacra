@@ -1,4 +1,4 @@
-use crate::domain::review::schedule::{CardSchedule, Phase};
+use crate::domain::review::schedule::{ItemSchedule, Phase};
 use crate::domain::review::Grade;
 use crate::ui::features::review::{REVIEW_DONE_ART, REVIEW_EMPTY_ART};
 use crate::ui::illustration::EmptyKey;
@@ -11,14 +11,15 @@ fn english(key: &str) -> String {
 #[test]
 fn every_label_key_has_an_english_text() {
     let mut keys: Vec<String> = Grade::ALL.iter().flat_map(|g| [format!("review.grade.{}", g.key()), format!("review.grade.{}_hint", g.key())]).collect();
-    keys.extend(["basic", "cloze", "concept"].map(|k| format!("review.kind.{k}")));
+    keys.extend(["question", "answer", "connections"].map(|k| format!("review.kind.{k}")));
     keys.extend(["new", "learning", "young", "mature", "suspended"].map(|k| format!("review.state.{k}")));
     keys.extend(["guess", "unsure", "sure"].map(|k| format!("review.confidence.{k}")));
     keys.extend(["choice", "recall", "order"].iter().flat_map(|k| [format!("review.quiz.{k}.title"), format!("review.quiz.{k}.description"), format!("review.quiz.{k}.done_tip")]));
-    keys.extend(["exact", "close", "wrong"].map(|k| format!("review.recall.verdict.{k}")));
-    keys.extend(["today", "stats", "cards"].map(|k| format!("review.tab.{k}")));
-    keys.extend(["basic", "cloze", "concept"].iter().flat_map(|k| [format!("review.maker.kind.{k}"), format!("review.maker.{k}.front"), format!("review.maker.{k}.tip")]));
-    keys.extend(["basic", "concept"].map(|k| format!("review.maker.{k}.back")));
+    keys.extend(["exact", "close", "wrong", "compare"].map(|k| format!("review.recall.verdict.{k}")));
+    keys.extend(["today", "stats", "items"].map(|k| format!("review.tab.{k}")));
+    keys.extend(["front", "back"].iter().flat_map(|k| [format!("review.learn.{k}.switch"), format!("review.learn.{k}.field"), format!("review.learn.{k}.tip")]));
+    keys.extend(["sentences", "paragraphs"].map(|k| format!("review.learn.{k}")));
+    keys.extend(["unexpected", "direction", "label"].map(|k| format!("review.drill.mistake.{k}")));
     for key in keys {
         assert_ne!(english(&key), key, "untranslated {key}");
     }
@@ -37,7 +38,7 @@ fn intervals_read_in_days_months_and_years() {
 fn due_labels_cover_new_today_overdue_and_later() {
     use crate::ui::features::review::text::due_label;
     let today = NaiveDate::from_ymd_opt(2026, 3, 10).unwrap();
-    let mut schedule = CardSchedule::new_card(today);
+    let mut schedule = ItemSchedule::new_item(today);
     let new = due_label(&schedule, today);
     schedule.phase = Phase::Review;
     let due_today = due_label(&schedule, today);

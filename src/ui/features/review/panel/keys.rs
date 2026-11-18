@@ -1,8 +1,9 @@
-//! The review keys: 1–4 grade a card (or pick an option), Space and Enter reveal (or move
-//! on after a multiple-choice answer).
+//! The review keys: 1–4 grade an item (or pick an option), Space and Enter reveal (check a
+//! drawn map, then go on with the grade it earned; or move on after a multiple-choice
+//! answer).
 
 use super::{QuizRunState, ReviewPanel, Screen};
-use crate::domain::review::Grade;
+use crate::domain::review::{Grade, Stage};
 use crate::ui::features::review::keys::{GradeAgain, GradeEasy, GradeGood, GradeHard, RevealAnswer};
 use gpui_kit::{Context, Window};
 
@@ -21,6 +22,7 @@ impl ReviewPanel {
     /// Reveal (session) or next question (multiple choice).
     pub(in crate::ui::features::review) fn press_reveal(&mut self, cx: &mut Context<Self>) {
         match (self.screen, &self.quiz) {
+            (Screen::Session, _) if self.session.stage == Stage::Revealed && self.drill.is_some() => self.grade_session(Grade::Good, cx),
             (Screen::Session, _) => self.reveal(cx),
             (Screen::Quiz, Some(QuizRunState::Choice(_))) => self.next_choice(cx),
             _ => {}

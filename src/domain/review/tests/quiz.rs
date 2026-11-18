@@ -1,11 +1,11 @@
-use super::basic;
-use crate::domain::review::card::Card;
+use super::{basic, no_posts};
+use crate::domain::review::item::ReviewItem;
 use crate::domain::review::quiz::*;
 use crate::domain::review::{Confidence, Grade};
 use crate::domain::{NetworkId, Post, PostId, ProfileId};
 
-fn tagged(id: &str, back: &str, tag: &str) -> Card {
-    Card { tags: vec![tag.into()], ..basic(id, "q", back) }
+fn tagged(id: &str, back: &str, tag: &str) -> ReviewItem {
+    ReviewItem { tags: vec![tag.into()], ..basic(id, "q", back) }
 }
 
 #[test]
@@ -20,8 +20,9 @@ fn distractors_prefer_shared_tags_then_meaning_and_skip_duplicates() {
         tagged("e", "Descartes", "history"),
         tagged("f", "Leibniz!", "philosophy"),
     ];
-    let near_descartes = |other: &Card| if other.id.as_str() == "e" { 1.0 } else { 0.0 };
-    let picked = pick_distractors(&card, &pool, &near_descartes);
+    let near_descartes = |other: &ReviewItem| if other.id.as_str() == "e" { 1.0 } else { 0.0 };
+    let answer_of = |item: &ReviewItem| item.answer_text(&no_posts);
+    let picked = pick_distractors(&card, &pool, &ChoiceSources { answer_of: &answer_of, affinity: &near_descartes });
     assert_eq!(picked.len(), DISTRACTORS);
     assert_eq!(picked[0], "Leibniz", "a shared tag ranks first");
     assert_eq!(picked[1], "Descartes", "then the closest in meaning");
@@ -32,7 +33,8 @@ fn distractors_prefer_shared_tags_then_meaning_and_skip_duplicates() {
 fn a_question_shuffles_options_reproducibly_and_needs_a_distractor() {
     let card = basic("q", "Who wrote the Ethics?", "Spinoza");
     let pool = vec![card.clone(), basic("a", "q", "Hume"), basic("b", "q", "Kant"), basic("c", "q", "Locke")];
-    let none = |_: &Card| 0.0;
+    let (none, answer_of) = (|_: &ReviewItem| 0.0, |item: &ReviewItem| item.answer_text(&no_posts));
+    let none = ChoiceSources { answer_of: &answer_of, affinity: &none };
     let one = build_choice(&card, &pool, &none, 7).unwrap();
     assert_eq!(one, build_choice(&card, &pool, &none, 7).unwrap());
     assert_eq!(one.options[one.correct], "Spinoza");
@@ -46,6 +48,9 @@ fn typed_answers_forgive_case_accents_punctuation_and_typos() {
     assert_eq!(judge_recall("mitochondria", "mitocondria"), RecallVerdict::Close);
     assert_eq!(judge_recall("mitochondria", "ribosome"), RecallVerdict::Wrong);
     assert_eq!(judge_recall("anything", "   "), RecallVerdict::Wrong);
+    let post = "word ".repeat(CHECKABLE_ANSWER_CHARS);
+    assert_eq!(judge_recall(&post, "the gist in my words"), RecallVerdict::Compare, "a whole post is compared by the learner");
+    assert_eq!(RecallVerdict::Compare.is_correct(), None);
     assert_eq!(RecallVerdict::Close.suggested_grade(), Grade::Hard);
     assert!(similarity("abc", "abd") > 0.6);
 }
@@ -96,7 +101,7 @@ fn a_thread_line_runs_from_the_root_through_the_earliest_replies() {
 
 #[test]
 fn a_choice_run_grades_by_correctness_and_confidence() {
-    let question = |id: &str| ChoiceQuestion { card_id: crate::domain::review::CardId::new(id), options: vec!["a".into(), "b".into()], correct: 1 };
+    let question = |id: &str| ChoiceQuestion { item_id: crate::domain::review::ItemId::new(id), options: vec!["a".into(), "b".into()], correct: 1 };
     let run = ChoiceRun::new(vec![question("one"), question("two")]).with_confidence(Confidence::Guess);
     let (run, answer) = run.pick(1);
     let answer = answer.unwrap();
@@ -111,7 +116,7 @@ fn a_choice_run_grades_by_correctness_and_confidence() {
 
 #[test]
 fn a_recall_run_checks_then_takes_the_learners_grade() {
-    let run = RecallRun::new(vec![crate::domain::review::CardId::new("c")]);
+    let run = RecallRun::new(vec![crate::domain::review::ItemId::new("c")]);
     assert!(run.clone().grade(Grade::Good).1.is_none(), "grading waits for a check");
     let run = run.check("Spinosa", "Spinoza");
     assert_eq!(run.checked.as_ref().map(|(_, v)| *v), Some(RecallVerdict::Close));

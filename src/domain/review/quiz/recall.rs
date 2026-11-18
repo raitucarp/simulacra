@@ -6,6 +6,9 @@ use super::super::grade::Grade;
 
 /// Similarity from which an answer counts as close (a typo or two).
 pub const CLOSE_SIMILARITY: f64 = 0.8;
+/// Longest expected answer still compared letter by letter; a longer one (a whole post)
+/// is recalled in the learner's own words and compared by the learner.
+pub const CHECKABLE_ANSWER_CHARS: usize = 120;
 
 /// How a typed answer compares.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -13,6 +16,8 @@ pub enum RecallVerdict {
     Exact,
     Close,
     Wrong,
+    /// A long answer: the learner compares it with their own words.
+    Compare,
 }
 
 impl RecallVerdict {
@@ -21,13 +26,23 @@ impl RecallVerdict {
             Self::Exact => "exact",
             Self::Close => "close",
             Self::Wrong => "wrong",
+            Self::Compare => "compare",
+        }
+    }
+
+    /// Whether the answer was objectively right (none when the learner compares).
+    pub const fn is_correct(self) -> Option<bool> {
+        match self {
+            Self::Exact | Self::Close => Some(true),
+            Self::Wrong => Some(false),
+            Self::Compare => None,
         }
     }
 
     /// The grade pre-selected for the learner.
     pub const fn suggested_grade(self) -> Grade {
         match self {
-            Self::Exact => Grade::Good,
+            Self::Exact | Self::Compare => Grade::Good,
             Self::Close => Grade::Hard,
             Self::Wrong => Grade::Again,
         }
@@ -80,6 +95,9 @@ pub fn similarity(expected: &str, typed: &str) -> f64 {
 pub fn judge_recall(expected: &str, typed: &str) -> RecallVerdict {
     if normalize_answer(typed).is_empty() {
         return RecallVerdict::Wrong;
+    }
+    if expected.trim().chars().count() > CHECKABLE_ANSWER_CHARS {
+        return RecallVerdict::Compare;
     }
     match similarity(expected, typed) {
         score if score >= 1.0 => RecallVerdict::Exact,

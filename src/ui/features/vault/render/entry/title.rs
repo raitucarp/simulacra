@@ -18,7 +18,8 @@ const READ_BUTTON_ID: &str = "vault-entry-read";
 const EDIT_BUTTON_ID: &str = "vault-entry-edit";
 const MARK_BUTTON_ID: &str = "vault-entry-mark";
 const DELETE_BUTTON_ID: &str = "vault-entry-delete";
-const FLASHCARDS_BUTTON_ID: &str = "vault-entry-flashcards";
+const PASSAGES_BUTTON_ID: &str = "vault-entry-learn-passages";
+const CONNECTIONS_BUTTON_ID: &str = "vault-entry-learn-connections";
 
 /// "Baruch Spinoza · translated by R. H. M. Elwes".
 fn byline(doc: &GroundingDocument) -> Vec<String> {
@@ -76,10 +77,17 @@ impl VaultPanel {
         let mark_label = if is_read { t!("vault.mark_unread") } else { t!("vault.mark_read") }.to_string();
         let mark = Button::new(MARK_BUTTON_ID).ghost().small().icon(Icon::new(LucideIcon::Check)).label(mark_label)
             .on_click(cx.listener(move |this, _, _, cx| this.mark_read(mark_id.clone(), !is_read, cx)));
-        let cards_id = doc.id.clone();
-        let cards = Button::new(FLASHCARDS_BUTTON_ID).ghost().small().icon(Icon::new(LucideIcon::Layers)).label(t!("vault.make_flashcards").to_string())
-            .on_click(cx.listener(move |_, _, _, cx| cx.emit(VaultEvent::MakeFlashcards(cards_id.clone()))));
-        div().flex().flex_wrap().gap(self.theme.control_gap).child(read).child(edit).child(mark).child(cards).child(self.render_delete_button(doc, cx))
+        div().flex().flex_wrap().gap(self.theme.control_gap).child(read).child(edit).child(mark).children(self.learn_buttons(doc, cx)).child(self.render_delete_button(doc, cx))
+    }
+
+    /// "Learn passages" and "Learn connections" (sb C1b).
+    fn learn_buttons(&self, doc: &GroundingDocument, cx: &mut Context<Self>) -> [Button; 2] {
+        let (passages_id, connections_id) = (doc.id.clone(), doc.id.clone());
+        let passages = Button::new(PASSAGES_BUTTON_ID).ghost().small().icon(Icon::new(LucideIcon::GraduationCap)).label(t!("vault.learn_passages").to_string())
+            .on_click(cx.listener(move |_, _, _, cx| cx.emit(VaultEvent::LearnPassages(passages_id.clone()))));
+        let connections = Button::new(CONNECTIONS_BUTTON_ID).ghost().small().icon(Icon::new(LucideIcon::Share2)).label(t!("vault.learn_connections").to_string())
+            .on_click(cx.listener(move |_, _, _, cx| cx.emit(VaultEvent::LearnConnections(connections_id.clone()))));
+        [passages, connections]
     }
 
     /// Delete, after a confirmation naming the document.

@@ -48,6 +48,7 @@ pub fn derive_tokens(
     import::apply_import_layout(&mut t);
     semantic::apply_semantic_layout(&mut t);
     review::apply_review_layout(&mut t);
+    review::apply_review_map_layout(&mut t);
     responsive::apply_responsive_layout(&mut t);
     vault::apply_vault_layout(&mut t);
     surfaces::apply_surfaces(&mut t, palette);

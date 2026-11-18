@@ -52,6 +52,7 @@ impl AppView {
             CommandId::GoInsights | CommandId::InsightsOverview | CommandId::InsightsNetwork | CommandId::InsightsSets
             | CommandId::InsightsSymmetry | CommandId::InsightsCategories | CommandId::InsightsEmbedding | CommandId::InsightsActivity => self.open_insights(id, window, cx),
             CommandId::ImageIdeas => self.open_image_ideas_command(window, cx),
+            CommandId::GoJournal | CommandId::NewJournalEntry | CommandId::LogMood | CommandId::StartFocus | CommandId::NewTimeCapsule => self.open_journal(id, window, cx),
         }
     }
 

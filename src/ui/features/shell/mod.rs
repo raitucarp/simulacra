@@ -20,6 +20,7 @@ mod handlers;
 mod image_ideas_state;
 mod import_state;
 mod insights_host;
+mod journal_host;
 mod inspector_state;
 mod lab_state;
 mod media_state;

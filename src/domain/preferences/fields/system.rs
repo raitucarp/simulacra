@@ -6,13 +6,13 @@ use crate::domain::preferences::{AdvancedPrefs, LogLevel, NotificationPrefs, Pri
 
 category_fields! {
     /// A Privacy & Data preference.
-    PrivacyField { LinkPreviews => "link_previews", Telemetry => "telemetry" }
+    PrivacyField { LinkPreviews => "link_previews", JournalInSearch => "journal_in_search", Telemetry => "telemetry" }
 }
 
 impl PrivacyField {
     pub fn kind(self) -> FieldKind {
         match self {
-            Self::LinkPreviews => FieldKind::Toggle,
+            Self::LinkPreviews | Self::JournalInSearch => FieldKind::Toggle,
             Self::Telemetry => FieldKind::Locked,
         }
     }
@@ -20,6 +20,7 @@ impl PrivacyField {
     pub fn get(self, prefs: &PrivacyPrefs) -> SettingValue {
         SettingValue::Toggle(match self {
             Self::LinkPreviews => prefs.link_previews,
+            Self::JournalInSearch => prefs.journal_in_search,
             Self::Telemetry => prefs.telemetry,
         })
     }
@@ -28,6 +29,7 @@ impl PrivacyField {
     pub fn set(self, prefs: PrivacyPrefs, value: &SettingValue) -> PrivacyPrefs {
         match self {
             Self::LinkPreviews => PrivacyPrefs { link_previews: toggle(value, prefs.link_previews), ..prefs },
+            Self::JournalInSearch => PrivacyPrefs { journal_in_search: toggle(value, prefs.journal_in_search), ..prefs },
             Self::Telemetry => prefs,
         }
     }

@@ -11,6 +11,7 @@ use crate::state::forge::engine::{body_error, mutate, JsonProblem};
 use crate::state::forge::EngineSection;
 use crate::ui::features::forge::text::tr;
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
+use crate::state::forge::suggest::EngineParam;
 use gpui_kit::*;
 
 const BUILDER_KEY: &str = "forge.ui.engine.builder_title";
@@ -34,8 +35,8 @@ impl ForgeView {
     pub(super) fn request_section(&self, handle: &ForgeHandle) -> Div {
         let theme = &self.theme;
         let kind = RequestKind::of(&self.engine().request);
-        let grid = self.engine_cards("request", (Some(kind), &RequestKind::ALL), handle, mutate::set_request_kind);
-        let head = card(theme).child(self.engine_field("engine_request", grid)).children(option_line(kind, theme));
+        let grid = self.engine_cards((EngineParam::Request, "request"), (Some(kind), &RequestKind::ALL), handle, mutate::set_request_kind);
+        let head = card(theme).child(self.engine_field(handle, "engine_request", grid)).children(option_line(kind, theme));
         let builder = match &self.engine().request {
             RequestMode::Custom(request) => Some(self.request_builder(request, handle)),
             RequestMode::Native => None,
@@ -45,12 +46,12 @@ impl ForgeView {
 
     fn request_builder(&self, request: &CustomRequest, handle: &ForgeHandle) -> Div {
         let theme = &self.theme;
-        let methods = self.engine_cards("method", (Some(request.method), &HttpMethod::ALL), handle, |e, method| {
+        let methods = self.engine_cards((EngineParam::Method, "method"), (Some(request.method), &HttpMethod::ALL), handle, |e, method| {
             if let Some(request) = custom(e) {
                 request.method = method;
             }
         });
-        let url = self.engine_input("url", &request.url, (SECTION, handle), |e, text| {
+        let url = self.engine_input_for((EngineParam::Url, "url".to_string()), &request.url, (SECTION, handle), |e, text| {
             if let Some(request) = custom(e) {
                 request.url = text;
             }
@@ -64,12 +65,12 @@ impl ForgeView {
         card(theme)
             .gap(theme.section_gap)
             .child(heading(tr(BUILDER_KEY), theme))
-            .child(self.engine_field("engine_method", methods.compact()))
-            .child(self.engine_field("engine_url", url.placeholder(tr(URL_HINT_KEY))))
-            .child(self.engine_field("engine_headers", headers))
-            .child(self.engine_field("engine_body", self.body_editor(request, handle)))
+            .child(self.engine_field(handle, "engine_method", methods.compact()))
+            .child(self.engine_field(handle, "engine_url", url.placeholder(tr(URL_HINT_KEY))))
+            .child(self.engine_field(handle, "engine_headers", headers))
+            .child(self.engine_field(handle, "engine_body", self.body_editor(request, handle)))
             .child(self.reply_paths(request, handle))
-            .child(self.engine_field("engine_credential", key))
+            .child(self.engine_field(handle, "engine_credential", key))
     }
 
     /// The body template, its placeholder chips and whether it is JSON once filled in.
@@ -78,7 +79,7 @@ impl ForgeView {
         if !request.method.has_body() {
             return muted(tr(NO_BODY_KEY), theme);
         }
-        let body = self.engine_input("body", &request.body_template, (SECTION, handle), |e, text| {
+        let body = self.engine_input_for((EngineParam::Body, "body".to_string()), &request.body_template, (SECTION, handle), |e, text| {
             if let Some(request) = custom(e) {
                 request.body_template = text;
             }
@@ -96,12 +97,12 @@ impl ForgeView {
 
     fn reply_paths(&self, request: &CustomRequest, handle: &ForgeHandle) -> Div {
         let theme = &self.theme;
-        let reply = self.engine_input("reply-path", &request.reply_path, (SECTION, handle), |e, text| {
+        let reply = self.engine_input_for((EngineParam::ReplyPath, "reply-path".to_string()), &request.reply_path, (SECTION, handle), |e, text| {
             if let Some(request) = custom(e) {
                 request.reply_path = text;
             }
         });
-        let tools = self.engine_input("tool-call-path", &request.tool_call_path, (SECTION, handle), |e, text| {
+        let tools = self.engine_input_for((EngineParam::ToolCallPath, "tool-call-path".to_string()), &request.tool_call_path, (SECTION, handle), |e, text| {
             if let Some(request) = custom(e) {
                 request.tool_call_path = text;
             }
@@ -110,7 +111,7 @@ impl ForgeView {
             .flex()
             .flex_col()
             .gap(theme.spacing_md)
-            .child(self.engine_field("engine_reply_path", reply))
-            .child(self.engine_field("engine_tool_call_path", tools))
+            .child(self.engine_field(handle, "engine_reply_path", reply))
+            .child(self.engine_field(handle, "engine_tool_call_path", tools))
     }
 }

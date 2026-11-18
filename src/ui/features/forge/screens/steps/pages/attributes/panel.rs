@@ -9,6 +9,7 @@ use crate::state::forge::ScoreField;
 use crate::theme::ThemeTokens;
 use crate::ui::features::forge::screens::common::{card, heading, muted};
 use crate::ui::features::forge::text::{tr, tr_count, tr_with};
+use crate::ui::features::forge::widgets::suggest::SliderHint;
 use crate::ui::features::forge::widgets::{ScoreSlider, ToggleCard, ValueCallback};
 use gpui_kit::*;
 
@@ -37,6 +38,8 @@ pub(super) struct PersonalityPanel {
     pub cfg: AgentConfig,
     pub theme: ThemeTokens,
     pub on_score: ValueCallback<(ScoreField, u8)>,
+    /// The typical band and "Why?" card of each slider.
+    pub hints: Vec<(ScoreField, SliderHint)>,
 }
 
 impl PersonalityPanel {
@@ -77,7 +80,8 @@ impl PersonalityPanel {
         let theme = &self.theme;
         let sliders = fields.iter().map(|&field| {
             let on_score = self.on_score.clone();
-            ScoreSlider::new(field, &self.cfg, theme, move |value, w, cx| on_score((field, value), w, cx)).budgeted(balanced)
+            let hint = self.hints.iter().find(|(candidate, _)| *candidate == field).map(|(_, hint)| hint.clone());
+            ScoreSlider::new(field, &self.cfg, theme, move |value, w, cx| on_score((field, value), w, cx)).budgeted(balanced).hint(hint)
         });
         card(theme).gap(theme.section_gap).child(heading(tr(title_key), theme)).child(muted(tr(hint_key), theme)).children(sliders)
     }

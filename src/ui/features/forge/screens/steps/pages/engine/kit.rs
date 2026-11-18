@@ -12,6 +12,7 @@ use crate::ui::features::forge::widgets::{ForgeTextInput, IllustratedOptionGrid}
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::{Icon, Sizable};
+use crate::state::forge::suggest::{EngineParam, Param};
 use gpui_kit::*;
 use std::rc::Rc;
 
@@ -67,16 +68,19 @@ pub(super) fn json_line(problem: Option<JsonProblem>, theme: &ThemeTokens) -> Di
 }
 
 impl ForgeView {
-    /// Illustrated cards for `options`, ringing `selected`; picking one runs `set` (one undo step).
+    /// Illustrated cards for `options`, ringing `selected` and badging the suggested picks of
+    /// `param`; picking one runs `set` (one undo step).
     pub(super) fn engine_cards<T: TraitOption>(
         &self,
-        name: &str,
+        (param, name): (EngineParam, &str),
         (selected, options): (Option<T>, &[T]),
         handle: &ForgeHandle,
         set: impl Fn(&mut EngineConfig, T) + 'static,
     ) -> IllustratedOptionGrid<T> {
         let pick = handle.engine(set);
-        IllustratedOptionGrid::new(engine_id(name), selected, &self.theme, move |option, w, cx| pick(option, w, cx)).options(options.to_vec())
+        IllustratedOptionGrid::new(engine_id(name), selected, &self.theme, move |option, w, cx| pick(option, w, cx))
+            .options(options.to_vec())
+            .suggested(self.picks(Param::Engine(param)))
     }
 
     /// A text input over one engine string; typing in `section` merges into one undo step.
@@ -91,9 +95,13 @@ impl ForgeView {
         ForgeTextInput::new(engine_id(name), value, &self.theme, move |text, w, cx| edit(text, w, cx)).on_blur(move |w, cx| seal(w, cx))
     }
 
-    /// `control` under the caption (and "?" explainer) of pseudo-field `path`.
-    pub(super) fn engine_field(&self, path: &str, control: impl IntoElement) -> Div {
-        labeled(path, control, &self.theme)
+    /// `control` under the caption of pseudo-field `path`: with "Why?", "Suggest" and AI values
+    /// for a setting, plain for a group caption.
+    pub(super) fn engine_field(&self, handle: &ForgeHandle, path: &str, control: impl IntoElement) -> Div {
+        match Param::from_path(path) {
+            Some(param) => self.hinted(param, control, handle),
+            None => labeled(path, control, &self.theme),
+        }
     }
 
     /// Clickable `{{placeholder}}` chips appending to the template `read` returns.

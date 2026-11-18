@@ -76,6 +76,7 @@ impl AppView {
             }
             ForgeEvent::ImportPhoto(path) => self.import_forge_photo(forge, path, cx),
             ForgeEvent::OpenAiSettings => self.open_ai_settings(window, cx),
+            ForgeEvent::Suggest(job) => self.run_forge_suggest(forge, job.clone(), window, cx),
             ForgeEvent::ImageIdeas => self.open_image_ideas_for_forge(window, cx),
         }
         cx.notify();

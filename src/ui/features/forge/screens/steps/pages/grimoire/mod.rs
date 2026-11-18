@@ -6,13 +6,13 @@
 mod template;
 
 use super::super::super::common::{card, heading, muted};
-use super::trait_block::explained;
 use crate::state::forge::{DraftEdit, ForgeStep, Severity, TextField, ToggleField, TraitField};
 use crate::ui::features::forge::text::tr;
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
 use crate::ui::features::forge::widgets::ToggleCard;
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::button::Button;
+use crate::state::forge::suggest::Param;
 use gpui_kit::*;
 
 const TITLE_KEY: &str = "forge.ui.grimoire.title";
@@ -76,7 +76,7 @@ impl ForgeView {
         let toggles = INJECTIONS.map(|field| {
             let edit = handle.edit(move |on: bool| DraftEdit::Toggle(field, on));
             let toggle = ToggleCard::new(field, *field.get(profile), theme, move |on, w, cx| edit(on, w, cx));
-            explained(field.path(), toggle, theme)
+            self.hinted_toggle(Param::Toggle(field), toggle, handle)
         });
         card(theme).child(heading(tr(INGREDIENTS_KEY), theme)).children(toggles)
     }

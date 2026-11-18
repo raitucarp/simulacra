@@ -11,6 +11,7 @@ use crate::ui::features::forge::widgets::NumberSlider;
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::Sizable;
+use crate::state::forge::suggest::Param;
 use gpui_kit::*;
 use std::path::PathBuf;
 
@@ -58,7 +59,8 @@ impl ForgeView {
         };
         let zoom = handle.with(move |this, zoom: u16, _, cx| this.set_crop(PhotoCrop { zoom, ..crop }.clamped(), cx));
         let slider = NumberSlider::new(ZOOM_ID, tr(ZOOM_KEY), crop.zoom, (ZOOM_MIN, ZOOM_MAX, ZOOM_STEP), theme, move |v, w, cx| zoom(v, w, cx))
-            .format(|zoom| format!("{:.1}{ZOOM_SUFFIX}", f32::from(zoom) / PER_MILLE_F));
+            .format(|zoom| format!("{:.1}{ZOOM_SUFFIX}", f32::from(zoom) / PER_MILLE_F))
+            .hint(self.slider_hint(Param::PhotoZoom, &tr(ZOOM_KEY), handle));
         let reset = handle.act(|this, _, cx| this.set_crop(PhotoCrop::default(), cx));
         let arrows = PAN_ARROWS.iter().enumerate().map(|(at, &(icon, dx, dy))| {
             let pan = handle.act(move |this, _, cx| this.set_crop(crop.panned(dx * PAN_STEP, dy * PAN_STEP), cx));

@@ -12,6 +12,7 @@ mod consts;
 mod construct;
 mod credential_state;
 mod forge_host;
+mod forge_suggest;
 mod lab_selection;
 mod feed_state;
 mod graph_state;

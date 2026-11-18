@@ -27,6 +27,7 @@ pub struct TraitPick {
     id: SharedString,
     theme: ThemeTokens,
     look: TraitGridLook,
+    suggested: Vec<&'static str>,
     on_pick: ValueCallback<TraitValue>,
 }
 
@@ -37,7 +38,8 @@ impl TraitVisitor for TraitPick {
         let on_pick = self.on_pick;
         let grid = IllustratedOptionGrid::new(self.id, Some(current), &self.theme, move |option: T, window, cx| {
             on_pick(wrap(option), window, cx)
-        });
+        })
+        .suggested(self.suggested);
         match self.look {
             TraitGridLook::Illustrated => grid.into_any_element(),
             TraitGridLook::Small => {
@@ -48,14 +50,14 @@ impl TraitVisitor for TraitPick {
 }
 
 /// Illustrated cards for every option of `field`, ringing its value on `cfg`; picking one
-/// calls `on_pick` with the new [`TraitValue`]. `id` keys the grid's keyboard cursor.
+/// calls `on_pick` with the new [`TraitValue`]. `id` keys the grid's keyboard cursor;
+/// `suggested` keys get the "Suggested" badge.
 pub fn trait_option_grid(
-    id: SharedString,
-    field: TraitField,
+    (id, field): (SharedString, TraitField),
     cfg: &AgentConfig,
     look: TraitGridLook,
-    theme: &ThemeTokens,
+    (theme, suggested): (&ThemeTokens, Vec<&'static str>),
     on_pick: ValueCallback<TraitValue>,
 ) -> AnyElement {
-    field.read(cfg).visit(TraitPick { id, theme: theme.clone(), look, on_pick })
+    field.read(cfg).visit(TraitPick { id, theme: theme.clone(), look, suggested, on_pick })
 }

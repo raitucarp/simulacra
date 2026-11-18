@@ -4,12 +4,13 @@
 use super::groups::MbtiGroup;
 use crate::domain::MbtiType;
 use crate::state::forge::{DraftEdit, TraitValue};
-use crate::ui::features::forge::screens::common::labeled;
+use crate::domain::TraitOption;
 use crate::ui::features::forge::text::{tr, trait_description, trait_label};
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
 use crate::ui::features::forge::widgets::{CardGrid, GridCell, OptionCardSpec};
 use crate::ui::illustration::Illustration;
 use crate::state::forge::TraitField;
+use crate::state::forge::suggest::Param;
 use gpui_kit::*;
 
 const CARD_ID_PREFIX: &str = "forge-mbti";
@@ -23,10 +24,11 @@ impl ForgeView {
         let theme = &self.theme;
         let chosen = self.draft.profile().config.mbti;
         let headers = MbtiGroup::ALL.into_iter().map(|group| self.mbti_family(group).into_any_element()).collect();
-        let cells = MbtiGroup::ALL.into_iter().flat_map(|group| group.members()).map(|ty| self.mbti_card(ty, ty == chosen, handle)).collect();
+        let picks = self.picks(Param::Trait(TraitField::Mbti));
+        let cells = MbtiGroup::ALL.into_iter().flat_map(|group| group.members()).map(|ty| self.mbti_card(ty, (ty == chosen, picks.contains(&ty.key())), handle)).collect();
         let grid = CardGrid::new(GRID_ID, cells, FAMILY_SIZE, theme.spacing_sm).row_headers(headers);
         let body = div().flex().flex_col().gap(theme.spacing_md).child(grid).child(self.mbti_callout(chosen));
-        labeled(TraitField::Mbti.path(), body, theme)
+        self.hinted(Param::Trait(TraitField::Mbti), body, handle)
     }
 
     /// The family's name and blurb, above its row of cards.
@@ -40,11 +42,12 @@ impl ForgeView {
             .child(div().text_size(theme.font_size_xs).text_color(theme.text_muted).child(tr(&group.blurb_key())))
     }
 
-    fn mbti_card(&self, ty: MbtiType, selected: bool, handle: &ForgeHandle) -> GridCell {
+    fn mbti_card(&self, ty: MbtiType, (selected, suggested): (bool, bool), handle: &ForgeHandle) -> GridCell {
         let width = self.theme.forge_compact_card_width;
         let art = Illustration::trait_card(ty).width(width);
         let mut spec = OptionCardSpec::new((CARD_ID_PREFIX, ty as usize), art, ty.code(), width);
         spec.selected = selected;
+        spec.suggested = suggested;
         let pick = handle.edit(|ty: MbtiType| DraftEdit::Trait(TraitValue::Mbti(ty)));
         GridCell::card(spec, &self.theme, std::rc::Rc::new(move |w, cx| pick(ty, w, cx)))
     }

@@ -14,11 +14,13 @@ mod hear;
 mod keys;
 mod lifecycle;
 mod state;
+mod suggest;
 
 pub use engine::{CallReply, EngineUi, Probe};
 pub use handle::ForgeHandle;
 pub use hear::HearStatus;
 pub use keys::{Dismiss, Redo, Undo, FORGE_KEY_CONTEXT};
+pub use suggest::{SuggestJob, SuggestStatus, SuggestUi};
 pub use state::{DescribeStatus, ForgeContext, ForgeOpen, ForgeScreen, GuideState, Notice, StartState};
 
 use crate::domain::portrait::{FormSlot, PortraitSlot};
@@ -46,6 +48,9 @@ pub enum ForgeEvent {
     ImportPhoto(PathBuf),
     /// Show Settings › AI (where credentials are stored) over the forge.
     OpenAiSettings,
+    /// Send this suggestion request (within the daily AI budget), then call
+    /// [`ForgeView::suggestions_arrived`].
+    Suggest(SuggestJob),
     /// sb D3: open the image ideas sheet for the draft's avatar.
     ImageIdeas,
 }
@@ -77,6 +82,8 @@ pub struct ForgeView {
     pub(crate) engine: EngineUi,
     /// The step palette hovered in the current step's palette strip (its changes preview).
     pub(crate) strip_preview: Option<&'static Palette>,
+    /// Parameter suggestions: the AI request in flight, its values, the step bar status.
+    pub(crate) suggest: SuggestUi,
     pub(crate) focus: FocusHandle,
 }
 

@@ -88,6 +88,8 @@ impl ForgeView {
         }
         self.guide.fresh_step = true;
         self.notice = None;
+        self.suggest.reset();
+        self.guide.thinking = false;
         close_explainers(cx);
         self.revalidate();
         self.focus.focus(window, cx);

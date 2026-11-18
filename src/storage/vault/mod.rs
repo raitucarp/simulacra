@@ -8,6 +8,7 @@
 mod catalogue_ops;
 mod embeddings;
 mod learning;
+mod journal;
 mod media;
 mod ops;
 mod review;

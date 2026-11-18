@@ -15,6 +15,8 @@ pub enum PaletteGroup {
     People,
     Posts,
     Documents,
+    /// Journal entries, only when Settings › Privacy & Data lets search include them (sb E3).
+    Journal,
     Settings,
     /// Semantic search results (sb B3).
     Meaning,
@@ -33,6 +35,7 @@ impl PaletteGroup {
             Self::People => "palette.group.people",
             Self::Posts => "palette.group.posts",
             Self::Documents => "palette.group.documents",
+            Self::Journal => "palette.group.journal",
             Self::Settings => "palette.group.settings",
             Self::Meaning => "palette.group.meaning",
             Self::Words => "palette.group.words",
@@ -48,6 +51,8 @@ pub enum PaletteTarget {
     Post(PostId),
     Document(String),
     Settings(SettingsTab),
+    /// A journal entry by id (sb E3).
+    JournalEntry(String),
 }
 
 impl PaletteTarget {
@@ -59,6 +64,7 @@ impl PaletteTarget {
             Self::Post(id) => format!("post:{id}"),
             Self::Document(id) => format!("doc:{id}"),
             Self::Settings(tab) => format!("settings:{}", tab.id()),
+            Self::JournalEntry(id) => format!("journal:{id}"),
         }
     }
 

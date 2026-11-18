@@ -70,6 +70,8 @@ pub enum NavigationTab {
     Appearance,
     /// Charts and graph analytics of the network (sb D2).
     Insights,
+    /// The private journal, mood log, focus sessions and time capsules (sb E3).
+    Journal,
 }
 
 /// Application state container.

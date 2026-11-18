@@ -11,6 +11,7 @@ pub mod engine;
 pub mod graph;
 pub mod insights;
 pub mod learning;
+pub mod journal;
 pub mod image_prompt;
 pub mod media;
 pub mod ids;

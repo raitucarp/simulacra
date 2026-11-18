@@ -14,6 +14,8 @@ mod image_ideas_run;
 mod import_flow;
 mod import_sheet;
 mod insights;
+mod journal;
+mod journal_events;
 mod inspector;
 mod lab;
 mod learning_data;

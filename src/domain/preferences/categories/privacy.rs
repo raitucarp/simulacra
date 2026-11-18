@@ -1,5 +1,6 @@
 //! Privacy & Data: Simulacra sends no telemetry, and the stored flag can never turn it on.
-//! Link previews (sb C3) are fetched from the linked sites unless switched off.
+//! Link previews (sb C3) are fetched from the linked sites unless switched off. Journal entries
+//! (sb E3) stay out of every search unless the user lets the palette find them.
 
 use serde::{Deserialize, Serialize};
 
@@ -12,11 +13,13 @@ pub struct PrivacyPrefs {
     /// Whether links in posts are fetched for a preview card (title, image, site); off shows
     /// plain links and nothing is requested.
     pub link_previews: bool,
+    /// Whether the command palette's word search includes journal entries (sb E3, off).
+    pub journal_in_search: bool,
 }
 
 impl Default for PrivacyPrefs {
     fn default() -> Self {
-        Self { telemetry: false, link_previews: true }
+        Self { telemetry: false, link_previews: true, journal_in_search: false }
     }
 }
 

@@ -7,6 +7,7 @@ mod capsule_open;
 mod capsules;
 mod checkin;
 mod common;
+pub(in crate::ui::features::journal) mod confirm; // sb P16: deletes ask first
 mod editor;
 mod empty;
 mod entries;
@@ -44,7 +45,8 @@ impl Render for JournalPanel {
             .child(self.render_header(class, cx))
             .child(self.render_tab(class, cx));
         let inset = if class.is_compact() { theme.panel_padding_compact } else { theme.panel_padding };
-        root.child(div().id(SCROLL_ID).size_full().overflow_y_scroll().flex().justify_center().px(inset).py(theme.panel_padding).child(column))
+        // Top-aligned: a stretched column would be clipped to the viewport and never scroll.
+        root.child(div().id(SCROLL_ID).size_full().overflow_y_scroll().flex().justify_center().items_start().px(inset).py(theme.panel_padding).child(column))
     }
 }
 

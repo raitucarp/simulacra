@@ -24,4 +24,4 @@ pub use display::{chord_labels, is_mac, key_caps, KeyCap};
 pub use groups::{group_of, sheet_rows, target_label, target_label_key, SheetRow, ShortcutGroup};
 pub use install::{install_keymap, RunCommand};
 pub use sheet::{SheetAction, ShortcutSheet};
-pub use shortcuts::{shortcut_for, KeyScope, PaletteKey, Shortcut, ShortcutTarget, SHORTCUTS};
+pub use shortcuts::{shortcut_for, KeyScope, PaletteKey, ReviewKey, Shortcut, ShortcutTarget, SHORTCUTS};

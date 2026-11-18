@@ -19,6 +19,7 @@ mod handlers;
 mod import_state;
 mod lab_state;
 mod panels;
+mod review_host;
 mod render;
 mod scheduler_state;
 mod semantic_state;

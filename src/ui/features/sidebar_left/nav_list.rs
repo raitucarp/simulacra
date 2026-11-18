@@ -1,4 +1,4 @@
-//! The primary places: Timeline, Knowledge Vault, Personas & Agents and Mind Graph, each with
+//! The primary places: Timeline, Knowledge Vault, Personas & Agents, Mind Graph and Review, each with
 //! its count. Preferences (Appearance) live in the footer instead.
 
 use super::nav_button::{render_nav_button, NavButtonSpec};
@@ -20,11 +20,12 @@ struct Place {
     command: CommandId,
 }
 
-const PLACES: [Place; 4] = [
+const PLACES: [Place; 5] = [
     Place { tab: NavigationTab::Timeline, label_key: "nav.home", icon: LucideIcon::Activity, command: CommandId::GoTimeline },
     Place { tab: NavigationTab::Knowledge, label_key: "nav.knowledge", icon: LucideIcon::BookOpen, command: CommandId::GoKnowledge },
     Place { tab: NavigationTab::AgentLab, label_key: "nav.agent_lab", icon: LucideIcon::Users, command: CommandId::GoAgents },
     Place { tab: NavigationTab::MindGraph, label_key: "nav.mind_graph", icon: LucideIcon::Share2, command: CommandId::GoMindGraph },
+    Place { tab: NavigationTab::Review, label_key: "nav.review", icon: LucideIcon::GraduationCap, command: CommandId::GoReview },
 ];
 
 /// Whether `place` is the active screen (the Persona Lab counts as Personas & Agents).
@@ -32,8 +33,9 @@ fn is_active(place: &Place, active: NavigationTab) -> bool {
     place.tab == active || (place.tab == NavigationTab::AgentLab && active == NavigationTab::PersonaLab)
 }
 
-fn count_of(tab: NavigationTab, state: &AppState) -> Option<usize> {
+fn count_of(tab: NavigationTab, state: &AppState, review_due: Option<usize>) -> Option<usize> {
     match tab {
+        NavigationTab::Review => review_due,
         NavigationTab::Timeline => Some(state.current_network_post_count()),
         NavigationTab::Knowledge => Some(state.current_documents().count()),
         NavigationTab::AgentLab => Some(state.current_network_agents().len() + state.current_network_personas().len()),
@@ -41,13 +43,14 @@ fn count_of(tab: NavigationTab, state: &AppState) -> Option<usize> {
     }
 }
 
-pub(super) fn render_nav_list(state: &AppState, is_rail: bool, callbacks: &SidebarCallbacks, theme: &ThemeTokens) -> Div {
+/// `review_due`: cards waiting on the Review page (sb C1).
+pub(super) fn render_nav_list(state: &AppState, review_due: Option<usize>, is_rail: bool, callbacks: &SidebarCallbacks, theme: &ThemeTokens) -> Div {
     let buttons = PLACES.iter().map(|place| {
         let spec = NavButtonSpec {
             label: t!(place.label_key).to_string(),
             icon: place.icon,
             is_active: is_active(place, state.active_tab),
-            count: count_of(place.tab, state),
+            count: count_of(place.tab, state, review_due),
             command: Some(place.command),
         };
         let (nav, tab) = (callbacks.on_select_nav.clone(), place.tab);

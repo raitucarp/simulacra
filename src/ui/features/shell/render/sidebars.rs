@@ -16,6 +16,7 @@ impl AppView {
             sidebar: &self.sidebar,
             is_workspace_open: self.chrome.is_workspace_open,
             shell_focus: self.palette.shell_focus.clone(),
+            review_due: Some(self.review.due),
             callbacks: SidebarCallbacks {
                 on_select_nav: Rc::new(bind.with(Self::select_nav)),
                 on_command: Rc::new(bind.with(Self::run_command)),

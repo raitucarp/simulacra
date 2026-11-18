@@ -62,6 +62,7 @@ pub const COMMANDS: &[CommandSpec] = &[
     screen(C::GoAgents, I::Users),
     screen(C::GoPersonas, I::UserCheck),
     screen(C::GoMindGraph, I::Share2),
+    screen(C::GoReview, I::GraduationCap),
     action(C::NewThread, I::MessageSquarePlus, Ready),
     action(C::NewNote, I::StickyNote, Ready),
     action(C::ImportFile, I::FileUp, Ready),
@@ -81,6 +82,7 @@ pub const COMMANDS: &[CommandSpec] = &[
     action(C::ReplayWelcome, I::Sparkles, Ready),
     action(C::SemanticSearch, I::Sparkles, Ready),
     action(C::FindSimilar, I::Compass, Ready),
+    action(C::MakeFlashcard, I::Layers, Ready),
 ];
 
 /// The registry row of `id`.

@@ -19,5 +19,8 @@ gpui_kit::assets::icon_assets!(
         LayoutGrid, List, Bookmark, Quote, ArrowUpDown, BookMarked, Languages, MapPin,
         // sb B2
         Feather, Pilcrow, VenetianMask,
+        // sb C1
+        GraduationCap, Layers, ListOrdered, ChartColumn, Flame, Target, Lightbulb, RotateCcw, WandSparkles,
+        TextCursorInput, Trophy, Pause, Play,
     ]
 );

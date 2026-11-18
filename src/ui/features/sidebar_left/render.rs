@@ -18,7 +18,7 @@ const SEARCH_ID: &str = "sidebar-open-palette";
 const SECTIONS_ID: &str = "sidebar-sections-scroll";
 
 pub fn render_left_sidebar(params: LeftSidebarParams<'_>) -> impl IntoElement {
-    let LeftSidebarParams { state, theme, sidebar, is_workspace_open, shell_focus, callbacks } = params;
+    let LeftSidebarParams { state, theme, sidebar, is_workspace_open, shell_focus, callbacks, review_due } = params;
     let is_rail = sidebar.mode(theme) == SidebarMode::Rail;
     let switcher = render_network_switcher(state.current_network(), is_workspace_open, is_rail, &callbacks, theme);
     let search = render_icon_button(SEARCH_ID, LucideIcon::Search, spec(CommandId::OpenPalette).title(), CommandId::OpenPalette, &callbacks, theme);
@@ -31,7 +31,7 @@ pub fn render_left_sidebar(params: LeftSidebarParams<'_>) -> impl IntoElement {
         .when(is_rail, |top| top.items_center())
         .child(if is_rail { div().child(switcher) } else { div().flex().items_center().gap(theme.spacing_2xs).child(switcher).child(render_collapse_toggle(false, &callbacks, theme)) })
         .child(if is_rail { div().flex().flex_col().items_center().gap(theme.spacing_2xs).child(new_button).child(search) } else { div().flex().items_center().gap(theme.spacing_2xs).child(new_button).child(search) })
-        .child(render_nav_list(state, is_rail, &callbacks, theme));
+        .child(render_nav_list(state, review_due, is_rail, &callbacks, theme));
     let middle = div().id(SECTIONS_ID).flex_1().min_h_0().overflow_y_scroll().flex().flex_col().pt(theme.stack_gap);
     let middle = if is_rail {
         middle.items_center().gap(theme.spacing_2xs).children(render_rail_pins(state, sidebar, &callbacks, theme))

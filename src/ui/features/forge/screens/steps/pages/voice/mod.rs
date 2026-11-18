@@ -61,7 +61,7 @@ impl ForgeView {
     /// A score slider with its field's "?" explainer.
     pub(super) fn score_row(&self, field: ScoreField, handle: &ForgeHandle) -> Div {
         let edit = handle.edit(move |value: u8| DraftEdit::Score(field, value));
-        let hint = self.slider_hint(Param::Score(field), &field_label(field.path()));
+        let hint = self.slider_hint(Param::Score(field), &field_label(field.path()), handle);
         let slider = ScoreSlider::new(field, &self.draft.profile().config, &self.theme, move |v, w, cx| edit(v, w, cx)).hint(hint);
         div().child(slider)
     }

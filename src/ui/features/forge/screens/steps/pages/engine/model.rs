@@ -128,9 +128,9 @@ impl ForgeView {
         let tokens = model.max_tokens.min(u32::from(MAX_TOKENS_RANGE.1)) as u16;
         let temperature = NumberSlider::new(engine_id("temperature"), tr(TEMPERATURE_KEY), temperature, TEMPERATURE_RANGE, theme, move |v, w, cx| set_temperature(v, w, cx))
             .format(|value| format!("{:.2}", f32::from(value) / TEMPERATURE_SCALE))
-            .hint(self.slider_hint(Param::Engine(EngineParam::Temperature), &tr(TEMPERATURE_KEY)));
+            .hint(self.slider_hint(Param::Engine(EngineParam::Temperature), &tr(TEMPERATURE_KEY), handle));
         let tokens = NumberSlider::new(engine_id("max-tokens"), tr(MAX_TOKENS_KEY), tokens, MAX_TOKENS_RANGE, theme, move |v, w, cx| set_tokens(v, w, cx))
-            .hint(self.slider_hint(Param::Engine(EngineParam::MaxTokens), &tr(MAX_TOKENS_KEY)));
+            .hint(self.slider_hint(Param::Engine(EngineParam::MaxTokens), &tr(MAX_TOKENS_KEY), handle));
         div().flex().flex_col().gap(theme.spacing_md).child(temperature).child(tokens)
     }
 }

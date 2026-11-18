@@ -71,7 +71,7 @@ impl ForgeView {
         let set = handle.engine(|e: &mut EngineConfig, value: u16| e.max_tool_steps = value as u8);
         let range = (MIN_TOOL_STEPS, u16::from(MAX_TOOL_STEPS_LIMIT), TOOL_STEPS_STEP);
         let slider = NumberSlider::new(engine_id("tool-steps"), tr(STEPS_KEY), u16::from(steps), range, theme, move |v, w, cx| set(v, w, cx))
-            .hint(self.slider_hint(Param::Engine(EngineParam::MaxToolSteps), &tr(STEPS_KEY)));
+            .hint(self.slider_hint(Param::Engine(EngineParam::MaxToolSteps), &tr(STEPS_KEY), handle));
         card(theme).child(self.engine_field(handle, "engine_max_tool_steps", slider))
     }
 }

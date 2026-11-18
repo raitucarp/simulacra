@@ -8,6 +8,7 @@ mod edit;
 mod parse;
 mod prompt;
 mod summary;
+mod text_rules;
 mod value;
 
 pub use edit::value_edit;

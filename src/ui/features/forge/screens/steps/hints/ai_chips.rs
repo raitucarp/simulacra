@@ -9,6 +9,7 @@ use crate::state::forge::suggest::{range_hint, suggestions_for, EngineParam, Fie
 use crate::state::forge::EngineSection;
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
 use crate::ui::features::forge::widgets::suggest::{ChipSpec, HintChips};
+use crate::ui::features::forge::widgets::ValueCallback;
 use crate::state::forge::suggest::Joiner;
 use std::rc::Rc;
 
@@ -27,20 +28,29 @@ impl ForgeView {
         }
     }
 
-    /// Sparkle chips with the AI's values for `param`, if it proposed any.
-    pub(in super::super) fn ai_chips(&self, param: Param, handle: &ForgeHandle) -> Option<HintChips> {
+    /// One chip per AI value of `param` (its value is the value's index).
+    pub(super) fn ai_chip_specs(&self, param: Param) -> Vec<ChipSpec> {
         let values = self.suggest.values(param);
-        if values.is_empty() {
-            return None;
-        }
-        let chips = values.iter().enumerate().map(|(at, value)| ChipSpec { label: self.value_label(param, value), value: at.to_string() }).collect();
-        let accept = handle.with(move |this, index: String, _, cx| {
+        values.iter().enumerate().map(|(at, value)| ChipSpec { label: self.value_label(param, value), value: at.to_string() }).collect()
+    }
+
+    /// Uses the AI value whose index a chip reports.
+    pub(super) fn ai_accept(&self, param: Param, handle: &ForgeHandle) -> ValueCallback<String> {
+        handle.with(move |this, index: String, _, cx| {
             if let Ok(index) = index.parse::<usize>() {
                 this.accept_suggestion(param, index, cx);
             }
-        });
+        })
+    }
+
+    /// Sparkle chips with the AI's values for `param`, if it proposed any.
+    pub(in super::super) fn ai_chips(&self, param: Param, handle: &ForgeHandle) -> Option<HintChips> {
+        let chips = self.ai_chip_specs(param);
+        if chips.is_empty() {
+            return None;
+        }
         let id = format!("{ID_PREFIX}-ai-values-{}", param.path());
-        Some(HintChips::new(id, chips, (String::new(), Joiner::Space), &self.theme, accept).ai())
+        Some(HintChips::new(id, chips, (String::new(), Joiner::Space), &self.theme, self.ai_accept(param, handle)).ai())
     }
 
     /// Example chips (and AI values) under an Engine text setting; `set` writes the text.

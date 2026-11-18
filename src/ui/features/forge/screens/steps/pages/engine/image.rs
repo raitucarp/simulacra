@@ -119,7 +119,7 @@ impl ForgeView {
         let chance = match image.trigger {
             ImageTrigger::Chance { percent } => {
                 let set = handle.engine(|e: &mut EngineConfig, value: u16| e.image.trigger = ImageTrigger::Chance { percent: value as u8 });
-                Some(NumberSlider::new(engine_id("chance"), tr(CHANCE_KEY), u16::from(percent), CHANCE_RANGE, theme, move |v, w, cx| set(v, w, cx)).format(|v| format!("{v}%")).hint(self.slider_hint(Param::Engine(EngineParam::ImageChance), &tr(CHANCE_KEY))))
+                Some(NumberSlider::new(engine_id("chance"), tr(CHANCE_KEY), u16::from(percent), CHANCE_RANGE, theme, move |v, w, cx| set(v, w, cx)).format(|v| format!("{v}%")).hint(self.slider_hint(Param::Engine(EngineParam::ImageChance), &tr(CHANCE_KEY), handle)))
             }
             _ => None,
         };

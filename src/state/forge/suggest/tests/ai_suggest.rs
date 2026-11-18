@@ -64,6 +64,16 @@ fn fenced_wrapped_and_loosely_keyed_replies_are_read() {
 }
 
 #[test]
+fn text_must_fit_the_field_shape() {
+    let draft = agent();
+    let (handle, tritype) = (Param::Text(TextField::Handle), Param::Text(TextField::Tritype));
+    let reply = r#"{"handle": ["Wry and patient", "@slow_reader", "x"], "tritype": ["548", "5-4-8", "5489"]}"#;
+    let parsed = parse(&draft, reply, &[handle, tritype]);
+    assert_eq!(values_of(&parsed, handle), vec![SuggestedValue::Text("@slow_reader".into())]);
+    assert_eq!(values_of(&parsed, tritype), vec![SuggestedValue::Text("548".into())]);
+}
+
+#[test]
 fn options_are_matched_leniently_and_invalid_ones_dropped() {
     let draft = agent();
     let reply = r#"{"post_format": ["Field Note", "sonnet", "thread"], "rhetorical_devices": [["metaphor", "nonsense", "Paradox"], "irony"]}"#;

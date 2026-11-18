@@ -8,11 +8,11 @@ mod why_card;
 
 use super::super::common::message;
 use crate::state::forge::suggest::ai::SuggestScope;
-use crate::state::forge::suggest::{picks_for, range_hint, suggestions_for, FieldSuggestions, Param, RangeHint, SuggestContext};
+use crate::state::forge::suggest::{picks_for, range_hint, suggestions_for, FieldSuggestions, Param, SuggestContext};
 use crate::state::forge::{DraftEdit, TextField};
 use crate::ui::features::forge::text::{field_label, tr};
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
-use crate::ui::features::forge::widgets::suggest::{why_button, ChipSpec, HintChips, WhyCard};
+use crate::ui::features::forge::widgets::suggest::{why_button, ChipSpec, HintChips, SliderHint};
 use crate::ui::features::forge::widgets::ExplainerButton;
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::button::{Button, ButtonVariants};
@@ -28,10 +28,15 @@ impl ForgeView {
         picks_for(param, &SuggestContext::of(&self.draft))
     }
 
-    /// The typical band and "Why?" card of a slider over `param`, titled `label`.
-    pub(super) fn slider_hint(&self, param: Param, label: &str) -> Option<(RangeHint, WhyCard)> {
-        let hint = range_hint(param, &SuggestContext::of(&self.draft))?;
-        Some((hint, self.why_card(param, Some(label.to_string()))))
+    /// The suggestions of a slider over `param` titled `label`: band, "Why?", "Suggest", AI values.
+    pub(super) fn slider_hint(&self, param: Param, label: &str, handle: &ForgeHandle) -> Option<SliderHint> {
+        let band = range_hint(param, &SuggestContext::of(&self.draft))?;
+        let ask = param.ai_capable().then(|| {
+            let ask = handle.act(move |this, _, cx| this.request_suggestions(SuggestScope::Field(param), cx));
+            (ask, self.suggest.is_running(SuggestScope::Field(param)))
+        });
+        let why = self.why_card(param, Some(label.to_string()));
+        Some(SliderHint { band, why, ask, ai: self.ai_chip_specs(param), on_ai: self.ai_accept(param, handle) })
     }
 
     /// "Why?" plus, when the AI may suggest `param`, a sparkle asking it for values.

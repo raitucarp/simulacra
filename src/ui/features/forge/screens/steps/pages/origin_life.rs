@@ -79,7 +79,7 @@ impl ForgeView {
         let age = *CountField::Age.get(self.draft.profile());
         let edit = handle.edit(|age: u16| DraftEdit::Count(CountField::Age, age));
         let slider = NumberSlider::new(AGE_ID, field_label(path), age, (0, MAX_AGE, AGE_STEP), &self.theme, move |v, w, cx| edit(v, w, cx))
-            .hint(self.slider_hint(Param::Count(CountField::Age), &field_label(path)))
+            .hint(self.slider_hint(Param::Count(CountField::Age), &field_label(path), handle))
             .format(|age| tr_count(AGE_FORMAT_KEY, usize::from(age), &[]));
         div().flex().flex_col().gap(self.theme.spacing_xs).child(slider).children(self.issue_lines(path))
     }

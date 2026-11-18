@@ -18,7 +18,7 @@ use panel::PersonalityPanel;
 impl ForgeView {
     pub(in crate::ui::features::forge::screens::steps) fn attributes_page(&self, handle: &ForgeHandle) -> AnyElement {
         let on_score = handle.edit(|(field, value): (ScoreField, u8)| DraftEdit::Score(field, value));
-        let hints = BUDGET_FIELDS.iter().filter_map(|&field| Some((field, self.slider_hint(Param::Score(field), &field_label(field.path()))?))).collect();
+        let hints = BUDGET_FIELDS.iter().filter_map(|&field| Some((field, self.slider_hint(Param::Score(field), &field_label(field.path()), handle)?))).collect();
         PersonalityPanel { cfg: self.draft.profile().config.clone(), theme: self.theme.clone(), on_score, hints }.into_any_element()
     }
 }

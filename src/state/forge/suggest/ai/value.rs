@@ -5,6 +5,7 @@ use super::super::context::SuggestContext;
 use super::super::model::{RangeUnit, HUNDREDTHS};
 use super::super::param::Param;
 use super::super::{suggestions_for, EngineParam, FieldSuggestions};
+use super::text_rules::fits;
 use serde_json::Value;
 
 /// Longest free text accepted from a suggestion.
@@ -83,7 +84,7 @@ fn options(param: Param, raw: &Value) -> Option<SuggestedValue> {
 pub fn validate(param: Param, raw: &Value, ctx: &SuggestContext) -> Option<SuggestedValue> {
     match suggestions_for(param, ctx) {
         FieldSuggestions::Text(_) => text_of(raw)
-            .filter(|text| !text.is_empty() && text.chars().count() <= MAX_TEXT_CHARS)
+            .filter(|text| !text.is_empty() && fits(param, text))
             .map(SuggestedValue::Text),
         FieldSuggestions::Range(hint) => number(raw, hint.unit, hint.valid).map(SuggestedValue::Number),
         FieldSuggestions::Choice(_) if is_multi(param) => options(param, raw),

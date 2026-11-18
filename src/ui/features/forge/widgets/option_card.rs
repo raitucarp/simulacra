@@ -77,7 +77,7 @@ pub fn option_card(
                 .hover(move |style| style.bg(hover_bg))
                 .on_click(move |_, window, cx| on_click(window, cx))
         })
-        .child(div().relative().w_full().flex().justify_center().bg(theme.bg_elevated).child(spec.art).children(spec.suggested.then(|| suggested_badge(theme))))
+        .child(div().relative().w_full().flex().justify_center().bg(theme.bg_elevated).child(spec.art).children(spec.suggested.then(|| suggested_badge(theme, spec.width < theme.forge_option_card_width))))
         .child(caption(spec.label, spec.description, selected, theme))
 }
 

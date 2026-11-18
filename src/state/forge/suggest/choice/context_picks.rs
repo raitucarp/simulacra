@@ -54,6 +54,15 @@ fn natural(field: TraitField, cfg: &AgentConfig) -> Option<&'static str> {
     NATURE.contains(&field).then(|| field.read(&body).key())
 }
 
+/// Pronoun words that point to a gender, checked in order (`she` before `he`).
+const PRONOUN_GENDERS: [(&str, &str); 3] = [("she", "female"), ("he", "male"), ("they", "non_binary")];
+
+/// The gender typed English pronouns point to (other languages keep the current gender).
+fn gender_for(pronouns: &str) -> Option<&'static str> {
+    let lower = pronouns.to_lowercase();
+    PRONOUN_GENDERS.iter().find(|(word, _)| lower.split(|c: char| !c.is_alphabetic()).any(|part| part == *word)).map(|(_, key)| *key)
+}
+
 fn post_formats(mode: RhetoricalMode) -> &'static [&'static str] {
     use RhetoricalMode::*;
     match mode {
@@ -106,6 +115,7 @@ pub(super) fn context_picks(field: TraitField, ctx: &SuggestContext) -> Option<V
             }
             picks
         }),
+        Gender => vec![gender_for(&cfg.pronouns).unwrap_or_else(|| cfg.gender.key())],
         IdentityVariant => vec![if cfg.neuroticism >= HIGH_SCORE { "turbulent" } else { "assertive" }],
         Enneagram => match ctx.palette.filter(|palette| !palette.enneagram_options.is_empty()) {
             Some(palette) => palette.enneagram_options.iter().map(|kind| kind.key()).take(MAX_PICKS).collect(),

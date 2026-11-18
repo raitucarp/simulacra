@@ -9,8 +9,7 @@ use crate::state::forge::ScoreField;
 use crate::theme::ThemeTokens;
 use crate::ui::features::forge::screens::common::{card, heading, muted};
 use crate::ui::features::forge::text::{tr, tr_count, tr_with};
-use crate::state::forge::suggest::RangeHint;
-use crate::ui::features::forge::widgets::suggest::WhyCard;
+use crate::ui::features::forge::widgets::suggest::SliderHint;
 use crate::ui::features::forge::widgets::{ScoreSlider, ToggleCard, ValueCallback};
 use gpui_kit::*;
 
@@ -40,7 +39,7 @@ pub(super) struct PersonalityPanel {
     pub theme: ThemeTokens,
     pub on_score: ValueCallback<(ScoreField, u8)>,
     /// The typical band and "Why?" card of each slider.
-    pub hints: Vec<(ScoreField, (RangeHint, WhyCard))>,
+    pub hints: Vec<(ScoreField, SliderHint)>,
 }
 
 impl PersonalityPanel {

@@ -8,6 +8,6 @@ use gpui_kit::px;
 pub(super) fn apply_suggestions_layout(t: &mut ThemeTokens) {
     set_tokens!(t {
         suggest_chip_max_width: px(220.0), suggest_chip_row_height: px(26.0),
-        suggest_band_height: px(4.0), suggest_tick_width: px(2.0), suggest_card_width: px(320.0),
+        suggest_band_height: px(6.0), suggest_tick_width: px(2.0), suggest_card_width: px(320.0),
     });
 }

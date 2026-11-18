@@ -9,8 +9,7 @@
 
 use super::explainer::ExplainerButton;
 use super::slider_slot::{keyboard_slider, keyed_slider, SliderRange};
-use super::suggest::{typical_band, why_button, WhyCard};
-use crate::state::forge::suggest::RangeHint;
+use super::suggest::SliderHint;
 use super::ValueCallback;
 use crate::domain::agent_config::AgentConfig;
 use crate::state::forge::attributes::{budget_remaining, BUDGET_FIELDS};
@@ -36,7 +35,7 @@ pub struct ScoreSlider {
     value: u8,
     ceiling: u8,
     disabled: bool,
-    hint: Option<(RangeHint, WhyCard)>,
+    hint: Option<SliderHint>,
     theme: ThemeTokens,
     on_change: ValueCallback<u8>,
 }
@@ -59,8 +58,9 @@ impl ScoreSlider {
         self
     }
 
-    /// Draws the typical band of `hint` under the track and a "Why?" pill opening its card.
-    pub fn hint(mut self, hint: Option<(RangeHint, WhyCard)>) -> Self {
+    /// Shows the slider's suggestions: "Why?" and "Suggest" by the name, the typical band and
+    /// any AI values under the track.
+    pub fn hint(mut self, hint: Option<SliderHint>) -> Self {
         self.hint = hint;
         self
     }
@@ -87,7 +87,7 @@ impl ScoreSlider {
             .gap(theme.spacing_xs)
             .child(div().text_size(theme.font_size_sm).text_color(theme.text_primary).child(field_label(self.field.path())))
             .children(ExplainerButton::for_field(self.field.path(), theme))
-            .children(self.hint.as_ref().map(|(_, card)| why_button(format!("{SLIDER_ID_PREFIX}-{}-why", self.field.path()), card.clone(), theme)));
+            .children(self.hint.as_ref().map(|hint| hint.header(&format!("{SLIDER_ID_PREFIX}-{}", self.field.path()), theme)));
         div().flex().items_center().justify_between().child(name).child(level)
     }
 }
@@ -108,7 +108,7 @@ impl RenderOnce for ScoreSlider {
             .gap(theme.spacing_xs)
             .child(self.header(shown))
             .child(keyboard_slider(SharedString::from(format!("{id}-{KEYS_SUFFIX}")), &binding, (u16::from(self.value), range), self.disabled, theme, on_release))
-            .children(self.hint.as_ref().map(|(hint, _)| typical_band(hint, theme)))
+            .children(self.hint.as_ref().map(|hint| hint.footer(&id, theme)))
             .when(at_ceiling, |col| {
                 col.child(div().text_size(theme.font_size_2xs).text_color(theme.warning).child(tr(NO_POINTS_KEY)))
             })

@@ -39,7 +39,7 @@ impl ForgeView {
             .flex()
             .flex_col()
             .gap(theme.spacing_xs)
-            .child(ScoreSlider::new(field, cfg, theme, move |v, w, cx| edit(v, w, cx)).hint(self.slider_hint(Param::Score(field), &field_label(field.path()))))
+            .child(ScoreSlider::new(field, cfg, theme, move |v, w, cx| edit(v, w, cx)).hint(self.slider_hint(Param::Score(field), &field_label(field.path()), handle)))
             .child(self.ladder(step))
             .child(div().text_size(theme.font_size_2xs).text_color(theme.text_muted).child(next))
             .children(self.issue_lines(field.path()))

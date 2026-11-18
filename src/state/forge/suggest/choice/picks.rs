@@ -7,7 +7,6 @@ use crate::state::forge::{TraitField, TraitSet};
 pub(super) fn static_picks(field: TraitField) -> Option<&'static [&'static str]> {
     use TraitField::*;
     Some(match field {
-        Gender => &["female", "male", "non_binary"],
         InstinctualVariant => &["sp_so", "so_sx", "sx_sp"],
         AttachmentStyle => &["secure"],
         MoralFoundation => &["epistemic_truth", "care_harm", "fairness_cheating"],

@@ -18,6 +18,7 @@ use super::vault_host::VaultHost;
 use super::review_host::ReviewHost;
 use super::insights_host::InsightsHost;
 use super::journal_host::JournalHost;
+use super::thinking_host::ThinkingHost;
 use crate::i18n::Language;
 use crate::state::AppState;
 use crate::theme::ThemeTokens;
@@ -68,6 +69,8 @@ pub struct AppView {
     pub inspector: InspectorState,
     /// sb D3: the image ideas sheet.
     pub image_ideas: ImageIdeasUi,
+    /// sb E1: argument maps, credences, tensions and the atomicity sheet.
+    pub thinking: ThinkingHost,
     /// Cached views of the sidebars and the center column.
     pub(super) panels: ShellPanels,
     pub(super) _subscriptions: Vec<Subscription>,

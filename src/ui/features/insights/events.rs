@@ -14,4 +14,6 @@ pub enum InsightsEvent {
     OpenNode(NodeRef),
     /// Open an author's profile.
     OpenAuthor(ProfileId),
+    /// sb E1: something asked in the Calibration or Tensions view.
+    Thinking(crate::ui::features::thinking::insights::ThinkingRequest),
 }

@@ -33,4 +33,6 @@ pub struct PostCardHandlers {
     pub links: BodyLinks,
     /// "…" menu › Actions (sb C2); `None` hides the submenu.
     pub on_post_action: Option<PickPostAction>,
+    /// sb E1: the credence chip and popover; `None` on posts the user did not write.
+    pub credence: Option<crate::ui::features::thinking::credence::CredenceControls>,
 }

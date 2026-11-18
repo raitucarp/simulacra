@@ -41,6 +41,13 @@ keyed_enum! {
         FalsifiablePrediction => "falsifiable_prediction",
         /// Continues the thought one step further in the author's voice.
         ContinueThought => "continue_thought",
+        /// sb E1: argumentation theory: the thread as an argument graph (Toulmin roles, support
+        /// and attack), shown in the inspector's Argument view.
+        MapArgument => "map_argument",
+        /// sb E1: posts and vault passages that may contradict this one (the Tensions view).
+        FindTensions => "find_tensions",
+        /// sb E1: how atomic the post is (one claim, with context), and a split into one post per claim.
+        CheckAtomicity => "check_atomicity",
     }
 }
 
@@ -72,8 +79,8 @@ impl ActionKind {
     pub const fn group(self) -> ActionGroup {
         use ActionKind::*;
         match self {
-            SearchConcept | Explain | SummariseThread | MapConcepts | Translate => ActionGroup::Understand,
-            Steelman | Strawman | HiddenPremise | Counterexample | CognitiveBiases | ClaimConfidence | Crux => ActionGroup::Challenge,
+            SearchConcept | Explain | SummariseThread | MapConcepts | Translate | MapArgument | CheckAtomicity => ActionGroup::Understand,
+            Steelman | Strawman | HiddenPremise | Counterexample | CognitiveBiases | ClaimConfidence | Crux | FindTensions => ActionGroup::Challenge,
             Socratic | Analogies | FalsifiablePrediction | ContinueThought => ActionGroup::Explore,
         }
     }
@@ -95,6 +102,12 @@ impl ActionKind {
             Self::Steelman | Self::SummariseThread | Self::Translate | Self::Explain => LONG_ANSWER_TOKENS,
             _ => LIST_ANSWER_TOKENS,
         }
+    }
+
+    /// sb E1: whether the action opens a thinking tool of its own instead of an answer in the
+    /// actions sheet.
+    pub const fn opens_tool(self) -> bool {
+        matches!(self, Self::MapArgument | Self::FindTensions | Self::CheckAtomicity)
     }
 
     /// Every action of `group`, in display order.

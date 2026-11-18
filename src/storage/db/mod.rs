@@ -30,6 +30,8 @@ mod schema;
 mod setting_key;
 mod settings;
 mod theme_settings;
+mod thinking;
+mod thinking_schema;
 mod trending;
 pub(super) mod versions;
 

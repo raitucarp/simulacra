@@ -75,6 +75,7 @@ impl Render for ComposerModalPanel {
             is_image_input_open: self.is_image_input_open,
             notice,
             can_post: problem.is_none(),
+            atomic_hint: self.atomic_hint_view(cx),
             callbacks: callbacks(&cx.entity()),
         }
     }

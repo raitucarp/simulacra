@@ -10,6 +10,7 @@ use rust_i18n::t;
 
 const CARDS_ID: &str = "inspector-mode-cards";
 const OUTLINE_ID: &str = "inspector-mode-outline";
+const ARGUMENT_ID: &str = "inspector-mode-argument";
 
 /// Two small icon buttons, the active one in the accent.
 pub(crate) fn render_mode_toggle(mode: InspectorMode, on_command: &InspectorCallback, theme: &ThemeTokens) -> Div {
@@ -31,4 +32,5 @@ pub(crate) fn render_mode_toggle(mode: InspectorMode, on_command: &InspectorCall
         .gap(theme.spacing_3xs)
         .child(button(CARDS_ID, InspectorMode::Cards, LucideIcon::LayoutGrid, t!("feed.outline.show_cards").to_string()))
         .child(button(OUTLINE_ID, InspectorMode::Outline, LucideIcon::ListTree, t!("feed.outline.show_outline").to_string()))
+        .child(button(ARGUMENT_ID, InspectorMode::Argument, LucideIcon::Waypoints, t!("thinking.argument.show").to_string()))
 }

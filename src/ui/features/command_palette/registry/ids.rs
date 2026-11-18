@@ -90,4 +90,9 @@ command_ids! {
     LogMood => "log_mood",
     StartFocus => "start_focus",
     NewTimeCapsule => "new_time_capsule",
+    /// sb E1: the Calibration and Tensions views, resolving due predictions, the argument map.
+    InsightsCalibration => "insights_calibration",
+    InsightsTensions => "insights_tensions",
+    ResolveDuePredictions => "resolve_due_predictions",
+    ShowArgumentMap => "show_argument_map",
 }

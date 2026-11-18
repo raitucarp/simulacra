@@ -47,6 +47,7 @@ impl AppView {
             InsightsEvent::OpenPost(id) => self.reveal_post(id, window, cx),
             InsightsEvent::OpenNode(node) => self.open_graph_node(node, window, cx),
             InsightsEvent::OpenAuthor(id) => self.open_graph_node(NodeRef::Profile(id), window, cx),
+            InsightsEvent::Thinking(request) => self.on_thinking_request(request, window, cx),
         }
     }
 }

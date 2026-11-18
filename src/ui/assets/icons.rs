@@ -30,5 +30,7 @@ gpui_kit::assets::icon_assets!(
         MessageSquareReply, CircleStop, Eraser, ArrowLeftRight, ListChecks,
         // sb E3
         NotebookPen, HeartPulse, Timer, Mail, MailOpen, LockOpen, Shuffle, Paperclip, HandHeart,
+        // sb E1
+        Waypoints, Atom, Percent, ChartScatter, Split, CalendarClock, GripVertical,
     ]
 );

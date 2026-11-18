@@ -92,6 +92,7 @@ pub const COMMANDS: &[CommandSpec] = &[
     action(C::InsightsSymmetry, I::GitBranch, Ready), action(C::InsightsCategories, I::GitCompareArrows, Ready), action(C::InsightsEmbedding, I::Compass, Ready), action(C::InsightsActivity, I::Clock, Ready),
     action(C::ImageIdeas, I::ImagePlus, Ready),
     action(C::NewJournalEntry, I::Feather, Ready), action(C::LogMood, I::HeartPulse, Ready), action(C::StartFocus, I::Timer, Ready), action(C::NewTimeCapsule, I::Mail, Ready),
+    action(C::InsightsCalibration, I::ChartScatter, Ready), action(C::InsightsTensions, I::Zap, Ready), action(C::ResolveDuePredictions, I::CalendarClock, Ready), action(C::ShowArgumentMap, I::Waypoints, Ready), // sb E1
 ];
 
 /// The registry row of `id`.

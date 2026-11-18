@@ -14,6 +14,8 @@ keyed_enum! {
         Cards => "cards",
         /// Nested, text-only bullets.
         Outline => "outline",
+        /// sb E1: the thread as an argument map.
+        Argument => "argument",
     }
 }
 
@@ -28,7 +30,7 @@ impl InspectorMode {
     pub fn toggled(self) -> Self {
         match self {
             Self::Cards => Self::Outline,
-            Self::Outline => Self::Cards,
+            Self::Outline | Self::Argument => Self::Cards,
         }
     }
 }
@@ -40,6 +42,8 @@ pub struct InspectorView {
     pub outlines: OutlineMemory,
     /// Keyboard focus of the outline.
     pub focus: FocusHandle,
+    /// sb E1: the Argument view (set by the shell).
+    pub argument: Option<gpui_kit::Entity<crate::ui::features::thinking::argument::ArgumentPanel>>,
 }
 
 /// Something done in the inspector's chrome or outline.

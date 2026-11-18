@@ -26,6 +26,7 @@ fn noop_handlers() -> PostCardHandlers {
         on_delete: None,
         links: Default::default(),
         on_post_action: None,
+        credence: None,
     }
 }
 use simulacra::ui::organisms::compute_stream_threadline_style;

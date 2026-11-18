@@ -13,6 +13,7 @@ mod overview;
 mod radial;
 mod sets;
 mod symmetry;
+mod thinking;
 #[cfg(test)]
 mod tests;
 
@@ -20,6 +21,7 @@ use super::panel::InsightsPanel;
 use super::view::InsightsView;
 use crate::domain::insights::InsightsReport;
 use crate::ui::components::measured_width;
+use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::*;
 use std::rc::Rc;
 
@@ -67,7 +69,7 @@ impl Render for InsightsPanel {
             .gap(theme.section_gap)
             .child(probe)
             .child(self.render_header(room, cx))
-            .child(self.render_filters(room, cx))
+            .when(!self.state.view.is_thinking(), |column| column.child(self.render_filters(room, cx)))
             .child(self.render_body(room, cx));
         div().id(ROOT_ID).size_full().bg(theme.bg_app).font_family(theme.font_family_ui.clone()).child(
             div()
@@ -86,6 +88,9 @@ impl Render for InsightsPanel {
 
 impl InsightsPanel {
     fn render_body(&self, room: Room, cx: &mut Context<Self>) -> AnyElement {
+        if self.state.view.is_thinking() {
+            return self.render_thinking(room, cx);
+        }
         let Some(report) = self.report.clone() else { return self.render_loading().into_any_element() };
         if report.posts.is_empty() {
             return self.render_empty().into_any_element();
@@ -102,6 +107,7 @@ impl InsightsPanel {
             InsightsView::Categories => self.render_categories(&report, room, cx).into_any_element(),
             InsightsView::Embedding => self.render_embedding(&report, room, cx).into_any_element(),
             InsightsView::Activity => self.render_activity(&report, room, cx).into_any_element(),
+            InsightsView::Calibration | InsightsView::Tensions => self.render_thinking(room, cx),
         }
     }
 }

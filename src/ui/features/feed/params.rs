@@ -68,6 +68,8 @@ pub struct FeedParams<'a, C> {
     pub on_run_command: RunCommandCallback,
     /// sb C2: "…" menu › Actions, and the inspector's view (cards or outline) with its commands.
     pub on_post_action: PostActionCallback,
+    /// sb E1: credence chips on the user's own posts.
+    pub credence: Option<crate::ui::features::thinking::credence::CredenceSource>,
     pub inspector: super::inspector_outline::InspectorView,
     pub on_inspector: super::inspector_outline::InspectorCallback,
 }

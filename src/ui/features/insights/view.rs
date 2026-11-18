@@ -16,10 +16,14 @@ pub enum InsightsView {
     Categories,
     Embedding,
     Activity,
+    /// sb E1: how well stated credences matched what happened.
+    Calibration,
+    /// sb E1: posts and passages that may contradict each other.
+    Tensions,
 }
 
 impl InsightsView {
-    pub const ALL: [Self; 7] = [Self::Overview, Self::Network, Self::Sets, Self::Symmetry, Self::Categories, Self::Embedding, Self::Activity];
+    pub const ALL: [Self; 9] = [Self::Overview, Self::Network, Self::Sets, Self::Symmetry, Self::Categories, Self::Embedding, Self::Activity, Self::Calibration, Self::Tensions];
 
     /// Stable key (locale keys `insights.view.<key>`, persisted state).
     pub const fn key(self) -> &'static str {
@@ -31,6 +35,8 @@ impl InsightsView {
             Self::Categories => "categories",
             Self::Embedding => "embedding",
             Self::Activity => "activity",
+            Self::Calibration => "calibration",
+            Self::Tensions => "tensions",
         }
     }
 
@@ -43,6 +49,8 @@ impl InsightsView {
             Self::Categories => LucideIcon::GitCompareArrows,
             Self::Embedding => LucideIcon::Compass,
             Self::Activity => LucideIcon::Clock,
+            Self::Calibration => LucideIcon::ChartScatter,
+            Self::Tensions => LucideIcon::Zap,
         }
     }
 
@@ -56,7 +64,14 @@ impl InsightsView {
             Self::Categories => CommandId::InsightsCategories,
             Self::Embedding => CommandId::InsightsEmbedding,
             Self::Activity => CommandId::InsightsActivity,
+            Self::Calibration => CommandId::InsightsCalibration,
+            Self::Tensions => CommandId::InsightsTensions,
         }
+    }
+
+    /// sb E1: the views fed by the thinking tools rather than the report (no filter bar).
+    pub const fn is_thinking(self) -> bool {
+        matches!(self, Self::Calibration | Self::Tensions)
     }
 
     /// The view a command opens (`go_insights` keeps the current view: `None`).

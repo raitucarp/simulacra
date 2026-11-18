@@ -8,6 +8,8 @@ mod runner;
 
 #[cfg(test)]
 mod tests;
+#[cfg(test)]
+mod thinking_tests;
 
 pub use cancel::CancelToken;
 pub use runner::{run_action, run_action_blocking, ActionFailure, ActionJob};

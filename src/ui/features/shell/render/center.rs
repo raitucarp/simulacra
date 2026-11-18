@@ -4,6 +4,7 @@ use super::super::binder::Binder;
 use super::super::view::AppView;
 use crate::state::NavigationTab;
 use crate::ui::features::day_filter::render_day_filter_chip;
+use crate::ui::features::feed::inspector_outline::InspectorView;
 use crate::ui::features::feed::{render_main_feed, FeedParams};
 use crate::ui::responsive::LayoutClass;
 use gpui_kit::*;
@@ -79,8 +80,8 @@ impl AppView {
             on_open_media: Rc::new(bind.with(Self::open_lightbox)),
             on_cycle_profile: bind.boxed_act(Self::cycle_profile),
             on_run_command: Rc::new(bind.with(Self::run_command)),
-            on_post_action: Self::post_action_callback(bind),
-            inspector: self.inspector.view(),
+            on_post_action: Self::post_action_callback(bind), credence: Some(self.credence_source(bind)),
+            inspector: InspectorView { argument: Some(self.thinking.argument.clone()), ..self.inspector.view() },
             on_inspector: Rc::new(bind.with(Self::run_inspector_command)),
         })
     }

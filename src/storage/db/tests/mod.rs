@@ -11,4 +11,5 @@ mod preferences;
 mod review;
 mod schema;
 mod settings;
+mod thinking;
 mod versions;

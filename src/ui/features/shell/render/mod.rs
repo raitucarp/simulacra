@@ -80,6 +80,7 @@ impl AppView {
         self.sync_review(window, cx);
         self.sync_insights(cx);
         self.sync_journal(window, cx);
+        self.sync_arena(cx);
         self.sync_thinking(cx);
         self.sync_forge_theme(cx);
     }

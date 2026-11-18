@@ -5,6 +5,7 @@
 //! toast it. Reads are synchronous round trips through the same queue, so they always observe
 //! every earlier write. Dropping the last handle flushes the queue and joins the worker.
 
+mod arena;
 mod catalogue_ops;
 mod embeddings;
 mod learning;

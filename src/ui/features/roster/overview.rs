@@ -1,7 +1,8 @@
 //! Overview card of the selected profile: portrait, identity, a glimpse of the biography and
 //! the actions (Edit in Forge, use persona / run a turn, delete).
 
-use super::params::{RosterCallbacks, RosterParams};
+use super::params::{ProfileTab, RosterCallbacks, RosterParams};
+use super::profile_tabs::{beliefs_column, profile_tabs};
 use crate::domain::Profile;
 use crate::theme::ThemeTokens;
 use crate::ui::atoms::render_profile_avatar;
@@ -83,5 +84,11 @@ pub(super) fn render_overview(profile: &Profile, params: &RosterParams<'_>, call
         .child(identity(profile, active_persona, theme))
         .children(bio)
         .child(actions(profile, callbacks).gap(theme.control_gap));
-    div().id(OVERVIEW_ID).flex_1().h_full().overflow_y_scrollbar().p(theme.panel_padding).flex().items_start().justify_center().child(card)
+    // sb F1: an agent's overview switches between its profile card and its beliefs.
+    let tabs = profile.is_agent().then(|| profile_tabs(params.profile_tab, theme, callbacks.switch_profile_tab.clone()));
+    let body = match (&params.beliefs, params.profile_tab, profile.is_agent()) {
+        (Some(view), ProfileTab::Beliefs, true) => beliefs_column(view.clone(), theme),
+        _ => card,
+    };
+    div().id(OVERVIEW_ID).flex_1().h_full().overflow_y_scrollbar().p(theme.panel_padding).flex().flex_col().items_center().gap(theme.section_gap).children(tabs).child(body)
 }

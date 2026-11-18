@@ -144,4 +144,5 @@ lucide_catalog! {
     MessageSquareReply => "icons/message-square-reply.svg", CircleStop => "icons/circle-stop.svg", Eraser => "icons/eraser.svg", ArrowLeftRight => "icons/arrow-left-right.svg", ListChecks => "icons/list-checks.svg", // sb C1b
     NotebookPen => "icons/notebook-pen.svg", HeartPulse => "icons/heart-pulse.svg", Timer => "icons/timer.svg", Mail => "icons/mail.svg", MailOpen => "icons/mail-open.svg", LockOpen => "icons/lock-open.svg", Shuffle => "icons/shuffle.svg", Paperclip => "icons/paperclip.svg", HandHeart => "icons/hand-heart.svg", // sb E3
     Waypoints => "icons/waypoints.svg", Atom => "icons/atom.svg", Percent => "icons/percent.svg", ChartScatter => "icons/chart-scatter.svg", Split => "icons/split.svg", CalendarClock => "icons/calendar-clock.svg", GripVertical => "icons/grip-vertical.svg", // sb E1
+    Save => "icons/save.svg", // sb F1
 }

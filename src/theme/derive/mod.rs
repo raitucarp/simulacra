@@ -5,6 +5,7 @@
 
 mod accents;
 mod actions;
+mod arena;
 mod chrome;
 mod forge;
 mod image_prompt;
@@ -60,7 +61,7 @@ pub fn derive_tokens(
     review::apply_review_map_layout(&mut t);
     insights::apply_insights_layout(&mut t);
     learning::apply_learning_layout(&mut t);
-    journal::apply_journal_layout(&mut t);
+    journal::apply_journal_layout(&mut t); arena::apply_arena_layout(&mut t); // sb F1: Arena and Beliefs sizes
     responsive::apply_responsive_layout(&mut t);
     vault::apply_vault_layout(&mut t);
     actions::apply_actions_layout(&mut t);

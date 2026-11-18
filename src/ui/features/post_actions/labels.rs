@@ -32,6 +32,8 @@ pub fn kind_icon(kind: ActionKind) -> LucideIcon {
         ActionKind::MapArgument => LucideIcon::Waypoints,
         ActionKind::FindTensions => LucideIcon::Zap,
         ActionKind::CheckAtomicity => LucideIcon::Atom,
+        ActionKind::Debate => LucideIcon::Swords,
+        ActionKind::ThoughtExperiment => LucideIcon::FlaskConical,
     }
 }
 

@@ -72,12 +72,16 @@ impl AppView {
         self.scheduler.queue.complete(agent_id);
         match outcome {
             Ok(SimulationOutcome { reply, thread, llm_error, gate_key, image_error }) => {
+                let generated = llm_error.is_none(); // sb F1: only a model's reply updates beliefs
                 match llm_error {
                     Some(failure) => self.report_llm_failure(&gate_key, failure, window, cx),
                     None => self.scheduler.failures.reset(&gate_key),
                 }
                 if let Some(err) = image_error {
                     eprintln!("simulacra: image generation failed: {err}");
+                }
+                if generated {
+                    self.update_beliefs_from_reply(&reply, cx);
                 }
                 for post in std::iter::once(reply).chain(thread) {
                     self.insert_simulated_reply(post, window, cx);
@@ -122,7 +126,7 @@ impl AppView {
         let tools = (!engine.tools.is_empty())
             .then(|| ToolContext::capture(&network, &self.state.posts, &self.state.user_profiles, &self.state.documents));
         let roll = roll_percent(self.scheduler.seed, agent.id.as_str(), self.scheduler.tick ^ self.state.posts.len() as u64);
-        let context = self.prompt_context(&network);
+        let context = PromptContext { beliefs: self.belief_dossier(&agent.id), ..self.prompt_context(&network) }; // sb F1
         EngineJob { parent, agent, network, context, plan, tools, roll }
     }
 
@@ -136,6 +140,6 @@ impl AppView {
             .filter(|d| &d.network_id == network)
             .map(|d| d.title.clone())
             .collect();
-        PromptContext { network_name: network_name.unwrap_or_default(), grounding_docs }
+        PromptContext { network_name: network_name.unwrap_or_default(), grounding_docs, ..PromptContext::default() }
     }
 }

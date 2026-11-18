@@ -14,6 +14,8 @@ impl AppView {
             mode: self.current_lab_mode(),
             selected_profile_id: self.lab.selected_profile_id.as_ref(),
             theme: &self.theme,
+            profile_tab: self.arena.profile_tab,
+            beliefs: Some(self.arena.beliefs_panel.clone().into()),
         };
         let callbacks = RosterCallbacks {
             select: Rc::new(bind.with(Self::lab_select_profile)),
@@ -23,6 +25,7 @@ impl AppView {
             delete: Rc::new(bind.with(Self::lab_delete_profile)),
             activate_persona: Rc::new(bind.with(Self::lab_activate_persona)),
             trigger_agent: Rc::new(bind.with(Self::lab_trigger_agent)),
+            switch_profile_tab: Rc::new(bind.with(Self::switch_profile_tab)),
         };
         render_roster_view(params, callbacks)
     }

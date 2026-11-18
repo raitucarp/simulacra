@@ -21,6 +21,7 @@ pub struct DrillRun {
 }
 
 impl DrillRun {
+
     /// A drill of `item` (a connection map), its points scattered for this review.
     pub fn start(item: &ReviewItem) -> Self {
         let count = item.subject.map().map_or(0, |map| map.points.len());

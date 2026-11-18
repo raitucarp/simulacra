@@ -4,7 +4,9 @@
 use super::super::panel::{MapEditor, ReviewPanel};
 use super::super::text::tr;
 use super::common::caption;
+use super::map::point_name;
 use crate::domain::review::connections::MapEdge;
+use crate::domain::review::quiz::piece_text;
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::{Icon, Sizable};
@@ -14,13 +16,15 @@ use rust_i18n::t;
 const DIRECTION_ID_PREFIX: &str = "review-map-direction-";
 const REMOVE_EDGE_ID_PREFIX: &str = "review-map-remove-edge-";
 const REMOVE_POINT_ID_PREFIX: &str = "review-map-remove-point-";
+/// Characters of a point's name in the lists.
+const NAME_CHARS: usize = 44;
 const UNDIRECTED: &str = "—";
 const DIRECTED: &str = "→";
 
 impl ReviewPanel {
     pub(super) fn render_map_lists(&self, editor: &MapEditor, cx: &mut Context<Self>) -> impl IntoElement {
         let theme = &self.theme;
-        let titles: Vec<String> = self.map_chips(&editor.map, Some(&editor.posts)).into_iter().map(|chip| chip.title).collect();
+        let titles: Vec<String> = self.map_chips(&editor.map, Some(&editor.posts)).iter().map(point_name).map(|name| piece_text(&name, NAME_CHARS)).collect();
         let edges: Vec<AnyElement> = editor.map.edges.iter().enumerate().map(|(index, edge)| self.edge_row(index, edge, &titles, cx).into_any_element()).collect();
         let points: Vec<AnyElement> = titles.iter().enumerate().map(|(index, title)| self.point_row(index, title, cx).into_any_element()).collect();
         let column = |label: String| div().flex_1().min_w(theme.review_count_tile_width).flex().flex_col().gap(theme.spacing_3xs).child(caption(label, theme));

@@ -10,9 +10,9 @@ use crate::domain::review::quiz::piece_text;
 use crate::domain::review::Grade;
 use crate::theme::ThemeTokens;
 use crate::ui::icons::LucideIcon;
-use crate::ui::keymap::render_key_cap;
 use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::{Icon, Sizable};
+use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::*;
 use rust_i18n::t;
 
@@ -41,7 +41,7 @@ fn legend(theme: &ThemeTokens) -> Div {
 }
 
 /// Characters of a point's title in a mistake line.
-const NAME_CHARS: usize = 28;
+const NAME_CHARS: usize = 40;
 /// Mistakes listed at most.
 const MAX_MISTAKES: usize = 6;
 
@@ -50,7 +50,7 @@ fn mistakes(score: &MapScore, titles: &[String], theme: &ThemeTokens) -> Div {
     let name = |i: usize| piece_text(titles.get(i).map_or("", String::as_str), NAME_CHARS);
     let pair = |a: usize, b: usize| format!("{} — {}", name(a), name(b));
     let wrong = score.wrong.iter().map(|(edge, mistake)| (pair(edge.from, edge.to), tr(&format!("review.drill.mistake.{}", mistake.key())), theme.accent_danger));
-    let missing = score.missing.iter().map(|edge| (pair(edge.from, edge.to), tr("review.drill.legend_missing"), theme.warning));
+    let missing = score.missing.iter().map(|edge| (pair(edge.from, edge.to), tr("review.drill.mistake.missing"), theme.warning));
     let rows = wrong.chain(missing).take(MAX_MISTAKES).map(|(pair, why, color)| {
         div().flex().gap(theme.inline_gap).text_size(theme.font_size_xs).child(div().min_w_0().truncate().text_color(theme.text_secondary).child(pair)).child(div().flex_none().text_color(color).child(why))
     });
@@ -70,7 +70,7 @@ pub fn render_drill_result(score: &MapScore, grade: Grade, titles: &[String], th
         .child(headline(score, theme))
         .child(caption(measures, theme))
         .child(legend(theme))
-        .child(mistakes(score, titles, theme))
+        .when(!score.is_exact(), |block| block.child(mistakes(score, titles, theme)))
         .child(caption(tr(if score.is_exact() { "review.drill.why_exact" } else { "review.drill.why_again" }), theme))
-        .child(control_row(theme).child(graded).child(div().flex_1()).child(next).child(render_key_cap(tr("keymap.key.space"), theme)))
+        .child(control_row(theme).child(graded).child(div().flex_1()).child(next))
 }

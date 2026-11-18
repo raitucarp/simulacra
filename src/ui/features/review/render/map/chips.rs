@@ -9,7 +9,9 @@ use crate::theme::ThemeTokens;
 use gpui_kit::*;
 
 /// Characters of a post or passage shown on its chip.
-const CHIP_CHARS: usize = 90;
+const CHIP_CHARS: usize = 52;
+/// Lines of a chip's words.
+const CHIP_LINES: usize = 2;
 
 /// The kind of a point (its colour).
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -40,6 +42,15 @@ pub fn point_chip(point: &MapPoint, post: &dyn Fn(&str) -> Option<PostView>, tit
             body: if text.trim().is_empty() { tr("review.map.whole_document") } else { piece_text(text, CHIP_CHARS) },
         },
         MapPoint::Concept { label } => PointChip { kind: ChipKind::Concept, title: label.clone(), body: tr("review.map.concept") },
+    }
+}
+
+/// How a point is named in a list: a concept by its name, a post or passage by its title and
+/// opening words.
+pub fn point_name(chip: &PointChip) -> String {
+    match chip.kind {
+        ChipKind::Concept => chip.title.clone(),
+        ChipKind::Post | ChipKind::Passage => format!("{}: {}", chip.title, chip.body),
     }
 }
 
@@ -78,5 +89,5 @@ pub fn render_chip(chip: &PointChip, id: ElementId, pending: bool, theme: &Theme
                 .child(div().flex_none().size(theme.review_swatch_size).rounded(theme.radius_full).bg(color))
                 .child(div().min_w_0().truncate().text_size(theme.font_size_xs).font_weight(FontWeight::SEMIBOLD).text_color(theme.text_primary).child(chip.title.clone())),
         )
-        .child(div().text_size(theme.font_size_2xs).line_height(relative(theme.line_height_body)).text_color(theme.text_secondary).line_clamp(2).child(chip.body.clone()))
+        .child(div().text_size(theme.font_size_2xs).line_height(relative(theme.line_height_body)).text_color(theme.text_secondary).line_clamp(CHIP_LINES).child(chip.body.clone()))
 }

@@ -10,7 +10,7 @@ pub mod chips;
 mod geometry;
 mod paint;
 
-pub use chips::{point_chip, PointChip};
+pub use chips::{point_chip, point_name, PointChip};
 
 use crate::theme::ThemeTokens;
 use crate::ui::components::measured_width;

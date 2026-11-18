@@ -19,7 +19,7 @@ fn every_label_key_has_an_english_text() {
     keys.extend(["today", "stats", "items"].map(|k| format!("review.tab.{k}")));
     keys.extend(["front", "back"].iter().flat_map(|k| [format!("review.learn.{k}.switch"), format!("review.learn.{k}.field"), format!("review.learn.{k}.tip")]));
     keys.extend(["sentences", "paragraphs"].map(|k| format!("review.learn.{k}")));
-    keys.extend(["unexpected", "direction", "label"].map(|k| format!("review.drill.mistake.{k}")));
+    keys.extend(["unexpected", "direction", "label", "missing"].map(|k| format!("review.drill.mistake.{k}")));
     for key in keys {
         assert_ne!(english(&key), key, "untranslated {key}");
     }

@@ -5,7 +5,7 @@
 use super::super::panel::{DrillRun, ReviewPanel};
 use super::super::text::tr;
 use super::common::{block_title, caption, control_row, surface};
-use super::map::{MapCanvas, PointAction, Stroke};
+use super::map::{point_name, MapCanvas, PointAction, Stroke};
 use super::result::render_drill_result;
 use crate::domain::review::connections::{ConnectionMap, MapScore};
 use crate::domain::review::ReviewItem;
@@ -35,7 +35,7 @@ impl ReviewPanel {
             })
         });
         let chips = self.map_chips(map, None);
-        let titles: Vec<String> = chips.iter().map(|chip| chip.title.clone()).collect();
+        let titles: Vec<String> = chips.iter().map(point_name).collect();
         let canvas = MapCanvas {
             id: CANVAS_ID.into(),
             chips,

@@ -59,6 +59,8 @@ pub struct FeedParams<'a, C> {
     pub on_open_wikilink: OpenTextAction,
     /// Source chips of agent posts (open the vault document, post, profile or web page).
     pub on_open_source: OpenSourceAction,
+    /// Post images open the lightbox (sb C3).
+    pub on_open_media: crate::ui::features::media::OpenMediaAction,
     pub on_cycle_profile: CycleProfileCallback,
     pub on_run_command: RunCommandCallback,
     /// sb C2: "…" menu › Actions, and the inspector's view (cards or outline) with its commands.

@@ -29,6 +29,7 @@ impl RenderOnce for ComposerModalView {
 impl ComposerModalView {
     fn dialog(&self) -> Stateful<Div> {
         let theme = &self.theme;
+        let drop_border = theme.accent_brand;
         div()
             .id(MODAL_DIALOG_ID)
             .w(theme.modal_composer_width)
@@ -44,6 +45,8 @@ impl ComposerModalView {
             .on_mouse_down(MouseButton::Left, |_ev, _window, cx| {
                 cx.stop_propagation();
             })
+            // Images dragged over the dialog are attached when dropped (sb C3)
+            .drag_over::<ExternalPaths>(move |style, _, _, _| style.border_color(drop_border))
             // 1. Header: Cancel, Title, Options
             .child(self.header())
             // 2. Parent Context (if Reply mode)

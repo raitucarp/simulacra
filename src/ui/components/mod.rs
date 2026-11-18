@@ -22,7 +22,7 @@ pub use document_picker::{
     pick_document_path, read_document_file, DocumentImportError, MAX_DOCUMENT_KB,
 };
 pub use hover_row::selectable_row;
-pub use image_picker::pick_image_path;
+pub use image_picker::{pick_image_path, pick_image_paths};
 pub use measured_width::measured_width;
 pub use persisted_split::{persisted_h_resizable, persisted_v_resizable, PersistedSplit, SplitPane};
 pub use segmented::{segment_pill, segmented_track, Segment};

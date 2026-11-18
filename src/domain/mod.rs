@@ -9,6 +9,7 @@ pub mod document;
 pub mod embedding;
 pub mod engine;
 pub mod graph;
+pub mod media;
 pub mod ids;
 pub mod network;
 pub mod palette;

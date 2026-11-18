@@ -5,6 +5,7 @@ mod columns;
 mod drawer;
 mod navigation;
 mod import;
+mod media;
 mod overlays;
 mod post_actions;
 mod semantic;
@@ -59,7 +60,8 @@ impl Render for AppView {
             .children(self.import_sheet(&bind, cx))
             .children(self.capture_box(&bind))
             .children(self.card_maker(cx))
-            .children(self.drop_hint())
+            .children(self.drop_hint(cx))
+            .children(self.lightbox(&bind))
     }
 }
 
@@ -72,6 +74,7 @@ impl AppView {
         self.sync_mind_graph(cx);
         self.sync_vault(cx);
         self.sync_semantic_index(window, cx);
+        self.sync_media(window, cx);
         self.sync_review(window, cx);
         self.sync_forge_theme(cx);
     }
@@ -93,5 +96,7 @@ impl AppView {
             panel.set_profile(current_profile, cx);
             panel.set_theme(current_theme, cx);
         });
+        let media_dir = self.state.media_dir();
+        self.composer_modal.update(cx, |panel, _| panel.set_media_dir(media_dir));
     }
 }

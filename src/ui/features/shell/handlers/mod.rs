@@ -11,6 +11,8 @@ mod import_flow;
 mod import_sheet;
 mod inspector;
 mod lab;
+mod media;
+mod media_pump;
 mod navigation;
 mod networks;
 mod onboarding;

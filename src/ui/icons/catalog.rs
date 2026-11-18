@@ -64,6 +64,7 @@ lucide_catalog! {
     Heart => "icons/heart.svg",
     HelpCircle => "icons/circle-question-mark.svg",
     Image => "icons/image.svg",
+    ImagePlus => "icons/image-plus.svg",
     EyeOff => "icons/eye-off.svg",
     Info => "icons/info.svg",
     Keyboard => "icons/keyboard.svg",

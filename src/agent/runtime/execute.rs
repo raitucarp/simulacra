@@ -32,6 +32,7 @@ impl EngineResult {
             tools: self.tools.clone(),
             sources: self.sources.clone(),
             origin: None,
+            images: Vec::new(),
         }
     }
 }

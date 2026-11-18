@@ -25,6 +25,8 @@ pub struct BodyLinks {
     pub on_wikilink: Option<OpenTextAction>,
     /// Source chip click (vault document, post, profile or web page an agent drew on).
     pub on_source: Option<super::extras::OpenSourceAction>,
+    /// Image click: opens the lightbox on that image of the post (sb C3).
+    pub on_media: Option<crate::ui::features::media::OpenMediaAction>,
 }
 
 /// Tokenizes `content` and renders it with inert links (previews, tests, the spark feed).

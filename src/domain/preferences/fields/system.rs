@@ -6,21 +6,30 @@ use crate::domain::preferences::{AdvancedPrefs, LogLevel, NotificationPrefs, Pri
 
 category_fields! {
     /// A Privacy & Data preference.
-    PrivacyField { Telemetry => "telemetry" }
+    PrivacyField { LinkPreviews => "link_previews", Telemetry => "telemetry" }
 }
 
 impl PrivacyField {
     pub fn kind(self) -> FieldKind {
-        FieldKind::Locked
+        match self {
+            Self::LinkPreviews => FieldKind::Toggle,
+            Self::Telemetry => FieldKind::Locked,
+        }
     }
 
     pub fn get(self, prefs: &PrivacyPrefs) -> SettingValue {
-        SettingValue::Toggle(prefs.telemetry)
+        SettingValue::Toggle(match self {
+            Self::LinkPreviews => prefs.link_previews,
+            Self::Telemetry => prefs.telemetry,
+        })
     }
 
     /// Telemetry is never switched on.
-    pub fn set(self, prefs: PrivacyPrefs, _: &SettingValue) -> PrivacyPrefs {
-        prefs
+    pub fn set(self, prefs: PrivacyPrefs, value: &SettingValue) -> PrivacyPrefs {
+        match self {
+            Self::LinkPreviews => PrivacyPrefs { link_previews: toggle(value, prefs.link_previews), ..prefs },
+            Self::Telemetry => prefs,
+        }
     }
 }
 

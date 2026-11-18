@@ -38,7 +38,7 @@ impl ComposerModalView {
             )
     }
 
-    /// Quote preview, attachment inputs, image preview and attachment bar of the first post.
+    /// Quote preview, attachment inputs, attached images and attachment bar of the first post.
     pub(super) fn first_post_extras(&self, column: Div) -> Div {
         let theme = &self.theme;
         column
@@ -47,7 +47,7 @@ impl ComposerModalView {
             })
             .when(self.is_link_input_open, |this| this.child(self.link_input_row()))
             .when(self.is_image_input_open, |this| this.child(self.image_input_row()))
-            .when_some(self.image_path.as_ref(), |this, path| this.child(self.image_preview(path)))
+            .children(self.media_tray())
             .child(self.attachment_bar())
     }
 
@@ -56,6 +56,7 @@ impl ComposerModalView {
     pub(super) fn textarea(&self, index: usize, draft: &DraftEditor) -> Stateful<Div> {
         let on_submit_action = self.callbacks.on_submit.clone();
         let on_submit_key = self.callbacks.on_submit.clone();
+        let on_paste = self.callbacks.on_paste.clone();
         div()
             .id((MODAL_TEXTAREA_WRAPPER_ID, index))
             .w_full()
@@ -67,6 +68,6 @@ impl ComposerModalView {
                     (on_submit_key)(window, cx);
                 }
             })
-            .child(Textarea::new(&draft.input).bordered(false))
+            .child(Textarea::new(&draft.input).bordered(false).on_paste(move |item, window, cx| on_paste(item, window, cx)))
     }
 }

@@ -86,13 +86,17 @@ impl ColumnChart {
         })
     }
 
+    /// Labels under every `stride`-th column, each spanning its `stride` columns so it is
+    /// never cut to one narrow slot.
     fn label_row(&self, stride: usize) -> Div {
         let theme = &self.theme;
-        let cells = (0..self.columns.len()).map(|i| {
-            let text = self.labels.get(i).filter(|_| i % stride == 0).cloned().unwrap_or_default();
-            div().flex_1().min_w_0().flex().justify_center().overflow_hidden().whitespace_nowrap().text_size(theme.font_size_2xs).text_color(theme.text_muted).child(text)
+        let count = self.columns.len().max(1);
+        let cells = (0..self.columns.len()).step_by(stride.max(1)).map(|i| {
+            let span = stride.min(count - i) as f32 / count as f32;
+            let text = self.labels.get(i).cloned().unwrap_or_default();
+            div().w(relative(span)).flex_none().overflow_hidden().whitespace_nowrap().text_size(theme.font_size_2xs).text_color(theme.text_muted).child(text)
         });
-        div().flex().pl(theme.insights_axis_width).children(cells)
+        div().flex().pl(theme.insights_axis_width + theme.spacing_xs).children(cells)
     }
 }
 

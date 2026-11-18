@@ -76,7 +76,7 @@ jobs:
             ## Downloads
             | Platform | Installer | Without installer |
             |---|---|---|
-            | Windows 10/11 (x64) | `Simulacra_*_x64-setup.exe` | `simulacra-*-windows-x64.zip` |
+            | Windows 10/11 (x64) | `simulacra_*_x64-setup.exe` | `simulacra-*-windows-x64.zip` |
             | macOS 11+ (Apple silicon) | `Simulacra_*_aarch64.dmg` | `simulacra-*-macos-arm64.tar.gz` |
             | macOS 11+ (Intel) | `Simulacra_*_x64.dmg` | `simulacra-*-macos-x64.tar.gz` |
             | Linux (x64) | `.deb` or `.AppImage` | `simulacra-*-linux-x64.tar.gz` |

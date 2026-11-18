@@ -9,6 +9,7 @@ use crate::state::forge::engine::{mutate, search_credential_kind};
 use crate::ui::features::forge::text::{tr, tr_count, trait_label};
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
 use crate::ui::features::forge::widgets::{MultiSelectGrid, NumberSlider};
+use crate::state::forge::suggest::{EngineParam, Param};
 use gpui_kit::*;
 
 const NONE_KEY: &str = "forge.ui.engine.tools_none";
@@ -25,7 +26,9 @@ impl ForgeView {
         let engine = self.engine();
         let granted = mutate::granted(engine);
         let set = handle.engine(|e: &mut EngineConfig, kinds| mutate::set_tools(e, &kinds));
-        let grid = MultiSelectGrid::new(engine_id("tools"), &granted, theme, move |kinds, w, cx| set(kinds, w, cx)).with_descriptions();
+        let grid = MultiSelectGrid::new(engine_id("tools"), &granted, theme, move |kinds, w, cx| set(kinds, w, cx))
+            .with_descriptions()
+            .suggested(self.picks(Param::Engine(EngineParam::Tools)));
         let summary = match granted.len() {
             0 => muted(tr(NONE_KEY), theme),
             count => {
@@ -33,7 +36,7 @@ impl ForgeView {
                 muted(format!("{} · {names}", tr_count(GRANTED_KEY, count, &[])), theme)
             }
         };
-        let head = card(theme).child(self.engine_field("engine_tools", grid)).child(summary);
+        let head = card(theme).child(self.engine_field(handle, "engine_tools", grid)).child(summary);
         let search = engine.tools.iter().find_map(|grant| match grant {
             ToolGrant::WebSearch(search) => Some(self.search_card(search, handle)),
             _ => None,
@@ -45,7 +48,7 @@ impl ForgeView {
 
     fn search_card(&self, search: &WebSearchConfig, handle: &ForgeHandle) -> Div {
         let theme = &self.theme;
-        let grid = self.engine_cards("search", (Some(search.backend), &SearchBackend::ALL), handle, |e, backend| {
+        let grid = self.engine_cards((EngineParam::SearchBackend, "search"), (Some(search.backend), &SearchBackend::ALL), handle, |e, backend| {
             if let Some(search) = mutate::web_search_mut(e) {
                 search.backend = backend;
                 search.credential = None;
@@ -58,16 +61,17 @@ impl ForgeView {
                     search.credential = id;
                 }
             });
-            self.engine_field("engine_credential", picker)
+            self.engine_field(handle, "engine_credential", picker)
         });
-        card(theme).child(self.engine_field("engine_search_backend", grid.compact())).children(option_line(search.backend, theme)).children(key)
+        card(theme).child(self.engine_field(handle, "engine_search_backend", grid.compact())).children(option_line(search.backend, theme)).children(key)
     }
 
     fn steps_card(&self, steps: u8, handle: &ForgeHandle) -> Div {
         let theme = &self.theme;
         let set = handle.engine(|e: &mut EngineConfig, value: u16| e.max_tool_steps = value as u8);
         let range = (MIN_TOOL_STEPS, u16::from(MAX_TOOL_STEPS_LIMIT), TOOL_STEPS_STEP);
-        let slider = NumberSlider::new(engine_id("tool-steps"), tr(STEPS_KEY), u16::from(steps), range, theme, move |v, w, cx| set(v, w, cx));
-        card(theme).child(self.engine_field("engine_max_tool_steps", slider))
+        let slider = NumberSlider::new(engine_id("tool-steps"), tr(STEPS_KEY), u16::from(steps), range, theme, move |v, w, cx| set(v, w, cx))
+            .hint(self.slider_hint(Param::Engine(EngineParam::MaxToolSteps), &tr(STEPS_KEY), handle));
+        card(theme).child(self.engine_field(handle, "engine_max_tool_steps", slider))
     }
 }

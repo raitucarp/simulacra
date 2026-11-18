@@ -13,6 +13,7 @@ use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::Sizable;
+use crate::state::forge::suggest::EngineParam;
 use gpui_kit::*;
 
 const SECTION: EngineSection = EngineSection::Tools;
@@ -43,18 +44,18 @@ impl ForgeView {
 
     fn custom_tool_editor(&self, index: usize, def: &HttpToolDef, handle: &ForgeHandle) -> Div {
         let theme = &self.theme;
-        let input = |name: &str, value: &str, set: fn(&mut HttpToolDef, String)| {
-            self.engine_input(format!("tool-{index}-{name}"), value, (SECTION, handle), move |e, text| {
+        let input = |(param, name): (EngineParam, &str), value: &str, set: fn(&mut HttpToolDef, String)| {
+            self.engine_input_for((param, format!("tool-{index}-{name}")), value, (SECTION, handle), move |e, text| {
                 if let Some(tool) = mutate::custom_tool_mut(e, index) {
                     set(tool, text);
                 }
             })
         };
-        let name = input("name", &def.name, |tool, text| tool.name = text).placeholder(tr(NAME_HINT_KEY));
-        let description = input("description", &def.description, |tool, text| tool.description = text).multiline(NOTE_ROWS.0, NOTE_ROWS.1);
-        let url = input("url", &def.url_template, |tool, text| tool.url_template = text).placeholder(tr(URL_HINT_KEY));
-        let params = input("params", &def.params_schema, |tool, text| tool.params_schema = text).multiline(CODE_ROWS.0, CODE_ROWS.1);
-        let methods = self.engine_cards(&format!("tool-{index}-method"), (Some(def.method), &HttpMethod::ALL), handle, move |e, method| {
+        let name = input((EngineParam::ToolName, "name"), &def.name, |tool, text| tool.name = text).placeholder(tr(NAME_HINT_KEY));
+        let description = input((EngineParam::ToolDescription, "description"), &def.description, |tool, text| tool.description = text).multiline(NOTE_ROWS.0, NOTE_ROWS.1);
+        let url = input((EngineParam::UrlTemplate, "url"), &def.url_template, |tool, text| tool.url_template = text).placeholder(tr(URL_HINT_KEY));
+        let params = input((EngineParam::ParamsSchema, "params"), &def.params_schema, |tool, text| tool.params_schema = text).multiline(CODE_ROWS.0, CODE_ROWS.1);
+        let methods = self.engine_cards((EngineParam::Method, &format!("tool-{index}-method")), (Some(def.method), &HttpMethod::ALL), handle, move |e, method| {
             if let Some(tool) = mutate::custom_tool_mut(e, index) {
                 tool.method = method;
             }
@@ -68,13 +69,13 @@ impl ForgeView {
         card(theme)
             .gap(theme.section_gap)
             .child(self.tool_header(index, handle))
-            .child(self.engine_field("engine_tool_name", name))
-            .child(self.engine_field("engine_tool_description", description))
-            .child(self.engine_field("engine_method", methods.compact()))
-            .child(self.engine_field("engine_url_template", url))
-            .child(self.engine_field("engine_headers", headers))
-            .child(self.engine_field("engine_params_schema", div().flex().flex_col().gap(theme.spacing_xs).child(params).child(json_line(object_problem(&def.params_schema), theme))))
-            .child(self.engine_field("engine_credential", key))
+            .child(self.engine_field(handle, "engine_tool_name", name))
+            .child(self.engine_field(handle, "engine_tool_description", description))
+            .child(self.engine_field(handle, "engine_method", methods.compact()))
+            .child(self.engine_field(handle, "engine_url_template", url))
+            .child(self.engine_field(handle, "engine_headers", headers))
+            .child(self.engine_field(handle, "engine_params_schema", div().flex().flex_col().gap(theme.spacing_xs).child(params).child(json_line(object_problem(&def.params_schema), theme))))
+            .child(self.engine_field(handle, "engine_credential", key))
     }
 
     /// "Custom tool N" and its remove button.

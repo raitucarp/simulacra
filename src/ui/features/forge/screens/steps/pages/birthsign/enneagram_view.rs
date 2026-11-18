@@ -5,11 +5,12 @@ use super::enneagram::{core, variants, with_core};
 use super::wheel::enneagram_wheel;
 use crate::domain::{EnneagramType, InstinctualVariant};
 use crate::state::forge::{DraftEdit, TraitField, TraitValue};
-use crate::ui::features::forge::screens::common::labeled;
 use crate::ui::features::forge::text::{tr, trait_description, trait_label};
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
 use crate::ui::features::forge::widgets::{CardGrid, GridCell, IllustratedOptionGrid, OptionCardSpec};
 use crate::ui::illustration::Illustration;
+use crate::state::forge::suggest::Param;
+use crate::domain::TraitOption;
 use gpui_kit::*;
 
 const WHEEL_HINT_KEY: &str = "forge.ui.birthsign.wheel_hint";
@@ -42,7 +43,7 @@ impl ForgeView {
             .child(wheel)
             .child(caption(tr(WING_KEY), theme))
             .child(self.wing_cards(current, handle));
-        labeled(TraitField::Enneagram.path(), body, theme)
+        self.hinted(Param::Trait(TraitField::Enneagram), body, handle)
     }
 
     /// One illustrated card per valid wing of `current`'s core.
@@ -51,11 +52,13 @@ impl ForgeView {
         let width = theme.forge_option_card_width;
         let wings = variants(core(current));
         let columns = wings.len();
+        let picks = self.picks(Param::Trait(TraitField::Enneagram));
         let cells = wings.into_iter().map(|variant| {
             let art = Illustration::trait_card(variant).width(width);
             let mut spec = OptionCardSpec::new((WING_ID_PREFIX, variant as usize), art, trait_label(variant), width);
             spec.description = trait_description(variant);
             spec.selected = variant == current;
+            spec.suggested = picks.contains(&variant.key());
             let pick = handle.edit(|ty: EnneagramType| DraftEdit::Trait(TraitValue::Enneagram(ty)));
             GridCell::card(spec, theme, std::rc::Rc::new(move |w, cx| pick(variant, w, cx)))
         });
@@ -67,7 +70,8 @@ impl ForgeView {
         let theme = &self.theme;
         let current = self.draft.profile().config.instinctual_variant;
         let edit = handle.edit(|v: InstinctualVariant| DraftEdit::Trait(TraitValue::InstinctualVariant(v)));
+        let param = Param::Trait(TraitField::InstinctualVariant);
         let grid = IllustratedOptionGrid::new(INSTINCT_GRID_ID, Some(current), theme, move |v, w, cx| edit(v, w, cx)).columns(INSTINCT_COLUMNS);
-        labeled(TraitField::InstinctualVariant.path(), grid, theme)
+        self.hinted(param, grid.suggested(self.picks(param)), handle)
     }
 }

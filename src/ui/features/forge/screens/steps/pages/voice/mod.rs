@@ -5,11 +5,12 @@
 mod sample;
 
 use super::super::super::common::{card, heading};
-use super::trait_block::explained;
 use crate::state::forge::{DraftEdit, ScoreField, TextField, TraitField};
 use crate::ui::features::forge::text::tr;
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
 use crate::ui::features::forge::widgets::ScoreSlider;
+use crate::state::forge::suggest::Param;
+use crate::ui::features::forge::text::field_label;
 use gpui_kit::*;
 
 const LANGUAGES_KEY: &str = "forge.ui.voice.languages";
@@ -60,7 +61,8 @@ impl ForgeView {
     /// A score slider with its field's "?" explainer.
     pub(super) fn score_row(&self, field: ScoreField, handle: &ForgeHandle) -> Div {
         let edit = handle.edit(move |value: u8| DraftEdit::Score(field, value));
-        let slider = ScoreSlider::new(field, &self.draft.profile().config, &self.theme, move |v, w, cx| edit(v, w, cx));
-        explained(field.path(), slider, &self.theme)
+        let hint = self.slider_hint(Param::Score(field), &field_label(field.path()), handle);
+        let slider = ScoreSlider::new(field, &self.draft.profile().config, &self.theme, move |v, w, cx| edit(v, w, cx)).hint(hint);
+        div().child(slider)
     }
 }

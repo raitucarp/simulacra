@@ -14,6 +14,7 @@ use crate::state::forge::EngineSection;
 use crate::ui::features::forge::text::tr;
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
 use crate::ui::features::forge::widgets::NumberSlider;
+use crate::state::forge::suggest::{EngineParam, Param};
 use gpui_kit::*;
 
 const SECTION: EngineSection = EngineSection::Image;
@@ -40,8 +41,8 @@ impl ForgeView {
         let theme = &self.theme;
         let image = &self.engine().image;
         let kind = image.engine.kind();
-        let grid = self.engine_cards("image", (Some(kind), &ImageEngineKind::ALL), handle, mutate::set_image_kind);
-        let head = card(theme).child(self.engine_field("engine_image", grid)).children(option_line(kind, theme));
+        let grid = self.engine_cards((EngineParam::Image, "image"), (Some(kind), &ImageEngineKind::ALL), handle, mutate::set_image_kind);
+        let head = card(theme).child(self.engine_field(handle, "engine_image", grid)).children(option_line(kind, theme));
         let page = div().flex().flex_col().gap(theme.section_gap).child(head);
         if kind == ImageEngineKind::None {
             return page;
@@ -54,13 +55,13 @@ impl ForgeView {
         let theme = &self.theme;
         match engine {
             ImageEngine::LocalSd { flavor, url } => {
-                let flavors = self.engine_cards("sd-flavor", (Some(*flavor), &SdFlavor::ALL), handle, mutate::set_sd_flavor);
-                let url = self.engine_input("sd-url", url, (SECTION, handle), |e, text| {
+                let flavors = self.engine_cards((EngineParam::SdFlavor, "sd-flavor"), (Some(*flavor), &SdFlavor::ALL), handle, mutate::set_sd_flavor);
+                let url = self.engine_input_for((EngineParam::SdUrl, "sd-url".to_string()), url, (SECTION, handle), |e, text| {
                     if let ImageEngine::LocalSd { url, .. } = &mut e.image.engine {
                         *url = text;
                     }
                 });
-                Some(card(theme).child(self.engine_field("engine_sd_flavor", flavors)).children(option_line(*flavor, theme)).child(self.engine_field("engine_sd_url", url)))
+                Some(card(theme).child(self.engine_field(handle, "engine_sd_flavor", flavors)).children(option_line(*flavor, theme)).child(self.engine_field(handle, "engine_sd_url", url)))
             }
             ImageEngine::Custom(request) => Some(self.custom_image_card(request, handle)),
             _ => None,
@@ -69,18 +70,18 @@ impl ForgeView {
 
     fn custom_image_card(&self, request: &CustomRequest, handle: &ForgeHandle) -> Div {
         let theme = &self.theme;
-        let url = self.engine_input("image-url", &request.url, (SECTION, handle), |e, text| {
+        let url = self.engine_input_for((EngineParam::Url, "image-url".to_string()), &request.url, (SECTION, handle), |e, text| {
             if let Some(request) = custom_image(e) {
                 request.url = text;
             }
         });
-        let body = self.engine_input("image-body", &request.body_template, (SECTION, handle), |e, text| {
+        let body = self.engine_input_for((EngineParam::Body, "image-body".to_string()), &request.body_template, (SECTION, handle), |e, text| {
             if let Some(request) = custom_image(e) {
                 request.body_template = text;
             }
         });
         let chips = self.token_chips("image-body", &IMAGE_PLACEHOLDERS, &request.body_template, (SECTION, handle), |e| custom_image(e).map(|r| &mut r.body_template));
-        let reply = self.engine_input("image-reply", &request.reply_path, (SECTION, handle), |e, text| {
+        let reply = self.engine_input_for((EngineParam::ImageReplyPath, "image-reply".to_string()), &request.reply_path, (SECTION, handle), |e, text| {
             if let Some(request) = custom_image(e) {
                 request.reply_path = text;
             }
@@ -89,45 +90,45 @@ impl ForgeView {
         let body = div().flex().flex_col().gap(theme.spacing_xs).child(body.multiline(CODE_ROWS.0, CODE_ROWS.1)).child(json_line(problem, theme)).child(chips);
         card(theme)
             .gap(theme.section_gap)
-            .child(self.engine_field("engine_url", url))
-            .child(self.engine_field("engine_headers", self.headers_editor("image", &request.headers, (image_headers as HeaderAccess, 0), (SECTION, handle))))
-            .child(self.engine_field("engine_body", body))
-            .child(self.engine_field("engine_image_reply_path", reply))
+            .child(self.engine_field(handle, "engine_url", url))
+            .child(self.engine_field(handle, "engine_headers", self.headers_editor("image", &request.headers, (image_headers as HeaderAccess, 0), (SECTION, handle))))
+            .child(self.engine_field(handle, "engine_body", body))
+            .child(self.engine_field(handle, "engine_image_reply_path", reply))
     }
 
     /// Model, size and house style.
     fn look_card(&self, image: &ImageEngineConfig, handle: &ForgeHandle) -> Div {
         let theme = &self.theme;
-        let model = self.engine_input("image-model", &image.model, (SECTION, handle), |e, text| e.image.model = text);
-        let sizes = self.engine_cards("image-size", (ImageSize::of(image), &ImageSize::ALL), handle, |e, size: ImageSize| e.image.size = size.dimensions().to_string());
+        let model = self.engine_input_for((EngineParam::ImageModel, "image-model".to_string()), &image.model, (SECTION, handle), |e, text| e.image.model = text);
+        let sizes = self.engine_cards((EngineParam::ImageSize, "image-size"), (ImageSize::of(image), &ImageSize::ALL), handle, |e, size: ImageSize| e.image.size = size.dimensions().to_string());
         let size = self.engine_input("image-size-text", &image.size, (SECTION, handle), |e, text| e.image.size = text);
-        let style = self.engine_input("style-prefix", &image.style_prefix, (SECTION, handle), |e, text| e.image.style_prefix = text);
+        let style = self.engine_input_for((EngineParam::StylePrefix, "style-prefix".to_string()), &image.style_prefix, (SECTION, handle), |e, text| e.image.style_prefix = text);
         let sizes = div().flex().flex_col().gap(theme.spacing_xs).child(sizes.compact().columns(ImageSize::ALL.len()).card_width(theme.forge_compact_card_width)).child(size.placeholder(tr(SIZE_HINT_KEY)));
         card(theme)
             .gap(theme.section_gap)
-            .child(self.engine_field("engine_image_model", model.placeholder(tr(MODEL_HINT_KEY))))
-            .child(self.engine_field("engine_image_size", sizes))
-            .child(self.engine_field("engine_style_prefix", style.multiline(NOTE_ROWS.0, NOTE_ROWS.1)))
+            .child(self.engine_field(handle, "engine_image_model", model.placeholder(tr(MODEL_HINT_KEY))))
+            .child(self.engine_field(handle, "engine_image_size", sizes))
+            .child(self.engine_field(handle, "engine_style_prefix", style.multiline(NOTE_ROWS.0, NOTE_ROWS.1)))
     }
 
     /// When it draws (and how often by chance), and which key it uses.
     fn when_card(&self, image: &ImageEngineConfig, handle: &ForgeHandle) -> Div {
         let theme = &self.theme;
         let trigger = TriggerKind::of(image.trigger);
-        let grid = self.engine_cards("trigger", (Some(trigger), &TriggerKind::ALL), handle, mutate::set_trigger);
+        let grid = self.engine_cards((EngineParam::Trigger, "trigger"), (Some(trigger), &TriggerKind::ALL), handle, mutate::set_trigger);
         let chance = match image.trigger {
             ImageTrigger::Chance { percent } => {
                 let set = handle.engine(|e: &mut EngineConfig, value: u16| e.image.trigger = ImageTrigger::Chance { percent: value as u8 });
-                Some(NumberSlider::new(engine_id("chance"), tr(CHANCE_KEY), u16::from(percent), CHANCE_RANGE, theme, move |v, w, cx| set(v, w, cx)).format(|v| format!("{v}%")))
+                Some(NumberSlider::new(engine_id("chance"), tr(CHANCE_KEY), u16::from(percent), CHANCE_RANGE, theme, move |v, w, cx| set(v, w, cx)).format(|v| format!("{v}%")).hint(self.slider_hint(Param::Engine(EngineParam::ImageChance), &tr(CHANCE_KEY), handle)))
             }
             _ => None,
         };
         let key = self.credential_picker("image", (image.credential.as_deref(), image_credential_kind(&image.engine)), handle, |e, id| e.image.credential = id);
         card(theme)
             .gap(theme.section_gap)
-            .child(self.engine_field("engine_trigger", grid.compact()))
+            .child(self.engine_field(handle, "engine_trigger", grid.compact()))
             .children(option_line(trigger, theme))
             .children(chance)
-            .child(self.engine_field("engine_credential", key))
+            .child(self.engine_field(handle, "engine_credential", key))
     }
 }

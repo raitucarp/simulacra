@@ -18,6 +18,7 @@ mod review;
 mod scales;
 mod semantic;
 mod spacing;
+mod suggestions;
 mod surfaces;
 mod text;
 mod vault;
@@ -56,6 +57,7 @@ pub fn derive_tokens(
     responsive::apply_responsive_layout(&mut t);
     vault::apply_vault_layout(&mut t);
     actions::apply_actions_layout(&mut t);
+    suggestions::apply_suggestions_layout(&mut t);
     image_prompt::apply_image_prompt_layout(&mut t);
     surfaces::apply_surfaces(&mut t, palette);
     text::apply_text(&mut t, palette);

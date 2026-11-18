@@ -15,6 +15,7 @@ use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
 use crate::ui::features::forge::widgets::NumberSlider;
 use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::Sizable;
+use crate::state::forge::suggest::{EngineParam, Param};
 use gpui_kit::*;
 
 const GLOBAL_KEY: &str = "forge.ui.engine.global_hint";
@@ -44,8 +45,8 @@ impl ForgeView {
     pub(super) fn model_section(&self, handle: &ForgeHandle) -> Div {
         let theme = &self.theme;
         let source = TextSource::of(&self.engine().text);
-        let grid = self.engine_cards("source", (Some(source), &TextSource::ALL), handle, mutate::set_text_source);
-        let head = card(theme).child(self.engine_field("engine_source", grid)).children(option_line(source, theme));
+        let grid = self.engine_cards((EngineParam::Source, "source"), (Some(source), &TextSource::ALL), handle, mutate::set_text_source);
+        let head = card(theme).child(self.engine_field(handle, "engine_source", grid)).children(option_line(source, theme));
         let body = match &self.engine().text {
             TextModel::UseGlobal => self.global_card(),
             TextModel::Own(own) => self.own_model_card(own, handle),
@@ -68,13 +69,13 @@ impl ForgeView {
 
     fn own_model_card(&self, model: &OwnModel, handle: &ForgeHandle) -> Div {
         let theme = &self.theme;
-        let providers = self.engine_cards("provider", (Some(model.provider), &LlmProvider::ALL), handle, mutate::set_provider).compact();
+        let providers = self.engine_cards((EngineParam::Provider, "provider"), (Some(model.provider), &LlmProvider::ALL), handle, mutate::set_provider).compact();
         let model_input = self.engine_input("model", &model.model, (SECTION, handle), |e, text| {
             if let Some(own) = own(e) {
                 own.model = text;
             }
         });
-        let endpoint = self.engine_input("endpoint", &model.endpoint, (SECTION, handle), |e, text| {
+        let endpoint = self.engine_input_for((EngineParam::Endpoint, "endpoint".to_string()), &model.endpoint, (SECTION, handle), |e, text| {
             if let Some(own) = own(e) {
                 own.endpoint = text;
             }
@@ -87,11 +88,11 @@ impl ForgeView {
         });
         card(theme)
             .gap(theme.section_gap)
-            .child(self.engine_field("engine_provider", providers))
-            .child(self.engine_field("engine_model", div().flex().flex_col().gap(theme.spacing_xs).child(model_input).child(self.model_presets(model, handle))))
-            .child(self.engine_field("engine_sampling", self.sampling(model, handle)))
-            .child(self.engine_field("engine_endpoint", endpoint.placeholder(tr(ENDPOINT_HINT_KEY))))
-            .child(self.engine_field("engine_credential", key))
+            .child(self.engine_field(handle, "engine_provider", providers))
+            .child(self.engine_field(handle, "engine_model", div().flex().flex_col().gap(theme.spacing_xs).child(model_input).child(self.model_presets(model, handle))))
+            .child(self.engine_field(handle, "engine_sampling", self.sampling(model, handle)))
+            .child(self.engine_field(handle, "engine_endpoint", endpoint.placeholder(tr(ENDPOINT_HINT_KEY))))
+            .child(self.engine_field(handle, "engine_credential", key))
     }
 
     /// One chip per suggested model of the provider.
@@ -126,8 +127,10 @@ impl ForgeView {
         });
         let tokens = model.max_tokens.min(u32::from(MAX_TOKENS_RANGE.1)) as u16;
         let temperature = NumberSlider::new(engine_id("temperature"), tr(TEMPERATURE_KEY), temperature, TEMPERATURE_RANGE, theme, move |v, w, cx| set_temperature(v, w, cx))
-            .format(|value| format!("{:.2}", f32::from(value) / TEMPERATURE_SCALE));
-        let tokens = NumberSlider::new(engine_id("max-tokens"), tr(MAX_TOKENS_KEY), tokens, MAX_TOKENS_RANGE, theme, move |v, w, cx| set_tokens(v, w, cx));
+            .format(|value| format!("{:.2}", f32::from(value) / TEMPERATURE_SCALE))
+            .hint(self.slider_hint(Param::Engine(EngineParam::Temperature), &tr(TEMPERATURE_KEY), handle));
+        let tokens = NumberSlider::new(engine_id("max-tokens"), tr(MAX_TOKENS_KEY), tokens, MAX_TOKENS_RANGE, theme, move |v, w, cx| set_tokens(v, w, cx))
+            .hint(self.slider_hint(Param::Engine(EngineParam::MaxTokens), &tr(MAX_TOKENS_KEY), handle));
         div().flex().flex_col().gap(theme.spacing_md).child(temperature).child(tokens)
     }
 }

@@ -2,6 +2,7 @@
 //! a brand ring when selected and the theme's focus ring when the keyboard cursor is on it.
 
 use super::focus_ring::focus_ring_shadow;
+use super::suggest::suggested_badge;
 use crate::theme::ThemeTokens;
 use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::*;
@@ -16,6 +17,8 @@ pub struct OptionCardSpec {
     pub selected: bool,
     pub focused: bool,
     pub disabled: bool,
+    /// A good starting pick: a "Suggested" badge over the art.
+    pub suggested: bool,
     pub width: Pixels,
 }
 
@@ -30,6 +33,7 @@ impl OptionCardSpec {
             selected: false,
             focused: false,
             disabled: false,
+            suggested: false,
             width,
         }
     }
@@ -73,7 +77,7 @@ pub fn option_card(
                 .hover(move |style| style.bg(hover_bg))
                 .on_click(move |_, window, cx| on_click(window, cx))
         })
-        .child(div().w_full().flex().justify_center().bg(theme.bg_elevated).child(spec.art))
+        .child(div().relative().w_full().flex().justify_center().bg(theme.bg_elevated).child(spec.art).children(spec.suggested.then(|| suggested_badge(theme, spec.width < theme.forge_option_card_width))))
         .child(caption(spec.label, spec.description, selected, theme))
 }
 

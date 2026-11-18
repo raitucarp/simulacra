@@ -3,20 +3,21 @@
 //! strip replayed through the real scheduler, and what fills their days.
 
 mod clock;
+mod hours;
 mod ring;
 mod week;
 
 use super::super::super::common::{card, heading, message};
-use super::trait_block::explained;
 use crate::agent::schedule::{cadence_rule, peak_window, WeekPreview};
 use crate::domain::agent_config::AgentConfig;
 use crate::domain::HumanChronotype;
 use crate::state::forge::{DraftEdit, HourField, ScoreField, TextField, ToggleField, TraitField, TraitSet};
 use crate::ui::features::forge::text::{tr, tr_with};
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
-use crate::ui::features::forge::widgets::{ExplainerButton, HourRangePicker, ToggleCard};
+use crate::ui::features::forge::widgets::{HourRangePicker, ToggleCard};
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::Icon;
+use crate::state::forge::suggest::Param;
 use gpui_kit::*;
 
 const BODY_CLOCK_KEY: &str = "forge.ui.daily.body_clock";
@@ -28,7 +29,6 @@ const ACTIVE_DAYS_KEY: &str = "forge.ui.daily.active_days_title";
 /// Weekday cards per row until the grid is measured (preset width keeps "Wednesday" whole).
 const DAY_COLUMNS: usize = 4;
 const DAYS_KEY: &str = "forge.ui.daily.days";
-const HOURS_KEY: &str = "forge.ui.daily.hours";
 const ARG_START: &str = "start";
 const ARG_END: &str = "end";
 
@@ -108,17 +108,6 @@ impl ForgeView {
             .child(message(tr_with(PEAK_KEY, &args), theme.accent_dialectic, theme))
     }
 
-    /// "Active hours" with the hour fields' explainer.
-    fn hours_caption(&self) -> Div {
-        let theme = &self.theme;
-        div()
-            .flex()
-            .items_center()
-            .gap(theme.spacing_xs)
-            .child(div().text_size(theme.font_size_xs).font_weight(FontWeight::SEMIBOLD).text_color(theme.text_secondary).child(tr(HOURS_KEY)))
-            .children(ExplainerButton::for_field(HourField::ActiveHoursStart.path(), theme))
-    }
-
     fn online_card(&self, handle: &ForgeHandle) -> Div {
         let theme = &self.theme;
         let profile = self.draft.profile();
@@ -130,10 +119,11 @@ impl ForgeView {
         let start = HourField::ActiveHoursStart.path();
         card(theme)
             .child(heading(tr(ONLINE_TITLE_KEY), theme))
-            .child(explained(ToggleField::IsActive.path(), toggle, theme))
-            .child(self.hours_caption())
+            .child(self.hinted_toggle(Param::Toggle(ToggleField::IsActive), toggle, handle))
+            .child(self.hours_caption(handle))
             .child(div().flex().justify_center().child(ring::clock_ring(&profile.config, theme, hour_edit)))
             .child(picker)
+            .children(self.hours_hints(handle))
             .children(self.issue_lines(start))
             .children(self.issue_lines(HourField::ActiveHoursEnd.path()))
     }

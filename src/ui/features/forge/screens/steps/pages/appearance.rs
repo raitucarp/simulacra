@@ -15,6 +15,7 @@ use crate::ui::icons::LucideIcon;
 use crate::ui::illustration::PortraitView;
 use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::Disableable;
+use crate::state::forge::suggest::Param;
 use gpui_kit::*;
 
 const STYLE_KEY: &str = "forge.ui.appearance.style";
@@ -43,13 +44,13 @@ impl ForgeView {
             .flex()
             .flex_col()
             .gap(theme.section_gap)
-            .child(card(theme).child(self.style_heading()).child(self.mode_switch(AvatarKind::of(mode.as_ref()), handle)).child(image_ideas_button(handle)))
+            .child(card(theme).child(self.style_heading(handle)).child(self.mode_switch(AvatarKind::of(mode.as_ref()), handle)).child(image_ideas_button(handle)))
             .child(body)
             .into_any_element()
     }
 
     /// "Avatar style" with the avatar field's explainer.
-    fn style_heading(&self) -> Div {
+    fn style_heading(&self, handle: &ForgeHandle) -> Div {
         let theme = &self.theme;
         div()
             .flex()
@@ -57,6 +58,8 @@ impl ForgeView {
             .gap(theme.spacing_xs)
             .child(heading(tr(STYLE_KEY), theme))
             .children(ExplainerButton::for_field(AvatarField::Avatar.path(), theme))
+            .child(div().flex_1())
+            .child(self.hint_actions(Param::Avatar(AvatarField::Avatar), handle))
     }
 
     fn mode_switch(&self, current: Option<AvatarKind>, handle: &ForgeHandle) -> Div {

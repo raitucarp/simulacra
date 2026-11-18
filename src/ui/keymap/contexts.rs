@@ -9,6 +9,8 @@ pub const SHELL_KEY_CONTEXT: &str = "Shell";
 pub const PALETTE_KEY_CONTEXT: &str = "CommandPalette";
 /// Key context of the shortcut sheet overlay.
 pub const SHEET_KEY_CONTEXT: &str = "ShortcutSheet";
+/// Key context of the image lightbox (sb C3).
+pub const LIGHTBOX_KEY_CONTEXT: &str = "Lightbox";
 /// The kit's text field context.
 const INPUT_KEY_CONTEXT: &str = "Input";
 /// The palette's search field: deeper than the kit's own `Input` bindings (arrows, Enter,
@@ -23,5 +25,6 @@ pub const fn context_of(scope: KeyScope) -> &'static str {
         KeyScope::Forge => FORGE_KEY_CONTEXT,
         KeyScope::Palette => PALETTE_INPUT_CONTEXT,
         KeyScope::Sheet => SHEET_KEY_CONTEXT,
+        KeyScope::Lightbox => LIGHTBOX_KEY_CONTEXT,
     }
 }

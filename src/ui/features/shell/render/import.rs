@@ -37,14 +37,15 @@ impl AppView {
         })
     }
 
-    /// The drop hint while files are dragged over the window.
-    pub(super) fn drop_hint(&self) -> Option<Div> {
-        self.import.dragging.then(|| render_drop_overlay(&self.theme))
+    /// The drop hint while files are dragged over the window (the open composer takes images
+    /// itself, so the import hint stays hidden then).
+    pub(super) fn drop_hint(&self, cx: &App) -> Option<Div> {
+        (self.import.dragging && !self.composer_modal.read(cx).is_open()).then(|| render_drop_overlay(&self.theme))
     }
 
     /// Drop, drag, paste and shortcut listeners for the root element.
     pub(super) fn with_import_listeners(&self, root: Div, cx: &mut Context<Self>) -> Div {
-        root.on_drop(cx.listener(|this, paths: &ExternalPaths, window, cx| this.import_paths(paths.paths().to_vec(), window, cx)))
+        root.on_drop(cx.listener(|this, paths: &ExternalPaths, window, cx| this.drop_files(paths.paths().to_vec(), window, cx)))
             .on_drag_move(cx.listener(|this, _: &DragMoveEvent<ExternalPaths>, _, cx| {
                 if !this.import.dragging {
                     this.import.dragging = true;

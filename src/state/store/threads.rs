@@ -10,6 +10,8 @@ pub struct ThreadDraft {
     pub content: String,
     pub link: Option<String>,
     pub image: Option<String>,
+    /// Images attached in the composer with their alt text (sb C3); `image` is the first.
+    pub images: Vec<crate::domain::media::ImageAttachment>,
 }
 
 impl ThreadDraft {
@@ -60,7 +62,7 @@ impl AppState {
         let mut parent = anchor.reply_to.clone();
         let mut posts = Vec::with_capacity(drafts.len());
         for (index, draft) in drafts.iter().enumerate() {
-            let post = Post::create_with_attachments(
+            let mut post = Post::create_with_attachments(
                 Self::new_post_id(),
                 self.active_network_id.clone(),
                 author.clone(),
@@ -71,6 +73,7 @@ impl AppState {
                 if index == 0 { anchor.quote_of.clone() } else { None },
                 None,
             )?;
+            post.extras.images = draft.images.clone();
             parent = Some(post.id.clone());
             posts.push(post);
         }

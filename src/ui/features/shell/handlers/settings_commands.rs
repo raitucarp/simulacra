@@ -77,8 +77,10 @@ impl AppView {
         }
     }
 
-    /// Forgets every cached illustration and avatar raster (they are redrawn on demand).
-    fn clear_caches(&self, window: &mut Window, cx: &mut App) {
+    /// Forgets every cached illustration and avatar raster (they are redrawn on demand) and
+    /// the link preview cache (sb C3).
+    fn clear_caches(&mut self, window: &mut Window, cx: &mut App) {
+        self.clear_media_cache();
         let stale = crate::ui::illustration::forget_illustrations("");
         let count = stale.len();
         stale.into_iter().for_each(|image| image.remove_asset(cx));

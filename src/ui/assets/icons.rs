@@ -19,5 +19,7 @@ gpui_kit::assets::icon_assets!(
         LayoutGrid, List, Bookmark, Quote, ArrowUpDown, BookMarked, Languages, MapPin,
         // sb B2
         Feather, Pilcrow, VenetianMask,
+        // sb C3
+        Play, ImagePlus,
     ]
 );

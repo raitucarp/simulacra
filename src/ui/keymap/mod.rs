@@ -19,9 +19,9 @@ mod shortcuts;
 mod tests;
 
 pub use caps::{chord_text, render_chord, render_key_cap};
-pub use contexts::{context_of, PALETTE_KEY_CONTEXT, SHEET_KEY_CONTEXT, SHELL_KEY_CONTEXT};
+pub use contexts::{context_of, LIGHTBOX_KEY_CONTEXT, PALETTE_KEY_CONTEXT, SHEET_KEY_CONTEXT, SHELL_KEY_CONTEXT};
 pub use display::{chord_labels, is_mac, key_caps, KeyCap};
 pub use groups::{group_of, sheet_rows, target_label, target_label_key, SheetRow, ShortcutGroup};
 pub use install::{install_keymap, RunCommand};
 pub use sheet::{SheetAction, ShortcutSheet};
-pub use shortcuts::{shortcut_for, KeyScope, PaletteKey, Shortcut, ShortcutTarget, SHORTCUTS};
+pub use shortcuts::{shortcut_for, KeyScope, LightboxKey, PaletteKey, Shortcut, ShortcutTarget, SHORTCUTS};

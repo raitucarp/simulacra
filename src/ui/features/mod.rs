@@ -7,6 +7,7 @@ pub mod day_filter;
 pub mod feed;
 pub mod forge;
 pub mod import;
+pub mod media;
 pub mod mind_graph;
 pub mod onboarding;
 pub mod popovers;

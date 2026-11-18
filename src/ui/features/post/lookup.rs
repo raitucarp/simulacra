@@ -2,6 +2,7 @@
 
 use super::excerpt::excerpt_with;
 use crate::domain::post::{tokenize_post_body, BodyToken};
+use crate::domain::media::MediaCatalog;
 use crate::domain::{Post, Profile};
 use std::rc::Rc;
 use std::borrow::Borrow;
@@ -15,6 +16,14 @@ pub trait PostLookup: Copy {
     fn author_of(&self, post: &Post) -> &Profile;
     /// Body tokens of `post` (cached by the store; collections tokenize on demand).
     fn body_tokens(&self, post: &Post) -> Rc<[BodyToken]>;
+    /// Cached link previews and image scans (sb C3); collections have none.
+    fn media_catalog(&self) -> Option<&MediaCatalog> {
+        None
+    }
+    /// Whether link previews may be shown (Settings › Privacy & Data); off shows plain links.
+    fn link_previews_enabled(&self) -> bool {
+        false
+    }
 }
 
 /// Linear id search over any collection of owned or borrowed posts.
@@ -78,5 +87,13 @@ impl PostLookup for &crate::state::AppState {
             Some(meta) => Rc::clone(&meta.tokens),
             None => tokenize_post_body(&post.content).into(),
         }
+    }
+    #[inline]
+    fn media_catalog(&self) -> Option<&MediaCatalog> {
+        Some(&self.media)
+    }
+    #[inline]
+    fn link_previews_enabled(&self) -> bool {
+        self.preferences().privacy.link_previews
     }
 }

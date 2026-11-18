@@ -7,6 +7,7 @@
 
 mod catalogue_ops;
 mod embeddings;
+mod media;
 mod ops;
 #[cfg(test)]
 mod tests;

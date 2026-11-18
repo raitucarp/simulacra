@@ -107,7 +107,7 @@ impl ComposerModalPanel {
 
     /// Whether a link or an image is attached (they belong to the first post).
     fn has_media(&self, cx: &App) -> bool {
-        !self.link_input.read(cx).value().trim().is_empty() || self.image_attachment(cx).is_some()
+        !self.link_input.read(cx).value().trim().is_empty() || !self.images.is_empty() || self.typed_image(cx).is_some()
     }
 
     /// The first post that blocks publishing (quotes always need commentary text).

@@ -1,6 +1,6 @@
 //! Grouping of the keymap for the shortcut sheet: sections, row labels and merged chords.
 
-use super::shortcuts::{PaletteKey, ShortcutTarget, SHORTCUTS};
+use super::shortcuts::{LightboxKey, PaletteKey, ShortcutTarget, SHORTCUTS};
 use crate::ui::features::command_palette::{spec, CommandId};
 use rust_i18n::t;
 
@@ -37,7 +37,7 @@ pub fn group_of(target: ShortcutTarget) -> ShortcutGroup {
         ShortcutTarget::SubmitPost => ShortcutGroup::Writing,
         ShortcutTarget::ForgeUndo | ShortcutTarget::ForgeRedo | ShortcutTarget::ForgeDismiss => ShortcutGroup::Forge,
         ShortcutTarget::Palette(_) => ShortcutGroup::Palette,
-        ShortcutTarget::CloseSheet => ShortcutGroup::General,
+        ShortcutTarget::CloseSheet | ShortcutTarget::Lightbox(_) => ShortcutGroup::General,
     }
 }
 
@@ -71,6 +71,9 @@ pub const fn target_label_key(target: ShortcutTarget) -> Option<&'static str> {
         ShortcutTarget::ForgeDismiss => "keymap.target.forge_dismiss",
         ShortcutTarget::CloseSheet => "keymap.target.close_sheet",
         ShortcutTarget::Palette(key) => palette_label_key(key),
+        ShortcutTarget::Lightbox(LightboxKey::Close) => "keymap.target.lightbox_close",
+        ShortcutTarget::Lightbox(LightboxKey::Previous) => "keymap.target.lightbox_previous",
+        ShortcutTarget::Lightbox(LightboxKey::Next) => "keymap.target.lightbox_next",
     })
 }
 

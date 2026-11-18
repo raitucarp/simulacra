@@ -5,6 +5,7 @@ use super::forge_host::ForgeSession;
 use super::graph_state::GraphState;
 use super::import_state::ImportUi;
 use super::lab_state::{LabState, LlmInputs};
+use super::media_state::MediaHost;
 use super::panels::ShellPanels;
 use super::scheduler_state::SchedulerState;
 use super::semantic_state::SemanticState;
@@ -42,6 +43,8 @@ pub struct AppView {
     pub import: ImportUi,
     /// Vector index, indexing queue and the "find similar" sheet (sb B3).
     pub semantic: SemanticState,
+    /// The lightbox and the media pump's last plan (sb C3).
+    pub media: MediaHost,
     /// The Agent Forge while it is open (it replaces the center and right columns).
     pub forge: Option<ForgeSession>,
     /// Left sidebar prefs (width, sections, pins, recents) and the window width.

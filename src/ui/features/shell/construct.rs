@@ -4,6 +4,7 @@ use super::feed_state::FeedState;
 use super::graph_state::GraphState;
 use super::import_state::ImportUi;
 use super::lab_state::{LabState, LlmInputs};
+use super::media_state::MediaHost;
 use super::panels::ShellPanels;
 use super::scheduler_state::SchedulerState;
 use super::semantic_state::SemanticState;
@@ -58,7 +59,7 @@ impl AppView {
             state,
             chrome: ChromeState { is_onboarding_open: onboarding, ..ChromeState::new(initial_lang) },
             feed, composer_modal, appearance, llm_inputs, settings_ui,
-            lab, scheduler, graph, vault, import, semantic: SemanticState::new(cx),
+            lab, scheduler, graph, vault, import, semantic: SemanticState::new(cx), media: MediaHost::new(cx),
             forge: None, sidebar, palette,
             panels: ShellPanels::new(cx),
             _subscriptions: subscriptions,

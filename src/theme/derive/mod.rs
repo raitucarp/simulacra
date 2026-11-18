@@ -7,6 +7,7 @@ mod accents;
 mod chrome;
 mod forge;
 mod import;
+mod media;
 mod metrics;
 mod navigation;
 mod panels;
@@ -45,6 +46,7 @@ pub fn derive_tokens(
     panels::apply_panel_layout(&mut t);
     navigation::apply_navigation_layout(&mut t);
     import::apply_import_layout(&mut t);
+    media::apply_media_layout(&mut t);
     semantic::apply_semantic_layout(&mut t);
     responsive::apply_responsive_layout(&mut t);
     vault::apply_vault_layout(&mut t);

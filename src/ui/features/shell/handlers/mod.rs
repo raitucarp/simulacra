@@ -10,6 +10,8 @@ mod credentials;
 mod import_flow;
 mod import_sheet;
 mod lab;
+mod media;
+mod media_pump;
 mod navigation;
 mod networks;
 mod onboarding;

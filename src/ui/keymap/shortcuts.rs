@@ -18,6 +18,8 @@ pub enum KeyScope {
     Palette,
     /// While the shortcut sheet is open.
     Sheet,
+    /// While the image lightbox is open (sb C3).
+    Lightbox,
 }
 
 /// A palette navigation key.
@@ -43,6 +45,16 @@ pub enum ShortcutTarget {
     ForgeDismiss,
     Palette(PaletteKey),
     CloseSheet,
+    /// Moves through or closes the image lightbox (sb C3).
+    Lightbox(LightboxKey),
+}
+
+/// A lightbox key (sb C3).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum LightboxKey {
+    Close,
+    Previous,
+    Next,
 }
 
 /// One binding: a key chord, what it does and where.
@@ -99,6 +111,9 @@ pub const SHORTCUTS: &[Shortcut] = &[
     palette("tab", P::NextGroup),
     palette("shift-tab", P::PreviousGroup),
     scoped("escape", T::CloseSheet, KeyScope::Sheet),
+    scoped("escape", T::Lightbox(LightboxKey::Close), KeyScope::Lightbox),
+    scoped("left", T::Lightbox(LightboxKey::Previous), KeyScope::Lightbox),
+    scoped("right", T::Lightbox(LightboxKey::Next), KeyScope::Lightbox),
 ];
 
 /// The chord shown for `id` (its first binding), if it has one.

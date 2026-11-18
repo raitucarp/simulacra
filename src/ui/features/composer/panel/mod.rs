@@ -6,15 +6,18 @@
 
 mod actions;
 mod drafts;
+mod media;
 mod render;
 
 use super::consts::MODAL_LINK_PLACEHOLDER;
 use super::modal::ComposerModalMode;
+use crate::domain::media::ImageAttachment;
 use crate::domain::Profile;
 use crate::theme::ThemeTokens;
 use gpui_kit::component::input::{InputState, TextareaState};
 use gpui_kit::*;
 use rust_i18n::t;
+use std::path::PathBuf;
 
 /// A thread the user asked to publish: one text per post, attachments on the first post.
 #[derive(Debug, Clone, PartialEq)]
@@ -22,13 +25,20 @@ pub struct ComposerSubmission {
     pub mode: ComposerModalMode,
     pub drafts: Vec<String>,
     pub link: Option<String>,
-    pub image: Option<String>,
+    /// Attached images with their descriptions (sb C3), at most a gallery's worth.
+    pub images: Vec<ImageAttachment>,
 }
 
 /// Events emitted by [`ComposerModalPanel`].
 #[derive(Debug, Clone, PartialEq)]
 pub enum ComposerModalEvent {
     Submit(ComposerSubmission),
+}
+
+/// An attached image and the field holding its description (sb C3).
+struct ComposerImage {
+    attachment: ImageAttachment,
+    alt: Entity<InputState>,
 }
 
 /// One post editor of the thread, with the subscription that keeps the panel in sync.
@@ -46,7 +56,10 @@ pub struct ComposerModalPanel {
     active_draft: usize,
     link_input: Entity<InputState>,
     image_input: Entity<InputState>,
-    image_path: Option<String>,
+    /// Images attached so far, and how many are still being copied into the media folder.
+    images: Vec<ComposerImage>,
+    pending_images: usize,
+    media_dir: PathBuf,
     is_link_input_open: bool,
     is_image_input_open: bool,
     /// Last publish failure reported by the host, cleared on the next edit.
@@ -75,7 +88,9 @@ impl ComposerModalPanel {
             active_draft: 0,
             link_input,
             image_input,
-            image_path: None,
+            images: Vec::new(),
+            pending_images: 0,
+            media_dir: crate::storage::media::media_dir_for(""),
             is_link_input_open: false,
             is_image_input_open: false,
             error: None,
@@ -83,7 +98,7 @@ impl ComposerModalPanel {
             profile,
             _subscriptions: Vec::new(),
         };
-        panel._subscriptions = panel.subscribe(cx);
+        panel._subscriptions = panel.subscribe(window, cx);
         panel.drafts.push(panel.new_draft_slot(window, cx));
         panel
     }

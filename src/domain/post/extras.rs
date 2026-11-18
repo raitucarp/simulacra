@@ -22,6 +22,9 @@ pub struct PostExtras {
     /// Set on imported and captured posts (captures make up the Inbox).
     #[serde(skip_serializing_if = "Option::is_none")]
     pub origin: Option<PostOrigin>,
+    /// Images attached in the composer, with alt text (sb C3); `image_path` holds the first.
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub images: Vec<crate::domain::media::ImageAttachment>,
 }
 
 impl PostExtras {
@@ -30,9 +33,9 @@ impl PostExtras {
         self == &Self::default()
     }
 
-    /// Whether there is anything to show behind the post (the origin alone is not).
+    /// Whether there is anything to show behind the post (the origin and images alone are not).
     pub fn has_details(&self) -> bool {
-        Self { origin: None, ..self.clone() } != Self::default()
+        Self { origin: None, images: Vec::new(), ..self.clone() } != Self::default()
     }
 
     /// Adds `source` unless an identical reference is already listed.

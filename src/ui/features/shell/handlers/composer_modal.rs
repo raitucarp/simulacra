@@ -59,11 +59,12 @@ impl AppView {
 
 /// Store drafts (attachments on the first post) and the anchor implied by the modal mode.
 fn thread_from_submission(submission: ComposerSubmission) -> (Vec<ThreadDraft>, ThreadAnchor) {
-    let ComposerSubmission { mode, drafts, link, image } = submission;
+    let ComposerSubmission { mode, drafts, link, images } = submission;
     let mut thread: Vec<ThreadDraft> = drafts.into_iter().map(ThreadDraft::text).collect();
     if let Some(first) = thread.first_mut() {
         first.link = link;
-        first.image = image;
+        first.image = images.first().map(|image| image.path.clone());
+        first.images = images;
     }
     let anchor = match mode {
         ComposerModalMode::NewThread => ThreadAnchor::default(),

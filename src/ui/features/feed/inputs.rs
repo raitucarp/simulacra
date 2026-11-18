@@ -37,6 +37,7 @@ pub(crate) fn split_params<C>(params: FeedParams<'_, C>) -> (PostCallbacks, Time
             on_tag: Some(params.on_open_tag),
             on_wikilink: Some(params.on_open_wikilink),
             on_source: Some(params.on_open_source),
+            on_media: Some(params.on_open_media),
         },
     };
     let timeline = TimelineInputs {

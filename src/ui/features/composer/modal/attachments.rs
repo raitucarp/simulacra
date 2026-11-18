@@ -1,10 +1,10 @@
-//! Attachment UI: link and image path input rows, image preview card and the action bar.
+//! Attachment UI: link and image path input rows and the action bar (attached images are
+//! listed by `media_tray`).
 
 use super::super::consts::{
-    MODAL_BROWSE_IMAGE_BTN_ID, MODAL_CLEAR_IMAGE_BTN_ID, MODAL_CLEAR_IMAGE_INPUT_BTN_ID,
-    MODAL_CLEAR_LINK_BTN_ID, MODAL_IMAGE_INPUT_ROW_ID, MODAL_IMAGE_PREVIEW_CARD_ID,
-    MODAL_PICK_IMAGE_BTN_ID, MODAL_TAG_BTN_ID, MODAL_TOGGLE_IMAGE_INPUT_BTN_ID,
-    MODAL_TOGGLE_LINK_BTN_ID,
+    MODAL_BROWSE_IMAGE_BTN_ID, MODAL_CLEAR_IMAGE_INPUT_BTN_ID, MODAL_CLEAR_LINK_BTN_ID,
+    MODAL_IMAGE_INPUT_ROW_ID, MODAL_PICK_IMAGE_BTN_ID, MODAL_TAG_BTN_ID,
+    MODAL_TOGGLE_IMAGE_INPUT_BTN_ID, MODAL_TOGGLE_LINK_BTN_ID,
 };
 use super::{ComposerModalView, ModalActionCallback};
 use crate::theme::ThemeTokens;
@@ -14,7 +14,6 @@ use gpui_kit::component::input::Input;
 use gpui_kit::component::{Icon, Sizable};
 use gpui_kit::*;
 use rust_i18n::t;
-use std::path::PathBuf;
 
 impl ComposerModalView {
     pub(super) fn link_input_row(&self) -> Div {
@@ -41,39 +40,6 @@ impl ComposerModalView {
                     .on_click(move |_, window, cx| (on_pick_image_browse)(window, cx)),
             )
             .child(clear_button(MODAL_CLEAR_IMAGE_INPUT_BTN_ID, self.callbacks.on_clear_image.clone(), theme))
-    }
-
-    pub(super) fn image_preview(&self, path: &str) -> Stateful<Div> {
-        let theme = &self.theme;
-        let on_clear_image = self.callbacks.on_clear_image.clone();
-        div()
-            .id(MODAL_IMAGE_PREVIEW_CARD_ID)
-            .w_full()
-            .relative()
-            .rounded(theme.radius_md)
-            .border(theme.border_width_hairline)
-            .border_color(theme.border)
-            .overflow_hidden()
-            .child(
-                img(PathBuf::from(path))
-                    .w_full()
-                    .max_h(theme.post_image_preview_height)
-                    .object_fit(ObjectFit::Cover),
-            )
-            .child(
-                div()
-                    .id(MODAL_CLEAR_IMAGE_BTN_ID)
-                    .absolute()
-                    .top(theme.spacing_xs)
-                    .right(theme.spacing_xs)
-                    .p(theme.spacing_2xs)
-                    .rounded(theme.radius_full)
-                    .bg(theme.bg_scrim)
-                    .cursor_pointer()
-                    .text_color(theme.on_overlay)
-                    .on_click(move |_, window, cx| (on_clear_image)(window, cx))
-                    .child(Icon::new(LucideIcon::X)),
-            )
     }
 
     pub(super) fn attachment_bar(&self) -> Div {

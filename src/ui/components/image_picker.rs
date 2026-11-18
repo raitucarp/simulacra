@@ -13,3 +13,10 @@ pub async fn pick_image_path(title: &str) -> Option<String> {
         .await?;
     Some(file.path().to_string_lossy().to_string())
 }
+
+/// Opens a native "pick images" dialog allowing several files; empty when cancelled.
+pub async fn pick_image_paths(title: &str) -> Vec<std::path::PathBuf> {
+    let filter_name = rust_i18n::t!("picker.image_filter").to_string();
+    let files = rfd::AsyncFileDialog::new().set_title(title).add_filter(filter_name, &IMAGE_EXTENSIONS).pick_files().await;
+    files.unwrap_or_default().iter().map(|file| file.path().to_path_buf()).collect()
+}

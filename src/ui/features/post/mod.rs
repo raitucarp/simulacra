@@ -23,6 +23,7 @@ pub use controls::{post_permalink, share_text, OpenPostAction, PostAction, PostC
 pub use excerpt::resolve_wikilink_excerpt;
 pub use extras::{mood_chip, source_chip, tool_chip, OpenSourceAction};
 pub(crate) use extras_detail::render_extras_detail;
+pub(crate) use attachments::missing_image;
 pub use host::extract_host_domain;
 pub use item::render_post_item;
 pub use lookup::PostLookup;

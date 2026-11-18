@@ -37,6 +37,8 @@ command_ids! {
     GoAgents => "go_agents",
     GoPersonas => "go_personas",
     GoMindGraph => "go_mind_graph",
+    /// sb C1: the Review page, and a flashcard from the thought open in the inspector.
+    GoReview => "go_review",
     /// Creation ("New" menu).
     NewThread => "new_thread",
     /// Quick capture of a note into the Inbox.
@@ -65,4 +67,5 @@ command_ids! {
     /// sb B3: the palette in semantic mode, and "find similar" for the open thought.
     SemanticSearch => "semantic_search",
     FindSimilar => "find_similar",
+    MakeFlashcard => "make_flashcard",
 }

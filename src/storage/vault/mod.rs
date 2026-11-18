@@ -8,6 +8,7 @@
 mod catalogue_ops;
 mod embeddings;
 mod ops;
+mod review;
 #[cfg(test)]
 mod tests;
 

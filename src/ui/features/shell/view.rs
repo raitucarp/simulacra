@@ -11,6 +11,7 @@ use super::semantic_state::SemanticState;
 use super::settings_draft::SettingsDraft;
 use super::settings_ui::SettingsUi;
 use super::vault_host::VaultHost;
+use super::review_host::ReviewHost;
 use crate::i18n::Language;
 use crate::state::AppState;
 use crate::theme::ThemeTokens;
@@ -42,6 +43,8 @@ pub struct AppView {
     pub import: ImportUi,
     /// Vector index, indexing queue and the "find similar" sheet (sb B3).
     pub semantic: SemanticState,
+    /// The review deck, the Review page and the card maker (sb C1).
+    pub review: ReviewHost,
     /// The Agent Forge while it is open (it replaces the center and right columns).
     pub forge: Option<ForgeSession>,
     /// Left sidebar prefs (width, sections, pins, recents) and the window width.

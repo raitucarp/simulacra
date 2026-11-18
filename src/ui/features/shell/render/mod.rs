@@ -56,6 +56,7 @@ impl Render for AppView {
             .children(self.shortcut_sheet(&bind))
             .children(self.import_sheet(&bind, cx))
             .children(self.capture_box(&bind))
+            .children(self.card_maker(cx))
             .children(self.drop_hint())
     }
 }
@@ -69,7 +70,13 @@ impl AppView {
         self.sync_mind_graph(cx);
         self.sync_vault(cx);
         self.sync_semantic_index(window, cx);
+        self.sync_review(window, cx);
         self.sync_forge_theme(cx);
+    }
+
+    /// The card maker sheet, while open (sb C1).
+    fn card_maker(&self, cx: &App) -> Option<Entity<crate::ui::features::review::FlashcardMaker>> {
+        self.review.maker.read(cx).is_open().then(|| self.review.maker.clone())
     }
 
     /// Pushes the active profile and theme into the isolated composer entities.

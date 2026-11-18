@@ -17,6 +17,8 @@ mod post_updates;
 mod posts;
 mod preferences;
 mod profiles;
+mod review;
+mod review_schema;
 mod schema;
 mod setting_key;
 mod settings;

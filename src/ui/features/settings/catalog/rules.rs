@@ -10,6 +10,7 @@ pub fn is_enabled(row: SettingRow, prefs: &Preferences) -> bool {
     match field {
         SettingField::Agents(AgentField::QuietStart | AgentField::QuietEnd) => prefs.agents.quiet_hours,
         SettingField::Learning(LearningField::ReminderHour) => prefs.learning.review_reminder,
+        SettingField::Learning(LearningField::WeeklyDay | LearningField::WeeklyHour) => prefs.learning.weekly_review_reminder,
         SettingField::Embeddings(EmbeddingField::Endpoint) => {
             matches!(prefs.embeddings.provider, EmbeddingProvider::LocalServer | EmbeddingProvider::Custom)
         }

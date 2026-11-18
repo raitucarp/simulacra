@@ -95,6 +95,7 @@ impl Database {
         self.conn.execute_batch(super::embeddings_schema::CREATE_EMBEDDINGS).map_err(db_err)?;
         self.conn.execute_batch(super::media_schema::CREATE_MEDIA_TABLES).map_err(db_err)?;
         self.conn.execute_batch(super::review_schema::CREATE_REVIEW).map_err(db_err)?;
+        self.conn.execute_batch(super::learning_schema::CREATE_LEARNING).map_err(db_err)?; // sb E2
         self.migrate_posts_schema()?;
         self.conn
             .execute_batch(CREATE_MIGRATED_INDEXES)

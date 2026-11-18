@@ -15,6 +15,7 @@ impl ReviewPanel {
             (Screen::Session, _) => self.grade_session(grade, cx),
             (Screen::Quiz, Some(QuizRunState::Choice(_))) => self.pick_choice(index, cx),
             (Screen::Quiz, Some(QuizRunState::Recall(_))) => self.grade_recall(grade, window, cx),
+            (Screen::Learn, _) => self.grade_walk(grade, cx),
             _ => {}
         }
     }
@@ -27,6 +28,7 @@ impl ReviewPanel {
             (Screen::Session, _) if self.drill.is_some() && self.session.stage == Stage::Revealed => {}
             (Screen::Session, _) => self.reveal(cx),
             (Screen::Quiz, Some(QuizRunState::Choice(_))) => self.next_choice(cx),
+            (Screen::Learn, _) => self.reveal_walk(cx),
             _ => {}
         }
     }

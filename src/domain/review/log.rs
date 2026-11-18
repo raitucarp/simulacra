@@ -20,10 +20,12 @@ pub enum ReviewMode {
     Recall,
     /// Draw a connection map, graded by how exactly it matches.
     Connections,
+    /// Walk a memory palace: recall what is placed at each locus, reveal, self-grade (sb E2).
+    Palace,
 }
 
 impl ReviewMode {
-    pub const ALL: [Self; 4] = [Self::Review, Self::Choice, Self::Recall, Self::Connections];
+    pub const ALL: [Self; 5] = [Self::Review, Self::Choice, Self::Recall, Self::Connections, Self::Palace];
 
     /// Stable wire key. Never rename one.
     pub const fn key(self) -> &'static str {
@@ -32,6 +34,7 @@ impl ReviewMode {
             Self::Choice => "choice",
             Self::Recall => "recall",
             Self::Connections => "connections",
+            Self::Palace => "palace",
         }
     }
 }

@@ -10,6 +10,7 @@ mod forge;
 mod image_prompt;
 mod import;
 mod insights;
+mod learning;
 mod media;
 mod metrics;
 mod navigation;
@@ -56,6 +57,7 @@ pub fn derive_tokens(
     review::apply_review_layout(&mut t);
     review::apply_review_map_layout(&mut t);
     insights::apply_insights_layout(&mut t);
+    learning::apply_learning_layout(&mut t);
     responsive::apply_responsive_layout(&mut t);
     vault::apply_vault_layout(&mut t);
     actions::apply_actions_layout(&mut t);

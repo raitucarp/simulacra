@@ -3,11 +3,11 @@
 //! The review keys are bound only while a card waits for them (see `keys_active`).
 
 mod choice;
-mod common;
+pub(in crate::ui::features::review) mod common;
 mod drill;
 mod empty;
 pub mod face;
-mod grades;
+pub(in crate::ui::features::review) mod grades;
 mod header;
 mod items;
 pub mod map;
@@ -66,6 +66,7 @@ impl Render for ReviewPanel {
                     .overflow_y_scroll()
                     .flex()
                     .justify_center()
+                    .items_start()
                     .px(if class.is_compact() { theme.panel_padding_compact } else { theme.panel_padding })
                     .py(theme.panel_padding)
                     .child(column),
@@ -84,6 +85,7 @@ impl ReviewPanel {
             Screen::Items => self.render_items(cx).into_any_element(),
             Screen::Picker => self.render_picker(cx).into_any_element(),
             Screen::MapEditor => self.render_map_editor(cx).into_any_element(),
+            Screen::Learn => self.render_learning(class, cx),
         }
     }
 

@@ -22,6 +22,7 @@ use super::events::ReviewEvent;
 use crate::domain::review::quiz::{ChoiceRun, OrderPuzzle, RecallRun};
 use crate::domain::review::Session;
 use crate::theme::ThemeTokens;
+use crate::ui::features::review::learning::{LearningFields, LearningUi};
 use gpui_kit::{Context, EventEmitter, FocusHandle, Subscription, Window};
 
 /// The page's screens.
@@ -40,17 +41,20 @@ pub enum Screen {
     Picker,
     /// A connection map being made or edited.
     MapEditor,
+    /// The learning tools: tutor, goals, gaps and palace (sb E2).
+    Learn,
 }
 
 impl Screen {
     /// The tabs of the page header (the other screens are entered from them).
-    pub const TABS: [Self; 3] = [Self::Today, Self::Stats, Self::Items];
+    pub const TABS: [Self; 4] = [Self::Today, Self::Learn, Self::Stats, Self::Items];
 
     pub const fn key(self) -> &'static str {
         match self {
             Self::Today | Self::Session | Self::Summary | Self::Quiz => "today",
             Self::Stats => "stats",
             Self::Items | Self::Picker | Self::MapEditor => "items",
+            Self::Learn => "learn",
         }
     }
 }
@@ -77,6 +81,8 @@ pub struct ReviewPanel {
     pub(super) picker: Option<Picker>,
     pub(super) focus: FocusHandle,
     pub(super) fields: PanelFields,
+    pub(in crate::ui::features::review) learning: LearningUi,
+    pub(in crate::ui::features::review) learn_fields: LearningFields,
     _subscriptions: Vec<Subscription>,
 }
 
@@ -84,7 +90,9 @@ impl EventEmitter<ReviewEvent> for ReviewPanel {}
 
 impl ReviewPanel {
     pub fn new(data: ReviewData, theme: ThemeTokens, window: &mut Window, cx: &mut Context<Self>) -> Self {
-        let (fields, subscriptions) = PanelFields::new(window, cx);
+        let (fields, mut subscriptions) = PanelFields::new(window, cx);
+        let (learn_fields, learn_subscriptions) = LearningFields::new(window, cx);
+        subscriptions.extend(learn_subscriptions);
         Self {
             theme,
             data,
@@ -96,6 +104,8 @@ impl ReviewPanel {
             picker: None,
             focus: cx.focus_handle(),
             fields,
+            learning: LearningUi::new(),
+            learn_fields,
             _subscriptions: subscriptions,
         }
     }
@@ -130,6 +140,7 @@ impl ReviewPanel {
             (Screen::Session, _) => !self.session.is_finished(),
             (Screen::Quiz, Some(QuizRunState::Choice(run))) => !run.is_finished(),
             (Screen::Quiz, Some(QuizRunState::Recall(run))) => run.checked.is_some(),
+            (Screen::Learn, _) => self.learning.walk().is_some_and(|walk| !walk.is_finished()),
             _ => false,
         }
     }

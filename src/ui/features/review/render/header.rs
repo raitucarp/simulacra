@@ -19,6 +19,7 @@ fn tab_icon(screen: Screen) -> LucideIcon {
     match screen {
         Screen::Stats => LucideIcon::ChartColumn,
         Screen::Items | Screen::Picker | Screen::MapEditor => LucideIcon::Layers,
+        Screen::Learn => LucideIcon::Lightbulb,
         _ => LucideIcon::Calendar,
     }
 }

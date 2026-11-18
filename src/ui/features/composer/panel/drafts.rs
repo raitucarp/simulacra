@@ -94,6 +94,14 @@ impl ComposerModalPanel {
         }
     }
 
+    /// Puts `text` into the first post (a composer opened prefilled, sb E2).
+    pub fn prefill(&mut self, text: &str, window: &mut Window, cx: &mut Context<Self>) {
+        if let Some(first) = self.drafts.first() {
+            first.input.update(cx, |state, cx| state.set_value(text.to_string(), window, cx));
+        }
+        cx.notify();
+    }
+
     pub(super) fn focus_draft(&self, index: usize, window: &mut Window, cx: &mut App) {
         if let Some(slot) = self.drafts.get(index) {
             slot.input.update(cx, |state, cx| state.focus(window, cx));

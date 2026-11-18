@@ -4,6 +4,7 @@
 use super::super::panel::JournalPanel;
 use super::super::text::{region_label, tr};
 use super::common::{block_title, caption, control_row, ghost_button, surface};
+use super::confirm::DeleteKind;
 use crate::domain::journal::mood::summary::newest_checkins;
 use crate::domain::journal::MoodCheckin;
 use crate::i18n::COUNT_SEPARATOR;
@@ -40,7 +41,7 @@ impl JournalPanel {
         facts.extend(checkin.sleep_hours.map(|h| t!("journal.mood.sleep_value", hours = format!("{h:.1}")).to_string()));
         facts.extend(checkin.tags.iter().map(|tag| format!("#{tag}")));
         let id = checkin.id.clone();
-        let delete = ghost_button((DELETE_ID, index), LucideIcon::Trash, tr("journal.entry.delete")).on_click(cx.listener(move |this, _, _, cx| this.delete_checkin(id.clone(), cx)));
+        let delete = ghost_button((DELETE_ID, index), LucideIcon::Trash, tr("journal.entry.delete")).on_click(self.confirm_delete(DeleteKind::Checkin, id, cx));
         let note = (!checkin.note.is_empty()).then(|| div().text_size(theme.font_size_sm).text_color(theme.text_primary).child(checkin.note.clone()));
         div()
             .w_full()

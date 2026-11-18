@@ -5,6 +5,7 @@
 use super::super::panel::{JournalFields, JournalPanel};
 use super::super::text::{capsule_state_label, day_label, tr};
 use super::common::{area_field, block_title, caption, control_row, ghost_button, line_field, primary_button, surface};
+use super::confirm::DeleteKind;
 use crate::domain::journal::capsule::notify::in_list_order;
 use crate::domain::journal::capsule::{CapsuleState, SealProblem, TimeCapsule};
 use crate::i18n::t_count;
@@ -73,7 +74,7 @@ impl JournalPanel {
             primary_button((OPEN_ID, index), LucideIcon::MailOpen, label).on_click(cx.listener(move |this, _, window, cx| this.open_capsule(&id, window, cx)))
         });
         let delete_id = capsule.id.clone();
-        let delete = ghost_button((DELETE_ID, index), LucideIcon::Trash, tr("journal.entry.delete")).on_click(cx.listener(move |this, _, _, cx| this.delete_capsule(delete_id.clone(), cx)));
+        let delete = ghost_button((DELETE_ID, index), LucideIcon::Trash, tr("journal.entry.delete")).on_click(self.confirm_delete(DeleteKind::Capsule, delete_id, cx));
         let art = matches!(state, CapsuleState::Sealed { .. }).then(|| Illustration::empty(EmptyKey::CapsuleSealed).width(theme.art_compact_width));
         let border = if state == CapsuleState::Ready { theme.accent_dialectic_border } else { theme.border_subtle };
         surface(theme)

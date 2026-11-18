@@ -51,15 +51,15 @@ impl AppView {
 
     pub(in crate::ui::features::shell) fn handle_arena_event(&mut self, _: &Entity<ArenaPanel>, event: &ArenaEvent, window: &mut Window, cx: &mut Context<Self>) {
         match event.clone() {
-            ArenaEvent::StartDebate(setup) => self.start_debate(setup, cx),
-            ArenaEvent::ContinueDebate(id) if self.arena.run.is_none() => self.advance_debate(&id, cx),
+            ArenaEvent::StartDebate(setup) => self.begin_debate(setup, cx),
+            ArenaEvent::ContinueDebate(id) if self.arena.run.is_none() => self.continue_debate(id, cx),
             ArenaEvent::ContinueDebate(_) => {}
             ArenaEvent::Cancel => self.arena.stop(),
             ArenaEvent::PublishDebate(id) => self.publish_debate(&id, window, cx),
             ArenaEvent::DeleteDebate(id) => self.delete_arena_record::<Debate>(&id),
             ArenaEvent::SaveExperiment { id, scenario, agents, preset } => self.submit_experiment(id, scenario, agents, preset, false, cx),
             ArenaEvent::RunExperiment { id, scenario, agents, preset } => self.submit_experiment(id, scenario, agents, preset, true, cx),
-            ArenaEvent::ResumeExperiment(id) if self.arena.run.is_none() => self.advance_experiment(&id, cx),
+            ArenaEvent::ResumeExperiment(id) if self.arena.run.is_none() => self.run_experiment(id, cx),
             ArenaEvent::ResumeExperiment(_) => {}
             ArenaEvent::PublishExperiment(id) => self.publish_experiment(&id, window, cx),
             ArenaEvent::DeleteExperiment(id) => self.delete_arena_record::<Experiment>(&id),

@@ -1,6 +1,7 @@
 //! [`HintChips`]: example values under a field. Click uses one, Shift-click adds it to what is
-//! typed (AI chips always replace). Below the wide layout the chips collapse to one row with "More"; AI suggestions draw
-//! in the brand tint with a sparkle.
+//! typed (AI chips always replace). Below the wide layout the chips collapse to one row with "More":
+//! the row wraps and shows its first line only, so a chip is either whole or hidden, never cut.
+//! AI suggestions draw in the brand tint with a sparkle.
 
 use super::super::ValueCallback;
 use crate::state::forge::suggest::Joiner;
@@ -117,7 +118,7 @@ impl RenderOnce for HintChips {
         let toggle = (narrow && !self.ai && self.chips.len() > 1).then(|| self.toggle(&expanded, open));
         let row = div().flex().items_center().gap(theme.spacing_xs);
         let body = if collapsed {
-            row.child(div().flex_1().min_w_0().flex().gap(theme.spacing_xs).overflow_hidden().children(chips)).children(toggle)
+            row.child(div().flex_1().min_w_0().h(theme.suggest_chip_row_height).flex().flex_wrap().gap(theme.spacing_xs).overflow_hidden().children(chips)).children(toggle)
         } else {
             row.flex_wrap().children(chips).children(toggle)
         };

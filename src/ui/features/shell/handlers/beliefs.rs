@@ -82,7 +82,7 @@ impl AppView {
                 }
                 self.arena.settings.insert(agent, settings);
             }
-            BeliefsEvent::ReadOpenThread(agent) => self.read_open_thread(&agent, cx),
+            BeliefsEvent::ReadOpenThread(agent) => self.read_thread_asking(agent, cx),
             BeliefsEvent::OpenSource(source) => self.open_belief_source(source, window, cx),
         }
         self.arena_changed(cx);

@@ -4,6 +4,7 @@ use crate::domain::journal::mood::correlate::MoodMeasure;
 use crate::domain::journal::mood::AffectRegion;
 use crate::domain::journal::prompts::catalogue;
 use crate::domain::journal::templates::Template;
+use crate::ui::features::journal::render::confirm::DeleteKind;
 use crate::ui::features::journal::JournalTab;
 use rust_i18n::t;
 
@@ -22,6 +23,7 @@ fn every_label_of_the_page_is_translated() {
     keys.extend(ActivityKind::ALL.iter().map(|a| format!("journal.activity.{}", a.key())));
     keys.extend(MoodMeasure::ALL.iter().map(|m| format!("journal.measure.{}", m.key())));
     keys.extend((0..7).flat_map(|d| [format!("journal.weekday.{d}"), format!("journal.weekday_short.{d}")]));
+    keys.extend(DeleteKind::ALL.iter().flat_map(|kind| [kind.title_key(), kind.description_key()]));
     let missing: Vec<&String> = keys.iter().filter(|k| !translated(k)).collect();
     assert!(missing.is_empty(), "untranslated: {missing:?}");
 }

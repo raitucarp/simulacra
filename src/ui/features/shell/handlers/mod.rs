@@ -8,6 +8,7 @@ mod arena_debate;
 mod arena_judge;
 mod arena_lab;
 mod arena_publish;
+mod arena_spend; // sb P16
 mod arena_sync;
 mod beliefs;
 mod beliefs_material;
@@ -68,6 +69,9 @@ mod settings;
 mod sidebar_nav;
 mod simulation;
 mod simulation_notices;
+mod spend; // sb P16: the budget path and ask before spending
+pub(super) use spend::SpendResume;
+mod spend_dialog;
 mod storage;
 mod stream;
 mod thinking;

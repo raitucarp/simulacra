@@ -51,7 +51,8 @@ impl ComposerModalView {
             .flex_col()
             .gap(theme.spacing_3xs)
             .child(div().text_size(theme.font_size_xs).text_color(theme.text_muted).child(t!("composer.media_alt_label").to_string()))
-            .child(Input::new(alt).appearance(false));
+            // No inner inset: the description starts under its label, as a borderless field.
+            .child(Input::new(alt).appearance(false).px(Pixels::ZERO));
         let remove = div()
             .id((MODAL_CLEAR_IMAGE_BTN_ID, index))
             .flex_none()

@@ -4,6 +4,7 @@
 use super::super::panel::{JournalFields, JournalPanel};
 use super::super::text::{day_label, tr};
 use super::common::{caption, control_row, ghost_button, line_field, primary_button, surface};
+use super::confirm::DeleteKind;
 use crate::domain::journal::search::{excerpt_around, search_entries};
 use crate::domain::journal::templates::Template;
 use crate::domain::journal::JournalEntry;
@@ -60,7 +61,7 @@ impl JournalPanel {
         let (edit_id, post_id, delete_id) = (entry.id.clone(), entry.id.clone(), entry.id.clone());
         let edit = ghost_button((EDIT_ID, index), LucideIcon::NotebookPen, tr("journal.entry.edit")).on_click(cx.listener(move |this, _, window, cx| this.edit_entry(&edit_id, window, cx)));
         let post = ghost_button((POST_ID, index), LucideIcon::Send, tr("journal.entry.into_post")).on_click(cx.listener(move |this, _, _, cx| this.entry_into_post(&post_id, cx)));
-        let delete = ghost_button((DELETE_ID, index), LucideIcon::Trash, tr("journal.entry.delete")).on_click(cx.listener(move |this, _, _, cx| this.delete_entry(delete_id.clone(), cx)));
+        let delete = ghost_button((DELETE_ID, index), LucideIcon::Trash, tr("journal.entry.delete")).on_click(self.confirm_delete(DeleteKind::Entry, delete_id, cx));
         let meta = format!("{}{}{}", day_label(entry.day), crate::i18n::COUNT_SEPARATOR, t!("journal.entry.words", count = entry.word_count()));
         div()
             .w_full()

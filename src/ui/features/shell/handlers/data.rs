@@ -5,7 +5,7 @@ use super::super::binder::Binder;
 use super::super::view::AppView;
 use crate::domain::data::saved::ItemRef;
 use crate::ui::features::command_palette::CommandId;
-use crate::ui::features::data::{render_export_sheet, render_history_sheet, render_restore_sheet, render_snapshot_sheet, DataAction, DataEvent, DataSource};
+use crate::ui::features::data::{closes_on_escape, render_export_sheet, render_history_sheet, render_restore_sheet, render_snapshot_sheet, DataAction, DataEvent, DataSource};
 use gpui_kit::component::input::{InputEvent, InputState};
 use gpui_kit::*;
 use std::collections::HashMap;
@@ -15,6 +15,7 @@ impl AppView {
     /// Routes one data event to its area.
     pub(crate) fn on_data_event(&mut self, event: DataEvent, window: &mut Window, cx: &mut Context<Self>) {
         use DataEvent as E;
+        let was_open = self.data_sheet_open();
         match event {
             E::EditPost(_) | E::ToggleBookmark(_) | E::AddToCollection(..) | E::RemoveFromCollection(..) | E::NewCollectionFor(_) => self.on_post_data_event(event, window, cx),
             E::OpenPostHistory(_) | E::OpenDocumentHistory(_) | E::SelectVersion(_) | E::RestoreVersion(_) | E::CloseHistory => self.on_history_event(event, window, cx),
@@ -23,7 +24,22 @@ impl AppView {
             E::OpenRestore | E::PickSnapshotFile | E::VerifySnapshot | E::ConfirmRestore | E::CloseRestore => self.on_restore_event(event, window, cx),
             _ => self.on_saved_event(event, window, cx),
         }
+        self.hand_keyboard_to_sheet(was_open, window, cx);
         cx.notify();
+    }
+
+    fn data_sheet_open(&self) -> bool {
+        self.data.history.is_some() || self.data.export.is_some() || self.data.snapshot.is_some() || self.data.restore.is_some()
+    }
+
+    /// A sheet that just opened takes the keyboard (unless one of its fields already did), so
+    /// Escape reaches it; a sheet that just closed gives it back to the shell.
+    fn hand_keyboard_to_sheet(&mut self, was_open: bool, window: &mut Window, cx: &mut Context<Self>) {
+        match (was_open, self.data_sheet_open()) {
+            (false, true) if !self.data.inputs.any_focused(window, cx) => window.focus(&self.data.focus, cx),
+            (true, false) => window.focus(&self.palette.shell_focus, cx),
+            _ => {}
+        }
     }
 
     /// A data callback for the views.
@@ -44,6 +60,7 @@ impl AppView {
             bookmarks: Rc::new(self.data.shelf.bookmarks.iter().map(|b| b.post.as_str().to_string()).collect()),
             collections: Rc::new(self.network_collections()),
             memberships: Rc::new(memberships),
+            history_open: self.data.history.is_some(),
             on_event: self.data_action(bind),
         }
     }
@@ -87,17 +104,16 @@ impl AppView {
 
     /// The open data sheet, if any.
     pub(in crate::ui::features::shell) fn data_overlay(&self, bind: &Binder) -> Option<AnyElement> {
-        let on_event = self.data_action(bind);
-        let theme = &self.theme;
-        if let Some(sheet) = &self.data.history {
-            return Some(render_history_sheet(sheet, on_event, theme).into_any_element());
-        }
-        if let Some(dialog) = &self.data.export {
-            return Some(render_export_sheet(dialog, on_event, theme).into_any_element());
-        }
-        if let Some(dialog) = &self.data.snapshot {
-            return Some(render_snapshot_sheet(dialog, on_event, theme).into_any_element());
-        }
-        self.data.restore.as_ref().map(|dialog| render_restore_sheet(dialog, on_event, theme).into_any_element())
+        let (on_event, theme) = (self.data_action(bind), &self.theme);
+        let (sheet, close) = if let Some(sheet) = &self.data.history {
+            (render_history_sheet(sheet, on_event.clone(), theme), DataEvent::CloseHistory)
+        } else if let Some(dialog) = &self.data.export {
+            (render_export_sheet(dialog, on_event.clone(), theme), DataEvent::CloseExport)
+        } else if let Some(dialog) = &self.data.snapshot {
+            (render_snapshot_sheet(dialog, on_event.clone(), theme), DataEvent::CloseSnapshot)
+        } else {
+            (render_restore_sheet(self.data.restore.as_ref()?, on_event.clone(), theme), DataEvent::CloseRestore)
+        };
+        Some(closes_on_escape(sheet, &self.data.focus, close, on_event).into_any_element())
     }
 }

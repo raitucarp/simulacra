@@ -9,6 +9,7 @@ pub mod canvas;
 mod editor;
 pub mod events;
 mod findings;
+mod legend;
 mod list;
 mod render;
 

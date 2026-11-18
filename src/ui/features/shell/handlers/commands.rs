@@ -48,10 +48,9 @@ impl AppView {
             CommandId::LearnPost => self.learn_focused_post(window, cx),
             CommandId::NewConnectionMap => self.open_review_tab_picker(crate::ui::features::review::PickerMode::Map, window, cx),
             CommandId::PostActions => self.open_actions_for_open_thought(window, cx),
-            CommandId::ToggleOutline => self.toggle_inspector_outline(window, cx),
+            CommandId::ToggleOutline => self.toggle_inspector_outline(window, cx), CommandId::ImageIdeas => self.open_image_ideas_command(window, cx),
             CommandId::GoInsights | CommandId::InsightsOverview | CommandId::InsightsNetwork | CommandId::InsightsSets
             | CommandId::InsightsSymmetry | CommandId::InsightsCategories | CommandId::InsightsEmbedding | CommandId::InsightsActivity => self.open_insights(id, window, cx),
-            CommandId::ImageIdeas => self.open_image_ideas_command(window, cx),
             CommandId::GoJournal | CommandId::NewJournalEntry | CommandId::LogMood | CommandId::StartFocus | CommandId::NewTimeCapsule => self.open_journal(id, window, cx),
             CommandId::InsightsCalibration | CommandId::InsightsTensions | CommandId::ResolveDuePredictions | CommandId::ShowArgumentMap => self.run_thinking_command(id, window, cx),
         }

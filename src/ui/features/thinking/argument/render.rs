@@ -5,14 +5,13 @@
 use super::super::labels::{edge_colour, tr};
 use super::canvas::geometry::columns_for;
 use super::canvas::{ArgumentCanvas, NodeChip, Stroke};
-use super::{ArgumentEvent, ArgumentPanel, ArgumentThread, EditorMode, ExtractStatus};
-use crate::domain::thinking::argument::{layout, Standing};
+use super::{ArgumentEvent, ArgumentPanel, ArgumentThread, ExtractStatus};
+use crate::domain::thinking::argument::layout;
 use crate::ui::components::{art_state, ArtState};
 use crate::ui::icons::LucideIcon;
 use crate::ui::illustration::{Illustration, SpotKey};
 use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::{Icon, Sizable};
-use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::*;
 use rust_i18n::t;
 use std::rc::Rc;
@@ -132,23 +131,5 @@ impl ArgumentPanel {
 
     pub(super) fn hint_line(&self, text: String) -> Div {
         div().w_full().text_size(self.theme.font_size_2xs).line_height(relative(self.theme.line_height_body)).text_color(self.theme.text_muted).child(text)
-    }
-
-    fn legend(&self) -> Div {
-        let theme = &self.theme;
-        let swatch = |colour: Rgba, label: String| div().flex().items_center().gap(theme.spacing_xs).child(div().flex_none().size(theme.insights_swatch_size).rounded(theme.radius_full).bg(colour)).child(label);
-        let line = |colour: Rgba, label: String| div().flex().items_center().gap(theme.spacing_xs).child(div().flex_none().w(theme.insights_swatch_size * 2.0).h(theme.thinking_edge_width).bg(colour)).child(label);
-        use crate::domain::thinking::argument::EdgeKind;
-        let standings = Standing::ALL.iter().map(|s| swatch(super::super::labels::standing_colour(*s, theme), super::super::labels::standing_label(*s)));
-        div()
-            .flex()
-            .flex_wrap()
-            .gap(theme.control_gap)
-            .text_size(theme.font_size_2xs)
-            .text_color(theme.text_muted)
-            .children(standings)
-            .child(line(edge_colour(EdgeKind::Support, theme), super::super::labels::edge_label(EdgeKind::Support)))
-            .child(line(edge_colour(EdgeKind::Attack, theme), super::super::labels::edge_label(EdgeKind::Attack)))
-            .when(matches!(self.editor, EditorMode::Closed), |row| row.child(div().text_color(theme.text_muted).child(tr("thinking.argument.click_hint"))))
     }
 }

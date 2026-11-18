@@ -11,6 +11,7 @@ category_fields! {
         PostLengthLimit => "post_length_limit", AutoSplitThreads => "auto_split_threads",
         AutosaveSeconds => "autosave_seconds", Spellcheck => "spellcheck", DefaultIdentity => "default_identity",
         WikilinkClick => "wikilink_click", HashtagClick => "hashtag_click", AtomicHints => "atomic_hints",
+        ReadabilityMeter => "readability_meter",
     }
 }
 
@@ -18,7 +19,7 @@ impl WritingField {
     pub fn kind(self) -> FieldKind {
         match self {
             Self::PostLengthLimit => number(POST_LENGTH, NumberUnit::Characters),
-            Self::AutoSplitThreads | Self::Spellcheck | Self::AtomicHints => FieldKind::Toggle,
+            Self::AutoSplitThreads | Self::Spellcheck | Self::AtomicHints | Self::ReadabilityMeter => FieldKind::Toggle,
             Self::AutosaveSeconds => number(AUTOSAVE_SECONDS, NumberUnit::Seconds),
             Self::DefaultIdentity => choices::<PostIdentity>(),
             Self::WikilinkClick => choices::<WikilinkClick>(),
@@ -36,6 +37,7 @@ impl WritingField {
             Self::WikilinkClick => choice_value(prefs.wikilink_click),
             Self::HashtagClick => choice_value(prefs.hashtag_click),
             Self::AtomicHints => SettingValue::Toggle(prefs.atomic_hints),
+            Self::ReadabilityMeter => SettingValue::Toggle(prefs.readability_meter),
         }
     }
 
@@ -49,6 +51,7 @@ impl WritingField {
             Self::WikilinkClick => WritingPrefs { wikilink_click: choice(value, prefs.wikilink_click), ..prefs },
             Self::HashtagClick => WritingPrefs { hashtag_click: choice(value, prefs.hashtag_click), ..prefs },
             Self::AtomicHints => WritingPrefs { atomic_hints: toggle(value, prefs.atomic_hints), ..prefs },
+            Self::ReadabilityMeter => WritingPrefs { readability_meter: toggle(value, prefs.readability_meter), ..prefs },
         }
     }
 }

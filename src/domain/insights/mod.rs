@@ -16,6 +16,7 @@ pub mod embedding;
 pub mod facts;
 pub mod filter;
 pub mod graph;
+pub mod lenses; // sb F3: concept timeline, viewpoint diversity, readability
 pub mod network;
 pub mod report;
 pub mod sets;

@@ -8,6 +8,7 @@ mod common;
 mod embedding;
 mod filters;
 mod header;
+mod lenses; // sb F3: Concept timeline, Viewpoint diversity, Readability
 mod network;
 mod overview;
 mod radial;
@@ -91,6 +92,9 @@ impl InsightsPanel {
         if self.state.view.is_thinking() {
             return self.render_thinking(room, cx);
         }
+        if self.state.view.is_lens() {
+            return self.render_lens(room, cx);
+        }
         let Some(report) = self.report.clone() else { return self.render_loading().into_any_element() };
         if report.posts.is_empty() {
             return self.render_empty().into_any_element();
@@ -108,6 +112,7 @@ impl InsightsPanel {
             InsightsView::Embedding => self.render_embedding(&report, room, cx).into_any_element(),
             InsightsView::Activity => self.render_activity(&report, room, cx).into_any_element(),
             InsightsView::Calibration | InsightsView::Tensions => self.render_thinking(room, cx),
+            InsightsView::Timeline | InsightsView::Diversity | InsightsView::Readability => self.render_lens(room, cx),
         }
     }
 }

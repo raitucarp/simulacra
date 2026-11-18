@@ -50,7 +50,7 @@ impl AppView {
             CommandId::PostActions => self.open_actions_for_open_thought(window, cx),
             CommandId::ToggleOutline => self.toggle_inspector_outline(window, cx), CommandId::ImageIdeas => self.open_image_ideas_command(window, cx),
             CommandId::GoInsights | CommandId::InsightsOverview | CommandId::InsightsNetwork | CommandId::InsightsSets
-            | CommandId::InsightsSymmetry | CommandId::InsightsCategories | CommandId::InsightsEmbedding | CommandId::InsightsActivity => self.open_insights(id, window, cx),
+            | CommandId::InsightsSymmetry | CommandId::InsightsCategories | CommandId::InsightsEmbedding | CommandId::InsightsActivity | CommandId::InsightsTimeline | CommandId::InsightsDiversity | CommandId::InsightsReadability => self.open_insights(id, window, cx), // sb F3: lens views
             CommandId::GoJournal | CommandId::NewJournalEntry | CommandId::LogMood | CommandId::StartFocus | CommandId::NewTimeCapsule => self.open_journal(id, window, cx),
             CommandId::InsightsCalibration | CommandId::InsightsTensions | CommandId::ResolveDuePredictions | CommandId::ShowArgumentMap => self.run_thinking_command(id, window, cx), CommandId::GoArena | CommandId::NewDebate | CommandId::NewThoughtExperiment | CommandId::DebateOpenThought | CommandId::ExperimentOpenThought => self.open_arena(id, window, cx), // sb F1
         }

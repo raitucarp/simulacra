@@ -54,6 +54,7 @@ pub struct InsightsPanel {
     /// Authors of the network (id, name), busiest first, for the author filter.
     pub(super) authors: Vec<(String, String)>,
     pub(crate) thinking: crate::ui::features::thinking::insights::ThinkingInsights, // sb E1: Calibration and Tensions data
+    pub(crate) lenses: super::lens_state::LensUi, // sb F3: the lens views
 }
 
 impl EventEmitter<InsightsEvent> for InsightsPanel {}
@@ -74,7 +75,7 @@ impl InsightsPanel {
             map: CanvasState::default(),
             frames: Frames::default(),
             focus: cx.focus_handle(),
-            authors: Vec::new(), thinking: Default::default(),
+            authors: Vec::new(), thinking: Default::default(), lenses: Default::default(),
         }
     }
 

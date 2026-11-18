@@ -86,6 +86,8 @@ pub struct ComposerModalView {
     pub callbacks: ModalCallbacks,
     /// sb E1: the atomic-note hint under one draft.
     pub atomic_hint: Option<AtomicHintView>,
+    /// sb F3: the readability meter under one draft.
+    pub readability: Option<super::panel::readability_meter::ReadabilityMeterView>,
 }
 
 /// sb E1: the atomic-note hint of draft `draft`, with its split and dismiss actions.

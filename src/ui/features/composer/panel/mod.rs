@@ -8,8 +8,7 @@ mod actions;
 mod atomic;
 mod drafts;
 mod edit; // sb F2: edit mode
-mod media;
-mod render;
+mod media; mod readability; pub mod readability_meter; mod render; // sb F3: the readability meter
 
 use super::consts::MODAL_LINK_PLACEHOLDER;
 use super::modal::ComposerModalMode;
@@ -71,6 +70,7 @@ pub struct ComposerModalPanel {
     theme: ThemeTokens,
     profile: Option<Profile>,
     atomic: atomic::AtomicHintState, // sb E1: the atomic-note hint
+    readability: readability::ReadabilityState, // sb F3: the readability meter
     _subscriptions: Vec<Subscription>,
 }
 
@@ -101,7 +101,7 @@ impl ComposerModalPanel {
             error: None,
             theme,
             profile,
-            atomic: Default::default(), _subscriptions: Vec::new(),
+            atomic: Default::default(), readability: Default::default(), _subscriptions: Vec::new(),
         };
         panel._subscriptions = panel.subscribe(window, cx);
         panel.drafts.push(panel.new_draft_slot(window, cx));

@@ -67,6 +67,6 @@ impl InsightsPanel {
                 .tooltip(move |window, cx| gpui_kit::component::tooltip::Tooltip::new(tip.clone()).build(window, cx))
                 .keyboard_stop(theme, open)
         });
-        segmented_track(theme).children(pills)
+        segmented_track(theme).flex_wrap().children(pills) // sb F3: twelve views wrap onto a second row when they do not fit
     }
 }

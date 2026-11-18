@@ -42,6 +42,7 @@ impl ComposerModalPanel {
             InputEvent::Change => {
                 self.error = None;
                 self.schedule_atomic_hint(cx);
+                self.schedule_readability(cx);
                 cx.notify();
             }
             InputEvent::PressEnter { secondary: true, .. } => self.submit(window, cx),

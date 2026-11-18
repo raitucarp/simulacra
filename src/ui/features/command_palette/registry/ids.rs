@@ -107,4 +107,8 @@ command_ids! {
     ExportBundle => "export_bundle",
     EncryptedSnapshot => "encrypted_snapshot",
     RestoreSnapshot => "restore_snapshot",
+    /// sb F3: the concept timeline, viewpoint diversity and readability views.
+    InsightsTimeline => "insights_timeline",
+    InsightsDiversity => "insights_diversity",
+    InsightsReadability => "insights_readability",
 }

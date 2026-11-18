@@ -8,17 +8,14 @@ use super::super::view::AppView;
 use crate::agent::learning::{run_tutor_blocking, TutorFailure, TutorReply};
 use crate::agent::post_actions::{ActionFailure, ActionJob, CancelToken};
 use crate::agent::LlmClient;
-use crate::domain::embedding::{estimate_tokens, BudgetLimits};
 use crate::domain::learning::tutor::prompt::TutorRequest;
 use crate::domain::learning::{SessionId, TutorSession};
 use crate::domain::post_actions::{ActionFailureKind, RequestPolicy};
+use crate::domain::spend::SpendEstimate;
 use crate::ui::features::post_actions::failure_text;
 use crate::ui::features::review::learning::TutorStatus;
 use chrono::Utc;
 use gpui_kit::*;
-
-/// Local calendar day key of the AI budget (shared with embeddings and post actions).
-const DAY_FORMAT: &str = "%Y-%m-%d";
 
 fn failure_message(failure: &TutorFailure) -> String {
     match failure {
@@ -32,6 +29,10 @@ impl AppView {
     pub(super) fn run_tutor(&mut self, id: &SessionId, window: &mut Window, cx: &mut Context<Self>) {
         let Some(session) = self.review.learning.records.session(id).cloned() else { return };
         let Some(request) = TutorRequest::for_session(&session) else { return };
+        let resume_id = id.clone();
+        if self.has_ai_key() && self.confirm_spend(SpendEstimate::one(), Box::new(move |this, window, cx| this.run_tutor(&resume_id, window, cx)), cx) {
+            return;
+        }
         self.review.learning.cancel_running();
         self.review.learning.tutor = match self.start_tutor_job(&session, request, window, cx) {
             Ok(()) => TutorStatus::Running(id.clone()),
@@ -52,15 +53,7 @@ impl AppView {
         if !client.has_api_key() {
             return Err(ActionFailure::local(ActionFailureKind::NoKey));
         }
-        let today = chrono::Local::now().format(DAY_FORMAT).to_string();
-        let tokens = estimate_tokens([prompt.system.as_str(), prompt.user.as_str()]).saturating_add(request.answer_tokens());
-        if !self.semantic.usage.allows(BudgetLimits::from_prefs(&ai), &today, 1, tokens) {
-            return Err(ActionFailure::local(ActionFailureKind::Budget));
-        }
-        self.semantic.usage = self.semantic.usage.recorded(&today, 1, tokens);
-        if let Some(vault) = self.state.db.as_ref() {
-            let _ = vault.save_embedding_usage(&self.semantic.usage);
-        }
+        self.charge_ai_request(&prompt, request.answer_tokens())?;
         let cancel = CancelToken::new();
         self.review.learning.cancel = Some(cancel.clone());
         let (generation, id, mastery) = (self.review.learning.generation, session.id.clone(), session.mastery());

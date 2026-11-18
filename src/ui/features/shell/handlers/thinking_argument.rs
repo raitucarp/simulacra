@@ -7,6 +7,7 @@ use super::super::view::AppView;
 use super::thinking_ai::failure_message;
 use crate::agent::post_actions::{ActionFailure, CancelToken};
 use crate::domain::thinking::argument::{extraction_prompt, parse_extraction, ArgumentMap, ThreadPost, EXTRACT_ANSWER_TOKENS};
+use crate::domain::spend::SpendEstimate;
 use crate::domain::{Post, PostId};
 use crate::state::{build_conversation, ReplyLimits};
 use crate::ui::features::feed::inspector_outline::{thread_root, InspectorMode};
@@ -78,6 +79,10 @@ impl AppView {
     }
 
     fn extract_argument(&mut self, root: PostId, cx: &mut Context<Self>) {
+        let again = root.clone();
+        if self.has_ai_key() && self.confirm_spend(SpendEstimate::one(), Box::new(move |this, _, cx| this.extract_argument(again, cx)), cx) {
+            return;
+        }
         ThinkingHost::stop(&mut self.thinking.extract);
         let posts = self.thread_posts(&root);
         let language = self.state.preferences().general.language.english_label().to_string();

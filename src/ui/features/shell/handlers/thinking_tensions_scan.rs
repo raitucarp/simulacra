@@ -7,6 +7,7 @@ use super::super::thinking_host::Running;
 use super::super::view::AppView;
 use super::thinking_ai::failure_message;
 use crate::agent::post_actions::{ActionFailure, CancelToken};
+use crate::domain::post_actions::ActionFailureKind;
 use crate::domain::embedding::{chunk_text, owner_vectors, EmbeddingOwner, OwnerKind};
 use crate::domain::thinking::tensions::{classification_prompt, parse_classifications, rank_candidates, Candidate, CandidateInput, RankOptions, TensionRecord, TensionSide, BATCH_SIZE, CLASSIFY_ANSWER_TOKENS};
 use crate::ui::features::thinking::insights::TensionMode;
@@ -17,7 +18,7 @@ use std::collections::HashMap;
 const MAX_POSTS: usize = 1_500;
 const MAX_PASSAGES: usize = 400;
 /// Batches classified after one scan (the rest wait for the next scan).
-const BATCHES_PER_SCAN: usize = 3;
+pub(super) const BATCHES_PER_SCAN: usize = 3;
 
 impl AppView {
     /// Every post and passage of the active network, with vectors when meaning is available.
@@ -110,7 +111,8 @@ impl AppView {
                 self.thinking.scan.batch = (batch, left - 1);
                 self.spawn_thinking_job(job, ticket, Self::finish_classification, cx);
             }
-            Err(failure) => self.thinking.scan.problem = Some(failure_message(&failure)),
+            // An automatic scan the user has not allowed to spend keeps its word-based results quietly.
+            Err(failure) => self.thinking.scan.problem = (failure.kind != ActionFailureKind::Unapproved).then(|| failure_message(&failure)),
         }
     }
 

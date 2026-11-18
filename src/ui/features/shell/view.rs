@@ -77,6 +77,8 @@ pub struct AppView {
     pub thinking: ThinkingHost,
     /// sb F2: history, export, snapshots, collections and bookmarks.
     pub data: DataHost,
+    /// sb P16: what "Ask before spending" allowed this session.
+    pub spend: super::spend_host::SpendHost,
     /// Cached views of the sidebars and the center column.
     pub(super) panels: ShellPanels,
     pub(super) _subscriptions: Vec<Subscription>,

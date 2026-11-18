@@ -34,6 +34,7 @@ mod review_host;
 mod render;
 mod scheduler_state;
 mod semantic_state;
+mod spend_host; // sb P16
 mod stream_list;
 mod thinking_host;
 mod settings_draft;

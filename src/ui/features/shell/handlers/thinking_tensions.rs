@@ -4,6 +4,7 @@
 
 use super::super::view::AppView;
 use crate::domain::thinking::tensions::{Candidate, LexicalSignals, SideKind, TensionSide, TensionStatus};
+use crate::domain::spend::SpendEstimate;
 use crate::domain::PostId;
 use crate::state::semantic::hits::shortened;
 use crate::ui::features::command_palette::CommandId;
@@ -39,6 +40,10 @@ impl AppView {
     }
 
     pub(super) fn rescan_tensions(&mut self, cx: &mut Context<Self>) {
+        let checks = SpendEstimate::requests(super::thinking_tensions_scan::BATCHES_PER_SCAN as u32);
+        if self.has_ai_key() && self.confirm_spend(checks, Box::new(|this, _, cx| this.rescan_tensions(cx)), cx) {
+            return;
+        }
         self.thinking.scan.stamp = None;
         self.start_tension_scan(cx);
     }

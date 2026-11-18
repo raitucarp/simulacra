@@ -27,6 +27,8 @@ keyed_enum! {
         Empty => "empty",
         /// The user stopped it.
         Cancelled => "cancelled",
+        /// "Ask before spending" is on and the user has not allowed this request (sb P16).
+        Unapproved => "unapproved",
     }
 }
 

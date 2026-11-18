@@ -7,29 +7,17 @@ use crate::agent::image::generate_with;
 use crate::agent::post_actions::{run_action_blocking, ActionFailure, ActionJob, CancelToken};
 use crate::agent::runtime::resolve_image_job;
 use crate::agent::LlmClient;
-use crate::domain::embedding::{estimate_tokens, BudgetLimits};
 use crate::domain::engine::ImageEngineConfig;
 use crate::domain::image_prompt::{candidates_prompt, parse_candidates, CANDIDATE_ANSWER_TOKENS};
 use crate::domain::post_actions::{ActionPrompt, RequestPolicy};
+use crate::domain::spend::SpendEstimate;
 use crate::ui::features::image_prompt::{from_action, from_image_error, CandidatesStatus, GenerationStatus, IdeasFailure};
 use gpui_kit::*;
 
-/// Local calendar day key of the AI budget (shared with post actions and embeddings).
-const DAY_FORMAT: &str = "%Y-%m-%d";
 impl AppView {
-    /// Charges one request of `prompt` to today's AI budget, or says why it cannot run.
+    /// Charges one request of `prompt` through the one budget path, or says why it cannot run.
     fn charge_ai_budget(&mut self, prompt: &ActionPrompt) -> Result<(), IdeasFailure> {
-        let ai = self.state.preferences().ai.clone();
-        let today = chrono::Local::now().format(DAY_FORMAT).to_string();
-        let tokens = estimate_tokens([prompt.system.as_str(), prompt.user.as_str()]).saturating_add(CANDIDATE_ANSWER_TOKENS);
-        if !self.semantic.usage.allows(BudgetLimits::from_prefs(&ai), &today, 1, tokens) {
-            return Err(IdeasFailure::Budget);
-        }
-        self.semantic.usage = self.semantic.usage.recorded(&today, 1, tokens);
-        if let Some(vault) = self.state.db.as_ref() {
-            let _ = vault.save_embedding_usage(&self.semantic.usage);
-        }
-        Ok(())
+        self.charge_ai_request(prompt, CANDIDATE_ANSWER_TOKENS).map_err(|failure| from_action(failure).unwrap_or(IdeasFailure::Budget))
     }
 
     /// "Write it for me": three prompts from the configured language model.
@@ -40,6 +28,9 @@ impl AppView {
         let mut settings = self.state.llm_settings.clone();
         settings.max_tokens = settings.max_tokens.max(CANDIDATE_ANSWER_TOKENS);
         let client = LlmClient::new(settings).with_timeout(policy.timeout);
+        if client.has_api_key() && self.confirm_spend(SpendEstimate::one(), Box::new(|this, window, cx| this.write_image_ideas(window, cx)), cx) {
+            return;
+        }
         let ready = if client.has_api_key() { self.charge_ai_budget(&prompt) } else { Err(IdeasFailure::NoTextKey) };
         if let Err(failure) = ready {
             return self.set_candidates(CandidatesStatus::Failed(failure), cx);

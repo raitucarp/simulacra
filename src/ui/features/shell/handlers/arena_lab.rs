@@ -30,7 +30,7 @@ impl AppView {
         self.save_experiment(experiment);
         self.arena.panel.update(cx, |panel, cx| panel.open_experiment(id.clone(), cx));
         if run {
-            self.advance_experiment(&id, cx);
+            self.run_experiment(id, cx);
         }
         self.arena_changed(cx);
     }

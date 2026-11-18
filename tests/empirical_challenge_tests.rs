@@ -801,6 +801,8 @@ fn test_stress_multi_user_repost_isolation_in_memory_and_raw_sqlite() {
 
         // In raw SQLite: verify directly via rusqlite
         {
+            // Writes reach SQLite on the vault's worker thread; wait for them before reading the file.
+            state.db.as_ref().expect("vault").flush().expect("flush queued writes");
             let conn = rusqlite::Connection::open(&temp_db_path).expect("open raw sqlite");
             let count: i64 = conn
                 .query_row(
@@ -836,6 +838,8 @@ fn test_stress_multi_user_repost_isolation_in_memory_and_raw_sqlite() {
 
         // Verification: In raw SQLite, User A's repost row is deleted, but User B and User C rows are PRESERVED
         {
+            // Writes reach SQLite on the vault's worker thread; wait for them before reading the file.
+            state.db.as_ref().expect("vault").flush().expect("flush queued writes");
             let conn = rusqlite::Connection::open(&temp_db_path).expect("open raw sqlite");
             let count_a: i64 = conn
                 .query_row(
@@ -898,6 +902,8 @@ fn test_stress_multi_user_repost_isolation_in_memory_and_raw_sqlite() {
 
         // In raw SQLite: zero repost rows
         {
+            // Writes reach SQLite on the vault's worker thread; wait for them before reading the file.
+            state.db.as_ref().expect("vault").flush().expect("flush queued writes");
             let conn = rusqlite::Connection::open(&temp_db_path).expect("open raw sqlite");
             let total_remaining: i64 = conn
                 .query_row(

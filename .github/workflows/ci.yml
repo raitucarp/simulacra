@@ -1,7 +1,7 @@
 name: CI
 
-# Every pull request and push to main: cargo check (warnings fail) and the full test suite on
-# Linux, Windows and macOS. On main, once the tests pass, the installers are built too (as
+# Every pull request and push to main: build every target (warnings fail) and run the full test
+# suite on Linux, Windows and macOS. On main, once the tests pass, the installers are built too (as
 # workflow artifacts), which also warms the release cache for the next tag. The Release workflow
 # calls this workflow first, so nothing is published from a commit whose tests fail.
 
@@ -44,21 +44,21 @@ jobs:
       - name: Install Linux system libraries
         if: runner.os == 'Linux'
         run: bash .github/scripts/install-linux-deps.sh
-      # Pull requests restore main's cache but never save their own, so the 10 GB repo budget
-      # holds the caches that every run can use.
+      # Compiled dependencies are cached per OS. A pull request restores its own cache or main's
+      # and saves its own, so the next push to the same pull request starts warm.
       - uses: Swatinem/rust-cache@v2
         with:
           shared-key: test-${{ runner.os }}
-          save-if: ${{ github.ref == 'refs/heads/main' }}
-      # Warnings fail the build. RUSTFLAGS is not used for this, because it would replace the
-      # Windows stack-size flag set in .cargo/config.toml.
-      - name: Check (no warnings allowed)
+          cache-on-failure: true
+      # One compile covers every target (lib, binary, tests, examples) and runs the tests; a
+      # separate `cargo check` would compile the crate a second time. Warnings fail the job.
+      # RUSTFLAGS is not used for that, because it would replace the Windows stack-size flag
+      # set in .cargo/config.toml.
+      - name: Build and test (no warnings allowed)
         shell: bash
         run: |
-          cargo check --locked --all-targets 2>&1 | tee check.log
-          if grep -E "^warning" check.log; then echo "::error::cargo check reported warnings"; exit 1; fi
-      - name: Test
-        run: cargo test --locked --no-fail-fast
+          cargo test --locked --no-fail-fast --all-targets 2>&1 | tee test.log
+          if grep -E "^warning" test.log; then echo "::error::the build reported warnings"; exit 1; fi
 
   package:
     name: Installers

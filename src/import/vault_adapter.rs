@@ -38,10 +38,12 @@ pub struct VaultEntry {
 /// The catalogued document for `entry`, added by `added_by` into `network_id`.
 pub fn new_document(entry: &VaultEntry, network_id: NetworkId, added_by: &str) -> NewDocument {
     let source = if entry.source_name.is_empty() { entry.format_label.clone() } else { entry.source_name.clone() };
-    NewDocument::new(network_id, catalogue_title(entry), entry.content.clone())
+    let mut new = NewDocument::new(network_id, catalogue_title(entry), entry.content.clone())
         .with_record(catalogue_record(entry))
         .from_origin(OriginKind::Import, source)
-        .added_by(added_by)
+        .added_by(added_by);
+    new.record.provenance.original = entry.original_file.as_deref().and_then(std::path::Path::file_name).map(|name| name.to_string_lossy().to_string()).unwrap_or_default(); // sb F2
+    new
 }
 
 /// Stores `entry` in the active network's vault and returns the new document id.

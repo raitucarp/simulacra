@@ -12,7 +12,9 @@ impl ComposerModalView {
     pub(super) fn footer(&self, can_post: bool) -> Div {
         let theme = &self.theme;
         let on_submit_btn = self.callbacks.on_submit.clone();
-        let label = if self.drafts.len() > 1 {
+        let label = if self.is_editing() {
+            t!("data.edit.save")
+        } else if self.drafts.len() > 1 {
             t!("composer.post_all_button")
         } else {
             t!("composer.post_button")

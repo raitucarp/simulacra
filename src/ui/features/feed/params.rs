@@ -70,6 +70,8 @@ pub struct FeedParams<'a, C> {
     pub on_post_action: PostActionCallback,
     /// sb E1: credence chips on the user's own posts.
     pub credence: Option<crate::ui::features::thinking::credence::CredenceSource>,
+    /// sb F2: edit, history, bookmarks and collections on every card.
+    pub data: Option<crate::ui::features::data::DataSource>,
     pub inspector: super::inspector_outline::InspectorView,
     pub on_inspector: super::inspector_outline::InspectorCallback,
 }

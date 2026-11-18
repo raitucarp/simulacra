@@ -6,6 +6,7 @@ mod drawer;
 mod navigation;
 mod image_ideas;
 mod import;
+mod knowledge; // sb F2: the Library / Saved switch
 mod media;
 mod overlays;
 mod post_actions;
@@ -63,7 +64,7 @@ impl Render for AppView {
             .children(self.capture_box(&bind))
             .children(self.learn_sheet(cx))
             .children(self.drop_hint(cx))
-            .children(self.lightbox(&bind))
+            .children(self.lightbox(&bind)).children(self.data_overlay(&bind)) // sb F2
     }
 }
 

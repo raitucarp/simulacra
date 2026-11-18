@@ -99,6 +99,7 @@ impl Database {
         self.conn.execute_batch(super::journal_schema::CREATE_JOURNAL).map_err(db_err)?;
         self.conn.execute_batch(super::arena_schema::CREATE_ARENA).map_err(db_err)?;
         self.conn.execute_batch(super::thinking_schema::CREATE_THINKING_TABLES).map_err(db_err)?;
+        self.conn.execute_batch(super::data_schema::CREATE_DATA_TABLES).map_err(db_err)?; // sb F2
         self.migrate_posts_schema()?;
         self.conn
             .execute_batch(CREATE_MIGRATED_INDEXES)

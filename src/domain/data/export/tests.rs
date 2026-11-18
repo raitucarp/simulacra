@@ -1,0 +1,185 @@
+use super::*;
+use crate::domain::data::saved::ItemRef;
+use crate::domain::document::Collection;
+use crate::domain::{NetworkId, PostId};
+use chrono::TimeZone;
+use serde_json::json;
+
+const NET: &str = "net_main";
+
+fn at(day: u32) -> DateTime<Utc> {
+    Utc.with_ymd_and_hms(2026, 11, day, 12, 0, 0).unwrap()
+}
+
+fn post(id: &str, author: &str, text: &str, day: u32, reply_to: Option<&str>) -> Post {
+    let mut post = Post::create(id, NET, author, text).unwrap();
+    post.created_at = at(day);
+    post.reply_to_id = reply_to.map(PostId::new);
+    post
+}
+
+fn source() -> ExportSource {
+    let me = Profile::new_primary("user_main", "Ada", "@ada");
+    let mut socrates = Profile::new_agent("agent_s", "Socrates", "@socrates", "Philosopher");
+    socrates.config.engine.request = crate::domain::engine::RequestMode::Custom(Default::default());
+    let posts = vec![
+        post("p1", "user_main", "Is the mind a [[mirror]]? #mind", 2, None),
+        post("p2", "agent_s", "Or a lamp, Ada?", 3, Some("p1")),
+        post("p3", "user_main", "A lamp, then.", 9, Some("p2")),
+        post("p4", "agent_s", "Unrelated musing, with \"quotes\".", 5, None),
+    ];
+    let mut doc = GroundingDocument::new("doc_ethics", NET, "Ethics", "Deus sive natura.");
+    doc.created_at = at(4);
+    doc.record.collections = vec![CollectionId::new("coll_a")];
+    doc.record.provenance.original = "abcd.epub".into();
+    let library = Library { subjects: Vec::new(), collections: vec![Collection { id: CollectionId::new("coll_a"), network_id: NetworkId::new(NET), name: "Shelf".into(), description: String::new() }] };
+    let entries = vec![CollectionEntry { collection: CollectionId::new("coll_a"), item: ItemRef::Post(PostId::new("p4")), position: 0, note: String::new(), added_at: at(6) }];
+    let authors = [me.clone(), socrates.clone()].into_iter().map(|p| (p.id.clone(), p)).collect();
+    ExportSource {
+        network_name: "Main".into(), posts, authors, profiles: vec![me, socrates], documents: vec![doc], library, review: Vec::new(), entries,
+        settings: vec![("preferences.general".into(), "{\"language\":\"en\"}".into())], journal: None,
+        media_dir: PathBuf::from("media"), exported_at: at(10), app_version: "0.1.0".into(),
+    }
+}
+
+fn options(scope: ExportScope) -> ExportOptions {
+    ExportOptions { scope, include_originals: false, include_journal: false }
+}
+
+fn paths(files: &[BundleFile]) -> Vec<&str> {
+    files.iter().map(|f| f.path.as_str()).collect()
+}
+
+fn text_of<'a>(files: &'a [BundleFile], prefix: &str) -> &'a str {
+    files.iter().find(|f| f.path.starts_with(prefix)).and_then(|f| match &f.body { FileBody::Text(t) => Some(t.as_str()), FileBody::Copy(_) => None }).unwrap_or_default()
+}
+
+#[test]
+fn everything_groups_posts_by_thread() {
+    let source = source();
+    let plan = plan_export(&source, &options(ExportScope::Everything));
+    assert_eq!((plan.counts.threads, plan.counts.posts, plan.counts.documents, plan.counts.agents, plan.counts.settings), (2, 4, 1, 2, 1));
+    assert_eq!(plan.threads[0].posts.iter().map(|p| p.id.as_str()).collect::<Vec<_>>(), vec!["p1", "p2", "p3"]);
+}
+
+#[test]
+fn persona_scope_keeps_only_its_posts_in_their_threads() {
+    let source = source();
+    let plan = plan_export(&source, &options(ExportScope::Persona(ProfileId::new("user_main"))));
+    assert_eq!(plan.threads.len(), 1);
+    assert_eq!(plan.threads[0].root.as_str(), "p1");
+    assert_eq!(plan.threads[0].posts.len(), 2);
+    assert_eq!(plan.counts.settings, 0, "settings travel with everything only");
+    assert_eq!(plan.agents.iter().map(|p| p.handle.as_str()).collect::<Vec<_>>(), vec!["@ada"]);
+}
+
+#[test]
+fn collection_scope_takes_its_posts_and_filed_documents() {
+    let source = source();
+    let plan = plan_export(&source, &options(ExportScope::Collection(CollectionId::new("coll_a"))));
+    assert_eq!((plan.counts.posts, plan.counts.documents), (1, 1));
+    assert_eq!(plan.threads[0].root.as_str(), "p4");
+}
+
+#[test]
+fn date_range_is_inclusive() {
+    let source = source();
+    let day = |d: u32| at(d).with_timezone(&chrono::Local).date_naive();
+    let plan = plan_export(&source, &options(ExportScope::DateRange { from: day(3), to: day(5) }));
+    assert_eq!(plan.counts.posts, 2);
+    assert_eq!(plan.counts.documents, 1);
+}
+
+#[test]
+fn thread_markdown_has_front_matter_and_keeps_wikilinks() {
+    let source = source();
+    let plan = plan_export(&source, &options(ExportScope::Everything));
+    let files = bundle_files(&plan, &source);
+    let thread = text_of(&files, "threads/2026-11-02-is-the-mind-a-mirror-mind");
+    assert!(thread.starts_with("---\ntitle: \"Is the mind a [[mirror]]? #mind\"\n"), "{thread}");
+    assert!(thread.contains("tags: [\"#mind\"]"));
+    assert!(thread.contains("authors: [\"@ada\",\"@socrates\"]
+"), "{thread}");
+    assert!(thread.contains("### Socrates (@socrates) · 2026-11-03 12:00 UTC"));
+    assert!(thread.contains("[[mirror]]"));
+}
+
+#[test]
+fn bundle_lists_manifest_threads_documents_agents_and_settings() {
+    let source = source();
+    let plan = plan_export(&source, &ExportOptions { include_originals: true, ..options(ExportScope::Everything) });
+    let files = bundle_files(&plan, &source);
+    let all = paths(&files);
+    assert_eq!(all[0], MANIFEST_PATH);
+    assert!(all.iter().any(|p| p.starts_with("documents/ethics-") && p.ends_with(".md")));
+    assert!(all.contains(&"documents/originals/abcd.epub"));
+    assert!(all.iter().any(|p| p.starts_with("agents/socrates-")));
+    assert!(all.contains(&"settings.json"));
+    assert!(!all.iter().any(|p| p.starts_with("journal/")));
+    let manifest: serde_json::Value = serde_json::from_str(text_of(&files, MANIFEST_PATH)).unwrap();
+    assert_eq!(manifest["format"], json!(BUNDLE_FORMAT));
+    assert_eq!(manifest["counts"]["posts"], json!(4));
+    assert_eq!(manifest["includes_private_journal"], json!(false));
+}
+
+#[test]
+fn journal_is_left_out_unless_ticked() {
+    let mut source = source();
+    let day = at(3).with_timezone(&chrono::Local).date_naive();
+    let entry = crate::domain::journal::JournalEntry::new(crate::domain::journal::RecordId::new("j1"), day, at(3), "private thought");
+    source.journal = Some(crate::domain::journal::JournalBook { entries: vec![entry], ..Default::default() });
+    let off = bundle_files(&plan_export(&source, &options(ExportScope::Everything)), &source);
+    assert!(!off.iter().any(|f| f.path.starts_with("journal/")));
+    let on_plan = plan_export(&source, &ExportOptions { include_journal: true, ..options(ExportScope::Everything) });
+    assert_eq!(on_plan.counts.journal_records, 1);
+    assert!(text_of(&bundle_files(&on_plan, &source), "journal/").contains("private thought"));
+}
+
+#[test]
+fn settings_allow_list_holds_no_secret() {
+    use crate::storage::SettingKey as K;
+    for forbidden in [K::Credentials, K::LlmApiKey, K::LlmProvider, K::LlmEndpoint, K::LlmModel, K::EmbeddingUsage, K::ForgeAutosave, K::LegacyThemeTokens] {
+        assert!(!SETTINGS_ALLOW_LIST.contains(&forbidden), "{forbidden:?} must stay out");
+    }
+    for key in SETTINGS_ALLOW_LIST {
+        let name = key.as_str().to_lowercase();
+        assert!(!["key", "token", "secret", "credential", "password"].iter().any(|m| name.contains(m)), "{name}");
+    }
+}
+
+#[test]
+fn agent_secrets_are_redacted() {
+    let mut agent = Profile::new_agent("agent_x", "X", "@x", "Tester");
+    let mut request = crate::domain::engine::CustomRequest { url: "https://example.test/v1?key=SECRET1".into(), credential: Some("cred_main".into()), ..Default::default() };
+    request.headers[0].value = "Bearer SECRET2".into();
+    agent.config.engine.request = crate::domain::engine::RequestMode::Custom(request);
+    let json = redacted_profile(&agent).to_string();
+    assert!(!json.contains("SECRET1") && !json.contains("SECRET2") && !json.contains("cred_main"), "{json}");
+    assert!(json.contains("https://example.test/v1") && json.contains("Authorization"));
+}
+
+#[test]
+fn csv_fields_are_quoted_when_needed() {
+    assert_eq!(csv_field("plain"), "plain");
+    assert_eq!(csv_field("a,b"), "\"a,b\"");
+    assert_eq!(csv_field("say \"hi\""), "\"say \"\"hi\"\"\"");
+    assert_eq!(csv_field("two\nlines"), "\"two\nlines\"");
+    assert!(review_csv(&[]).starts_with("id,type,anchor,written,tags,created,due,interval_days,reps,lapses,suspended\r\n"));
+}
+
+#[test]
+fn slugs_and_titles_are_tidy() {
+    assert_eq!(slug("Is the mind a [[mirror]]?"), "is-the-mind-a-mirror");
+    assert_eq!(slug("日本語"), "untitled");
+    assert_eq!(thread_title("\n  First line\nsecond"), "First line");
+    assert!(thread_title(&"word ".repeat(40)).ends_with('…'));
+}
+
+#[test]
+fn reply_cycles_do_not_hang_the_root_search() {
+    let a = post("a", "u", "a", 1, Some("b"));
+    let b = post("b", "u", "b", 1, Some("a"));
+    let by_id: std::collections::HashMap<&str, &Post> = [("a", &a), ("b", &b)].into_iter().collect();
+    let root = thread_root(&a, &by_id);
+    assert!(root.id.as_str() == "a" || root.id.as_str() == "b");
+}

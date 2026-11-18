@@ -30,6 +30,8 @@ pub(crate) struct PostCallbacks {
     pub links: BodyLinks,
     /// sb E1: credence chips of the user's own posts.
     pub credence: Option<crate::ui::features::thinking::credence::CredenceSource>,
+    /// sb F2: edit, history, bookmarks and collections.
+    pub data: Option<crate::ui::features::data::DataSource>,
 }
 
 /// Visual and interaction mode of a rendered card.
@@ -74,6 +76,7 @@ impl PostCallbacks {
             links: self.links.clone(),
             on_post_action: Some(bind_action(&self.on_post_action, &target_id)),
             credence: self.credence.as_ref().filter(|_| target.human).map(|source| source.controls(&target_id)),
+            data: self.data.as_ref().map(|source| source.controls(&target_id, target.human)),
         }
     }
 

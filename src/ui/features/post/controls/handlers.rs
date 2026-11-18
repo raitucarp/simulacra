@@ -35,4 +35,6 @@ pub struct PostCardHandlers {
     pub on_post_action: Option<PickPostAction>,
     /// sb E1: the credence chip and popover; `None` on posts the user did not write.
     pub credence: Option<crate::ui::features::thinking::credence::CredenceControls>,
+    /// sb F2: Edit, History, Bookmark, collections and the "edited" mark; `None` hides them.
+    pub data: Option<crate::ui::features::data::DataControls>,
 }

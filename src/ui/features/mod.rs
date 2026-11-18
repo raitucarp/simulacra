@@ -4,6 +4,7 @@
 pub mod arena;
 pub mod beliefs;
 pub mod command_palette;
+pub mod data; // sb F2
 pub mod composer;
 pub mod day_filter;
 pub mod feed;

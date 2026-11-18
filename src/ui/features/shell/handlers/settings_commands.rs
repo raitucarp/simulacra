@@ -2,6 +2,7 @@
 
 use super::super::view::AppView;
 use crate::domain::preferences::{Preferences, ToastKind};
+use crate::ui::features::data::DataEvent;
 use crate::ui::features::settings::SettingsCommand;
 use gpui_kit::component::notification::Notification;
 use gpui_kit::component::WindowExt;
@@ -9,8 +10,6 @@ use gpui_kit::*;
 use rust_i18n::t;
 use std::path::{Path, PathBuf};
 
-/// Prefix of the notes of commands that later waves complete (`prefs.pending.<id>`).
-const PENDING_PREFIX: &str = "prefs.pending";
 /// Folder of the vault backups, next to the database.
 const BACKUP_DIR: &str = "backups";
 /// `simulacra-20261117-210455.db`
@@ -40,11 +39,9 @@ impl AppView {
             }
             SettingsCommand::ReindexEmbeddings => self.rebuild_semantic_index(window, cx),
             SettingsCommand::CancelReindex => self.cancel_semantic_index(window, cx),
-            SettingsCommand::Export => {
-                let key = format!("{PENDING_PREFIX}.{}", command.id());
-                let note = Notification::info(t!(key.as_str()).to_string());
-                window.push_notification(note, cx);
-            }
+            SettingsCommand::Export => self.on_data_event(DataEvent::OpenExport, window, cx),
+            SettingsCommand::EncryptedSnapshot => self.on_data_event(DataEvent::OpenSnapshot, window, cx),
+            SettingsCommand::RestoreSnapshot => self.on_data_event(DataEvent::OpenRestore, window, cx),
         }
         cx.notify();
     }

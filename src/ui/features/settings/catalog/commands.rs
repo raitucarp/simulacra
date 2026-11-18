@@ -14,7 +14,7 @@ pub enum SettingsCommand {
     OpenMediaFolder,
     /// Writes a copy of the vault next to it.
     Backup,
-    /// Exports the vault (a stub until the export wave lands).
+    /// Opens the export bundle dialog (sb F2).
     Export,
     /// Forgets the cached illustration and avatar rasters.
     ClearCaches,
@@ -22,13 +22,16 @@ pub enum SettingsCommand {
     OpenKeymap,
     /// Puts every preference back to its default.
     ResetAll,
+    /// sb F2: seals the whole vault with a passphrase; restores a sealed snapshot.
+    EncryptedSnapshot,
+    RestoreSnapshot,
 }
 
 impl SettingsCommand {
     /// Every command.
-    pub const ALL: [SettingsCommand; 10] = [
+    pub const ALL: [SettingsCommand; 12] = [
         Self::ReplayWelcome, Self::ReindexEmbeddings, Self::CancelReindex, Self::OpenDatabaseFolder, Self::OpenMediaFolder,
-        Self::Backup, Self::Export, Self::ClearCaches, Self::OpenKeymap, Self::ResetAll,
+        Self::Backup, Self::Export, Self::ClearCaches, Self::OpenKeymap, Self::ResetAll, Self::EncryptedSnapshot, Self::RestoreSnapshot,
     ];
 
     /// Stable command id.
@@ -44,6 +47,8 @@ impl SettingsCommand {
             Self::ClearCaches => "data.clear_caches",
             Self::OpenKeymap => "keymap.open",
             Self::ResetAll => "settings.reset_all",
+            Self::EncryptedSnapshot => "data.snapshot",
+            Self::RestoreSnapshot => "data.restore",
         }
     }
 

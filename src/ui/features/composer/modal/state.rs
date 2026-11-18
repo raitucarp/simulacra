@@ -15,7 +15,13 @@ impl ComposerModalView {
             ComposerModalMode::Quote(target) => {
                 t!("composer.quote_title", handle = target.author.display_handle()).to_string()
             }
+            ComposerModalMode::Edit(_) => t!("data.edit.title").to_string(),
         }
+    }
+
+    /// Whether the dialog edits a post (sb F2: one text, no attachments or added posts).
+    pub(super) fn is_editing(&self) -> bool {
+        matches!(self.mode, ComposerModalMode::Edit(_))
     }
 
     pub(super) fn reply_parent(&self) -> Option<&AuthoredPost> {

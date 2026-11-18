@@ -30,4 +30,6 @@ pub enum VaultEvent {
     LearnPassages(String),
     /// A connection map of a document's related entries (sb C1b).
     LearnConnections(String),
+    /// sb F2: the document's earlier versions (text, title and record).
+    History(String),
 }

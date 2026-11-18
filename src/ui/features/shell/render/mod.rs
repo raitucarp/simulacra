@@ -4,6 +4,7 @@ mod center;
 mod columns;
 mod drawer;
 mod navigation;
+mod image_ideas;
 mod import;
 mod media;
 mod overlays;
@@ -55,6 +56,7 @@ impl Render for AppView {
             .children(self.indexing_indicator(&bind))
             .children(self.similar_sheet(&bind))
             .children(self.post_actions_sheet(&bind))
+            .children(self.image_ideas_sheet(&bind))
             .children(self.palette.palette.clone())
             .children(self.shortcut_sheet(&bind))
             .children(self.import_sheet(&bind, cx))

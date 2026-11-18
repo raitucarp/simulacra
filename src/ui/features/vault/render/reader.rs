@@ -99,7 +99,8 @@ impl VaultPanel {
             .child(div().font_family(theme.font_family_display.clone()).text_size(theme.font_size_xl).font_weight(FontWeight::BOLD).text_color(theme.text_primary).child(doc.display_title()))
             .child(meta_line(vec![creators, doc.record.date.clone()], theme).text_size(theme.font_size_sm));
         let body = blocks(&doc.content);
-        let empty = body.is_empty().then(|| div().text_size(theme.font_size_sm).text_color(theme.text_muted).child(t!("vault.no_text").to_string()));
+        let art = || crate::ui::illustration::Illustration::spot(crate::ui::illustration::SpotKey::Reading).width(theme.art_notice_width);
+        let empty = body.is_empty().then(|| crate::ui::components::art_state(crate::ui::components::ArtState::hint(art(), t!("vault.no_text").to_string()), theme));
         std::iter::once(heading)
             .chain(body.into_iter().map(|block| self.render_block(block)))
             .chain(empty)

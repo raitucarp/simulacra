@@ -89,6 +89,7 @@ pub const COMMANDS: &[CommandSpec] = &[
     action(C::ToggleOutline, I::ListTree, Ready),
     action(C::InsightsOverview, I::Gauge, Ready), action(C::InsightsNetwork, I::Network, Ready), action(C::InsightsSets, I::Layers, Ready),
     action(C::InsightsSymmetry, I::GitBranch, Ready), action(C::InsightsCategories, I::GitCompareArrows, Ready), action(C::InsightsEmbedding, I::Compass, Ready), action(C::InsightsActivity, I::Clock, Ready),
+    action(C::ImageIdeas, I::ImagePlus, Ready),
 ];
 
 /// The registry row of `id`.

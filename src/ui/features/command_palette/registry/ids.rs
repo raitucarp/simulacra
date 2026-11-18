@@ -82,4 +82,6 @@ command_ids! {
     InsightsCategories => "insights_categories",
     InsightsEmbedding => "insights_embedding",
     InsightsActivity => "insights_activity",
+    /// sb D3: image ideas for an avatar (the Forge draft, the roster selection or you).
+    ImageIdeas => "image_ideas",
 }

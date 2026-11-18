@@ -7,6 +7,7 @@ mod accents;
 mod actions;
 mod chrome;
 mod forge;
+mod image_prompt;
 mod import;
 mod insights;
 mod media;
@@ -57,6 +58,7 @@ pub fn derive_tokens(
     responsive::apply_responsive_layout(&mut t);
     vault::apply_vault_layout(&mut t);
     actions::apply_actions_layout(&mut t);
+    image_prompt::apply_image_prompt_layout(&mut t);
     surfaces::apply_surfaces(&mut t, palette);
     text::apply_text(&mut t, palette);
     accents::apply_accents(&mut t, palette);

@@ -47,8 +47,8 @@ impl ImportSheet {
     pub(super) fn preview(&self) -> AnyElement {
         let theme = self.theme.clone();
         if self.session.units.is_empty() {
-            let empty = div().p(theme.card_padding).text_size(theme.font_size_xs).text_color(theme.text_muted);
-            return empty.child(t!("import.no_units").to_string()).into_any_element();
+            let empty = div().p(theme.card_padding).flex().justify_center();
+            return empty.child(crate::ui::components::art_state(crate::ui::components::ArtState::hint(crate::ui::illustration::Illustration::empty(crate::ui::illustration::EmptyKey::ImportNothing).width(theme.art_notice_width), t!("import.no_units").to_string()), &theme)).into_any_element();
         }
         let (units, selected, titles) = (self.session.units.clone(), Rc::new(self.session.selected.clone()), Rc::new(self.session.chapter_titles()));
         let toggle = self.actions.on_toggle.clone();

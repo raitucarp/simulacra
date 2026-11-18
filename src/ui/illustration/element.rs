@@ -1,7 +1,7 @@
 //! [`Illustration`]: a themed illustration template rendered as a sized `img()`.
 
 use super::active::with_active_cache;
-use super::keys::{ClassKey, EmptyKey, GuidePose, IllustrationKind, StepKey};
+use super::keys::{ClassKey, EmptyKey, GuidePose, IllustrationKind, NoticeKey, SpotKey, StepKey};
 use super::template::{raster_width, TemplateExtras};
 use crate::domain::TraitOption;
 use gpui_kit::gpui::Image;
@@ -47,6 +47,16 @@ impl Illustration {
     /// An empty-state scene.
     pub fn empty(key: EmptyKey) -> Self {
         Self::asset(key.path(), EmptyKey::KIND)
+    }
+
+    /// A reusable spot scene (sb D3).
+    pub fn spot(key: SpotKey) -> Self {
+        Self::asset(key.path(), SpotKey::KIND)
+    }
+
+    /// The art beside a notice (sb D3).
+    pub fn notice(key: NoticeKey) -> Self {
+        Self::asset(key.path(), NoticeKey::KIND)
     }
 
     /// Displayed width (height follows the canvas aspect ratio).

@@ -6,6 +6,7 @@ pub mod composer;
 pub mod day_filter;
 pub mod feed;
 pub mod forge;
+pub mod image_prompt;
 pub mod import;
 pub mod insights;
 pub mod media;

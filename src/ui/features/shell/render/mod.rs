@@ -78,6 +78,7 @@ impl AppView {
         self.sync_semantic_index(window, cx);
         self.sync_media(window, cx);
         self.sync_review(window, cx);
+        self.sync_insights(cx);
         self.sync_forge_theme(cx);
     }
 

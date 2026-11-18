@@ -47,7 +47,7 @@ pub fn group_of(target: ShortcutTarget) -> ShortcutGroup {
 fn command_group(id: CommandId) -> ShortcutGroup {
     match id {
         CommandId::GoTimeline | CommandId::GoKnowledge | CommandId::GoAgents | CommandId::GoPersonas
-        | CommandId::GoMindGraph | CommandId::GoReview | CommandId::OpenInbox | CommandId::ToggleSidebar | CommandId::ToggleRightSidebar => {
+        | CommandId::GoMindGraph | CommandId::GoReview | CommandId::GoInsights | CommandId::OpenInbox | CommandId::ToggleSidebar | CommandId::ToggleRightSidebar => {
             ShortcutGroup::Navigation
         }
         CommandId::NewThread | CommandId::NewNote | CommandId::ImportFile | CommandId::NewAgent => ShortcutGroup::Writing,

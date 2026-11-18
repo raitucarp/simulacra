@@ -5,7 +5,7 @@ use super::geometry::{faded, max_degree, node_color, node_radius};
 use super::viewport::{Fit, Frame, Viewport};
 use crate::state::graph::GraphScene;
 use crate::theme::ThemeTokens;
-use gpui_kit::{fill, point, px, size, App, Bounds, Pixels, Point, Window};
+use gpui_kit::{fill, point, px, size, App, Bounds, Window};
 
 /// Diameter as a multiple of the radius.
 const DIAMETER_FACTOR: f32 = 2.0;
@@ -39,10 +39,6 @@ pub(crate) struct ScenePainter<'a> {
     fit: Fit,
     /// Per-node full-strength flag (the anchor and its neighbors, or everything).
     lit: Vec<bool>,
-}
-
-pub(super) fn to_point((x, y): (f32, f32)) -> Point<Pixels> {
-    point(px(x), px(y))
 }
 
 impl<'a> ScenePainter<'a> {
@@ -112,6 +108,10 @@ impl<'a> ScenePainter<'a> {
     fn paint_node(&self, idx: usize, top: usize, window: &mut Window) {
         let (x, y) = self.screen(idx);
         let r = self.radius(idx, top);
+        let frame = (self.frame.x, self.frame.y, self.frame.width, self.frame.height);
+        if !crate::ui::features::insights::chart::cull::point_visible((x, y), r, frame) {
+            return;
+        }
         let mut color = node_color(self.scene.model.nodes()[idx].node.kind(), self.theme);
         if !self.is_lit(idx) {
             color = faded(color, self.theme.graph_dim_opacity);

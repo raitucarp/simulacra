@@ -13,6 +13,7 @@ mod image_ideas_open;
 mod image_ideas_run;
 mod import_flow;
 mod import_sheet;
+mod insights;
 mod inspector;
 mod lab;
 mod media;

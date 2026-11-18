@@ -63,6 +63,7 @@ pub const COMMANDS: &[CommandSpec] = &[
     screen(C::GoPersonas, I::UserCheck),
     screen(C::GoMindGraph, I::Share2),
     screen(C::GoReview, I::GraduationCap),
+    screen(C::GoInsights, I::ChartColumn),
     action(C::NewThread, I::MessageSquarePlus, Ready),
     action(C::NewNote, I::StickyNote, Ready),
     action(C::ImportFile, I::FileUp, Ready),
@@ -86,6 +87,8 @@ pub const COMMANDS: &[CommandSpec] = &[
     action(C::NewConnectionMap, I::Share2, Ready),
     action(C::PostActions, I::WandSparkles, Ready),
     action(C::ToggleOutline, I::ListTree, Ready),
+    action(C::InsightsOverview, I::Gauge, Ready), action(C::InsightsNetwork, I::Network, Ready), action(C::InsightsSets, I::Layers, Ready),
+    action(C::InsightsSymmetry, I::GitBranch, Ready), action(C::InsightsCategories, I::GitCompareArrows, Ready), action(C::InsightsEmbedding, I::Compass, Ready), action(C::InsightsActivity, I::Clock, Ready),
     action(C::ImageIdeas, I::ImagePlus, Ready),
 ];
 

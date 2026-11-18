@@ -114,6 +114,7 @@ pub const SHORTCUTS: &[Shortcut] = &[
     shell("secondary-4", C::GoPersonas),
     shell("secondary-5", C::GoMindGraph),
     shell("secondary-6", C::GoReview),
+    shell("secondary-7", C::GoInsights),
     scoped("secondary-enter", T::SubmitPost, KeyScope::Input),
     scoped("secondary-z", T::ForgeUndo, KeyScope::Forge),
     scoped("secondary-shift-z", T::ForgeRedo, KeyScope::Forge),

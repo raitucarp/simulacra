@@ -5,6 +5,7 @@
 //! [`ComposerModalEvent::Submit`], reporting store rejections back through [`ComposerModalPanel::set_error`].
 
 mod actions;
+mod atomic;
 mod drafts;
 mod media;
 mod render;
@@ -68,6 +69,7 @@ pub struct ComposerModalPanel {
     error: Option<String>,
     theme: ThemeTokens,
     profile: Option<Profile>,
+    atomic: atomic::AtomicHintState, // sb E1: the atomic-note hint
     _subscriptions: Vec<Subscription>,
 }
 
@@ -98,7 +100,7 @@ impl ComposerModalPanel {
             error: None,
             theme,
             profile,
-            _subscriptions: Vec::new(),
+            atomic: Default::default(), _subscriptions: Vec::new(),
         };
         panel._subscriptions = panel.subscribe(window, cx);
         panel.drafts.push(panel.new_draft_slot(window, cx));

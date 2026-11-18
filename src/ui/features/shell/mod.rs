@@ -30,6 +30,7 @@ mod render;
 mod scheduler_state;
 mod semantic_state;
 mod stream_list;
+mod thinking_host;
 mod settings_draft;
 mod settings_ui;
 mod vault_host;

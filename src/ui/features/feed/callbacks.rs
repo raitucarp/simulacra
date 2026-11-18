@@ -28,6 +28,8 @@ pub(crate) struct PostCallbacks {
     pub on_post_action: Rc<PostActionCallback>,
     /// Hashtag and wikilink clicks inside post bodies.
     pub links: BodyLinks,
+    /// sb E1: credence chips of the user's own posts.
+    pub credence: Option<crate::ui::features::thinking::credence::CredenceSource>,
 }
 
 /// Visual and interaction mode of a rendered card.
@@ -56,7 +58,7 @@ impl PostCallbacks {
     /// original of an instant repost); delete stays on the card's own thought and is offered
     /// only on thoughts written by a user persona.
     fn handlers_for(&self, post: &Post, author: &Profile, target: CardTarget, selectable: bool) -> PostCardHandlers {
-        let CardTarget { id: target_id, handle } = target;
+        let CardTarget { id: target_id, handle, .. } = target.clone();
         let (reply, reply_id) = (self.on_reply.clone(), target_id.clone());
         let select = self.on_select.clone();
         PostCardHandlers {
@@ -71,6 +73,7 @@ impl PostCallbacks {
             on_delete: author.is_human_persona().then(|| bind(&self.on_delete, &post.id)),
             links: self.links.clone(),
             on_post_action: Some(bind_action(&self.on_post_action, &target_id)),
+            credence: self.credence.as_ref().filter(|_| target.human).map(|source| source.controls(&target_id)),
         }
     }
 
@@ -95,15 +98,18 @@ impl PostCallbacks {
 }
 
 /// The thought a card's actions act on, with its author's handle (for reply mentions).
+#[derive(Clone)]
 struct CardTarget {
     id: PostId,
     handle: String,
+    /// The thought was written by one of the user's personas (sb E1: credences).
+    human: bool,
 }
 
 impl CardTarget {
     fn resolve(post: &Post, state: &AppState) -> Self {
         let id = state.action_target(&post.id);
-        let handle = state.get_post(&id).map_or_else(|| state.author_of(post), |p| state.author_of(p)).handle.clone();
-        Self { id, handle }
+        let author = state.get_post(&id).map_or_else(|| state.author_of(post), |p| state.author_of(p));
+        Self { id, handle: author.handle.clone(), human: author.is_human_persona() }
     }
 }

@@ -124,11 +124,7 @@ lucide_catalog! {
     BookMarked => "icons/book-marked.svg",
     Languages => "icons/languages.svg",
     MapPin => "icons/map-pin.svg",
-    // Import and capture
-    Feather => "icons/feather.svg",
-    Inbox => "icons/inbox.svg",
-    Pilcrow => "icons/pilcrow.svg",
-    VenetianMask => "icons/venetian-mask.svg",
+    Feather => "icons/feather.svg", Inbox => "icons/inbox.svg", Pilcrow => "icons/pilcrow.svg", VenetianMask => "icons/venetian-mask.svg", // Import and capture
     // sb C2: post actions and the outline view
     Network => "icons/network.svg", Shield => "icons/shield.svg", Scale => "icons/scale.svg", Puzzle => "icons/puzzle.svg", Swords => "icons/swords.svg", Gauge => "icons/gauge.svg", GitCompareArrows => "icons/git-compare-arrows.svg", FlaskConical => "icons/flask-conical.svg", ListTree => "icons/list-tree.svg", ChevronsDownUp => "icons/chevrons-down-up.svg",
     // sb C1: review page, quizzes and statistics
@@ -147,4 +143,5 @@ lucide_catalog! {
     Pause => "icons/pause.svg",
     Play => "icons/play.svg",
     MessageSquareReply => "icons/message-square-reply.svg", CircleStop => "icons/circle-stop.svg", Eraser => "icons/eraser.svg", ArrowLeftRight => "icons/arrow-left-right.svg", ListChecks => "icons/list-checks.svg", // sb C1b
+    Waypoints => "icons/waypoints.svg", Atom => "icons/atom.svg", Percent => "icons/percent.svg", ChartScatter => "icons/chart-scatter.svg", Split => "icons/split.svg", CalendarClock => "icons/calendar-clock.svg", GripVertical => "icons/grip-vertical.svg", // sb E1
 }

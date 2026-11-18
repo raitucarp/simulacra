@@ -28,5 +28,7 @@ gpui_kit::assets::icon_assets!(
         TextCursorInput, Trophy, Pause, Play,
         // sb C1b
         MessageSquareReply, CircleStop, Eraser, ArrowLeftRight, ListChecks,
+        // sb E1
+        Waypoints, Atom, Percent, ChartScatter, Split, CalendarClock, GripVertical,
     ]
 );

@@ -22,6 +22,7 @@ mod spacing;
 mod suggestions;
 mod surfaces;
 mod text;
+mod thinking;
 mod vault;
 
 pub use metrics::{DEFAULT_FONT_FAMILY, DEFAULT_MONO_FONT_FAMILY};
@@ -61,6 +62,7 @@ pub fn derive_tokens(
     actions::apply_actions_layout(&mut t);
     suggestions::apply_suggestions_layout(&mut t);
     image_prompt::apply_image_prompt_layout(&mut t);
+    thinking::apply_thinking_layout(&mut t);
     surfaces::apply_surfaces(&mut t, palette);
     text::apply_text(&mut t, palette);
     accents::apply_accents(&mut t, palette);

@@ -29,6 +29,9 @@ pub fn kind_icon(kind: ActionKind) -> LucideIcon {
         ActionKind::Analogies => LucideIcon::GitCompareArrows,
         ActionKind::FalsifiablePrediction => LucideIcon::FlaskConical,
         ActionKind::ContinueThought => LucideIcon::Feather,
+        ActionKind::MapArgument => LucideIcon::Waypoints,
+        ActionKind::FindTensions => LucideIcon::Zap,
+        ActionKind::CheckAtomicity => LucideIcon::Atom,
     }
 }
 

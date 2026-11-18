@@ -84,4 +84,9 @@ command_ids! {
     InsightsActivity => "insights_activity",
     /// sb D3: image ideas for an avatar (the Forge draft, the roster selection or you).
     ImageIdeas => "image_ideas",
+    /// sb E1: the Calibration and Tensions views, resolving due predictions, the argument map.
+    InsightsCalibration => "insights_calibration",
+    InsightsTensions => "insights_tensions",
+    ResolveDuePredictions => "resolve_due_predictions",
+    ShowArgumentMap => "show_argument_map",
 }

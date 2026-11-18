@@ -90,6 +90,7 @@ pub const COMMANDS: &[CommandSpec] = &[
     action(C::InsightsOverview, I::Gauge, Ready), action(C::InsightsNetwork, I::Network, Ready), action(C::InsightsSets, I::Layers, Ready),
     action(C::InsightsSymmetry, I::GitBranch, Ready), action(C::InsightsCategories, I::GitCompareArrows, Ready), action(C::InsightsEmbedding, I::Compass, Ready), action(C::InsightsActivity, I::Clock, Ready),
     action(C::ImageIdeas, I::ImagePlus, Ready),
+    action(C::InsightsCalibration, I::ChartScatter, Ready), action(C::InsightsTensions, I::Zap, Ready), action(C::ResolveDuePredictions, I::CalendarClock, Ready), action(C::ShowArgumentMap, I::Waypoints, Ready), // sb E1
 ];
 
 /// The registry row of `id`.

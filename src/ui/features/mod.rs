@@ -23,5 +23,6 @@ pub mod shell;
 pub mod sidebar_left;
 pub mod sidebar_right;
 pub mod splash;
+pub mod thinking;
 pub mod title_bar;
 pub mod vault;

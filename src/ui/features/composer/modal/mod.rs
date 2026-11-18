@@ -82,4 +82,15 @@ pub struct ComposerModalView {
     pub notice: Option<String>,
     pub can_post: bool,
     pub callbacks: ModalCallbacks,
+    /// sb E1: the atomic-note hint under one draft.
+    pub atomic_hint: Option<AtomicHintView>,
+}
+
+/// sb E1: the atomic-note hint of draft `draft`, with its split and dismiss actions.
+#[derive(Clone)]
+pub struct AtomicHintView {
+    pub draft: usize,
+    pub report: crate::domain::thinking::atomic::AtomicReport,
+    pub on_split: ModalActionCallback,
+    pub on_dismiss: ModalActionCallback,
 }

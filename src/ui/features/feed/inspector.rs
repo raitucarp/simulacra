@@ -46,10 +46,10 @@ pub(crate) fn render_inspector_pane(ctx: &InspectorContext<'_>, focused: Option<
     let theme = ctx.theme;
     let conversation = focused.map(|post| build_conversation(ctx.state, post, ctx.limits()));
     let replies_count = conversation.as_ref().map(|c| c.direct_total);
-    let outline = focused.filter(|_| ctx.view.mode == InspectorMode::Outline);
-    let body = match outline {
-        Some(post) => render_outline_pane(ctx.state, post, ctx.view, &ctx.on_inspector, theme).into_any_element(),
-        None => render_thread_scroll(ctx, conversation.as_ref()).into_any_element(),
+    let body = match (ctx.view.mode, focused, ctx.view.argument.clone()) {
+        (InspectorMode::Outline, Some(post), _) => render_outline_pane(ctx.state, post, ctx.view, &ctx.on_inspector, theme).into_any_element(),
+        (InspectorMode::Argument, Some(_), Some(argument)) => argument.into_any_element(),
+        _ => render_thread_scroll(ctx, conversation.as_ref()).into_any_element(),
     };
     div()
         .w_full()

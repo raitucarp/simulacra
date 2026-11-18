@@ -55,7 +55,7 @@ impl Render for AppView {
             .children(self.welcome_overlay(&bind))
             .children(self.indexing_indicator(&bind))
             .children(self.similar_sheet(&bind))
-            .children(self.post_actions_sheet(&bind))
+            .children(self.post_actions_sheet(&bind)).children(self.atomic_sheet_overlay(&bind))
             .children(self.image_ideas_sheet(&bind))
             .children(self.palette.palette.clone())
             .children(self.shortcut_sheet(&bind))
@@ -79,6 +79,7 @@ impl AppView {
         self.sync_media(window, cx);
         self.sync_review(window, cx);
         self.sync_insights(cx);
+        self.sync_thinking(cx);
         self.sync_forge_theme(cx);
     }
 

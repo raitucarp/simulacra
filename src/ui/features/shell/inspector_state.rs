@@ -31,6 +31,6 @@ impl InspectorState {
 
     /// The view the feed renders.
     pub fn view(&self) -> InspectorView {
-        InspectorView { mode: self.mode, outlines: self.outlines.clone(), focus: self.focus.clone() }
+        InspectorView { mode: self.mode, outlines: self.outlines.clone(), focus: self.focus.clone(), argument: None }
     }
 }

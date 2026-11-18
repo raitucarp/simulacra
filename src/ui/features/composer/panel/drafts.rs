@@ -41,6 +41,7 @@ impl ComposerModalPanel {
             }
             InputEvent::Change => {
                 self.error = None;
+                self.schedule_atomic_hint(cx);
                 cx.notify();
             }
             InputEvent::PressEnter { secondary: true, .. } => self.submit(window, cx),
@@ -72,8 +73,15 @@ impl ComposerModalPanel {
             return;
         };
         let text = input.read(cx).value().to_string();
-        let chunks = split_into_thread(&text, MAX_POST_CHARS);
-        let Some((first, rest)) = chunks.split_first().filter(|(_, rest)| !rest.is_empty()) else {
+        self.replace_draft(index, split_into_thread(&text, MAX_POST_CHARS), window, cx);
+    }
+
+    /// Replaces the draft at `index` with `chunks` (one draft each), focusing the last one.
+    pub(super) fn replace_draft(&mut self, index: usize, chunks: Vec<String>, window: &mut Window, cx: &mut Context<Self>) {
+        let Some(input) = self.drafts.get(index).map(|slot| slot.input.clone()) else {
+            return;
+        };
+        let Some((first, rest)) = chunks.split_first() else {
             return;
         };
         input.update(cx, |state, cx| state.set_value(first.clone(), window, cx));

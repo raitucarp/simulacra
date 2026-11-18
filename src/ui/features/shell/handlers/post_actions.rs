@@ -24,6 +24,9 @@ impl AppView {
     /// Opens the sheet on `post_id`, running `kind` at once when given.
     pub(crate) fn open_post_actions(&mut self, post_id: PostId, kind: Option<ActionKind>, window: &mut Window, cx: &mut Context<Self>) {
         let post_id = self.state.action_target(&post_id);
+        if let Some(kind) = kind.filter(|kind| kind.opens_tool()) {
+            return self.open_thinking_tool(post_id, kind, window, cx);
+        }
         let Some(post) = self.state.get_post(&post_id) else { return };
         self.post_actions.cancel_running();
         let concepts = extract_concepts(&post.content, |link| self.state.get_post_by_id(link).is_some());
@@ -64,6 +67,10 @@ impl AppView {
     }
 
     fn pick_post_action(&mut self, kind: ActionKind, window: &mut Window, cx: &mut Context<Self>) {
+        if let Some(post_id) = self.post_actions.sheet.as_ref().filter(|_| kind.opens_tool()).map(|sheet| sheet.post_id.clone()) {
+            self.close_action_sheet(window, cx);
+            return self.open_thinking_tool(post_id, kind, window, cx);
+        }
         let Some(sheet) = self.post_actions.sheet.as_mut() else { return };
         sheet.request = sheet.request.clone().with_kind(kind);
         sheet.hits = None;

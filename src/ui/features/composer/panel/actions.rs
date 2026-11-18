@@ -39,6 +39,7 @@ impl ComposerModalPanel {
             input.update(cx, |state, cx| state.set_value("", window, cx));
         }
         self.drafts.truncate(1);
+        self.reset_atomic_hint();
         if let Some(first) = self.drafts.first() {
             first.input.update(cx, |state, cx| state.set_value("", window, cx));
         }

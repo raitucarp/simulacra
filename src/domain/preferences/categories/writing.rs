@@ -30,6 +30,8 @@ pub struct WritingPrefs {
     pub wikilink_click: WikilinkClick,
     /// Consumed by a later wave.
     pub hashtag_click: HashtagClick,
+    /// sb E1: a quiet atomic-note hint under composer drafts (one claim, with context).
+    pub atomic_hints: bool,
 }
 
 impl Default for WritingPrefs {
@@ -42,6 +44,7 @@ impl Default for WritingPrefs {
             default_identity: PostIdentity::default(),
             wikilink_click: WikilinkClick::default(),
             hashtag_click: HashtagClick::default(),
+            atomic_hints: true,
         }
     }
 }

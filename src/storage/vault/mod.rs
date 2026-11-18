@@ -10,10 +10,12 @@ mod embeddings;
 mod media;
 mod ops;
 mod review;
+mod thinking;
 #[cfg(test)]
 mod tests;
 
 use super::Database;
+pub use thinking::ThinkingRows;
 use crate::error::{AppError, Result};
 use std::cell::RefCell;
 use std::rc::Rc;

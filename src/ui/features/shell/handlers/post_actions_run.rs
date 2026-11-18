@@ -6,7 +6,7 @@ use super::super::view::AppView;
 use crate::agent::post_actions::{run_action_blocking, ActionFailure, ActionJob, CancelToken};
 use crate::agent::LlmClient;
 use crate::domain::embedding::{estimate_tokens, BudgetLimits};
-use crate::domain::post_actions::{build_prompt, parse_output, ActionFailureKind, ActionKind, RequestPolicy};
+use crate::domain::post_actions::{build_prompt, parse_output, ActionFailureKind, ActionKind, ActionPrompt, RequestPolicy};
 use crate::domain::PostId;
 use crate::ui::features::post_actions::{failure_text, ActionStatus};
 use gpui_kit::*;
@@ -58,8 +58,20 @@ impl AppView {
         if !client.has_api_key() {
             return Err(ActionFailure::local(ActionFailureKind::NoKey));
         }
+        self.charge_ai_request(&prompt, request.kind.answer_tokens())?;
+        let cancel = CancelToken::new();
+        self.post_actions.cancel = Some(cancel.clone());
+        let key = RunKey { generation: self.post_actions.generation, post_id: post_id.clone(), request_key: request.cache_key(), kind: request.kind };
+        self.spawn_action_job(ActionJob { client, prompt, policy, cancel }, key, window, cx);
+        Ok(())
+    }
+
+    /// Charges one request of `prompt` (with an answer of up to `answer_tokens`) to today's AI
+    /// budget, shared by post actions, embeddings and the thinking tools (sb E1).
+    pub(in crate::ui::features::shell) fn charge_ai_request(&mut self, prompt: &ActionPrompt, answer_tokens: u32) -> Result<(), ActionFailure> {
+        let ai = self.state.preferences().ai.clone();
         let today = chrono::Local::now().format(DAY_FORMAT).to_string();
-        let tokens = estimate_tokens([prompt.system.as_str(), prompt.user.as_str()]).saturating_add(request.kind.answer_tokens());
+        let tokens = estimate_tokens([prompt.system.as_str(), prompt.user.as_str()]).saturating_add(answer_tokens);
         if !self.semantic.usage.allows(BudgetLimits::from_prefs(&ai), &today, 1, tokens) {
             return Err(ActionFailure::local(ActionFailureKind::Budget));
         }
@@ -67,10 +79,6 @@ impl AppView {
         if let Some(vault) = self.state.db.as_ref() {
             let _ = vault.save_embedding_usage(&self.semantic.usage);
         }
-        let cancel = CancelToken::new();
-        self.post_actions.cancel = Some(cancel.clone());
-        let key = RunKey { generation: self.post_actions.generation, post_id: post_id.clone(), request_key: request.cache_key(), kind: request.kind };
-        self.spawn_action_job(ActionJob { client, prompt, policy, cancel }, key, window, cx);
         Ok(())
     }
 

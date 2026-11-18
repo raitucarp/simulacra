@@ -10,6 +10,7 @@ use crate::state::forge::EngineSection;
 use crate::ui::features::forge::text::tr;
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
 use crate::ui::features::forge::widgets::IllustratedOptionGrid;
+use crate::state::forge::suggest::{EngineParam, Param};
 use gpui_kit::*;
 
 const SECTION: EngineSection = EngineSection::Output;
@@ -39,8 +40,8 @@ impl ForgeView {
     pub(super) fn output_section(&self, handle: &ForgeHandle) -> Div {
         let theme = &self.theme;
         let kind = OutputKind::of(&self.engine().output);
-        let grid = self.engine_cards("output", (Some(kind), &OutputKind::ALL), handle, mutate::set_output_kind);
-        let head = card(theme).child(self.engine_field("engine_output", grid)).children(option_line(kind, theme));
+        let grid = self.engine_cards((EngineParam::Output, "output"), (Some(kind), &OutputKind::ALL), handle, mutate::set_output_kind);
+        let head = card(theme).child(self.engine_field(handle, "engine_output", grid)).children(option_line(kind, theme));
         let Some(structured) = self.engine().structured() else {
             return div().flex().flex_col().gap(theme.section_gap).child(head);
         };
@@ -60,13 +61,14 @@ impl ForgeView {
             this.engine.sample = None;
             this.edit_engine(None, |e| mutate::apply_preset(e, preset), cx);
         });
-        let presets = IllustratedOptionGrid::new(engine_id("preset"), Some(output.preset), theme, move |p, w, cx| pick(p, w, cx));
-        let schema = self.engine_input("schema", &output.schema, (SECTION, handle), mutate::edit_schema);
+        let presets = IllustratedOptionGrid::new(engine_id("preset"), Some(output.preset), theme, move |p, w, cx| pick(p, w, cx))
+            .suggested(self.picks(Param::Engine(EngineParam::SchemaPreset)));
+        let schema = self.engine_input_for((EngineParam::Schema, "schema".to_string()), &output.schema, (SECTION, handle), mutate::edit_schema);
         card(theme)
             .gap(theme.section_gap)
-            .child(self.engine_field("engine_schema_preset", presets))
+            .child(self.engine_field(handle, "engine_schema_preset", presets))
             .children(option_line(output.preset, theme))
-            .child(self.engine_field("engine_schema", schema.multiline(CODE_ROWS.0, CODE_ROWS.1)))
+            .child(self.engine_field(handle, "engine_schema", schema.multiline(CODE_ROWS.0, CODE_ROWS.1)))
             .child(json_line(object_problem(&output.schema), theme))
     }
 
@@ -84,6 +86,6 @@ impl ForgeView {
             let label = div().w(theme.forge_option_card_width).flex_shrink_0().text_size(theme.font_size_xs).text_color(theme.text_secondary).child(tr(&format!("{MAPPING_ROOT}.{key}")));
             div().flex().items_center().gap(theme.spacing_sm).child(label).child(div().flex_1().min_w_0().child(input))
         });
-        card(theme).child(self.engine_field("engine_mapping", div().flex().flex_col().gap(theme.spacing_xs).children(rows)))
+        card(theme).child(self.engine_field(handle, "engine_mapping", div().flex().flex_col().gap(theme.spacing_xs).children(rows)))
     }
 }

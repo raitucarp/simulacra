@@ -34,6 +34,7 @@ impl ForgeView {
             .children(self.guide_panel(handle))
             .children(self.notice.as_ref().map(|notice| self.notice_box(notice, handle)))
             .children(self.palette_strip(handle))
+            .children(self.suggest_bar(handle))
             .child(self.step_page(handle))
     }
 

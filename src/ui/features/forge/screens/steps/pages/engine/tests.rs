@@ -30,7 +30,7 @@ const PAGES: [&str; 6] = [
     include_str!("tools.rs"),
     include_str!("custom_tool.rs"),
 ];
-const FIELD_CALL: &str = "engine_field(\"";
+const FIELD_CALL: &str = "engine_field(handle, \"";
 const ENGINE_ISSUE_PREFIX: &str = "engine_";
 
 fn has_flat_key(yaml: &str, key: &str) -> bool {

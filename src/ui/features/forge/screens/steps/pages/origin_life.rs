@@ -12,6 +12,7 @@ use crate::ui::features::forge::text::{field_label, tr, tr_count};
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
 use crate::ui::features::forge::widgets::{CardGrid, GridCell, IllustratedOptionGrid, NumberSlider, OptionCardSpec};
 use crate::ui::illustration::PortraitView;
+use crate::state::forge::suggest::Param;
 use gpui_kit::*;
 
 const LIFE_KEY: &str = "forge.ui.origin.life";
@@ -78,6 +79,7 @@ impl ForgeView {
         let age = *CountField::Age.get(self.draft.profile());
         let edit = handle.edit(|age: u16| DraftEdit::Count(CountField::Age, age));
         let slider = NumberSlider::new(AGE_ID, field_label(path), age, (0, MAX_AGE, AGE_STEP), &self.theme, move |v, w, cx| edit(v, w, cx))
+            .hint(self.slider_hint(Param::Count(CountField::Age), &field_label(path)))
             .format(|age| tr_count(AGE_FORMAT_KEY, usize::from(age), &[]));
         div().flex().flex_col().gap(self.theme.spacing_xs).child(slider).children(self.issue_lines(path))
     }
@@ -88,8 +90,9 @@ impl ForgeView {
         let grid = IllustratedOptionGrid::new(GENDER_GRID_ID, Some(current), &self.theme, move |g, w, cx| pick(g, w, cx))
             .columns(GENDER_COLUMNS)
             .card_width(self.theme.forge_compact_card_width)
-            .compact();
-        labeled(TraitField::Gender.path(), grid, &self.theme)
+            .compact()
+            .suggested(self.picks(Param::Trait(TraitField::Gender)));
+        self.hinted(Param::Trait(TraitField::Gender), grid, handle)
     }
 
     /// Sets the gender, and the pronouns too while they still match the old default.

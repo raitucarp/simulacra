@@ -13,10 +13,11 @@ mod tests;
 
 use crate::domain::IdentityVariant;
 use crate::state::forge::{DraftEdit, TextField, TraitField, TraitValue};
-use crate::ui::features::forge::screens::common::{card, heading, labeled};
+use crate::ui::features::forge::screens::common::{card, heading};
 use crate::ui::features::forge::text::tr;
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
 use crate::ui::features::forge::widgets::IllustratedOptionGrid;
+use crate::state::forge::suggest::Param;
 use gpui_kit::*;
 
 const TYPE_KEY: &str = "forge.ui.birthsign.type";
@@ -47,7 +48,8 @@ impl ForgeView {
         let theme = &self.theme;
         let current = self.draft.profile().config.identity_variant;
         let edit = handle.edit(|v: IdentityVariant| DraftEdit::Trait(TraitValue::IdentityVariant(v)));
+        let param = Param::Trait(TraitField::IdentityVariant);
         let grid = IllustratedOptionGrid::new(IDENTITY_GRID_ID, Some(current), theme, move |v, w, cx| edit(v, w, cx)).columns(IDENTITY_COLUMNS);
-        labeled(TraitField::IdentityVariant.path(), grid, theme)
+        self.hinted(param, grid.suggested(self.picks(param)), handle)
     }
 }

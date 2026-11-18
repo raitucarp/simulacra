@@ -1,7 +1,7 @@
 //! Opening the forge, resuming an autosave, and what happens after the host saved the profile.
 
 use super::state::{ForgeContext, ForgeOpen, ForgeScreen, GuideState, Notice, StartState};
-use super::{ForgeEvent, ForgeView};
+use super::{ForgeEvent, ForgeView, SuggestUi};
 use crate::domain::portrait::{AvatarMode, FormLayer, FormSlot, PortraitSlot};
 use crate::domain::Profile;
 use crate::state::forge::{AgentDraft, AvatarField, DraftEdit, ForgeKind};
@@ -38,6 +38,7 @@ impl ForgeView {
             grimoire_open: false,
             engine: super::EngineUi::default(),
             strip_preview: None,
+            suggest: SuggestUi::default(),
             focus: cx.focus_handle(),
         };
         view.revalidate();

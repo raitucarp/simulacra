@@ -24,6 +24,7 @@ pub struct IllustratedOptionGrid<T: TraitOption> {
     columns: usize,
     card_width: Pixels,
     descriptions: bool,
+    suggested: Vec<&'static str>,
     theme: ThemeTokens,
     on_select: ValueCallback<T>,
 }
@@ -43,6 +44,7 @@ impl<T: TraitOption> IllustratedOptionGrid<T> {
             columns: GRID_COLUMNS,
             card_width: theme.forge_option_card_width,
             descriptions: true,
+            suggested: Vec::new(),
             theme: theme.clone(),
             on_select: Rc::new(on_select),
         }
@@ -66,6 +68,12 @@ impl<T: TraitOption> IllustratedOptionGrid<T> {
         self
     }
 
+    /// Marks the options with these keys as good starting picks.
+    pub fn suggested(mut self, keys: Vec<&'static str>) -> Self {
+        self.suggested = keys;
+        self
+    }
+
     /// Hides the short descriptions under the labels.
     pub fn compact(mut self) -> Self {
         self.descriptions = false;
@@ -77,6 +85,7 @@ impl<T: TraitOption> IllustratedOptionGrid<T> {
         let mut spec = OptionCardSpec::new((self.id.clone(), at.to_string()), art, trait_label(option), self.card_width);
         spec.description = self.descriptions.then(|| trait_description(option)).flatten();
         spec.selected = self.selected.is_some_and(|chosen| chosen.key() == option.key());
+        spec.suggested = self.suggested.contains(&option.key());
         let on_select = self.on_select.clone();
         GridCell::card(spec, &self.theme, Rc::new(move |window, cx| on_select(option, window, cx)))
     }

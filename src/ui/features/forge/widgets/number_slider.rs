@@ -2,6 +2,8 @@
 //! with a formatter for the shown value. Reports the value on release.
 
 use super::slider_slot::{keyboard_slider, keyed_slider, SliderRange};
+use super::suggest::{typical_band, why_button, WhyCard};
+use crate::state::forge::suggest::RangeHint;
 use super::ValueCallback;
 use crate::theme::ThemeTokens;
 use gpui_kit::*;
@@ -20,6 +22,7 @@ pub struct NumberSlider {
     value: u16,
     range: SliderRange,
     format: ValueFormat,
+    hint: Option<(RangeHint, WhyCard)>,
     theme: ThemeTokens,
     on_change: ValueCallback<u16>,
 }
@@ -40,9 +43,16 @@ impl NumberSlider {
             value,
             range: SliderRange { min, max, step, ceiling: max },
             format: Rc::new(|value| value.to_string()),
+            hint: None,
             theme: theme.clone(),
             on_change: Rc::new(on_change),
         }
+    }
+
+    /// Draws the typical band of `hint` under the track and a "Why?" pill opening `why`.
+    pub fn hint(mut self, hint: Option<(RangeHint, WhyCard)>) -> Self {
+        self.hint = hint;
+        self
     }
 
     /// How the value is written next to the label.
@@ -57,14 +67,17 @@ impl RenderOnce for NumberSlider {
         let binding = keyed_slider(self.id.clone(), self.value, self.range, self.on_change.clone(), window, cx);
         let shown = (self.format)(binding.dragging.unwrap_or(self.value));
         let theme = &self.theme;
+        let why = self.hint.as_ref().map(|(_, card)| why_button(format!("{}-why", self.id), card.clone(), theme));
+        let name = div().flex().items_center().gap(theme.spacing_xs).child(div().text_size(theme.font_size_sm).text_color(theme.text_primary).child(self.label)).children(why);
         let header = div()
             .flex()
             .items_center()
             .justify_between()
-            .child(div().text_size(theme.font_size_sm).text_color(theme.text_primary).child(self.label))
+            .child(name)
             .child(div().text_size(theme.font_size_xs).font_weight(FontWeight::SEMIBOLD).text_color(theme.accent_brand).child(shown));
         let keys_id = SharedString::from(format!("{}-{KEYS_SUFFIX}", self.id));
         let slider = keyboard_slider(keys_id, &binding, (self.value, self.range), false, theme, self.on_change.clone());
-        div().flex().flex_col().gap(theme.spacing_xs).child(header).child(slider)
+        let band = self.hint.as_ref().map(|(hint, _)| typical_band(hint, theme));
+        div().flex().flex_col().gap(theme.spacing_xs).child(header).child(slider).children(band)
     }
 }

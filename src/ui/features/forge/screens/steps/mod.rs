@@ -3,6 +3,7 @@
 
 mod options;
 mod pages;
+mod hints;
 mod palette_strip;
 mod rail;
 mod save_bar;

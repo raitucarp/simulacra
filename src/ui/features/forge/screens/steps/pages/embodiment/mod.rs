@@ -6,7 +6,7 @@
 #[cfg(test)]
 mod tests;
 
-use super::super::super::common::{card, heading, labeled, muted};
+use super::super::super::common::{card, heading, muted};
 use super::trait_block::chosen_line;
 use crate::domain::traits::{BodyForm, BodyKind, Embodiment};
 use crate::state::forge::{avatar_edits, body_edits, body_for_form, body_for_kind, roll_being, BeingScope, TraitField};
@@ -17,6 +17,7 @@ use crate::ui::features::forge::widgets::IllustratedOptionGrid;
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::Sizable;
+use crate::state::forge::suggest::Param;
 use gpui_kit::*;
 
 const KIND_TITLE_KEY: &str = "forge.ui.embodiment.kind_title";
@@ -59,7 +60,8 @@ impl ForgeView {
             let current = this.draft.profile().config.embodiment;
             this.become_body(body_for_kind(current, kind), cx);
         });
-        let grid = IllustratedOptionGrid::new(KIND_GRID_ID, Some(body.body_kind), theme, move |kind, w, cx| pick(kind, w, cx));
+        let kind_param = Param::Trait(TraitField::BodyKind);
+        let grid = IllustratedOptionGrid::new(KIND_GRID_ID, Some(body.body_kind), theme, move |kind, w, cx| pick(kind, w, cx)).suggested(self.picks(kind_param));
         let roll = handle.act(|this, _, cx| {
             let before = this.draft.profile().config.embodiment;
             if roll_being(&mut this.draft, time_seed(), BeingScope::AnyBeing) != before {
@@ -69,7 +71,7 @@ impl ForgeView {
         let dice = Button::new(ROLL_ID).outline().small().icon(LucideIcon::Dices).label(tr(ROLL_KEY)).on_click(move |_, w, cx| roll(w, cx));
         card(theme)
             .child(heading(tr(KIND_TITLE_KEY), theme))
-            .child(labeled(TraitField::BodyKind.path(), grid, theme))
+            .child(self.hinted(kind_param, grid, handle))
             .child(div().flex().items_center().gap(theme.spacing_sm).child(dice).child(muted(tr(ROLL_HINT_KEY), theme)))
             .children(body.is_human().then(|| muted(tr(HUMAN_HINT_KEY), theme)))
     }
@@ -82,12 +84,13 @@ impl ForgeView {
             this.become_body(body_for_form(current, form), cx);
         });
         let grid = IllustratedOptionGrid::new(FORM_GRID_ID, Some(body.form), theme, move |form, w, cx| pick(form, w, cx))
-            .options(body.body_kind.forms());
+            .options(body.body_kind.forms())
+            .suggested(self.picks(Param::Trait(TraitField::Form)));
         let reset = handle.with(move |this: &mut ForgeView, (), _, cx| this.apply_edits(&body_edits(Embodiment::natural(body.form)), cx));
         let natural = Button::new(NATURAL_ID).ghost().small().icon(LucideIcon::Undo2).label(tr(NATURAL_KEY)).on_click(move |_, w, cx| reset((), w, cx));
         card(theme)
             .child(heading(tr(FORM_TITLE_KEY), theme))
-            .child(labeled(TraitField::Form.path(), grid, theme))
+            .child(self.hinted(Param::Trait(TraitField::Form), grid, handle))
             .children(chosen_line(TraitField::Form.read(&self.draft.profile().config), theme))
             .children(self.issue_lines(TraitField::Form.path()))
             .child(div().child(natural))

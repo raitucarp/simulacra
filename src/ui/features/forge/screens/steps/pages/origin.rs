@@ -10,6 +10,7 @@ use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::button::Button;
 use gpui_kit::component::Sizable;
+use crate::state::forge::suggest::Param;
 use gpui_kit::*;
 
 const IDENTITY_KEY: &str = "forge.ui.origin.identity";
@@ -98,6 +99,7 @@ impl ForgeView {
             .gap(theme.spacing_xs)
             .child(div().flex_1().child(self.text_input(TextField::Handle, handle)))
             .child(Button::new(SUGGEST_ID).outline().small().icon(LucideIcon::Sparkles).label(tr(SUGGEST_KEY)).on_click(move |_, w, cx| suggest(w, cx)));
-        super::super::super::common::labeled(path, input_row, theme).children(self.issue_lines(path)).children(available)
+        let control = self.text_with_examples(TextField::Handle, input_row, handle);
+        self.hinted(Param::Text(TextField::Handle), control, handle).children(self.issue_lines(path)).children(available)
     }
 }

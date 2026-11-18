@@ -13,6 +13,7 @@ use super::semantic_state::SemanticState;
 use super::settings_ui::SettingsUi;
 use super::vault_host::VaultHost;
 use super::review_host::ReviewHost;
+use super::insights_host::InsightsHost;
 use super::view::{AppView, ChromeState};
 use crate::state::AppState;
 use crate::ui::features::command_palette::PaletteHost;
@@ -45,10 +46,11 @@ impl AppView {
         let (settings_ui, settings_subscriptions) = SettingsUi::new(state.preferences(), window, cx);
         let (import, import_subscriptions) = ImportUi::new(window, cx);
         let (review, review_subscriptions) = ReviewHost::new(&state, window, cx);
+        let (insights, insights_subscription) = InsightsHost::new(&state, window, cx);
         let mut subscriptions = vec![
             feed.subscribe_search(cx),
             cx.subscribe_in(&composer_modal, window, Self::publish_composer_draft),
-            graph_subscription, vault_subscription,
+            graph_subscription, vault_subscription, insights_subscription,
             cx.subscribe_in(&appearance, window, Self::on_appearance_event),
             Self::observe_own_changes(cx), Self::observe_window_width(window, cx), Self::refocus_on_focus_loss(window, cx),
             cx.observe_window_appearance(window, |this, window, cx| this.follow_system_appearance(window, cx)),
@@ -63,7 +65,7 @@ impl AppView {
             state,
             chrome: ChromeState { is_onboarding_open: onboarding, ..ChromeState::new(initial_lang) },
             feed, composer_modal, appearance, llm_inputs, settings_ui,
-            lab, scheduler, graph, vault, import, review, semantic: SemanticState::new(cx), media: MediaHost::new(cx),
+            lab, scheduler, graph, vault, import, review, insights, semantic: SemanticState::new(cx), media: MediaHost::new(cx),
             forge: None, sidebar, palette,
             panels: ShellPanels::new(cx),
             _subscriptions: subscriptions,

@@ -71,6 +71,8 @@ setting_keys! {
     /// JSON array of the seed profile ids the user deleted (never re-seeded).
     DismissedSeeds => "seeds.dismissed",
     /// Typed preferences, one JSON row per settings category (`domain::preferences`).
+    /// The Insights page's view, filter and display choices (JSON, sb D2).
+    InsightsState => "insights.state",
     PrefsGeneral => "preferences.general",
     PrefsAppearance => "preferences.appearance",
     PrefsWriting => "preferences.writing",

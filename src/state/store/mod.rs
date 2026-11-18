@@ -68,6 +68,8 @@ pub enum NavigationTab {
     /// Spaced-repetition review, quizzes and statistics (sb C1).
     Review,
     Appearance,
+    /// Charts and graph analytics of the network (sb D2).
+    Insights,
 }
 
 /// Application state container.

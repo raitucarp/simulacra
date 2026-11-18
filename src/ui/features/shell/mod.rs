@@ -17,6 +17,7 @@ mod feed_state;
 mod graph_state;
 mod handlers;
 mod import_state;
+mod insights_host;
 mod inspector_state;
 mod lab_state;
 mod media_state;

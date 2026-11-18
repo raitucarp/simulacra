@@ -73,4 +73,13 @@ command_ids! {
     /// sb C2: the actions sheet on the open thought, and the inspector's outline view.
     PostActions => "post_actions",
     ToggleOutline => "toggle_outline",
+    /// sb D2: the Insights page and each of its views.
+    GoInsights => "go_insights",
+    InsightsOverview => "insights_overview",
+    InsightsNetwork => "insights_network",
+    InsightsSets => "insights_sets",
+    InsightsSymmetry => "insights_symmetry",
+    InsightsCategories => "insights_categories",
+    InsightsEmbedding => "insights_embedding",
+    InsightsActivity => "insights_activity",
 }

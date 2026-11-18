@@ -49,6 +49,8 @@ impl AppView {
             CommandId::NewConnectionMap => self.open_review_tab_picker(crate::ui::features::review::PickerMode::Map, window, cx),
             CommandId::PostActions => self.open_actions_for_open_thought(window, cx),
             CommandId::ToggleOutline => self.toggle_inspector_outline(window, cx),
+            CommandId::GoInsights | CommandId::InsightsOverview | CommandId::InsightsNetwork | CommandId::InsightsSets
+            | CommandId::InsightsSymmetry | CommandId::InsightsCategories | CommandId::InsightsEmbedding | CommandId::InsightsActivity => self.open_insights(id, window, cx),
         }
     }
 

@@ -9,6 +9,7 @@ mod composer_modal;
 mod credentials;
 mod import_flow;
 mod import_sheet;
+mod insights;
 mod inspector;
 mod lab;
 mod media;

@@ -28,6 +28,7 @@ mod identities;
 mod profile_create;
 mod profiles;
 mod reposts;
+mod revisions; // sb F2
 mod search;
 mod settings;
 mod seed_catalogue;

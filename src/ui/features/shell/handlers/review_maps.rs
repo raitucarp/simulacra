@@ -24,7 +24,7 @@ const TITLE_CHARS: usize = 48;
 
 impl AppView {
     /// Shows the Review page and opens its editor on `map`.
-    fn open_map_editor(&mut self, map: ConnectionMap, existing: Option<ItemId>, window: &mut Window, cx: &mut Context<Self>) {
+    pub(in crate::ui::features::shell) fn open_map_editor(&mut self, map: ConnectionMap, existing: Option<ItemId>, window: &mut Window, cx: &mut Context<Self>) {
         let posts: HashMap<String, PostView> = map.points.iter().filter_map(|p| match p {
             MapPoint::Post { id } => self.post_view(id).map(|view| (id.clone(), view)),
             _ => None,

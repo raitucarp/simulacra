@@ -6,6 +6,7 @@
 mod accents;
 mod actions;
 mod chrome;
+mod data;
 mod forge;
 mod image_prompt;
 mod import;
@@ -66,7 +67,7 @@ pub fn derive_tokens(
     actions::apply_actions_layout(&mut t);
     suggestions::apply_suggestions_layout(&mut t);
     image_prompt::apply_image_prompt_layout(&mut t);
-    thinking::apply_thinking_layout(&mut t);
+    thinking::apply_thinking_layout(&mut t); data::apply_data_layout(&mut t); // sb F2
     surfaces::apply_surfaces(&mut t, palette);
     text::apply_text(&mut t, palette);
     accents::apply_accents(&mut t, palette);

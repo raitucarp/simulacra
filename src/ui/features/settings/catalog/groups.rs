@@ -75,7 +75,7 @@ const IMPORT: &[SettingsGroup] = &[
 ];
 const PRIVACY: &[SettingsGroup] = &[
     group("storage", &[Path(DataFolder::Database), Path(DataFolder::Media)]),
-    group("maintenance", &[Action(Cmd::Backup), Action(Cmd::Export), Action(Cmd::ClearCaches)]),
+    group("maintenance", &[Action(Cmd::Backup), Action(Cmd::Export), Action(Cmd::EncryptedSnapshot), Action(Cmd::RestoreSnapshot), Action(Cmd::ClearCaches)]), // sb F2: export, snapshots
     group("privacy", &[Field(F::Privacy(PrivacyField::LinkPreviews)), Field(F::Privacy(PrivacyField::JournalInSearch)), Field(F::Privacy(PrivacyField::Telemetry))]),
 ];
 const NOTIFICATIONS: &[SettingsGroup] = &[group(

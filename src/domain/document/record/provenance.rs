@@ -41,6 +41,9 @@ pub struct Provenance {
     /// [`text_checksum`] of the content when it was catalogued.
     #[serde(skip_serializing_if = "String::is_empty")]
     pub checksum: String,
+    /// sb F2: file name of the kept original under `<media>/imports/` (empty when none was kept).
+    #[serde(skip_serializing_if = "String::is_empty")]
+    pub original: String,
 }
 
 /// Label of the checksum algorithm, so a later algorithm can be told apart.

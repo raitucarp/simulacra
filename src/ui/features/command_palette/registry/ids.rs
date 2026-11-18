@@ -95,4 +95,10 @@ command_ids! {
     InsightsTensions => "insights_tensions",
     ResolveDuePredictions => "resolve_due_predictions",
     ShowArgumentMap => "show_argument_map",
+    /// sb F2: the Saved view, bookmarking the open thought, the export bundle and snapshots.
+    OpenCollection => "open_collection",
+    BookmarkPost => "bookmark_post",
+    ExportBundle => "export_bundle",
+    EncryptedSnapshot => "encrypted_snapshot",
+    RestoreSnapshot => "restore_snapshot",
 }

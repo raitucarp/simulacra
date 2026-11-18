@@ -6,6 +6,7 @@
 //! every earlier write. Dropping the last handle flushes the queue and joins the worker.
 
 mod catalogue_ops;
+mod data; // sb F2
 mod embeddings;
 mod learning;
 mod journal;

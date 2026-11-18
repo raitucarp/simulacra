@@ -32,6 +32,8 @@ pub enum ComposerModalMode {
     NewThread,
     Reply(Box<AuthoredPost>),
     Quote(Box<AuthoredPost>),
+    /// sb F2: rewriting the text of one of the user's own posts.
+    Edit(Box<AuthoredPost>),
 }
 
 /// One post editor of the thread with its current (trimmed) character count.

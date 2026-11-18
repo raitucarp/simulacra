@@ -62,6 +62,7 @@ impl AppView {
 
     /// Shows document `id`'s entry in the vault (wikilinks, source chips, graph nodes).
     pub(crate) fn open_vault_document(&mut self, id: &str, window: &mut Window, cx: &mut Context<Self>) {
+        self.data.showing_saved = false; // sb F2: the entry is in the library
         self.select_nav(NavigationTab::Knowledge, window, cx);
         self.push_vault_data(cx);
         self.vault.panel.update(cx, |panel, cx| panel.open_entry(id, cx));
@@ -82,6 +83,7 @@ impl AppView {
             VaultEvent::OpenPost(post) => self.reveal_post(post, window, cx),
             VaultEvent::LearnPassages(id) => self.learn_passages(&id, window, cx),
             VaultEvent::LearnConnections(id) => self.learn_connections(&id, window, cx),
+            VaultEvent::History(id) => self.on_data_event(crate::ui::features::data::DataEvent::OpenDocumentHistory(id), window, cx),
         }
         cx.notify();
     }

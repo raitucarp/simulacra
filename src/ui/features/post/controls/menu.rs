@@ -39,6 +39,7 @@ fn build_menu(menu: PopupMenu, text: &str, link: &str, handlers: &PostCardHandle
         .item(action_item(LucideIcon::Compass, t!("post.menu_find_similar"), &handlers.on_find_similar));
     let menu = with_learn_submenu(menu, &handlers.learn, window, cx);
     let menu = crate::ui::features::thinking::credence::with_credence_item(menu, handlers.credence.as_ref());
+    let menu = crate::ui::features::data::with_data_items(menu, handlers.data.as_ref(), window, cx);
     match &handlers.on_delete {
         Some(on_delete) => menu.separator().item(delete_item(on_delete.clone())),
         None => menu,

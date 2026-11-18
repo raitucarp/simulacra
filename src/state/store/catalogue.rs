@@ -33,11 +33,13 @@ impl AppState {
             return Err(problems);
         }
         let Some(doc) = self.documents.iter_mut().find(|d| d.id == id) else { return Ok(()) };
+        let before = doc.clone(); // sb F2: the version this edit replaces
         doc.title = title.trim().to_string();
         doc.content = content.trim().to_string();
         doc.record = with_derived_fields(CatalogueRecord { updated_at: Some(Utc::now()), ..record }, &doc.content);
         doc.chunk_count = chunk_count(doc.record.extent.words);
         let saved = doc.clone();
+        self.keep_document_revision(&before, &saved);
         self.queue(|db| db.save_document(&saved));
         Ok(())
     }

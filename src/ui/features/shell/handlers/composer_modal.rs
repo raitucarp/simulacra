@@ -44,6 +44,9 @@ impl AppView {
             ComposerModalEvent::Submit(submission) => submission,
             ComposerModalEvent::ImageIdeas(text) => return self.open_image_ideas_for_draft(text.clone(), window, cx),
         };
+        if let ComposerModalMode::Edit(target) = &submission.mode {
+            return self.save_post_edit(target.post.id.clone(), submission.drafts.first().cloned().unwrap_or_default(), window, cx); // sb F2
+        }
         let (thread, anchor) = thread_from_submission(submission.clone());
         match self.state.submit_thread(&thread, &anchor) {
             Ok(ids) => {
@@ -73,6 +76,7 @@ fn thread_from_submission(submission: ComposerSubmission) -> (Vec<ThreadDraft>, 
         ComposerModalMode::NewThread => ThreadAnchor::default(),
         ComposerModalMode::Reply(parent) => ThreadAnchor { reply_to: Some(parent.post.id), quote_of: None },
         ComposerModalMode::Quote(quoted) => ThreadAnchor { reply_to: None, quote_of: Some(quoted.post.id) },
+        ComposerModalMode::Edit(_) => ThreadAnchor::default(),
     };
     (thread, anchor)
 }

@@ -7,6 +7,14 @@ mod chrome;
 mod commands;
 mod composer_modal;
 mod credentials;
+mod data; // sb F2: history, export, snapshots, collections and bookmarks
+mod data_export;
+mod data_history;
+mod data_posts;
+mod data_restore;
+mod data_saved;
+mod data_shelf;
+mod data_snapshot;
 mod image_ideas;
 mod image_ideas_apply;
 mod image_ideas_open;

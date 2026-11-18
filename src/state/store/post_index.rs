@@ -122,6 +122,12 @@ impl PostIndex {
         self.len == 0
     }
 
+    /// Re-derives the body data of `post`, whose text was edited (sb F2).
+    pub fn content_changed(&mut self, post: &Post) {
+        self.meta.insert(post.id.clone(), PostMeta::of(post));
+        self.revision += 1;
+    }
+
     /// Marks author data (names, handles, archived authors) as changed: listings that match
     /// on authors, such as cached search results, must be recomputed.
     pub fn authors_changed(&mut self) {

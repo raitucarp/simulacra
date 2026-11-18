@@ -20,6 +20,7 @@ const MARK_BUTTON_ID: &str = "vault-entry-mark";
 const DELETE_BUTTON_ID: &str = "vault-entry-delete";
 const PASSAGES_BUTTON_ID: &str = "vault-entry-learn-passages";
 const CONNECTIONS_BUTTON_ID: &str = "vault-entry-learn-connections";
+const HISTORY_BUTTON_ID: &str = "vault-entry-history";
 
 /// "Baruch Spinoza · translated by R. H. M. Elwes".
 fn byline(doc: &GroundingDocument) -> Vec<String> {
@@ -77,7 +78,9 @@ impl VaultPanel {
         let mark_label = if is_read { t!("vault.mark_unread") } else { t!("vault.mark_read") }.to_string();
         let mark = Button::new(MARK_BUTTON_ID).ghost().small().icon(Icon::new(LucideIcon::Check)).label(mark_label)
             .on_click(cx.listener(move |this, _, _, cx| this.mark_read(mark_id.clone(), !is_read, cx)));
-        div().flex().flex_wrap().gap(self.theme.control_gap).child(read).child(edit).child(mark).children(self.learn_buttons(doc, cx)).child(self.render_delete_button(doc, cx))
+        let history_id = doc.id.clone(); // sb F2
+        let history = Button::new(HISTORY_BUTTON_ID).ghost().small().icon(Icon::new(LucideIcon::RotateCcwClock)).label(t!("data.history.button").to_string()).on_click(cx.listener(move |_, _, _, cx| cx.emit(VaultEvent::History(history_id.clone()))));
+        div().flex().flex_wrap().gap(self.theme.control_gap).child(read).child(edit).child(mark).children(self.learn_buttons(doc, cx)).child(history).child(self.render_delete_button(doc, cx))
     }
 
     /// "Learn passages" and "Learn connections" (sb C1b).

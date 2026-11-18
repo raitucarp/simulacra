@@ -17,6 +17,7 @@ use super::review_host::ReviewHost;
 use super::insights_host::InsightsHost;
 use super::journal_host::JournalHost;
 use super::thinking_host::ThinkingHost;
+use super::data_host::DataHost;
 use super::view::{AppView, ChromeState};
 use crate::state::AppState;
 use crate::ui::features::command_palette::PaletteHost;
@@ -59,7 +60,7 @@ impl AppView {
         ];
         subscriptions.extend(settings_subscriptions.into_iter().chain(import_subscriptions).chain(review_subscriptions));
         let llm_inputs = LlmInputs::new(&state, window, cx);
-        let (lab, onboarding) = (LabState::new(&state), state.should_offer_onboarding());
+        let (lab, onboarding, data) = (LabState::new(&state), state.should_offer_onboarding(), DataHost::new(&state, window, cx)); // sb F2: data
         let scheduler = SchedulerState::new(state.scheduler_enabled(), state.preferences().agents.max_concurrent as usize);
         let (sidebar, palette) = (SidebarState::load(state.db.as_ref(), window.viewport_size().width), PaletteHost::new(state.db.as_ref(), cx));
         let mut view = Self {
@@ -67,7 +68,7 @@ impl AppView {
             state,
             chrome: ChromeState { is_onboarding_open: onboarding, ..ChromeState::new(initial_lang) },
             feed, composer_modal, appearance, llm_inputs, settings_ui,
-            lab, scheduler, graph, vault, import, review, insights, journal, thinking, semantic: SemanticState::new(cx), media: MediaHost::new(cx),
+            lab, scheduler, graph, vault, import, review, insights, journal, thinking, data, semantic: SemanticState::new(cx), media: MediaHost::new(cx),
             forge: None, sidebar, palette,
             panels: ShellPanels::new(cx),
             _subscriptions: subscriptions,

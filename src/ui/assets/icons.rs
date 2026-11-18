@@ -32,5 +32,7 @@ gpui_kit::assets::icon_assets!(
         NotebookPen, HeartPulse, Timer, Mail, MailOpen, LockOpen, Shuffle, Paperclip, HandHeart,
         // sb E1
         Waypoints, Atom, Percent, ChartScatter, Split, CalendarClock, GripVertical,
+        // sb F2
+        Pencil, RotateCcwClock, BookmarkCheck, FolderPlus, Download, KeyRound, ShieldCheck, ArchiveRestore, Package, LockKeyhole, FileDiff,
     ]
 );

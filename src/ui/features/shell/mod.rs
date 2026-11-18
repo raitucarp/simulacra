@@ -23,6 +23,7 @@ mod insights_host;
 mod journal_host;
 mod inspector_state;
 mod lab_state;
+mod learning_host;
 mod media_state;
 mod panels;
 mod post_actions_state;

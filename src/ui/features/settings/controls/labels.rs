@@ -1,7 +1,7 @@
 //! Display texts of control values: choice option labels and number readouts.
 
 use super::super::consts::HOUR_SUFFIX;
-use crate::domain::preferences::{AdvancedField, Choice, EmbeddingField, GeneralField, ImageField, ImportField};
+use crate::domain::preferences::{AdvancedField, Choice, EmbeddingField, GeneralField, ImageField, ImportField, LearningField};
 use crate::domain::preferences::{group_thousands, AppearanceField, NumberSpec, NumberUnit, Preferences, SettingField, WritingField};
 use crate::i18n::Language;
 use super::super::text::tr;
@@ -23,6 +23,7 @@ fn option_group(field: SettingField) -> Option<&'static str> {
         F::General(GeneralField::TimeFormat) => "time_format",
         F::General(GeneralField::NumberFormat) => "number_format",
         F::General(GeneralField::FirstWeekday) => "first_weekday",
+        F::Learning(LearningField::WeeklyDay) => "weekly_review_day",
         F::Appearance(AppearanceField::ReadingWidth) => "reading_width",
         F::Writing(WritingField::DefaultIdentity) | F::Import(ImportField::Identity) => "identity",
         F::Writing(WritingField::WikilinkClick) => "wikilink_click",

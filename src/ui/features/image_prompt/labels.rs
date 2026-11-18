@@ -53,5 +53,6 @@ pub fn use_label(destination: &IdeasDestination) -> String {
     match destination {
         IdeasDestination::Composer => tr("attach"),
         IdeasDestination::Forge | IdeasDestination::Profile(_) => tr("set_avatar"),
+        IdeasDestination::Locus(..) => tr("use_cue"),
     }
 }

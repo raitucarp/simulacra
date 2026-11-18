@@ -8,6 +8,8 @@ mod catalogue;
 mod dismissed_seeds;
 mod embeddings;
 mod embeddings_schema;
+mod learning;
+mod learning_schema;
 mod journal;
 mod journal_schema;
 pub mod location;

@@ -34,6 +34,9 @@ impl ReviewPanel {
         let key = match picker.mode {
             PickerMode::Learn => "review.picker.learn",
             PickerMode::Map => "review.picker.map",
+            PickerMode::Tutor => "learning.picker.tutor",
+            PickerMode::Place => "learning.picker.place",
+            PickerMode::Link => "learning.picker.link",
         };
         let query = self.picker_query(cx);
         let visible = picker.visible(&query);
@@ -79,6 +82,7 @@ impl ReviewPanel {
                 .on_click(cx.listener(move |this, _, _, cx| this.toggle_picked(id.clone(), cx)))
                 .when(picked, |row| row.child(Icon::new(LucideIcon::Check).size(theme.icon_size_sm).text_color(theme.accent_brand))),
             PickerMode::Learn => row.child(self.learn_buttons(index, view, cx)),
+            PickerMode::Tutor | PickerMode::Place | PickerMode::Link => row.child(self.learning_picker_buttons(picker.mode, index, view, cx)),
         }
     }
 
@@ -101,11 +105,15 @@ impl ReviewPanel {
 
     fn picker_footer(&self, picker: &Picker, cx: &mut Context<Self>) -> impl IntoElement {
         let theme = &self.theme;
-        let back = Button::new(BACK_ID).ghost().small().icon(Icon::new(LucideIcon::ArrowLeft)).label(tr("review.back_items"))
-            .on_click(cx.listener(|this, _, _, cx| this.show(Screen::Items, cx)));
+        let (back_label, back_to) = match picker.mode {
+            PickerMode::Tutor | PickerMode::Place | PickerMode::Link => ("learning.back", Screen::Learn),
+            PickerMode::Learn | PickerMode::Map => ("review.back_items", Screen::Items),
+        };
+        let back = Button::new(BACK_ID).ghost().small().icon(Icon::new(LucideIcon::ArrowLeft)).label(tr(back_label))
+            .on_click(cx.listener(move |this, _, _, cx| this.show(back_to, cx)));
         let row = control_row(theme).child(back).child(div().flex_1());
         match picker.mode {
-            PickerMode::Learn => row,
+            PickerMode::Learn | PickerMode::Tutor | PickerMode::Place | PickerMode::Link => row,
             PickerMode::Map => row.child(
                 Button::new(CREATE_ID).primary().small().icon(Icon::new(LucideIcon::Share2)).label(t_count("review.picker.create_map", picker.picked.len()))
                     .disabled(picker.picked.len() < MIN_MAP_POSTS)

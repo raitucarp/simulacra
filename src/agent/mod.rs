@@ -5,6 +5,7 @@ pub mod custom_request;
 pub mod embedding;
 pub mod engine;
 pub mod image;
+pub mod learning;
 pub mod llm;
 #[cfg(test)]
 pub(crate) mod mock_server;

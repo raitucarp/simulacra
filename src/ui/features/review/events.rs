@@ -5,6 +5,7 @@ use crate::domain::review::connections::ConnectionMap;
 use crate::domain::review::quiz::{ChoiceQuestion, OrderPuzzle, QuizKind};
 use crate::domain::review::{Anchor, AnchorSide, Answer, ItemId};
 use crate::domain::PostId;
+use crate::ui::features::review::learning::LearningEvent;
 
 /// What the post picker is for.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -13,6 +14,12 @@ pub enum PickerMode {
     Learn,
     /// Pick several posts for a connection map.
     Map,
+    /// Pick a post (or its thread) for the tutor (sb E2).
+    Tutor,
+    /// Pick a post to place at a palace locus (sb E2).
+    Place,
+    /// Pick a post or thread to link to a goal (sb E2).
+    Link,
 }
 
 /// A request from the Review page.
@@ -36,6 +43,8 @@ pub enum ReviewEvent {
     SaveMap { id: Option<ItemId>, map: ConnectionMap },
     SetSuspended(ItemId, bool),
     DeleteItem(ItemId),
+    /// A request of the Learn tab (sb E2).
+    Learning(LearningEvent),
 }
 
 /// A quiz the shell prepared.

@@ -12,6 +12,7 @@ pub mod data;
 pub mod events;
 pub mod keys;
 pub mod learn;
+pub mod learning;
 mod panel;
 mod render;
 pub mod suggest_request;

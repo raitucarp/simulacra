@@ -2,7 +2,7 @@
 //! A card answered Again comes back a few cards later (immediate re-retrieval after a
 //! failure, with a short gap so the answer is not still in working memory).
 
-use super::card::CardId;
+use super::item::ItemId;
 use super::grade::Grade;
 
 /// Cards shown before a forgotten card returns.
@@ -21,7 +21,7 @@ pub enum Stage {
 /// One answer given in the session.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct SessionAnswer {
-    pub card_id: CardId,
+    pub item_id: ItemId,
     pub grade: Grade,
 }
 
@@ -29,7 +29,7 @@ pub struct SessionAnswer {
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
 pub struct Session {
     /// Cards still to show; the first is the current one.
-    pub queue: Vec<CardId>,
+    pub queue: Vec<ItemId>,
     pub stage: Stage,
     pub answers: Vec<SessionAnswer>,
     /// Distinct cards the session started with.
@@ -37,12 +37,12 @@ pub struct Session {
 }
 
 impl Session {
-    pub fn new(queue: Vec<CardId>) -> Self {
+    pub fn new(queue: Vec<ItemId>) -> Self {
         let planned = queue.len();
         Self { queue, stage: Stage::Prompt, answers: Vec::new(), planned }
     }
 
-    pub fn current(&self) -> Option<&CardId> {
+    pub fn current(&self) -> Option<&ItemId> {
         self.queue.first()
     }
 
@@ -58,19 +58,19 @@ impl Session {
     /// Records `grade` for the current card and moves on; Again re-queues it.
     pub fn grade(self, grade: Grade) -> Self {
         let Some(current) = self.current().cloned() else { return self };
-        let mut queue: Vec<CardId> = self.queue[1..].to_vec();
-        let failures = self.answers.iter().filter(|a| a.card_id == current && a.grade == Grade::Again).count();
+        let mut queue: Vec<ItemId> = self.queue[1..].to_vec();
+        let failures = self.answers.iter().filter(|a| a.item_id == current && a.grade == Grade::Again).count();
         if grade == Grade::Again && failures < MAX_REQUEUES {
             queue.insert(REQUEUE_GAP.min(queue.len()), current.clone());
         }
         let mut answers = self.answers;
-        answers.push(SessionAnswer { card_id: current, grade });
+        answers.push(SessionAnswer { item_id: current, grade });
         Self { queue, stage: Stage::Prompt, answers, planned: self.planned }
     }
 
     /// Distinct cards answered so far.
     pub fn done(&self) -> usize {
-        let mut seen: Vec<&CardId> = self.answers.iter().map(|a| &a.card_id).collect();
+        let mut seen: Vec<&ItemId> = self.answers.iter().map(|a| &a.item_id).collect();
         seen.sort();
         seen.dedup();
         seen.len()
@@ -84,7 +84,7 @@ impl Session {
     /// Share of first answers that were recalled (0–1), if any card was answered.
     pub fn first_try_recall(&self) -> Option<f64> {
         let firsts: Vec<&SessionAnswer> =
-            self.answers.iter().enumerate().filter(|(i, a)| !self.answers[..*i].iter().any(|b| b.card_id == a.card_id)).map(|(_, a)| a).collect();
+            self.answers.iter().enumerate().filter(|(i, a)| !self.answers[..*i].iter().any(|b| b.item_id == a.item_id)).map(|(_, a)| a).collect();
         (!firsts.is_empty()).then(|| firsts.iter().filter(|a| a.grade.is_recall()).count() as f64 / firsts.len() as f64)
     }
 }

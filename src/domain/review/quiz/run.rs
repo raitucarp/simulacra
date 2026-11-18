@@ -4,7 +4,7 @@
 use super::choice::ChoiceQuestion;
 use super::recall::{judge_recall, RecallVerdict};
 use crate::domain::review::log::{Answer, ReviewMode};
-use crate::domain::review::{CardId, Confidence, Grade};
+use crate::domain::review::{ItemId, Confidence, Grade};
 
 /// A multiple-choice round.
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
@@ -40,7 +40,7 @@ impl ChoiceRun {
         let Some(question) = self.current().filter(|q| self.picked.is_none() && option < q.options.len()) else { return (self, None) };
         let correct = option == question.correct;
         let answer = Answer {
-            card_id: question.card_id.clone(),
+            item_id: question.item_id.clone(),
             grade: Confidence::grade_for(self.confidence, correct),
             mode: ReviewMode::Choice,
             confidence: self.confidence,
@@ -62,7 +62,7 @@ impl ChoiceRun {
 /// A free-recall round.
 #[derive(Debug, Clone, PartialEq, Eq, Default)]
 pub struct RecallRun {
-    pub cards: Vec<CardId>,
+    pub items: Vec<ItemId>,
     pub index: usize,
     /// The typed answer once checked, with its verdict.
     pub checked: Option<(String, RecallVerdict)>,
@@ -70,16 +70,16 @@ pub struct RecallRun {
 }
 
 impl RecallRun {
-    pub fn new(cards: Vec<CardId>) -> Self {
-        Self { cards, ..Self::default() }
+    pub fn new(items: Vec<ItemId>) -> Self {
+        Self { items, ..Self::default() }
     }
 
-    pub fn current(&self) -> Option<&CardId> {
-        self.cards.get(self.index)
+    pub fn current(&self) -> Option<&ItemId> {
+        self.items.get(self.index)
     }
 
     pub fn is_finished(&self) -> bool {
-        self.index >= self.cards.len()
+        self.index >= self.items.len()
     }
 
     /// Compares `typed` with `expected`.
@@ -92,8 +92,8 @@ impl RecallRun {
 
     /// The learner's own grade after checking; the answer to record.
     pub fn grade(self, grade: Grade) -> (Self, Option<Answer>) {
-        let (Some(card_id), Some(verdict)) = (self.current().cloned(), self.checked.as_ref().map(|(_, verdict)| *verdict)) else { return (self, None) };
-        let answer = Answer { card_id, grade, mode: ReviewMode::Recall, confidence: None, correct: Some(verdict != RecallVerdict::Wrong) };
+        let (Some(item_id), Some(verdict)) = (self.current().cloned(), self.checked.as_ref().map(|(_, verdict)| *verdict)) else { return (self, None) };
+        let answer = Answer { item_id, grade, mode: ReviewMode::Recall, confidence: None, correct: verdict.is_correct() };
         let mut grades = self.grades;
         grades.push(grade);
         (Self { index: self.index + 1, checked: None, grades, ..self }, Some(answer))

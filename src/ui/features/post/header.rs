@@ -1,7 +1,7 @@
 //! Post header rows: repost banner and author identity/metadata row.
 
 use super::consts::{META_SEPARATOR, TIME_FORMAT};
-use super::controls::{render_overflow_menu, PostCardHandlers};
+use super::controls::{render_learn_badge, render_overflow_menu, PostCardHandlers};
 use crate::domain::{Post, Profile, ProfileRole};
 use crate::theme::ThemeTokens;
 use crate::ui::atoms::render_role_badge;
@@ -50,6 +50,7 @@ pub(crate) fn render_author_row(
         .justify_between()
         .gap(theme.spacing_xs)
         .child(render_author_meta(post, author, is_instant_repost, theme))
+        .children(handlers.learn.status.map(|status| render_learn_badge(status, theme)))
         .child(div().flex_none().child(render_overflow_menu(post, handlers)))
 }
 

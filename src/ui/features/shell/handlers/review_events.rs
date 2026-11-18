@@ -1,90 +1,110 @@
-//! What the Review page asks for (sb C1): answers applied to the deck and saved, sources
-//! opened, cards suspended or deleted, and the page's data with a label for each source.
+//! What the Review page asks for (sb C1, items since sb C1b): answers applied to the deck
+//! and saved, anchors opened, items suspended or deleted, and the page's data with the posts
+//! and document titles its items and maps show.
 
-use super::super::review_host::learning_policy;
+use super::super::review_host::{learning_policy, review_today};
 use super::super::view::AppView;
-use crate::domain::review::{apply_answer, Answer, Card, CardId, CardSource};
+use crate::domain::review::{apply_answer, Anchor, Answer, ItemId, ReviewItem};
 use crate::domain::PostId;
-use crate::state::semantic::hits::shortened;
-use crate::ui::features::review::{ReviewData, ReviewEvent, ReviewPanel};
+use crate::ui::features::review::{PickerMode, PostView, PostViews, ReviewData, ReviewEvent, ReviewPanel};
 use chrono::{NaiveDate, Utc};
 use gpui_kit::*;
-use rust_i18n::t;
 use std::collections::HashMap;
+use std::rc::Rc;
 
-/// Characters of a post shown as a card's source.
-const SOURCE_CHARS: usize = 64;
+/// Most posts the picker lists from (newest first).
+const PICKER_POSTS: usize = 1_000;
 
 impl AppView {
     pub(in crate::ui::features::shell) fn handle_review_event(&mut self, _: &Entity<ReviewPanel>, event: &ReviewEvent, window: &mut Window, cx: &mut Context<Self>) {
         match event.clone() {
             ReviewEvent::Answered(answer) => self.apply_review_answer(answer, cx),
-            ReviewEvent::OpenSource(source) => self.open_card_source(source, window, cx),
+            ReviewEvent::OpenAnchor(anchor) => self.open_anchor(anchor, window, cx),
             ReviewEvent::RequestQuiz(kind) => self.start_review_quiz(kind, window, cx),
-            ReviewEvent::NewCard => self.open_blank_card_maker(window, cx),
-            ReviewEvent::SetSuspended(id, suspended) => self.update_review_card(&id, |card| Card { suspended, ..card }, cx),
-            ReviewEvent::DeleteCard(id) => {
-                self.review.deck = std::mem::take(&mut self.review.deck).without_card(&id);
-                if let Some(db) = &self.state.db {
-                    let _ = db.delete_review_card(&id);
-                }
-                self.review_changed(cx);
-            }
+            ReviewEvent::OpenPicker(mode) => self.open_review_picker(mode, window, cx),
+            ReviewEvent::LearnPost(id, side) => self.learn_post(id, side, window, cx),
+            ReviewEvent::EditItem(id) => self.edit_review_item(&id, window, cx),
+            ReviewEvent::MapFromPosts(ids) => self.map_from_posts(&ids, window, cx),
+            ReviewEvent::SaveMap { id, map } => self.save_connection_map(id, map, window, cx),
+            ReviewEvent::SetSuspended(id, suspended) => self.update_review_item(&id, |item| ReviewItem { suspended, ..item }, cx),
+            ReviewEvent::DeleteItem(id) => self.delete_review_item(&id, cx),
         }
     }
 
-    /// The page's data: the active network's cards and log, today, Settings › Learning.
+    /// `post` with its author, as the stream shows it.
+    pub(in crate::ui::features::shell) fn post_view(&self, id: &str) -> Option<PostView> {
+        self.state.get_post_by_id(id).map(|post| PostView { post: post.clone(), author: self.state.author_of(post).clone() })
+    }
+
+    /// Views of the posts `items` refer to (anchors and map points).
+    fn referenced_posts(&self, items: &[ReviewItem]) -> PostViews {
+        let anchors = items.iter().filter_map(|item| item.subject.anchor()).filter_map(Anchor::post_id);
+        let points = items.iter().filter_map(|item| item.subject.map()).flat_map(|map| map.points.iter().filter_map(|p| p.anchor()?.post_id()));
+        let views: HashMap<String, PostView> = anchors.chain(points).filter_map(|id| self.post_view(id.as_str()).map(|view| (id.as_str().to_string(), view))).collect();
+        Rc::new(views)
+    }
+
+    /// The page's data: the active network's items and log, today, Settings › Learning, and
+    /// the posts and document titles shown.
     pub(in crate::ui::features::shell) fn review_data(&self, today: NaiveDate) -> ReviewData {
         let deck = self.review.deck.of_network(&self.state.active_network_id);
         let (limits, policy) = learning_policy(&self.state.preferences().learning);
-        let source_labels = deck.cards.iter().filter_map(|card| self.source_label(&card.source).map(|label| (card.source.group_key(), label))).collect::<HashMap<_, _>>();
-        ReviewData { network_id: self.state.active_network_id.clone(), cards: deck.cards, log: deck.log, today, limits, policy, source_labels }
+        let posts = self.referenced_posts(&deck.items);
+        let documents = Rc::new(self.state.current_documents().map(|doc| (doc.id.clone(), doc.title.clone())).collect());
+        ReviewData { network_id: self.state.active_network_id.clone(), items: deck.items, log: deck.log, today, limits, policy, posts, documents }
     }
 
-    /// A post's opening words, or a document's title with the cited paragraph.
-    fn source_label(&self, source: &CardSource) -> Option<String> {
-        match source {
-            CardSource::Post { id } => Some(self.state.get_post_by_id(id).map_or_else(|| t!("review.source.missing").to_string(), |post| shortened(&post.content, SOURCE_CHARS))),
-            CardSource::Document { id, locator } => {
-                let title = self.state.documents.iter().find(|doc| &doc.id == id).map(|doc| doc.title.clone()).unwrap_or_else(|| t!("review.source.missing").to_string());
-                Some(match locator.as_ref().and_then(|l| l.paragraph) {
-                    Some(paragraph) => t!("review.source.paragraph", title = title, paragraph = paragraph).to_string(),
-                    None => title,
-                })
-            }
-            CardSource::Sentence { .. } => None,
-        }
-    }
-
-    /// Applies `answer` to its card, logs it and queues both for the vault.
+    /// Applies `answer` to its item, logs it and queues both for the vault.
     fn apply_review_answer(&mut self, answer: Answer, cx: &mut Context<Self>) {
-        let Some(card) = self.review.deck.card(&answer.card_id).cloned() else { return };
-        let (limits_policy, today) = (learning_policy(&self.state.preferences().learning), super::super::review_host::review_today());
-        let (card, entry) = apply_answer(&card, &answer, Utc::now(), today, &limits_policy.1);
+        let Some(item) = self.review.deck.item(&answer.item_id).cloned() else { return };
+        let policy = learning_policy(&self.state.preferences().learning).1;
+        let (item, entry) = apply_answer(&item, &answer, Utc::now(), review_today(), &policy);
         if let Some(db) = &self.state.db {
-            let _ = db.save_review_cards(vec![card.clone()]);
+            let _ = db.save_review_items(vec![item.clone()]);
             let _ = db.append_review_entry(entry.clone());
         }
-        self.review.deck = std::mem::take(&mut self.review.deck).with_card(card).with_entry(entry);
+        self.review.deck = std::mem::take(&mut self.review.deck).with_item(item).with_entry(entry);
         self.review_changed(cx);
     }
 
-    /// Replaces card `id` with `change(card)` and saves it.
-    fn update_review_card(&mut self, id: &CardId, change: impl FnOnce(Card) -> Card, cx: &mut Context<Self>) {
-        let Some(card) = self.review.deck.card(id).cloned().map(change) else { return };
+    /// Saves `items` (new or replaced) to the deck and the vault.
+    pub(in crate::ui::features::shell) fn store_review_items(&mut self, items: Vec<ReviewItem>, cx: &mut Context<Self>) {
         if let Some(db) = &self.state.db {
-            let _ = db.save_review_cards(vec![card.clone()]);
+            let _ = db.save_review_items(items.clone());
         }
-        self.review.deck = std::mem::take(&mut self.review.deck).with_card(card);
+        self.review.deck = items.into_iter().fold(std::mem::take(&mut self.review.deck), |deck, item| deck.with_item(item));
         self.review_changed(cx);
     }
 
-    /// Opens the post or vault document a card cites.
-    fn open_card_source(&mut self, source: CardSource, window: &mut Window, cx: &mut Context<Self>) {
-        match source {
-            CardSource::Post { id } => self.reveal_post(PostId::new(id), window, cx),
-            CardSource::Document { id, .. } => self.open_vault_document(&id, window, cx),
-            CardSource::Sentence { .. } => {}
+    /// Replaces item `id` with `change(item)` and saves it.
+    fn update_review_item(&mut self, id: &ItemId, change: impl FnOnce(ReviewItem) -> ReviewItem, cx: &mut Context<Self>) {
+        if let Some(item) = self.review.deck.item(id).cloned().map(change) {
+            self.store_review_items(vec![item], cx);
         }
+    }
+
+    /// Removes item `id` (its log stays for the statistics).
+    pub(in crate::ui::features::shell) fn delete_review_item(&mut self, id: &ItemId, cx: &mut Context<Self>) {
+        self.review.deck = std::mem::take(&mut self.review.deck).without_item(id);
+        if let Some(db) = &self.state.db {
+            let _ = db.delete_review_item(id);
+        }
+        self.review_changed(cx);
+    }
+
+    /// Opens the post or vault document an item is anchored to.
+    fn open_anchor(&mut self, anchor: Anchor, window: &mut Window, cx: &mut Context<Self>) {
+        match anchor {
+            Anchor::Post { id } => self.reveal_post(PostId::new(id), window, cx),
+            Anchor::Passage { document_id, .. } => self.open_vault_document(&document_id, window, cx),
+        }
+    }
+
+    /// The picker over the network's posts, newest first.
+    pub(in crate::ui::features::shell) fn open_review_picker(&mut self, mode: PickerMode, window: &mut Window, cx: &mut Context<Self>) {
+        let mut posts: Vec<PostView> = self.state.current_network_posts().filter(|post| !post.is_instant_repost()).map(|post| PostView { post: post.clone(), author: self.state.author_of(post).clone() }).collect();
+        posts.sort_by(|a, b| b.post.created_at.cmp(&a.post.created_at));
+        posts.truncate(PICKER_POSTS);
+        self.review.panel.update(cx, |panel, cx| panel.open_picker(mode, posts, window, cx));
     }
 }

@@ -27,7 +27,7 @@ pub use consts::{
 };
 pub use params::{
     CycleProfileCallback, DeletePostCallback, FeedParams, LikePostCallback, LoadMoreCallback, PostActionCallback, QuotePostCallback, ReplyPostCallback, RepostPostCallback,
-    SelectFeedTabCallback, SelectPostCallback, ToggleRepliesCallback,
+    SelectFeedTabCallback, SelectPostCallback, ToggleRepliesCallback, LearnPostCallback, LearningPosts,
 };
 pub use render::render_main_feed;
 pub use stream::{FeedReader, StreamInputs, StreamRows};

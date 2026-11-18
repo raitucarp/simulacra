@@ -1,17 +1,24 @@
-//! The Review page: a header with its tabs above the current screen, in a centred column.
+//! The Review page: a header with its tabs above the current screen, in a centred column
+//! (a post face, a connection map canvas and the picker are drawn here too).
 //! The review keys are bound only while a card waits for them (see `keys_active`).
 
-mod cards;
 mod choice;
 mod common;
+mod drill;
 mod empty;
-mod face;
+pub mod face;
 mod grades;
 mod header;
+mod items;
+pub mod map;
+mod map_editor;
+mod map_lists;
 mod order;
 mod overview;
+mod picker;
 mod quiz_frame;
 mod recall;
+mod result;
 mod session;
 mod stats;
 mod summary;
@@ -74,7 +81,9 @@ impl ReviewPanel {
             Screen::Summary => self.render_summary(cx).into_any_element(),
             Screen::Quiz => self.render_quiz(cx),
             Screen::Stats => self.render_stats(class).into_any_element(),
-            Screen::Cards => self.render_cards(cx).into_any_element(),
+            Screen::Items => self.render_items(cx).into_any_element(),
+            Screen::Picker => self.render_picker(cx).into_any_element(),
+            Screen::MapEditor => self.render_map_editor(cx).into_any_element(),
         }
     }
 

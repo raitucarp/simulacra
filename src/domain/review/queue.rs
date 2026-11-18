@@ -2,7 +2,7 @@
 //! Settings › Learning, interleaved so new material is spread between reviews and cards from
 //! the same source rarely follow each other (interleaving improves discrimination).
 
-use super::card::{Card, CardId};
+use super::item::{ItemId, ReviewItem};
 use super::log::ReviewEntry;
 use super::schedule::Phase;
 use chrono::NaiveDate;
@@ -39,29 +39,25 @@ impl TodayPlan {
     }
 }
 
-fn is_active(card: &Card) -> bool {
-    !card.suspended
-}
-
 /// Distinct cards answered today and how many of them were new.
 fn answered_today(log: &[ReviewEntry], today: NaiveDate) -> (usize, usize) {
     let today_entries: Vec<&ReviewEntry> = log.iter().filter(|entry| entry.day == today).collect();
-    let answered: HashSet<&CardId> = today_entries.iter().map(|entry| &entry.card_id).collect();
+    let answered: HashSet<&ItemId> = today_entries.iter().map(|entry| &entry.item_id).collect();
     let introduced = today_entries.iter().filter(|entry| entry.phase_before == Phase::New).count();
     (answered.len(), introduced)
 }
 
 /// Due learnt cards, most overdue first, and new cards, oldest first.
-fn candidates(cards: &[Card], today: NaiveDate) -> (Vec<&Card>, Vec<&Card>) {
-    let mut due: Vec<&Card> = cards.iter().filter(|c| is_active(c) && c.schedule.is_due(today)).collect();
+fn candidates(cards: &[ReviewItem], today: NaiveDate) -> (Vec<&ReviewItem>, Vec<&ReviewItem>) {
+    let mut due: Vec<&ReviewItem> = cards.iter().filter(|c| c.is_active() && c.schedule.is_due(today)).collect();
     due.sort_by(|a, b| a.schedule.due.cmp(&b.schedule.due).then_with(|| a.id.cmp(&b.id)));
-    let mut new: Vec<&Card> = cards.iter().filter(|c| is_active(c) && c.schedule.is_new()).collect();
+    let mut new: Vec<&ReviewItem> = cards.iter().filter(|c| c.is_active() && c.schedule.is_new()).collect();
     new.sort_by(|a, b| a.created_at.cmp(&b.created_at).then_with(|| a.id.cmp(&b.id)));
     (due, new)
 }
 
 /// Counts for the overview and the sizes of today's queue.
-pub fn plan_today(cards: &[Card], log: &[ReviewEntry], today: NaiveDate, limits: DailyLimits) -> TodayPlan {
+pub fn plan_today(cards: &[ReviewItem], log: &[ReviewEntry], today: NaiveDate, limits: DailyLimits) -> TodayPlan {
     let (due, new) = candidates(cards, today);
     let (answered, introduced) = answered_today(log, today);
     let room = (limits.reviews as usize).saturating_sub(answered);
@@ -72,12 +68,12 @@ pub fn plan_today(cards: &[Card], log: &[ReviewEntry], today: NaiveDate, limits:
 
 /// Today's queue: due and new cards within the limits, new cards spread evenly between the
 /// reviews, then cards from one source moved apart where possible.
-pub fn build_queue(cards: &[Card], log: &[ReviewEntry], today: NaiveDate, limits: DailyLimits) -> Vec<CardId> {
+pub fn build_queue(cards: &[ReviewItem], log: &[ReviewEntry], today: NaiveDate, limits: DailyLimits) -> Vec<ItemId> {
     let plan = plan_today(cards, log, today, limits);
     let (due, new) = candidates(cards, today);
     let (due, new) = (&due[..plan.queued_due], &new[..plan.queued_new]);
     let stride = (due.len() + new.len()).checked_div(new.len().max(1)).unwrap_or(1).max(1);
-    let mut mixed: Vec<&Card> = Vec::with_capacity(due.len() + new.len());
+    let mut mixed: Vec<&ReviewItem> = Vec::with_capacity(due.len() + new.len());
     let (mut due_iter, mut new_iter) = (due.iter(), new.iter());
     for slot in 0..due.len() + new.len() {
         let take_new = slot % stride == stride - 1 || due_iter.len() == 0;
@@ -89,23 +85,23 @@ pub fn build_queue(cards: &[Card], log: &[ReviewEntry], today: NaiveDate, limits
 
 /// The source group with the most waiting cards, if it holds more than half of them (it
 /// must be placed now, or two of its cards would end up side by side).
-fn crowding_group(waiting: &[&Card]) -> Option<String> {
+fn crowding_group(waiting: &[&ReviewItem]) -> Option<String> {
     let mut counts: HashMap<String, usize> = HashMap::new();
-    waiting.iter().for_each(|card| *counts.entry(card.source.group_key()).or_default() += 1);
+    waiting.iter().for_each(|card| *counts.entry(card.group_key()).or_default() += 1);
     counts.into_iter().max_by(|a, b| a.1.cmp(&b.1).then_with(|| b.0.cmp(&a.0))).filter(|(_, count)| count * 2 > waiting.len()).map(|(group, _)| group)
 }
 
 /// Reorders `cards` so neighbours come from different sources wherever that is possible,
 /// otherwise keeping their order.
-fn spread_sources(cards: Vec<&Card>) -> Vec<&Card> {
+fn spread_sources(cards: Vec<&ReviewItem>) -> Vec<&ReviewItem> {
     let mut waiting = cards;
-    let mut out: Vec<&Card> = Vec::with_capacity(waiting.len());
+    let mut out: Vec<&ReviewItem> = Vec::with_capacity(waiting.len());
     while !waiting.is_empty() {
-        let last = out.last().map(|card| card.source.group_key());
+        let last = out.last().map(|card| card.group_key());
         let crowded = crowding_group(&waiting).filter(|group| Some(group) != last.as_ref());
         let pick = match crowded {
-            Some(group) => waiting.iter().position(|card| card.source.group_key() == group),
-            None => waiting.iter().position(|card| Some(card.source.group_key()) != last),
+            Some(group) => waiting.iter().position(|card| card.group_key() == group),
+            None => waiting.iter().position(|card| Some(card.group_key()) != last),
         };
         out.push(waiting.remove(pick.unwrap_or(0)));
     }

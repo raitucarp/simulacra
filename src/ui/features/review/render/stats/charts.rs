@@ -1,4 +1,4 @@
-//! The two column charts: cards due in the next thirty days, and weekly retention against
+//! The two column charts: items due in the next thirty days, and weekly retention against
 //! the desired retention.
 
 use super::super::super::panel::ReviewPanel;
@@ -21,12 +21,12 @@ const MIN_FORECAST_MAX: f64 = 1.0;
 impl ReviewPanel {
     pub(super) fn forecast_panel(&self) -> Div {
         let theme = &self.theme;
-        let counts = due_forecast(&self.data.cards, self.data.today, FORECAST_DAYS);
+        let counts = due_forecast(&self.data.items, self.data.today, FORECAST_DAYS);
         let total: usize = counts.iter().sum();
         let max = counts.iter().copied().max().unwrap_or_default() as f64;
         let tips = counts.iter().enumerate().map(|(day, count)| {
             let when = if day == 0 { tr("review.due.today") } else { t_count("review.due.in_days", day) };
-            format!("{when}: {}", t_count("review.stats.cards", *count))
+            format!("{when}: {}", t_count("review.stats.items", *count))
         });
         let chart = BarChart {
             id: FORECAST_ID,

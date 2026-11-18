@@ -5,7 +5,7 @@ use crate::state::{AppState, FeedTab};
 use crate::theme::ThemeTokens;
 use crate::ui::responsive::LayoutClass;
 use super::stream::StreamInputs;
-use crate::ui::features::post::{OpenSourceAction, OpenTextAction};
+use crate::ui::features::post::{LearnRequestKind, LearnStatus, OpenSourceAction, OpenTextAction};
 use gpui_kit::{App, Window};
 
 pub type LikePostCallback = Box<dyn Fn(PostId, &mut Window, &mut App) + 'static>;
@@ -15,10 +15,12 @@ pub type RepostPostCallback = Box<dyn Fn(PostId, &mut Window, &mut App) + 'stati
 pub type QuotePostCallback = Box<dyn Fn(PostId, &mut Window, &mut App) + 'static>;
 pub type DeletePostCallback = Box<dyn Fn(PostId, &mut Window, &mut App) + 'static>;
 pub type FindSimilarCallback = Box<dyn Fn(PostId, &mut Window, &mut App) + 'static>;
+/// Post "…" menu › Learn › … (sb C1b).
+pub type LearnPostCallback = Box<dyn Fn(PostId, LearnRequestKind, &mut Window, &mut App) + 'static>;
+/// The review state of every post being learnt, by post id (sb C1b).
+pub type LearningPosts = std::rc::Rc<std::collections::HashMap<String, LearnStatus>>;
 /// sb C2: runs a thinking action on a post ("…" menu › Actions).
 pub type PostActionCallback = Box<dyn Fn(PostId, crate::domain::post_actions::ActionKind, &mut Window, &mut App) + 'static>;
-/// Post "…" menu › Make flashcard (sb C1).
-pub type MakeFlashcardCallback = Box<dyn Fn(PostId, &mut Window, &mut App) + 'static>;
 pub type CycleProfileCallback = Box<dyn Fn(&mut Window, &mut App) + 'static>;
 pub type LoadMoreCallback = Box<dyn Fn(&mut Window, &mut App) + 'static>;
 pub type SelectFeedTabCallback = Box<dyn Fn(FeedTab, &mut Window, &mut App) + 'static>;
@@ -52,8 +54,9 @@ pub struct FeedParams<'a, C> {
     pub on_delete_post: DeletePostCallback,
     /// Post "…" menu › Find similar.
     pub on_find_similar_post: FindSimilarCallback,
-    /// Post "…" menu › Make flashcard (sb C1).
-    pub on_make_flashcard_post: MakeFlashcardCallback,
+    /// Post "…" menu › Learn (sb C1b), and the posts in review (their indicator).
+    pub on_learn_post: LearnPostCallback,
+    pub learning_posts: LearningPosts,
     /// Hashtag / wikilink clicks in post bodies (tag search, open the linked post or doc).
     pub on_open_tag: OpenTextAction,
     pub on_open_wikilink: OpenTextAction,

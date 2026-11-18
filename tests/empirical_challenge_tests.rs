@@ -7,7 +7,7 @@ use simulacra::state::AppState;
 use simulacra::storage::Database;
 use simulacra::theme::minimalist_dark;
 use simulacra::ui::molecules::post_item::{
-    extract_host_domain, render_post_item, PostAction, PostCardHandlers, ThreadlineStyle,
+    extract_host_domain, render_post_item, LearnControls, PostAction, PostCardHandlers, ThreadlineStyle,
 };
 use std::rc::Rc;
 
@@ -20,8 +20,8 @@ fn noop_handlers() -> PostCardHandlers {
         on_reply: noop.clone(),
         on_repost: noop.clone(),
         on_quote: noop.clone(),
-        on_find_similar: noop.clone(),
-        on_make_flashcard: noop,
+        on_find_similar: noop,
+        learn: LearnControls::inert(),
         on_open_post: Rc::new(|_, _, _| {}),
         on_delete: None,
         links: Default::default(),

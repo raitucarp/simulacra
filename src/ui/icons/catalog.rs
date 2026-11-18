@@ -146,4 +146,5 @@ lucide_catalog! {
     Trophy => "icons/trophy.svg",
     Pause => "icons/pause.svg",
     Play => "icons/play.svg",
+    MessageSquareReply => "icons/message-square-reply.svg", CircleStop => "icons/circle-stop.svg", Eraser => "icons/eraser.svg", ArrowLeftRight => "icons/arrow-left-right.svg", ListChecks => "icons/list-checks.svg", // sb C1b
 }

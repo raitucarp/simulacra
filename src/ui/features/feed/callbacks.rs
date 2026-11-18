@@ -1,13 +1,13 @@
 //! Shared post interaction callbacks and the post card renderer wired to them.
 
 use super::params::{
-    DeletePostCallback, FindSimilarCallback, LikePostCallback, MakeFlashcardCallback, PostActionCallback, QuotePostCallback,
+    DeletePostCallback, FindSimilarCallback, LearnPostCallback, LearningPosts, LikePostCallback, PostActionCallback, QuotePostCallback,
     ReplyPostCallback, RepostPostCallback, SelectPostCallback,
 };
 use crate::domain::{Post, PostId, Profile};
 use crate::state::AppState;
 use crate::theme::ThemeTokens;
-use crate::ui::features::post::{render_post_item, BodyLinks, PostAction, PostCardHandlers, ThreadlineStyle};
+use crate::ui::features::post::{render_post_item, BodyLinks, LearnControls, PostAction, PostCardHandlers, ThreadlineStyle};
 use gpui_kit::{AnyElement, App, IntoElement, Window};
 use std::rc::Rc;
 
@@ -21,9 +21,11 @@ pub(crate) struct PostCallbacks {
     pub on_quote: Rc<QuotePostCallback>,
     pub on_delete: Rc<DeletePostCallback>,
     pub on_find_similar: Rc<FindSimilarCallback>,
+    pub on_learn: Rc<LearnPostCallback>,
+    /// Posts in review (sb C1b).
+    pub learning: LearningPosts,
     /// sb C2: "…" menu › Actions.
     pub on_post_action: Rc<PostActionCallback>,
-    pub on_make_flashcard: Rc<MakeFlashcardCallback>,
     /// Hashtag and wikilink clicks inside post bodies.
     pub links: BodyLinks,
 }
@@ -64,12 +66,18 @@ impl PostCallbacks {
             on_repost: bind(&self.on_repost, &target_id),
             on_quote: bind(&self.on_quote, &target_id),
             on_find_similar: bind(&self.on_find_similar, &target_id),
-            on_make_flashcard: bind(&self.on_make_flashcard, &target_id),
+            learn: self.learn_controls(&target_id),
             on_open_post: Rc::new(move |id, window, cx| select(id, window, cx)),
             on_delete: author.is_human_persona().then(|| bind(&self.on_delete, &post.id)),
             links: self.links.clone(),
             on_post_action: Some(bind_action(&self.on_post_action, &target_id)),
         }
+    }
+
+    /// The learn submenu and indicator of the post `id` (sb C1b).
+    fn learn_controls(&self, id: &PostId) -> LearnControls {
+        let (on_learn, post) = (self.on_learn.clone(), id.clone());
+        LearnControls { status: self.learning.get(id.as_str()).copied(), on_learn: Rc::new(move |kind, window, cx| on_learn(post.clone(), kind, window, cx)) }
     }
 
     /// Renders `post` as a card whose actions dispatch to these callbacks.

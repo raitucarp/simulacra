@@ -1,4 +1,4 @@
-//! The statistics screen: the due forecast, retention over time, cards by state, the review
+//! The statistics screen: the due forecast, retention over time, items by state, the review
 //! heatmap and confidence calibration. Two columns in the wide layout class, one otherwise;
 //! every chart measures its container.
 

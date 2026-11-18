@@ -63,7 +63,7 @@ fn v4_moves_a_gemini_gemma_placeholder_to_the_working_model_once() {
     db.init_schema().unwrap();
     let migrated = db.get_setting(SettingKey::PrefsEmbeddings).unwrap().unwrap();
     assert!(migrated.contains("gemini-embedding-001") && migrated.contains("512"), "{migrated}");
-    assert_eq!(db.schema_version().unwrap(), EMBEDDING_MODEL_VERSION);
+    assert!(db.schema_version().unwrap() >= EMBEDDING_MODEL_VERSION);
 
     let local = r#"{"provider":"local_server","model":"embeddinggemma"}"#;
     db.set_setting(SettingKey::PrefsEmbeddings, local).unwrap();

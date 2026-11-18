@@ -1,15 +1,14 @@
-//! Free recall: type the answer, compare it with the card's, then grade yourself (the
-//! comparison only suggests a grade).
+//! Free recall: type the answer, compare it with the item's (a post or passage is compared
+//! in your own words), then grade yourself (the comparison only suggests a grade).
 
 use super::super::panel::ReviewPanel;
 use super::super::text::tr;
 use super::common::{caption, control_row, surface};
-use super::face::render_face;
+use super::face::{render_face, FaceRole};
 use super::grades::{grade_color, render_grade_buttons};
-use crate::domain::review::card::card_faces;
 use crate::domain::review::quiz::{QuizKind, RecallRun, RecallVerdict};
 use crate::domain::review::schedule::preview;
-use crate::domain::review::{Card, Grade};
+use crate::domain::review::{Grade, ReviewItem};
 use crate::ui::icons::LucideIcon;
 use crate::ui::keymap::render_key_cap;
 use gpui_kit::component::button::{Button, ButtonVariants};
@@ -24,15 +23,15 @@ const CHECK_ID: &str = "review-recall-check";
 impl ReviewPanel {
     pub(super) fn render_recall(&self, run: &RecallRun, cx: &mut Context<Self>) -> impl IntoElement {
         let theme = &self.theme;
-        let total = run.cards.len();
-        let Some(card) = run.current().and_then(|id| self.data.card(id)) else {
+        let total = run.items.len();
+        let Some(item) = run.current().and_then(|id| self.data.item(id)) else {
             let recalled = run.grades.iter().filter(|grade| grade.is_recall()).count();
             return self.render_quiz_done(QuizKind::Recall, t!("review.recall.score", right = recalled, total = total).to_string(), cx);
         };
         let progress = t!("review.recall.progress", index = run.index + 1, total = total).to_string();
         let below = match &run.checked {
             None => self.recall_input(cx).into_any_element(),
-            Some((typed, verdict)) => self.recall_result(card, typed, *verdict, cx).into_any_element(),
+            Some((typed, verdict)) => self.recall_result(item, typed, *verdict, cx).into_any_element(),
         };
         div()
             .w_full()
@@ -42,7 +41,7 @@ impl ReviewPanel {
             .flex_col()
             .gap(theme.section_gap)
             .child(self.quiz_top(progress, run.index as f64 / total.max(1) as f64, cx))
-            .child(self.render_card(card, false, cx))
+            .child(self.render_item(item, false, cx))
             .child(below)
     }
 
@@ -56,7 +55,7 @@ impl ReviewPanel {
             .border_color(theme.border)
             .bg(theme.input_bg)
             .px(theme.spacing_sm)
-            .child(Input::new(&self.answer_input).bordered(false));
+            .child(Input::new(&self.fields.answer).bordered(false));
         let check = Button::new(CHECK_ID).primary().icon(Icon::new(LucideIcon::Check)).label(tr("review.recall.check")).on_click(cx.listener(|this, _, window, cx| this.check_recall(window, cx)));
         div()
             .flex()
@@ -66,7 +65,7 @@ impl ReviewPanel {
             .child(control_row(theme).child(render_key_cap(tr("keymap.key.enter"), theme)).child(caption(tr("review.recall.hint"), theme)))
     }
 
-    fn recall_result(&self, card: &Card, typed: &str, verdict: RecallVerdict, cx: &mut Context<Self>) -> impl IntoElement {
+    fn recall_result(&self, item: &ReviewItem, typed: &str, verdict: RecallVerdict, cx: &mut Context<Self>) -> impl IntoElement {
         let theme = &self.theme;
         let suggested = verdict.suggested_grade();
         let verdict_line = div()
@@ -80,11 +79,11 @@ impl ReviewPanel {
         let on_grade = Rc::new(move |grade: Grade, window: &mut Window, cx: &mut App| {
             let _ = entity.update(cx, |panel, cx| panel.grade_recall(grade, window, cx));
         });
-        let intervals = preview(&card.schedule, self.data.today, &self.data.policy);
+        let intervals = preview(&item.schedule, self.data.today, &self.data.policy);
         surface(theme)
             .child(verdict_line)
             .child(caption(t!("review.recall.you_typed", answer = typed).to_string(), theme))
-            .child(render_face(&card_faces(&card.kind).answer, theme.font_size_md, theme.text_primary, theme))
+            .child(render_face(&item.faces().answer, FaceRole::Answer, &self.data, theme))
             .child(caption(tr("review.recall.grade_yourself"), theme))
             .child(render_grade_buttons(Some(intervals), Some(suggested), on_grade, theme))
     }

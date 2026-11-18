@@ -15,4 +15,4 @@ pub use calibration::{calibration, CalibrationRow};
 pub use forecast::{due_forecast, FORECAST_DAYS};
 pub use heatmap::{current_streak, heatmap_level, review_heatmap, HeatmapCell, HEATMAP_LEVELS};
 pub use retention::{retention_by_week, RetentionPoint, RETENTION_WEEKS};
-pub use states::{state_counts, CardState, StateCounts, MATURE_INTERVAL};
+pub use states::{state_counts, ItemState, StateCounts, MATURE_INTERVAL};

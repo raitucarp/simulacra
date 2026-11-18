@@ -37,7 +37,7 @@ command_ids! {
     GoAgents => "go_agents",
     GoPersonas => "go_personas",
     GoMindGraph => "go_mind_graph",
-    /// sb C1: the Review page, and a flashcard from the thought open in the inspector.
+    /// sb C1: the Review page (learning commands below, sb C1b).
     GoReview => "go_review",
     /// Creation ("New" menu).
     NewThread => "new_thread",
@@ -67,8 +67,10 @@ command_ids! {
     /// sb B3: the palette in semantic mode, and "find similar" for the open thought.
     SemanticSearch => "semantic_search",
     FindSimilar => "find_similar",
+    /// sb C1b: learn the thought open in the inspector; a new connection map.
+    LearnPost => "learn_post",
+    NewConnectionMap => "new_connection_map",
     /// sb C2: the actions sheet on the open thought, and the inspector's outline view.
     PostActions => "post_actions",
     ToggleOutline => "toggle_outline",
-    MakeFlashcard => "make_flashcard",
 }

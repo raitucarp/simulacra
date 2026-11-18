@@ -16,13 +16,13 @@ use rust_i18n::t;
 
 impl AppView {
     /// The root of the thread around `post_id`.
-    fn root_of(&self, post_id: &PostId) -> Option<PostId> {
+    pub(super) fn root_of(&self, post_id: &PostId) -> Option<PostId> {
         let post = self.state.get_post(&self.state.action_target(post_id))?;
         Some(thread_root(post, |id| self.state.get_post(id)).id.clone())
     }
 
     /// The thread's posts, root first, then every reply in reading order.
-    fn thread_posts(&self, root: &PostId) -> Vec<ThreadPost> {
+    pub(super) fn thread_posts(&self, root: &PostId) -> Vec<ThreadPost> {
         let Some(post) = self.state.get_post(root) else { return Vec::new() };
         let conversation = build_conversation(&self.state, post, ReplyLimits::UNLIMITED);
         let line = |post: &Post| ThreadPost { id: post.id.clone(), author: self.state.author_of(post).name.clone(), text: post.content.clone() };

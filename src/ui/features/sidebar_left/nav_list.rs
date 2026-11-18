@@ -20,7 +20,7 @@ struct Place {
     command: CommandId,
 }
 
-const PLACES: [Place; 7] = [
+const PLACES: [Place; 8] = [
     Place { tab: NavigationTab::Timeline, label_key: "nav.home", icon: LucideIcon::Activity, command: CommandId::GoTimeline },
     Place { tab: NavigationTab::Knowledge, label_key: "nav.knowledge", icon: LucideIcon::BookOpen, command: CommandId::GoKnowledge },
     Place { tab: NavigationTab::AgentLab, label_key: "nav.agent_lab", icon: LucideIcon::Users, command: CommandId::GoAgents },
@@ -28,6 +28,7 @@ const PLACES: [Place; 7] = [
     Place { tab: NavigationTab::Review, label_key: "nav.review", icon: LucideIcon::GraduationCap, command: CommandId::GoReview },
     Place { tab: NavigationTab::Insights, label_key: "nav.insights", icon: LucideIcon::ChartColumn, command: CommandId::GoInsights },
     Place { tab: NavigationTab::Journal, label_key: "nav.journal", icon: LucideIcon::NotebookPen, command: CommandId::GoJournal },
+    Place { tab: NavigationTab::Arena, label_key: "nav.arena", icon: LucideIcon::Swords, command: CommandId::GoArena },
 ];
 
 /// Whether `place` is the active screen (the Persona Lab counts as Personas & Agents).

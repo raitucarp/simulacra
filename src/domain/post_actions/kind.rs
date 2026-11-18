@@ -48,6 +48,10 @@ keyed_enum! {
         FindTensions => "find_tensions",
         /// sb E1: how atomic the post is (one claim, with context), and a split into one post per claim.
         CheckAtomicity => "check_atomicity",
+        /// sb F1: agents debate the post's claim in the Arena.
+        Debate => "debate",
+        /// sb F1: agents answer a thought experiment built on the post, in the Arena's lab.
+        ThoughtExperiment => "thought_experiment",
     }
 }
 
@@ -80,8 +84,8 @@ impl ActionKind {
         use ActionKind::*;
         match self {
             SearchConcept | Explain | SummariseThread | MapConcepts | Translate | MapArgument | CheckAtomicity => ActionGroup::Understand,
-            Steelman | Strawman | HiddenPremise | Counterexample | CognitiveBiases | ClaimConfidence | Crux | FindTensions => ActionGroup::Challenge,
-            Socratic | Analogies | FalsifiablePrediction | ContinueThought => ActionGroup::Explore,
+            Steelman | Strawman | HiddenPremise | Counterexample | CognitiveBiases | ClaimConfidence | Crux | FindTensions | Debate => ActionGroup::Challenge,
+            Socratic | Analogies | FalsifiablePrediction | ContinueThought | ThoughtExperiment => ActionGroup::Explore,
         }
     }
 
@@ -107,7 +111,7 @@ impl ActionKind {
     /// sb E1: whether the action opens a thinking tool of its own instead of an answer in the
     /// actions sheet.
     pub const fn opens_tool(self) -> bool {
-        matches!(self, Self::MapArgument | Self::FindTensions | Self::CheckAtomicity)
+        matches!(self, Self::MapArgument | Self::FindTensions | Self::CheckAtomicity | Self::Debate | Self::ThoughtExperiment)
     }
 
     /// Every action of `group`, in display order.

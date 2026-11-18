@@ -95,6 +95,12 @@ command_ids! {
     InsightsTensions => "insights_tensions",
     ResolveDuePredictions => "resolve_due_predictions",
     ShowArgumentMap => "show_argument_map",
+    /// sb F1: the Arena page, a new debate or experiment, and either on the open thought.
+    GoArena => "go_arena",
+    NewDebate => "new_debate",
+    NewThoughtExperiment => "new_thought_experiment",
+    DebateOpenThought => "debate_open_thought",
+    ExperimentOpenThought => "experiment_open_thought",
     /// sb F2: the Saved view, bookmarking the open thought, the export bundle and snapshots.
     OpenCollection => "open_collection",
     BookmarkPost => "bookmark_post",

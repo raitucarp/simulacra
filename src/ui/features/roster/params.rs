@@ -17,6 +17,15 @@ pub enum LabMode {
     PersonaLab,
 }
 
+/// sb F1: what the selected agent's overview shows.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum ProfileTab {
+    #[default]
+    Profile,
+    /// Its beliefs and their revision log.
+    Beliefs,
+}
+
 /// A shared callback taking a profile id.
 pub type ProfileCallback = Rc<dyn Fn(ProfileId, &mut Window, &mut App)>;
 
@@ -32,6 +41,8 @@ pub struct RosterCallbacks {
     pub delete: ProfileCallback,
     pub activate_persona: ProfileCallback,
     pub trigger_agent: ProfileCallback,
+    /// sb F1: shows the profile or its beliefs.
+    pub switch_profile_tab: Rc<dyn Fn(ProfileTab, &mut Window, &mut App)>,
 }
 
 /// Plain data the roster renders from.
@@ -40,6 +51,9 @@ pub struct RosterParams<'a> {
     pub mode: LabMode,
     pub selected_profile_id: Option<&'a ProfileId>,
     pub theme: &'a ThemeTokens,
+    /// sb F1: the overview's tab, and the selected agent's Beliefs tab.
+    pub profile_tab: ProfileTab,
+    pub beliefs: Option<AnyView>,
 }
 
 /// Values derived once per render.

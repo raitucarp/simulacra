@@ -18,6 +18,7 @@ use super::vault_host::VaultHost;
 use super::review_host::ReviewHost;
 use super::insights_host::InsightsHost;
 use super::journal_host::JournalHost;
+use super::arena_host::ArenaHost;
 use super::thinking_host::ThinkingHost;
 use super::data_host::DataHost;
 use crate::i18n::Language;
@@ -59,6 +60,8 @@ pub struct AppView {
     pub insights: InsightsHost,
     /// The private Journal page and its records (sb E3).
     pub journal: JournalHost,
+    /// Debates, thought experiments and agent beliefs (sb F1).
+    pub arena: ArenaHost,
     /// The Agent Forge while it is open (it replaces the center and right columns).
     pub forge: Option<ForgeSession>,
     /// Left sidebar prefs (width, sections, pins, recents) and the window width.

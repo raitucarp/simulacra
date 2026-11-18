@@ -4,6 +4,9 @@
 //! `Database` is a single type whose `impl` blocks are spread across the sibling
 //! modules by table (networks, profiles, posts, trending, settings, documents).
 
+mod arena;
+mod arena_schema;
+mod beliefs;
 mod catalogue;
 mod data_schema;
 mod restore;
@@ -43,6 +46,7 @@ pub(super) mod versions;
 mod tests;
 
 pub use catalogue::{build_catalogue_search, fts_match_expression, CatalogueSearch, DocumentText};
+pub use arena::ArenaRecord;
 pub use journal::StoredRecord;
 pub use restore::{verify_database_file, DatabaseSummary};
 pub use preferences::{preference_rows, PREFERENCE_KEYS};

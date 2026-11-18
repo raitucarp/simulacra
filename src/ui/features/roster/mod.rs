@@ -8,8 +8,9 @@ mod mode_switch;
 mod overview;
 mod pane;
 mod params;
+mod profile_tabs;
 
-pub use params::{LabMode, RosterCallbacks, RosterParams};
+pub use params::{LabMode, ProfileTab, RosterCallbacks, RosterParams};
 
 use crate::theme::ThemeTokens;
 use crate::ui::components::{persisted_h_resizable, SplitPane};

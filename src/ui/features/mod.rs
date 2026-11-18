@@ -1,6 +1,8 @@
 //! Feature-oriented UI modules (one directory per product surface),
 //! composed from shared `crate::ui::components`.
 
+pub mod arena;
+pub mod beliefs;
 pub mod command_palette;
 pub mod data; // sb F2
 pub mod composer;

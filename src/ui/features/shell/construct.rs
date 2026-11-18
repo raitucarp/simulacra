@@ -16,6 +16,7 @@ use super::vault_host::VaultHost;
 use super::review_host::ReviewHost;
 use super::insights_host::InsightsHost;
 use super::journal_host::JournalHost;
+use super::arena_host::ArenaHost;
 use super::thinking_host::ThinkingHost;
 use super::data_host::DataHost;
 use super::view::{AppView, ChromeState};
@@ -49,7 +50,7 @@ impl AppView {
         let appearance = cx.new(|cx| AppearancePanel::new(state.theme_settings.clone(), window, cx));
         let (settings_ui, settings_subscriptions) = SettingsUi::new(state.preferences(), window, cx);
         let (import, import_subscriptions) = ImportUi::new(window, cx);
-        let ((review, review_subscriptions), (insights, insights_subscription), (journal, journal_subscription), (thinking, thinking_subscription)) = (ReviewHost::new(&state, window, cx), InsightsHost::new(&state, window, cx), JournalHost::new(&state, window, cx), ThinkingHost::new(&state, window, cx));
+        let ((review, review_subscriptions), (insights, insights_subscription), (journal, journal_subscription), (thinking, thinking_subscription), (arena, arena_subscriptions)) = (ReviewHost::new(&state, window, cx), InsightsHost::new(&state, window, cx), JournalHost::new(&state, window, cx), ThinkingHost::new(&state, window, cx), ArenaHost::new(&state, window, cx));
         let mut subscriptions = vec![
             feed.subscribe_search(cx),
             cx.subscribe_in(&composer_modal, window, Self::publish_composer_draft),
@@ -58,7 +59,7 @@ impl AppView {
             Self::observe_own_changes(cx), Self::observe_window_width(window, cx), Self::refocus_on_focus_loss(window, cx),
             cx.observe_window_appearance(window, |this, window, cx| this.follow_system_appearance(window, cx)),
         ];
-        subscriptions.extend(settings_subscriptions.into_iter().chain(import_subscriptions).chain(review_subscriptions));
+        subscriptions.extend(settings_subscriptions.into_iter().chain(import_subscriptions).chain(review_subscriptions).chain(arena_subscriptions));
         let llm_inputs = LlmInputs::new(&state, window, cx);
         let (lab, onboarding, data) = (LabState::new(&state), state.should_offer_onboarding(), DataHost::new(&state, window, cx)); // sb F2: data
         let scheduler = SchedulerState::new(state.scheduler_enabled(), state.preferences().agents.max_concurrent as usize);
@@ -68,7 +69,7 @@ impl AppView {
             state,
             chrome: ChromeState { is_onboarding_open: onboarding, ..ChromeState::new(initial_lang) },
             feed, composer_modal, appearance, llm_inputs, settings_ui,
-            lab, scheduler, graph, vault, import, review, insights, journal, thinking, data, semantic: SemanticState::new(cx), media: MediaHost::new(cx),
+            lab, scheduler, graph, vault, import, review, insights, journal, thinking, arena, data, semantic: SemanticState::new(cx), media: MediaHost::new(cx),
             forge: None, sidebar, palette,
             panels: ShellPanels::new(cx),
             _subscriptions: subscriptions,

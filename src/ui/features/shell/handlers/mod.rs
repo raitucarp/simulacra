@@ -2,6 +2,15 @@
 //! UI callback by `super::binder::Binder`.
 
 pub(super) mod appearance;
+mod arena;
+mod arena_calls;
+mod arena_debate;
+mod arena_judge;
+mod arena_lab;
+mod arena_publish;
+mod arena_sync;
+mod beliefs;
+mod beliefs_material;
 mod capture;
 mod chrome;
 mod commands;

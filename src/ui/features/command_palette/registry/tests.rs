@@ -58,5 +58,5 @@ fn availability_decides_listing_and_running() {
 #[test]
 fn screens_are_the_go_commands() {
     let screens: Vec<CommandId> = COMMANDS.iter().filter(|spec| spec.kind == CommandKind::Screen).map(|spec| spec.id).collect();
-    assert_eq!(screens, vec![CommandId::GoTimeline, CommandId::GoKnowledge, CommandId::GoAgents, CommandId::GoPersonas, CommandId::GoMindGraph, CommandId::GoReview, CommandId::GoInsights, CommandId::GoJournal]);
+    assert_eq!(screens, vec![CommandId::GoTimeline, CommandId::GoKnowledge, CommandId::GoAgents, CommandId::GoPersonas, CommandId::GoMindGraph, CommandId::GoReview, CommandId::GoInsights, CommandId::GoJournal, CommandId::GoArena]);
 }

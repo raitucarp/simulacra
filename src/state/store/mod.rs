@@ -73,6 +73,8 @@ pub enum NavigationTab {
     Insights,
     /// The private journal, mood log, focus sessions and time capsules (sb E3).
     Journal,
+    /// Debates and thought experiments between agents (sb F1).
+    Arena,
 }
 
 /// Application state container.

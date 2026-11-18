@@ -1,5 +1,6 @@
 //! Unit tests for the SQLite persistence layer.
 
+mod arena;
 mod catalogue;
 mod embeddings;
 mod learning;

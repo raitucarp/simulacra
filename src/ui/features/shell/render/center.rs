@@ -28,6 +28,8 @@ impl AppView {
             self.insights.panel.clone().into_any_element()
         } else if self.state.active_tab == NavigationTab::Journal {
             self.journal.panel.clone().into_any_element()
+        } else if self.state.active_tab == NavigationTab::Arena {
+            self.arena.panel.clone().into_any_element()
         } else {
             self.filtered_feed(bind, class).into_any_element()
         }

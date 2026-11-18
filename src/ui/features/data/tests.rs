@@ -27,6 +27,7 @@ fn card_controls_follow_the_shelf_and_edit_counts() {
         bookmarks: Rc::new(HashSet::from(["p1".to_string()])),
         collections: Rc::new(vec![(shelf.clone(), "Shelf".into())]),
         memberships: Rc::new(HashMap::from([("p1".to_string(), vec![shelf.clone()])])),
+        history_open: false,
         on_event: Rc::new(|_, _, _| {}),
     };
     let own = source.controls(&PostId::new("p1"), true);
@@ -34,6 +35,9 @@ fn card_controls_follow_the_shelf_and_edit_counts() {
     assert_eq!((own.revisions, own.member_of.clone()), (2, vec![shelf]));
     let other = source.controls(&PostId::new("p2"), false);
     assert!(!other.own && !other.bookmarked && other.member_of.is_empty() && other.revisions == 0);
+    assert!(own.edited_tooltip(), "the mark explains itself while no history is open");
+    let open = DataSource { history_open: true, ..source };
+    assert!(!open.controls(&PostId::new("p1"), true).edited_tooltip(), "an open history sheet drops the mark's tooltip");
 }
 
 #[test]

@@ -1,12 +1,16 @@
 //! The frame every data sheet shares: a scrim, an elevated card with a header (icon, title,
 //! subtitle), a scrolling body and a footer of buttons. Clicking the scrim closes it.
 
+use super::events::{DataAction, DataEvent};
 use crate::theme::ThemeTokens;
 use crate::ui::atoms::ElevationExt;
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::Icon;
 use gpui_kit::*;
 use std::rc::Rc;
+
+/// The key that closes a sheet, as on the other sheets.
+const ESCAPE_KEY: &str = "escape";
 
 /// A no-argument sheet callback.
 pub(super) type SheetCallback = Rc<dyn Fn(&mut Window, &mut App) + 'static>;
@@ -123,4 +127,14 @@ pub(super) fn sheet_frame(parts: SheetParts, theme: &ThemeTokens) -> Stateful<Di
         .pt(theme.palette_top_offset)
         .on_mouse_down(MouseButton::Left, move |_, window, cx| dismiss(window, cx))
         .child(card)
+}
+
+/// Escape closes `sheet` with `close` while the keyboard is inside it (the shell focuses
+/// `focus` when a sheet opens), as on the post actions and similar-posts sheets.
+pub fn closes_on_escape(sheet: Stateful<Div>, focus: &FocusHandle, close: DataEvent, on_event: DataAction) -> Stateful<Div> {
+    sheet.track_focus(focus).on_key_down(move |event, window, cx| {
+        if event.keystroke.key == ESCAPE_KEY {
+            on_event(close.clone(), window, cx);
+        }
+    })
 }

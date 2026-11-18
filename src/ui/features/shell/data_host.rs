@@ -42,6 +42,8 @@ pub struct DataHost {
     /// The post "New collection…" was asked from, added once the collection exists.
     pub pending_add: Option<PostId>,
     pub inputs: DataInputs,
+    /// The open sheet's keyboard focus (Escape closes it), sb P16.
+    pub focus: FocusHandle,
     _subscriptions: Vec<Subscription>,
 }
 
@@ -60,6 +62,11 @@ impl DataInputs {
             collection_name: field(t!("data.saved.name_placeholder").to_string(), false, window, cx),
             note: field(t!("data.saved.note_placeholder").to_string(), false, window, cx),
         }
+    }
+
+    /// Whether one of the fields has the keyboard.
+    pub fn any_focused(&self, window: &Window, cx: &App) -> bool {
+        [&self.passphrase, &self.repeat, &self.restore_passphrase, &self.from, &self.to, &self.collection_name, &self.note].into_iter().any(|input| input.read(cx).focus_handle(cx).is_focused(window))
     }
 
     /// Re-renders on edits of the live fields; Enter in the name and note fields submits.
@@ -98,6 +105,7 @@ impl DataHost {
             editing_note: None,
             pending_add: None,
             inputs,
+            focus: cx.focus_handle(),
             _subscriptions: subscriptions,
         }
     }

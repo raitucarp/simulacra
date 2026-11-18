@@ -10,6 +10,7 @@ use crate::theme::ThemeTokens;
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::menu::{PopupMenu, PopupMenuItem};
 use gpui_kit::component::Icon;
+use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::*;
 use rust_i18n::t;
 use std::collections::{HashMap, HashSet};
@@ -27,6 +28,8 @@ pub struct DataSource {
     pub collections: Rc<Vec<(CollectionId, String)>>,
     /// The collections holding each post, by post id.
     pub memberships: Rc<HashMap<String, Vec<CollectionId>>>,
+    /// The history sheet is open (the "edited" marks drop their tooltips), sb P16.
+    pub history_open: bool,
     pub on_event: DataAction,
 }
 
@@ -40,6 +43,7 @@ impl DataSource {
             bookmarked: self.bookmarks.contains(post.as_str()),
             collections: self.collections.clone(),
             member_of: self.memberships.get(post.as_str()).cloned().unwrap_or_default(),
+            history_open: self.history_open,
             on_event: self.on_event.clone(),
         }
     }
@@ -54,7 +58,16 @@ pub struct DataControls {
     pub bookmarked: bool,
     pub collections: Rc<Vec<(CollectionId, String)>>,
     pub member_of: Vec<CollectionId>,
+    pub history_open: bool,
     pub on_event: DataAction,
+}
+
+impl DataControls {
+    /// Whether the "edited" mark offers its tooltip: not while the history sheet is open, so a
+    /// tooltip that was pending when the mark was clicked never shows over the sheet.
+    pub fn edited_tooltip(&self) -> bool {
+        !self.history_open
+    }
 }
 
 fn item(label: String, icon: LucideIcon, event: DataEvent, on_event: &DataAction) -> PopupMenuItem {
@@ -107,7 +120,7 @@ pub fn render_edited_mark(controls: &DataControls, theme: &ThemeTokens) -> Optio
         .text_size(theme.font_size_2xs)
         .text_color(theme.text_muted)
         .hover(move |style| style.text_color(hover))
-        .tooltip(move |window, cx| gpui_kit::component::tooltip::Tooltip::new(tr("data.edited_tooltip")).build(window, cx))
+        .when(controls.edited_tooltip(), |mark| mark.tooltip(move |window, cx| gpui_kit::component::tooltip::Tooltip::new(tr("data.edited_tooltip")).build(window, cx)))
         .on_click(move |_, window, cx| on_event(DataEvent::OpenPostHistory(post.clone()), window, cx))
         .child(tr("data.edited"));
     Some(mark.into_any_element())

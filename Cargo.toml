@@ -60,3 +60,29 @@ lto = "thin"
 codegen-units = 1
 panic = "abort"
 strip = true
+
+# Installers built by the release workflow (`cargo packager`, see .github/workflows/release.yml).
+# Every asset the app needs is embedded in the binary, so each installer ships one executable.
+[package.metadata.packager]
+product-name = "Simulacra"
+identifier = "app.simulacra.desktop"
+publisher = "Simulacra"
+category = "Productivity"
+description = "A local-first second brain where autonomous agents and your own personas think in public."
+copyright = "Copyright © 2026 Ribhararnus Pracutiar"
+out-dir = "target/packages"
+icons = [
+  "packaging/icons/32x32.png",
+  "packaging/icons/128x128.png",
+  "packaging/icons/256x256.png",
+  "packaging/icons/512x512.png",
+  "packaging/icons/icon.icns",
+  "packaging/icons/icon.ico",
+]
+binaries = [{ path = "simulacra", main = true }]
+
+[package.metadata.packager.deb]
+depends = ["libxkbcommon0", "libxkbcommon-x11-0", "libwayland-client0", "libfontconfig1", "libgtk-3-0", "libvulkan1"]
+
+[package.metadata.packager.macos]
+minimum-system-version = "11.0"

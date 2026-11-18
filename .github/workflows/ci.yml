@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_INCREMENTAL: 0
+
+jobs:
+  test:
+    name: Check and test (${{ matrix.name }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Linux
+            os: ubuntu-24.04
+          - name: Windows
+            os: windows-latest
+          - name: macOS
+            os: macos-latest
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - name: Install Linux system libraries
+        if: runner.os == 'Linux'
+        run: bash .github/scripts/install-linux-deps.sh
+      - uses: Swatinem/rust-cache@v2
+        with:
+          shared-key: ci
+      # Warnings fail the build. RUSTFLAGS is not used for this, because it would replace the
+      # Windows stack-size flag set in .cargo/config.toml.
+      - name: Check (no warnings allowed)
+        shell: bash
+        run: |
+          cargo check --locked --all-targets 2>&1 | tee check.log
+          if grep -E "^warning" check.log; then echo "::error::cargo check reported warnings"; exit 1; fi
+      - name: Test
+        run: cargo test --locked --no-fail-fast

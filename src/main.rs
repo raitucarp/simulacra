@@ -1,5 +1,8 @@
 //! Binary entry point for the Simulacra desktop application.
 
+// Release builds on Windows are GUI apps: no console window opens behind the main window.
+#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
+
 use gpui_kit::*;
 use simulacra::theme::ThemeTokens;
 use simulacra::ui::features::splash::{splash_window_options, SplashView};

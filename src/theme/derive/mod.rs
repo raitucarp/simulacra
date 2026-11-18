@@ -4,6 +4,7 @@
 //! so the same palette always yields the same tokens, in light and dark mode alike.
 
 mod accents;
+mod actions;
 mod chrome;
 mod forge;
 mod import;
@@ -50,6 +51,7 @@ pub fn derive_tokens(
     review::apply_review_layout(&mut t);
     responsive::apply_responsive_layout(&mut t);
     vault::apply_vault_layout(&mut t);
+    actions::apply_actions_layout(&mut t);
     surfaces::apply_surfaces(&mut t, palette);
     text::apply_text(&mut t, palette);
     accents::apply_accents(&mut t, palette);

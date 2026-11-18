@@ -82,6 +82,8 @@ pub const COMMANDS: &[CommandSpec] = &[
     action(C::ReplayWelcome, I::Sparkles, Ready),
     action(C::SemanticSearch, I::Sparkles, Ready),
     action(C::FindSimilar, I::Compass, Ready),
+    action(C::PostActions, I::WandSparkles, Ready),
+    action(C::ToggleOutline, I::ListTree, Ready),
     action(C::MakeFlashcard, I::Layers, Ready),
 ];
 

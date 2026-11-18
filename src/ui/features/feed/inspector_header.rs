@@ -1,6 +1,8 @@
-//! Focus thread inspector chrome: header, grounding callout, and quick reply bar.
+//! Focus thread inspector chrome: header and quick reply bar.
 
 use super::consts::QUICK_REPLY_BUTTON_ID;
+use super::inspector_mode_toggle::render_mode_toggle;
+use super::inspector_outline::{InspectorCallback, InspectorMode};
 use super::params::ReplyPostCallback;
 use crate::domain::{Post, Profile};
 use crate::theme::ThemeTokens;
@@ -13,8 +15,9 @@ use crate::i18n::t_count;
 use rust_i18n::t;
 use std::rc::Rc;
 
-/// Inspector header with title and (when a thread is focused) the replies count pill.
-pub(crate) fn render_inspector_header(theme: &ThemeTokens, replies_count: Option<usize>) -> Div {
+/// Inspector header with title, (when a thread is focused) the replies count pill, and the
+/// cards / outline switch.
+pub(crate) fn render_inspector_header(theme: &ThemeTokens, replies_count: Option<usize>, mode: InspectorMode, on_command: &InspectorCallback) -> Div {
     div()
         .w_full()
         .px(theme.panel_padding)
@@ -43,7 +46,15 @@ pub(crate) fn render_inspector_header(theme: &ThemeTokens, replies_count: Option
                         .child(t!("feed.inspector_title").to_string()),
                 ),
         )
-        .when_some(replies_count, |this, count| this.child(render_replies_pill(count, theme)))
+        .child(
+            div()
+                .flex_none()
+                .flex()
+                .items_center()
+                .gap(theme.control_gap)
+                .when_some(replies_count, |this, count| this.child(render_replies_pill(count, theme)))
+                .child(render_mode_toggle(mode, on_command, theme)),
+        )
 }
 
 fn render_replies_pill(count: usize, theme: &ThemeTokens) -> Div {
@@ -62,42 +73,6 @@ fn render_replies_pill(count: usize, theme: &ThemeTokens) -> Div {
         .font_weight(FontWeight::MEDIUM)
         .text_color(theme.text_secondary)
         .child(t_count("feed.replies_count", count))
-}
-
-/// Grounding context insight shown when the focused thought has no replies yet.
-pub(crate) fn render_grounding_callout(theme: &ThemeTokens) -> Div {
-    div()
-        .m(theme.panel_padding)
-        .p(theme.card_padding)
-        .rounded(theme.radius_md)
-        .bg(theme.bg_callout)
-        .border(theme.border_width_hairline)
-        .border_color(theme.border_subtle)
-        .flex()
-        .flex_col()
-        .gap(theme.spacing_xs)
-        .child(
-            div()
-                .flex()
-                .items_center()
-                .gap(theme.spacing_xs)
-                .child(Icon::new(LucideIcon::Sparkles).size(theme.font_size_sm).text_color(theme.accent_brand))
-                .child(
-                    div()
-                        .font_family(theme.font_family_display.clone())
-                        .text_size(theme.font_size_xs)
-                        .font_weight(FontWeight::BOLD)
-                        .text_color(theme.text_primary)
-                        .child(t!("feed.grounding_context_title").to_string()),
-                ),
-        )
-        .child(
-            div()
-                .font_family(theme.font_family_body.clone())
-                .text_size(theme.font_size_xs)
-                .text_color(theme.text_secondary)
-                .child(t!("feed.grounding_context_desc").to_string()),
-        )
 }
 
 /// Pinned bottom quick reply bar for the focused thought.

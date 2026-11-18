@@ -128,6 +128,8 @@ lucide_catalog! {
     Inbox => "icons/inbox.svg",
     Pilcrow => "icons/pilcrow.svg",
     VenetianMask => "icons/venetian-mask.svg",
+    // sb C2: post actions and the outline view
+    Network => "icons/network.svg", Shield => "icons/shield.svg", Scale => "icons/scale.svg", Puzzle => "icons/puzzle.svg", Swords => "icons/swords.svg", Gauge => "icons/gauge.svg", GitCompareArrows => "icons/git-compare-arrows.svg", FlaskConical => "icons/flask-conical.svg", ListTree => "icons/list-tree.svg", ChevronsDownUp => "icons/chevrons-down-up.svg",
     // sb C1: review page, quizzes and statistics
     GraduationCap => "icons/graduation-cap.svg",
     Layers => "icons/layers.svg",

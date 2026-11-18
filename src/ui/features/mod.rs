@@ -11,6 +11,7 @@ pub mod mind_graph;
 pub mod onboarding;
 pub mod popovers;
 pub mod post;
+pub mod post_actions;
 pub mod review;
 pub mod roster;
 pub mod semantic;

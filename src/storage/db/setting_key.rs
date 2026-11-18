@@ -91,4 +91,6 @@ setting_keys! {
     PaletteHistory => "ui.palette_history",
     /// sb B3: JSON of today's embedding requests and estimated tokens (the daily AI budget).
     EmbeddingUsage => "embeddings.usage",
+    /// sb C2: how the thread inspector shows a thread (`cards` or `outline`).
+    InspectorMode => "ui.inspector_mode",
 }

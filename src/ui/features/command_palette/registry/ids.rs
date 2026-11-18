@@ -67,5 +67,8 @@ command_ids! {
     /// sb B3: the palette in semantic mode, and "find similar" for the open thought.
     SemanticSearch => "semantic_search",
     FindSimilar => "find_similar",
+    /// sb C2: the actions sheet on the open thought, and the inspector's outline view.
+    PostActions => "post_actions",
+    ToggleOutline => "toggle_outline",
     MakeFlashcard => "make_flashcard",
 }

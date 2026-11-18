@@ -45,6 +45,8 @@ impl AppView {
             CommandId::ReplayWelcome => self.replay_welcome(window, cx),
             CommandId::SemanticSearch => self.open_palette(PaletteMode::Semantic, window, cx),
             CommandId::FindSimilar => self.find_similar_to_open_thought(window, cx),
+            CommandId::PostActions => self.open_actions_for_open_thought(window, cx),
+            CommandId::ToggleOutline => self.toggle_inspector_outline(window, cx),
             CommandId::MakeFlashcard => self.make_flashcard_open_thought(window, cx),
         }
     }

@@ -8,6 +8,7 @@ pub mod image;
 pub mod llm;
 #[cfg(test)]
 pub(crate) mod mock_server;
+pub mod post_actions;
 pub mod runtime;
 pub mod schedule;
 pub mod template;

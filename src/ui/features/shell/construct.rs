@@ -3,8 +3,10 @@
 use super::feed_state::FeedState;
 use super::graph_state::GraphState;
 use super::import_state::ImportUi;
+use super::inspector_state::InspectorState;
 use super::lab_state::{LabState, LlmInputs};
 use super::panels::ShellPanels;
+use super::post_actions_state::PostActionsUi;
 use super::scheduler_state::SchedulerState;
 use super::semantic_state::SemanticState;
 use super::settings_ui::SettingsUi;
@@ -56,7 +58,7 @@ impl AppView {
         let scheduler = SchedulerState::new(state.scheduler_enabled(), state.preferences().agents.max_concurrent as usize);
         let (sidebar, palette) = (SidebarState::load(state.db.as_ref(), window.viewport_size().width), PaletteHost::new(state.db.as_ref(), cx));
         let mut view = Self {
-            theme: state.theme_tokens.clone(),
+            theme: state.theme_tokens.clone(), post_actions: PostActionsUi::new(window, cx), inspector: InspectorState::load(state.db.as_ref(), cx),
             state,
             chrome: ChromeState { is_onboarding_open: onboarding, ..ChromeState::new(initial_lang) },
             feed, composer_modal, appearance, llm_inputs, settings_ui,
@@ -82,6 +84,7 @@ impl AppView {
     /// The long-running tasks every window needs (key bindings are the central keymap's).
     fn start_background_work(&mut self, window: &mut Window, cx: &mut Context<Self>) {
         crate::ui::features::import::keys::init_key_bindings(cx);
+        crate::ui::features::feed::inspector_outline::init_key_bindings(cx);
         self.import_command_line_files(window, cx);
         self.start_scheduler_heartbeat(window, cx);
         self.watch_vault_failures(window, cx);

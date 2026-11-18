@@ -35,6 +35,8 @@ pub(crate) fn render_timeline<C: IntoElement>(
         callbacks,
         expanded: inputs.inspector_expanded,
         on_toggle_replies: Rc::new(inputs.on_toggle_replies),
+        view: &inputs.inspector,
+        on_inspector: inputs.on_inspector.clone(),
     };
     let inspector = render_inspector_pane(&ctx, focused_post);
     let header = render_stream_header(theme, inputs.feed_tab, Rc::new(inputs.on_select_feed_tab), inputs.on_run_command);

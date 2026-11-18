@@ -54,7 +54,7 @@ impl AppView {
         data.with_semantic(neighbours)
     }
 
-    fn push_vault_data(&mut self, cx: &mut Context<Self>) {
+    pub(super) fn push_vault_data(&mut self, cx: &mut Context<Self>) {
         self.vault.fingerprint = self.vault_fingerprint();
         let (data, theme) = (self.vault_data(), self.theme.clone());
         self.vault.panel.update(cx, |panel, cx| panel.set_data(data, &theme, cx));

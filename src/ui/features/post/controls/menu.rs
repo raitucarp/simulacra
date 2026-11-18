@@ -33,7 +33,8 @@ fn build_menu(menu: PopupMenu, text: &str, link: &str, handlers: &PostCardHandle
         .separator()
         .item(action_item(LucideIcon::MessageSquare, t!("post.menu_reply"), &handlers.on_reply))
         .item(action_item(LucideIcon::Edit, t!("post.menu_quote"), &handlers.on_quote))
-        .item(action_item(LucideIcon::Compass, t!("post.menu_find_similar"), &handlers.on_find_similar));
+        .item(action_item(LucideIcon::Compass, t!("post.menu_find_similar"), &handlers.on_find_similar))
+        .item(action_item(LucideIcon::Layers, t!("post.menu_make_flashcard"), &handlers.on_make_flashcard));
     match &handlers.on_delete {
         Some(on_delete) => menu.separator().item(delete_item(on_delete.clone())),
         None => menu,

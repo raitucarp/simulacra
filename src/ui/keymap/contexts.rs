@@ -2,6 +2,7 @@
 
 use super::shortcuts::KeyScope;
 use crate::ui::features::forge::view::FORGE_KEY_CONTEXT;
+use crate::ui::features::review::REVIEW_KEY_CONTEXT;
 
 /// Key context of the main window's root element.
 pub const SHELL_KEY_CONTEXT: &str = "Shell";
@@ -26,5 +27,6 @@ pub const fn context_of(scope: KeyScope) -> &'static str {
         KeyScope::Palette => PALETTE_INPUT_CONTEXT,
         KeyScope::Sheet => SHEET_KEY_CONTEXT,
         KeyScope::Lightbox => LIGHTBOX_KEY_CONTEXT,
+        KeyScope::Review => REVIEW_KEY_CONTEXT,
     }
 }

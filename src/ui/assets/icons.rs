@@ -20,6 +20,9 @@ gpui_kit::assets::icon_assets!(
         // sb B2
         Feather, Pilcrow, VenetianMask,
         // sb C3
-        Play, ImagePlus,
+        ImagePlus,
+        // sb C1
+        GraduationCap, Layers, ListOrdered, ChartColumn, Flame, Target, Lightbulb, RotateCcw, WandSparkles,
+        TextCursorInput, Trophy, Pause, Play,
     ]
 );

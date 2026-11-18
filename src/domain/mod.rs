@@ -17,6 +17,7 @@ pub mod preferences;
 pub mod portrait;
 pub mod post;
 pub mod profile;
+pub mod review;
 pub mod thread;
 pub mod topic;
 pub mod traits;

@@ -1,7 +1,7 @@
 //! Shared post interaction callbacks and the post card renderer wired to them.
 
 use super::params::{
-    DeletePostCallback, FindSimilarCallback, LikePostCallback, QuotePostCallback, ReplyPostCallback, RepostPostCallback,
+    DeletePostCallback, FindSimilarCallback, LikePostCallback, MakeFlashcardCallback, QuotePostCallback, ReplyPostCallback, RepostPostCallback,
     SelectPostCallback,
 };
 use crate::domain::{Post, PostId, Profile};
@@ -21,6 +21,7 @@ pub(crate) struct PostCallbacks {
     pub on_quote: Rc<QuotePostCallback>,
     pub on_delete: Rc<DeletePostCallback>,
     pub on_find_similar: Rc<FindSimilarCallback>,
+    pub on_make_flashcard: Rc<MakeFlashcardCallback>,
     /// Hashtag and wikilink clicks inside post bodies.
     pub links: BodyLinks,
 }
@@ -55,6 +56,7 @@ impl PostCallbacks {
             on_repost: bind(&self.on_repost, &target_id),
             on_quote: bind(&self.on_quote, &target_id),
             on_find_similar: bind(&self.on_find_similar, &target_id),
+            on_make_flashcard: bind(&self.on_make_flashcard, &target_id),
             on_open_post: Rc::new(move |id, window, cx| select(id, window, cx)),
             on_delete: author.is_human_persona().then(|| bind(&self.on_delete, &post.id)),
             links: self.links.clone(),

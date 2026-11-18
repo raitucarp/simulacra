@@ -6,6 +6,7 @@ mod location;
 mod media;
 mod posts;
 mod preferences;
+mod review;
 mod schema;
 mod settings;
 mod versions;

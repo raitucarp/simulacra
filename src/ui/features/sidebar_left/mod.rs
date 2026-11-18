@@ -73,4 +73,6 @@ pub struct LeftSidebarParams<'a> {
     /// Focus of the shell root: menu items dispatch their commands there.
     pub shell_focus: FocusHandle,
     pub callbacks: SidebarCallbacks,
+    /// Cards waiting on the Review page, shown as its count (sb C1).
+    pub review_due: Option<usize>,
 }

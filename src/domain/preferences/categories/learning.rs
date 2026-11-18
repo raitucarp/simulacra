@@ -18,15 +18,15 @@ const DEFAULT_REMINDER_HOUR: u32 = 9;
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 #[serde(default)]
 pub struct LearningPrefs {
-    /// Consumed by a later wave.
+    /// Cards answered per day at most, new ones included (the Review page's queue).
     pub daily_review_limit: u32,
-    /// Consumed by a later wave.
+    /// New cards introduced per day (the Review page's queue).
     pub new_cards_per_day: u32,
-    /// Percent. Consumed by a later wave.
+    /// Percent: the recall probability FSRS schedules each card for.
     pub desired_retention: u32,
-    /// Consumed by a later wave.
+    /// A daily notification when cards are due.
     pub review_reminder: bool,
-    /// Local hour of the reminder. Consumed by a later wave.
+    /// Local hour of the reminder.
     pub reminder_hour: u32,
 }
 

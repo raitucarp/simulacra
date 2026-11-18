@@ -10,6 +10,7 @@ use super::scheduler_state::SchedulerState;
 use super::semantic_state::SemanticState;
 use super::settings_ui::SettingsUi;
 use super::vault_host::VaultHost;
+use super::review_host::ReviewHost;
 use super::view::{AppView, ChromeState};
 use crate::state::AppState;
 use crate::ui::features::command_palette::PaletteHost;
@@ -41,6 +42,7 @@ impl AppView {
         let appearance = cx.new(|cx| AppearancePanel::new(state.theme_settings.clone(), window, cx));
         let (settings_ui, settings_subscriptions) = SettingsUi::new(state.preferences(), window, cx);
         let (import, import_subscriptions) = ImportUi::new(window, cx);
+        let (review, review_subscriptions) = ReviewHost::new(&state, window, cx);
         let mut subscriptions = vec![
             feed.subscribe_search(cx),
             cx.subscribe_in(&composer_modal, window, Self::publish_composer_draft),
@@ -49,7 +51,7 @@ impl AppView {
             Self::observe_own_changes(cx), Self::observe_window_width(window, cx), Self::refocus_on_focus_loss(window, cx),
             cx.observe_window_appearance(window, |this, window, cx| this.follow_system_appearance(window, cx)),
         ];
-        subscriptions.extend(settings_subscriptions.into_iter().chain(import_subscriptions));
+        subscriptions.extend(settings_subscriptions.into_iter().chain(import_subscriptions).chain(review_subscriptions));
         let llm_inputs = LlmInputs::new(&state, window, cx);
         let (lab, onboarding) = (LabState::new(&state), state.should_offer_onboarding());
         let scheduler = SchedulerState::new(state.scheduler_enabled(), state.preferences().agents.max_concurrent as usize);
@@ -59,7 +61,7 @@ impl AppView {
             state,
             chrome: ChromeState { is_onboarding_open: onboarding, ..ChromeState::new(initial_lang) },
             feed, composer_modal, appearance, llm_inputs, settings_ui,
-            lab, scheduler, graph, vault, import, semantic: SemanticState::new(cx), media: MediaHost::new(cx),
+            lab, scheduler, graph, vault, import, review, semantic: SemanticState::new(cx), media: MediaHost::new(cx),
             forge: None, sidebar, palette,
             panels: ShellPanels::new(cx),
             _subscriptions: subscriptions,

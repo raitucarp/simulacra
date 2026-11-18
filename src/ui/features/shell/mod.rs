@@ -20,6 +20,7 @@ mod import_state;
 mod lab_state;
 mod media_state;
 mod panels;
+mod review_host;
 mod render;
 mod scheduler_state;
 mod semantic_state;

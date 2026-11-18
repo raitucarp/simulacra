@@ -18,6 +18,7 @@ const READ_BUTTON_ID: &str = "vault-entry-read";
 const EDIT_BUTTON_ID: &str = "vault-entry-edit";
 const MARK_BUTTON_ID: &str = "vault-entry-mark";
 const DELETE_BUTTON_ID: &str = "vault-entry-delete";
+const FLASHCARDS_BUTTON_ID: &str = "vault-entry-flashcards";
 
 /// "Baruch Spinoza · translated by R. H. M. Elwes".
 fn byline(doc: &GroundingDocument) -> Vec<String> {
@@ -75,7 +76,10 @@ impl VaultPanel {
         let mark_label = if is_read { t!("vault.mark_unread") } else { t!("vault.mark_read") }.to_string();
         let mark = Button::new(MARK_BUTTON_ID).ghost().small().icon(Icon::new(LucideIcon::Check)).label(mark_label)
             .on_click(cx.listener(move |this, _, _, cx| this.mark_read(mark_id.clone(), !is_read, cx)));
-        div().flex().flex_wrap().gap(self.theme.control_gap).child(read).child(edit).child(mark).child(self.render_delete_button(doc, cx))
+        let cards_id = doc.id.clone();
+        let cards = Button::new(FLASHCARDS_BUTTON_ID).ghost().small().icon(Icon::new(LucideIcon::Layers)).label(t!("vault.make_flashcards").to_string())
+            .on_click(cx.listener(move |_, _, _, cx| cx.emit(VaultEvent::MakeFlashcards(cards_id.clone()))));
+        div().flex().flex_wrap().gap(self.theme.control_gap).child(read).child(edit).child(mark).child(cards).child(self.render_delete_button(doc, cx))
     }
 
     /// Delete, after a confirmation naming the document.

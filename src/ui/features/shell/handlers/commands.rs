@@ -25,6 +25,7 @@ impl AppView {
             CommandId::GoAgents => self.select_nav(NavigationTab::AgentLab, window, cx),
             CommandId::GoPersonas => self.select_nav(NavigationTab::PersonaLab, window, cx),
             CommandId::GoMindGraph => self.select_nav(NavigationTab::MindGraph, window, cx),
+            CommandId::GoReview => self.select_nav(NavigationTab::Review, window, cx),
             CommandId::NewThread => self.new_thread(window, cx),
             CommandId::NewNote => self.open_quick_capture(window, cx),
             CommandId::ImportFile => self.pick_import_files(window, cx),
@@ -44,6 +45,7 @@ impl AppView {
             CommandId::ReplayWelcome => self.replay_welcome(window, cx),
             CommandId::SemanticSearch => self.open_palette(PaletteMode::Semantic, window, cx),
             CommandId::FindSimilar => self.find_similar_to_open_thought(window, cx),
+            CommandId::MakeFlashcard => self.make_flashcard_open_thought(window, cx),
         }
     }
 

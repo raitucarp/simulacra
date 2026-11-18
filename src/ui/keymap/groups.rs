@@ -1,6 +1,6 @@
 //! Grouping of the keymap for the shortcut sheet: sections, row labels and merged chords.
 
-use super::shortcuts::{LightboxKey, PaletteKey, ShortcutTarget, SHORTCUTS};
+use super::shortcuts::{LightboxKey, PaletteKey, ReviewKey, ShortcutTarget, SHORTCUTS};
 use crate::ui::features::command_palette::{spec, CommandId};
 use rust_i18n::t;
 
@@ -12,11 +12,12 @@ pub enum ShortcutGroup {
     Writing,
     Palette,
     Forge,
+    Review,
 }
 
 impl ShortcutGroup {
     /// Every section, in sheet order.
-    pub const ALL: [ShortcutGroup; 5] = [Self::General, Self::Navigation, Self::Writing, Self::Palette, Self::Forge];
+    pub const ALL: [ShortcutGroup; 6] = [Self::General, Self::Navigation, Self::Writing, Self::Palette, Self::Forge, Self::Review];
 
     /// Locale key of the section title.
     pub const fn title_key(self) -> &'static str {
@@ -26,6 +27,7 @@ impl ShortcutGroup {
             Self::Writing => "keymap.group.writing",
             Self::Palette => "keymap.group.palette",
             Self::Forge => "keymap.group.forge",
+            Self::Review => "keymap.group.review",
         }
     }
 }
@@ -38,13 +40,14 @@ pub fn group_of(target: ShortcutTarget) -> ShortcutGroup {
         ShortcutTarget::ForgeUndo | ShortcutTarget::ForgeRedo | ShortcutTarget::ForgeDismiss => ShortcutGroup::Forge,
         ShortcutTarget::Palette(_) => ShortcutGroup::Palette,
         ShortcutTarget::CloseSheet | ShortcutTarget::Lightbox(_) => ShortcutGroup::General,
+        ShortcutTarget::Review(_) => ShortcutGroup::Review,
     }
 }
 
 fn command_group(id: CommandId) -> ShortcutGroup {
     match id {
         CommandId::GoTimeline | CommandId::GoKnowledge | CommandId::GoAgents | CommandId::GoPersonas
-        | CommandId::GoMindGraph | CommandId::OpenInbox | CommandId::ToggleSidebar | CommandId::ToggleRightSidebar => {
+        | CommandId::GoMindGraph | CommandId::GoReview | CommandId::OpenInbox | CommandId::ToggleSidebar | CommandId::ToggleRightSidebar => {
             ShortcutGroup::Navigation
         }
         CommandId::NewThread | CommandId::NewNote | CommandId::ImportFile | CommandId::NewAgent => ShortcutGroup::Writing,
@@ -74,7 +77,18 @@ pub const fn target_label_key(target: ShortcutTarget) -> Option<&'static str> {
         ShortcutTarget::Lightbox(LightboxKey::Close) => "keymap.target.lightbox_close",
         ShortcutTarget::Lightbox(LightboxKey::Previous) => "keymap.target.lightbox_previous",
         ShortcutTarget::Lightbox(LightboxKey::Next) => "keymap.target.lightbox_next",
+        ShortcutTarget::Review(key) => review_label_key(key),
     })
+}
+
+const fn review_label_key(key: ReviewKey) -> &'static str {
+    match key {
+        ReviewKey::Again => "keymap.target.review_again",
+        ReviewKey::Hard => "keymap.target.review_hard",
+        ReviewKey::Good => "keymap.target.review_good",
+        ReviewKey::Easy => "keymap.target.review_easy",
+        ReviewKey::Reveal => "keymap.target.review_reveal",
+    }
 }
 
 const fn palette_label_key(key: PaletteKey) -> &'static str {

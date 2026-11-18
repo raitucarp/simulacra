@@ -20,6 +20,18 @@ pub enum KeyScope {
     Sheet,
     /// While the image lightbox is open (sb C3).
     Lightbox,
+    /// A review card waiting to be revealed or graded (sb C1).
+    Review,
+}
+
+/// A key of the review session: reveal the answer, or grade (pick an option in a quiz).
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum ReviewKey {
+    Again,
+    Hard,
+    Good,
+    Easy,
+    Reveal,
 }
 
 /// A palette navigation key.
@@ -45,6 +57,7 @@ pub enum ShortcutTarget {
     ForgeDismiss,
     Palette(PaletteKey),
     CloseSheet,
+    Review(ReviewKey),
     /// Moves through or closes the image lightbox (sb C3).
     Lightbox(LightboxKey),
 }
@@ -79,6 +92,7 @@ const fn scoped(keys: &'static str, target: ShortcutTarget, scope: KeyScope) -> 
 
 use CommandId as C;
 use PaletteKey as P;
+use ReviewKey as R;
 use ShortcutTarget as T;
 
 /// The keymap. The first chord of a target is the one shown next to it in menus and the palette.
@@ -99,6 +113,7 @@ pub const SHORTCUTS: &[Shortcut] = &[
     shell("secondary-3", C::GoAgents),
     shell("secondary-4", C::GoPersonas),
     shell("secondary-5", C::GoMindGraph),
+    shell("secondary-6", C::GoReview),
     scoped("secondary-enter", T::SubmitPost, KeyScope::Input),
     scoped("secondary-z", T::ForgeUndo, KeyScope::Forge),
     scoped("secondary-shift-z", T::ForgeRedo, KeyScope::Forge),
@@ -114,6 +129,12 @@ pub const SHORTCUTS: &[Shortcut] = &[
     scoped("escape", T::Lightbox(LightboxKey::Close), KeyScope::Lightbox),
     scoped("left", T::Lightbox(LightboxKey::Previous), KeyScope::Lightbox),
     scoped("right", T::Lightbox(LightboxKey::Next), KeyScope::Lightbox),
+    scoped("space", T::Review(R::Reveal), KeyScope::Review),
+    scoped("enter", T::Review(R::Reveal), KeyScope::Review),
+    scoped("1", T::Review(R::Again), KeyScope::Review),
+    scoped("2", T::Review(R::Hard), KeyScope::Review),
+    scoped("3", T::Review(R::Good), KeyScope::Review),
+    scoped("4", T::Review(R::Easy), KeyScope::Review),
 ];
 
 /// The chord shown for `id` (its first binding), if it has one.

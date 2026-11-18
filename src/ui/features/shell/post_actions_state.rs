@@ -25,10 +25,12 @@ pub struct PostActionsUi {
     /// Bumped on every run; a finished request only lands if it is still the latest.
     pub(super) generation: u64,
     pub(super) answers: AnswerCache,
+    /// Enter in the typed-choice field applies it.
+    _subscription: Subscription,
 }
 
 impl PostActionsUi {
-    pub(super) fn new(window: &mut Window, cx: &mut Context<AppView>) -> (Self, Subscription) {
+    pub(super) fn new(window: &mut Window, cx: &mut Context<AppView>) -> Self {
         let placeholder = t!("post_actions.typed_placeholder").to_string();
         let input = cx.new(|cx| InputState::new(window, cx).placeholder(placeholder));
         let subscription = cx.subscribe_in(&input, window, |view, _, event: &InputEvent, window, cx| {
@@ -36,8 +38,7 @@ impl PostActionsUi {
                 view.on_action_sheet_event(crate::ui::features::post_actions::SheetEvent::ApplyTyped, window, cx);
             }
         });
-        let ui = Self { sheet: None, input, focus: cx.focus_handle(), cancel: None, generation: 0, answers: HashMap::new() };
-        (ui, subscription)
+        Self { sheet: None, input, focus: cx.focus_handle(), cancel: None, generation: 0, answers: HashMap::new(), _subscription: subscription }
     }
 
     /// Stops the running request, if any.

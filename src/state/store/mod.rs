@@ -65,6 +65,8 @@ pub enum NavigationTab {
     AgentLab,
     PersonaLab,
     MindGraph,
+    /// Spaced-repetition review, quizzes and statistics (sb C1).
+    Review,
     Appearance,
 }
 

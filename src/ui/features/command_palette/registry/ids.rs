@@ -37,6 +37,8 @@ command_ids! {
     GoAgents => "go_agents",
     GoPersonas => "go_personas",
     GoMindGraph => "go_mind_graph",
+    /// sb C1: the Review page, and a flashcard from the thought open in the inspector.
+    GoReview => "go_review",
     /// Creation ("New" menu).
     NewThread => "new_thread",
     /// Quick capture of a note into the Inbox.
@@ -68,4 +70,5 @@ command_ids! {
     /// sb C2: the actions sheet on the open thought, and the inspector's outline view.
     PostActions => "post_actions",
     ToggleOutline => "toggle_outline",
+    MakeFlashcard => "make_flashcard",
 }

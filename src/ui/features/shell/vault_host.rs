@@ -80,6 +80,7 @@ impl AppView {
                 self.push_vault_data(cx);
             }
             VaultEvent::OpenPost(post) => self.reveal_post(post, window, cx),
+            VaultEvent::MakeFlashcards(id) => self.make_flashcards_document(&id, window, cx),
         }
         cx.notify();
     }

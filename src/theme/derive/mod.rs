@@ -12,6 +12,7 @@ mod metrics;
 mod navigation;
 mod panels;
 mod responsive;
+mod review;
 mod scales;
 mod semantic;
 mod spacing;
@@ -47,6 +48,7 @@ pub fn derive_tokens(
     navigation::apply_navigation_layout(&mut t);
     import::apply_import_layout(&mut t);
     semantic::apply_semantic_layout(&mut t);
+    review::apply_review_layout(&mut t);
     responsive::apply_responsive_layout(&mut t);
     vault::apply_vault_layout(&mut t);
     actions::apply_actions_layout(&mut t);

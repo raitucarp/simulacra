@@ -17,6 +17,8 @@ pub type DeletePostCallback = Box<dyn Fn(PostId, &mut Window, &mut App) + 'stati
 pub type FindSimilarCallback = Box<dyn Fn(PostId, &mut Window, &mut App) + 'static>;
 /// sb C2: runs a thinking action on a post ("…" menu › Actions).
 pub type PostActionCallback = Box<dyn Fn(PostId, crate::domain::post_actions::ActionKind, &mut Window, &mut App) + 'static>;
+/// Post "…" menu › Make flashcard (sb C1).
+pub type MakeFlashcardCallback = Box<dyn Fn(PostId, &mut Window, &mut App) + 'static>;
 pub type CycleProfileCallback = Box<dyn Fn(&mut Window, &mut App) + 'static>;
 pub type LoadMoreCallback = Box<dyn Fn(&mut Window, &mut App) + 'static>;
 pub type SelectFeedTabCallback = Box<dyn Fn(FeedTab, &mut Window, &mut App) + 'static>;
@@ -50,6 +52,8 @@ pub struct FeedParams<'a, C> {
     pub on_delete_post: DeletePostCallback,
     /// Post "…" menu › Find similar.
     pub on_find_similar_post: FindSimilarCallback,
+    /// Post "…" menu › Make flashcard (sb C1).
+    pub on_make_flashcard_post: MakeFlashcardCallback,
     /// Hashtag / wikilink clicks in post bodies (tag search, open the linked post or doc).
     pub on_open_tag: OpenTextAction,
     pub on_open_wikilink: OpenTextAction,

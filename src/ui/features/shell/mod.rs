@@ -21,6 +21,7 @@ mod inspector_state;
 mod lab_state;
 mod panels;
 mod post_actions_state;
+mod review_host;
 mod render;
 mod scheduler_state;
 mod semantic_state;

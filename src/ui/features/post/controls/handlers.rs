@@ -23,6 +23,8 @@ pub struct PostCardHandlers {
     pub on_quote: PostAction,
     /// Opens the items closest in meaning to this thought (sb B3).
     pub on_find_similar: PostAction,
+    /// Opens the card maker on this thought (sb C1).
+    pub on_make_flashcard: PostAction,
     /// Opens a referenced thought (or this one) in the inspector.
     pub on_open_post: OpenPostAction,
     /// Deletes the thought; `None` when the user did not write it.

@@ -20,6 +20,9 @@ gpui_kit::assets::icon_assets!(
         // sb B2
         Feather, Pilcrow, VenetianMask,
         // sb C2
-        WandSparkles, GraduationCap, Network, Shield, Scale, Puzzle, Swords, Gauge, Target, GitCompareArrows, FlaskConical, ListTree, ChevronsDownUp,
+        Network, Shield, Scale, Puzzle, Swords, Gauge, GitCompareArrows, FlaskConical, ListTree, ChevronsDownUp,
+        // sb C1
+        GraduationCap, Layers, ListOrdered, ChartColumn, Flame, Target, Lightbulb, RotateCcw, WandSparkles,
+        TextCursorInput, Trophy, Pause, Play,
     ]
 );

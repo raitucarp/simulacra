@@ -37,6 +37,7 @@ pub(crate) fn split_params<C>(params: FeedParams<'_, C>) -> (PostCallbacks, Time
         on_delete: Rc::new(params.on_delete_post),
         on_find_similar: Rc::new(params.on_find_similar_post),
         on_post_action: Rc::new(params.on_post_action),
+        on_make_flashcard: Rc::new(params.on_make_flashcard_post),
         links: BodyLinks {
             on_tag: Some(params.on_open_tag),
             on_wikilink: Some(params.on_open_wikilink),

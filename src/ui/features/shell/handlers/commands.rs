@@ -52,7 +52,7 @@ impl AppView {
             CommandId::GoInsights | CommandId::InsightsOverview | CommandId::InsightsNetwork | CommandId::InsightsSets
             | CommandId::InsightsSymmetry | CommandId::InsightsCategories | CommandId::InsightsEmbedding | CommandId::InsightsActivity => self.open_insights(id, window, cx),
             CommandId::GoJournal | CommandId::NewJournalEntry | CommandId::LogMood | CommandId::StartFocus | CommandId::NewTimeCapsule => self.open_journal(id, window, cx),
-            CommandId::InsightsCalibration | CommandId::InsightsTensions | CommandId::ResolveDuePredictions | CommandId::ShowArgumentMap => self.run_thinking_command(id, window, cx),
+            CommandId::InsightsCalibration | CommandId::InsightsTensions | CommandId::ResolveDuePredictions | CommandId::ShowArgumentMap => self.run_thinking_command(id, window, cx), CommandId::GoArena | CommandId::NewDebate | CommandId::NewThoughtExperiment | CommandId::DebateOpenThought | CommandId::ExperimentOpenThought => self.open_arena(id, window, cx), // sb F1
         }
     }
 

@@ -5,6 +5,8 @@ pub mod trait_option;
 pub mod activity;
 pub mod agent_config;
 pub mod archetype;
+pub mod arena;
+pub mod beliefs;
 pub mod document;
 pub mod embedding;
 pub mod engine;

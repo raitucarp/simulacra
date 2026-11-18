@@ -33,6 +33,7 @@ impl AppView {
             ActionKind::MapArgument => self.map_argument_of(post_id, window, cx),
             ActionKind::FindTensions => self.find_tensions_with(post_id, window, cx),
             ActionKind::CheckAtomicity => self.check_atomicity_of(post_id, window, cx),
+            ActionKind::Debate | ActionKind::ThoughtExperiment => self.open_arena_tool(post_id, kind, window, cx), // sb F1
             _ => {}
         }
     }

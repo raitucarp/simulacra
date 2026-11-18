@@ -48,6 +48,8 @@ pub(super) fn task_text(request: &ActionRequest, context: &ActionContext) -> Str
 
 const SUMMARISE_SINGLE: &str = "The thought has no replies yet. Summarise it: ## Gist (two sentences), ## Key claims (list), ## Open questions (list).";
 
+const DEBATE: &str = "Stage a short debate on the thought's central claim. Sections: ## Motion (one sentence), ## For (three strongest points), ## Against (three strongest points), ## Where it turns (one sentence).";
+const THOUGHT_EXPERIMENT: &str = "Turn the thought into a thought experiment. Sections: ## Scenario (a short neutral premise), ## Variables (two, each with two values), ## Question (one).";
 const MAP_ARGUMENT: &str = "Map the argument of the thread with Toulmin's roles. Sections: ## Claims (list), ## Grounds (\"- ground -> the claim it supports\"), ## Warrants (list), ## Objections (\"- objection -> the claim it attacks\").";
 const FIND_TENSIONS: &str = "Find statements in the thread that are in tension with the thought. For each: \"- The statement: … — Why it conflicts: … — How both could be true: …\". If nothing conflicts, say so in one sentence.";
 const CHECK_ATOMICITY: &str = "Check whether the thought is an atomic note: one claim, with enough context to stand alone. Sections: ## Claims (each distinct claim), ## Missing context (list), ## Atomic versions (one short post per claim).";
@@ -73,6 +75,9 @@ fn fixed_task(kind: ActionKind) -> &'static str {
         ActionKind::MapArgument => MAP_ARGUMENT,
         ActionKind::FindTensions => FIND_TENSIONS,
         ActionKind::CheckAtomicity => CHECK_ATOMICITY,
+        // sb F1: the Arena opens instead; these tasks are the plain-text fallback.
+        ActionKind::Debate => DEBATE,
+        ActionKind::ThoughtExperiment => THOUGHT_EXPERIMENT,
     }
 }
 

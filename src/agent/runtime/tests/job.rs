@@ -22,7 +22,7 @@ fn job(engine: EngineConfig, endpoint: &str) -> EngineJob {
         parent: parent(),
         agent,
         network: NetworkId::new("net_x"),
-        context: PromptContext { network_name: "Mind".into(), grounding_docs: vec!["Ethics".into()] },
+        context: PromptContext { network_name: "Mind".into(), grounding_docs: vec!["Ethics".into()], ..PromptContext::default() },
         plan: plan(LlmProvider::OpenAi, endpoint, engine),
         tools: Some(tool_context()),
         roll: 0,

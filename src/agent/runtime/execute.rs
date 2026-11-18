@@ -8,6 +8,7 @@ use crate::agent::image::{self, should_fire};
 use crate::agent::llm::wire::STRUCTURED_OUTPUT_NAME;
 use crate::agent::llm::{redact_secrets, ChatMessage, ChatRequest, SchemaStrategy, ToolChoice, ToolSpec};
 use crate::agent::tools::{ToolBox, ToolContext};
+use crate::domain::image_prompt::default_post_prompt;
 use crate::domain::post::{PostExtras, SourceRef, ToolUse};
 
 const EMPTY_ANSWER_ERROR: &str = "The model returned an empty post";
@@ -93,8 +94,12 @@ async fn illustrate(plan: &EnginePlan, result: &mut EngineResult, roll: u8) {
     if !should_fire(job.config.trigger, result.draft.image_prompt.is_some(), roll) {
         return;
     }
-    let prompt = result.draft.image_prompt.clone().unwrap_or_else(|| result.draft.content.clone());
-    match image::generate(job, &prompt).await {
+    let fallback = || default_post_prompt(&result.draft.content, &plan.image_subject, job.config.engine.kind());
+    let (prompt, negative) = match result.draft.image_prompt.clone() {
+        Some(prompt) => (prompt, None),
+        None => fallback().into_parts(),
+    };
+    match image::generate_with(job, &prompt, negative.as_deref()).await {
         Ok(path) => result.image_path = Some(path.to_string_lossy().into_owned()),
         Err(e) => result.image_error = Some(redact_secrets(&e, &plan.credentials.secrets())),
     }

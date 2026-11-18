@@ -19,5 +19,5 @@ mod tests;
 
 pub use draft::PostDraft;
 pub use execute::{build_request, run_engine, EngineResult};
-pub use plan::{EnginePlan, GLOBAL_GATE_KEY};
+pub use plan::{resolve_image_job, EnginePlan, GLOBAL_GATE_KEY};
 pub use transport::{CustomTransport, Transport};

@@ -3,6 +3,7 @@
 use super::feed_state::FeedState;
 use super::forge_host::ForgeSession;
 use super::graph_state::GraphState;
+use super::image_ideas_state::ImageIdeasUi;
 use super::import_state::ImportUi;
 use super::inspector_state::InspectorState;
 use super::lab_state::{LabState, LlmInputs};
@@ -59,6 +60,8 @@ pub struct AppView {
     /// sb C2: the post actions sheet and the inspector's cards / outline view.
     pub post_actions: PostActionsUi,
     pub inspector: InspectorState,
+    /// sb D3: the image ideas sheet.
+    pub image_ideas: ImageIdeasUi,
     /// Cached views of the sidebars and the center column.
     pub(super) panels: ShellPanels,
     pub(super) _subscriptions: Vec<Subscription>,

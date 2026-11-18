@@ -11,6 +11,7 @@ use std::time::Duration;
 
 const A1111_TXT2IMG_PATH: &str = "/sdapi/v1/txt2img";
 const A1111_STEPS: u32 = 25;
+const A1111_NEGATIVE_KEY: &str = "negative_prompt";
 const COMFY_PROMPT_PATH: &str = "/prompt";
 const COMFY_HISTORY_PATH: &str = "/history/";
 const COMFY_VIEW_PATH: &str = "/view";
@@ -27,24 +28,28 @@ const SD_ERRORS: ErrorLabels = ErrorLabels {
     empty: "Stable Diffusion returned no image",
 };
 
-/// The A1111 txt2img body.
-pub fn a1111_body(job: &ImageJob, prompt: &str) -> Value {
+/// The A1111 txt2img body (with the negative prompt when one is given).
+pub fn a1111_body(job: &ImageJob, prompt: &str, negative: Option<&str>) -> Value {
     let (width, height) = job.config.dimensions().unwrap_or((DEFAULT_SIDE, DEFAULT_SIDE));
-    json!({ "prompt": prompt, "width": width, "height": height, "steps": A1111_STEPS })
+    let mut body = json!({ "prompt": prompt, "width": width, "height": height, "steps": A1111_STEPS });
+    if let Some(negative) = negative.filter(|text| !text.trim().is_empty()) {
+        body[A1111_NEGATIVE_KEY] = Value::String(negative.to_string());
+    }
+    body
 }
 
 /// Generates with AUTOMATIC1111 (`images[0]` is base64).
-pub async fn a1111(http: &reqwest::Client, base: &str, job: &ImageJob, prompt: &str) -> Result<ImageData, String> {
+pub async fn a1111(http: &reqwest::Client, base: &str, job: &ImageJob, prompt: &str, negative: Option<&str>) -> Result<ImageData, String> {
     let url = format!("{}{A1111_TXT2IMG_PATH}", base.trim_end_matches('/'));
-    let reply = send_json(http.post(url).json(&a1111_body(job, prompt)), &SD_ERRORS).await?;
+    let reply = send_json(http.post(url).json(&a1111_body(job, prompt, negative)), &SD_ERRORS).await?;
     reply["images"][0].as_str().map(|data| ImageData::Base64(data.to_string())).ok_or_else(|| SD_ERRORS.empty.to_string())
 }
 
 /// Queues the workflow on ComfyUI, waits for its first output image and downloads it.
-pub async fn comfy(http: &reqwest::Client, base: &str, job: &ImageJob, prompt: &str) -> Result<ImageData, String> {
+pub async fn comfy(http: &reqwest::Client, base: &str, job: &ImageJob, prompt: &str, negative: Option<&str>) -> Result<ImageData, String> {
     let base = base.trim_end_matches('/');
     let (width, height) = job.config.dimensions().unwrap_or((DEFAULT_SIDE, DEFAULT_SIDE));
-    let workflow = comfy_workflow(&job.config.model, prompt, width, height);
+    let workflow = comfy_workflow(&job.config.model, prompt, negative, width, height);
     let queued = send_json(http.post(format!("{base}{COMFY_PROMPT_PATH}")).json(&json!({ "prompt": workflow })), &SD_ERRORS).await?;
     let id = queued["prompt_id"].as_str().ok_or_else(|| SD_ERRORS.empty.to_string())?.to_string();
     for _ in 0..COMFY_MAX_POLLS {

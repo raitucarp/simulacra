@@ -9,6 +9,8 @@ use super::labels::{kind_hint, kind_icon, kind_title};
 use super::model::{ActionStatus, SheetEvent};
 use super::sheet::{SheetAction, SheetInputs};
 use crate::theme::ThemeTokens;
+use crate::ui::components::{art_state, ArtState};
+use crate::ui::illustration::{EmptyKey, Illustration, NoticeKey};
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::{Icon, Sizable};
@@ -23,7 +25,8 @@ pub(super) fn render_answer_pane(inputs: &SheetInputs<'_>) -> Div {
     let (sheet, theme) = (inputs.sheet, inputs.theme);
     let pane = div().flex_1().min_w_0().h_full().flex().flex_col();
     if sheet.status == ActionStatus::Picking {
-        return pane.child(note(LucideIcon::WandSparkles, t!("post_actions.pick").to_string(), theme).p(theme.panel_padding));
+        let art = Illustration::empty(EmptyKey::ActionsIdle).width(theme.art_empty_width);
+        return pane.items_center().justify_center().p(theme.panel_padding).child(art_state(ArtState::hint(art, t!("post_actions.pick").to_string()), theme));
     }
     let kind = sheet.request.kind;
     let heading = div()
@@ -56,7 +59,7 @@ fn render_status(status: &ActionStatus, on_event: &SheetAction, theme: &ThemeTok
         ActionStatus::NeedsChoice => note(LucideIcon::Info, t!("post_actions.needs_choice").to_string(), theme).into_any_element(),
         ActionStatus::Running => running(on_event.clone(), theme).into_any_element(),
         ActionStatus::Done(output) => render_blocks(output, theme).into_any_element(),
-        ActionStatus::Failed(reason) => note(LucideIcon::CircleAlert, reason.clone(), theme).text_color(theme.warning).into_any_element(),
+        ActionStatus::Failed(reason) => art_state(ArtState::hint(Illustration::notice(NoticeKey::Error).width(theme.art_notice_width), reason.clone()), theme).into_any_element(),
     }
 }
 
@@ -67,7 +70,8 @@ fn running(on_event: SheetAction, theme: &ThemeTokens) -> Div {
         .icon(Icon::new(LucideIcon::X))
         .label(t!("post_actions.cancel").to_string())
         .on_click(move |_, window, cx| on_event(SheetEvent::Cancel, window, cx));
-    note(LucideIcon::Sparkles, t!("post_actions.running").to_string(), theme).child(div().flex_1()).child(stop)
+    let art = Illustration::notice(NoticeKey::Working).width(theme.art_notice_width);
+    art_state(ArtState::hint(art, t!("post_actions.running").to_string()), theme).child(stop)
 }
 
 /// An icon and a muted line.

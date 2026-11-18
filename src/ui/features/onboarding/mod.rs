@@ -5,9 +5,8 @@
 use crate::theme::ThemeTokens;
 use crate::ui::atoms::ElevationExt;
 use crate::ui::icons::LucideIcon;
-use crate::ui::illustration::{GuidePose, Illustration};
+use crate::ui::illustration::{GuidePose, Illustration, SpotKey};
 use gpui_kit::component::button::{Button, ButtonVariants};
-use gpui_kit::component::Icon;
 use gpui_kit::*;
 use rust_i18n::t;
 use std::rc::Rc;
@@ -21,11 +20,11 @@ const SUBTITLE_KEY: &str = "onboarding.subtitle";
 const REPLAY_HINT_KEY: &str = "onboarding.replay_hint";
 const SKIP_KEY: &str = "onboarding.skip";
 const START_KEY: &str = "onboarding.start";
-/// (icon, title key, body key) of each card, in reading order.
-const CARDS: [(LucideIcon, &str, &str); 3] = [
-    (LucideIcon::Sparkles, "onboarding.what_title", "onboarding.what_body"),
-    (LucideIcon::Bot, "onboarding.life_title", "onboarding.life_body"),
-    (LucideIcon::Plus, "onboarding.create_title", "onboarding.create_body"),
+/// (spot art, title key, body key) of each card, in reading order (sb D3: art over icons).
+const CARDS: [(SpotKey, &str, &str); 3] = [
+    (SpotKey::Ideas, "onboarding.what_title", "onboarding.what_body"),
+    (SpotKey::Debate, "onboarding.life_title", "onboarding.life_body"),
+    (SpotKey::Writing, "onboarding.create_title", "onboarding.create_body"),
 ];
 
 /// A shared no-argument callback.
@@ -49,7 +48,7 @@ fn tr(key: &str) -> String {
     t!(key).to_string()
 }
 
-fn card((icon, title_key, body_key): (LucideIcon, &str, &str), theme: &ThemeTokens) -> Div {
+fn card((art, title_key, body_key): (SpotKey, &str, &str), theme: &ThemeTokens) -> Div {
     div()
         .flex_1()
         .min_w_0()
@@ -61,7 +60,7 @@ fn card((icon, title_key, body_key): (LucideIcon, &str, &str), theme: &ThemeToke
         .bg(theme.bg_card)
         .border(theme.border_width_hairline)
         .border_color(theme.border_subtle)
-        .child(div().text_color(theme.accent_brand).child(Icon::new(icon).size(theme.font_size_lg)))
+        .child(Illustration::spot(art).width(theme.art_spot_width))
         .child(div().text_size(theme.font_size_sm).font_weight(FontWeight::SEMIBOLD).text_color(theme.text_primary).child(tr(title_key)))
         .child(div().text_size(theme.font_size_xs).text_color(theme.text_muted).line_height(relative(theme.line_height_body)).child(tr(body_key)))
 }

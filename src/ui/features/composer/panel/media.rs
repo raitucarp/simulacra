@@ -1,7 +1,7 @@
 //! Images attached in the composer (sb C3): picked, pasted or dropped files are copied into
 //! the media folder by content hash off the UI thread, each with a field for its description.
 
-use super::{ComposerImage, ComposerModalPanel};
+use super::{ComposerImage, ComposerModalEvent, ComposerModalPanel};
 use crate::domain::media::{ImageAttachment, MAX_GALLERY_IMAGES};
 use crate::media::{store_attachment_bytes, store_attachment_file};
 use gpui_kit::component::input::InputState;
@@ -122,6 +122,12 @@ impl ComposerModalPanel {
     /// The attached images and their description fields, for the dialog.
     pub(super) fn image_views(&self) -> Vec<(String, Entity<InputState>)> {
         self.images.iter().map(|image| (image.attachment.path.clone(), image.alt.clone())).collect()
+    }
+
+    /// sb D3: asks the host for image ideas about the active draft's text.
+    pub(super) fn image_ideas(&mut self, _: &mut Window, cx: &mut Context<Self>) {
+        let text = self.drafts.get(self.active_draft).or(self.drafts.first()).map(|slot| slot.input.read(cx).value().to_string()).unwrap_or_default();
+        cx.emit(ComposerModalEvent::ImageIdeas(text));
     }
 
     /// How many images are still being copied in.

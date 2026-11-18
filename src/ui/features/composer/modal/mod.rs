@@ -54,6 +54,8 @@ pub struct ModalCallbacks {
     pub on_add_draft: ModalActionCallback,
     /// Inserts the hashtag sigil at the cursor of the active draft.
     pub on_insert_tag: ModalActionCallback,
+    /// sb D3: opens image ideas for the draft.
+    pub on_image_ideas: ModalActionCallback,
     pub on_remove_draft: DraftActionCallback,
     pub on_split_draft: DraftActionCallback,
     /// Removes the attached image at an index (sb C3).

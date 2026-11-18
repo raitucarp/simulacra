@@ -33,6 +33,8 @@ pub struct ComposerSubmission {
 #[derive(Debug, Clone, PartialEq)]
 pub enum ComposerModalEvent {
     Submit(ComposerSubmission),
+    /// sb D3: open image ideas for this draft text.
+    ImageIdeas(String),
 }
 
 /// An attached image and the field holding its description (sb C3).

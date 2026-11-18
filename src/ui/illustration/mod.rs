@@ -29,7 +29,7 @@ pub mod template;
 pub use active::{active_palette, forget_illustrations, set_active_palette, with_active_cache};
 pub use cache::{palette_hash, IllustrationCache, FALLBACK_TEMPLATE};
 pub use element::Illustration;
-pub use keys::{ClassKey, EmptyKey, GuidePose, IllustrationKind, StepKey, ILLUSTRATION_EXT, ILLUSTRATION_ROOT};
+pub use keys::{ClassKey, EmptyKey, GuidePose, IllustrationKind, NoticeKey, SpotKey, StepKey, ILLUSTRATION_EXT, ILLUSTRATION_ROOT};
 pub use form::{compose_form_template, form_image, form_source};
 pub use photo::{forget_photo, forget_stored_photo};
 pub use portrait_view::{avatar_source, render_avatar_mode, PortraitView};

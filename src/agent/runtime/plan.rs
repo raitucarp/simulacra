@@ -5,7 +5,8 @@ use super::transport::{CustomTransport, Transport};
 use crate::agent::credentials::{Credential, CredentialKind, CredentialStore};
 use crate::agent::image::ImageJob;
 use crate::agent::llm::{LlmClient, LlmProvider, LlmSettings};
-use crate::domain::engine::{CustomRequest, EngineConfig, ImageEngine, RequestMode, StructuredOutput, TextModel, ToolGrant};
+use crate::domain::image_prompt::ImageSubject;
+use crate::domain::engine::{CustomRequest, EngineConfig, ImageEngine, ImageEngineConfig, RequestMode, StructuredOutput, TextModel, ToolGrant};
 use std::path::PathBuf;
 
 /// Failure-gate key of agents on the global default model.
@@ -22,6 +23,8 @@ pub struct EnginePlan {
     pub tools: Vec<ToolGrant>,
     pub max_steps: u8,
     pub image: Option<ImageJob>,
+    /// The agent as an image subject, for posts that come without an image prompt (sb D3).
+    pub image_subject: ImageSubject,
     /// The store (tools resolve their credentials; every secret is redacted from output).
     pub credentials: CredentialStore,
 }
@@ -36,6 +39,7 @@ impl EnginePlan {
             tools: Vec::new(),
             max_steps: EngineConfig::default().tool_steps(),
             image: None,
+            image_subject: ImageSubject::default(),
             credentials: CredentialStore::default(),
         }
     }
@@ -61,6 +65,7 @@ impl EnginePlan {
             tools: engine.tools.clone(),
             max_steps: engine.tool_steps(),
             image: image_job(engine, credentials, media_dir),
+            image_subject: ImageSubject::default(),
             credentials: credentials.clone(),
         }
     }
@@ -111,10 +116,11 @@ fn text_settings(text: &TextModel, global: &LlmSettings, credentials: &Credentia
 
 /// The image job, when an engine is configured and can fire.
 fn image_job(engine: &EngineConfig, credentials: &CredentialStore, media_dir: PathBuf) -> Option<ImageJob> {
-    let config = &engine.image;
-    if !config.is_enabled() {
-        return None;
-    }
+    engine.image.is_enabled().then(|| resolve_image_job(&engine.image, credentials, media_dir))
+}
+
+/// The job of any image engine config, its credential resolved (sb D3: also the image ideas helper).
+pub fn resolve_image_job(config: &ImageEngineConfig, credentials: &CredentialStore, media_dir: PathBuf) -> ImageJob {
     let kind = match config.engine {
         ImageEngine::OpenAi => CredentialKind::OpenAi,
         ImageEngine::Google => CredentialKind::Gemini,
@@ -124,10 +130,10 @@ fn image_job(engine: &EngineConfig, credentials: &CredentialStore, media_dir: Pa
         ImageEngine::OpenAi | ImageEngine::Google => credentials.resolve(config.credential.as_deref(), kind),
         _ => config.credential.as_deref().and_then(|id| credentials.get(id)),
     };
-    Some(ImageJob {
+    ImageJob {
         config: config.clone(),
         secret: cred.map(|c| c.secret.trim().to_string()).unwrap_or_default(),
         endpoint: cred.map(|c| c.endpoint.trim().to_string()).unwrap_or_default(),
         media_dir,
-    })
+    }
 }

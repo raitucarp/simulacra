@@ -39,7 +39,7 @@ impl VaultPanel {
                     .child(div().text_size(theme.font_size_sm).text_color(theme.text_secondary).child(t!("vault.subject_index_hint").to_string())),
             );
         let groups: Vec<AnyElement> = letters.into_iter().map(|letter| self.render_index_letter(letter, cx)).collect();
-        let empty = groups.is_empty().then(|| div().text_size(theme.font_size_sm).text_color(theme.text_muted).child(t!("vault.no_subjects").to_string()));
+        let empty = groups.is_empty().then(|| div().flex().justify_center().child(crate::ui::components::art_state(crate::ui::components::ArtState::hint(crate::ui::illustration::Illustration::empty(crate::ui::illustration::EmptyKey::SubjectsNone).width(theme.art_empty_width), t!("vault.no_subjects").to_string()), theme)));
         let page = div()
             .id(INDEX_SCROLL_ID)
             .size_full()

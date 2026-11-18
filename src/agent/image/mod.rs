@@ -69,6 +69,11 @@ pub fn compose_prompt(style_prefix: &str, prompt: &str) -> String {
 
 /// Renders `prompt` with the job's engine and saves the image; the saved file path.
 pub async fn generate(job: &ImageJob, prompt: &str) -> Result<PathBuf, String> {
+    generate_with(job, prompt, None).await
+}
+
+/// [`generate`] with a negative prompt, for the engines that take one (sb D3).
+pub async fn generate_with(job: &ImageJob, prompt: &str, negative: Option<&str>) -> Result<PathBuf, String> {
     let http = reqwest::Client::builder().timeout(IMAGE_REQUEST_TIMEOUT).build().map_err(|e| e.to_string())?;
     let prompt = compose_prompt(&job.config.style_prefix, prompt);
     let data = match &job.config.engine {
@@ -76,8 +81,8 @@ pub async fn generate(job: &ImageJob, prompt: &str) -> Result<PathBuf, String> {
         ImageEngine::OpenAi => providers::openai(&http, job, &prompt).await?,
         ImageEngine::Google => providers::google(&http, job, &prompt).await?,
         ImageEngine::LocalSd { flavor, url } => match flavor {
-            crate::domain::engine::SdFlavor::A1111 => local_sd::a1111(&http, url, job, &prompt).await?,
-            crate::domain::engine::SdFlavor::ComfyUi => local_sd::comfy(&http, url, job, &prompt).await?,
+            crate::domain::engine::SdFlavor::A1111 => local_sd::a1111(&http, url, job, &prompt, negative).await?,
+            crate::domain::engine::SdFlavor::ComfyUi => local_sd::comfy(&http, url, job, &prompt, negative).await?,
         },
         ImageEngine::Custom(request) => {
             let vars = [

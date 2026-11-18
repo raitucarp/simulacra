@@ -86,6 +86,7 @@ pub const COMMANDS: &[CommandSpec] = &[
     action(C::NewConnectionMap, I::Share2, Ready),
     action(C::PostActions, I::WandSparkles, Ready),
     action(C::ToggleOutline, I::ListTree, Ready),
+    action(C::ImageIdeas, I::ImagePlus, Ready),
 ];
 
 /// The registry row of `id`.

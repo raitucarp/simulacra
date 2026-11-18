@@ -40,6 +40,7 @@ pub(super) const MODAL_PICK_IMAGE_BTN_ID: &str = "modal-pick-image-btn";
 pub(super) const MODAL_TOGGLE_IMAGE_INPUT_BTN_ID: &str = "modal-toggle-image-input-btn";
 pub(super) const MODAL_TOGGLE_LINK_BTN_ID: &str = "modal-toggle-link-btn";
 pub(super) const MODAL_TAG_BTN_ID: &str = "modal-tag-btn";
+pub(super) const MODAL_IMAGE_IDEAS_BTN_ID: &str = "modal-image-ideas-btn";
 pub(super) const MODAL_MORE_BTN_ID: &str = "modal-more-options-btn";
 pub(super) const MODAL_SUBMIT_POST_BTN_ID: &str = "modal-submit-post-btn";
 pub(super) const MODAL_THREAD_SCROLL_ID: &str = "modal-thread-scroll";

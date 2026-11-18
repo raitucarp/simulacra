@@ -9,6 +9,8 @@ use std::rc::Rc;
 pub type PostAction = Rc<dyn Fn(&mut Window, &mut App) + 'static>;
 /// Opens the given thought in the conversation inspector.
 pub type OpenPostAction = Rc<dyn Fn(PostId, &mut Window, &mut App) + 'static>;
+/// Runs a thinking action on the card's thought (sb C2).
+pub type PickPostAction = Rc<dyn Fn(crate::domain::post_actions::ActionKind, &mut Window, &mut App) + 'static>;
 
 /// Every interaction of one post card.
 #[derive(Clone)]
@@ -27,4 +29,6 @@ pub struct PostCardHandlers {
     pub on_delete: Option<PostAction>,
     /// Hashtag and wikilink clicks inside the body.
     pub links: BodyLinks,
+    /// "…" menu › Actions (sb C2); `None` hides the submenu.
+    pub on_post_action: Option<PickPostAction>,
 }

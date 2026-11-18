@@ -6,6 +6,7 @@ mod drawer;
 mod navigation;
 mod import;
 mod overlays;
+mod post_actions;
 mod semantic;
 mod settings;
 mod sidebars;
@@ -52,6 +53,7 @@ impl Render for AppView {
             .children(self.welcome_overlay(&bind))
             .children(self.indexing_indicator(&bind))
             .children(self.similar_sheet(&bind))
+            .children(self.post_actions_sheet(&bind))
             .children(self.palette.palette.clone())
             .children(self.shortcut_sheet(&bind))
             .children(self.import_sheet(&bind, cx))

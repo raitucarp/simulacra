@@ -31,6 +31,12 @@ impl LlmClient {
         Self { settings, http, endpoint: None }
     }
 
+    /// Lets each request take up to `timeout` (Settings › AI & Models; sb C2).
+    pub fn with_timeout(mut self, timeout: Duration) -> Self {
+        self.http = reqwest::Client::builder().timeout(timeout).build().unwrap_or(self.http);
+        self
+    }
+
     /// Sends every request to `endpoint` instead of the provider URL (blank = no override).
     pub fn with_endpoint(mut self, endpoint: &str) -> Self {
         let endpoint = endpoint.trim();

@@ -1,8 +1,8 @@
 //! Shared post interaction callbacks and the post card renderer wired to them.
 
 use super::params::{
-    DeletePostCallback, FindSimilarCallback, LikePostCallback, QuotePostCallback, ReplyPostCallback, RepostPostCallback,
-    SelectPostCallback,
+    DeletePostCallback, FindSimilarCallback, LikePostCallback, PostActionCallback, QuotePostCallback, ReplyPostCallback,
+    RepostPostCallback, SelectPostCallback,
 };
 use crate::domain::{Post, PostId, Profile};
 use crate::state::AppState;
@@ -21,6 +21,8 @@ pub(crate) struct PostCallbacks {
     pub on_quote: Rc<QuotePostCallback>,
     pub on_delete: Rc<DeletePostCallback>,
     pub on_find_similar: Rc<FindSimilarCallback>,
+    /// sb C2: "…" menu › Actions.
+    pub on_post_action: Rc<PostActionCallback>,
     /// Hashtag and wikilink clicks inside post bodies.
     pub links: BodyLinks,
 }
@@ -38,6 +40,12 @@ pub(crate) struct CardMode {
 fn bind<F: Fn(PostId, &mut Window, &mut App) + ?Sized + 'static>(cb: &Rc<Box<F>>, id: &PostId) -> PostAction {
     let (cb, id) = (cb.clone(), id.clone());
     Rc::new(move |window, cx| cb(id.clone(), window, cx))
+}
+
+/// Binds the actions callback to one post (sb C2).
+fn bind_action(cb: &Rc<PostActionCallback>, id: &PostId) -> crate::ui::features::post::PickPostAction {
+    let (cb, id) = (cb.clone(), id.clone());
+    Rc::new(move |kind, window, cx| cb(id.clone(), kind, window, cx))
 }
 
 impl PostCallbacks {
@@ -58,6 +66,7 @@ impl PostCallbacks {
             on_open_post: Rc::new(move |id, window, cx| select(id, window, cx)),
             on_delete: author.is_human_persona().then(|| bind(&self.on_delete, &post.id)),
             links: self.links.clone(),
+            on_post_action: Some(bind_action(&self.on_post_action, &target_id)),
         }
     }
 

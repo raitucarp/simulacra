@@ -2,6 +2,7 @@
 //! delete.
 
 use super::super::consts::OVERFLOW_BTN_ID_PREFIX;
+use super::actions_menu::with_actions_submenu;
 use super::handlers::{PostAction, PostCardHandlers};
 use super::share::{copy_with_toast, post_permalink};
 use crate::domain::Post;
@@ -21,7 +22,8 @@ pub(crate) fn render_overflow_menu(post: &Post, handlers: &PostCardHandlers) -> 
         .xsmall()
         .icon(Icon::new(LucideIcon::Ellipsis))
         .tooltip(t!("post.menu_tooltip").to_string())
-        .dropdown_menu_with_anchor(Anchor::TopRight, move |menu, _, _| {
+        .dropdown_menu_with_anchor(Anchor::TopRight, move |menu, window, cx| {
+            let menu = with_actions_submenu(menu, handlers.on_post_action.as_ref(), window, cx);
             build_menu(menu, &text, &link, &handlers)
         })
 }

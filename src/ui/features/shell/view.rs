@@ -4,8 +4,10 @@ use super::feed_state::FeedState;
 use super::forge_host::ForgeSession;
 use super::graph_state::GraphState;
 use super::import_state::ImportUi;
+use super::inspector_state::InspectorState;
 use super::lab_state::{LabState, LlmInputs};
 use super::panels::ShellPanels;
+use super::post_actions_state::PostActionsUi;
 use super::scheduler_state::SchedulerState;
 use super::semantic_state::SemanticState;
 use super::settings_draft::SettingsDraft;
@@ -48,6 +50,9 @@ pub struct AppView {
     pub sidebar: SidebarState,
     /// Command palette, its history and the shortcut sheet.
     pub palette: PaletteHost,
+    /// sb C2: the post actions sheet and the inspector's cards / outline view.
+    pub post_actions: PostActionsUi,
+    pub inspector: InspectorState,
     /// Cached views of the sidebars and the center column.
     pub(super) panels: ShellPanels,
     pub(super) _subscriptions: Vec<Subscription>,

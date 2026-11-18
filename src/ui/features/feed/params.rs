@@ -15,6 +15,8 @@ pub type RepostPostCallback = Box<dyn Fn(PostId, &mut Window, &mut App) + 'stati
 pub type QuotePostCallback = Box<dyn Fn(PostId, &mut Window, &mut App) + 'static>;
 pub type DeletePostCallback = Box<dyn Fn(PostId, &mut Window, &mut App) + 'static>;
 pub type FindSimilarCallback = Box<dyn Fn(PostId, &mut Window, &mut App) + 'static>;
+/// sb C2: runs a thinking action on a post ("…" menu › Actions).
+pub type PostActionCallback = Box<dyn Fn(PostId, crate::domain::post_actions::ActionKind, &mut Window, &mut App) + 'static>;
 pub type CycleProfileCallback = Box<dyn Fn(&mut Window, &mut App) + 'static>;
 pub type LoadMoreCallback = Box<dyn Fn(&mut Window, &mut App) + 'static>;
 pub type SelectFeedTabCallback = Box<dyn Fn(FeedTab, &mut Window, &mut App) + 'static>;
@@ -55,4 +57,8 @@ pub struct FeedParams<'a, C> {
     pub on_open_source: OpenSourceAction,
     pub on_cycle_profile: CycleProfileCallback,
     pub on_run_command: RunCommandCallback,
+    /// sb C2: "…" menu › Actions, and the inspector's view (cards or outline) with its commands.
+    pub on_post_action: PostActionCallback,
+    pub inspector: super::inspector_outline::InspectorView,
+    pub on_inspector: super::inspector_outline::InspectorCallback,
 }

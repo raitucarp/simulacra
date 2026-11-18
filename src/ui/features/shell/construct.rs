@@ -3,8 +3,10 @@
 use super::feed_state::FeedState;
 use super::graph_state::GraphState;
 use super::import_state::ImportUi;
+use super::inspector_state::InspectorState;
 use super::lab_state::{LabState, LlmInputs};
 use super::panels::ShellPanels;
+use super::post_actions_state::PostActionsUi;
 use super::scheduler_state::SchedulerState;
 use super::semantic_state::SemanticState;
 use super::settings_ui::SettingsUi;
@@ -40,10 +42,11 @@ impl AppView {
         let appearance = cx.new(|cx| AppearancePanel::new(state.theme_settings.clone(), window, cx));
         let (settings_ui, settings_subscriptions) = SettingsUi::new(state.preferences(), window, cx);
         let (import, import_subscriptions) = ImportUi::new(window, cx);
+        let ((post_actions, actions_subscription), inspector) = (PostActionsUi::new(window, cx), InspectorState::load(state.db.as_ref(), cx));
         let mut subscriptions = vec![
             feed.subscribe_search(cx),
             cx.subscribe_in(&composer_modal, window, Self::publish_composer_draft),
-            graph_subscription, vault_subscription,
+            graph_subscription, vault_subscription, actions_subscription,
             cx.subscribe_in(&appearance, window, Self::on_appearance_event),
             Self::observe_own_changes(cx), Self::observe_window_width(window, cx), Self::refocus_on_focus_loss(window, cx),
             cx.observe_window_appearance(window, |this, window, cx| this.follow_system_appearance(window, cx)),
@@ -59,7 +62,7 @@ impl AppView {
             chrome: ChromeState { is_onboarding_open: onboarding, ..ChromeState::new(initial_lang) },
             feed, composer_modal, appearance, llm_inputs, settings_ui,
             lab, scheduler, graph, vault, import, semantic: SemanticState::new(cx),
-            forge: None, sidebar, palette,
+            forge: None, sidebar, palette, post_actions, inspector,
             panels: ShellPanels::new(cx),
             _subscriptions: subscriptions,
         };
@@ -80,6 +83,7 @@ impl AppView {
     /// The long-running tasks every window needs (key bindings are the central keymap's).
     fn start_background_work(&mut self, window: &mut Window, cx: &mut Context<Self>) {
         crate::ui::features::import::keys::init_key_bindings(cx);
+        crate::ui::features::feed::inspector_outline::init_key_bindings(cx);
         self.import_command_line_files(window, cx);
         self.start_scheduler_heartbeat(window, cx);
         self.watch_vault_failures(window, cx);

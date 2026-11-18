@@ -1,6 +1,7 @@
 //! Splits [`FeedParams`] into the inputs of each feed sub-view.
 
 use super::callbacks::PostCallbacks;
+use super::inspector_outline::{InspectorCallback, InspectorView};
 use super::params::{FeedParams, LoadMoreCallback, RunCommandCallback, SelectFeedTabCallback, ToggleRepliesCallback};
 use crate::domain::PostId;
 use crate::state::FeedTab;
@@ -21,6 +22,8 @@ pub(crate) struct TimelineInputs<C> {
     pub on_select_feed_tab: SelectFeedTabCallback,
     pub on_toggle_replies: ToggleRepliesCallback,
     pub on_run_command: RunCommandCallback,
+    pub inspector: InspectorView,
+    pub on_inspector: InspectorCallback,
 }
 
 /// Distributes feed parameters to the post callbacks and the timeline.
@@ -35,10 +38,12 @@ pub(crate) fn split_params<C>(params: FeedParams<'_, C>) -> (PostCallbacks, Time
         on_find_similar: Rc::new(params.on_find_similar_post),
         on_learn: Rc::new(params.on_learn_post),
         learning: params.learning_posts,
+        on_post_action: Rc::new(params.on_post_action),
         links: BodyLinks {
             on_tag: Some(params.on_open_tag),
             on_wikilink: Some(params.on_open_wikilink),
             on_source: Some(params.on_open_source),
+            on_media: Some(params.on_open_media),
         },
     };
     let timeline = TimelineInputs {
@@ -52,6 +57,8 @@ pub(crate) fn split_params<C>(params: FeedParams<'_, C>) -> (PostCallbacks, Time
         on_select_feed_tab: params.on_select_feed_tab,
         on_toggle_replies: params.on_toggle_replies,
         on_run_command: params.on_run_command,
+        inspector: params.inspector,
+        on_inspector: params.on_inspector,
     };
     (callbacks, timeline)
 }

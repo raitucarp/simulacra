@@ -47,6 +47,8 @@ impl AppView {
             CommandId::FindSimilar => self.find_similar_to_open_thought(window, cx),
             CommandId::LearnPost => self.learn_focused_post(window, cx),
             CommandId::NewConnectionMap => self.open_review_tab_picker(crate::ui::features::review::PickerMode::Map, window, cx),
+            CommandId::PostActions => self.open_actions_for_open_thought(window, cx),
+            CommandId::ToggleOutline => self.toggle_inspector_outline(window, cx),
         }
     }
 

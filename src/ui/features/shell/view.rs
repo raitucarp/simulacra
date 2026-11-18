@@ -4,8 +4,11 @@ use super::feed_state::FeedState;
 use super::forge_host::ForgeSession;
 use super::graph_state::GraphState;
 use super::import_state::ImportUi;
+use super::inspector_state::InspectorState;
 use super::lab_state::{LabState, LlmInputs};
+use super::media_state::MediaHost;
 use super::panels::ShellPanels;
+use super::post_actions_state::PostActionsUi;
 use super::scheduler_state::SchedulerState;
 use super::semantic_state::SemanticState;
 use super::settings_draft::SettingsDraft;
@@ -43,6 +46,8 @@ pub struct AppView {
     pub import: ImportUi,
     /// Vector index, indexing queue and the "find similar" sheet (sb B3).
     pub semantic: SemanticState,
+    /// The lightbox and the media pump's last plan (sb C3).
+    pub media: MediaHost,
     /// The review deck, the Review page and the card maker (sb C1).
     pub review: ReviewHost,
     /// The Agent Forge while it is open (it replaces the center and right columns).
@@ -51,6 +56,9 @@ pub struct AppView {
     pub sidebar: SidebarState,
     /// Command palette, its history and the shortcut sheet.
     pub palette: PaletteHost,
+    /// sb C2: the post actions sheet and the inspector's cards / outline view.
+    pub post_actions: PostActionsUi,
+    pub inspector: InspectorState,
     /// Cached views of the sidebars and the center column.
     pub(super) panels: ShellPanels,
     pub(super) _subscriptions: Vec<Subscription>,

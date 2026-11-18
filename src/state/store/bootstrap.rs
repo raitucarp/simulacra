@@ -96,6 +96,7 @@ impl AppState {
             preferences: settings.preferences,
             db,
             load_error: None,
+            media: Default::default(),
         }
     }
 }

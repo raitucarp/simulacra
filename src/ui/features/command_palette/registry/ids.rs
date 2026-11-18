@@ -70,4 +70,7 @@ command_ids! {
     /// sb C1b: learn the thought open in the inspector; a new connection map.
     LearnPost => "learn_post",
     NewConnectionMap => "new_connection_map",
+    /// sb C2: the actions sheet on the open thought, and the inspector's outline view.
+    PostActions => "post_actions",
+    ToggleOutline => "toggle_outline",
 }

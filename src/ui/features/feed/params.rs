@@ -19,6 +19,8 @@ pub type FindSimilarCallback = Box<dyn Fn(PostId, &mut Window, &mut App) + 'stat
 pub type LearnPostCallback = Box<dyn Fn(PostId, LearnRequestKind, &mut Window, &mut App) + 'static>;
 /// The review state of every post being learnt, by post id (sb C1b).
 pub type LearningPosts = std::rc::Rc<std::collections::HashMap<String, LearnStatus>>;
+/// sb C2: runs a thinking action on a post ("…" menu › Actions).
+pub type PostActionCallback = Box<dyn Fn(PostId, crate::domain::post_actions::ActionKind, &mut Window, &mut App) + 'static>;
 pub type CycleProfileCallback = Box<dyn Fn(&mut Window, &mut App) + 'static>;
 pub type LoadMoreCallback = Box<dyn Fn(&mut Window, &mut App) + 'static>;
 pub type SelectFeedTabCallback = Box<dyn Fn(FeedTab, &mut Window, &mut App) + 'static>;
@@ -60,6 +62,12 @@ pub struct FeedParams<'a, C> {
     pub on_open_wikilink: OpenTextAction,
     /// Source chips of agent posts (open the vault document, post, profile or web page).
     pub on_open_source: OpenSourceAction,
+    /// Post images open the lightbox (sb C3).
+    pub on_open_media: crate::ui::features::media::OpenMediaAction,
     pub on_cycle_profile: CycleProfileCallback,
     pub on_run_command: RunCommandCallback,
+    /// sb C2: "…" menu › Actions, and the inspector's view (cards or outline) with its commands.
+    pub on_post_action: PostActionCallback,
+    pub inspector: super::inspector_outline::InspectorView,
+    pub on_inspector: super::inspector_outline::InspectorCallback,
 }

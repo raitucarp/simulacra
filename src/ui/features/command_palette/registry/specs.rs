@@ -84,6 +84,8 @@ pub const COMMANDS: &[CommandSpec] = &[
     action(C::FindSimilar, I::Compass, Ready),
     action(C::LearnPost, I::GraduationCap, Ready),
     action(C::NewConnectionMap, I::Share2, Ready),
+    action(C::PostActions, I::WandSparkles, Ready),
+    action(C::ToggleOutline, I::ListTree, Ready),
 ];
 
 /// The registry row of `id`.

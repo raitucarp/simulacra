@@ -3,6 +3,7 @@
 mod catalogue;
 mod embeddings;
 mod location;
+mod media;
 mod posts;
 mod preferences;
 mod review;

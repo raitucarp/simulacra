@@ -3,7 +3,7 @@
 use super::callbacks::CardMode;
 use super::consts::{MAX_INSPECTOR_NESTED_REPLIES, MAX_INSPECTOR_REPLIES, TOGGLE_REPLIES_BUTTON_ID};
 use super::inspector::InspectorContext;
-use super::inspector_header::render_grounding_callout;
+use super::inspector_grounding::render_grounding_callout;
 use crate::domain::Post;
 use crate::state::{Conversation, ReplyBranch};
 use crate::ui::features::post::{render_extras_detail, ThreadlineStyle};

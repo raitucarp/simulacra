@@ -26,6 +26,10 @@ zip = { version = "9", default-features = false, features = ["deflate-flate2"] }
 lopdf = { version = "0.47", default-features = false }
 sha2 = "0.11"
 encoding_rs = "0.8"
+# Post media (sb C3): link-preview URLs and off-thread image decoding / thumbnails (both
+# already in the graph through reqwest and gpui, with the same features).
+url = "2"
+image = { version = "0.25", default-features = false, features = ["png", "jpeg", "gif", "webp", "bmp"] }
 
 [dev-dependencies]
 resvg = "0.45.1"

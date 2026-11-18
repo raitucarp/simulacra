@@ -16,15 +16,24 @@ pub struct MockReply {
     pub status: u16,
     pub content_type: String,
     pub body: Vec<u8>,
+    /// Extra response headers (a redirect's `Location`).
+    pub headers: Vec<(String, String)>,
 }
 
 impl MockReply {
     pub fn json(value: Value) -> Self {
-        Self { status: 200, content_type: JSON_TYPE.into(), body: value.to_string().into_bytes() }
+        Self { status: 200, content_type: JSON_TYPE.into(), body: value.to_string().into_bytes(), headers: Vec::new() }
     }
 
     pub fn raw(status: u16, content_type: &str, body: impl Into<Vec<u8>>) -> Self {
-        Self { status, content_type: content_type.into(), body: body.into() }
+        Self { status, content_type: content_type.into(), body: body.into(), headers: Vec::new() }
+    }
+
+    /// The reply with one more response header.
+    #[must_use]
+    pub fn with_header(mut self, name: &str, value: &str) -> Self {
+        self.headers.push((name.into(), value.into()));
+        self
     }
 }
 
@@ -102,8 +111,9 @@ fn serve(stream: TcpStream, reply: &MockReply, log: &Mutex<Vec<Recorded>>) {
     let _ = reader.read_exact(&mut body);
     recorded.body = String::from_utf8_lossy(&body).into_owned();
     log.lock().expect("request log").push(recorded);
+    let extra: String = reply.headers.iter().map(|(name, value)| format!("{name}: {value}\r\n")).collect();
     let head = format!(
-        "HTTP/1.1 {} MOCK\r\nContent-Type: {}\r\nContent-Length: {}\r\nConnection: close\r\n\r\n",
+        "HTTP/1.1 {} MOCK\r\nContent-Type: {}\r\nContent-Length: {}\r\n{extra}Connection: close\r\n\r\n",
         reply.status,
         reply.content_type,
         reply.body.len()

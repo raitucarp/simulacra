@@ -7,8 +7,6 @@ pub(crate) const META_SEPARATOR: &str = "·";
 
 /// Element id prefix of the whole post card.
 pub(crate) const POST_ITEM_ID_PREFIX: &str = "post-item-";
-/// Element id prefix of the rich link preview card.
-pub(crate) const LINK_PREVIEW_ID_PREFIX: &str = "link-preview-";
 /// Element id prefix of an embedded quote card (suffixed with the quoted post id).
 pub(crate) const QUOTE_CARD_ID_PREFIX: &str = "quote-card-";
 /// Element id prefix of the like action button.

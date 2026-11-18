@@ -1,7 +1,6 @@
 //! Comprehensive Threads-style post item composition.
 
 use super::actions::render_action_bar;
-use super::attachments::{render_image_embed, render_link_preview};
 use super::body::render_body_tokens;
 use super::consts::POST_ITEM_ID_PREFIX;
 use super::controls::{collect_references, PostCardHandlers};
@@ -12,6 +11,7 @@ use super::quote_card::render_quote_embed;
 use super::threadline::{render_avatar_column, ThreadlineStyle};
 use crate::domain::Post;
 use crate::theme::ThemeTokens;
+use crate::ui::features::media::render_post_media;
 use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::{
     div, Div, InteractiveElement, IntoElement, MouseButton, ParentElement, Rgba, Styled,
@@ -80,7 +80,6 @@ fn render_content_column<L: PostLookup>(
     handlers: PostCardHandlers,
 ) -> Div {
     let refs = collect_references(effective, lookup);
-    let image_path = effective.image_path.as_deref().map(str::trim).filter(|p| !p.is_empty());
     div()
         .flex_1()
         .min_w_0()
@@ -98,10 +97,7 @@ fn render_content_column<L: PostLookup>(
                 .child(render_body_tokens(&lookup.body_tokens(effective), lookup, theme, &handlers.links)),
         )
         .children(render_post_extras(&effective.extras, theme, handlers.links.on_source.as_ref()))
-        .when_some(image_path, |this, path| this.child(render_image_embed(path, theme)))
-        .when_some(effective.link_url.as_ref(), |this, url| {
-            this.child(render_link_preview(effective.id.as_str(), url, theme))
-        })
+        .children(render_post_media(effective, lookup, theme, handlers.links.on_media.as_ref()))
         .when_some(effective.quote_id.as_ref(), |this, quote_id| {
             this.child(render_quote_embed(quote_id.as_str(), lookup, handlers.on_open_post.clone(), &handlers.links, theme))
         })

@@ -6,6 +6,7 @@ mod draft_row;
 mod editor;
 mod footer;
 mod header;
+mod media_tray;
 mod quote_preview;
 mod render;
 mod reply_context;
@@ -23,6 +24,8 @@ pub type ModalSubmitCallback = Rc<dyn Fn(&mut Window, &mut App) + 'static>;
 pub type ModalActionCallback = Rc<dyn Fn(&mut Window, &mut App) + 'static>;
 /// Callback acting on the draft at the given thread position.
 pub type DraftActionCallback = Rc<dyn Fn(usize, &mut Window, &mut App) + 'static>;
+/// A paste into a draft; `true` when it attached images instead of inserting text (sb C3).
+pub type PasteCallback = Rc<dyn Fn(&ClipboardItem, &mut Window, &mut App) -> bool + 'static>;
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum ComposerModalMode {
@@ -53,6 +56,9 @@ pub struct ModalCallbacks {
     pub on_insert_tag: ModalActionCallback,
     pub on_remove_draft: DraftActionCallback,
     pub on_split_draft: DraftActionCallback,
+    /// Removes the attached image at an index (sb C3).
+    pub on_remove_image: DraftActionCallback,
+    pub on_paste: PasteCallback,
 }
 
 /// Stateless dialog rendering a composer snapshot.
@@ -64,8 +70,10 @@ pub struct ComposerModalView {
     pub drafts: Vec<DraftEditor>,
     pub link_input: Entity<InputState>,
     pub image_input: Entity<InputState>,
-    /// The attached image (picked, or a typed path that exists).
-    pub image_path: Option<String>,
+    /// Attached images and their description fields (sb C3).
+    pub images: Vec<(String, Entity<InputState>)>,
+    /// Images still being copied into the media folder.
+    pub pending_images: usize,
     pub is_link_input_open: bool,
     pub is_image_input_open: bool,
     /// Publish error or the reason the thread cannot be posted yet.

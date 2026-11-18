@@ -75,7 +75,7 @@ const IMPORT: &[SettingsGroup] = &[
 const PRIVACY: &[SettingsGroup] = &[
     group("storage", &[Path(DataFolder::Database), Path(DataFolder::Media)]),
     group("maintenance", &[Action(Cmd::Backup), Action(Cmd::Export), Action(Cmd::ClearCaches)]),
-    group("privacy", &[Field(F::Privacy(PrivacyField::Telemetry))]),
+    group("privacy", &[Field(F::Privacy(PrivacyField::LinkPreviews)), Field(F::Privacy(PrivacyField::Telemetry))]),
 ];
 const NOTIFICATIONS: &[SettingsGroup] = &[group(
     "toasts",

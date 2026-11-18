@@ -9,6 +9,8 @@ mod dismissed_seeds;
 mod embeddings;
 mod embeddings_schema;
 pub mod location;
+mod media;
+mod media_schema;
 mod migrate;
 mod networks;
 mod post_batch;

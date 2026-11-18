@@ -2,12 +2,13 @@
 //! the kit's own `init` so these bindings take precedence at equal depth.
 
 use super::contexts::context_of;
-use super::shortcuts::{PaletteKey, ReviewKey, Shortcut, ShortcutTarget, SHORTCUTS};
+use super::shortcuts::{LightboxKey, PaletteKey, ReviewKey, Shortcut, ShortcutTarget, SHORTCUTS};
 use crate::ui::features::command_palette::{
     CommandId, ConfirmSelection, DismissPalette, NextGroup, PreviousGroup, SelectNext, SelectPrevious,
 };
 use crate::ui::features::composer::SubmitPostDraft;
 use crate::ui::features::forge::view::{Dismiss, Redo, Undo};
+use crate::ui::features::media::{CloseLightbox, NextImage, PreviousImage};
 use crate::ui::features::review::keys::{GradeAgain, GradeEasy, GradeGood, GradeHard, RevealAnswer};
 use gpui_kit::*;
 use std::rc::Rc;
@@ -39,7 +40,16 @@ pub fn action_of(target: ShortcutTarget) -> Box<dyn Action> {
         ShortcutTarget::ForgeDismiss => Box::new(Dismiss),
         ShortcutTarget::CloseSheet => Box::new(RunCommand(CommandId::ShowShortcuts)),
         ShortcutTarget::Palette(key) => palette_action(key),
+        ShortcutTarget::Lightbox(key) => lightbox_action(key),
         ShortcutTarget::Review(key) => review_action(key),
+    }
+}
+
+fn lightbox_action(key: LightboxKey) -> Box<dyn Action> {
+    match key {
+        LightboxKey::Close => Box::new(CloseLightbox),
+        LightboxKey::Previous => Box::new(PreviousImage),
+        LightboxKey::Next => Box::new(NextImage),
     }
 }
 

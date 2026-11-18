@@ -26,6 +26,8 @@ pub struct InsightsHost {
     cache: VecDeque<(u64, Rc<InsightsReport>)>,
     /// Fingerprint the author list was last built for.
     pub(super) authors_for: Option<u64>,
+    /// sb F3: the lens views' cached reports.
+    pub(super) lenses: super::lens_host::LensHost,
 }
 
 impl InsightsHost {
@@ -35,7 +37,7 @@ impl InsightsHost {
         let theme = state.theme_tokens.clone();
         let panel = cx.new(|cx| InsightsPanel::new(page, theme, cx));
         let subscription = cx.subscribe_in(&panel, window, AppView::handle_insights_event);
-        (Self { panel, requested: None, cache: VecDeque::new(), authors_for: None }, subscription)
+        (Self { panel, requested: None, cache: VecDeque::new(), authors_for: None, lenses: Default::default() }, subscription)
     }
 
     fn cached(&self, fingerprint: u64) -> Option<Rc<InsightsReport>> {

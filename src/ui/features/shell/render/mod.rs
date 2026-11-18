@@ -81,6 +81,7 @@ impl AppView {
         self.sync_insights(cx);
         self.sync_journal(window, cx);
         self.sync_thinking(cx);
+        self.sync_lenses(cx); // sb F3
         self.sync_forge_theme(cx);
     }
 

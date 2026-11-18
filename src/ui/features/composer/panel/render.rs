@@ -76,6 +76,7 @@ impl Render for ComposerModalPanel {
             notice,
             can_post: problem.is_none(),
             atomic_hint: self.atomic_hint_view(cx),
+            readability: self.readability_view(cx),
             callbacks: callbacks(&cx.entity()),
         }
     }

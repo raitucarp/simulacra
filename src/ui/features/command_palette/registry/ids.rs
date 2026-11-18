@@ -95,4 +95,8 @@ command_ids! {
     InsightsTensions => "insights_tensions",
     ResolveDuePredictions => "resolve_due_predictions",
     ShowArgumentMap => "show_argument_map",
+    /// sb F3: the concept timeline, viewpoint diversity and readability views.
+    InsightsTimeline => "insights_timeline",
+    InsightsDiversity => "insights_diversity",
+    InsightsReadability => "insights_readability",
 }

@@ -20,10 +20,16 @@ pub enum InsightsView {
     Calibration,
     /// sb E1: posts and passages that may contradict each other.
     Tensions,
+    /// sb F3: concepts over time.
+    Timeline,
+    /// sb F3: how varied the voices, stances and meanings read are.
+    Diversity,
+    /// sb F3: how easily the posts read.
+    Readability,
 }
 
 impl InsightsView {
-    pub const ALL: [Self; 9] = [Self::Overview, Self::Network, Self::Sets, Self::Symmetry, Self::Categories, Self::Embedding, Self::Activity, Self::Calibration, Self::Tensions];
+    pub const ALL: [Self; 12] = [Self::Overview, Self::Network, Self::Sets, Self::Symmetry, Self::Categories, Self::Embedding, Self::Activity, Self::Calibration, Self::Tensions, Self::Timeline, Self::Diversity, Self::Readability];
 
     /// Stable key (locale keys `insights.view.<key>`, persisted state).
     pub const fn key(self) -> &'static str {
@@ -37,6 +43,9 @@ impl InsightsView {
             Self::Activity => "activity",
             Self::Calibration => "calibration",
             Self::Tensions => "tensions",
+            Self::Timeline => "timeline",
+            Self::Diversity => "diversity",
+            Self::Readability => "readability",
         }
     }
 
@@ -51,6 +60,9 @@ impl InsightsView {
             Self::Activity => LucideIcon::Clock,
             Self::Calibration => LucideIcon::ChartScatter,
             Self::Tensions => LucideIcon::Zap,
+            Self::Timeline => LucideIcon::Activity,
+            Self::Diversity => LucideIcon::Shuffle,
+            Self::Readability => LucideIcon::BookOpen,
         }
     }
 
@@ -66,12 +78,20 @@ impl InsightsView {
             Self::Activity => CommandId::InsightsActivity,
             Self::Calibration => CommandId::InsightsCalibration,
             Self::Tensions => CommandId::InsightsTensions,
+            Self::Timeline => CommandId::InsightsTimeline,
+            Self::Diversity => CommandId::InsightsDiversity,
+            Self::Readability => CommandId::InsightsReadability,
         }
     }
 
     /// sb E1: the views fed by the thinking tools rather than the report (no filter bar).
     pub const fn is_thinking(self) -> bool {
         matches!(self, Self::Calibration | Self::Tensions)
+    }
+
+    /// sb F3: the lens views, fed by their own background report (with the filter bar).
+    pub const fn is_lens(self) -> bool {
+        matches!(self, Self::Timeline | Self::Diversity | Self::Readability)
     }
 
     /// The view a command opens (`go_insights` keeps the current view: `None`).

@@ -9,6 +9,7 @@
 
 pub mod cache;
 pub mod columns;
+pub mod lanes; // sb F3: lane chart geometry (concept timeline)
 pub mod cull;
 pub mod legend;
 pub mod paint;

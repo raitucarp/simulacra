@@ -41,7 +41,7 @@ const APPEARANCE: &[SettingsGroup] = &[
 ];
 const WRITING: &[SettingsGroup] = &[
     group("posts", &[Field(F::Writing(Wrt::PostLengthLimit)), Field(F::Writing(Wrt::AutoSplitThreads)), Field(F::Writing(Wrt::DefaultIdentity))]),
-    group("drafts", &[Field(F::Writing(Wrt::AutosaveSeconds)), Field(F::Writing(Wrt::Spellcheck)), Field(F::Writing(Wrt::AtomicHints))]),
+    group("drafts", &[Field(F::Writing(Wrt::AutosaveSeconds)), Field(F::Writing(Wrt::Spellcheck)), Field(F::Writing(Wrt::AtomicHints)), Field(F::Writing(Wrt::ReadabilityMeter))]),
     group("links", &[Field(F::Writing(Wrt::WikilinkClick)), Field(F::Writing(Wrt::HashtagClick))]),
 ];
 const AI: &[SettingsGroup] = &[

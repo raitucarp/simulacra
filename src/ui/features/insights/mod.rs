@@ -10,8 +10,10 @@
 
 pub(crate) mod chart;
 pub mod events;
+pub mod lens_state; // sb F3: the lens views' report and interaction state
 mod panel;
 mod render;
+pub mod readability_style; // sb F3: readability bands and formula names
 pub mod state;
 pub mod view;
 

@@ -9,6 +9,7 @@ mod chrome;
 mod forge;
 mod image_prompt;
 mod import;
+mod insight_more;
 mod insights;
 mod learning;
 mod journal;
@@ -58,7 +59,7 @@ pub fn derive_tokens(
     semantic::apply_semantic_layout(&mut t);
     review::apply_review_layout(&mut t);
     review::apply_review_map_layout(&mut t);
-    insights::apply_insights_layout(&mut t);
+    insights::apply_insights_layout(&mut t); insight_more::apply_insight_more_layout(&mut t); // sb F3: lens views
     learning::apply_learning_layout(&mut t);
     journal::apply_journal_layout(&mut t);
     responsive::apply_responsive_layout(&mut t);

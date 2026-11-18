@@ -46,6 +46,8 @@ pub enum ForgeEvent {
     ImportPhoto(PathBuf),
     /// Show Settings › AI (where credentials are stored) over the forge.
     OpenAiSettings,
+    /// sb D3: open the image ideas sheet for the draft's avatar.
+    ImageIdeas,
 }
 
 /// The Agent Forge entity.

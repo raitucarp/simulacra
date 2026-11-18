@@ -10,6 +10,8 @@ use super::threadline::compute_stream_threadline_style;
 use crate::domain::Post;
 use crate::state::AppState;
 use crate::theme::ThemeTokens;
+use crate::ui::components::{art_state, ArtState};
+use crate::ui::illustration::{EmptyKey, Illustration};
 use gpui_kit::component::scroll::ScrollableElement;
 use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::{div, list, AnyElement, App, IntoElement, ListState, ParentElement, Styled, Window};
@@ -105,12 +107,9 @@ pub(crate) fn render_stream_list(
         .min_h_0()
         .overflow_hidden()
         .when(is_empty, |this| {
-            this.p(theme.panel_padding).flex().items_center().justify_center().child(
-                div()
-                    .text_size(theme.font_size_sm)
-                    .text_color(theme.text_muted)
-                    .child(t!("feed.no_posts").to_string()),
-            )
+            let art = Illustration::empty(EmptyKey::NoPosts).width(theme.art_empty_width);
+            let state = ArtState::titled(art, t!("feed.no_posts").to_string(), t!("art.feed_empty_hint").to_string());
+            this.p(theme.panel_padding).flex().items_center().justify_center().child(art_state(state, theme))
         })
         .when(!is_empty, |this| this.child(body).vertical_scrollbar(&scrollbar_handle))
 }

@@ -9,6 +9,8 @@ use super::params::ToggleRepliesCallback;
 use crate::domain::Post;
 use crate::state::{build_conversation, AppState, Conversation, ReplyLimits};
 use crate::theme::ThemeTokens;
+use crate::ui::components::{art_state, ArtState};
+use crate::ui::illustration::{EmptyKey, Illustration};
 use gpui_kit::component::scroll::ScrollableElement;
 use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::{div, Div, InteractiveElement, IntoElement, ParentElement, Styled};
@@ -74,11 +76,8 @@ fn render_thread_scroll(ctx: &InspectorContext<'_>, conversation: Option<&Conver
         .flex_col()
         .when_some(conversation, |this, c| this.children(conversation_children(ctx, c)))
         .when(is_empty, |this| {
-            this.p(theme.panel_padding).items_center().justify_center().child(
-                div()
-                    .text_size(theme.font_size_sm)
-                    .text_color(theme.text_muted)
-                    .child(t!("feed.select_to_inspect").to_string()),
-            )
+            let art = Illustration::empty(EmptyKey::InspectorIdle).width(theme.art_empty_width);
+            let state = ArtState::titled(art, t!("feed.select_to_inspect").to_string(), t!("art.inspector_idle_hint").to_string());
+            this.p(theme.panel_padding).items_center().justify_center().child(art_state(state, theme))
         })
 }

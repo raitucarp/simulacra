@@ -11,6 +11,7 @@ use simulacra::domain::engine::{
     HttpMethod, ImageEngineKind, ImageSize, OutputKind, RequestKind, SchemaPreset, SdFlavor, SearchBackend, TextSource, ToolKind,
     TriggerKind,
 };
+use simulacra::domain::image_prompt::{ImageAvoid, ImageFraming, ImageMood, ImagePalette, ImageStyle};
 use simulacra::domain::TraitOption;
 
 const ASSETS_DIR: &str = "assets";
@@ -68,6 +69,7 @@ fn every_trait_variant_has_an_option_card() {
         SentenceStructure, PostFormat, LexicalField, Weekday,
         TextSource, LlmProvider, RequestKind, HttpMethod, OutputKind, SchemaPreset, ImageEngineKind, SdFlavor,
         ImageSize, TriggerKind, ToolKind, SearchBackend,
+        ImageStyle, ImageMood, ImagePalette, ImageFraming, ImageAvoid,
     );
     assert!(total > 100, "expected the full trait catalogue, saw {total} variants");
     assert!(missing.is_empty(), "missing trait illustrations:\n{}", missing.join("\n"));

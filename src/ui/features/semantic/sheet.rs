@@ -52,7 +52,9 @@ pub fn hit_icon(target: &HitTarget) -> LucideIcon {
 pub fn render_similar_sheet(view: &SimilarView, actions: SheetActions, focus: &FocusHandle, theme: &ThemeTokens) -> Stateful<Div> {
     let (close, escape, dismiss) = (actions.on_close.clone(), actions.on_close.clone(), actions.on_close.clone());
     let rows: Vec<AnyElement> = view.hits.iter().enumerate().map(|(index, hit)| render_hit(index, hit, &actions, theme)).collect();
-    let empty = rows.is_empty().then(|| div().p(theme.panel_padding).text_size(theme.font_size_xs).text_color(theme.text_muted).child(t!("semantic.similar.empty").to_string()));
+    let art = || crate::ui::illustration::Illustration::spot(crate::ui::illustration::SpotKey::Connections).width(theme.art_notice_width);
+    let empty_state = || crate::ui::components::art_state(crate::ui::components::ArtState::hint(art(), t!("semantic.similar.empty").to_string()), theme);
+    let empty = rows.is_empty().then(|| div().p(theme.panel_padding).flex().justify_center().child(empty_state()));
     let note = view.note.clone().map(|note| div().px(theme.card_padding).pt(theme.spacing_xs).text_size(theme.font_size_2xs).text_color(theme.text_muted).child(note));
     let list = div().id(LIST_ID).max_h(theme.similar_sheet_max_height).overflow_y_scroll().p(theme.spacing_xs).flex().flex_col().children(rows);
     let card = render_card(theme)

@@ -40,7 +40,10 @@ impl AppView {
         window: &mut Window,
         cx: &mut Context<Self>,
     ) {
-        let ComposerModalEvent::Submit(submission) = event;
+        let submission = match event {
+            ComposerModalEvent::Submit(submission) => submission,
+            ComposerModalEvent::ImageIdeas(text) => return self.open_image_ideas_for_draft(text.clone(), window, cx),
+        };
         let (thread, anchor) = thread_from_submission(submission.clone());
         match self.state.submit_thread(&thread, &anchor) {
             Ok(ids) => {

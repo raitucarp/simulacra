@@ -5,6 +5,7 @@
 //! wraps the native image file dialog used by several features; `document_picker` does the same
 //! for plain-text vault documents.
 
+pub mod art_state;
 pub mod badge;
 pub mod chip;
 pub mod document_picker;
@@ -16,6 +17,7 @@ pub mod segmented;
 pub mod status_dot;
 pub mod stepper;
 
+pub use art_state::{art_state, ArtState};
 pub use badge::{meta_badge, mono_tag, BadgeColors};
 pub use chip::{chip_row, choice_chip};
 pub use document_picker::{

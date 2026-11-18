@@ -9,11 +9,11 @@ use crate::state::forge::{AvatarField, DraftEdit};
 use crate::ui::components::{segment_pill, segmented_track, Segment};
 use crate::ui::features::forge::logic::time_seed;
 use crate::ui::features::forge::text::tr;
-use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
+use crate::ui::features::forge::view::{ForgeEvent, ForgeHandle, ForgeView};
 use crate::ui::features::forge::widgets::ExplainerButton;
 use crate::ui::icons::LucideIcon;
 use crate::ui::illustration::PortraitView;
-use gpui_kit::component::button::Button;
+use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::Disableable;
 use gpui_kit::*;
 
@@ -23,6 +23,8 @@ const EMBLEM_HINT_KEY: &str = "forge.ui.appearance.emblem_hint";
 const REDERIVE_KEY: &str = "forge.ui.appearance.rederive";
 const MODE_ID_PREFIX: &str = "forge-avatar-mode";
 const REDERIVE_ID: &str = "forge-emblem-rederive";
+const IMAGE_IDEAS_ID: &str = "forge-image-ideas";
+const IMAGE_IDEAS_KEY: &str = "image_ideas.open";
 /// The emblem preview is this fraction of the stage portrait.
 const PREVIEW_SCALE: f32 = 0.5;
 
@@ -41,7 +43,7 @@ impl ForgeView {
             .flex()
             .flex_col()
             .gap(theme.section_gap)
-            .child(card(theme).child(self.style_heading()).child(self.mode_switch(AvatarKind::of(mode.as_ref()), handle)))
+            .child(card(theme).child(self.style_heading()).child(self.mode_switch(AvatarKind::of(mode.as_ref()), handle)).child(image_ideas_button(handle)))
             .child(body)
             .into_any_element()
     }
@@ -108,4 +110,10 @@ impl ForgeView {
                     .on_click(move |_, w, cx| rederive(w, cx)),
             )
     }
+}
+
+/// sb D3: "Image ideas", a guided prompt for an avatar drawn by an image model.
+fn image_ideas_button(handle: &ForgeHandle) -> Button {
+    let open = handle.act(|_, _, cx| cx.emit(ForgeEvent::ImageIdeas));
+    Button::new(IMAGE_IDEAS_ID).ghost().icon(LucideIcon::Sparkles).label(tr(IMAGE_IDEAS_KEY)).on_click(move |_, w, cx| open(w, cx))
 }

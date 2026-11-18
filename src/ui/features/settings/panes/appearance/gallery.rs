@@ -42,7 +42,7 @@ pub(super) fn body(pane: &AppearancePanel, handle: &PanelHandle, cx: &App) -> Di
     let bundled: Vec<&ThemePalette> = ThemeRegistry::global().all().iter().filter(visible).collect();
     let mut body = div().flex().flex_col().gap(theme.spacing_md);
     if custom.is_empty() && bundled.is_empty() {
-        return body.child(muted_note(theme, t!("appearance.no_results").to_string()));
+        return body.items_center().child(crate::ui::components::art_state(crate::ui::components::ArtState::hint(crate::ui::illustration::Illustration::empty(crate::ui::illustration::EmptyKey::NoResults).width(theme.art_notice_width), t!("appearance.no_results").to_string()), theme));
     }
     for (title, palettes) in [("appearance.your_themes", custom), ("appearance.bundled_themes", bundled)] {
         if !palettes.is_empty() {

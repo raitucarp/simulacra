@@ -5,9 +5,10 @@ use super::super::events::BeliefsEvent;
 use super::super::{BeliefEdit, BeliefsPanel};
 use super::text::{credence_text, tr};
 use crate::domain::beliefs::{BeliefAction, BeliefId};
-use crate::ui::components::mini_step_button;
 use crate::ui::features::arena::kit::{control_row, ghost_button, line_field, primary_button};
 use crate::ui::icons::LucideIcon;
+use gpui_kit::component::button::{Button, ButtonVariants};
+use gpui_kit::component::{Icon, Sizable};
 use gpui_kit::*;
 
 /// Percent points one step moves the credence.
@@ -16,8 +17,6 @@ const LESS_ID: &str = "belief-edit-less";
 const MORE_ID: &str = "belief-edit-more";
 const SAVE_ID: &str = "belief-edit-save";
 const CANCEL_ID: &str = "belief-edit-cancel";
-const LESS: &str = "−";
-const MORE: &str = "+";
 
 impl BeliefsPanel {
     /// Opens the editor on `edit`, its field holding `proposition`.
@@ -48,9 +47,11 @@ impl BeliefsPanel {
 
     pub(super) fn render_edit(&self, edit: &BeliefEdit, cx: &mut Context<Self>) -> Div {
         let theme = &self.theme;
-        let step = |id: &'static str, label: &'static str, delta: i32| {
+        // Kit buttons, like Save and Cancel beside them: they claim their press, so the first
+        // click after the editor opens registers (a plain div stepper here missed it).
+        let step = |id: &'static str, icon: LucideIcon, delta: i32| {
             let entity = cx.entity().downgrade();
-            mini_step_button(id, label, theme, move |_, cx| {
+            Button::new(id).ghost().xsmall().icon(Icon::new(icon)).on_click(move |_, _, cx| {
                 let _ = entity.update(cx, |panel, cx| panel.step(delta, cx));
             })
         };
@@ -71,7 +72,7 @@ impl BeliefsPanel {
             .flex_col()
             .gap(theme.spacing_xs)
             .child(line_field(&self.wording, theme))
-            .child(control_row(theme).child(step(LESS_ID, LESS, -STEP_POINTS)).child(value).child(step(MORE_ID, MORE, STEP_POINTS)))
+            .child(control_row(theme).child(step(LESS_ID, LucideIcon::Minus, -STEP_POINTS)).child(value).child(step(MORE_ID, LucideIcon::Plus, STEP_POINTS)))
             .child(control_row(theme).child(save).child(cancel))
     }
 }

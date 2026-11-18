@@ -7,6 +7,7 @@
 //! - `handlers`: event handlers by responsibility; `binder` wires them to callbacks.
 //! - `render`: section builders composed by `impl Render`.
 
+mod arena_host;
 mod binder;
 mod consts;
 mod construct;

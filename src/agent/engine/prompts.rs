@@ -12,15 +12,24 @@ pub struct PromptContext {
     pub network_name: String,
     /// Titles of the network's grounding documents.
     pub grounding_docs: Vec<String>,
+    /// sb F1: the agent's "Your current beliefs" section (empty when it holds none).
+    pub beliefs: String,
 }
 
 impl DialecticEngine {
     /// System prompt for `agent_profile` in `context` (the default network when unnamed).
     pub fn system_prompt_in(agent_profile: &Profile, context: &PromptContext) -> String {
-        if context.network_name.is_empty() {
-            return Self::persona_system_prompt(agent_profile);
+        let base = if context.network_name.is_empty() {
+            Self::persona_system_prompt(agent_profile)
+        } else {
+            Self::persona_system_prompt_with_context(agent_profile, &context.network_name, &context.grounding_docs)
+        };
+        match context.beliefs.trim() {
+            "" => base,
+            beliefs => format!("{base}
+
+{beliefs}"),
         }
-        Self::persona_system_prompt_with_context(agent_profile, &context.network_name, &context.grounding_docs)
     }
 
     /// Constructs the full human psychological & linguistic system prompt for a given agent.

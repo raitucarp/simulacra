@@ -1,5 +1,6 @@
 //! Autonomous agent dialectic engine module.
 
+pub mod arena;
 pub mod credentials;
 pub mod custom_request;
 pub mod embedding;

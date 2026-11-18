@@ -73,4 +73,6 @@ command_ids! {
     /// sb C2: the actions sheet on the open thought, and the inspector's outline view.
     PostActions => "post_actions",
     ToggleOutline => "toggle_outline",
+    /// sb D3: image ideas for an avatar (the Forge draft, the roster selection or you).
+    ImageIdeas => "image_ideas",
 }

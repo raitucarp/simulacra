@@ -20,6 +20,8 @@ fn every_typed_key_maps_to_an_existing_asset_and_back() {
     check(ClassKey::ALL, ClassKey::path, "classes");
     check(GuidePose::ALL, GuidePose::path, "guide");
     check(EmptyKey::ALL, EmptyKey::path, "empty");
+    check(SpotKey::ALL, SpotKey::path, "spot");
+    check(NoticeKey::ALL, NoticeKey::path, "notice");
 }
 
 #[test]
@@ -29,6 +31,8 @@ fn canvases_match_the_templates() {
         (ClassKey::StoicSage.path(), ClassKey::KIND),
         (GuidePose::Idle.path(), GuidePose::KIND),
         (EmptyKey::NoPosts.path(), EmptyKey::KIND),
+        (SpotKey::Ideas.path(), SpotKey::KIND),
+        (NoticeKey::NoKey.path(), NoticeKey::KIND),
     ];
     for (path, kind) in pairs {
         let text = template_text(&path).unwrap();

@@ -3,7 +3,7 @@
 
 use super::super::consts::{
     MODAL_BROWSE_IMAGE_BTN_ID, MODAL_CLEAR_IMAGE_INPUT_BTN_ID, MODAL_CLEAR_LINK_BTN_ID,
-    MODAL_IMAGE_INPUT_ROW_ID, MODAL_PICK_IMAGE_BTN_ID, MODAL_TAG_BTN_ID,
+    MODAL_IMAGE_IDEAS_BTN_ID, MODAL_IMAGE_INPUT_ROW_ID, MODAL_PICK_IMAGE_BTN_ID, MODAL_TAG_BTN_ID,
     MODAL_TOGGLE_IMAGE_INPUT_BTN_ID, MODAL_TOGGLE_LINK_BTN_ID,
 };
 use super::{ComposerModalView, ModalActionCallback};
@@ -47,6 +47,7 @@ impl ComposerModalView {
         let toggle_image = self.callbacks.on_toggle_image.clone();
         let toggle_link = self.callbacks.on_toggle_link.clone();
         let insert_tag = self.callbacks.on_insert_tag.clone();
+        let image_ideas = self.callbacks.on_image_ideas.clone();
         div()
             .w_full()
             .flex()
@@ -72,6 +73,11 @@ impl ComposerModalView {
                 attachment_button(MODAL_TAG_BTN_ID, LucideIcon::Hash)
                     .tooltip(t!("composer.insert_tag").to_string())
                     .on_click(move |_, window, cx| (insert_tag)(window, cx)),
+            )
+            .child(
+                attachment_button(MODAL_IMAGE_IDEAS_BTN_ID, LucideIcon::Sparkles)
+                    .tooltip(t!("image_ideas.open").to_string())
+                    .on_click(move |_, window, cx| (image_ideas)(window, cx)),
             )
     }
 }

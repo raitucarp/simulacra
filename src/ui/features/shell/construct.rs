@@ -2,6 +2,7 @@
 
 use super::feed_state::FeedState;
 use super::graph_state::GraphState;
+use super::image_ideas_state::ImageIdeasUi;
 use super::import_state::ImportUi;
 use super::inspector_state::InspectorState;
 use super::lab_state::{LabState, LlmInputs};
@@ -59,7 +60,7 @@ impl AppView {
         let scheduler = SchedulerState::new(state.scheduler_enabled(), state.preferences().agents.max_concurrent as usize);
         let (sidebar, palette) = (SidebarState::load(state.db.as_ref(), window.viewport_size().width), PaletteHost::new(state.db.as_ref(), cx));
         let mut view = Self {
-            theme: state.theme_tokens.clone(), post_actions: PostActionsUi::new(window, cx), inspector: InspectorState::load(state.db.as_ref(), cx),
+            theme: state.theme_tokens.clone(), post_actions: PostActionsUi::new(window, cx), image_ideas: ImageIdeasUi::new(window, cx), inspector: InspectorState::load(state.db.as_ref(), cx),
             state,
             chrome: ChromeState { is_onboarding_open: onboarding, ..ChromeState::new(initial_lang) },
             feed, composer_modal, appearance, llm_inputs, settings_ui,

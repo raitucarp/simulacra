@@ -51,6 +51,8 @@ pub enum ForgeEvent {
     /// Send this suggestion request (within the daily AI budget), then call
     /// [`ForgeView::suggestions_arrived`].
     Suggest(SuggestJob),
+    /// sb D3: open the image ideas sheet for the draft's avatar.
+    ImageIdeas,
 }
 
 /// The Agent Forge entity.

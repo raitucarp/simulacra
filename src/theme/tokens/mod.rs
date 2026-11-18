@@ -125,6 +125,7 @@ theme_tokens! {
         review_page_max_width, review_card_max_width, review_card_min_height, review_progress_height, review_grade_button_height, review_chart_height, review_bar_min_height, review_bar_max_width, review_heatmap_cell_min, review_heatmap_cell_max, review_heatmap_gap, review_swatch_size, review_empty_art_width, review_maker_max_height, review_sentence_list_height, review_count_tile_width, review_stat_label_width, // sb C1: review page, item card, grade buttons, charts, sheet height
         review_learn_sheet_width, review_map_height, review_map_point_width, review_map_point_height, review_map_label_width, review_map_edge_width, // sb C1b: learn sheet, connection map canvas, point chips, relation labels, strokes
         suggest_chip_max_width, suggest_chip_row_height, suggest_band_height, suggest_tick_width, suggest_card_width, // sb D1: suggestion chips, typical band on sliders, Why card
+        art_empty_width, art_notice_width, art_spot_width, art_compact_width, image_ideas_sheet_width, image_ideas_sheet_height, image_ideas_picks_width, image_ideas_chip_width, image_ideas_chip_art_width, image_ideas_result_size, // sb D3: app-wide art widths, image ideas sheet
     ],
     // Typography Hierarchy & Line Height; heatmap level opacities; graph dimming & curvature
     floats: [

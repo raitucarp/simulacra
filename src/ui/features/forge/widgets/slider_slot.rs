@@ -124,7 +124,7 @@ pub fn keyboard_slider(
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use super::{fresh_slider, SliderRange};
     use crate::domain::portrait::{ZOOM_MAX, ZOOM_MIN, ZOOM_STEP};
 
     #[test]

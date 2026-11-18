@@ -77,6 +77,7 @@ impl AppView {
             ForgeEvent::ImportPhoto(path) => self.import_forge_photo(forge, path, cx),
             ForgeEvent::OpenAiSettings => self.open_ai_settings(window, cx),
             ForgeEvent::Suggest(job) => self.run_forge_suggest(forge, job.clone(), window, cx),
+            ForgeEvent::ImageIdeas => self.open_image_ideas_for_forge(window, cx),
         }
         cx.notify();
     }
@@ -105,7 +106,7 @@ impl AppView {
     }
 
     /// Copies a picked photo into the vault and hands the avatar to the forge.
-    fn import_forge_photo(&mut self, forge: &Entity<ForgeView>, path: &Path, cx: &mut Context<Self>) {
+    pub(super) fn import_forge_photo(&mut self, forge: &Entity<ForgeView>, path: &Path, cx: &mut Context<Self>) {
         let draft_id = forge.read(cx).draft.id().clone();
         match self.state.import_avatar_photo(&draft_id, path) {
             Ok(mode) => {

@@ -11,14 +11,16 @@ const STEPS: u32 = 25;
 const CFG: f32 = 7.0;
 const OUTPUT_PREFIX: &str = "simulacra";
 
-/// A checkpoint → CLIP encode → KSampler → VAE decode → SaveImage graph.
-pub fn comfy_workflow(checkpoint: &str, prompt: &str, width: u32, height: u32) -> Value {
+/// A checkpoint → CLIP encode → KSampler → VAE decode → SaveImage graph; `negative` replaces
+/// the default negative prompt.
+pub fn comfy_workflow(checkpoint: &str, prompt: &str, negative: Option<&str>, width: u32, height: u32) -> Value {
+    let negative = negative.filter(|text| !text.trim().is_empty()).unwrap_or(NEGATIVE_PROMPT);
     let checkpoint = if checkpoint.trim().is_empty() { DEFAULT_CHECKPOINT } else { checkpoint.trim() };
     let seed = uuid::Uuid::new_v4().as_u64_pair().0 >> 12;
     json!({
         "1": { "class_type": "CheckpointLoaderSimple", "inputs": { "ckpt_name": checkpoint } },
         "2": { "class_type": "CLIPTextEncode", "inputs": { "text": prompt, "clip": ["1", 1] } },
-        "3": { "class_type": "CLIPTextEncode", "inputs": { "text": NEGATIVE_PROMPT, "clip": ["1", 1] } },
+        "3": { "class_type": "CLIPTextEncode", "inputs": { "text": negative, "clip": ["1", 1] } },
         "4": { "class_type": "EmptyLatentImage", "inputs": { "width": width, "height": height, "batch_size": 1 } },
         "5": { "class_type": "KSampler", "inputs": {
             "model": ["1", 0], "positive": ["2", 0], "negative": ["3", 0], "latent_image": ["4", 0],

@@ -7,6 +7,7 @@ use super::reply::{build_followup, build_reply};
 use super::DialecticEngine;
 use crate::agent::runtime::{run_engine, EnginePlan, EngineResult};
 use crate::agent::tools::ToolContext;
+use crate::domain::image_prompt::subject_from_config;
 use crate::domain::{AuthoredPost, NetworkId, Profile};
 use tokio::sync::oneshot;
 
@@ -40,7 +41,8 @@ impl DialecticEngine {
     }
 
     /// Runs `job` on a fresh current-thread Tokio runtime (blocking the caller).
-    pub fn run_engine_job(job: EngineJob) -> SimulationOutcome {
+    pub fn run_engine_job(mut job: EngineJob) -> SimulationOutcome {
+        job.plan.image_subject = subject_from_config(&job.agent.config);
         let system = Self::system_prompt_in(&job.agent, &job.context);
         let user = Self::persona_user_prompt(&job.parent, &job.agent);
         let runtime = tokio::runtime::Builder::new_current_thread().enable_all().build();

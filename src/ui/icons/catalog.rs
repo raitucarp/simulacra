@@ -125,8 +125,7 @@ lucide_catalog! {
     Languages => "icons/languages.svg",
     MapPin => "icons/map-pin.svg",
     Feather => "icons/feather.svg", Inbox => "icons/inbox.svg", Pilcrow => "icons/pilcrow.svg", VenetianMask => "icons/venetian-mask.svg", // Import and capture
-    // sb C2: post actions and the outline view
-    Network => "icons/network.svg", Shield => "icons/shield.svg", Scale => "icons/scale.svg", Puzzle => "icons/puzzle.svg", Swords => "icons/swords.svg", Gauge => "icons/gauge.svg", GitCompareArrows => "icons/git-compare-arrows.svg", FlaskConical => "icons/flask-conical.svg", ListTree => "icons/list-tree.svg", ChevronsDownUp => "icons/chevrons-down-up.svg",
+    Network => "icons/network.svg", Shield => "icons/shield.svg", Scale => "icons/scale.svg", Puzzle => "icons/puzzle.svg", Swords => "icons/swords.svg", Gauge => "icons/gauge.svg", GitCompareArrows => "icons/git-compare-arrows.svg", FlaskConical => "icons/flask-conical.svg", ListTree => "icons/list-tree.svg", ChevronsDownUp => "icons/chevrons-down-up.svg", // sb C2: post actions and the outline view
     // sb C1: review page, quizzes and statistics
     GraduationCap => "icons/graduation-cap.svg",
     Layers => "icons/layers.svg",
@@ -143,5 +142,6 @@ lucide_catalog! {
     Pause => "icons/pause.svg",
     Play => "icons/play.svg",
     MessageSquareReply => "icons/message-square-reply.svg", CircleStop => "icons/circle-stop.svg", Eraser => "icons/eraser.svg", ArrowLeftRight => "icons/arrow-left-right.svg", ListChecks => "icons/list-checks.svg", // sb C1b
+    NotebookPen => "icons/notebook-pen.svg", HeartPulse => "icons/heart-pulse.svg", Timer => "icons/timer.svg", Mail => "icons/mail.svg", MailOpen => "icons/mail-open.svg", LockOpen => "icons/lock-open.svg", Shuffle => "icons/shuffle.svg", Paperclip => "icons/paperclip.svg", HandHeart => "icons/hand-heart.svg", // sb E3
     Waypoints => "icons/waypoints.svg", Atom => "icons/atom.svg", Percent => "icons/percent.svg", ChartScatter => "icons/chart-scatter.svg", Split => "icons/split.svg", CalendarClock => "icons/calendar-clock.svg", GripVertical => "icons/grip-vertical.svg", // sb E1
 }

@@ -30,7 +30,7 @@ impl Render for AppView {
         self.sync_views(window, cx);
         let bind = Binder::new(cx);
         let class = LayoutClass::of_window(window, &self.theme);
-        let columns = self.render_columns(class);
+        let columns = self.journal_focus_view().unwrap_or_else(|| self.render_columns(class).into_any_element());
 
         let root = div()
             .w_full()
@@ -79,6 +79,7 @@ impl AppView {
         self.sync_media(window, cx);
         self.sync_review(window, cx);
         self.sync_insights(cx);
+        self.sync_journal(window, cx);
         self.sync_thinking(cx);
         self.sync_forge_theme(cx);
     }

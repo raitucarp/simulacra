@@ -100,6 +100,9 @@ art_keys! {
         InspectorIdle => "inspector_idle", ActionsIdle => "actions_idle", ImageIdeas => "image_ideas",
         ImageResults => "image_results", ImportNothing => "import_nothing", CredentialsNone => "credentials_none",
         SubjectsNone => "subjects_none",
+        // sb E3
+        JournalEmpty => "journal_empty", MoodEmpty => "mood_empty", FocusEmpty => "focus_empty", CapsulesEmpty => "capsules_empty",
+        CapsuleSealed => "capsule_sealed",
     }
 }
 
@@ -108,6 +111,7 @@ art_keys! {
     SpotKey in "spot" as TraitCard {
         Ideas => "ideas", Connections => "connections", Memory => "memory", Reading => "reading",
         Writing => "writing", Debate => "debate", Calm => "calm",
+        Journal => "journal", // sb E3: the Journal page header
     }
 }
 

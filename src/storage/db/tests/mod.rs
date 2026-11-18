@@ -2,6 +2,7 @@
 
 mod catalogue;
 mod embeddings;
+mod journal;
 mod location;
 mod media;
 mod posts;

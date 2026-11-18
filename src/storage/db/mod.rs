@@ -8,6 +8,8 @@ mod catalogue;
 mod dismissed_seeds;
 mod embeddings;
 mod embeddings_schema;
+mod journal;
+mod journal_schema;
 pub mod location;
 mod media;
 mod media_schema;
@@ -35,6 +37,7 @@ pub(super) mod versions;
 mod tests;
 
 pub use catalogue::{build_catalogue_search, fts_match_expression, CatalogueSearch, DocumentText};
+pub use journal::StoredRecord;
 pub use preferences::{preference_rows, PREFERENCE_KEYS};
 pub use setting_key::SettingKey;
 

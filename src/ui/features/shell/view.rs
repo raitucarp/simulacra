@@ -17,6 +17,7 @@ use super::settings_ui::SettingsUi;
 use super::vault_host::VaultHost;
 use super::review_host::ReviewHost;
 use super::insights_host::InsightsHost;
+use super::journal_host::JournalHost;
 use super::thinking_host::ThinkingHost;
 use crate::i18n::Language;
 use crate::state::AppState;
@@ -55,6 +56,8 @@ pub struct AppView {
     pub review: ReviewHost,
     /// The Insights page and its background report (sb D2).
     pub insights: InsightsHost,
+    /// The private Journal page and its records (sb E3).
+    pub journal: JournalHost,
     /// The Agent Forge while it is open (it replaces the center and right columns).
     pub forge: Option<ForgeSession>,
     /// Left sidebar prefs (width, sections, pins, recents) and the window width.

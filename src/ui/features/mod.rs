@@ -9,6 +9,7 @@ pub mod forge;
 pub mod image_prompt;
 pub mod import;
 pub mod insights;
+pub mod journal;
 pub mod media;
 pub mod mind_graph;
 pub mod onboarding;

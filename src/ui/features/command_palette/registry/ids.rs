@@ -84,6 +84,12 @@ command_ids! {
     InsightsActivity => "insights_activity",
     /// sb D3: image ideas for an avatar (the Forge draft, the roster selection or you).
     ImageIdeas => "image_ideas",
+    /// sb E3: the Journal page and its quick starts.
+    GoJournal => "go_journal",
+    NewJournalEntry => "new_journal_entry",
+    LogMood => "log_mood",
+    StartFocus => "start_focus",
+    NewTimeCapsule => "new_time_capsule",
     /// sb E1: the Calibration and Tensions views, resolving due predictions, the argument map.
     InsightsCalibration => "insights_calibration",
     InsightsTensions => "insights_tensions",

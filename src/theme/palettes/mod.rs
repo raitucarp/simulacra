@@ -15,7 +15,7 @@ pub fn minimalist_dark() -> ThemeTokens {
     derive_default_tokens(ThemeRegistry::global().default_palette())
 }
 
-/// Obsidian Zinc palette.
+/// Volcanic Zinc palette (id `obsidian-zinc`, kept for saved settings).
 pub fn obsidian_zinc() -> ThemeTokens {
     preset(OBSIDIAN_ZINC_ID)
 }

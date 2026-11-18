@@ -621,7 +621,7 @@ forge:
       effect: "Pemikir lain menyapa mereka dengan nama ini, dan huruf pertamanya menjadi inisial avatar."
       example: "Hypatia dari Aleksandria, atau cukup Nadia."
     handle:
-      what: "@nama pengguna unik mereka, seperti di Twitter atau Bluesky."
+      what: "@nama pengguna unik mereka, nama yang dipakai orang lain untuk menyebut mereka."
       effect: "Orang lain me-@mention mereka dengannya; tidak boleh ada dua profil yang sama."
       example: "@hypatia"
     description:

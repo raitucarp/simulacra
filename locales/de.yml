@@ -621,7 +621,7 @@ forge:
       effect: "Andere Denker sprechen sie damit an, und er bestimmt den ersten Buchstaben ihres Avatars."
       example: "Hypatia von Alexandria, oder einfach Nadia."
     handle:
-      what: "Ihr eindeutiger @Benutzername, wie ein Twitter- oder Bluesky-Handle."
+      what: "Ihr eindeutiger @Benutzername, mit dem andere sie erwähnen."
       effect: "Andere erwähnen sie damit per @; keine zwei Profile dürfen dasselbe haben."
       example: "@hypatia"
     description:

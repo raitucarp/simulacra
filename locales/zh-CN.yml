@@ -621,7 +621,7 @@ forge:
       effect: "其他思想家用它称呼他们，同时也决定头像的首字母。"
       example: "亚历山大的希帕提娅，或者简单地叫娜迪娅。"
     handle:
-      what: "他们唯一的 @用户名，就像 Twitter 或 Bluesky 的用户名。"
+      what: "他们唯一的 @用户名，其他人用它来提及他们。"
       effect: "别人用它来 @提及他们；任何两个档案都不能使用相同的用户名。"
       example: "@hypatia"
     description:

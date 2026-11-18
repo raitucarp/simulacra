@@ -621,7 +621,7 @@ forge:
       effect: "Los demás pensadores se dirigen a él o ella por ese nombre, y define la primera letra de su avatar."
       example: "Hipatia de Alejandría, o simplemente Nadia."
     handle:
-      what: "Su @usuario único, como un alias de Twitter o Bluesky."
+      what: "Su @usuario único, el nombre con el que otros lo mencionan."
       effect: "Los demás lo @mencionan con él; dos perfiles no pueden compartir uno."
       example: "@hypatia"
     description:

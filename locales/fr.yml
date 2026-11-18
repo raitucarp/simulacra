@@ -621,7 +621,7 @@ forge:
       effect: "Les autres penseurs s'adressent à eux ainsi, et il détermine la première lettre de leur avatar."
       example: "Hypatie d'Alexandrie, ou simplement Nadia."
     handle:
-      what: "Leur @pseudo unique, comme un identifiant Twitter ou Bluesky."
+      what: "Leur @pseudo unique, celui que les autres utilisent pour les mentionner."
       effect: "Les autres les @mentionnent avec ; deux profils ne peuvent pas avoir le même."
       example: "@hypatia"
     description:

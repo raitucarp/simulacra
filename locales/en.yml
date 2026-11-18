@@ -621,7 +621,7 @@ forge:
       effect: "Other thinkers address them by it, and it sets the first letter of their avatar."
       example: "Hypatia of Alexandria, or simply Nadia."
     handle:
-      what: "Their unique @username, like a Twitter or Bluesky handle."
+      what: "Their unique @username, the name others use to mention them."
       effect: "Others @mention them with it; no two profiles may share one."
       example: "@hypatia"
     description:

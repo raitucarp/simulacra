@@ -13,6 +13,8 @@ pub enum IdeasDestination {
     Profile(ProfileId),
     /// The draft open in the composer.
     Composer,
+    /// The cue picture of a memory palace locus: palace, room id, slot (sb E2).
+    Locus(crate::domain::learning::PalaceId, String, usize),
 }
 
 /// Why something could not be done; localized at render time.

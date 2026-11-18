@@ -1,6 +1,7 @@
 //! Learning: spaced-repetition review limits, desired retention and the review reminder.
 
 use super::super::bounds::{Bounds, HOUR_OF_DAY};
+use super::super::choices::ReviewWeekday;
 use serde::{Deserialize, Serialize};
 
 /// Reviews per day.
@@ -13,6 +14,7 @@ const DEFAULT_DAILY_REVIEWS: u32 = 200;
 const DEFAULT_NEW_CARDS: u32 = 20;
 const DEFAULT_RETENTION: u32 = 90;
 const DEFAULT_REMINDER_HOUR: u32 = 9;
+const DEFAULT_WEEKLY_HOUR: u32 = 18;
 
 /// Review preferences.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -28,6 +30,12 @@ pub struct LearningPrefs {
     pub review_reminder: bool,
     /// Local hour of the reminder.
     pub reminder_hour: u32,
+    /// A weekly notification to do the weekly review (sb E2).
+    pub weekly_review_reminder: bool,
+    /// The weekday of the weekly review.
+    pub weekly_review_day: ReviewWeekday,
+    /// Local hour of the weekly review reminder.
+    pub weekly_review_hour: u32,
 }
 
 impl Default for LearningPrefs {
@@ -38,6 +46,9 @@ impl Default for LearningPrefs {
             desired_retention: DEFAULT_RETENTION,
             review_reminder: false,
             reminder_hour: DEFAULT_REMINDER_HOUR,
+            weekly_review_reminder: false,
+            weekly_review_day: ReviewWeekday::default(),
+            weekly_review_hour: DEFAULT_WEEKLY_HOUR,
         }
     }
 }
@@ -51,6 +62,7 @@ impl LearningPrefs {
             new_cards_per_day: NEW_CARDS.clamp_u32(self.new_cards_per_day).min(daily_review_limit),
             desired_retention: DESIRED_RETENTION.clamp_u32(self.desired_retention),
             reminder_hour: HOUR_OF_DAY.clamp_u32(self.reminder_hour),
+            weekly_review_hour: HOUR_OF_DAY.clamp_u32(self.weekly_review_hour),
             ..self
         }
     }

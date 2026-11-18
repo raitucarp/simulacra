@@ -1,9 +1,9 @@
 //! Fields of the Agents & Simulation and Learning categories.
 
 use super::macros::category_fields;
-use super::value::{count, number, number_value, toggle, FieldKind, NumberUnit, SettingValue};
+use super::value::{choice, choice_value, choices, count, number, number_value, toggle, FieldKind, NumberUnit, SettingValue};
 use crate::domain::preferences::{AgentPrefs, MAX_CONCURRENT, POSTS_PER_HOUR, REPLY_DEPTH};
-use crate::domain::preferences::{LearningPrefs, DAILY_REVIEWS, DESIRED_RETENTION, HOUR_OF_DAY, NEW_CARDS};
+use crate::domain::preferences::{LearningPrefs, ReviewWeekday, DAILY_REVIEWS, DESIRED_RETENTION, HOUR_OF_DAY, NEW_CARDS};
 
 category_fields! {
     /// An Agents & Simulation preference.
@@ -55,6 +55,7 @@ category_fields! {
     LearningField {
         DailyReviewLimit => "daily_review_limit", NewCardsPerDay => "new_cards_per_day",
         DesiredRetention => "desired_retention", ReviewReminder => "review_reminder", ReminderHour => "reminder_hour",
+        WeeklyReminder => "weekly_review_reminder", WeeklyDay => "weekly_review_day", WeeklyHour => "weekly_review_hour",
     }
 }
 
@@ -65,7 +66,9 @@ impl LearningField {
             Self::NewCardsPerDay => number(NEW_CARDS, NumberUnit::Cards),
             Self::DesiredRetention => number(DESIRED_RETENTION, NumberUnit::Percent),
             Self::ReviewReminder => FieldKind::Toggle,
-            Self::ReminderHour => number(HOUR_OF_DAY, NumberUnit::Hour),
+            Self::ReminderHour | Self::WeeklyHour => number(HOUR_OF_DAY, NumberUnit::Hour),
+            Self::WeeklyReminder => FieldKind::Toggle,
+            Self::WeeklyDay => choices::<ReviewWeekday>(),
         }
     }
 
@@ -76,6 +79,9 @@ impl LearningField {
             Self::DesiredRetention => number_value(prefs.desired_retention),
             Self::ReviewReminder => SettingValue::Toggle(prefs.review_reminder),
             Self::ReminderHour => number_value(prefs.reminder_hour),
+            Self::WeeklyReminder => SettingValue::Toggle(prefs.weekly_review_reminder),
+            Self::WeeklyDay => choice_value(prefs.weekly_review_day),
+            Self::WeeklyHour => number_value(prefs.weekly_review_hour),
         }
     }
 
@@ -86,6 +92,9 @@ impl LearningField {
             Self::DesiredRetention => LearningPrefs { desired_retention: count(value, prefs.desired_retention), ..prefs },
             Self::ReviewReminder => LearningPrefs { review_reminder: toggle(value, prefs.review_reminder), ..prefs },
             Self::ReminderHour => LearningPrefs { reminder_hour: count(value, prefs.reminder_hour), ..prefs },
+            Self::WeeklyReminder => LearningPrefs { weekly_review_reminder: toggle(value, prefs.weekly_review_reminder), ..prefs },
+            Self::WeeklyDay => LearningPrefs { weekly_review_day: choice(value, prefs.weekly_review_day), ..prefs },
+            Self::WeeklyHour => LearningPrefs { weekly_review_hour: count(value, prefs.weekly_review_hour), ..prefs },
         }
     }
 }

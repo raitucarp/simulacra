@@ -67,6 +67,7 @@ const AGENTS: &[SettingsGroup] = &[
 const LEARNING: &[SettingsGroup] = &[
     group("reviews", &[Field(F::Learning(Lrn::DailyReviewLimit)), Field(F::Learning(Lrn::NewCardsPerDay)), Field(F::Learning(Lrn::DesiredRetention))]),
     group("reminder", &[Field(F::Learning(Lrn::ReviewReminder)), Field(F::Learning(Lrn::ReminderHour))]),
+    group("weekly", &[Field(F::Learning(Lrn::WeeklyReminder)), Field(F::Learning(Lrn::WeeklyDay)), Field(F::Learning(Lrn::WeeklyHour))]), // sb E2
 ];
 const IMPORT: &[SettingsGroup] = &[
     group("splitting", &[Field(F::Import(Imp::Segmentation)), Field(F::Import(Imp::Identity))]),

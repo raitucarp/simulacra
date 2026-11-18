@@ -6,6 +6,7 @@ use crate::domain::review::queue::{plan_today, DailyLimits, TodayPlan};
 use crate::domain::review::schedule::Policy;
 use crate::domain::review::{ItemId, ReviewEntry, ReviewItem};
 use crate::domain::{NetworkId, Post, Profile};
+use crate::ui::features::review::learning::LearningData;
 use chrono::NaiveDate;
 use std::collections::HashMap;
 use std::rc::Rc;
@@ -34,12 +35,14 @@ pub struct ReviewData {
     pub posts: PostViews,
     /// Vault document titles by id.
     pub documents: Rc<HashMap<String, String>>,
+    /// The Learn tab's goals, sessions, palaces, radar and weekly digest (sb E2).
+    pub learning: Rc<LearningData>,
 }
 
 impl ReviewData {
     /// An empty page for `network_id`.
     pub fn empty(network_id: NetworkId, today: NaiveDate, limits: DailyLimits, policy: Policy) -> Self {
-        Self { network_id, items: Vec::new(), log: Vec::new(), today, limits, policy, posts: Rc::default(), documents: Rc::default() }
+        Self { network_id, items: Vec::new(), log: Vec::new(), today, limits, policy, posts: Rc::default(), documents: Rc::default(), learning: Rc::default() }
     }
 
     pub fn item(&self, id: &ItemId) -> Option<&ReviewItem> {

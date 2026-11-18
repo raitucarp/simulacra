@@ -35,6 +35,8 @@ pub struct ReviewHost {
     stamp: Option<Stamp>,
     /// The review day the reminder was last shown on.
     reminded_on: Option<NaiveDate>,
+    /// Goals, tutor sessions and palaces of the Learn tab (sb E2).
+    pub learning: super::learning_host::LearningHost,
 }
 
 /// Today's review day in local time.
@@ -57,7 +59,8 @@ impl ReviewHost {
         let panel = cx.new(|cx| ReviewPanel::new(data, theme.clone(), window, cx));
         let learn = cx.new(|cx| LearnSheet::new(theme, window, cx));
         let subscriptions = vec![cx.subscribe_in(&panel, window, AppView::handle_review_event), cx.subscribe_in(&learn, window, AppView::handle_learn_event)];
-        (Self { panel, learn, deck, due: 0, version: 0, stamp: None, reminded_on: None }, subscriptions)
+        let learning = super::learning_host::LearningHost::load(state);
+        (Self { panel, learn, deck, due: 0, version: 0, stamp: None, reminded_on: None, learning }, subscriptions)
     }
 }
 
@@ -80,6 +83,7 @@ impl AppView {
         self.review.panel.update(cx, |panel, cx| panel.set_theme(&theme, cx));
         self.review.learn.update(cx, |sheet, cx| sheet.set_theme(&theme, cx));
         self.remind_review(today, window, cx);
+        self.remind_weekly_review(today, window, cx);
     }
 
     /// Marks items whose post was deleted as retired, and saves them.

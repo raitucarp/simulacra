@@ -38,6 +38,7 @@ impl AppView {
             }
             IdeasDestination::Profile(id) => self.set_profile_photo(&id, &path, window, cx),
             IdeasDestination::Composer => self.composer_modal.update(cx, |panel, cx| panel.attach_paths(vec![path], window, cx)),
+            IdeasDestination::Locus(palace, room, slot) => self.set_locus_image(&palace, &room, slot, &path, cx),
         }
         self.close_image_ideas(window, cx);
     }

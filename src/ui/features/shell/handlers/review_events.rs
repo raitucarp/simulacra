@@ -6,6 +6,8 @@ use super::super::review_host::{learning_policy, review_today};
 use super::super::view::AppView;
 use crate::domain::review::{apply_answer, Anchor, Answer, ItemId, ReviewItem};
 use crate::domain::PostId;
+use super::learning_events::learning_post_ids;
+use crate::ui::features::review::learning::LearningData;
 use crate::ui::features::review::{PickerMode, PostView, PostViews, ReviewData, ReviewEvent, ReviewPanel};
 use chrono::{NaiveDate, Utc};
 use gpui_kit::*;
@@ -28,6 +30,7 @@ impl AppView {
             ReviewEvent::SaveMap { id, map } => self.save_connection_map(id, map, window, cx),
             ReviewEvent::SetSuspended(id, suspended) => self.update_review_item(&id, |item| ReviewItem { suspended, ..item }, cx),
             ReviewEvent::DeleteItem(id) => self.delete_review_item(&id, cx),
+            ReviewEvent::Learning(event) => self.handle_learning_event(event, window, cx),
         }
     }
 
@@ -37,10 +40,11 @@ impl AppView {
     }
 
     /// Views of the posts `items` refer to (anchors and map points).
-    fn referenced_posts(&self, items: &[ReviewItem]) -> PostViews {
+    fn referenced_posts(&self, items: &[ReviewItem], learning: &LearningData) -> PostViews {
         let anchors = items.iter().filter_map(|item| item.subject.anchor()).filter_map(Anchor::post_id);
         let points = items.iter().filter_map(|item| item.subject.map()).flat_map(|map| map.points.iter().filter_map(|p| p.anchor()?.post_id()));
-        let views: HashMap<String, PostView> = anchors.chain(points).filter_map(|id| self.post_view(id.as_str()).map(|view| (id.as_str().to_string(), view))).collect();
+        let learnt = learning_post_ids(learning).into_iter().map(PostId::new);
+        let views: HashMap<String, PostView> = anchors.chain(points).chain(learnt).filter_map(|id| self.post_view(id.as_str()).map(|view| (id.as_str().to_string(), view))).collect();
         Rc::new(views)
     }
 
@@ -49,9 +53,10 @@ impl AppView {
     pub(in crate::ui::features::shell) fn review_data(&self, today: NaiveDate) -> ReviewData {
         let deck = self.review.deck.of_network(&self.state.active_network_id);
         let (limits, policy) = learning_policy(&self.state.preferences().learning);
-        let posts = self.referenced_posts(&deck.items);
+        let learning = self.learning_data(&deck, today, &policy);
+        let posts = self.referenced_posts(&deck.items, &learning);
         let documents = Rc::new(self.state.current_documents().map(|doc| (doc.id.clone(), doc.title.clone())).collect());
-        ReviewData { network_id: self.state.active_network_id.clone(), items: deck.items, log: deck.log, today, limits, policy, posts, documents }
+        ReviewData { network_id: self.state.active_network_id.clone(), items: deck.items, log: deck.log, today, limits, policy, posts, documents, learning: Rc::new(learning) }
     }
 
     /// Applies `answer` to its item, logs it and queues both for the vault.

@@ -10,7 +10,8 @@ impl AppView {
     /// Opens the palette in `mode` (or switches the open one by reopening it).
     pub(crate) fn open_palette(&mut self, mode: PaletteMode, window: &mut Window, cx: &mut Context<Self>) {
         self.palette.is_sheet_open = false;
-        let (items, history, theme) = (collect_items(&self.state), self.palette.history.clone(), self.theme.clone());
+        let items = collect_items(&self.state).into_iter().chain(self.journal_palette_items()).collect();
+        let (history, theme) = (self.palette.history.clone(), self.theme.clone());
         let palette = cx.new(|cx| CommandPalette::new(items, history, mode, theme, window, cx));
         self.palette.subscription = Some(cx.subscribe_in(&palette, window, Self::on_palette_event));
         self.palette.palette = Some(palette);
@@ -45,6 +46,7 @@ impl AppView {
             PaletteTarget::Post(id) => self.reveal_post(id, window, cx),
             PaletteTarget::Document(id) => self.open_nav_item(NavRef::Document(id), window, cx),
             PaletteTarget::Settings(tab) => self.open_settings_tab(tab, window, cx),
+            PaletteTarget::JournalEntry(id) => self.open_journal_entry(id, window, cx),
         }
     }
 

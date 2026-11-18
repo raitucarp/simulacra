@@ -28,5 +28,7 @@ gpui_kit::assets::icon_assets!(
         TextCursorInput, Trophy, Pause, Play,
         // sb C1b
         MessageSquareReply, CircleStop, Eraser, ArrowLeftRight, ListChecks,
+        // sb E3
+        NotebookPen, HeartPulse, Timer, Mail, MailOpen, LockOpen, Shuffle, Paperclip, HandHeart,
     ]
 );

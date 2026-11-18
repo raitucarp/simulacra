@@ -48,6 +48,15 @@ impl ComposerModalPanel {
         }
     }
 
+    /// Opens the modal in `mode` with `text` in its first post (sb E3: "Turn into a post").
+    pub fn open_with_text(&mut self, mode: ComposerModalMode, text: String, window: &mut Window, cx: &mut Context<Self>) {
+        self.open(mode, window, cx);
+        if let Some(input) = self.drafts.first().map(|slot| slot.input.clone()) {
+            input.update(cx, |state, cx| state.set_value(text, window, cx));
+        }
+        cx.notify();
+    }
+
     /// Appends an empty post to the thread and focuses it.
     pub(super) fn add_draft(&mut self, window: &mut Window, cx: &mut Context<Self>) {
         let slot = self.new_draft_slot(window, cx);

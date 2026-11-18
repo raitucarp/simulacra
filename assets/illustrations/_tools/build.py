@@ -9,7 +9,8 @@ import kit  # noqa: E402
 MODULES = ['cards_mbti', 'cards_mind', 'cards_self', 'cards_voice', 'cards_world', 'scenes', 'classes', 'portrait', 'forms',
            'cards_beings', 'cards_body', 'cards_rhetoric', 'cards_engine', 'palettes', 'settings_art', 'vault_art', 'import_art',
            'review_art',
-           'spot_art', 'notice_art', 'app_art', 'image_prompt_art']  # sb D3
+           'spot_art', 'notice_art', 'app_art', 'image_prompt_art',  # sb D3
+           'journal_art']  # sb E3
 
 if __name__ == '__main__':
     for name in sys.argv[1:] or MODULES:

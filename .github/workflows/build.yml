@@ -1,0 +1,121 @@
+name: Build installers
+
+# Reusable: builds release binaries for Windows x64, macOS (Apple silicon and Intel) and Linux x64,
+# packages installers with cargo-packager (NSIS setup, DMG, .deb, AppImage) plus plain archives,
+# and uploads them as `dist-<platform>` artifacts. CI calls it on pushes to main (which also keeps
+# the release cache warm for tags); the Release workflow calls it before publishing. It can also
+# be started by hand from the Actions tab to try packaging changes on any branch.
+
+on:
+  workflow_call:
+    inputs:
+      ref:
+        description: Commit, branch or tag to build (defaults to the triggering commit)
+        type: string
+        default: ""
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_INCREMENTAL: 0
+
+jobs:
+  build:
+    name: Build (${{ matrix.name }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: Windows x64
+            os: windows-latest
+            target: x86_64-pc-windows-msvc
+            formats: nsis
+            slug: windows-x64
+          - name: macOS Apple silicon
+            os: macos-latest
+            target: aarch64-apple-darwin
+            formats: dmg
+            slug: macos-arm64
+          - name: macOS Intel
+            os: macos-latest
+            target: x86_64-apple-darwin
+            formats: dmg
+            slug: macos-x64
+          - name: Linux x64
+            os: ubuntu-22.04
+            target: x86_64-unknown-linux-gnu
+            formats: deb,appimage
+            slug: linux-x64
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 120
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.ref || github.sha }}
+
+      - name: Read the version
+        run: echo "VERSION=$(grep -m1 '^version' Cargo.toml | cut -d'"' -f2)" >> "$GITHUB_ENV"
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: Install Linux system libraries
+        if: runner.os == 'Linux'
+        run: bash .github/scripts/install-linux-deps.sh
+
+      # Release builds cannot reuse the test cache (different optimisation and LTO), so each
+      # target keeps its own. Only main saves it: tags may restore caches from the default branch
+      # but not from other tags, and pull-request caches would crowd out the 10 GB repo budget.
+      - uses: Swatinem/rust-cache@v2
+        with:
+          shared-key: release-${{ matrix.target }}
+          save-if: ${{ github.ref == 'refs/heads/main' }}
+
+      - name: Build the release binary
+        run: cargo build --locked --release --target ${{ matrix.target }}
+
+      - name: Install cargo-packager
+        uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-packager
+
+      - name: Build installers
+        env:
+          # linuxdeploy is itself an AppImage; run it without FUSE on the CI runner.
+          APPIMAGE_EXTRACT_AND_RUN: "1"
+        run: cargo packager --release --target ${{ matrix.target }} --formats ${{ matrix.formats }}
+
+      - name: Collect release files
+        run: |
+          mkdir -p dist
+          # Installers (the macOS .app bundle is a folder; the .dmg already contains it).
+          find target/packages -maxdepth 1 -type f \
+            \( -name '*.exe' -o -name '*.msi' -o -name '*.dmg' -o -name '*.deb' -o -name '*.AppImage' \) \
+            -exec cp {} dist/ \;
+          # A plain archive of the executable for people who prefer no installer.
+          bin_dir="target/${{ matrix.target }}/release"
+          name="simulacra-${VERSION}-${{ matrix.slug }}"
+          staging="$RUNNER_TEMP/$name"
+          mkdir -p "$staging"
+          cp README.md THIRD_PARTY.md "$staging/"
+          if [ "${{ runner.os }}" = "Windows" ]; then
+            cp "$bin_dir/simulacra.exe" "$staging/"
+            (cd "$RUNNER_TEMP" && 7z a -tzip "$GITHUB_WORKSPACE/dist/$name.zip" "$name" > /dev/null)
+          else
+            cp "$bin_dir/simulacra" "$staging/"
+            tar -C "$RUNNER_TEMP" -czf "dist/$name.tar.gz" "$name"
+          fi
+          ls -la dist
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist-${{ matrix.slug }}
+          path: dist/*
+          if-no-files-found: error

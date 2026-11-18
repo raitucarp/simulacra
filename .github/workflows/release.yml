@@ -1,10 +1,10 @@
 name: Release
 
-# Builds Simulacra for Windows, macOS (Apple silicon and Intel) and Linux, packages installers
-# with cargo-packager, and publishes them with plain archives and checksums on the Releases page.
-# Run it by pushing a tag such as `v0.1.0` that matches the version in Cargo.toml, or start it by
-# hand from the Actions tab for an existing tag. Pull requests that touch the packaging run the
-# build jobs as a dry run (installers become workflow artifacts; nothing is published).
+# Publishes Simulacra on the Releases page: installers for Windows, macOS (Apple silicon and
+# Intel) and Linux, plain archives and SHA256 checksums. Push a tag such as `v0.1.0` that matches
+# the version in Cargo.toml, or start it by hand from the Actions tab for an existing tag.
+# Order: the tag is checked, then the CI tests run on it, then the installers are built (reusing
+# the release cache main keeps warm), and only then is anything published.
 
 on:
   push:
@@ -14,130 +14,43 @@ on:
       tag:
         description: Existing tag to build and publish (for example v0.1.0)
         required: true
-  pull_request:
-    paths:
-      - .github/workflows/release.yml
-      - .github/scripts/**
-      - packaging/**
-      - Cargo.toml
 
 permissions:
   contents: write
 
 env:
-  CARGO_TERM_COLOR: always
-  CARGO_INCREMENTAL: 0
   RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
-  DRY_RUN: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  build:
-    name: Build (${{ matrix.name }})
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - name: Windows x64
-            os: windows-latest
-            target: x86_64-pc-windows-msvc
-            formats: nsis
-            archive: zip
-            slug: windows-x64
-          - name: macOS Apple silicon
-            os: macos-latest
-            target: aarch64-apple-darwin
-            formats: dmg
-            archive: tar.gz
-            slug: macos-arm64
-          - name: macOS Intel
-            os: macos-latest
-            target: x86_64-apple-darwin
-            formats: dmg
-            archive: tar.gz
-            slug: macos-x64
-          - name: Linux x64
-            os: ubuntu-22.04
-            target: x86_64-unknown-linux-gnu
-            formats: deb,appimage
-            archive: tar.gz
-            slug: linux-x64
-    runs-on: ${{ matrix.os }}
-    timeout-minutes: 120
-    defaults:
-      run:
-        shell: bash
+  tag:
+    name: Check the tag
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event_name == 'pull_request' && github.sha || env.RELEASE_TAG }}
-
-      - name: Check the tag matches Cargo.toml
+          ref: ${{ env.RELEASE_TAG }}
+      - name: The tag must match Cargo.toml
         run: |
           version=$(grep -m1 '^version' Cargo.toml | cut -d'"' -f2)
-          if [ "$DRY_RUN" != "true" ] && [ "v$version" != "$RELEASE_TAG" ]; then
+          if [ "v$version" != "$RELEASE_TAG" ]; then
             echo "::error::Tag $RELEASE_TAG does not match Cargo.toml version $version"; exit 1
           fi
-          echo "VERSION=$version" >> "$GITHUB_ENV"
 
-      - uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: ${{ matrix.target }}
+  test:
+    name: CI
+    needs: tag
+    uses: ./.github/workflows/ci.yml
 
-      - name: Install Linux system libraries
-        if: runner.os == 'Linux'
-        run: bash .github/scripts/install-linux-deps.sh
-
-      - uses: Swatinem/rust-cache@v2
-        with:
-          shared-key: release-${{ matrix.target }}
-
-      - name: Build the release binary
-        run: cargo build --locked --release --target ${{ matrix.target }}
-
-      - name: Install cargo-packager
-        uses: taiki-e/install-action@v2
-        with:
-          tool: cargo-packager
-
-      - name: Build installers
-        env:
-          # linuxdeploy is itself an AppImage; run it without FUSE on the CI runner.
-          APPIMAGE_EXTRACT_AND_RUN: "1"
-        run: cargo packager --release --target ${{ matrix.target }} --formats ${{ matrix.formats }}
-
-      - name: Collect release files
-        run: |
-          mkdir -p dist
-          # Installers (the macOS .app bundle is a folder; the .dmg already contains it).
-          find target/packages -maxdepth 1 -type f \
-            \( -name '*.exe' -o -name '*.msi' -o -name '*.dmg' -o -name '*.deb' -o -name '*.AppImage' \) \
-            -exec cp {} dist/ \;
-          # A plain archive of the executable for people who prefer no installer.
-          bin_dir="target/${{ matrix.target }}/release"
-          name="simulacra-${VERSION}-${{ matrix.slug }}"
-          staging="$RUNNER_TEMP/$name"
-          mkdir -p "$staging"
-          cp README.md THIRD_PARTY.md "$staging/"
-          if [ "${{ runner.os }}" = "Windows" ]; then
-            cp "$bin_dir/simulacra.exe" "$staging/"
-            (cd "$RUNNER_TEMP" && 7z a -tzip "$GITHUB_WORKSPACE/dist/$name.zip" "$name" > /dev/null)
-          else
-            cp "$bin_dir/simulacra" "$staging/"
-            tar -C "$RUNNER_TEMP" -czf "dist/$name.tar.gz" "$name"
-          fi
-          ls -la dist
-          test -n "$(ls dist)"
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: dist-${{ matrix.slug }}
-          path: dist/*
-          if-no-files-found: error
+  build:
+    name: Installers
+    needs: test
+    uses: ./.github/workflows/build.yml
+    with:
+      ref: ${{ inputs.tag || github.ref_name }}
 
   publish:
     name: Publish the release
     needs: build
-    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v4

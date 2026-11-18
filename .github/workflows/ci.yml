@@ -1,14 +1,23 @@
 name: CI
 
+# Every pull request and push to main: cargo check (warnings fail) and the full test suite on
+# Linux, Windows and macOS. On main, once the tests pass, the installers are built too (as
+# workflow artifacts), which also warms the release cache for the next tag. The Release workflow
+# calls this workflow first, so nothing is published from a commit whose tests fail.
+
 on:
   push:
     branches: [main]
   pull_request:
   workflow_dispatch:
+  workflow_call:
+
+permissions:
+  contents: read
 
 concurrency:
-  group: ci-${{ github.ref }}
-  cancel-in-progress: true
+  group: ${{ github.workflow }}-ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 env:
   CARGO_TERM_COLOR: always
@@ -35,9 +44,12 @@ jobs:
       - name: Install Linux system libraries
         if: runner.os == 'Linux'
         run: bash .github/scripts/install-linux-deps.sh
+      # Pull requests restore main's cache but never save their own, so the 10 GB repo budget
+      # holds the caches that every run can use.
       - uses: Swatinem/rust-cache@v2
         with:
-          shared-key: ci
+          shared-key: test-${{ runner.os }}
+          save-if: ${{ github.ref == 'refs/heads/main' }}
       # Warnings fail the build. RUSTFLAGS is not used for this, because it would replace the
       # Windows stack-size flag set in .cargo/config.toml.
       - name: Check (no warnings allowed)
@@ -47,3 +59,9 @@ jobs:
           if grep -E "^warning" check.log; then echo "::error::cargo check reported warnings"; exit 1; fi
       - name: Test
         run: cargo test --locked --no-fail-fast
+
+  package:
+    name: Installers
+    needs: test
+    if: github.ref == 'refs/heads/main'
+    uses: ./.github/workflows/build.yml

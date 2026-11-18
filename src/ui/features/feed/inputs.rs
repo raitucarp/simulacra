@@ -40,6 +40,7 @@ pub(crate) fn split_params<C>(params: FeedParams<'_, C>) -> (PostCallbacks, Time
         learning: params.learning_posts,
         on_post_action: Rc::new(params.on_post_action),
         credence: params.credence,
+        data: params.data,
         links: BodyLinks {
             on_tag: Some(params.on_open_tag),
             on_wikilink: Some(params.on_open_wikilink),

@@ -7,6 +7,7 @@
 
 mod arena;
 mod catalogue_ops;
+mod data; // sb F2
 mod embeddings;
 mod learning;
 mod journal;

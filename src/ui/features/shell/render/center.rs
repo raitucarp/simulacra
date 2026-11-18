@@ -21,7 +21,7 @@ impl AppView {
         } else if self.state.active_tab == NavigationTab::MindGraph {
             self.graph.panel.clone().into_any_element()
         } else if self.state.active_tab == NavigationTab::Knowledge {
-            self.vault.panel.clone().into_any_element()
+            self.knowledge_page(bind)
         } else if self.state.active_tab == NavigationTab::Review {
             self.review.panel.clone().into_any_element()
         } else if self.state.active_tab == NavigationTab::Insights {
@@ -82,7 +82,7 @@ impl AppView {
             on_open_media: Rc::new(bind.with(Self::open_lightbox)),
             on_cycle_profile: bind.boxed_act(Self::cycle_profile),
             on_run_command: Rc::new(bind.with(Self::run_command)),
-            on_post_action: Self::post_action_callback(bind), credence: Some(self.credence_source(bind)),
+            on_post_action: Self::post_action_callback(bind), credence: Some(self.credence_source(bind)), data: Some(self.data_source(bind)),
             inspector: InspectorView { argument: Some(self.thinking.argument.clone()), ..self.inspector.view() },
             on_inspector: Rc::new(bind.with(Self::run_inspector_command)),
         })

@@ -95,6 +95,7 @@ pub const COMMANDS: &[CommandSpec] = &[
     action(C::NewJournalEntry, I::Feather, Ready), action(C::LogMood, I::HeartPulse, Ready), action(C::StartFocus, I::Timer, Ready), action(C::NewTimeCapsule, I::Mail, Ready),
     action(C::InsightsCalibration, I::ChartScatter, Ready), action(C::InsightsTensions, I::Zap, Ready), action(C::ResolveDuePredictions, I::CalendarClock, Ready), action(C::ShowArgumentMap, I::Waypoints, Ready), // sb E1
     action(C::NewDebate, I::Swords, Ready), action(C::NewThoughtExperiment, I::FlaskConical, Ready), action(C::DebateOpenThought, I::Scale, Ready), action(C::ExperimentOpenThought, I::FlaskConical, Ready), // sb F1
+    action(C::OpenCollection, I::Bookmark, Ready), action(C::BookmarkPost, I::BookmarkCheck, Ready), action(C::ExportBundle, I::Package, Ready), action(C::EncryptedSnapshot, I::LockKeyhole, Ready), action(C::RestoreSnapshot, I::ArchiveRestore, Ready), // sb F2
 ];
 
 /// The registry row of `id`.

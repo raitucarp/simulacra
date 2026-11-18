@@ -8,6 +8,10 @@ mod arena;
 mod arena_schema;
 mod beliefs;
 mod catalogue;
+mod data_schema;
+mod restore;
+mod revisions;
+mod saved; // sb F2: history, bookmarks, collection items, restore
 mod dismissed_seeds;
 mod embeddings;
 mod embeddings_schema;
@@ -44,6 +48,7 @@ mod tests;
 pub use catalogue::{build_catalogue_search, fts_match_expression, CatalogueSearch, DocumentText};
 pub use arena::ArenaRecord;
 pub use journal::StoredRecord;
+pub use restore::{verify_database_file, DatabaseSummary};
 pub use preferences::{preference_rows, PREFERENCE_KEYS};
 pub use setting_key::SettingKey;
 

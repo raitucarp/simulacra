@@ -7,6 +7,7 @@ pub mod agent_config;
 pub mod archetype;
 pub mod arena;
 pub mod beliefs;
+pub mod data; // sb F2: history, collections and bookmarks, export, snapshots
 pub mod document;
 pub mod embedding;
 pub mod engine;

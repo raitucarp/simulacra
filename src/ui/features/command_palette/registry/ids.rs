@@ -101,4 +101,10 @@ command_ids! {
     NewThoughtExperiment => "new_thought_experiment",
     DebateOpenThought => "debate_open_thought",
     ExperimentOpenThought => "experiment_open_thought",
+    /// sb F2: the Saved view, bookmarking the open thought, the export bundle and snapshots.
+    OpenCollection => "open_collection",
+    BookmarkPost => "bookmark_post",
+    ExportBundle => "export_bundle",
+    EncryptedSnapshot => "encrypted_snapshot",
+    RestoreSnapshot => "restore_snapshot",
 }

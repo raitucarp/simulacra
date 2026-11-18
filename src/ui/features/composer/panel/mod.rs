@@ -7,6 +7,7 @@
 mod actions;
 mod atomic;
 mod drafts;
+mod edit; // sb F2: edit mode
 mod media;
 mod render;
 

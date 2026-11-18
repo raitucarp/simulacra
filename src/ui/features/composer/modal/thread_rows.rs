@@ -29,7 +29,7 @@ impl ComposerModalView {
             .flex_col()
             .overflow_y_scroll()
             .children(rows)
-            .child(self.add_row())
+            .children((!self.is_editing()).then(|| self.add_row()))
     }
 
     /// Small avatar and "Add to thread" (disabled until the last post has text).

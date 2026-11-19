@@ -41,7 +41,7 @@ pub fn migrate_legacy_tokens(tokens: &ThemeTokens) -> LegacyTheme {
     LEGACY_PRESETS
         .iter()
         .find(|(legacy_bg, legacy_accent, _)| bg == rgb(*legacy_bg) && accent == rgb(*legacy_accent))
-        .map(|(_, _, id)| LegacyTheme::Preset(*id))
+        .map(|(_, _, id)| LegacyTheme::Preset(id))
         .unwrap_or_else(|| LegacyTheme::Custom(palette_from_tokens(tokens)))
 }
 

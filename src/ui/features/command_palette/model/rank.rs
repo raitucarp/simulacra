@@ -50,7 +50,7 @@ pub fn rank(items: &[PaletteItem], query: &PaletteQuery, history: &PaletteHistor
             Some((score, item.group, RankedItem { index, positions }))
         })
         .collect();
-    scored.sort_by(|a, b| b.0.cmp(&a.0));
+    scored.sort_by_key(|a| std::cmp::Reverse(a.0));
     grouped_by_best(scored)
 }
 

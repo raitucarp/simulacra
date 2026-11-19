@@ -62,7 +62,9 @@ impl StoreData {
             .chain(self.library.collections.iter().map(|c| database.save_collection(c)))
             .chain(self.documents.iter().map(|d| database.save_document(d)))
             .chain(self.trending.iter().map(|t| database.save_trending(t)));
-        results.fold(Ok(()), |first, next| first.and(next))
+        // Collecting first runs every save, even after a failure; the first error is returned.
+        let outcomes: Vec<Result<()>> = results.collect();
+        outcomes.into_iter().collect()
     }
 }
 

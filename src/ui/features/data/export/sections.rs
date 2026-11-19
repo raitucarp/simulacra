@@ -51,7 +51,7 @@ fn scope_detail(dialog: &ExportDialog, on_event: &DataAction, theme: &ThemeToken
 
 fn date_range(dialog: &ExportDialog, on_event: &DataAction, theme: &ThemeTokens) -> Div {
     let field = |label: String, input: &Entity<InputState>| div().flex().items_center().gap(theme.inline_gap).child(div().text_size(theme.font_size_xs).text_color(theme.text_muted).child(label)).child(div().w(theme.data_date_field_width).child(Input::new(input).small()));
-    let presets = DAY_PRESETS.map(|days| choice_chip(SharedString::from(format!("{DAYS_ID_PREFIX}{days}")), &rust_i18n::t!("data.export.last_days", count = days).to_string(), false, theme, send(on_event, DataEvent::LastDays(days))));
+    let presets = DAY_PRESETS.map(|days| choice_chip(SharedString::from(format!("{DAYS_ID_PREFIX}{days}")), rust_i18n::t!("data.export.last_days", count = days).as_ref(), false, theme, send(on_event, DataEvent::LastDays(days))));
     div()
         .flex()
         .flex_col()

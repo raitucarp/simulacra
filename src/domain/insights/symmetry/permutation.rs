@@ -71,5 +71,5 @@ pub fn rotation(replies: &[(usize, usize)]) -> Rotation {
     let order = cycles.iter().fold(1u64, |acc, c| acc / gcd(acc, c.len() as u64) * c.len() as u64);
     let transpositions: usize = cycles.iter().map(|c| c.len() - 1).sum();
     let transient = map.keys().copied().filter(|a| !seen.contains(a)).collect();
-    Rotation { cycles, order, even: transpositions % 2 == 0, transient }
+    Rotation { cycles, order, even: transpositions.is_multiple_of(2), transient }
 }

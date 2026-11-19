@@ -37,7 +37,7 @@ impl DuePreset {
 /// Dated before undated, earlier dates first, then the older credence first.
 fn by_due(a: &&Credence, b: &&Credence) -> Ordering {
     let rank = |c: &Credence| (c.resolves_by.is_none(), c.resolves_by);
-    rank(*a).cmp(&rank(*b)).then(a.created_at.cmp(&b.created_at))
+    rank(a).cmp(&rank(b)).then(a.created_at.cmp(&b.created_at))
 }
 
 /// Every open prediction in the order it comes due.

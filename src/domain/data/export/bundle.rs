@@ -72,10 +72,10 @@ fn thread_files(plan: &ExportPlan, source: &ExportSource) -> Vec<BundleFile> {
             for (path, _) in post_images(post) {
                 let name = Path::new(&path).file_name().map(|n| n.to_string_lossy().to_string()).unwrap_or_default();
                 let inside = format!("{MEDIA_DIR}/{}-{name}", tail(post.id.as_str()));
-                if !images.contains_key(&path) {
+                images.entry(path.clone()).or_insert_with(|| {
                     files.push(BundleFile { path: format!("{THREADS_DIR}/{inside}"), body: FileBody::Copy(media_source(&path, &source.media_dir)) });
-                    images.insert(path, inside);
-                }
+                    inside
+                });
             }
         }
         let first = &thread.posts[0];

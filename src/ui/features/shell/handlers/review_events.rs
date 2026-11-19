@@ -108,7 +108,7 @@ impl AppView {
     /// The picker over the network's posts, newest first.
     pub(in crate::ui::features::shell) fn open_review_picker(&mut self, mode: PickerMode, window: &mut Window, cx: &mut Context<Self>) {
         let mut posts: Vec<PostView> = self.state.current_network_posts().filter(|post| !post.is_instant_repost()).map(|post| PostView { post: post.clone(), author: self.state.author_of(post).clone() }).collect();
-        posts.sort_by(|a, b| b.post.created_at.cmp(&a.post.created_at));
+        posts.sort_by_key(|a| std::cmp::Reverse(a.post.created_at));
         posts.truncate(PICKER_POSTS);
         self.review.panel.update(cx, |panel, cx| panel.open_picker(mode, posts, window, cx));
     }

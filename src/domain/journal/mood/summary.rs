@@ -48,6 +48,6 @@ pub fn by_hour(checkins: &[MoodCheckin]) -> [MoodMean; HOURS] {
 /// Check-ins newest first.
 pub fn newest_checkins(checkins: &[MoodCheckin]) -> Vec<&MoodCheckin> {
     let mut sorted: Vec<&MoodCheckin> = checkins.iter().collect();
-    sorted.sort_by(|a, b| b.at.cmp(&a.at));
+    sorted.sort_by_key(|a| std::cmp::Reverse(a.at));
     sorted
 }

@@ -73,7 +73,7 @@ pub fn tile_row(columns: u16, theme: &ThemeTokens) -> Div {
 pub fn tile_columns(room: Room, count: usize) -> u16 {
     match room {
         Room::Wide => count as u16,
-        _ if count % 3 == 0 => 3,
+        _ if count.is_multiple_of(3) => 3,
         _ => 2,
     }
 }

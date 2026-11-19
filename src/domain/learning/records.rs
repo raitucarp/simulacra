@@ -26,7 +26,7 @@ impl LearningRecords {
     /// The records of `network`; sessions newest first.
     pub fn of_network(&self, network: &NetworkId) -> LearningRecords {
         let mut sessions: Vec<TutorSession> = self.sessions.iter().filter(|s| &s.network_id == network).cloned().collect();
-        sessions.sort_by(|a, b| b.updated_at.cmp(&a.updated_at));
+        sessions.sort_by_key(|a| std::cmp::Reverse(a.updated_at));
         LearningRecords {
             goals: self.goals.iter().filter(|g| &g.network_id == network).cloned().collect(),
             sessions,

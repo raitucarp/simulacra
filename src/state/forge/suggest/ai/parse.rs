@@ -52,7 +52,7 @@ fn alternatives(param: Param, raw: &Value) -> Vec<Value> {
 }
 
 /// The entry of `param`: by path, or by a key equal to it ignoring case and separators.
-fn entry<'a>(map: &'a Map<String, Value>, param: Param) -> Option<&'a Value> {
+fn entry(map: &Map<String, Value>, param: Param) -> Option<&Value> {
     let squash = |text: &str| text.to_lowercase().replace(['_', ' ', '-', '.'], "");
     map.get(param.path()).or_else(|| map.iter().find(|(key, _)| squash(key) == squash(param.path())).map(|(_, value)| value))
 }

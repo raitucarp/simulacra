@@ -32,7 +32,7 @@ pub fn group_thousands(value: i64, separator: char) -> String {
     let digits = value.unsigned_abs().to_string();
     let lead = digits.len() % GROUP_SIZE;
     let grouped = digits.chars().enumerate().fold(String::new(), |mut out, (index, digit)| {
-        if index > 0 && (index + GROUP_SIZE - lead) % GROUP_SIZE == 0 {
+        if index > 0 && (index + GROUP_SIZE - lead).is_multiple_of(GROUP_SIZE) {
             out.push(separator);
         }
         out.push(digit);

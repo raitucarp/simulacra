@@ -46,7 +46,7 @@ pub fn encode_f32_le(vector: &[f32]) -> Vec<u8> {
 
 /// Unpacks a little-endian `f32` blob (`None` when its length is not a multiple of 4).
 pub fn decode_f32_le(bytes: &[u8]) -> Option<Vec<f32>> {
-    if bytes.len() % F32_BYTES != 0 {
+    if !bytes.len().is_multiple_of(F32_BYTES) {
         return None;
     }
     let floats = bytes.chunks_exact(F32_BYTES).map(|b| f32::from_le_bytes([b[0], b[1], b[2], b[3]]));

@@ -83,5 +83,5 @@ pub fn radar_axis_at(frame: &Frame, at: (f32, f32)) -> Option<usize> {
     let (centre, radius) = radar(frame);
     let halves = RadialScale { centre, slots: TRAIT_AXES * 2 };
     let (slot, distance) = halves.locate(at);
-    (distance <= radius * RADAR_REACH).then_some(((slot + 1) / 2) % TRAIT_AXES)
+    (distance <= radius * RADAR_REACH).then_some(slot.div_ceil(2) % TRAIT_AXES)
 }

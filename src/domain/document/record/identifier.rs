@@ -78,15 +78,15 @@ pub fn is_valid_isbn(raw: &str) -> bool {
             let values: Option<Vec<u32>> = chars.iter().enumerate().map(|(at, c)| isbn10_value(*c, at)).collect();
             values.is_some_and(|values| {
                 let weighted: u32 = values.iter().zip((1..=ISBN10_LEN as u32).rev()).map(|(v, w)| v * w).sum();
-                weighted % ISBN10_MODULUS == 0
+                weighted.is_multiple_of(ISBN10_MODULUS)
             })
         }
         ISBN13_LEN => {
             let digits: Option<Vec<u32>> = chars.iter().map(|c| c.to_digit(10)).collect();
             digits.is_some_and(|digits| {
-                let weight = |at: usize| if at % 2 == 0 { 1 } else { ISBN13_ODD_WEIGHT };
+                let weight = |at: usize| if at.is_multiple_of(2) { 1 } else { ISBN13_ODD_WEIGHT };
                 let sum: u32 = digits.iter().enumerate().map(|(at, d)| d * weight(at)).sum();
-                sum % ISBN13_MODULUS == 0
+                sum.is_multiple_of(ISBN13_MODULUS)
             })
         }
         _ => false,

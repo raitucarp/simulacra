@@ -32,7 +32,7 @@ mod imp {
             let mut counts = counts.borrow_mut();
             *counts.entry(view).or_default() += 1;
             let total: usize = counts.values().sum();
-            if total % LOG_EVERY_RENDERS == 0 {
+            if total.is_multiple_of(LOG_EVERY_RENDERS) {
                 let line: Vec<String> = counts.iter().map(|(name, n)| format!("{name}={n}")).collect();
                 eprintln!("simulacra[render-stats] {}", line.join(" "));
             }

@@ -11,8 +11,9 @@ use gpui_kit::*;
 use std::path::PathBuf;
 
 /// A background check ("Test call", "Test image") and where it stands.
-#[derive(Debug, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, PartialEq, Eq, Default)]
 pub enum Probe<T> {
+    #[default]
     Idle,
     Waiting,
     Done(T),
@@ -20,11 +21,6 @@ pub enum Probe<T> {
     Failed(String),
 }
 
-impl<T> Default for Probe<T> {
-    fn default() -> Self {
-        Self::Idle
-    }
-}
 
 /// What a test call brought back: the raw reply of a custom request, and the text read from
 /// it (or why none could be read).

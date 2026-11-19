@@ -39,7 +39,7 @@ fn a_question_shuffles_options_reproducibly_and_needs_a_distractor() {
     assert_eq!(one, build_choice(&card, &pool, &none, 7).unwrap());
     assert_eq!(one.options[one.correct], "Spinoza");
     assert_eq!(one.options.len(), 4);
-    assert!(build_choice(&card, &[card.clone()], &none, 7).is_none());
+    assert!(build_choice(&card, std::slice::from_ref(&card), &none, 7).is_none());
 }
 
 #[test]

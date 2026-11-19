@@ -51,7 +51,7 @@ impl JournalPanel {
     fn mood_fill(&self, cell: &HeatmapCell, means: &BTreeMap<NaiveDate, MoodMean>) -> Rgba {
         let theme = &self.theme;
         let Some(mean) = means.get(&cell.day).filter(|_| !cell.future) else { return super::heat::heat_colour(&HeatmapCell { level: 0, ..*cell }, theme.accent_brand, theme) };
-        let level = heatmap_level((mean.valence.abs() * LEVEL_SCALE) as usize, LEVEL_SCALE as usize).max(1).min(HEATMAP_LEVELS);
+        let level = heatmap_level((mean.valence.abs() * LEVEL_SCALE) as usize, LEVEL_SCALE as usize).clamp(1, HEATMAP_LEVELS);
         let alphas = [theme.cadence_alpha_1, theme.cadence_alpha_2, theme.cadence_alpha_3, theme.cadence_alpha_4];
         let accent = if mean.valence >= 0.0 { theme.accent_success } else { theme.accent_danger };
         with_alpha(accent, alphas[level as usize - 1])

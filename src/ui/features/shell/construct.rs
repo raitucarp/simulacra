@@ -27,7 +27,7 @@ use crate::ui::features::settings::AppearancePanel;
 use crate::ui::features::sidebar_left::SidebarState;
 use gpui_kit::*;
 
-/// Interface language at startup.
+// Interface language at startup.
 
 impl AppView {
     /// Constructs a new AppView, loading the store from the default vault synchronously.

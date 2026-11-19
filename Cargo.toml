@@ -36,7 +36,7 @@ image = { version = "0.25", default-features = false, features = ["png", "jpeg",
 # Encrypted snapshots (sb F2): Argon2id key derivation and XChaCha20-Poly1305 sealing from
 # RustCrypto (released versions, pinned), and zeroize (already in the graph) for the
 # passphrase and derived key; rusqlite's online backup restores a verified snapshot.
-argon2 = { version = "=0.5.3", features = ["zeroize"] }
+argon2 = { version = "=0.6.0", features = ["zeroize"] }
 chacha20poly1305 = "=0.10.1"
 zeroize = "1.8"
 

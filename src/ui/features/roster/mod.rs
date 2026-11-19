@@ -9,8 +9,10 @@ mod overview;
 mod pane;
 mod params;
 mod profile_tabs;
+mod recommended;
 
 pub use params::{LabMode, ProfileTab, RosterCallbacks, RosterParams};
+pub use recommended::OpenPostCallback;
 
 use crate::theme::ThemeTokens;
 use crate::ui::components::{persisted_h_resizable, SplitPane};

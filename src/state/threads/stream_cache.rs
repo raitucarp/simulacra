@@ -1,7 +1,7 @@
 //! Memoized stream listing: grouping conversations is O(n log n), so it runs when the posts,
 //! network, tab, day filter or search query change — not on every frame.
 
-use super::{feed_entries, FeedTab};
+use super::{ranked_feed_entries, FeedRanking, FeedTab};
 use crate::domain::{NetworkId, Post};
 use crate::state::AppState;
 use jiff::civil::Date;
@@ -16,10 +16,12 @@ struct StreamKey {
     tab: FeedTab,
     day: Option<Date>,
     query: String,
+    /// Generation of the ranking the listing was ordered by (`None`: newest first).
+    ranking: Option<u64>,
 }
 
 impl StreamKey {
-    fn of(state: &AppState, tab: FeedTab, query: &str) -> Self {
+    fn of(state: &AppState, tab: FeedTab, query: &str, ranking: Option<&FeedRanking>) -> Self {
         Self {
             revision: state.index.revision(),
             len: state.posts.len(),
@@ -27,14 +29,20 @@ impl StreamKey {
             tab,
             day: state.feed_day_filter,
             query: query.to_string(),
+            ranking: ranking.map(|r| r.generation),
         }
     }
 }
 
 /// The stream's posts in display order: grouped conversations, or flat search matches.
 pub fn stream_posts<'a>(state: &'a AppState, tab: FeedTab, query: &'a str) -> Vec<&'a Post> {
+    ranked_stream_posts(state, tab, query, None)
+}
+
+/// [`stream_posts`] with the grouped conversations ordered by `ranking` when given.
+pub fn ranked_stream_posts<'a>(state: &'a AppState, tab: FeedTab, query: &'a str, ranking: Option<&FeedRanking>) -> Vec<&'a Post> {
     if query.is_empty() {
-        feed_entries(state, tab)
+        ranked_feed_entries(state, tab, ranking)
     } else {
         state.day_scoped(state.filtered_posts(query)).collect()
     }
@@ -51,11 +59,16 @@ pub struct StreamCache {
 impl StreamCache {
     /// Store positions of the stream in display order, and whether they were just rebuilt.
     pub fn positions(&mut self, state: &AppState, tab: FeedTab, query: &str) -> (Rc<[usize]>, bool) {
+        self.ranked_positions(state, tab, query, None)
+    }
+
+    /// [`Self::positions`] with the stream ordered by `ranking` when given.
+    pub fn ranked_positions(&mut self, state: &AppState, tab: FeedTab, query: &str, ranking: Option<&FeedRanking>) -> (Rc<[usize]>, bool) {
         let query = query.trim();
-        let key = StreamKey::of(state, tab, query);
+        let key = StreamKey::of(state, tab, query, ranking);
         let rebuilt = self.key.as_ref() != Some(&key);
         if rebuilt {
-            let posts = stream_posts(state, tab, query);
+            let posts = ranked_stream_posts(state, tab, query, ranking);
             self.positions = posts.iter().filter_map(|post| state.post_position(&post.id)).collect();
             self.key = Some(key);
             self.builds += 1;

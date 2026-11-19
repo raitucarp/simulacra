@@ -69,7 +69,7 @@ impl AppView {
             state,
             chrome: ChromeState { is_onboarding_open: onboarding, ..ChromeState::new(initial_lang) },
             feed, composer_modal, appearance, llm_inputs, settings_ui,
-            lab, scheduler, graph, vault, import, review, insights, journal, thinking, arena, data, semantic: SemanticState::new(cx), media: MediaHost::new(cx), spend: super::spend_host::SpendHost::new(window.window_handle()),
+            lab, scheduler, graph, vault, import, review, insights, journal, thinking, arena, data, semantic: SemanticState::new(cx), recommend: Default::default(), media: MediaHost::new(cx), spend: super::spend_host::SpendHost::new(window.window_handle()),
             forge: None, sidebar, palette,
             panels: ShellPanels::new(cx),
             _subscriptions: subscriptions,

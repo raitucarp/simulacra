@@ -72,12 +72,7 @@ fn walk(start: usize, children: &HashMap<usize, Vec<usize>>, visited: &mut [bool
 
 /// The active network's stream for `tab`: grouped conversations flattened in display order.
 pub fn feed_entries(state: &AppState, tab: FeedTab) -> Vec<&Post> {
-    let posts: Vec<&Post> = state.day_scoped(state.current_network_posts()).collect();
-    group_conversations(&posts)
-        .into_iter()
-        .filter(|conversation| tab.includes(conversation))
-        .flatten()
-        .collect()
+    super::ranking::ranked_feed_entries(state, tab, None)
 }
 
 /// Display position of `post_id` in the `tab` stream, if it is shown there.

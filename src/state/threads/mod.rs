@@ -1,12 +1,15 @@
 //! Read-side thread models: conversation grouping for the stream, the "For you" /
-//! "Dialectic" stream filters, and the conversation view of a selected post.
+//! "Dialectic" stream filters, the recommended "For you" order, and the conversation view of
+//! a selected post.
 
 mod conversation;
 mod grouping;
+mod ranking;
 mod stream_cache;
 
 pub use conversation::{build_conversation, Conversation, ReplyBranch, ReplyLimits};
 pub use grouping::{feed_entries, feed_position, group_conversations};
+pub use ranking::{ranked_feed_entries, ranked_feed_position, FeedRanking};
 pub use stream_cache::{stream_posts, StreamCache};
 
 use crate::domain::Post;

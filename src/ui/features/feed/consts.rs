@@ -23,5 +23,7 @@ pub(crate) const LOAD_MORE_BUTTON_ID: &str = "btn-load-more-posts";
 pub(crate) const TOGGLE_REPLIES_BUTTON_ID: &str = "btn-toggle-inspector-replies";
 /// Element id prefix of the stream tabs (suffixed with the tab position).
 pub(crate) const STREAM_TAB_ID: &str = "stream-tab";
+/// Element id of the "For you" order switch.
+pub(crate) const FEED_ORDER_ID: &str = "stream-order";
 /// Element id of the inspector quick reply button.
 pub(crate) const QUICK_REPLY_BUTTON_ID: &str = "btn-quick-reply-thread";

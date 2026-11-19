@@ -4,7 +4,7 @@
 use super::consts::STREAM_LIST_OVERDRAW;
 use super::view::AppView;
 use crate::domain::PostId;
-use crate::state::{AppState, FeedTab, StreamCache};
+use crate::state::{AppState, FeedRanking, FeedTab, StreamCache};
 use crate::theme::ThemeTokens;
 use crate::ui::features::feed::{FeedReader, StreamInputs, StreamRows};
 use gpui_kit::{px, App, Entity, ListAlignment, ListOffset, ListState, Pixels};
@@ -41,9 +41,10 @@ fn changed_range(old: &[RowKey], new: &[RowKey]) -> (usize, usize, usize) {
 }
 
 impl StreamList {
-    /// Brings the rows up to date with the store, splicing the list where rows changed.
-    pub fn sync(&mut self, state: &AppState, tab: FeedTab, query: &str, limit: usize) {
-        let (positions, rebuilt) = self.cache.positions(state, tab, query);
+    /// Brings the rows up to date with the store (ordered by `ranking` when given), splicing
+    /// the list where rows changed.
+    pub fn sync(&mut self, state: &AppState, tab: FeedTab, query: &str, limit: usize, ranking: Option<&FeedRanking>) {
+        let (positions, rebuilt) = self.cache.ranked_positions(state, tab, query, ranking);
         let rows = StreamRows::new(positions, limit);
         if !rebuilt && rows.shown == self.rows.shown {
             return;

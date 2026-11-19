@@ -84,7 +84,7 @@ impl AppView {
             on_run_command: Rc::new(bind.with(Self::run_command)),
             on_post_action: Self::post_action_callback(bind), credence: Some(self.credence_source(bind)), data: Some(self.data_source(bind)),
             inspector: InspectorView { argument: Some(self.thinking.argument.clone()), ..self.inspector.view() },
-            on_inspector: Rc::new(bind.with(Self::run_inspector_command)),
+            on_inspector: Rc::new(bind.with(Self::run_inspector_command)), discovery: self.feed_discovery(bind),
         })
     }
 }

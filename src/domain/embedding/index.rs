@@ -1,6 +1,8 @@
 //! The in-memory vector index: every stored chunk vector by owner, loaded once from the
-//! `embeddings` table and updated by value as batches finish.
+//! `embeddings` table and updated by value as batches finish. Nearest-neighbour candidates
+//! come from its USearch graphs ([`super::ann`]).
 
+use super::ann::{AnnCache, ChunkRef, ModelGraph};
 use super::owner::{EmbeddingOwner, OwnerKind};
 use std::collections::BTreeMap;
 
@@ -20,6 +22,7 @@ pub struct StoredChunk {
 #[derive(Debug, Clone, Default, PartialEq)]
 pub struct VectorIndex {
     owners: BTreeMap<EmbeddingOwner, Vec<StoredChunk>>,
+    ann: AnnCache,
 }
 
 impl VectorIndex {
@@ -70,6 +73,11 @@ impl VectorIndex {
     /// The index with `rows` inserted, replacing chunks with the same owner and index.
     pub fn with_chunks(mut self, rows: impl IntoIterator<Item = (EmbeddingOwner, StoredChunk)>) -> Self {
         for (owner, chunk) in rows {
+            let at: ChunkRef = (owner.clone(), chunk.index);
+            self.ann.update(|model, graph| match model == chunk.model {
+                true => graph.insert(at.clone(), &chunk.vector),
+                false => graph.remove(&at),
+            });
             let chunks = self.owners.entry(owner).or_default();
             chunks.retain(|existing| existing.index != chunk.index);
             let at = chunks.partition_point(|existing| existing.index < chunk.index);
@@ -80,6 +88,7 @@ impl VectorIndex {
 
     /// The index keeping only the first `keep` chunks of `owner` (none removes the owner).
     pub fn truncated(mut self, owner: &EmbeddingOwner, keep: usize) -> Self {
+        self.ann.update(|_, graph| graph.retain(|(of, index)| of != owner || *index < keep));
         if let Some(chunks) = self.owners.get_mut(owner) {
             chunks.retain(|chunk| chunk.index < keep);
             if chunks.is_empty() {
@@ -92,5 +101,27 @@ impl VectorIndex {
     /// The index without `owner`.
     pub fn without(self, owner: &EmbeddingOwner) -> Self {
         self.truncated(owner, 0)
+    }
+
+    /// Chunks of `model` nearest `query` whose owner passes `keep`, nearest first (at least
+    /// `count` of them when that many exist; every one while the index is small).
+    pub fn nearest_chunks(&self, query: &[f32], model: &str, count: usize, keep: &dyn Fn(&EmbeddingOwner) -> bool) -> Vec<ChunkRef> {
+        let found = self.ann.with_graph(model, || self.graph_of(model), |graph| graph.nearest(query, count, keep));
+        found.flatten().unwrap_or_else(|| self.scan(query.len(), model, keep))
+    }
+
+    /// A graph of every chunk of `model` (sized by its first vector).
+    fn graph_of(&self, model: &str) -> Option<ModelGraph> {
+        let mut chunks = self.iter().filter(|(_, chunk)| chunk.model == model).peekable();
+        let mut graph = ModelGraph::new(chunks.peek()?.1.vector.len())?;
+        chunks.for_each(|(owner, chunk)| graph.insert((owner.clone(), chunk.index), &chunk.vector));
+        Some(graph)
+    }
+
+    /// Every chunk of `model` with `dimensions`-long vectors passing `keep` (when no graph
+    /// fits the query).
+    fn scan(&self, dimensions: usize, model: &str, keep: &dyn Fn(&EmbeddingOwner) -> bool) -> Vec<ChunkRef> {
+        let fits = |(owner, chunk): &(&EmbeddingOwner, &StoredChunk)| chunk.model == model && chunk.vector.len() == dimensions && keep(owner);
+        self.iter().filter(fits).map(|(owner, chunk)| (owner.clone(), chunk.index)).collect()
     }
 }

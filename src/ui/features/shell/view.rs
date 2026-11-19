@@ -11,6 +11,7 @@ use super::media_state::MediaHost;
 use super::panels::ShellPanels;
 use super::post_actions_state::PostActionsUi;
 use super::scheduler_state::SchedulerState;
+use super::recommend_host::RecommendHost;
 use super::semantic_state::SemanticState;
 use super::settings_draft::SettingsDraft;
 use super::settings_ui::SettingsUi;
@@ -52,6 +53,8 @@ pub struct AppView {
     pub import: ImportUi,
     /// Vector index, indexing queue and the "find similar" sheet (sb B3).
     pub semantic: SemanticState,
+    /// The "For you" order and the cached recommendations from post embeddings.
+    pub recommend: RecommendHost,
     /// The lightbox and the media pump's last plan (sb C3).
     pub media: MediaHost,
     /// The review deck, the Review page and the card maker (sb C1).

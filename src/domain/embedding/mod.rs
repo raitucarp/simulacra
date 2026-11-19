@@ -5,16 +5,19 @@
 //! - [`hash`]: the stable content hash that lets unchanged text skip re-embedding.
 //! - [`vector`]: normalisation, cosine and the `f32` little-endian blob encoding.
 //! - [`index`]: the in-memory vector index (loaded once from SQLite, updated in place).
+//! - [`ann`]: USearch (HNSW) graphs that find nearest-neighbour candidates per model.
 //! - [`search`] / [`similar`]: cosine top-k by query vector or by an indexed item.
 //! - [`plan`]: which chunks are new or stale, which rows to trim or remove.
 //! - [`queue`]: the background indexing queue as a pure state machine.
 //! - [`budget`]: the daily request and token budget.
 //! - [`pca`]: a 2D projection (power iteration) for the embedding map.
 //!
-//! Limits (personal scale): every vector lives in memory and search is a linear scan, so
-//! 10 000 chunks of 768 dimensions take about 30 MB and a query about 10 ms. Past roughly
-//! 100 000 chunks an approximate index would be needed.
+//! Limits: every vector lives in memory (10 000 chunks of 768 dimensions take about 30 MB,
+//! plus half that for the graph). Up to [`ann::EXACT_LIMIT`] chunks per model a search is
+//! exhaustive; past that the HNSW graph answers in well under a millisecond, approximately,
+//! and candidates are re-scored exactly.
 
+pub mod ann;
 pub mod budget;
 pub mod chunk;
 pub mod failure;
@@ -44,5 +47,5 @@ pub use pca::{project_2d, Projection};
 pub use plan::{plan_index, ChunkJob, IndexPlan, PlanSpec, SourceText};
 pub use queue::{Batch, IndexQueue, Progress, QueueStatus};
 pub use search::{top_k, ScoredOwner};
-pub use similar::{owner_vectors, similar_documents, similar_posts, similar_to};
+pub use similar::{centroid, owner_vectors, similar_documents, similar_posts, similar_to};
 pub use vector::{cosine, decode_f32_le, dot, encode_f32_le, l2_normalized, mean_vector};

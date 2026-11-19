@@ -6,6 +6,7 @@ use super::super::view::AppView;
 use crate::agent::runtime::EnginePlan;
 use crate::agent::schedule::{due_agents, latest_activity, AgentSlot, Clock, ScheduleContext, SystemClock};
 use crate::domain::{AuthoredPost, NetworkId, Profile, ProfileId};
+use crate::state::recommend::Recommender;
 use jiff::Timestamp;
 use gpui_kit::*;
 
@@ -92,16 +93,17 @@ impl AppView {
         ready && self.scheduler.failures.allows_generation(&key, Timestamp::now())
     }
 
-    /// The agent, the post it should answer and its network, if it has anything to answer.
+    /// The agent, the post it should answer and its network, if it has anything to answer:
+    /// the recent post closest to what the agent writes and answers (post embeddings), or the
+    /// newest post by someone else while its interests are not embedded yet.
     fn scheduled_job(&self, id: &ProfileId) -> Option<(Profile, AuthoredPost, NetworkId)> {
         let agent = self.state.user_profiles.iter().find(|p| &p.id == id && p.is_agent())?;
         let network = agent.network_id.clone().unwrap_or_else(|| self.state.active_network_id.clone());
-        let parent = self
-            .state
-            .posts
-            .iter()
-            .filter(|post| post.network_id == network && post.author_id != agent.id)
-            .max_by_key(|post| post.created_at)?;
+        let model = self.embedding_config().model;
+        let recommender = Recommender { state: &self.state, index: &self.semantic.index, model: &model, now: Timestamp::now() };
+        let by_interest = recommender.agent_answer(agent, &network).and_then(|post| self.state.get_post(&post));
+        let newest = || self.state.posts.iter().filter(|post| post.network_id == network && post.author_id != agent.id).max_by_key(|post| post.created_at);
+        let parent = by_interest.or_else(newest)?;
         Some((agent.clone(), self.state.authored(parent), network))
     }
 }

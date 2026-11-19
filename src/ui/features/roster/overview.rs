@@ -3,6 +3,7 @@
 
 use super::params::{ProfileTab, RosterCallbacks, RosterParams};
 use super::profile_tabs::{beliefs_column, profile_tabs};
+use super::recommended::recommended_column;
 use crate::domain::Profile;
 use crate::theme::ThemeTokens;
 use crate::ui::atoms::render_profile_avatar;
@@ -84,11 +85,13 @@ pub(super) fn render_overview(profile: &Profile, params: &RosterParams<'_>, call
         .child(identity(profile, active_persona, theme))
         .children(bio)
         .child(actions(profile, callbacks).gap(theme.control_gap));
-    // sb F1: an agent's overview switches between its profile card and its beliefs.
-    let tabs = profile.is_agent().then(|| profile_tabs(params.profile_tab, theme, callbacks.switch_profile_tab.clone()));
+    // sb F1: the overview switches between the profile card, an agent's beliefs, and the
+    // posts recommended to the profile.
+    let tabs = profile_tabs(params.profile_tab, profile.is_agent(), theme, callbacks.switch_profile_tab.clone());
     let body = match (&params.beliefs, params.profile_tab, profile.is_agent()) {
         (Some(view), ProfileTab::Beliefs, true) => beliefs_column(view.clone(), theme),
+        (_, ProfileTab::Recommended, _) => recommended_column(profile, &params.recommended, &callbacks.open_post, theme),
         _ => card,
     };
-    div().id(OVERVIEW_ID).flex_1().h_full().overflow_y_scrollbar().p(theme.panel_padding).flex().flex_col().items_center().gap(theme.section_gap).children(tabs).child(body)
+    div().id(OVERVIEW_ID).flex_1().h_full().overflow_y_scrollbar().p(theme.panel_padding).flex().flex_col().items_center().gap(theme.section_gap).child(tabs).child(body)
 }

@@ -4,6 +4,7 @@ use super::callbacks::PostCallbacks;
 use super::consts::{INSPECTOR_SCROLL_ID, MAX_INSPECTOR_NESTED_REPLIES, MAX_INSPECTOR_REPLIES};
 use super::inspector_header::{render_inspector_header, render_quick_reply_bar};
 use super::inspector_outline::{render_outline_pane, InspectorCallback, InspectorMode, InspectorView};
+use super::inspector_related::render_related;
 use super::inspector_replies::conversation_children;
 use super::params::ToggleRepliesCallback;
 use crate::domain::Post;
@@ -28,6 +29,8 @@ pub(crate) struct InspectorContext<'a> {
     /// sb C2: cards or outline, the outline's memory and focus, and the commands they send.
     pub view: &'a InspectorView,
     pub on_inspector: InspectorCallback,
+    /// Posts nearest the focused post in meaning (shown under the conversation).
+    pub related: &'a [crate::state::semantic::SemanticHit],
 }
 
 impl InspectorContext<'_> {
@@ -74,7 +77,7 @@ fn render_thread_scroll(ctx: &InspectorContext<'_>, conversation: Option<&Conver
         .overflow_y_scrollbar()
         .flex()
         .flex_col()
-        .when_some(conversation, |this, c| this.children(conversation_children(ctx, c)))
+        .when_some(conversation, |this, c| this.children(conversation_children(ctx, c)).children(render_related(ctx.related, ctx.callbacks, theme)))
         .when(is_empty, |this| {
             let art = Illustration::empty(EmptyKey::InspectorIdle).width(theme.art_empty_width);
             let state = ArtState::titled(art, t!("feed.select_to_inspect").to_string(), t!("art.inspector_idle_hint").to_string());

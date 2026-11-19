@@ -17,7 +17,7 @@ thiserror = "2.0"
 rust-i18n = "4.2"
 reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
 nano-vectordb-rs = { git = "https://github.com/VectorInstitute/nano-vectordb-rs", rev = "9963b3d8334f6193f114832521391f29eda67e35", version = "0.1.1" }
-rfd = "0.15"
+rfd = "0.18"
 base64 = "0.23"
 # Already in the graph via gpui-kit-assets; embeds `assets/illustrations` (read from disk in debug builds).
 rust-embed = { version = "8.7", features = ["include-exclude"] }

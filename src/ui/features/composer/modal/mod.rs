@@ -1,5 +1,5 @@
-//! Threads-style composer modal dialog organism: one editor per post of the thread.
-//! 100% tokenized via ThemeTokens adhering strictly to AGENTS.md.
+//! Composer modal dialog organism: one editor per post of the thread.
+//! Every size and color comes from `ThemeTokens`.
 
 mod attachments;
 mod draft_row;

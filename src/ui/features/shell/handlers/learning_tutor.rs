@@ -14,7 +14,7 @@ use crate::domain::Post;
 use crate::state::semantic::hits::shortened;
 use crate::state::{build_conversation, ReplyLimits};
 use crate::ui::features::review::learning::TutorStatus;
-use chrono::Utc;
+use jiff::Timestamp;
 use gpui_kit::*;
 
 /// Characters of a title made from a post.
@@ -67,7 +67,7 @@ impl AppView {
 
     pub(super) fn start_tutor_session(&mut self, source: TutorSource, window: &mut Window, cx: &mut Context<Self>) {
         let Some(start) = self.tutor_start(self.rooted(source)) else { return };
-        let session = TutorSession::start(SessionId::generate(), start, Utc::now());
+        let session = TutorSession::start(SessionId::generate(), start, Timestamp::now());
         let id = session.id.clone();
         self.store_session(session, cx);
         let shown = id.clone();
@@ -81,14 +81,14 @@ impl AppView {
 
     pub(super) fn answer_tutor(&mut self, id: &SessionId, text: &str, window: &mut Window, cx: &mut Context<Self>) {
         let Some(session) = self.session(id) else { return };
-        self.store_session(session.with_answer(text, Utc::now()), cx);
+        self.store_session(session.with_answer(text, Timestamp::now()), cx);
         self.run_tutor(id, window, cx);
     }
 
     pub(super) fn close_tutor(&mut self, id: &SessionId, window: &mut Window, cx: &mut Context<Self>) {
         let Some(session) = self.session(id) else { return };
         self.review.learning.cancel_running();
-        self.store_session(session.close(Utc::now()), cx);
+        self.store_session(session.close(Timestamp::now()), cx);
         self.run_tutor(id, window, cx);
     }
 
@@ -112,13 +112,13 @@ impl AppView {
     /// Review items anchored to the session's source, one per chosen summary question.
     pub(super) fn create_gap_items(&mut self, id: &SessionId, chosen: &[usize], cx: &mut Context<Self>) {
         let Some(session) = self.session(id) else { return };
-        let context = NewItemContext { network_id: session.network_id.clone(), created_at: Utc::now(), today: review_today() };
+        let context = NewItemContext { network_id: session.network_id.clone(), created_at: Timestamp::now(), today: review_today() };
         let items: Vec<_> = gap_drafts(&session, chosen).iter().filter_map(|draft| new_item(draft, &context, ItemId::generate())).collect();
         if items.is_empty() {
             return;
         }
         let count = items.len();
         self.store_review_items(items, cx);
-        self.store_session(session.with_items_created(count, Utc::now()), cx);
+        self.store_session(session.with_items_created(count, Timestamp::now()), cx);
     }
 }

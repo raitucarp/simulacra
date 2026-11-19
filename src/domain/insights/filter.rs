@@ -3,7 +3,7 @@
 
 use super::facts::PostKind;
 use crate::domain::{NetworkId, Post, Profile};
-use chrono::{DateTime, Duration, Utc};
+use jiff::Timestamp;
 use serde::{Deserialize, Serialize};
 
 /// How far back posts are counted.
@@ -81,9 +81,9 @@ pub struct InsightsFilter {
 
 impl InsightsFilter {
     /// Whether `post` (by `author`, if known) passes, at time `now` in network `network`.
-    pub fn accepts(&self, post: &Post, author: Option<&Profile>, now: DateTime<Utc>, network: &NetworkId) -> bool {
+    pub fn accepts(&self, post: &Post, author: Option<&Profile>, now: Timestamp, network: &NetworkId) -> bool {
         let in_network = self.all_networks || &post.network_id == network;
-        let recent = self.range.days().is_none_or(|days| post.created_at >= now - Duration::days(days));
+        let recent = self.range.days().is_none_or(|days| post.created_at >= now - crate::time::days(days));
         let is_agent = author.is_some_and(Profile::is_agent);
         let audience = match self.audience {
             Audience::Everyone => true,

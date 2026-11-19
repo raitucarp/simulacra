@@ -64,7 +64,7 @@ pub fn prediction_list(data: &CalibrationData, on_request: &RequestAction, theme
 }
 
 fn prediction_row(index: usize, row: &PredictionRow, on_request: &RequestAction, theme: &ThemeTokens) -> Stateful<Div> {
-    let due = row.due.map_or_else(|| tr("thinking.credence.no_date"), |d| d.format(DAY_FORMAT).to_string());
+    let due = row.due.map_or_else(|| tr("thinking.credence.no_date"), |d| d.strftime(DAY_FORMAT).to_string());
     let due_colour = if row.is_due { theme.warning } else { theme.text_muted };
     let outcomes = Outcome::ALL.iter().enumerate().map(|(o, outcome)| {
         let (on_request, request) = (on_request.clone(), ThinkingRequest::ResolvePrediction(row.post_id.clone(), *outcome));

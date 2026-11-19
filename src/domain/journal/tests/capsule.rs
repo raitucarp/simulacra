@@ -62,6 +62,6 @@ fn list_order_puts_ready_first() {
 #[test]
 fn the_opening_field_takes_days_or_a_day() {
     assert_eq!(parse_until(" 30 "), Some(SealUntil::Days(30)));
-    assert_eq!(parse_until("2027-01-31"), Some(SealUntil::Date(chrono::NaiveDate::from_ymd_opt(2027, 1, 31).unwrap())));
+    assert_eq!(parse_until("2027-01-31"), Some(SealUntil::Date(jiff::civil::date(2027, 1, 31))));
     assert_eq!(parse_until("next year"), None);
 }

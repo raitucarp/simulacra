@@ -37,7 +37,7 @@ impl JournalPanel {
 
     fn checkin_row(&self, index: usize, checkin: &MoodCheckin, cx: &mut Context<Self>) -> Div {
         let theme = &self.theme;
-        let mut facts = vec![checkin.at.format(TIME_FORMAT).to_string(), t!("journal.mood.energy_value", value = checkin.energy).to_string()];
+        let mut facts = vec![checkin.at.strftime(TIME_FORMAT).to_string(), t!("journal.mood.energy_value", value = checkin.energy).to_string()];
         facts.extend(checkin.sleep_hours.map(|h| t!("journal.mood.sleep_value", hours = format!("{h:.1}")).to_string()));
         facts.extend(checkin.tags.iter().map(|tag| format!("#{tag}")));
         let id = checkin.id.clone();

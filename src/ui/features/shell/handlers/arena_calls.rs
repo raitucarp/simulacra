@@ -29,7 +29,7 @@ impl AppView {
 
     /// The "Your current beliefs" section of `agent`'s prompt (empty without beliefs).
     pub(in crate::ui::features::shell) fn belief_dossier(&self, agent: &ProfileId) -> String {
-        beliefs_section(&self.arena.book, agent, chrono::Utc::now())
+        beliefs_section(&self.arena.book, agent, jiff::Timestamp::now())
     }
 
     /// `agent`'s full system prompt: its dossier in the active network, with its beliefs.

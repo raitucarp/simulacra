@@ -1,9 +1,9 @@
 use super::{backoff_delay, FailureCause, FailureGate, BACKOFF_BASE_MINUTES, BACKOFF_MAX_MINUTES};
 use crate::agent::{LlmFailure, LlmProvider};
-use chrono::{DateTime, Duration, TimeZone, Utc};
+use jiff::{SignedDuration, Timestamp};
 
-fn at(minute: u32) -> DateTime<Utc> {
-    Utc.with_ymd_and_hms(2026, 11, 16, 12, minute, 0).single().expect("valid time")
+fn at(minute: i8) -> Timestamp {
+    crate::time::utc(2026, 11, 16, 12, minute, 0)
 }
 
 fn missing_key(provider: LlmProvider) -> FailureCause {
@@ -47,12 +47,12 @@ fn request_causes_ignore_the_variable_details() {
 
 #[test]
 fn backoff_doubles_per_failure_and_is_capped() {
-    assert_eq!(backoff_delay(1), Duration::minutes(BACKOFF_BASE_MINUTES));
-    assert_eq!(backoff_delay(2), Duration::minutes(BACKOFF_BASE_MINUTES * 2));
-    assert_eq!(backoff_delay(3), Duration::minutes(BACKOFF_BASE_MINUTES * 4));
-    assert_eq!(backoff_delay(40), Duration::minutes(BACKOFF_MAX_MINUTES));
-    assert_eq!(backoff_delay(u32::MAX), Duration::minutes(BACKOFF_MAX_MINUTES));
-    let delays: Vec<Duration> = (1..12).map(backoff_delay).collect();
+    assert_eq!(backoff_delay(1), jiff::SignedDuration::from_mins(BACKOFF_BASE_MINUTES));
+    assert_eq!(backoff_delay(2), jiff::SignedDuration::from_mins(BACKOFF_BASE_MINUTES * 2));
+    assert_eq!(backoff_delay(3), jiff::SignedDuration::from_mins(BACKOFF_BASE_MINUTES * 4));
+    assert_eq!(backoff_delay(40), jiff::SignedDuration::from_mins(BACKOFF_MAX_MINUTES));
+    assert_eq!(backoff_delay(u32::MAX), jiff::SignedDuration::from_mins(BACKOFF_MAX_MINUTES));
+    let delays: Vec<SignedDuration> = (1..12).map(backoff_delay).collect();
     assert!(delays.windows(2).all(|pair| pair[0] <= pair[1]), "never shrinks");
 }
 
@@ -61,7 +61,7 @@ fn failures_pause_generation_until_the_backoff_elapses() {
     let mut gate = FailureGate::default();
     assert!(gate.allows_generation(at(0)), "a fresh gate never blocks");
     assert!(gate.record_failure(request("API error (401 Unauthorized): x"), at(0)), "first failure is shown");
-    let base = BACKOFF_BASE_MINUTES as u32;
+    let base = BACKOFF_BASE_MINUTES as i8;
     assert!(!gate.allows_generation(at(base - 1)));
     assert!(gate.allows_generation(at(base)));
 

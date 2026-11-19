@@ -63,7 +63,7 @@ impl AppState {
         let author = self.ensure_author(&request.author)?;
         let source = SourceInfo { document_id: document_id.to_string(), title: title.to_string(), chapter_titles: request.chapter_titles.clone() };
         let plan = plan_posts(&request.units, &source, limit);
-        let posts = build_posts(&plan, &author, &self.active_network_id, chrono::Utc::now(), PostOrigin::Import, Self::fresh_post_id)?;
+        let posts = build_posts(&plan, &author, &self.active_network_id, jiff::Timestamp::now(), PostOrigin::Import, Self::fresh_post_id)?;
         self.publish_batch(posts)
     }
 }

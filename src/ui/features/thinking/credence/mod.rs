@@ -9,7 +9,7 @@ pub use chip::{render_credence_chip, with_credence_item};
 
 use crate::domain::thinking::credence::{Credence, DuePreset, Outcome};
 use crate::domain::PostId;
-use chrono::NaiveDate;
+use jiff::civil::Date;
 use gpui_kit::component::input::InputState;
 use gpui_kit::{App, Entity, Window};
 use std::collections::HashMap;
@@ -20,7 +20,7 @@ use std::rc::Rc;
 pub struct CredenceChip {
     pub percent: u8,
     pub outcome: Option<Outcome>,
-    pub due: Option<NaiveDate>,
+    pub due: Option<Date>,
     /// Open and past its date.
     pub is_due: bool,
     pub sentence: Option<String>,
@@ -28,7 +28,7 @@ pub struct CredenceChip {
 }
 
 impl CredenceChip {
-    pub fn of(credence: &Credence, today: NaiveDate) -> Self {
+    pub fn of(credence: &Credence, today: Date) -> Self {
         Self {
             percent: credence.percent,
             outcome: credence.outcome,

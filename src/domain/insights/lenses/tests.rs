@@ -7,15 +7,15 @@ use crate::domain::insights::filter::DateRange;
 use crate::domain::readability::Band;
 use crate::domain::trait_option::TraitOption;
 use crate::domain::traits::EpistemicStance;
-use chrono::{Duration, TimeZone};
+use jiff::Timestamp;
 use std::time::{Duration as Elapsed, Instant};
 
-fn now() -> DateTime<Utc> {
-    Utc.with_ymd_and_hms(2026, 3, 10, 12, 0, 0).unwrap()
+fn now() -> Timestamp {
+    crate::time::utc(2026, 3, 10, 12, 0, 0)
 }
 
 fn at(post: Post, days: i64) -> Post {
-    Post { created_at: now() - Duration::days(days), ..post }
+    Post { created_at: now() - crate::time::days(days), ..post }
 }
 
 fn agent(id: &str, name: &str, stance: EpistemicStance) -> Profile {
@@ -37,10 +37,10 @@ fn input() -> LensInput {
     ];
     posts.extend((0..6).map(|i| at(Post::create(format!("s{i}"), "n", socrates.clone(), &format!("Short question number {i}? #freedom")).unwrap(), i)));
     let mut doc = GroundingDocument::new("d1", "n", "Ethics", "Body");
-    doc.created_at = now() - Duration::days(10);
+    doc.created_at = now() - crate::time::days(10);
     doc.record.subjects = vec!["ethics".into()];
     doc.record.reading = crate::domain::document::record::Reading::at(50);
-    let review = vec![ReviewSource { network: "n".into(), text: "What is necessity?".into(), tags: vec!["necessity".into(), "ethics".into()], created_at: now() - Duration::days(3) }];
+    let review = vec![ReviewSource { network: "n".into(), text: "What is necessity?".into(), tags: vec!["necessity".into(), "ethics".into()], created_at: now() - crate::time::days(3) }];
     let vectors = vec![("root".into(), vec![1.0, 0.0]), ("no".into(), vec![0.0, 1.0]), ("s0".into(), vec![0.0, 1.0]), ("s1".into(), vec![0.1, 1.0])];
     LensInput { network: "n".into(), posts, documents: vec![doc], profiles: vec![me, socrates, spinoza], subjects: vec![("ethics".into(), "Ethics".into())], review, vectors, language: Default::default(), now: now(), offset: None }
 }
@@ -137,7 +137,7 @@ fn review_items_contribute_their_own_words() {
     use crate::domain::review::item::{new_map_item, NewItemContext};
     use crate::domain::review::{ConnectionMap, ItemId};
     let map = ConnectionMap { title: "Spinoza and freedom".into(), ..Default::default() };
-    let context = NewItemContext { network_id: "n".into(), created_at: now(), today: now().date_naive() };
+    let context = NewItemContext { network_id: "n".into(), created_at: now(), today: crate::time::utc_date(now()) };
     let item = ReviewItemTags::tagged(new_map_item(map, &context, ItemId::new("i1")), "ethics");
     let source = review_source(&item);
     assert_eq!((source.text.as_str(), source.tags.clone()), ("Spinoza and freedom", vec!["ethics".to_string()]));
@@ -173,7 +173,7 @@ fn five_thousand_posts_fit_the_budget() {
         let text = format!("Thinking about {} and {} again, with Spinoza and Socrates in mind. #{} #{}", topics[i % 10], topics[(i / 3) % 10], topics[i % 10], topics[(i * 7) % 10]);
         let author = authors[i % authors.len()].clone();
         let post = if i % 3 == 1 { Post::create_reply(format!("p{i}"), "n", author, &text, format!("p{}", i - 1).as_str(), None, None) } else { Post::create(format!("p{i}"), "n", author, &text) };
-        Post { created_at: now() - Duration::minutes((i * 105) as i64), ..post.unwrap() }
+        Post { created_at: now() - jiff::SignedDuration::from_mins((i * 105) as i64), ..post.unwrap() }
     }).collect();
     let vectors = (0..POSTS).step_by(2).map(|i| (format!("p{i}"), vec![(i % 7) as f32, (i % 5) as f32, 1.0])).collect();
     let input = LensInput { posts, profiles: authors, vectors, ..LensInput::empty("n".into(), now()) };

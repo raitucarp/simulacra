@@ -10,7 +10,6 @@ use crate::domain::embedding::cosine;
 use crate::domain::insights::lenses::{Analysed, LensInput};
 use crate::domain::trait_option::TraitOption;
 use crate::domain::ProfileId;
-use chrono::Duration;
 use std::collections::{HashMap, HashSet};
 
 /// Days that count as "lately".
@@ -48,7 +47,7 @@ fn top(shares: &Shares) -> Option<(String, f64)> {
 
 /// The window's summary, or `None` when nothing was posted in it.
 pub fn of(input: &LensInput, analysed: &Analysed, profiles: &ProfileMap, vectors: &HashMap<&str, &[f32]>) -> Option<Lately> {
-    let since = input.now - Duration::days(LATELY_DAYS);
+    let since = input.now - crate::time::days(LATELY_DAYS);
     let (recent, earlier): (Vec<usize>, Vec<usize>) = (0..analysed.posts.len()).partition(|&i| analysed.posts[i].created_at >= since);
     if recent.is_empty() {
         return None;

@@ -54,7 +54,7 @@ fn render_item_header(post: &Post, author: &Profile, theme: &ThemeTokens) -> Div
                 .font_family(theme.font_family_mono.clone())
                 .text_size(theme.font_size_label)
                 .text_color(theme.text_muted)
-                .child(post.created_at.format(SPARK_TIME_FORMAT).to_string()),
+                .child(post.created_at.strftime(SPARK_TIME_FORMAT).to_string()),
         )
 }
 

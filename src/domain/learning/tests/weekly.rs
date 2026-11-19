@@ -4,7 +4,7 @@ use crate::domain::learning::weekly::{suggest_actions, weekly_digest, weekly_rev
 use crate::domain::review::fsrs::Memory;
 use crate::domain::review::schedule::Phase;
 use crate::domain::review::{Grade, ItemId, ReviewEntry, ReviewMode};
-use chrono::Weekday;
+use jiff::civil::Weekday;
 
 fn entry(item: &str, offset: i64, grade: Grade, phase: Phase) -> ReviewEntry {
     ReviewEntry {
@@ -92,11 +92,11 @@ fn actions_start_with_due_reviews_then_strengthen_each_weak_concept() {
 
 #[test]
 fn the_reminder_shows_once_on_its_day_after_its_hour() {
-    let reminder = WeeklyReminder { enabled: true, weekday: Weekday::Sun, hour: 18 };
-    let sunday = chrono::NaiveDate::from_ymd_opt(2026, 11, 15).unwrap();
-    assert!(weekly_review_due(&reminder, sunday, Weekday::Sun, 18, None));
-    assert!(!weekly_review_due(&reminder, sunday, Weekday::Sun, 17, None), "too early");
-    assert!(!weekly_review_due(&reminder, sunday, Weekday::Sun, 20, Some(sunday)), "already shown today");
-    assert!(!weekly_review_due(&reminder, sunday, Weekday::Mon, 20, None), "another day");
-    assert!(!weekly_review_due(&WeeklyReminder { enabled: false, ..reminder }, sunday, Weekday::Sun, 20, None));
+    let reminder = WeeklyReminder { enabled: true, weekday: Weekday::Sunday, hour: 18 };
+    let sunday = jiff::civil::date(2026, 11, 15);
+    assert!(weekly_review_due(&reminder, sunday, Weekday::Sunday, 18, None));
+    assert!(!weekly_review_due(&reminder, sunday, Weekday::Sunday, 17, None), "too early");
+    assert!(!weekly_review_due(&reminder, sunday, Weekday::Sunday, 20, Some(sunday)), "already shown today");
+    assert!(!weekly_review_due(&reminder, sunday, Weekday::Monday, 20, None), "another day");
+    assert!(!weekly_review_due(&WeeklyReminder { enabled: false, ..reminder }, sunday, Weekday::Sunday, 20, None));
 }

@@ -1,6 +1,6 @@
 use super::*;
 use crate::domain::{AuthoredPost, NetworkId, Post, PostId, Profile};
-use chrono::Utc;
+use jiff::Timestamp;
 
 fn parent_post(id: &str, author_name: &str, content: &str, mentions: Vec<String>) -> AuthoredPost {
     let author = Profile::new_primary("u1", author_name, "@architect");
@@ -9,7 +9,7 @@ fn parent_post(id: &str, author_name: &str, content: &str, mentions: Vec<String>
         network_id: NetworkId::new("net_philosophy"),
         author_id: author.id.clone(),
         content: content.to_string(),
-        created_at: Utc::now(),
+        created_at: Timestamp::now(),
         likes: 0,
         is_liked: false,
         replies_count: 0,

@@ -14,14 +14,14 @@ use std::rc::Rc;
 use crate::domain::NetworkId;
 use crate::state::AppState;
 use crate::ui::features::review::{LearnSheet, ReviewData, ReviewPanel};
-use chrono::{Local, NaiveDate, Timelike};
+use jiff::civil::Date;
 use gpui_kit::component::notification::Notification;
 use gpui_kit::component::WindowExt;
 use gpui_kit::*;
 
 /// What the page's data was last built from: deck version, network, day, settings, post
 /// revision and document count.
-type Stamp = (u64, NetworkId, NaiveDate, LearningPrefs, u64, usize);
+type Stamp = (u64, NetworkId, Date, LearningPrefs, u64, usize);
 
 /// The deck, the Review page and the learn sheet.
 pub struct ReviewHost {
@@ -34,14 +34,14 @@ pub struct ReviewHost {
     pub(super) version: u64,
     stamp: Option<Stamp>,
     /// The review day the reminder was last shown on.
-    reminded_on: Option<NaiveDate>,
+    reminded_on: Option<Date>,
     /// Goals, tutor sessions and palaces of the Learn tab (sb E2).
     pub learning: super::learning_host::LearningHost,
 }
 
 /// Today's review day in local time.
-pub fn review_today() -> NaiveDate {
-    review_day(&Local::now())
+pub fn review_today() -> Date {
+    review_day(&crate::time::local_now())
 }
 
 /// The limits and the scheduling policy of Settings › Learning.
@@ -119,9 +119,9 @@ impl AppView {
     }
 
     /// Once a day, at or after the reminder hour, says how many items wait (Settings › Learning).
-    fn remind_review(&mut self, today: NaiveDate, window: &mut Window, cx: &mut Context<Self>) {
+    fn remind_review(&mut self, today: Date, window: &mut Window, cx: &mut Context<Self>) {
         let prefs = &self.state.preferences().learning;
-        if !prefs.review_reminder || self.review.reminded_on == Some(today) || Local::now().hour() < prefs.reminder_hour {
+        if !prefs.review_reminder || self.review.reminded_on == Some(today) || (crate::time::local_now().hour() as u32) < prefs.reminder_hour {
             return;
         }
         self.review.reminded_on = Some(today);

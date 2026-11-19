@@ -130,7 +130,7 @@ fn version_one_vaults_get_legacy_records_and_an_index() {
     db.init_schema().expect("v1 -> v2");
     assert_eq!((db.schema_version().unwrap(), CATALOGUE_VERSION), (LATEST_VERSION, 2));
     let doc = db.load_all_documents().unwrap().pop().unwrap();
-    assert_eq!((doc.title.as_str(), doc.created_at.to_rfc3339().as_str()), ("Old notes", "2025-05-01T10:00:00+00:00"));
+    assert_eq!((doc.title.as_str(), crate::time::rfc3339(doc.created_at).as_str()), ("Old notes", "2025-05-01T10:00:00+00:00"));
     assert_eq!((doc.record.kind, doc.record.provenance.origin), (DocumentKind::Note, OriginKind::Legacy));
     assert_eq!(doc.record.description, "Monism unifies mind and body.");
     let found = db.search_catalogue(&CatalogueQuery { text: "monism".into(), ..CatalogueQuery::new(NetworkId::new("net")) }, &Default::default());

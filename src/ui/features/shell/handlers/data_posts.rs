@@ -9,7 +9,7 @@ use crate::domain::preferences::ToastKind;
 use crate::domain::PostId;
 use crate::ui::features::composer::publish_error_message;
 use crate::ui::features::data::{tr, DataEvent, SavedTarget};
-use chrono::Utc;
+use jiff::Timestamp;
 use gpui_kit::component::notification::Notification;
 use gpui_kit::*;
 
@@ -55,7 +55,7 @@ impl AppView {
 
     fn toggle_bookmark(&mut self, id: &PostId, window: &mut Window, cx: &mut Context<Self>) {
         let was = self.data.shelf.is_bookmarked(id);
-        self.data.shelf.bookmarks = toggled_bookmark(&self.data.shelf.bookmarks, id, Utc::now());
+        self.data.shelf.bookmarks = toggled_bookmark(&self.data.shelf.bookmarks, id, Timestamp::now());
         if let Some(vault) = self.state.db.as_ref() {
             let saved = self.data.shelf.bookmarks.iter().find(|b| &b.post == id).cloned();
             let _ = match saved {
@@ -73,7 +73,7 @@ impl AppView {
         if self.data.shelf.entries.iter().any(|e| &e.collection == collection && e.item == item) {
             return;
         }
-        let entry = CollectionEntry { collection: collection.clone(), item, position: next_position(&self.data.shelf.entries, collection), note: String::new(), added_at: Utc::now() };
+        let entry = CollectionEntry { collection: collection.clone(), item, position: next_position(&self.data.shelf.entries, collection), note: String::new(), added_at: Timestamp::now() };
         if let Some(vault) = self.state.db.as_ref() {
             let _ = vault.save_collection_entries(vec![entry.clone()]);
         }

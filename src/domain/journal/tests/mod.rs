@@ -9,17 +9,18 @@ mod prompts;
 
 use super::entry::JournalEntry;
 use super::ids::RecordId;
-use chrono::{DateTime, NaiveDate, TimeZone, Utc};
+use jiff::Timestamp;
+use jiff::civil::Date;
 
 /// A fixed journal day.
-pub(super) fn day(offset: i64) -> NaiveDate {
-    NaiveDate::from_ymd_opt(2026, 3, 2).unwrap() + chrono::Duration::days(offset)
+pub(super) fn day(offset: i64) -> Date {
+    jiff::civil::date(2026, 3, 2) + crate::time::days(offset)
 }
 
 /// Noon UTC of `day(offset)`.
-pub(super) fn noon(offset: i64) -> DateTime<Utc> {
+pub(super) fn noon(offset: i64) -> Timestamp {
     let d = day(offset);
-    Utc.from_utc_datetime(&d.and_hms_opt(12, 0, 0).unwrap())
+    crate::time::at_utc(d, 12, 0, 0)
 }
 
 /// An entry `id` on `day(offset)` reading `body`.

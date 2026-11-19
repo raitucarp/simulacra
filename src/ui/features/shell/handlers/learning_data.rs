@@ -14,7 +14,7 @@ use crate::domain::review::{Deck, Policy};
 use crate::domain::post::{WIKILINK_CLOSE, WIKILINK_OPEN};
 use crate::domain::Post;
 use crate::ui::features::review::learning::{GoalView, LearningData};
-use chrono::NaiveDate;
+use jiff::civil::Date;
 
 /// Characters of a vault document the radar reads (its title and opening).
 const SOURCE_CHARS: usize = 4_000;
@@ -49,10 +49,10 @@ impl AppView {
     /// The active network's posts written by the learner (as themselves or a persona).
     fn own_posts(&self) -> Vec<OwnPost> {
         let own = self.state.current_network_posts().filter(|post| !post.is_instant_repost() && self.state.author_of(post).is_human_persona());
-        own.map(|post| OwnPost { id: post.id.as_str().to_string(), root_id: self.thread_root(post).id.as_str().to_string(), text: without_post_links(post), day: review_day(&post.created_at.with_timezone(&chrono::Local)) }).collect()
+        own.map(|post| OwnPost { id: post.id.as_str().to_string(), root_id: self.thread_root(post).id.as_str().to_string(), text: without_post_links(post), day: review_day(&crate::time::local(post.created_at)) }).collect()
     }
 
-    fn learning_inputs(&self, deck: &Deck, today: NaiveDate, policy: &Policy) -> LearningInputs {
+    fn learning_inputs(&self, deck: &Deck, today: Date, policy: &Policy) -> LearningInputs {
         let text_of = |id: &str| self.state.get_post_by_id(id).map(|post| post.content.clone());
         let item_texts = deck.items.iter().filter(|item| !item.retired).map(|item| ItemText {
             text: format!("{} {}", item.prompt_text(&text_of), item.answer_text(&text_of)),
@@ -71,7 +71,7 @@ impl AppView {
     }
 
     /// The Learn tab's data for the active network.
-    pub(in crate::ui::features::shell) fn learning_data(&self, deck: &Deck, today: NaiveDate, policy: &Policy) -> LearningData {
+    pub(in crate::ui::features::shell) fn learning_data(&self, deck: &Deck, today: Date, policy: &Policy) -> LearningData {
         let records: LearningRecords = self.review.learning.records.of_network(&self.state.active_network_id);
         let inputs = self.learning_inputs(deck, today, policy);
         let gap_inputs = GapInputs { own_posts: &inputs.own_posts, sources: &inputs.sources, items: &inputs.item_texts, sessions: &records.sessions, pinned: &[], only: None, today };

@@ -5,10 +5,10 @@ use crate::domain::review::item::{
 };
 use crate::domain::review::{Anchor, AnchorSide, Deck, Grade, ItemId, ReviewItem, Subject};
 use crate::domain::{NetworkId, PostId};
-use chrono::Utc;
+use jiff::Timestamp;
 
 fn context() -> NewItemContext {
-    NewItemContext { network_id: NetworkId::new("net"), created_at: Utc::now(), today: day(0) }
+    NewItemContext { network_id: NetworkId::new("net"), created_at: Timestamp::now(), today: day(0) }
 }
 
 fn on_post(side: AnchorSide, written: &str) -> ItemDraft {
@@ -79,7 +79,7 @@ fn deleted_posts_retire_their_items_and_keep_the_log() {
     assert!(retired[0].retired && !retired[0].is_active());
     assert!(retire_orphans(&retired, &gone).is_empty(), "retiring happens once");
     let answer = crate::domain::review::Answer { item_id: item.id.clone(), grade: Grade::Good, mode: crate::domain::review::ReviewMode::Review, confidence: None, correct: None };
-    let (_, entry) = crate::domain::review::apply_answer(&item, &answer, Utc::now(), day(0), &crate::domain::review::Policy::with_retention_percent(90));
+    let (_, entry) = crate::domain::review::apply_answer(&item, &answer, Timestamp::now(), day(0), &crate::domain::review::Policy::with_retention_percent(90));
     let deck = Deck { items: retired, log: vec![entry] };
     assert!(deck.on_post(&NetworkId::new("net"), "p1").is_none(), "a retired item no longer marks its post");
     assert_eq!(deck.without_item(&item.id).log.len(), 1);

@@ -27,7 +27,7 @@ pub use summary::{gap_drafts, parse_summary, TutorSummary};
 
 use super::bloom::BloomLevel;
 use crate::domain::NetworkId;
-use chrono::{DateTime, Utc};
+use jiff::Timestamp;
 use serde::{Deserialize, Serialize};
 
 /// Prefix of tutor session ids.
@@ -63,8 +63,8 @@ pub struct TutorSession {
     /// Review items made from the summary's gaps.
     #[serde(default)]
     pub items_created: usize,
-    pub created_at: DateTime<Utc>,
-    pub updated_at: DateTime<Utc>,
+    pub created_at: Timestamp,
+    pub updated_at: Timestamp,
 }
 
 /// What a session waits for.

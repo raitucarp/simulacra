@@ -7,7 +7,7 @@ use crate::agent::{LlmClient, LlmProvider, LlmSettings};
 use crate::domain::learning::tutor::machine::SessionStart;
 use crate::domain::learning::{SessionId, TutorSession, TutorSource, Verdict};
 use crate::domain::post_actions::{ActionFailureKind, RequestPolicy};
-use chrono::Utc;
+use jiff::Timestamp;
 use serde_json::json;
 use std::time::Duration;
 
@@ -19,7 +19,7 @@ fn answer(text: &str) -> MockReply {
 
 fn session() -> TutorSession {
     let start = SessionStart { network_id: crate::domain::NetworkId::new("net"), source: TutorSource::Concept { name: "necessity".into() }, title: "Necessity".into(), material: "Necessity: what could not be otherwise.".into() };
-    TutorSession::start(SessionId("tutor_t".into()), start, Utc::now())
+    TutorSession::start(SessionId("tutor_t".into()), start, Timestamp::now())
 }
 
 fn job(url: &str, request: TutorRequest, session: &TutorSession) -> ActionJob {
@@ -43,10 +43,10 @@ fn an_opening_question_comes_back_parsed() {
 fn a_turn_assesses_and_asks_again() {
     let reply = r#"{"assessment": {"level": "understand", "verdict": "solid", "right": ["own words"], "misconceptions": []}, "question": "Where would it fail?"}"#;
     let server = MockServer::start(vec![answer(reply)]);
-    let session = session().with_opening("What is it?", Utc::now()).with_answer("What must be.", Utc::now());
+    let session = session().with_opening("What is it?", Timestamp::now()).with_answer("What must be.", Timestamp::now());
     let TutorReply::Turn(turn) = run_tutor_blocking(job(&server.url, TutorRequest::Turn, &session), TutorRequest::Turn, None).unwrap() else { panic!("a turn") };
     assert_eq!(turn.assessment.map(|a| a.verdict), Some(Verdict::Solid));
-    let next = session.with_turn(TurnReply { assessment: None, question: turn.question }, Utc::now());
+    let next = session.with_turn(TurnReply { assessment: None, question: turn.question }, Timestamp::now());
     assert_eq!(next.exchanges.len(), 2);
 }
 

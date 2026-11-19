@@ -8,7 +8,7 @@ use crate::domain::activity::{ActivityHeatmap, HeatmapDay, DAYS_PER_WEEK, HEATMA
 use crate::theme::ThemeTokens;
 use crate::ui::components::measured_width;
 use crate::ui::features::day_filter::{day_summary, month_label};
-use chrono::NaiveDate;
+use jiff::civil::Date;
 use gpui_kit::component::tooltip::Tooltip;
 use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::*;
@@ -25,7 +25,7 @@ const LABELED_ROWS: [(usize, &str); 3] =
 #[derive(IntoElement)]
 pub(super) struct CadenceGrid {
     pub heatmap: ActivityHeatmap,
-    pub selected: Option<NaiveDate>,
+    pub selected: Option<Date>,
     pub on_click_day: ClickDayCallback,
     pub theme: ThemeTokens,
 }

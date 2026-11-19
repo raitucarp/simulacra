@@ -19,7 +19,7 @@ use gpui_kit::*;
 const DAY_FORMAT: &str = "%Y-%m-%d";
 
 pub(super) fn today() -> String {
-    chrono::Local::now().format(DAY_FORMAT).to_string()
+    crate::time::local_now().strftime(DAY_FORMAT).to_string()
 }
 
 impl AppView {
@@ -29,7 +29,7 @@ impl AppView {
         let today = today();
         let settings = self.arena.settings_of(agent);
         let Some(profile) = self.profile_of(agent).filter(|profile| profile.is_agent() && settings.allows(&today)).cloned() else { return };
-        let now = chrono::Utc::now();
+        let now = jiff::Timestamp::now();
         let current: Vec<_> = self.arena.book.ranked(agent, now).into_iter().take(DOSSIER_BELIEFS).collect();
         let prompt = extraction_prompt(&profile.name, &self.language_of(Some(&profile)), &current, &material);
         match self.thinking_job(prompt, EXTRACT_ANSWER_TOKENS, CancelToken::new()) {
@@ -52,7 +52,7 @@ impl AppView {
         let Some(pending) = self.arena.updates.remove(&ticket) else { return };
         match outcome {
             Ok(raw) => {
-                let change = apply_proposals(&self.arena.book, &pending.agent, &parse_proposals(&raw), &pending.source, chrono::Utc::now(), BeliefId::random);
+                let change = apply_proposals(&self.arena.book, &pending.agent, &parse_proposals(&raw), &pending.source, jiff::Timestamp::now(), BeliefId::random);
                 self.apply_belief_change(change);
                 self.arena.belief_notice = None;
             }
@@ -74,7 +74,7 @@ impl AppView {
 
     pub(in crate::ui::features::shell) fn handle_beliefs_event(&mut self, _: &Entity<BeliefsPanel>, event: &BeliefsEvent, window: &mut Window, cx: &mut Context<Self>) {
         match event.clone() {
-            BeliefsEvent::Act(action) => self.apply_belief_change(apply_user_action(&self.arena.book, &action, chrono::Utc::now())),
+            BeliefsEvent::Act(action) => self.apply_belief_change(apply_user_action(&self.arena.book, &action, jiff::Timestamp::now())),
             BeliefsEvent::SetUpdates(agent, on) => {
                 let settings = self.arena.settings_of(&agent).switched(on);
                 if let Some(vault) = self.state.db.as_ref() {

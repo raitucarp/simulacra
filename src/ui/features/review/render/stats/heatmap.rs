@@ -11,7 +11,7 @@ use crate::theme::ThemeTokens;
 use crate::ui::components::measured_width;
 use crate::ui::features::day_filter::format_day;
 use crate::ui::icons::LucideIcon;
-use chrono::NaiveDate;
+use jiff::civil::Date;
 use gpui_kit::component::tooltip::Tooltip;
 use gpui_kit::*;
 
@@ -36,7 +36,7 @@ fn level_color(level: u8, theme: &ThemeTokens) -> Rgba {
 #[derive(IntoElement)]
 struct ReviewHeatmap {
     log: Vec<ReviewEntry>,
-    today: NaiveDate,
+    today: Date,
     theme: ThemeTokens,
 }
 

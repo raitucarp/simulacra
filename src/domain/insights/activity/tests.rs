@@ -1,17 +1,16 @@
 use super::histogram::nice_width;
 use super::*;
 use crate::domain::insights::facts::PostFacts;
-use chrono::{TimeZone, Utc};
 
-fn day(d: u32) -> NaiveDate {
-    NaiveDate::from_ymd_opt(2026, 3, d).unwrap()
+fn day(d: i8) -> Date {
+    jiff::civil::date(2026, 3, d)
 }
 
-fn post(author: usize, kind: PostKind, d: u32, hour: usize, chars: usize) -> PostFacts {
+fn post(author: usize, kind: PostKind, d: i8, hour: usize, chars: usize) -> PostFacts {
     PostFacts {
         author,
         kind,
-        created_at: Utc.with_ymd_and_hms(2026, 3, d, hour as u32, 0, 0).unwrap(),
+        created_at: crate::time::utc(2026, 3, d, hour as i8, 0, 0),
         day: day(d),
         weekday: day(d).weekday_index(),
         hour,
@@ -25,9 +24,9 @@ trait WeekdayIndex {
     fn weekday_index(&self) -> usize;
 }
 
-impl WeekdayIndex for NaiveDate {
+impl WeekdayIndex for Date {
     fn weekday_index(&self) -> usize {
-        chrono::Datelike::weekday(self).num_days_from_monday() as usize
+        self.weekday().to_monday_zero_offset() as usize
     }
 }
 
@@ -40,7 +39,7 @@ fn timeline_has_a_bar_per_day_and_buckets_long_spans() {
     assert_eq!(bars[0].counts[PostKind::Reply.index()], 1);
     assert_eq!(bars[2].total(), 1);
     assert_eq!(bars[3].end(), day(5));
-    let year = timeline(&posts, Some(day(5) - chrono::Duration::days(364)), day(5));
+    let year = timeline(&posts, Some(day(5) - crate::time::days(364)), day(5));
     assert!(year.len() <= timeline::MAX_BUCKETS);
     assert_eq!(year.iter().map(TimeBucket::total).sum::<usize>(), 3);
     assert!(timeline(&[], None, day(5)).is_empty());

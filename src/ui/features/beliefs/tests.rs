@@ -15,7 +15,7 @@ fn revision(old: Option<u8>, new: Option<u8>, cause: RevisionCause, reason: &str
         cause,
         reason: reason.into(),
         source: BeliefSource::new(BeliefOrigin::Debate, "d", "Cars"),
-        at: chrono::Utc::now(),
+        at: jiff::Timestamp::now(),
     }
 }
 

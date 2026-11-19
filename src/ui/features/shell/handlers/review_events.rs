@@ -9,7 +9,8 @@ use crate::domain::PostId;
 use super::learning_events::learning_post_ids;
 use crate::ui::features::review::learning::LearningData;
 use crate::ui::features::review::{PickerMode, PostView, PostViews, ReviewData, ReviewEvent, ReviewPanel};
-use chrono::{NaiveDate, Utc};
+use jiff::Timestamp;
+use jiff::civil::Date;
 use gpui_kit::*;
 use std::collections::HashMap;
 use std::rc::Rc;
@@ -50,7 +51,7 @@ impl AppView {
 
     /// The page's data: the active network's items and log, today, Settings › Learning, and
     /// the posts and document titles shown.
-    pub(in crate::ui::features::shell) fn review_data(&self, today: NaiveDate) -> ReviewData {
+    pub(in crate::ui::features::shell) fn review_data(&self, today: Date) -> ReviewData {
         let deck = self.review.deck.of_network(&self.state.active_network_id);
         let (limits, policy) = learning_policy(&self.state.preferences().learning);
         let learning = self.learning_data(&deck, today, &policy);
@@ -63,7 +64,7 @@ impl AppView {
     fn apply_review_answer(&mut self, answer: Answer, cx: &mut Context<Self>) {
         let Some(item) = self.review.deck.item(&answer.item_id).cloned() else { return };
         let policy = learning_policy(&self.state.preferences().learning).1;
-        let (item, entry) = apply_answer(&item, &answer, Utc::now(), review_today(), &policy);
+        let (item, entry) = apply_answer(&item, &answer, Timestamp::now(), review_today(), &policy);
         if let Some(db) = &self.state.db {
             let _ = db.save_review_items(vec![item.clone()]);
             let _ = db.append_review_entry(entry.clone());

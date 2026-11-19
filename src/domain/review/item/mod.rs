@@ -19,7 +19,7 @@ pub use retire::{retire_orphans, retired_now};
 use super::connections::ConnectionMap;
 use super::schedule::ItemSchedule;
 use crate::domain::NetworkId;
-use chrono::{DateTime, Utc};
+use jiff::Timestamp;
 use serde::{Deserialize, Serialize};
 
 /// Prefix of generated item ids.
@@ -108,7 +108,7 @@ pub struct ReviewItem {
     pub network_id: NetworkId,
     pub subject: Subject,
     pub tags: Vec<String>,
-    pub created_at: DateTime<Utc>,
+    pub created_at: Timestamp,
     pub schedule: ItemSchedule,
     /// Left out of reviews until resumed.
     pub suspended: bool,

@@ -35,14 +35,14 @@ impl Database {
         let tx = self.conn.unchecked_transaction().map_err(db_err)?;
         for belief in &change.upserted {
             let json = serde_json::to_string(belief).map_err(db_err)?;
-            tx.execute(UPSERT_BELIEF, params![belief.id.as_str(), belief.agent.as_str(), belief.updated_at.to_rfc3339(), json]).map_err(db_err)?;
+            tx.execute(UPSERT_BELIEF, params![belief.id.as_str(), belief.agent.as_str(), crate::time::rfc3339(belief.updated_at), json]).map_err(db_err)?;
         }
         for id in &change.removed {
             tx.execute(DELETE_BELIEF, params![id.as_str()]).map_err(db_err)?;
         }
         for revision in &change.revisions {
             let json = serde_json::to_string(revision).map_err(db_err)?;
-            tx.execute(INSERT_REVISION, params![revision.belief.as_str(), revision.agent.as_str(), revision.at.to_rfc3339(), json]).map_err(db_err)?;
+            tx.execute(INSERT_REVISION, params![revision.belief.as_str(), revision.agent.as_str(), crate::time::rfc3339(revision.at), json]).map_err(db_err)?;
         }
         tx.commit().map_err(db_err)
     }

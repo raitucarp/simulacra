@@ -9,7 +9,7 @@ use crate::domain::review::{Anchor, Policy, ReviewItem};
 use crate::domain::PostId;
 use crate::import::segment::{split_sentences, SentenceLocale};
 use crate::ui::features::review::QuizContent;
-use chrono::Utc;
+use jiff::Timestamp;
 use gpui_kit::*;
 use rust_i18n::t;
 
@@ -32,7 +32,7 @@ fn quiz_items(items: &[ReviewItem], policy: &Policy, seed: u64) -> Vec<ReviewIte
 impl AppView {
     /// Builds the quiz of `kind` and starts it on the Review page.
     pub(in crate::ui::features::shell) fn start_review_quiz(&mut self, kind: QuizKind, window: &mut Window, cx: &mut Context<Self>) {
-        let seed = Utc::now().timestamp_nanos_opt().unwrap_or_default() as u64;
+        let seed = Timestamp::now().as_nanosecond() as u64;
         let content = match kind {
             QuizKind::Choice => self.choice_quiz(seed),
             QuizKind::Recall => self.recall_quiz(seed),

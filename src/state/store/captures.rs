@@ -15,7 +15,7 @@ impl AppState {
         let author = self.current_profile_or_err()?.id;
         let draft = CaptureDraft { capture: classify(text), image_path };
         let limit = effective_post_limit(self.preferences().writing.post_length_limit);
-        let posts = capture_posts(&draft, limit, &author, &self.active_network_id, chrono::Utc::now(), Self::fresh_post_id)?;
+        let posts = capture_posts(&draft, limit, &author, &self.active_network_id, jiff::Timestamp::now(), Self::fresh_post_id)?;
         self.publish_batch(posts)
     }
 

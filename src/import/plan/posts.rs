@@ -6,7 +6,7 @@ use super::ImportPlan;
 use crate::domain::post::{PostExtras, PostOrigin};
 use crate::domain::{NetworkId, Post, PostId, ProfileId};
 use crate::error::Result;
-use chrono::{DateTime, Duration, Utc};
+use jiff::Timestamp;
 
 /// Milliseconds between consecutive imported posts, so reading order survives sorting by time.
 pub const IMPORT_POST_SPACING_MS: i64 = 1;
@@ -17,7 +17,7 @@ pub fn build_posts(
     plan: &ImportPlan,
     author: &ProfileId,
     network: &NetworkId,
-    start: DateTime<Utc>,
+    start: Timestamp,
     origin: PostOrigin,
     mut next_id: impl FnMut() -> PostId,
 ) -> Result<Vec<Post>> {
@@ -27,7 +27,7 @@ pub fn build_posts(
         for text in &draft.thread {
             let id = next_id();
             let mut post = Post::create_with_attachments(id.clone(), network.clone(), author.clone(), text, None, None, parent.clone(), None, None)?;
-            post.created_at = start + Duration::milliseconds(posts.len() as i64 * IMPORT_POST_SPACING_MS);
+            post.created_at = start + jiff::SignedDuration::from_millis(posts.len() as i64 * IMPORT_POST_SPACING_MS);
             post.extras = PostExtras { sources: vec![draft.source.clone()], origin: Some(origin), ..PostExtras::default() };
             if parent.is_some() {
                 if let Some(previous) = posts.last_mut() {

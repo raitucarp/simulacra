@@ -16,7 +16,7 @@ pub struct GridGeometry {
 /// A month label placed over the shown weeks: its column and the room it may use.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct PlacedLabel {
-    pub month: u32,
+    pub month: i8,
     /// Column among the shown weeks.
     pub column: usize,
     /// Width up to the next label (or the grid's end).

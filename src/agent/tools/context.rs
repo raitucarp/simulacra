@@ -2,7 +2,7 @@
 //! profiles and vault documents, plus the web-fetch policy.
 
 use crate::domain::{GroundingDocument, NetworkId, Post, Profile};
-use chrono::{DateTime, Utc};
+use jiff::Timestamp;
 use std::collections::HashMap;
 use std::time::Duration;
 
@@ -20,7 +20,7 @@ pub struct PostSnapshot {
     pub author_handle: String,
     pub author_name: String,
     pub content: String,
-    pub created_at: DateTime<Utc>,
+    pub created_at: Timestamp,
     pub reply_to: Option<String>,
 }
 

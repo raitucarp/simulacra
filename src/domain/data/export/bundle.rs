@@ -79,7 +79,7 @@ fn thread_files(plan: &ExportPlan, source: &ExportSource) -> Vec<BundleFile> {
             }
         }
         let first = &thread.posts[0];
-        let name = format!("{THREADS_DIR}/{}-{}-{}.md", first.created_at.format(DAY_FORMAT), slug(&thread_title(&first.content)), tail(thread.root.as_str()));
+        let name = format!("{THREADS_DIR}/{}-{}-{}.md", first.created_at.strftime(DAY_FORMAT), slug(&thread_title(&first.content)), tail(thread.root.as_str()));
         files.push(text(name, thread_markdown(thread, source, &|path| images.get(path).cloned().unwrap_or_default())));
     }
     files
@@ -117,7 +117,7 @@ fn manifest(plan: &ExportPlan, source: &ExportSource) -> BundleFile {
         super::ExportScope::Persona(id) => json!({ "kind": plan.options.scope.key(), "persona": source.authors.get(id).map(|p| p.handle.clone()) }),
     };
     let counts = json!({ "threads": c.threads, "posts": c.posts, "documents": c.documents, "originals": c.originals, "images": c.images, "review_items": c.review_items, "agents": c.agents, "settings": c.settings, "journal_records": c.journal_records });
-    let value = json!({ "format": BUNDLE_FORMAT, "format_version": BUNDLE_FORMAT_VERSION, "app_version": source.app_version, "exported_at": source.exported_at.to_rfc3339(), "network": source.network_name, "scope": scope, "includes_originals": plan.options.include_originals, "includes_private_journal": plan.options.include_journal, "counts": counts, "left_out": LEFT_OUT });
+    let value = json!({ "format": BUNDLE_FORMAT, "format_version": BUNDLE_FORMAT_VERSION, "app_version": source.app_version, "exported_at": crate::time::rfc3339(source.exported_at), "network": source.network_name, "scope": scope, "includes_originals": plan.options.include_originals, "includes_private_journal": plan.options.include_journal, "counts": counts, "left_out": LEFT_OUT });
     text(MANIFEST_PATH.into(), pretty(&value))
 }
 

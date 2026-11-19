@@ -36,7 +36,7 @@ fn item_row(item: &ReviewItem) -> String {
         anchor,
         written,
         item.tags.join(TAG_SEPARATOR),
-        item.created_at.to_rfc3339(),
+        crate::time::rfc3339(item.created_at),
         schedule.due.to_string(),
         schedule.interval.to_string(),
         schedule.reps.to_string(),

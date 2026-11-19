@@ -2,7 +2,6 @@ use crate::domain::review::schedule::{ItemSchedule, Phase};
 use crate::domain::review::Grade;
 use crate::ui::features::review::{REVIEW_DONE_ART, REVIEW_EMPTY_ART};
 use crate::ui::illustration::EmptyKey;
-use chrono::NaiveDate;
 
 fn english(key: &str) -> String {
     rust_i18n::t!(key, locale = "en").to_string()
@@ -37,12 +36,12 @@ fn intervals_read_in_days_months_and_years() {
 #[test]
 fn due_labels_cover_new_today_overdue_and_later() {
     use crate::ui::features::review::text::due_label;
-    let today = NaiveDate::from_ymd_opt(2026, 3, 10).unwrap();
+    let today = jiff::civil::date(2026, 3, 10);
     let mut schedule = ItemSchedule::new_item(today);
     let new = due_label(&schedule, today);
     schedule.phase = Phase::Review;
     let due_today = due_label(&schedule, today);
-    schedule.due = today - chrono::Duration::days(3);
+    schedule.due = today - crate::time::days(3);
     let overdue = due_label(&schedule, today);
     assert!(overdue.contains('3'));
     assert!(new != due_today && due_today != overdue);

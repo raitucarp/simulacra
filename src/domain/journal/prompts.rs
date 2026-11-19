@@ -7,7 +7,7 @@
 //! [`PROMPT_COUNT`] days in a shuffled order, a day always gets the same prompt, and two
 //! days in a row never share one.
 
-use chrono::{Datelike, NaiveDate};
+use jiff::civil::Date;
 use serde::{Deserialize, Serialize};
 
 /// The research tradition a prompt comes from.
@@ -102,8 +102,8 @@ fn order(cycle: u64) -> [usize; PROMPT_COUNT] {
 }
 
 /// Today's prompt: stable for the day.
-pub fn prompt_for_day(day: NaiveDate) -> Prompt {
-    let number = day.num_days_from_ce().max(0) as u64;
+pub fn prompt_for_day(day: Date) -> Prompt {
+    let number = crate::time::days_from_ce(day).max(0) as u64;
     let (cycle, position) = (number / PROMPT_COUNT as u64, (number % PROMPT_COUNT as u64) as usize);
     catalogue()[order(cycle)[position]]
 }

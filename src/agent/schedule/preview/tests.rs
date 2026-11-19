@@ -3,8 +3,8 @@ use crate::domain::{HumanChronotype, PostingCadence};
 
 const SEED: u64 = 7;
 
-fn minute() -> Duration {
-    Duration::minutes(1)
+fn minute() -> jiff::SignedDuration {
+    jiff::SignedDuration::from_mins(1)
 }
 
 fn agent() -> ProfileId {
@@ -81,7 +81,7 @@ fn spontaneity_spreads_posts_out_and_is_deterministic() {
 #[test]
 fn a_non_positive_tick_previews_nothing() {
     let cfg = clockwork(PostingCadence::Hourly, 0, 0);
-    assert_eq!(simulate_week(&cfg, &agent(), Duration::zero(), SEED), WeekPreview::default());
+    assert_eq!(simulate_week(&cfg, &agent(), jiff::SignedDuration::ZERO, SEED), WeekPreview::default());
 }
 
 #[test]

@@ -9,7 +9,7 @@ use crate::domain::document::ids::{generated_id, COLLECTION_ID_PREFIX, SUBJECT_I
 use crate::domain::document::intake::{validate, with_derived_fields, FieldProblem};
 use crate::domain::document::record::Reading;
 use crate::domain::document::{chunk_count, CatalogueRecord, Collection, CollectionId, DocumentId, NewDocument, Subject, SubjectId};
-use chrono::Utc;
+use jiff::Timestamp;
 
 impl AppState {
     /// Validates and stores `new` in its network; returns the new document's id.
@@ -36,7 +36,7 @@ impl AppState {
         let before = doc.clone(); // sb F2: the version this edit replaces
         doc.title = title.trim().to_string();
         doc.content = content.trim().to_string();
-        doc.record = with_derived_fields(CatalogueRecord { updated_at: Some(Utc::now()), ..record }, &doc.content);
+        doc.record = with_derived_fields(CatalogueRecord { updated_at: Some(Timestamp::now()), ..record }, &doc.content);
         doc.chunk_count = chunk_count(doc.record.extent.words);
         let saved = doc.clone();
         self.keep_document_revision(&before, &saved);

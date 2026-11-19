@@ -4,7 +4,7 @@
 use super::{Bookmark, CollectionEntry, ItemRef};
 use crate::domain::document::{CollectionId, DocumentId};
 use crate::domain::PostId;
-use chrono::{DateTime, Utc};
+use jiff::Timestamp;
 
 /// The ordered items of `collection`.
 ///
@@ -12,7 +12,7 @@ use chrono::{DateTime, Utc};
 /// - Document entries are kept while the document is still filed under the collection
 ///   (`members`, from the documents' records).
 /// - Member documents without an entry follow, in `members` order, with no note.
-pub fn collection_items(collection: &CollectionId, entries: &[CollectionEntry], members: &[DocumentId], exists: &dyn Fn(&ItemRef) -> bool, now: DateTime<Utc>) -> Vec<CollectionEntry> {
+pub fn collection_items(collection: &CollectionId, entries: &[CollectionEntry], members: &[DocumentId], exists: &dyn Fn(&ItemRef) -> bool, now: Timestamp) -> Vec<CollectionEntry> {
     let keeps = |entry: &&CollectionEntry| match &entry.item {
         ItemRef::Post(_) => exists(&entry.item),
         ItemRef::Document(id) => members.contains(id),
@@ -49,7 +49,7 @@ pub fn moved(items: &[CollectionEntry], from: usize, to: usize) -> Vec<Collectio
 }
 
 /// `bookmarks` without `post` when it is bookmarked, else with it first (newest first).
-pub fn toggled_bookmark(bookmarks: &[Bookmark], post: &PostId, now: DateTime<Utc>) -> Vec<Bookmark> {
+pub fn toggled_bookmark(bookmarks: &[Bookmark], post: &PostId, now: Timestamp) -> Vec<Bookmark> {
     if bookmarks.iter().any(|b| &b.post == post) {
         return bookmarks.iter().filter(|b| &b.post != post).cloned().collect();
     }

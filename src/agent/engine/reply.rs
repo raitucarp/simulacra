@@ -1,7 +1,7 @@
 //! The constructors for agent reply posts and their chained follow-ups.
 
 use crate::domain::{AuthoredPost, NetworkId, Post, PostId, Profile, ProfileId};
-use chrono::{Duration, Utc};
+use jiff::Timestamp;
 use uuid::Uuid;
 
 /// Prefix of every generated post identifier (`post_<uuid>`).
@@ -26,7 +26,7 @@ pub(super) fn build_reply(
         network_id,
         author_id: agent_profile.id,
         content,
-        created_at: Utc::now(),
+        created_at: Timestamp::now(),
         likes: 0,
         is_liked: false,
         replies_count: 0,
@@ -49,7 +49,7 @@ pub(super) fn build_followup(previous: &Post, author_id: ProfileId, content: Str
         id: new_post_id(),
         author_id,
         content,
-        created_at: previous.created_at + Duration::milliseconds(FOLLOWUP_SPACING_MS),
+        created_at: previous.created_at + jiff::SignedDuration::from_millis(FOLLOWUP_SPACING_MS),
         replies_count: 0,
         mentions: Vec::new(),
         linked_posts: vec![previous.id.clone()],

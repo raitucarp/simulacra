@@ -10,7 +10,7 @@ pub use histogram::{histogram, Histogram};
 pub use timeline::{timeline, TimeBucket};
 
 use super::facts::{AuthorFacts, PostFacts, PostKind, TRAIT_AXES};
-use chrono::NaiveDate;
+use jiff::civil::Date;
 
 pub const WEEKDAYS: usize = 7;
 pub const HOURS: usize = 24;
@@ -37,7 +37,7 @@ pub struct ActivityReport {
 
 impl ActivityReport {
     /// Builds every series from `posts` up to `today` (`start` bounds the timeline when set).
-    pub fn of(posts: &[PostFacts], authors: &[AuthorFacts], start: Option<NaiveDate>, today: NaiveDate) -> Self {
+    pub fn of(posts: &[PostFacts], authors: &[AuthorFacts], start: Option<Date>, today: Date) -> Self {
         let mut kinds = [0usize; PostKind::COUNT];
         let mut rhythm = [[0usize; HOURS]; WEEKDAYS];
         let mut per_author = vec![[0usize; PostKind::COUNT]; authors.len()];

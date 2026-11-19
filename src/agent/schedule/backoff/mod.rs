@@ -7,7 +7,7 @@ mod gates;
 pub use gates::FailureGates;
 
 use crate::agent::{LlmFailure, LlmProvider};
-use chrono::{DateTime, Duration, Utc};
+use jiff::{SignedDuration, Timestamp};
 use std::collections::HashSet;
 
 /// Pause after the first failure of a streak.
@@ -54,10 +54,10 @@ impl FailureCause {
 
 /// The pause before autonomous generation retries after `streak` consecutive failures:
 /// [`BACKOFF_BASE_MINUTES`] doubling per failure, capped at [`BACKOFF_MAX_MINUTES`].
-pub fn backoff_delay(streak: u32) -> Duration {
+pub fn backoff_delay(streak: u32) -> SignedDuration {
     let doublings = streak.saturating_sub(1).min(i64::BITS - 2);
     let minutes = BACKOFF_BASE_MINUTES.saturating_mul(1_i64 << doublings);
-    Duration::minutes(minutes.min(BACKOFF_MAX_MINUTES))
+    jiff::SignedDuration::from_mins(minutes.min(BACKOFF_MAX_MINUTES))
 }
 
 /// Failure bookkeeping between two resets (a settings change or a successful call).
@@ -68,7 +68,7 @@ pub struct FailureGate {
     /// Consecutive failed generations.
     streak: u32,
     /// Autonomous generation waits until this instant.
-    retry_at: Option<DateTime<Utc>>,
+    retry_at: Option<Timestamp>,
 }
 
 impl FailureGate {
@@ -80,14 +80,14 @@ impl FailureGate {
 
     /// Records a failed generation at `now`: extends the backoff and returns whether the
     /// failure's notice should be shown (see [`Self::notice`]).
-    pub fn record_failure(&mut self, cause: FailureCause, now: DateTime<Utc>) -> bool {
+    pub fn record_failure(&mut self, cause: FailureCause, now: Timestamp) -> bool {
         self.streak = self.streak.saturating_add(1);
         self.retry_at = Some(now + backoff_delay(self.streak));
         self.notice(cause)
     }
 
     /// Whether autonomous generation may run at `now` (no backoff pending).
-    pub fn allows_generation(&self, now: DateTime<Utc>) -> bool {
+    pub fn allows_generation(&self, now: Timestamp) -> bool {
         self.retry_at.is_none_or(|at| now >= at)
     }
 

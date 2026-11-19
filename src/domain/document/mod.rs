@@ -29,7 +29,7 @@ pub use record::{CatalogueRecord, DocumentKind};
 pub use vocabulary::{Collection, Library, Subject};
 
 use super::ids::NetworkId;
-use chrono::{DateTime, Utc};
+use jiff::Timestamp;
 use serde::{Deserialize, Serialize};
 
 /// Words per grounding chunk (the agents' retrieval unit).
@@ -44,7 +44,7 @@ pub struct GroundingDocument {
     pub content: String,
     pub chunk_count: usize,
     /// When the document was added to the vault ("date added").
-    pub created_at: DateTime<Utc>,
+    pub created_at: Timestamp,
     /// Catalogue record (a legacy record derived from the text until it is catalogued).
     #[serde(default)]
     pub record: CatalogueRecord,
@@ -64,7 +64,7 @@ impl GroundingDocument {
         content: impl Into<String>,
     ) -> Self {
         let content: String = content.into();
-        let created_at = Utc::now();
+        let created_at = Timestamp::now();
         let record = intake::legacy_record(&content);
         Self {
             id: id.into(),

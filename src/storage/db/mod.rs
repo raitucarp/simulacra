@@ -53,7 +53,7 @@ pub use preferences::{preference_rows, PREFERENCE_KEYS};
 pub use setting_key::SettingKey;
 
 use crate::error::{AppError, Result};
-use chrono::{DateTime, Utc};
+use jiff::Timestamp;
 use rusqlite::Connection;
 use std::path::{Path, PathBuf};
 
@@ -131,10 +131,8 @@ fn sql_bool(flag: bool) -> i64 {
 }
 
 /// Parses an RFC 3339 timestamp column, falling back to the current time when malformed.
-fn parse_timestamp(raw: &str) -> DateTime<Utc> {
-    DateTime::parse_from_rfc3339(raw)
-        .map(|dt| dt.with_timezone(&Utc))
-        .unwrap_or_else(|_| Utc::now())
+fn parse_timestamp(raw: &str) -> Timestamp {
+    crate::time::parse_timestamp(raw).unwrap_or_else(Timestamp::now)
 }
 
 /// Collects mapped rows, converting the first row error into an application error.

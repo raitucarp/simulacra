@@ -63,7 +63,7 @@ fn render_quoted_card<L: PostLookup>(
 }
 
 fn render_quoted_meta(quoted: &Post, author: &Profile, theme: &ThemeTokens) -> Div {
-    let quoted_time = quoted.created_at.format(TIME_FORMAT).to_string();
+    let quoted_time = quoted.created_at.strftime(TIME_FORMAT).to_string();
     let quoted_is_agent = matches!(author.role, ProfileRole::Agent { .. });
     div()
         .flex()

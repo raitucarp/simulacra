@@ -5,7 +5,8 @@
 use super::ids::RecordId;
 use super::prompts::Prompt;
 use super::templates::Template;
-use chrono::{DateTime, NaiveDate, Utc};
+use jiff::Timestamp;
+use jiff::civil::Date;
 use serde::{Deserialize, Serialize};
 
 /// Characters of the first line shown as an entry's title.
@@ -20,9 +21,9 @@ const HEADING_MARKS: &[char] = &['#', ' '];
 pub struct JournalEntry {
     pub id: RecordId,
     /// The journal day it belongs to (local, after the night's rollover).
-    pub day: NaiveDate,
-    pub created_at: DateTime<Utc>,
-    pub updated_at: DateTime<Utc>,
+    pub day: Date,
+    pub created_at: Timestamp,
+    pub updated_at: Timestamp,
     pub body: String,
     #[serde(default)]
     pub prompt: Option<Prompt>,
@@ -38,12 +39,12 @@ impl super::records::Record for JournalEntry {
 
 impl JournalEntry {
     /// A new entry on `day`.
-    pub fn new(id: RecordId, day: NaiveDate, now: DateTime<Utc>, body: impl Into<String>) -> Self {
+    pub fn new(id: RecordId, day: Date, now: Timestamp, body: impl Into<String>) -> Self {
         Self { id, day, created_at: now, updated_at: now, body: body.into(), prompt: None, template: None }
     }
 
     /// The entry with `body` written at `now` (the day and creation time stay).
-    pub fn edited(&self, body: impl Into<String>, now: DateTime<Utc>) -> Self {
+    pub fn edited(&self, body: impl Into<String>, now: Timestamp) -> Self {
         Self { body: body.into(), updated_at: now, ..self.clone() }
     }
 
@@ -75,7 +76,7 @@ pub fn newest_first(entries: &[JournalEntry]) -> Vec<&JournalEntry> {
 }
 
 /// The entries of `day`, oldest first.
-pub fn entries_on(entries: &[JournalEntry], day: NaiveDate) -> Vec<&JournalEntry> {
+pub fn entries_on(entries: &[JournalEntry], day: Date) -> Vec<&JournalEntry> {
     let mut on_day: Vec<&JournalEntry> = entries.iter().filter(|entry| entry.day == day).collect();
     on_day.sort_by_key(|entry| entry.created_at);
     on_day

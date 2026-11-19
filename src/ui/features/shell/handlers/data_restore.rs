@@ -7,7 +7,6 @@ use super::super::view::AppView;
 use crate::domain::data::snapshot::SNAPSHOT_EXTENSION;
 use crate::storage::data::{open_snapshot, pre_restore_path, staged_restore_path, StageFailure, StagedRestore};
 use crate::ui::features::data::{format_time, tr, DataEvent, RestoreDialog, RestoreStep};
-use chrono::{DateTime, Utc};
 use gpui_kit::*;
 use rust_i18n::t;
 use std::path::PathBuf;
@@ -67,7 +66,7 @@ impl AppView {
     fn snapshot_verified(&mut self, opened: Result<StagedRestore, StageFailure>, cx: &mut Context<Self>) {
         match opened {
             Ok(staged) => {
-                let created_at = DateTime::<Utc>::from_timestamp(staged.created_at, 0).map(format_time).unwrap_or_default();
+                let created_at = jiff::Timestamp::from_second(staged.created_at).ok().map(format_time).unwrap_or_default();
                 let summary = staged.summary;
                 self.data.staged = Some(staged);
                 self.with_restore(cx, |dialog| (dialog.busy, dialog.step) = (false, RestoreStep::Verified { created_at, posts: summary.posts, profiles: summary.profiles, documents: summary.documents }));

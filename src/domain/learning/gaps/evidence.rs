@@ -9,7 +9,7 @@ use crate::domain::learning::bloom::BloomLevel;
 use crate::domain::learning::concept::{appears_in, concept_key, concepts_of, dedup, marked_concepts, searchable};
 use crate::domain::learning::goals::OwnPost;
 use crate::domain::learning::tutor::{TutorSession, TutorSource};
-use chrono::NaiveDate;
+use jiff::civil::Date;
 use std::collections::HashMap;
 
 /// Posts an unmarked concept must appear in to be shown.
@@ -30,7 +30,7 @@ pub struct ItemText {
     pub text: String,
     pub tags: Vec<String>,
     pub retrievability: Option<f64>,
-    pub last_review: Option<NaiveDate>,
+    pub last_review: Option<Date>,
 }
 
 /// What the radar is computed from.
@@ -44,7 +44,7 @@ pub struct GapInputs<'a> {
     pub pinned: &'a [String],
     /// When set, only these concepts are shown (a goal's radar).
     pub only: Option<&'a [String]>,
-    pub today: NaiveDate,
+    pub today: Date,
 }
 
 /// The evidence on one concept.
@@ -62,7 +62,7 @@ pub struct ConceptEvidence {
     /// Distinct other concepts it shares an own post with.
     pub degree: usize,
     /// Last day it was written about or reviewed.
-    pub last_touch: Option<NaiveDate>,
+    pub last_touch: Option<Date>,
 }
 
 fn typed_concept(session: &TutorSession) -> Option<String> {

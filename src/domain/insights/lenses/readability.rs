@@ -5,7 +5,7 @@
 use super::periods::Periods;
 use super::Analysed;
 use crate::domain::readability::{readability, Band, Formula, Readability, ReadingLanguage};
-use chrono::NaiveDate;
+use jiff::civil::Date;
 
 /// Authors shown in the per-author distribution (the most prolific).
 pub const TOP_AUTHORS: usize = 12;
@@ -20,7 +20,7 @@ pub struct ScoredPost {
     /// Index among the analysed posts.
     pub post: usize,
     pub author: usize,
-    pub day: NaiveDate,
+    pub day: Date,
     pub score: Readability,
 }
 

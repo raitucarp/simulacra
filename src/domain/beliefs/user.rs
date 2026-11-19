@@ -6,7 +6,7 @@ use super::book::{BeliefBook, BeliefChange};
 use super::matching::tidy;
 use super::model::{BeliefId, BeliefSource, Credence, RevisionCause};
 use super::update::{user_revision, MAX_PROPOSITION_CHARS};
-use chrono::{DateTime, Utc};
+use jiff::Timestamp;
 
 /// What the user does to one belief.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -28,7 +28,7 @@ impl BeliefAction {
 
 /// The change `action` makes in `book` at `now` (empty when the belief is gone or nothing
 /// would change).
-pub fn apply_user_action(book: &BeliefBook, action: &BeliefAction, now: DateTime<Utc>) -> BeliefChange {
+pub fn apply_user_action(book: &BeliefBook, action: &BeliefAction, now: Timestamp) -> BeliefChange {
     let Some(belief) = book.belief(action.id()).cloned() else { return BeliefChange::default() };
     match action {
         BeliefAction::TogglePin(_) => BeliefChange { upserted: vec![super::model::Belief { pinned: !belief.pinned, ..belief }], ..BeliefChange::default() },

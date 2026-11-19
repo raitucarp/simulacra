@@ -15,7 +15,7 @@ impl AppView {
         if setup_problem(&setup).is_some() || self.arena.run.is_some() {
             return;
         }
-        let estimate = SpendEstimate::requests(debate_requests(&Debate::new(ArenaId::random(), setup.clone(), chrono::Utc::now())));
+        let estimate = SpendEstimate::requests(debate_requests(&Debate::new(ArenaId::random(), setup.clone(), jiff::Timestamp::now())));
         let again = setup.clone();
         if !self.confirm_spend(estimate, Box::new(move |this, _, cx| this.begin_debate(again, cx)), cx) {
             self.start_debate(setup, cx);

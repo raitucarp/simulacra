@@ -11,7 +11,7 @@ pub use lifecycle::Phase;
 
 use super::periods::Periods;
 use super::sources::{Source, SourceKind};
-use chrono::NaiveDate;
+use jiff::civil::Date;
 use std::collections::HashMap;
 
 /// Periods drawn at most.
@@ -28,8 +28,8 @@ pub struct ConceptLane {
     /// Sources mentioning it, per period.
     pub counts: Vec<u32>,
     pub total: u32,
-    pub first_day: NaiveDate,
-    pub last_day: NaiveDate,
+    pub first_day: Date,
+    pub last_day: Date,
     /// The busiest period (the earliest of equals).
     pub peak: usize,
     pub phase: Phase,
@@ -40,7 +40,7 @@ pub struct ConceptLane {
 pub struct Mention {
     pub kind: SourceKind,
     pub id: String,
-    pub day: NaiveDate,
+    pub day: Date,
     pub period: usize,
     pub excerpt: String,
     /// Lane indices.
@@ -57,13 +57,13 @@ pub struct ConceptTimeline {
 
 impl ConceptTimeline {
     /// The timeline of `sources` (oldest first) up to `today`.
-    pub fn of(sources: Vec<Source>, today: NaiveDate) -> Self {
+    pub fn of(sources: Vec<Source>, today: Date) -> Self {
         let Some(first) = sources.iter().map(|s| s.day).min() else { return Self::default() };
         let periods = Periods::spanning(first, today, MAX_PERIODS);
         let keys = kept_concepts(&sources);
         let lane_of: HashMap<&str, usize> = keys.iter().enumerate().map(|(i, k)| (k.as_str(), i)).collect();
         let mut counts = vec![vec![0u32; periods.count]; keys.len()];
-        let mut days: Vec<Option<(NaiveDate, NaiveDate)>> = vec![None; keys.len()];
+        let mut days: Vec<Option<(Date, Date)>> = vec![None; keys.len()];
         let mut mentions = Vec::new();
         for source in sources.iter().filter(|s| s.day <= today) {
             let Some(period) = periods.index_of(source.day) else { continue };
@@ -95,7 +95,7 @@ fn kept_concepts(sources: &[Source]) -> Vec<String> {
     ranked.into_iter().take(MAX_LANES).map(|(key, _)| key.to_string()).collect()
 }
 
-fn lane(key: String, counts: Vec<u32>, (first_day, last_day): (NaiveDate, NaiveDate), periods: &Periods, today: NaiveDate) -> ConceptLane {
+fn lane(key: String, counts: Vec<u32>, (first_day, last_day): (Date, Date), periods: &Periods, today: Date) -> ConceptLane {
     let total = counts.iter().sum();
     let peak = counts.iter().enumerate().fold(0, |best, (i, &n)| if n > counts[best] { i } else { best });
     let quiet_periods = periods.index_of(today).unwrap_or(periods.count.saturating_sub(1)).saturating_sub(periods.index_of(last_day).unwrap_or_default());

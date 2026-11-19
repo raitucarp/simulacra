@@ -4,7 +4,7 @@
 use crate::agent::schedule::{FailureGates, GenerationQueue, DEFAULT_QUEUE_CAPACITY};
 use crate::agent::LlmFailure;
 use crate::domain::ProfileId;
-use chrono::{DateTime, Utc};
+use jiff::Timestamp;
 use gpui_kit::Task;
 use std::collections::HashMap;
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
@@ -19,7 +19,7 @@ pub struct SchedulerState {
     /// Bounded queue of agents awaiting or undergoing generation.
     pub queue: GenerationQueue,
     /// When each agent was last dispatched, so a failed run still respects its cadence.
-    pub last_dispatch: HashMap<ProfileId, DateTime<Utc>>,
+    pub last_dispatch: HashMap<ProfileId, Timestamp>,
     /// Heartbeat counter feeding the spontaneity rolls.
     pub tick: u64,
     /// Per-session seed for the spontaneity rolls.
@@ -52,7 +52,7 @@ impl SchedulerState {
     }
 
     /// The later of the agent's last post and its last dispatch.
-    pub fn last_activity(&self, id: &ProfileId, last_post: Option<DateTime<Utc>>) -> Option<DateTime<Utc>> {
+    pub fn last_activity(&self, id: &ProfileId, last_post: Option<Timestamp>) -> Option<Timestamp> {
         let dispatched = self.last_dispatch.get(id).copied();
         last_post.max(dispatched)
     }

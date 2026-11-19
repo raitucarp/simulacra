@@ -2,7 +2,9 @@
 //! and profiles (local time from a fixed UTC offset, so the result is reproducible).
 
 use crate::domain::{Post, Profile, ProfileId};
-use chrono::{DateTime, Datelike, FixedOffset, NaiveDate, Timelike, Utc};
+use jiff::Timestamp;
+use jiff::civil::Date;
+use jiff::tz::Offset;
 
 /// What a post is.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, PartialOrd, Ord, serde::Serialize, serde::Deserialize)]
@@ -77,8 +79,8 @@ impl AuthorFacts {
 pub struct PostFacts {
     pub author: usize,
     pub kind: PostKind,
-    pub created_at: DateTime<Utc>,
-    pub day: NaiveDate,
+    pub created_at: Timestamp,
+    pub day: Date,
     /// Monday = 0.
     pub weekday: usize,
     pub hour: usize,
@@ -92,16 +94,16 @@ const SENTENCE_ENDS: [char; 3] = ['.', '!', '?'];
 
 impl PostFacts {
     /// Facts of `post` written by author `author`, in the local time of `offset`.
-    pub fn of(post: &Post, author: usize, offset: FixedOffset) -> Self {
-        let local = post.created_at.with_timezone(&offset);
+    pub fn of(post: &Post, author: usize, offset: Offset) -> Self {
+        let local = offset.to_datetime(post.created_at);
         let words = post.content.split_whitespace().count();
         let sentences = post.content.split(SENTENCE_ENDS).filter(|s| !s.trim().is_empty()).count().max(1);
         Self {
             author,
             kind: PostKind::of(post),
             created_at: post.created_at,
-            day: local.date_naive(),
-            weekday: local.weekday().num_days_from_monday() as usize,
+            day: local.date(),
+            weekday: local.weekday().to_monday_zero_offset() as usize,
             hour: local.hour() as usize,
             chars: post.content.chars().count(),
             words,

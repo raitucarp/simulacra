@@ -52,7 +52,7 @@ impl AppView {
         let engine = PromptEngine::of(&config, &prefs.style_prefix);
         let engine = if open.target == ImageTarget::Avatar { engine.with_aspect(AVATAR_ASPECT) } else { engine };
         let context = ImageContext { target: open.target, subject: open.subject, theme_colours: self.theme_colour_names() };
-        let seed = chrono::Utc::now().timestamp_millis().unsigned_abs();
+        let seed = jiff::Timestamp::now().as_millisecond().unsigned_abs();
         self.image_ideas.sheet = Some(IdeasSheet {
             destination: open.destination,
             about: open.about,

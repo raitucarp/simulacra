@@ -4,7 +4,7 @@
 use super::day::{add_days, days_between};
 use super::fsrs::{self, Memory, Params};
 use super::Grade;
-use chrono::NaiveDate;
+use jiff::civil::Date;
 use serde::{Deserialize, Serialize};
 
 /// Longest interval, in days (a hundred years).
@@ -36,8 +36,8 @@ pub struct ItemSchedule {
     pub phase: Phase,
     pub memory: Option<Memory>,
     /// Review day the card is due on.
-    pub due: NaiveDate,
-    pub last_review: Option<NaiveDate>,
+    pub due: Date,
+    pub last_review: Option<Date>,
     /// Days between the last review and `due`.
     pub interval: u32,
     pub reps: u32,
@@ -46,7 +46,7 @@ pub struct ItemSchedule {
 
 impl ItemSchedule {
     /// A card nobody has reviewed, available from `today`.
-    pub fn new_item(today: NaiveDate) -> Self {
+    pub fn new_item(today: Date) -> Self {
         Self { phase: Phase::New, memory: None, due: today, last_review: None, interval: 0, reps: 0, lapses: 0 }
     }
 
@@ -55,12 +55,12 @@ impl ItemSchedule {
     }
 
     /// Whether the card should be reviewed on `today` (new cards are introduced separately).
-    pub fn is_due(&self, today: NaiveDate) -> bool {
+    pub fn is_due(&self, today: Date) -> bool {
         !self.is_new() && self.due <= today
     }
 
     /// Probability of recalling the card on `today`, once it has a memory.
-    pub fn retrievability(&self, today: NaiveDate, params: &Params) -> Option<f64> {
+    pub fn retrievability(&self, today: Date, params: &Params) -> Option<f64> {
         let (memory, last) = (self.memory?, self.last_review?);
         Some(fsrs::retrievability(params, f64::from(days_between(last, today)), memory.stability))
     }
@@ -89,7 +89,7 @@ impl Policy {
 }
 
 /// The memory after answering `grade` on `today`.
-pub fn next_memory(schedule: &ItemSchedule, grade: Grade, today: NaiveDate, params: &Params) -> Memory {
+pub fn next_memory(schedule: &ItemSchedule, grade: Grade, today: Date, params: &Params) -> Memory {
     let (Some(memory), Some(last)) = (schedule.memory, schedule.last_review) else {
         return Memory { stability: fsrs::initial_stability(params, grade), difficulty: fsrs::initial_difficulty(params, grade) };
     };
@@ -108,7 +108,7 @@ pub fn next_memory(schedule: &ItemSchedule, grade: Grade, today: NaiveDate, para
 }
 
 /// Intervals of the four grades, kept in order (Hard ≤ Good < Easy) as the buttons promise.
-pub fn preview(schedule: &ItemSchedule, today: NaiveDate, policy: &Policy) -> [u32; 4] {
+pub fn preview(schedule: &ItemSchedule, today: Date, policy: &Policy) -> [u32; 4] {
     let raw = Grade::ALL.map(|grade| match grade {
         Grade::Again => SAME_DAY,
         _ => policy.interval_for(next_memory(schedule, grade, today, &policy.params)),
@@ -120,7 +120,7 @@ pub fn preview(schedule: &ItemSchedule, today: NaiveDate, policy: &Policy) -> [u
 }
 
 /// The schedule after answering `grade` on `today`.
-pub fn review(schedule: &ItemSchedule, grade: Grade, today: NaiveDate, policy: &Policy) -> ItemSchedule {
+pub fn review(schedule: &ItemSchedule, grade: Grade, today: Date, policy: &Policy) -> ItemSchedule {
     let memory = next_memory(schedule, grade, today, &policy.params);
     let interval = preview(schedule, today, policy)[grade.index()];
     let was_learnt = matches!(schedule.phase, Phase::Review | Phase::Relearning);

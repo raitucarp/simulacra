@@ -81,10 +81,10 @@ fn an_order_puzzle_starts_shuffled_and_scores_moves() {
     assert!(OrderPuzzle::new("t".into(), pieces[..2].to_vec(), 1).is_none());
 }
 
-fn post(id: &str, reply_to: Option<&str>, minute: u32) -> Post {
+fn post(id: &str, reply_to: Option<&str>, minute: i8) -> Post {
     let mut post = Post::create(PostId::new(id), NetworkId::new("n"), ProfileId::new("p"), &format!("post {id}")).unwrap();
     post.reply_to_id = reply_to.map(PostId::new);
-    post.created_at = chrono::TimeZone::with_ymd_and_hms(&chrono::Utc, 2026, 1, 1, 0, minute, 0).unwrap();
+    post.created_at = crate::time::utc(2026, 1, 1, 0, minute, 0);
     post
 }
 

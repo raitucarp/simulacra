@@ -7,14 +7,14 @@ use super::view::AppView;
 use crate::domain::journal::capsule::notify::{announced, to_announce};
 use crate::domain::journal::{journal_day, JournalBook};
 use crate::ui::features::journal::{JournalData, JournalPanel};
-use chrono::{Local, NaiveDate};
+use jiff::civil::Date;
 use gpui_kit::component::notification::Notification;
 use gpui_kit::component::WindowExt;
 use gpui_kit::*;
 
 /// What the page's data was last built from: records version, day, post revision, review
 /// answers, documents, the open thought, reduced motion.
-type Stamp = (u64, NaiveDate, u64, usize, usize, Option<String>, bool);
+type Stamp = (u64, Date, u64, usize, usize, Option<String>, bool);
 
 /// The records and the Journal page.
 pub struct JournalHost {
@@ -28,8 +28,8 @@ pub struct JournalHost {
 }
 
 /// Today's journal day in local time.
-pub fn journal_today() -> NaiveDate {
-    journal_day(&Local::now())
+pub fn journal_today() -> Date {
+    journal_day(&crate::time::local_now())
 }
 
 impl JournalHost {
@@ -62,7 +62,7 @@ impl AppView {
     }
 
     /// One notice for the capsules whose day has come; each is told once (marked and saved).
-    fn announce_capsules(&mut self, today: NaiveDate, window: &mut Window, cx: &mut Context<Self>) {
+    fn announce_capsules(&mut self, today: Date, window: &mut Window, cx: &mut Context<Self>) {
         let ready: Vec<_> = to_announce(&self.journal.book.capsules, today).into_iter().map(announced).collect();
         if ready.is_empty() {
             return;

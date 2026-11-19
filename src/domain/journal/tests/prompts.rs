@@ -43,8 +43,8 @@ trait DayNumber {
     fn num_days_from_ce_value(&self) -> i64;
 }
 
-impl DayNumber for chrono::NaiveDate {
+impl DayNumber for jiff::civil::Date {
     fn num_days_from_ce_value(&self) -> i64 {
-        i64::from(chrono::Datelike::num_days_from_ce(self))
+        crate::time::days_from_ce(*self)
     }
 }

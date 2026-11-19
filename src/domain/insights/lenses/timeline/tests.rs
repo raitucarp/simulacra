@@ -1,9 +1,8 @@
 use super::lifecycle::phase;
 use super::*;
-use chrono::Duration;
 
-fn day(offset: i64) -> NaiveDate {
-    NaiveDate::from_ymd_opt(2026, 1, 1).unwrap() + Duration::days(offset)
+fn day(offset: i64) -> Date {
+    jiff::civil::date(2026, 1, 1) + crate::time::days(offset)
 }
 
 fn source(offset: i64, concepts: &[&str]) -> Source {

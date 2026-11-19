@@ -5,7 +5,7 @@
 use super::model::{Belief, BeliefId, Revision};
 use super::salience::by_salience;
 use crate::domain::ProfileId;
-use chrono::{DateTime, Utc};
+use jiff::Timestamp;
 
 /// All beliefs and revisions.
 #[derive(Debug, Clone, Default, PartialEq, Eq)]
@@ -51,7 +51,7 @@ impl BeliefBook {
     }
 
     /// The beliefs of `agent`, most salient first.
-    pub fn ranked<'a>(&'a self, agent: &'a ProfileId, now: DateTime<Utc>) -> Vec<&'a Belief> {
+    pub fn ranked<'a>(&'a self, agent: &'a ProfileId, now: Timestamp) -> Vec<&'a Belief> {
         by_salience(self.of_agent(agent).map(|belief| (belief, self.history(&belief.id).count())), now)
     }
 

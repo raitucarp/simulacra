@@ -5,22 +5,23 @@ use crate::domain::learning::{GoalId, GoalLink, PalaceId, PlacedTarget, RoomKind
 use crate::domain::review::ItemId;
 use crate::domain::NetworkId;
 use crate::storage::db::Database;
-use chrono::{NaiveDate, Utc};
+use jiff::Timestamp;
+use jiff::civil::Date;
 
-fn today() -> NaiveDate {
-    NaiveDate::from_ymd_opt(2026, 11, 18).unwrap()
+fn today() -> Date {
+    jiff::civil::date(2026, 11, 18)
 }
 
 #[test]
 fn goals_sessions_and_palaces_round_trip_and_upsert() {
     let db = Database::in_memory().unwrap();
     let network = NetworkId::new("net");
-    let draft = GoalDraft { title: "Spinoza".into(), why: "Reading group".into(), target: today() + chrono::Duration::days(30) };
-    let goal = new_goal(&draft, network.clone(), GoalId("goal_1".into()), today(), Utc::now()).unwrap();
+    let draft = GoalDraft { title: "Spinoza".into(), why: "Reading group".into(), target: today() + crate::time::days(30) };
+    let goal = new_goal(&draft, network.clone(), GoalId("goal_1".into()), today(), Timestamp::now()).unwrap();
     let goal = with_tasks(with_link(goal, GoalLink::concept("Necessity")), &["Write a post".into()], today());
     let start = SessionStart { network_id: network.clone(), source: TutorSource::Post { id: "p1".into() }, title: "Freedom".into(), material: "text".into() };
-    let session = TutorSession::start(SessionId("tutor_1".into()), start, Utc::now()).with_opening("What is it?", Utc::now());
-    let palace = new_palace(PalaceId("palace_1".into()), network, "Home", (RoomKind::Garden, "Garden"), Utc::now());
+    let session = TutorSession::start(SessionId("tutor_1".into()), start, Timestamp::now()).with_opening("What is it?", Timestamp::now());
+    let palace = new_palace(PalaceId("palace_1".into()), network, "Home", (RoomKind::Garden, "Garden"), Timestamp::now());
     let room = palace.rooms[0].id.clone();
     let palace = placed(palace, &room, 1, PlacedTarget::Item { id: ItemId::new("i1") });
     db.save_goal(&goal).unwrap();

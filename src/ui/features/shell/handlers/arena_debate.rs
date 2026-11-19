@@ -19,7 +19,7 @@ impl AppView {
         if setup_problem(&setup).is_some() || self.arena.run.is_some() {
             return;
         }
-        let debate = Debate::new(ArenaId::random(), setup, chrono::Utc::now());
+        let debate = Debate::new(ArenaId::random(), setup, jiff::Timestamp::now());
         let id = debate.id.clone();
         self.save_debate(debate);
         self.arena.panel.update(cx, |panel, cx| panel.open_debate(id.clone(), cx));
@@ -63,7 +63,7 @@ impl AppView {
         match outcome {
             Ok(text) => {
                 if let Some(debate) = self.arena.debates.iter().find(|debate| debate.id == id).cloned() {
-                    self.save_debate(debate.with_turn(&text, chrono::Utc::now()));
+                    self.save_debate(debate.with_turn(&text, jiff::Timestamp::now()));
                 }
                 self.advance_debate(&id, cx);
             }

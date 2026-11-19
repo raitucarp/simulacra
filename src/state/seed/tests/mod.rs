@@ -6,7 +6,7 @@
 //! reference their author by `author_id` instead of embedding the profile.
 
 use crate::state::seed::{seed_documents, seed_networks, seed_posts, seed_profiles, seed_trending};
-use chrono::{Duration, Utc};
+use jiff::Timestamp;
 use std::collections::HashSet;
 use serde_json::{json, Value};
 
@@ -50,19 +50,19 @@ fn seed_output_matches_pre_json_snapshot() {
 
 #[test]
 fn seed_timestamps_are_stamped_at_runtime() {
-    let before = Utc::now();
+    let before = Timestamp::now();
     let posts = seed_posts();
     let documents = seed_documents();
-    let after = Utc::now();
+    let after = Timestamp::now();
 
-    assert!(posts.iter().all(|p| p.created_at <= after && p.created_at >= before - Duration::days(SEED_SPAN_DAYS)));
+    assert!(posts.iter().all(|p| p.created_at <= after && p.created_at >= before - crate::time::days(SEED_SPAN_DAYS)));
     assert!(documents.iter().all(|d| d.created_at >= before && d.created_at <= after));
 }
 
 #[test]
 fn seed_posts_spread_over_distinct_days_newest_first_and_causally_ordered() {
     let posts = seed_posts();
-    let days: HashSet<_> = posts.iter().map(|p| p.created_at.date_naive()).collect();
+    let days: HashSet<_> = posts.iter().map(|p| crate::time::utc_date(p.created_at)).collect();
     assert!(days.len() > 1, "seed posts must not all share one heatmap day");
     assert!(posts.windows(2).all(|w| w[0].created_at > w[1].created_at), "strictly newest first, no ties");
     for post in &posts {

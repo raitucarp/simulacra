@@ -1,7 +1,6 @@
 use super::day;
 use crate::domain::review::legacy::{legacy_subject, migrated_items, LegacyRow};
 use crate::domain::review::{Anchor, AnchorSide, ItemSchedule, Subject};
-use chrono::{TimeZone, Utc};
 
 const POST: &str = r#"{"kind":"post","id":"p1"}"#;
 const DOCUMENT: &str = r#"{"kind":"document","id":"doc","locator":{"chapter":2,"paragraph":4}}"#;
@@ -11,14 +10,14 @@ const CLOZE: &str = r#"{"type":"cloze","text":"{{c1::Spinoza}} wrote the {{c2::E
 const CONCEPT_BACK: &str = r#"{"type":"concept","term":"Akrasia","definition":"Weakness of will","direction":"definition_to_term"}"#;
 const CONCEPT: &str = r#"{"type":"concept","term":"Akrasia","definition":"Weakness of will","direction":"term_to_definition"}"#;
 
-fn row(id: &str, minute: u32, kind: &str, source: &str) -> LegacyRow {
+fn row(id: &str, minute: i8, kind: &str, source: &str) -> LegacyRow {
     LegacyRow {
         id: id.into(),
         network_id: "net".into(),
         kind_json: kind.into(),
         source_json: source.into(),
         tags_json: r#"["ethics"]"#.into(),
-        created_at: Utc.with_ymd_and_hms(2026, 3, 1, 9, minute, 0).unwrap(),
+        created_at: crate::time::utc(2026, 3, 1, 9, minute, 0),
         schedule_json: serde_json::to_string(&ItemSchedule { reps: 3, ..ItemSchedule::new_item(day(0)) }).unwrap(),
         suspended: false,
     }

@@ -41,7 +41,7 @@ impl AppView {
         let Some(agent) = agent else { return BeliefsData::default() };
         let book = &self.arena.book;
         let rows = book
-            .ranked(&agent, chrono::Utc::now())
+            .ranked(&agent, jiff::Timestamp::now())
             .into_iter()
             .map(|belief| BeliefRow { belief: belief.clone(), series: credence_series(book, belief), history: book.history(&belief.id).rev().take(HISTORY_ROWS).cloned().collect() })
             .collect();

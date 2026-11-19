@@ -3,7 +3,7 @@
 
 use crate::domain::document::keyed::keyed_enum;
 use crate::domain::{PostId, ProfileId};
-use chrono::{DateTime, Utc};
+use jiff::Timestamp;
 use serde::{Deserialize, Serialize};
 
 keyed_enum! {
@@ -94,7 +94,7 @@ pub struct Slot {
 pub struct Turn {
     pub slot: Slot,
     pub text: String,
-    pub at: DateTime<Utc>,
+    pub at: Timestamp,
 }
 
 impl DebateSetup {

@@ -86,7 +86,7 @@ impl AppView {
 
     /// Saves the judged debate, ends the run and lets every debater revise its beliefs.
     fn close_debate(&mut self, debate: &Debate, verdict: Verdict, map: Option<ArgumentMap>, cx: &mut Context<Self>) {
-        let judged = debate.with_verdict(verdict, map, chrono::Utc::now());
+        let judged = debate.with_verdict(verdict, map, jiff::Timestamp::now());
         self.arena.run = None;
         self.save_debate(judged.clone());
         for debater in &judged.setup.debaters {

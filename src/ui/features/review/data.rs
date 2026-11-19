@@ -7,7 +7,7 @@ use crate::domain::review::schedule::Policy;
 use crate::domain::review::{ItemId, ReviewEntry, ReviewItem};
 use crate::domain::{NetworkId, Post, Profile};
 use crate::ui::features::review::learning::LearningData;
-use chrono::NaiveDate;
+use jiff::civil::Date;
 use std::collections::HashMap;
 use std::rc::Rc;
 
@@ -28,7 +28,7 @@ pub struct ReviewData {
     /// The network's items, retired ones included (the Items list shows them).
     pub items: Vec<ReviewItem>,
     pub log: Vec<ReviewEntry>,
-    pub today: NaiveDate,
+    pub today: Date,
     pub limits: DailyLimits,
     pub policy: Policy,
     /// Posts the items and maps refer to.
@@ -41,7 +41,7 @@ pub struct ReviewData {
 
 impl ReviewData {
     /// An empty page for `network_id`.
-    pub fn empty(network_id: NetworkId, today: NaiveDate, limits: DailyLimits, policy: Policy) -> Self {
+    pub fn empty(network_id: NetworkId, today: Date, limits: DailyLimits, policy: Policy) -> Self {
         Self { network_id, items: Vec::new(), log: Vec::new(), today, limits, policy, posts: Rc::default(), documents: Rc::default(), learning: Rc::default() }
     }
 

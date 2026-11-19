@@ -18,7 +18,7 @@ use crate::domain::learning::concept::mentions;
 use crate::domain::learning::tutor::TutorSession;
 use crate::domain::review::fsrs::Params;
 use crate::domain::review::{Anchor, ReviewItem, Subject};
-use chrono::NaiveDate;
+use jiff::civil::Date;
 
 /// Stability (days) at which an item counts as learnt for good.
 pub const MATURE_STABILITY_DAYS: f64 = 21.0;
@@ -37,7 +37,7 @@ pub struct OwnPost {
     /// The thread's first post (itself for a first post).
     pub root_id: String,
     pub text: String,
-    pub day: NaiveDate,
+    pub day: Date,
 }
 
 /// What progress is measured from.
@@ -46,7 +46,7 @@ pub struct GoalInputs<'a> {
     pub items: &'a [ReviewItem],
     pub own_posts: &'a [OwnPost],
     pub sessions: &'a [TutorSession],
-    pub today: NaiveDate,
+    pub today: Date,
     pub params: &'a Params,
 }
 

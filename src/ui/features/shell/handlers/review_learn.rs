@@ -12,7 +12,7 @@ use crate::domain::PostId;
 use crate::i18n::t_count;
 use crate::ui::features::post::LearnRequestKind;
 use crate::ui::features::review::{LearnRequest, LearnSource, Passage};
-use chrono::Utc;
+use jiff::Timestamp;
 use gpui_kit::component::notification::Notification;
 use gpui_kit::*;
 use rust_i18n::t;
@@ -80,7 +80,7 @@ impl AppView {
 
     /// Makes (or rewrites) the items of `drafts`, closes the sheet and confirms.
     pub(in crate::ui::features::shell) fn save_learn_drafts(&mut self, drafts: Vec<ItemDraft>, existing: Option<ItemId>, window: &mut Window, cx: &mut Context<Self>) {
-        let context = NewItemContext { network_id: self.state.active_network_id.clone(), created_at: Utc::now(), today: review_today() };
+        let context = NewItemContext { network_id: self.state.active_network_id.clone(), created_at: Timestamp::now(), today: review_today() };
         let edited = existing.and_then(|id| self.review.deck.item(&id).cloned());
         let items: Vec<_> = match edited {
             Some(item) => drafts.first().and_then(|draft| edited_item(&item, draft)).into_iter().collect(),

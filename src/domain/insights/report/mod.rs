@@ -17,7 +17,8 @@ use super::sets::{NamedSet, SetDimension};
 use crate::domain::document::SubjectId;
 use crate::domain::graph::{excerpt, GraphModel, GraphSource};
 use crate::domain::{GroundingDocument, NetworkId, Post, PostId, Profile};
-use chrono::{DateTime, Duration, FixedOffset, Utc};
+use jiff::Timestamp;
+use jiff::tz::Offset;
 use std::collections::HashMap;
 
 /// Characters of a post excerpt in tooltips.
@@ -33,8 +34,8 @@ pub struct InsightsInput {
     pub subjects: Vec<(SubjectId, String)>,
     /// Post id and unit embedding vector (one model).
     pub vectors: Vec<(String, Vec<f32>)>,
-    pub now: DateTime<Utc>,
-    pub offset: Option<FixedOffset>,
+    pub now: Timestamp,
+    pub offset: Option<Offset>,
 }
 
 /// A post as the charts name it.
@@ -44,7 +45,7 @@ pub struct PostSummary {
     pub author: usize,
     pub kind: PostKind,
     pub excerpt: String,
-    pub created_at: DateTime<Utc>,
+    pub created_at: Timestamp,
 }
 
 /// Every view's data.
@@ -68,7 +69,7 @@ pub struct InsightsReport {
 impl InsightsReport {
     /// Computes the report of `input` under `filter`, the Network view showing `scope`.
     pub fn compute(input: &InsightsInput, filter: &InsightsFilter, scope: GraphScope) -> Self {
-        let offset = input.offset.unwrap_or_else(|| FixedOffset::east_opt(0).expect("zero offset"));
+        let offset = input.offset.unwrap_or_else(|| Offset::UTC);
         let profile_of: HashMap<&str, &Profile> = input.profiles.iter().map(|p| (p.id.as_str(), p)).collect();
         let posts: Vec<Post> = input
             .posts
@@ -80,8 +81,8 @@ impl InsightsReport {
         let author_index: HashMap<&str, usize> = authors.iter().enumerate().map(|(i, a)| (a.id.as_str(), i)).collect();
         let author_of = |p: &Post| author_index.get(p.author_id.as_str()).copied().unwrap_or_default();
         let facts: Vec<PostFacts> = posts.iter().map(|p| PostFacts::of(p, author_of(p), offset)).collect();
-        let today = input.now.with_timezone(&offset).date_naive();
-        let start = filter.range.days().map(|days| today - Duration::days(days - 1));
+        let today = offset.to_datetime(input.now).date();
+        let start = filter.range.days().map(|days| today - crate::time::days(days - 1));
         let summaries = posts.iter().zip(&facts).map(|(p, f)| summary(p, f)).collect();
         let model = GraphModel::build(&GraphSource { posts: &posts, documents: &input.documents, profiles: &input.profiles, network: &input.network });
         let mut report = Self {

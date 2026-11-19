@@ -34,7 +34,7 @@ impl ReviewPanel {
     /// Creates the typed goal and opens it.
     fn create_goal(&mut self, window: &mut Window, cx: &mut Context<Self>) {
         let draft = self.goal_draft(cx);
-        let Some(goal) = new_goal(&draft, self.data.network_id.clone(), GoalId::generate(), self.data.today, chrono::Utc::now()) else { return cx.notify() };
+        let Some(goal) = new_goal(&draft, self.data.network_id.clone(), GoalId::generate(), self.data.today, jiff::Timestamp::now()) else { return cx.notify() };
         take_text(&self.learn_fields.goal_title, window, cx);
         take_text(&self.learn_fields.goal_why, window, cx);
         self.learning.goals = GoalsScreen::Goal(goal.id.clone());
@@ -64,7 +64,7 @@ impl ReviewPanel {
             .child(control_row(theme).child(framed_input(&self.learn_fields.goal_why, theme)))
             .child(section_label(tr("learning.goals.target_label"), theme))
             .child(control_row(theme).children(horizons))
-            .child(caption(t!("learning.goals.target_on", date = draft.target.format(DATE_FORMAT).to_string()).to_string(), theme))
+            .child(caption(t!("learning.goals.target_on", date = draft.target.strftime(DATE_FORMAT).to_string()).to_string(), theme))
             .children(problem)
             .child(control_row(theme).child(create).child(cancel))
     }

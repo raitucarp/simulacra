@@ -5,7 +5,7 @@
 use super::book::BeliefBook;
 use crate::domain::embedding::estimate_tokens;
 use crate::domain::ProfileId;
-use chrono::{DateTime, Utc};
+use jiff::Timestamp;
 
 /// Beliefs listed at most.
 pub const DOSSIER_BELIEFS: usize = 8;
@@ -20,7 +20,7 @@ fn line(proposition: &str, credence: f32) -> String {
 }
 
 /// The section for `agent`, or an empty string when it holds no beliefs.
-pub fn beliefs_section(book: &BeliefBook, agent: &ProfileId, now: DateTime<Utc>) -> String {
+pub fn beliefs_section(book: &BeliefBook, agent: &ProfileId, now: Timestamp) -> String {
     let lines: Vec<String> = book.ranked(agent, now).into_iter().take(DOSSIER_BELIEFS).map(|belief| line(&belief.proposition, belief.credence.unit())).collect();
     if lines.is_empty() {
         return String::new();

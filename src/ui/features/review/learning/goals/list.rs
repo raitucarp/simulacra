@@ -55,7 +55,7 @@ impl ReviewPanel {
     }
 
     pub(super) fn target_line(&self, view: &GoalView) -> String {
-        let date = view.goal.target.format(DATE_FORMAT).to_string();
+        let date = view.goal.target.strftime(DATE_FORMAT).to_string();
         match view.goal.target >= self.data.today {
             true => t!("learning.goals.target_in", date = date, days = days_between(self.data.today, view.goal.target)).to_string(),
             false => t!("learning.goals.target_past", date = date).to_string(),

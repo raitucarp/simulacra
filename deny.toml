@@ -9,11 +9,7 @@ all-features = true
 # depends on them directly; deep in the UI toolkit's tree they are reported upstream instead.
 unmaintained = "workspace"
 yanked = "deny"
-ignore = [
-    # chrono is flagged unmaintained (informational, no fixed version exists). Simulacra uses it
-    # for every timestamp; moving to jiff is planned as its own change.
-    { id = "RUSTSEC-2026-0543", reason = "no fixed version; migration to jiff planned" },
-]
+ignore = []
 
 [licenses]
 # Permissive licences, plus MPL-2.0 (file-level copyleft, fine to ship in a binary).

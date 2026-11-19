@@ -8,7 +8,7 @@ use crate::domain::data::snapshot::{meets_minimum, strength, SNAPSHOT_EXTENSION}
 use crate::domain::preferences::ToastKind;
 use crate::storage::data::create_snapshot;
 use crate::ui::features::data::{tr, DataEvent, SnapshotDialog};
-use chrono::{Local, Utc};
+use jiff::Timestamp;
 use gpui_kit::component::notification::Notification;
 use gpui_kit::*;
 use rust_i18n::t;
@@ -66,7 +66,7 @@ impl AppView {
         self.clear_passphrases(window, cx);
         self.refresh_snapshot_checks(cx);
         self.set_snapshot_busy(true, cx);
-        let name = format!("{}.{SNAPSHOT_EXTENSION}", Local::now().format(FILE_NAME_FORMAT));
+        let name = format!("{}.{SNAPSHOT_EXTENSION}", crate::time::local_now().strftime(FILE_NAME_FORMAT));
         let filter = tr("data.snapshot.file_filter");
         cx.spawn_in(window, async move |view, cx| {
             let file = rfd::AsyncFileDialog::new().set_file_name(name).add_filter(filter, &[SNAPSHOT_EXTENSION]).save_file().await;
@@ -76,7 +76,7 @@ impl AppView {
             };
             let Ok(Some(copy)) = view.update(cx, |this, cx| this.snapshot_copy(cx)) else { return };
             let target = out.clone();
-            let sealed = cx.background_executor().spawn(async move { create_snapshot(&copy, &target, &passphrase, Utc::now().timestamp()) }).await;
+            let sealed = cx.background_executor().spawn(async move { create_snapshot(&copy, &target, &passphrase, Timestamp::now().as_second()) }).await;
             let _ = view.update_in(cx, |this, window, cx| this.snapshot_finished(sealed.map(|bytes| (out, bytes)), window, cx));
         })
         .detach();
@@ -85,7 +85,7 @@ impl AppView {
     /// A consistent plain copy of the vault beside it (sealed and removed right after).
     fn snapshot_copy(&mut self, cx: &mut Context<Self>) -> Option<std::path::PathBuf> {
         let (vault, dir) = (self.state.db.clone()?, self.state.vault_dir()?);
-        let copy = dir.join(Local::now().format(COPY_NAME_FORMAT).to_string());
+        let copy = dir.join(crate::time::local_now().strftime(COPY_NAME_FORMAT).to_string());
         match vault.backup_to(copy.clone()) {
             Ok(()) => Some(copy),
             Err(err) => {

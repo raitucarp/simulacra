@@ -5,10 +5,10 @@ use crate::domain::review::schedule::Policy;
 use crate::domain::review::{apply_answer, Anchor, AnchorSide, Answer, Grade, ItemDraft, ItemId, ReviewItem, ReviewMode, Subject};
 use crate::domain::{NetworkId, PostId};
 use crate::storage::db::Database;
-use chrono::{NaiveDate, Utc};
+use jiff::Timestamp;
 
 fn context() -> NewItemContext {
-    NewItemContext { network_id: NetworkId::new("net"), created_at: Utc::now(), today: NaiveDate::from_ymd_opt(2026, 3, 1).unwrap() }
+    NewItemContext { network_id: NetworkId::new("net"), created_at: Timestamp::now(), today: jiff::civil::date(2026, 3, 1) }
 }
 
 fn items() -> Vec<ReviewItem> {
@@ -27,7 +27,7 @@ fn items_maps_and_answers_round_trip() {
     let items = items();
     db.save_review_items(&items).unwrap();
     let answer = Answer { item_id: items[0].id.clone(), grade: Grade::Good, mode: ReviewMode::Recall, confidence: None, correct: Some(true) };
-    let (reviewed, entry) = apply_answer(&items[0], &answer, Utc::now(), items[0].schedule.due, &Policy::with_retention_percent(90));
+    let (reviewed, entry) = apply_answer(&items[0], &answer, Timestamp::now(), items[0].schedule.due, &Policy::with_retention_percent(90));
     db.save_review_items(std::slice::from_ref(&reviewed)).unwrap();
     db.append_review_entry(&entry).unwrap();
     let deck = db.load_review_deck().unwrap();

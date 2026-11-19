@@ -16,7 +16,7 @@ pub use provenance::{PostOrigin, SourceLocator};
 pub use tokens::{has_rich_markup, is_trailing_punctuation, tokenize_post_body, BodyToken};
 
 use super::ids::{NetworkId, PostId, ProfileId};
-use chrono::{DateTime, Utc};
+use jiff::Timestamp;
 use serde::{Deserialize, Serialize};
 
 /// Maximum allowed character limit per post, enforcing micro-blog discipline.
@@ -31,7 +31,7 @@ pub struct Post {
     #[serde(alias = "author", deserialize_with = "author_ref::deserialize")]
     pub author_id: ProfileId,
     pub content: String,
-    pub created_at: DateTime<Utc>,
+    pub created_at: Timestamp,
     pub likes: usize,
     pub is_liked: bool,
     pub replies_count: usize,

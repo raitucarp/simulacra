@@ -7,10 +7,10 @@ use super::matching::{overlap, same_belief};
 use super::update::MAX_BELIEFS_PER_AGENT;
 use super::*;
 use crate::domain::ProfileId;
-use chrono::{DateTime, Duration, Utc};
+use jiff::Timestamp;
 
-fn now() -> DateTime<Utc> {
-    DateTime::parse_from_rfc3339("2026-11-18T10:00:00Z").expect("time").with_timezone(&Utc)
+fn now() -> Timestamp {
+    "2026-11-18T10:00:00Z".parse::<Timestamp>().expect("time")
 }
 
 fn ada() -> ProfileId {
@@ -26,7 +26,7 @@ fn debate() -> BeliefSource {
 }
 
 /// `book` after merging `proposals`, ids `b1, b2…` continuing from the book's size.
-fn merged(book: &BeliefBook, proposals: &[Proposal], at: DateTime<Utc>) -> BeliefBook {
+fn merged(book: &BeliefBook, proposals: &[Proposal], at: Timestamp) -> BeliefBook {
     let mut next = book.beliefs.len() + book.revisions.len();
     let change = apply_proposals(book, &ada(), proposals, &debate(), at, || {
         next += 1;
@@ -56,7 +56,7 @@ fn proposals_create_then_revise_with_a_logged_reason() {
     let book = merged(&BeliefBook::default(), &[proposal("Cities should ban private cars", 70)], now());
     assert_eq!(book.beliefs.len(), 1);
     assert_eq!(book.revisions[0].old, None);
-    let later = merged(&book, &[proposal("cities should ban private cars", 40), proposal("Trains beat planes", 80)], now() + Duration::hours(1));
+    let later = merged(&book, &[proposal("cities should ban private cars", 40), proposal("Trains beat planes", 80)], now() + jiff::SignedDuration::from_hours(1));
     assert_eq!(later.beliefs.len(), 2);
     let revised = later.history(&book.beliefs[0].id).last().expect("revision").clone();
     assert_eq!((revised.old, revised.new), (Some(Credence::from_percent(70)), Some(Credence::from_percent(40))));
@@ -78,7 +78,7 @@ fn pinned_beliefs_are_left_to_the_user() {
 
 #[test]
 fn the_cap_displaces_the_least_salient_unpinned_belief() {
-    let old = now() - Duration::days(60);
+    let old = now() - crate::time::days(60);
     let many: Vec<Proposal> = (0..MAX_BELIEFS_PER_AGENT).map(|i| proposal(&format!("Subject{i} thesis{i} statement{i}"), 55)).collect();
     let full = merged(&BeliefBook::default(), &many, old);
     let firm = merged(&full, &[proposal("A brand new firm conviction here", 95)], now());

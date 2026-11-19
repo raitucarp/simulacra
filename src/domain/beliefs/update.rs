@@ -12,7 +12,7 @@ use super::matching::{same_belief, tidy};
 use super::model::{Belief, BeliefId, BeliefSource, Credence, Revision, RevisionCause};
 use super::salience::by_salience;
 use crate::domain::ProfileId;
-use chrono::{DateTime, Utc};
+use jiff::Timestamp;
 
 /// Beliefs one agent keeps.
 pub const MAX_BELIEFS_PER_AGENT: usize = 16;
@@ -35,7 +35,7 @@ fn clipped(text: &str, max: usize) -> String {
 }
 
 /// A revision of `belief` from `old` to `new`.
-fn revision(belief: &Belief, old: Option<Credence>, new: Option<Credence>, cause: RevisionCause, reason: &str, now: DateTime<Utc>) -> Revision {
+fn revision(belief: &Belief, old: Option<Credence>, new: Option<Credence>, cause: RevisionCause, reason: &str, now: Timestamp) -> Revision {
     Revision {
         belief: belief.id.clone(),
         agent: belief.agent.clone(),
@@ -57,7 +57,7 @@ struct Merge {
 }
 
 impl Merge {
-    fn take(mut self, proposal: &Proposal, source: &BeliefSource, agent: &ProfileId, now: DateTime<Utc>, new_id: &mut impl FnMut() -> BeliefId) -> Self {
+    fn take(mut self, proposal: &Proposal, source: &BeliefSource, agent: &ProfileId, now: Timestamp, new_id: &mut impl FnMut() -> BeliefId) -> Self {
         let proposition = clipped(&proposal.proposition, MAX_PROPOSITION_CHARS);
         if proposition.is_empty() {
             return self;
@@ -85,7 +85,7 @@ impl Merge {
     }
 
     /// Ids of the beliefs to displace so at most the cap remain.
-    fn overflow(&self, book: &BeliefBook, now: DateTime<Utc>) -> Vec<BeliefId> {
+    fn overflow(&self, book: &BeliefBook, now: Timestamp) -> Vec<BeliefId> {
         let excess = self.beliefs.len().saturating_sub(MAX_BELIEFS_PER_AGENT);
         let candidates = self.beliefs.iter().filter(|belief| !belief.pinned && !self.touched.contains(&belief.id));
         let ranked = by_salience(candidates.map(|belief| (belief, book.history(&belief.id).count())), now);
@@ -94,7 +94,7 @@ impl Merge {
 }
 
 /// The change that merges `proposals` (read from `source`) into `agent`'s beliefs in `book`.
-pub fn apply_proposals(book: &BeliefBook, agent: &ProfileId, proposals: &[Proposal], source: &BeliefSource, now: DateTime<Utc>, mut new_id: impl FnMut() -> BeliefId) -> BeliefChange {
+pub fn apply_proposals(book: &BeliefBook, agent: &ProfileId, proposals: &[Proposal], source: &BeliefSource, now: Timestamp, mut new_id: impl FnMut() -> BeliefId) -> BeliefChange {
     let start = Merge { beliefs: book.of_agent(agent).cloned().collect(), touched: Vec::new(), revisions: Vec::new() };
     let mut merged = proposals.iter().fold(start, |merge, proposal| merge.take(proposal, source, agent, now, &mut new_id));
     let removed = merged.overflow(book, now);
@@ -106,6 +106,6 @@ pub fn apply_proposals(book: &BeliefBook, agent: &ProfileId, proposals: &[Propos
 }
 
 /// A revision written by the user's own action on `belief`.
-pub fn user_revision(belief: &Belief, old: Option<Credence>, new: Option<Credence>, cause: RevisionCause, now: DateTime<Utc>) -> Revision {
+pub fn user_revision(belief: &Belief, old: Option<Credence>, new: Option<Credence>, cause: RevisionCause, now: Timestamp) -> Revision {
     Revision { source: BeliefSource::user(), ..revision(belief, old, new, cause, "", now) }
 }

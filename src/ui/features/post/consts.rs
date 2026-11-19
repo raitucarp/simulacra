@@ -1,6 +1,6 @@
 //! Named constants for the post item feature: element ids, labels, and formats.
 
-/// `chrono` format string for post timestamps.
+/// `strftime` format string for post timestamps.
 pub(crate) const TIME_FORMAT: &str = "%H:%M";
 /// Middle dot separating metadata segments.
 pub(crate) const META_SEPARATOR: &str = "·";

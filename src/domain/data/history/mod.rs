@@ -11,7 +11,7 @@ pub use diff::{diff_stats, tokens, word_diff, DiffOp, DiffStats, MAX_DIFF_CELLS}
 pub use versions::{version_list, Version, VersionKind};
 
 use crate::domain::PostId;
-use chrono::{DateTime, Utc};
+use jiff::Timestamp;
 use serde::{Deserialize, Serialize};
 
 /// Prefix of generated revision ids.
@@ -80,7 +80,7 @@ impl RevisionSubject {
 pub struct Revision {
     pub id: RevisionId,
     pub subject: RevisionSubject,
-    pub saved_at: DateTime<Utc>,
+    pub saved_at: Timestamp,
     /// The document title (empty for posts).
     pub title: String,
     pub content: String,
@@ -90,7 +90,7 @@ pub struct Revision {
 
 impl Revision {
     /// The version of `subject` replaced at `saved_at`.
-    pub fn of(subject: RevisionSubject, content: &str, saved_at: DateTime<Utc>) -> Self {
+    pub fn of(subject: RevisionSubject, content: &str, saved_at: Timestamp) -> Self {
         Self { id: RevisionId::generate(), subject, saved_at, title: String::new(), content: content.to_string(), record_json: String::new() }
     }
 

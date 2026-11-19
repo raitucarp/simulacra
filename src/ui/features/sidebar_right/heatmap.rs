@@ -9,17 +9,17 @@ use super::heatmap_grid::CadenceGrid;
 use super::section::render_divided_section;
 use crate::domain::activity::ActivityHeatmap;
 use crate::theme::ThemeTokens;
-use chrono::NaiveDate;
+use jiff::civil::Date;
 use gpui_kit::*;
 
 /// Callback fired with the clicked calendar day.
-pub type ClickDayCallback = Rc<dyn Fn(NaiveDate, &mut Window, &mut App) + 'static>;
+pub type ClickDayCallback = Rc<dyn Fn(Date, &mut Window, &mut App) + 'static>;
 
 /// Inputs of the cadence heatmap section.
 pub struct HeatmapParams<'a> {
     pub heatmap: &'a ActivityHeatmap,
     /// Day the feed is currently filtered to, highlighted in the grid.
-    pub selected: Option<NaiveDate>,
+    pub selected: Option<Date>,
     pub on_click_day: ClickDayCallback,
 }
 

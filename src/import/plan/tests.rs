@@ -3,7 +3,6 @@ use crate::domain::post::PostOrigin;
 use crate::domain::preferences::PostIdentity;
 use crate::domain::{NetworkId, PostId, ProfileId};
 use crate::import::segment::{Unit, UnitPosition};
-use chrono::{TimeZone, Utc};
 
 fn unit(chapter: usize, paragraph: usize, sentence: Option<usize>, text: &str) -> Unit {
     Unit { position: UnitPosition { chapter, paragraph: Some(paragraph), sentence }, text: text.to_string() }
@@ -47,7 +46,7 @@ fn posts_chain_threads_rise_in_time_and_cite_their_source() {
     let long = "Sentence number one is here. ".repeat(20);
     let plan = plan_posts(&[unit(0, 0, None, &long), unit(0, 1, None, "Next.")], &source(), 280);
     let mut counter = 0;
-    let start = Utc.with_ymd_and_hms(2026, 1, 1, 0, 0, 0).unwrap();
+    let start = crate::time::utc(2026, 1, 1, 0, 0, 0);
     let posts = build_posts(&plan, &ProfileId::new("p"), &NetworkId::new("n"), start, PostOrigin::Import, || {
         counter += 1;
         PostId::new(format!("post_{counter}"))

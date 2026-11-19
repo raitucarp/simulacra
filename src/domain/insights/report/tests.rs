@@ -1,9 +1,8 @@
 use super::*;
 use crate::domain::insights::filter::{Audience, DateRange};
-use chrono::TimeZone;
 
 fn at(post: Post, minutes: i64) -> Post {
-    Post { created_at: Utc.with_ymd_and_hms(2026, 3, 10, 12, 0, 0).unwrap() - Duration::minutes(minutes), ..post }
+    Post { created_at: crate::time::utc(2026, 3, 10, 12, 0, 0) - jiff::SignedDuration::from_mins(minutes), ..post }
 }
 
 /// A debate: a root by Alice, two replies by the agent Bob, each answered by Alice; a quote,
@@ -29,7 +28,7 @@ fn input() -> InsightsInput {
         profiles: vec![alice, bob],
         subjects: vec![("s1".into(), "Ethics".into())],
         vectors: vec![("a".into(), vec![1.0, 0.0]), ("b".into(), vec![0.0, 1.0]), ("q".into(), vec![0.6, 0.8])],
-        now: Utc.with_ymd_and_hms(2026, 3, 10, 12, 0, 0).unwrap(),
+        now: crate::time::utc(2026, 3, 10, 12, 0, 0),
         offset: None,
     }
 }

@@ -26,7 +26,7 @@ fn metadata_rows(doc: &GroundingDocument) -> Vec<(&'static str, String)> {
         (record.extent.words > 0).then(|| t!("vault.minutes_read", minutes = reading_minutes(record.extent.words)).to_string()),
     ];
     let added_by = record.provenance.added_by.trim();
-    let added = doc.created_at.format(ADDED_FORMAT).to_string();
+    let added = doc.created_at.strftime(ADDED_FORMAT).to_string();
     let origin = tr(format!("vault.origin.{}", record.provenance.origin.key()));
     let source = record.provenance.source.trim();
     vec![

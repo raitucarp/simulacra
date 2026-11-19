@@ -6,7 +6,7 @@ use super::scenario::{cells, Scenario};
 use crate::domain::arena::ArenaId;
 use crate::domain::document::keyed::keyed_enum;
 use crate::domain::ProfileId;
-use chrono::{DateTime, Utc};
+use jiff::Timestamp;
 use serde::{Deserialize, Serialize};
 
 keyed_enum! {
@@ -52,12 +52,12 @@ pub struct Experiment {
     /// The preset it started from, if any (its key).
     #[serde(default)]
     pub preset: Option<String>,
-    pub created_at: DateTime<Utc>,
-    pub updated_at: DateTime<Utc>,
+    pub created_at: Timestamp,
+    pub updated_at: Timestamp,
 }
 
 impl Experiment {
-    pub fn new(id: ArenaId, scenario: Scenario, agents: Vec<ProfileId>, preset: Option<String>, now: DateTime<Utc>) -> Self {
+    pub fn new(id: ArenaId, scenario: Scenario, agents: Vec<ProfileId>, preset: Option<String>, now: Timestamp) -> Self {
         Self { id, scenario, agents, answers: Vec::new(), preset, created_at: now, updated_at: now }
     }
 
@@ -80,7 +80,7 @@ impl Experiment {
     }
 
     /// The experiment with `answer` recorded (replacing an earlier one for that pair).
-    pub fn with_answer(&self, answer: CellAnswer, now: DateTime<Utc>) -> Self {
+    pub fn with_answer(&self, answer: CellAnswer, now: Timestamp) -> Self {
         let same = |old: &&CellAnswer| old.agent == answer.agent && old.cell == answer.cell;
         let mut answers: Vec<CellAnswer> = self.answers.iter().filter(|old| !same(old)).cloned().collect();
         answers.push(answer);
@@ -88,7 +88,7 @@ impl Experiment {
     }
 
     /// The experiment ready to run again: same scenario and agents, no answers.
-    pub fn cleared(&self, now: DateTime<Utc>) -> Self {
+    pub fn cleared(&self, now: Timestamp) -> Self {
         Self { answers: Vec::new(), updated_at: now, ..self.clone() }
     }
 }

@@ -10,7 +10,7 @@ use crate::domain::preferences::{Choice, ReadingWidth};
 use crate::domain::{GroundingDocument, NetworkId, PostId};
 use crate::state::AppState;
 use crate::storage::Vault;
-use chrono::{DateTime, Utc};
+use jiff::Timestamp;
 use std::collections::HashMap;
 use std::rc::Rc;
 
@@ -24,7 +24,7 @@ pub struct BacklinkPreview {
     pub post_id: PostId,
     pub author: String,
     pub excerpt: String,
-    pub created_at: DateTime<Utc>,
+    pub created_at: Timestamp,
 }
 
 /// Everything the vault renders, shared cheaply between frames.

@@ -9,7 +9,8 @@ pub use timer::{FocusTimer, Phase};
 
 use super::ids::RecordId;
 use super::records::Record;
-use chrono::{DateTime, NaiveDate, Utc};
+use jiff::Timestamp;
+use jiff::civil::Date;
 use serde::{Deserialize, Serialize};
 
 /// Preset lengths in minutes: a pomodoro, a deep block, an ultradian cycle.
@@ -54,9 +55,9 @@ impl Outcome {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FocusSession {
     pub id: RecordId,
-    pub day: NaiveDate,
-    pub started_at: DateTime<Utc>,
-    pub ended_at: DateTime<Utc>,
+    pub day: Date,
+    pub started_at: Timestamp,
+    pub ended_at: Timestamp,
     pub intention: String,
     pub planned_minutes: u32,
     pub focused_minutes: u32,

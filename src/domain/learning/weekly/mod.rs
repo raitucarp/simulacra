@@ -13,7 +13,7 @@ use super::goals::OwnPost;
 use super::tutor::TutorSession;
 use crate::domain::review::day::add_days;
 use crate::domain::review::{ItemId, ReviewEntry, ReviewItem};
-use chrono::NaiveDate;
+use jiff::civil::Date;
 use std::collections::HashMap;
 
 /// Days a week review looks back over (today included).
@@ -26,16 +26,16 @@ const REPEATED: usize = 2;
 /// The seven review days ending today.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct WeekWindow {
-    pub start: NaiveDate,
-    pub end: NaiveDate,
+    pub start: Date,
+    pub end: Date,
 }
 
 impl WeekWindow {
-    pub fn ending(today: NaiveDate) -> Self {
-        Self { start: today - chrono::Duration::days(i64::from(WEEK_DAYS - 1)), end: today }
+    pub fn ending(today: Date) -> Self {
+        Self { start: today - crate::time::days(i64::from(WEEK_DAYS - 1)), end: today }
     }
 
-    pub fn contains(&self, day: NaiveDate) -> bool {
+    pub fn contains(&self, day: Date) -> bool {
         day >= self.start && day <= self.end
     }
 }
@@ -68,7 +68,7 @@ pub struct WeekInputs<'a> {
     pub log: &'a [ReviewEntry],
     pub own_posts: &'a [OwnPost],
     pub sessions: &'a [TutorSession],
-    pub today: NaiveDate,
+    pub today: Date,
 }
 
 fn recalled_items(log: &[&ReviewEntry]) -> Vec<ItemId> {
@@ -109,7 +109,7 @@ pub fn weekly_digest(inputs: &WeekInputs<'_>) -> WeeklyDigest {
         posts_written: posts.len(),
         posts: posts.iter().take(LISTED).map(|post| post.id.clone()).collect(),
         concepts: top_concepts(&posts),
-        tutor_sessions: inputs.sessions.iter().filter(|s| window.contains(s.updated_at.date_naive())).count(),
+        tutor_sessions: inputs.sessions.iter().filter(|s| window.contains(crate::time::utc_date(s.updated_at))).count(),
         due_today: active().filter(|item| item.schedule.due <= inputs.today).count(),
         due_week: active().filter(|item| item.schedule.due <= horizon).count(),
     }

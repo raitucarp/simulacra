@@ -14,7 +14,7 @@ use crate::domain::post_actions::{ActionFailureKind, RequestPolicy};
 use crate::domain::spend::SpendEstimate;
 use crate::ui::features::post_actions::failure_text;
 use crate::ui::features::review::learning::TutorStatus;
-use chrono::Utc;
+use jiff::Timestamp;
 use gpui_kit::*;
 
 fn failure_message(failure: &TutorFailure) -> String {
@@ -74,7 +74,7 @@ impl AppView {
         }
         self.review.learning.cancel = None;
         let Some(session) = self.review.learning.records.session(id).cloned() else { return };
-        let now = Utc::now();
+        let now = Timestamp::now();
         let next = match (request, outcome) {
             (TutorRequest::Opening, Ok(TutorReply::Turn(reply))) => session.with_opening(&reply.question, now),
             (TutorRequest::Turn, Ok(TutorReply::Turn(reply))) => session.with_turn(reply, now),

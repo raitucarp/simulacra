@@ -7,7 +7,6 @@ use crate::domain::thinking::credence::{open_by_due, summarize, Credence};
 use crate::state::semantic::hits::shortened;
 use crate::ui::features::insights::InsightsView;
 use crate::ui::features::thinking::insights::{CalibrationData, PredictionRow, ThinkingInsights};
-use chrono::Local;
 use gpui_kit::*;
 
 /// Characters of a post shown in the predictions list.
@@ -15,7 +14,7 @@ const EXCERPT_CHARS: usize = 90;
 
 impl AppView {
     fn calibration_data(&self) -> CalibrationData {
-        let today = Local::now().date_naive();
+        let today = crate::time::local_now().date();
         let credences: Vec<Credence> = self.thinking.credences.values().cloned().collect();
         let open = open_by_due(&credences).into_iter().map(|credence| PredictionRow {
             post_id: credence.post_id.clone(),

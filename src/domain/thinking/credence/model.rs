@@ -3,7 +3,8 @@
 
 use crate::domain::document::keyed::keyed_enum;
 use crate::domain::PostId;
-use chrono::{DateTime, NaiveDate, Utc};
+use jiff::Timestamp;
+use jiff::civil::Date;
 use serde::{Deserialize, Serialize};
 
 keyed_enum! {
@@ -37,18 +38,18 @@ pub struct Credence {
     pub percent: u8,
     /// The sentence the credence is about (`None`: the post's main claim).
     pub sentence: Option<String>,
-    pub resolves_by: Option<NaiveDate>,
+    pub resolves_by: Option<Date>,
     /// What the author wrote when resolving (or empty).
     pub note: String,
     /// `None` while the prediction is open.
     pub outcome: Option<Outcome>,
-    pub created_at: DateTime<Utc>,
-    pub resolved_at: Option<DateTime<Utc>>,
+    pub created_at: Timestamp,
+    pub resolved_at: Option<Timestamp>,
 }
 
 impl Credence {
     /// An open credence of `percent` (clamped) on the main claim of `post_id`.
-    pub fn new(post_id: PostId, percent: u8, now: DateTime<Utc>) -> Self {
+    pub fn new(post_id: PostId, percent: u8, now: Timestamp) -> Self {
         Self { post_id, percent: clamp_percent(i32::from(percent)), sentence: None, resolves_by: None, note: String::new(), outcome: None, created_at: now, resolved_at: None }
     }
 
@@ -62,7 +63,7 @@ impl Credence {
     }
 
     /// Open and its resolution date has come.
-    pub fn is_due(&self, today: NaiveDate) -> bool {
+    pub fn is_due(&self, today: Date) -> bool {
         self.is_open() && self.resolves_by.is_some_and(|due| due <= today)
     }
 
@@ -70,7 +71,7 @@ impl Credence {
         Self { percent: clamp_percent(i32::from(percent)), ..self }
     }
 
-    pub fn with_due(self, due: Option<NaiveDate>) -> Self {
+    pub fn with_due(self, due: Option<Date>) -> Self {
         Self { resolves_by: due, ..self }
     }
 
@@ -81,7 +82,7 @@ impl Credence {
     }
 
     /// Closed as `outcome` with `note` (trimmed) at `now`.
-    pub fn resolved(self, outcome: Outcome, note: &str, now: DateTime<Utc>) -> Self {
+    pub fn resolved(self, outcome: Outcome, note: &str, now: Timestamp) -> Self {
         Self { outcome: Some(outcome), note: note.trim().to_string(), resolved_at: Some(now), ..self }
     }
 

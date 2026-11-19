@@ -1,6 +1,6 @@
 //! Translated strings and times of the data views.
 
-use chrono::{DateTime, Local, Utc};
+use jiff::Timestamp;
 use rust_i18n::t;
 
 /// Local date and time as the history and restore sheets show them.
@@ -12,6 +12,6 @@ pub fn tr(key: &str) -> String {
 }
 
 /// `at` in local time.
-pub fn format_time(at: DateTime<Utc>) -> String {
-    at.with_timezone(&Local).format(TIME_FORMAT).to_string()
+pub fn format_time(at: Timestamp) -> String {
+    crate::time::local(at).strftime(TIME_FORMAT).to_string()
 }

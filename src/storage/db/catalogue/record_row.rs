@@ -22,7 +22,7 @@ pub fn record_params(doc: &GroundingDocument) -> Vec<Value> {
         Value::Text(class.place.trim().to_string()),
         Value::Text(record.reading.status.key().to_string()),
         Value::Integer(i64::from(record.reading.progress)),
-        record.updated_at.map_or(Value::Null, |at| Value::Text(at.to_rfc3339())),
+        record.updated_at.map_or(Value::Null, |at| Value::Text(crate::time::rfc3339(at))),
     ]
 }
 

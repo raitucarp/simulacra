@@ -7,7 +7,8 @@ pub mod notify;
 use super::ids::RecordId;
 use super::records::Record;
 use crate::domain::media::ImageAttachment;
-use chrono::{DateTime, Duration, NaiveDate, Utc};
+use jiff::Timestamp;
+use jiff::civil::Date;
 use serde::{Deserialize, Serialize};
 
 /// Fewest and most days a capsule can be sealed for (about twenty years).
@@ -17,7 +18,7 @@ pub const MAX_SEAL_DAYS: u32 = 7_305;
 /// When a capsule opens, as chosen in the form.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum SealUntil {
-    Date(NaiveDate),
+    Date(Date),
     Days(u32),
 }
 
@@ -42,14 +43,14 @@ pub enum CapsuleState {
 #[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TimeCapsule {
     pub id: RecordId,
-    pub written_at: DateTime<Utc>,
-    pub written_on: NaiveDate,
-    pub opens_on: NaiveDate,
+    pub written_at: Timestamp,
+    pub written_on: Date,
+    pub opens_on: Date,
     body: String,
     #[serde(default)]
     attachments: Vec<ImageAttachment>,
     #[serde(default)]
-    pub opened_at: Option<DateTime<Utc>>,
+    pub opened_at: Option<Timestamp>,
     /// The reply written after opening it.
     #[serde(default)]
     pub reply: Option<String>,
@@ -65,12 +66,12 @@ impl Record for TimeCapsule {
 }
 
 /// The day a capsule written on `today` opens, when it is in range.
-pub fn opening_day(until: SealUntil, today: NaiveDate) -> Option<NaiveDate> {
+pub fn opening_day(until: SealUntil, today: Date) -> Option<Date> {
     let day = match until {
         SealUntil::Date(day) => day,
-        SealUntil::Days(days) => today.checked_add_signed(Duration::days(i64::from(days)))?,
+        SealUntil::Days(days) => today.checked_add(crate::time::days(i64::from(days))).ok()?,
     };
-    let days = (day - today).num_days();
+    let days = i64::from((day - today).get_days());
     (i64::from(MIN_SEAL_DAYS)..=i64::from(MAX_SEAL_DAYS)).contains(&days).then_some(day)
 }
 
@@ -80,11 +81,11 @@ pub const DAY_FORMAT: &str = "%Y-%m-%d";
 /// What the "opens in" field says: a number of days, or a day (`2027-01-31`).
 pub fn parse_until(text: &str) -> Option<SealUntil> {
     let text = text.trim();
-    text.parse::<u32>().ok().map(SealUntil::Days).or_else(|| NaiveDate::parse_from_str(text, DAY_FORMAT).ok().map(SealUntil::Date))
+    text.parse::<u32>().ok().map(SealUntil::Days).or_else(|| Date::strptime(DAY_FORMAT, text).ok().map(SealUntil::Date))
 }
 
 /// Seals `body` (and `attachments`) on `today` until `until`.
-pub fn seal(id: RecordId, body: &str, attachments: Vec<ImageAttachment>, until: SealUntil, now: DateTime<Utc>, today: NaiveDate) -> Result<TimeCapsule, SealProblem> {
+pub fn seal(id: RecordId, body: &str, attachments: Vec<ImageAttachment>, until: SealUntil, now: Timestamp, today: Date) -> Result<TimeCapsule, SealProblem> {
     if body.trim().is_empty() && attachments.is_empty() {
         return Err(SealProblem::Empty);
     }
@@ -93,11 +94,11 @@ pub fn seal(id: RecordId, body: &str, attachments: Vec<ImageAttachment>, until: 
 }
 
 impl TimeCapsule {
-    pub fn state(&self, today: NaiveDate) -> CapsuleState {
+    pub fn state(&self, today: Date) -> CapsuleState {
         match (self.opened_at, today >= self.opens_on) {
             (Some(_), _) => CapsuleState::Opened,
             (None, true) => CapsuleState::Ready,
-            (None, false) => CapsuleState::Sealed { days_left: (self.opens_on - today).num_days().max(0) as u32 },
+            (None, false) => CapsuleState::Sealed { days_left: (self.opens_on - today).get_days().max(0) as u32 },
         }
     }
 
@@ -117,7 +118,7 @@ impl TimeCapsule {
     }
 
     /// Opens it at `now` when its day has come (`None` while sealed; unchanged if open).
-    pub fn opened(&self, now: DateTime<Utc>, today: NaiveDate) -> Option<Self> {
+    pub fn opened(&self, now: Timestamp, today: Date) -> Option<Self> {
         match self.state(today) {
             CapsuleState::Sealed { .. } => None,
             CapsuleState::Opened => Some(self.clone()),
@@ -132,6 +133,6 @@ impl TimeCapsule {
 
     /// Whole days between writing and opening (for "then and now").
     pub fn days_sealed(&self) -> u32 {
-        (self.opens_on - self.written_on).num_days().max(0) as u32
+        (self.opens_on - self.written_on).get_days().max(0) as u32
     }
 }

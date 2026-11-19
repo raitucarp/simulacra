@@ -5,7 +5,8 @@ use super::{Anchor, AnchorSide, ItemId, ReviewItem, Subject};
 use crate::domain::review::connections::ConnectionMap;
 use crate::domain::review::schedule::ItemSchedule;
 use crate::domain::NetworkId;
-use chrono::{DateTime, NaiveDate, Utc};
+use jiff::Timestamp;
+use jiff::civil::Date;
 
 /// What the learner wrote on a source.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -51,8 +52,8 @@ pub fn draft_problem(draft: &ItemDraft) -> Option<DraftProblem> {
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct NewItemContext {
     pub network_id: NetworkId,
-    pub created_at: DateTime<Utc>,
-    pub today: NaiveDate,
+    pub created_at: Timestamp,
+    pub today: Date,
 }
 
 fn subject_of(draft: &ItemDraft) -> Subject {

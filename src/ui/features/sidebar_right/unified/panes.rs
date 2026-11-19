@@ -21,7 +21,7 @@ pub(super) struct MindPaneParams<'a> {
     pub state: &'a AppState,
     pub posts: &'a [Post],
     pub heatmap: &'a ActivityHeatmap,
-    pub selected_day: Option<chrono::NaiveDate>,
+    pub selected_day: Option<jiff::civil::Date>,
     pub on_click_day: ClickDayCallback,
     pub graph: Rc<GraphScene>,
     pub on_open_graph: OpenGraphCallback,

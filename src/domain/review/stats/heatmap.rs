@@ -1,7 +1,7 @@
 //! Review heatmap: answers per day over the last weeks, as week columns of seven days.
 
 use crate::domain::review::log::ReviewEntry;
-use chrono::{Datelike, Duration, NaiveDate};
+use jiff::civil::Date;
 
 /// Intensity levels above zero.
 pub const HEATMAP_LEVELS: u8 = 4;
@@ -10,7 +10,7 @@ const DAYS_PER_WEEK: usize = 7;
 /// One day of the heatmap.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct HeatmapCell {
-    pub day: NaiveDate,
+    pub day: Date,
     pub count: usize,
     /// 0 (none) to [`HEATMAP_LEVELS`].
     pub level: u8,
@@ -27,14 +27,14 @@ pub fn heatmap_level(count: usize, max: usize) -> u8 {
 }
 
 /// `weeks` week columns ending with the week of `today` (each Monday first), oldest first.
-pub fn review_heatmap(log: &[ReviewEntry], today: NaiveDate, weeks: usize) -> Vec<Vec<HeatmapCell>> {
-    let monday = today - Duration::days(i64::from(today.weekday().num_days_from_monday()));
-    let first = monday - Duration::days((DAYS_PER_WEEK * weeks.saturating_sub(1)) as i64);
-    let count_on = |day: NaiveDate| log.iter().filter(|entry| entry.day == day).count();
-    let counts: Vec<Vec<(NaiveDate, usize)>> = (0..weeks)
+pub fn review_heatmap(log: &[ReviewEntry], today: Date, weeks: usize) -> Vec<Vec<HeatmapCell>> {
+    let monday = today - crate::time::days(i64::from(today.weekday().to_monday_zero_offset()));
+    let first = monday - crate::time::days((DAYS_PER_WEEK * weeks.saturating_sub(1)) as i64);
+    let count_on = |day: Date| log.iter().filter(|entry| entry.day == day).count();
+    let counts: Vec<Vec<(Date, usize)>> = (0..weeks)
         .map(|week| {
             (0..DAYS_PER_WEEK)
-                .map(|offset| first + Duration::days((week * DAYS_PER_WEEK + offset) as i64))
+                .map(|offset| first + crate::time::days((week * DAYS_PER_WEEK + offset) as i64))
                 .map(|day| (day, if day > today { 0 } else { count_on(day) }))
                 .collect()
         })
@@ -48,8 +48,8 @@ pub fn review_heatmap(log: &[ReviewEntry], today: NaiveDate, weeks: usize) -> Ve
 
 /// Consecutive days with at least one answer, ending today (or yesterday, when today has
 /// none yet).
-pub fn current_streak(log: &[ReviewEntry], today: NaiveDate) -> usize {
-    let reviewed = |day: NaiveDate| log.iter().any(|entry| entry.day == day);
-    let start = if reviewed(today) { today } else { today - Duration::days(1) };
-    (0..).map(|back| start - Duration::days(back)).take_while(|day| reviewed(*day)).count()
+pub fn current_streak(log: &[ReviewEntry], today: Date) -> usize {
+    let reviewed = |day: Date| log.iter().any(|entry| entry.day == day);
+    let start = if reviewed(today) { today } else { today - crate::time::days(1) };
+    (0..).map(|back| start - crate::time::days(back)).take_while(|day| reviewed(*day)).count()
 }

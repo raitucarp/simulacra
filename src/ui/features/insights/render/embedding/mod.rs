@@ -49,7 +49,7 @@ impl InsightsPanel {
         let (colouring, theme, generation, hovered) = (self.state.map_colour, self.theme.clone(), self.generation, self.hovered_point());
         let neighbours = self.map_neighbours(&report);
         let hidden: HashSet<usize> = self.hidden.iter().filter(|(l, _)| *l == LegendId::Map).map(|(_, i)| *i).collect();
-        let times = report.posts.iter().map(|p| p.created_at.timestamp());
+        let times = report.posts.iter().map(|p| p.created_at.as_second());
         let span = (times.clone().min().unwrap_or_default(), times.max().unwrap_or_default());
         let (padding, cell) = (self.canvas_padding(), theme.insights_point_radius.as_f32() * 4.0);
         canvas(move |bounds, _, _| slot.set(Some(Frame::from(bounds))), move |bounds, (), window, cx| {

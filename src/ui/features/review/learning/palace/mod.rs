@@ -62,7 +62,7 @@ impl ReviewPanel {
         }
         let kind = self.learning.new_room_kind;
         let room = super::super::text::tr(&format!("learning.palace.room.{}", kind.key()));
-        let palace = new_palace(PalaceId::generate(), self.data.network_id.clone(), &name, (kind, &room), chrono::Utc::now());
+        let palace = new_palace(PalaceId::generate(), self.data.network_id.clone(), &name, (kind, &room), jiff::Timestamp::now());
         let id = palace.id.clone();
         self.emit_learning(LearningEvent::SavePalace(palace.clone()), cx);
         self.learning.palace = PalaceScreen::Edit(id);

@@ -5,7 +5,6 @@ use super::{JournalFields, JournalPanel};
 use crate::domain::journal::mood::{parse_tags, Affect, CheckinDraft};
 use crate::domain::journal::{journal_day, RecordId};
 use crate::ui::features::journal::events::JournalEvent;
-use chrono::Local;
 use gpui_kit::{Context, Pixels, Point, Window};
 
 impl JournalPanel {
@@ -31,7 +30,7 @@ impl JournalPanel {
 
     /// Saves the check-in (once a point is chosen) and clears the form.
     pub(in crate::ui::features::journal) fn save_checkin(&mut self, window: &mut Window, cx: &mut Context<Self>) {
-        let now = Local::now();
+        let now = crate::time::local_now();
         let sleep = JournalFields::text(&self.fields.sleep, cx).replace(',', ".").parse::<f32>().ok();
         let draft = CheckinDraft {
             sleep_hours: sleep,
@@ -39,7 +38,7 @@ impl JournalPanel {
             note: JournalFields::text(&self.fields.note, cx),
             ..self.draft.clone()
         };
-        let Some(checkin) = draft.into_checkin(RecordId::random(), now.fixed_offset(), journal_day(&now)) else { return };
+        let Some(checkin) = draft.into_checkin(RecordId::random(), now.clone(), journal_day(&now)) else { return };
         cx.emit(JournalEvent::SaveCheckin(checkin));
         self.draft = CheckinDraft::default();
         for field in [&self.fields.note, &self.fields.tags, &self.fields.sleep] {

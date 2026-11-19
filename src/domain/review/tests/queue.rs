@@ -4,11 +4,11 @@ use crate::domain::review::log::{apply_answer, Answer, ReviewEntry, ReviewMode};
 use crate::domain::review::queue::{build_queue, plan_today, DailyLimits};
 use crate::domain::review::schedule::Policy;
 use crate::domain::review::{Grade, Phase};
-use chrono::Utc;
+use jiff::Timestamp;
 
 /// `card` reviewed Good on day 0, so it is learnt and due later.
 fn learnt(card: ReviewItem, due_offset: i64) -> ReviewItem {
-    let (mut card, _) = apply_answer(&card, &answer(&card, Grade::Good), Utc::now(), day(0), &Policy::with_retention_percent(90));
+    let (mut card, _) = apply_answer(&card, &answer(&card, Grade::Good), Timestamp::now(), day(0), &Policy::with_retention_percent(90));
     card.schedule.due = day(due_offset);
     card
 }
@@ -45,7 +45,7 @@ fn todays_answers_use_up_the_limits() {
     let cards = deck(0, 30);
     let log: Vec<ReviewEntry> = cards[..15]
         .iter()
-        .map(|card| apply_answer(card, &answer(card, Grade::Good), Utc::now(), day(0), &Policy::with_retention_percent(90)).1)
+        .map(|card| apply_answer(card, &answer(card, Grade::Good), Timestamp::now(), day(0), &Policy::with_retention_percent(90)).1)
         .collect();
     assert!(log.iter().all(|e| e.phase_before == Phase::New));
     let plan = plan_today(&cards[15..], &log, day(0), LIMITS);

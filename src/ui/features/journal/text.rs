@@ -5,7 +5,7 @@ use crate::domain::journal::capsule::CapsuleState;
 use crate::domain::journal::mood::correlate::{Association, Strength, MIN_DAYS};
 use crate::domain::journal::mood::AffectRegion;
 use crate::i18n::{t_count, COUNT_SEPARATOR};
-use chrono::NaiveDate;
+use jiff::civil::Date;
 use rust_i18n::t;
 
 /// Correlations are shown with two decimals.
@@ -17,9 +17,9 @@ pub fn tr(key: &str) -> String {
 }
 
 /// A day as "Mon 2 Mar 2026" in the user's language (numbers and month as figures).
-pub fn day_label(day: NaiveDate) -> String {
-    let weekday = tr(&format!("journal.weekday.{}", chrono::Datelike::weekday(&day).num_days_from_monday()));
-    t!("journal.day_format", weekday = weekday, date = day.format("%Y-%m-%d").to_string()).to_string()
+pub fn day_label(day: Date) -> String {
+    let weekday = tr(&format!("journal.weekday.{}", day.weekday().to_monday_zero_offset()));
+    t!("journal.day_format", weekday = weekday, date = day.strftime("%Y-%m-%d").to_string()).to_string()
 }
 
 pub fn region_label(region: AffectRegion) -> String {
@@ -27,7 +27,7 @@ pub fn region_label(region: AffectRegion) -> String {
 }
 
 /// What a capsule says on its card.
-pub fn capsule_state_label(state: CapsuleState, opens_on: NaiveDate) -> String {
+pub fn capsule_state_label(state: CapsuleState, opens_on: Date) -> String {
     match state {
         CapsuleState::Sealed { days_left } => t_count("journal.capsule.days_left", days_left as usize) + COUNT_SEPARATOR + &t!("journal.capsule.opens_on", date = day_label(opens_on)),
         CapsuleState::Ready => tr("journal.capsule.ready"),

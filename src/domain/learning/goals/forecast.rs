@@ -6,7 +6,7 @@ use super::progress::GoalProgress;
 use super::Goal;
 use crate::domain::document::keyed::keyed_enum;
 use crate::domain::review::day::days_between;
-use chrono::NaiveDate;
+use jiff::civil::Date;
 
 /// Score at which a goal counts as reached.
 pub const ACHIEVED_SCORE: f64 = 0.95;
@@ -24,13 +24,13 @@ keyed_enum! {
 }
 
 /// The share (0–1) of the goal's time spent by `today`.
-pub fn expected_share(goal: &Goal, today: NaiveDate) -> f64 {
+pub fn expected_share(goal: &Goal, today: Date) -> f64 {
     let total = days_between(goal.created_on, goal.target).max(1);
     (f64::from(days_between(goal.created_on, today)) / f64::from(total)).clamp(0.0, 1.0)
 }
 
 /// Where `goal` stands on `today` with `progress`.
-pub fn forecast(goal: &Goal, progress: &GoalProgress, today: NaiveDate) -> Forecast {
+pub fn forecast(goal: &Goal, progress: &GoalProgress, today: Date) -> Forecast {
     match (goal.completed || progress.score >= ACHIEVED_SCORE, today > goal.target) {
         (true, _) => Forecast::Achieved,
         (false, true) => Forecast::Overdue,

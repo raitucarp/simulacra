@@ -53,7 +53,7 @@ impl Database {
     /// The rows of [`Self::save_document`], inside the caller's transaction.
     pub(in crate::storage::db) fn write_document_rows(&self, doc: &GroundingDocument) -> Result<()> {
         let conn = &self.conn;
-        let created = doc.created_at.to_rfc3339();
+        let created = crate::time::rfc3339(doc.created_at);
         conn.execute(UPSERT_DOCUMENT, params![doc.id, doc.network_id.as_str(), doc.title, doc.content, doc.chunk_count as i64, created])
             .map_err(db_err)?;
         conn.execute(UPSERT_RECORD, params_from_iter(record_params(doc))).map_err(db_err)?;

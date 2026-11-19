@@ -12,7 +12,7 @@ use crate::theme::ThemeTokens;
 use crate::ui::features::insights::panel::InsightsPanel;
 use crate::ui::features::day_filter::month_label;
 use crate::ui::features::insights::view::InsightsView;
-use chrono::{Datelike, NaiveDate};
+use jiff::civil::Date;
 use gpui_kit::*;
 
 /// The "updating" badge while a new lens report is computed.
@@ -31,7 +31,7 @@ pub fn lens_updating(pending: bool, theme: &ThemeTokens) -> Option<AnyElement> {
 }
 
 /// A short axis label: month and day.
-pub fn short_day(day: NaiveDate) -> String {
+pub fn short_day(day: Date) -> String {
     format!("{} {}", month_label(day.month()), day.day())
 }
 

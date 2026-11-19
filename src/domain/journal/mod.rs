@@ -28,11 +28,12 @@ pub use focus::FocusSession;
 pub use ids::RecordId;
 pub use mood::MoodCheckin;
 
-use chrono::{DateTime, NaiveDate, TimeZone};
+use jiff::civil::Date;
+use jiff::ZonedDateTime;
 
 /// The journal day `at` falls in: local time with the review page's night rollover, so a
 /// late-night entry still belongs to the evening it was written in.
-pub fn journal_day<Tz: TimeZone>(at: &DateTime<Tz>) -> NaiveDate {
+pub fn journal_day(at: &ZonedDateTime) -> Date {
     crate::domain::review::day::review_day(at)
 }
 
@@ -47,7 +48,7 @@ pub struct JournalBook {
 
 impl JournalBook {
     /// Days with at least one written entry.
-    pub fn written_days(&self) -> impl Iterator<Item = NaiveDate> + '_ {
+    pub fn written_days(&self) -> impl Iterator<Item = Date> + '_ {
         self.entries.iter().filter(|e| !e.is_blank()).map(|e| e.day)
     }
 

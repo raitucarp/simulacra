@@ -5,7 +5,7 @@ use super::capture::Capture;
 use crate::domain::post::{PostExtras, PostOrigin};
 use crate::domain::{split_into_thread, NetworkId, Post, PostId, ProfileId};
 use crate::error::{AppError, Result};
-use chrono::{DateTime, Duration, Utc};
+use jiff::Timestamp;
 
 /// What to post: the classified text and an optional image already in the media folder.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -29,7 +29,7 @@ pub fn capture_posts(
     limit: usize,
     author: &ProfileId,
     network: &NetworkId,
-    now: DateTime<Utc>,
+    now: Timestamp,
     mut next_id: impl FnMut() -> PostId,
 ) -> Result<Vec<Post>> {
     let (mut texts, link) = parts(&draft.capture, limit);
@@ -44,7 +44,7 @@ pub fn capture_posts(
         let parent = posts.last().map(|post| post.id.clone());
         let (link, image) = if index == 0 { (link.clone(), draft.image_path.clone()) } else { (None, None) };
         let mut post = Post::create_with_attachments(next_id(), network.clone(), author.clone(), text, link, image, parent, None, None)?;
-        post.created_at = now + Duration::milliseconds(index as i64);
+        post.created_at = now + jiff::SignedDuration::from_millis(index as i64);
         post.extras = PostExtras { origin: Some(PostOrigin::Capture), ..PostExtras::default() };
         if let Some(previous) = posts.last_mut() {
             previous.replies_count = 1;
@@ -61,7 +61,7 @@ mod tests {
     fn build(capture: Capture, image: Option<&str>) -> Result<Vec<Post>> {
         let mut n = 0;
         let draft = CaptureDraft { capture, image_path: image.map(str::to_string) };
-        capture_posts(&draft, 280, &ProfileId::new("me"), &NetworkId::new("net"), Utc::now(), || {
+        capture_posts(&draft, 280, &ProfileId::new("me"), &NetworkId::new("net"), Timestamp::now(), || {
             n += 1;
             PostId::new(format!("c{n}"))
         })

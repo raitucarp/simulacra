@@ -10,7 +10,7 @@ use crate::media::store_attachment_file;
 use crate::ui::components::pick_image_paths;
 use crate::ui::features::journal::events::JournalEvent;
 use crate::ui::features::journal::text::tr;
-use chrono::Utc;
+use jiff::Timestamp;
 use gpui_kit::{Context, Window};
 
 /// The capsule being written, and the one being read.
@@ -55,7 +55,7 @@ impl JournalPanel {
     pub(in crate::ui::features::journal) fn seal_capsule(&mut self, window: &mut Window, cx: &mut Context<Self>) {
         let body = JournalFields::area_text(&self.fields.capsule_body, cx);
         let until = parse_until(&JournalFields::text(&self.fields.capsule_until, cx));
-        let sealed = until.ok_or(SealProblem::OutOfRange).and_then(|until| seal(RecordId::random(), &body, self.capsule.attachments.clone(), until, Utc::now(), self.data.today));
+        let sealed = until.ok_or(SealProblem::OutOfRange).and_then(|until| seal(RecordId::random(), &body, self.capsule.attachments.clone(), until, Timestamp::now(), self.data.today));
         match sealed {
             Ok(capsule) => {
                 cx.emit(JournalEvent::SaveCapsule(capsule));
@@ -71,7 +71,7 @@ impl JournalPanel {
     /// Opens a capsule whose day has come, and shows it.
     pub(in crate::ui::features::journal) fn open_capsule(&mut self, id: &RecordId, window: &mut Window, cx: &mut Context<Self>) {
         let Some(capsule) = find(&self.data.book.capsules, id) else { return };
-        let Some(opened) = capsule.opened(Utc::now(), self.data.today) else { return };
+        let Some(opened) = capsule.opened(Timestamp::now(), self.data.today) else { return };
         let reply = opened.reply.clone().unwrap_or_default();
         self.fields.reply.update(cx, |state, cx| state.set_value(reply, window, cx));
         if opened != *capsule {

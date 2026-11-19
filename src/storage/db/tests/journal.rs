@@ -3,19 +3,20 @@ use crate::domain::journal::focus::{FocusLink, FocusSession, Outcome};
 use crate::domain::journal::mood::{Affect, CheckinDraft};
 use crate::domain::journal::{JournalEntry, MoodCheckin, RecordId, TimeCapsule};
 use crate::storage::db::Database;
-use chrono::{NaiveDate, TimeZone, Utc};
+use jiff::Timestamp;
+use jiff::civil::Date;
 
 const SECRET: &str = "a private worry nobody should read";
 
-fn day() -> NaiveDate {
-    NaiveDate::from_ymd_opt(2026, 3, 2).unwrap()
+fn day() -> Date {
+    jiff::civil::date(2026, 3, 2)
 }
 
 fn book_records() -> (JournalEntry, MoodCheckin, FocusSession, TimeCapsule) {
-    let now = Utc.with_ymd_and_hms(2026, 3, 2, 9, 0, 0).unwrap();
+    let now = crate::time::utc(2026, 3, 2, 9, 0, 0);
     let entry = JournalEntry::new(RecordId::new("e1"), day(), now, format!("## Evening\n{SECRET} [[post_1]]"));
     let draft = CheckinDraft { affect: Some(Affect::new(-0.4, 0.6)), energy: 2, note: SECRET.into(), tags: vec!["work".into()], ..CheckinDraft::default() };
-    let checkin = draft.into_checkin(RecordId::new("m1"), now.fixed_offset(), day()).unwrap();
+    let checkin = draft.into_checkin(RecordId::new("m1"), now.to_zoned_datetime(jiff::tz::TimeZone::UTC), day()).unwrap();
     let session = FocusSession {
         id: RecordId::new("f1"), day: day(), started_at: now, ended_at: now, intention: SECRET.into(), planned_minutes: 25,
         focused_minutes: 24, link: Some(FocusLink::Post("post_1".into())), distractions: 2, outcome: Some(Outcome::Partly), reflection: "ok".into(),
@@ -40,7 +41,7 @@ fn every_kind_round_trips_and_upserts() {
     let (entry, checkin, session, capsule) = book_records();
     let book = db.load_journal_book().unwrap();
     assert_eq!((book.entries, book.checkins, book.sessions, book.capsules), (vec![entry.clone()], vec![checkin], vec![session], vec![capsule]));
-    db.save_journal_record(&entry.edited("rewritten", Utc::now())).unwrap();
+    db.save_journal_record(&entry.edited("rewritten", Timestamp::now())).unwrap();
     let entries: Vec<JournalEntry> = db.load_journal_records().unwrap();
     assert_eq!((entries.len(), entries[0].body.as_str()), (1, "rewritten"));
     db.delete_journal_record::<JournalEntry>(&RecordId::new("e1")).unwrap();

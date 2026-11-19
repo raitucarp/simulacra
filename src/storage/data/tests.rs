@@ -6,7 +6,7 @@ use crate::domain::data::snapshot::SnapshotError;
 use crate::domain::document::{CollectionId, DocumentId};
 use crate::domain::{Post, PostId};
 use crate::storage::Database;
-use chrono::Utc;
+use jiff::Timestamp;
 use std::io::Read;
 use std::path::PathBuf;
 use zeroize::Zeroizing;
@@ -118,7 +118,7 @@ fn restore_swaps_the_live_database_and_keeps_a_pre_restore_copy() {
 fn revisions_and_post_edits_persist_together() {
     let db = Database::in_memory().unwrap();
     db.save_post(&Post::create("post_1", "net", "user_main", "first words").unwrap()).unwrap();
-    let revision = Revision::of(RevisionSubject::Post(PostId::new("post_1")), "first words", Utc::now());
+    let revision = Revision::of(RevisionSubject::Post(PostId::new("post_1")), "first words", Timestamp::now());
     let edited = crate::domain::data::history::edited_post(&db.load_posts().unwrap()[0], "second words");
     db.edit_post_content(&edited, &revision).unwrap();
     assert_eq!(db.load_posts().unwrap()[0].content, "second words");
@@ -130,7 +130,7 @@ fn revisions_and_post_edits_persist_together() {
 #[test]
 fn bookmarks_and_collection_items_round_trip() {
     let db = Database::in_memory().unwrap();
-    let now = chrono::DateTime::parse_from_rfc3339("2026-11-18T09:00:00Z").unwrap().with_timezone(&Utc);
+    let now = "2026-11-18T09:00:00Z".parse::<jiff::Timestamp>().unwrap();
     db.save_bookmark(&Bookmark { post: PostId::new("p1"), created_at: now }).unwrap();
     let shelf = CollectionId::new("coll_1");
     let entry = |item: ItemRef, position: i64| CollectionEntry { collection: shelf.clone(), item, position, note: "why it matters".into(), added_at: now };

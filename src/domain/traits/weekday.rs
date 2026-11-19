@@ -18,16 +18,16 @@ trait_enum! {
 }
 
 impl Weekday {
-    /// The day matching a `chrono` weekday.
-    pub const fn from_chrono(day: chrono::Weekday) -> Self {
+    /// The day matching a `jiff` weekday.
+    pub const fn from_jiff(day: jiff::civil::Weekday) -> Self {
         match day {
-            chrono::Weekday::Mon => Self::Monday,
-            chrono::Weekday::Tue => Self::Tuesday,
-            chrono::Weekday::Wed => Self::Wednesday,
-            chrono::Weekday::Thu => Self::Thursday,
-            chrono::Weekday::Fri => Self::Friday,
-            chrono::Weekday::Sat => Self::Saturday,
-            chrono::Weekday::Sun => Self::Sunday,
+            jiff::civil::Weekday::Monday => Self::Monday,
+            jiff::civil::Weekday::Tuesday => Self::Tuesday,
+            jiff::civil::Weekday::Wednesday => Self::Wednesday,
+            jiff::civil::Weekday::Thursday => Self::Thursday,
+            jiff::civil::Weekday::Friday => Self::Friday,
+            jiff::civil::Weekday::Saturday => Self::Saturday,
+            jiff::civil::Weekday::Sunday => Self::Sunday,
         }
     }
 }

@@ -3,10 +3,11 @@
 //! comes out [`Decision::Due`] is counted as a post in its day and hour. The Agent Forge
 //! shows the result as a calendar strip of when the agent will likely post.
 
+use jiff::tz::TimeZone;
+use jiff::{SignedDuration, Timestamp};
 use super::planner::{evaluate, AgentSlot, Decision, ScheduleContext};
 use super::window::HOURS_PER_DAY;
 use crate::domain::{AgentConfig, ProfileId};
-use chrono::{DateTime, Duration, Timelike, Utc};
 
 /// Days in the previewed week.
 pub const DAYS_PER_WEEK: usize = 7;
@@ -41,21 +42,21 @@ impl WeekPreview {
 /// Replays one week of heartbeat ticks spaced `tick` apart for an agent with `cfg`, starting
 /// at midnight on a Monday, with the session `seed` driving the spontaneity rolls. A post resets the
 /// cooldown, exactly as a dispatch does on the live heartbeat.
-pub fn simulate_week(cfg: &AgentConfig, id: &ProfileId, tick: Duration, seed: u64) -> WeekPreview {
+pub fn simulate_week(cfg: &AgentConfig, id: &ProfileId, tick: SignedDuration, seed: u64) -> WeekPreview {
     let mut preview = WeekPreview::default();
-    if tick <= Duration::zero() {
+    if tick <= jiff::SignedDuration::ZERO {
         return preview;
     }
-    let start = DateTime::<Utc>::UNIX_EPOCH + Duration::days(FIRST_MONDAY_OFFSET_DAYS);
-    let end = start + Duration::days(DAYS_PER_WEEK as i64);
+    let start = Timestamp::UNIX_EPOCH + crate::time::days(FIRST_MONDAY_OFFSET_DAYS);
+    let end = start + crate::time::days(DAYS_PER_WEEK as i64);
     let mut last_activity = None;
     let (mut now, mut count) = (start, 0_u64);
     while now < end {
-        let ctx = ScheduleContext { now: now.fixed_offset(), seed, tick: count };
+        let ctx = ScheduleContext { now: now.to_zoned_datetime(TimeZone::UTC), seed, tick: count };
         if evaluate(&AgentSlot { id, config: cfg, last_activity }, &ctx) == Decision::Due {
             last_activity = Some(now);
-            let day = (now - start).num_days() as usize;
-            if let Some(slot) = preview.posts.get_mut(day).and_then(|hours| hours.get_mut(now.hour() as usize)) {
+            let day = (now.duration_since(start).as_hours() / i64::from(HOURS_PER_DAY)) as usize;
+            if let Some(slot) = preview.posts.get_mut(day).and_then(|hours| hours.get_mut(ctx.now.hour() as usize)) {
                 *slot += 1;
             }
         }

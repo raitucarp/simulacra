@@ -5,7 +5,7 @@ use crate::domain::activity::{ActivityHeatmap, MAX_ACTIVITY_LEVEL};
 use crate::theme::ThemeTokens;
 use crate::ui::features::day_filter::day_summary;
 use crate::ui::icons::LucideIcon;
-use chrono::NaiveDate;
+use jiff::civil::Date;
 use gpui_kit::*;
 use crate::i18n::t_count;
 use rust_i18n::t;
@@ -36,7 +36,7 @@ pub(super) fn render_heatmap_header(total: usize, theme: &ThemeTokens) -> Div {
     )
 }
 
-pub(super) fn render_subtitle(heatmap: &ActivityHeatmap, selected: Option<NaiveDate>, theme: &ThemeTokens) -> Div {
+pub(super) fn render_subtitle(heatmap: &ActivityHeatmap, selected: Option<Date>, theme: &ThemeTokens) -> Div {
     let subtitle = match selected {
         Some(day) => day_summary(day, heatmap.count_on(day)),
         None => t!("cadence.hint").to_string(),

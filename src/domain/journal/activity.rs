@@ -2,7 +2,9 @@
 //! posts the user wrote, review sessions (answers more than a gap apart start a new session)
 //! and focus minutes. Used only for the private associations on the Mood tab.
 
-use chrono::{DateTime, NaiveDate, Utc};
+use jiff::Timestamp;
+
+use jiff::civil::Date;
 use std::collections::BTreeMap;
 
 /// Minutes between two answers after which a new review session starts.
@@ -17,7 +19,7 @@ pub struct DayActivity {
 }
 
 /// Activity by journal day.
-pub type ActivityByDay = BTreeMap<NaiveDate, DayActivity>;
+pub type ActivityByDay = BTreeMap<Date, DayActivity>;
 
 /// An activity measure.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -49,13 +51,13 @@ impl ActivityKind {
 
 /// Review sessions per day from the answer times (each with its day): a session starts at
 /// the first answer of a day and after every gap longer than [`SESSION_GAP_MINUTES`].
-pub fn review_sessions_by_day(answers: &[(NaiveDate, DateTime<Utc>)]) -> BTreeMap<NaiveDate, usize> {
+pub fn review_sessions_by_day(answers: &[(Date, Timestamp)]) -> BTreeMap<Date, usize> {
     let mut sorted = answers.to_vec();
     sorted.sort_by_key(|(_, at)| *at);
-    let mut sessions: BTreeMap<NaiveDate, usize> = BTreeMap::new();
-    let mut previous: Option<(NaiveDate, DateTime<Utc>)> = None;
+    let mut sessions: BTreeMap<Date, usize> = BTreeMap::new();
+    let mut previous: Option<(Date, Timestamp)> = None;
     for (day, at) in sorted {
-        let continues = previous.is_some_and(|(d, p)| d == day && (at - p).num_minutes() <= SESSION_GAP_MINUTES);
+        let continues = previous.is_some_and(|(d, p)| d == day && (at - p).as_mins() <= SESSION_GAP_MINUTES);
         if !continues {
             *sessions.entry(day).or_default() += 1;
         }
@@ -65,7 +67,7 @@ pub fn review_sessions_by_day(answers: &[(NaiveDate, DateTime<Utc>)]) -> BTreeMa
 }
 
 /// Merges per-day counts into one activity map.
-pub fn activity_by_day(posts: &BTreeMap<NaiveDate, usize>, reviews: &BTreeMap<NaiveDate, usize>, focus: &BTreeMap<NaiveDate, u32>) -> ActivityByDay {
+pub fn activity_by_day(posts: &BTreeMap<Date, usize>, reviews: &BTreeMap<Date, usize>, focus: &BTreeMap<Date, u32>) -> ActivityByDay {
     let mut days = ActivityByDay::new();
     posts.iter().for_each(|(d, n)| days.entry(*d).or_default().posts = *n);
     reviews.iter().for_each(|(d, n)| days.entry(*d).or_default().review_sessions = *n);

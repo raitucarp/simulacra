@@ -13,7 +13,8 @@ pub use progress::{goal_progress, GoalInputs, GoalProgress, OwnPost};
 use crate::domain::learning::concept::concept_key;
 use crate::domain::review::ItemId;
 use crate::domain::NetworkId;
-use chrono::{DateTime, NaiveDate, Utc};
+use jiff::Timestamp;
+use jiff::civil::Date;
 use serde::{Deserialize, Serialize};
 
 /// Prefix of goal ids.
@@ -68,9 +69,9 @@ pub struct GoalTask {
     pub id: String,
     pub text: String,
     pub done: bool,
-    pub added_on: NaiveDate,
+    pub added_on: Date,
     #[serde(default)]
-    pub done_on: Option<NaiveDate>,
+    pub done_on: Option<Date>,
 }
 
 /// A learning goal.
@@ -81,14 +82,14 @@ pub struct Goal {
     pub title: String,
     /// Why it matters to the learner.
     pub why: String,
-    pub target: NaiveDate,
+    pub target: Date,
     pub links: Vec<GoalLink>,
     pub tasks: Vec<GoalTask>,
     /// The learner marked it reached.
     #[serde(default)]
     pub completed: bool,
-    pub created_on: NaiveDate,
-    pub created_at: DateTime<Utc>,
+    pub created_on: Date,
+    pub created_at: Timestamp,
 }
 
 impl Goal {

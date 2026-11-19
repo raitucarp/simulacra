@@ -14,7 +14,7 @@ pub use order::{collection_items, moved, next_position, toggled_bookmark};
 
 use crate::domain::document::{CollectionId, DocumentId};
 use crate::domain::PostId;
-use chrono::{DateTime, Utc};
+use jiff::Timestamp;
 
 /// `item_kind` of a post entry.
 pub const POST_ITEM: &str = "post";
@@ -61,14 +61,14 @@ pub struct CollectionEntry {
     pub item: ItemRef,
     pub position: i64,
     pub note: String,
-    pub added_at: DateTime<Utc>,
+    pub added_at: Timestamp,
 }
 
 /// A bookmarked post.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct Bookmark {
     pub post: PostId,
-    pub created_at: DateTime<Utc>,
+    pub created_at: Timestamp,
 }
 
 /// Every bookmark and collection entry, as loaded from the vault.

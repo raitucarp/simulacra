@@ -10,7 +10,6 @@ use crate::domain::journal::focus::{FocusLink, FocusSession};
 use crate::i18n::COUNT_SEPARATOR;
 use crate::ui::features::insights::chart::columns::{Column, ColumnChart};
 use crate::ui::icons::LucideIcon;
-use chrono::Duration;
 use gpui_kit::*;
 use rust_i18n::t;
 
@@ -44,12 +43,12 @@ impl JournalPanel {
     fn minutes_chart(&self) -> ColumnChart {
         let theme = &self.theme;
         let by_day = minutes_by_day(&self.data.book.sessions);
-        let days: Vec<_> = (0..CHART_DAYS).rev().map(|back| self.data.today - Duration::days(back)).collect();
+        let days: Vec<_> = (0..CHART_DAYS).rev().map(|back| self.data.today - crate::time::days(back)).collect();
         let columns = days.iter().map(|day| {
             let minutes = by_day.get(day).copied().unwrap_or(0);
             Column { segments: vec![(f64::from(minutes), theme.accent_success)], tip: format!("{}{COUNT_SEPARATOR}{}", day_label(*day), minutes_label(minutes)) }
         });
-        let labels = days.iter().map(|day| day.format("%d").to_string()).collect();
+        let labels = days.iter().map(|day| day.strftime("%d").to_string()).collect();
         ColumnChart { id: CHART_ID.into(), columns: columns.collect(), labels, height: theme.journal_chart_height, on_click: None, theme: theme.clone() }
     }
 

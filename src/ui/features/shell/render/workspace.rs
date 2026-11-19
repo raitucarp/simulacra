@@ -2,7 +2,8 @@
 
 use super::super::binder::Binder;
 use super::super::view::AppView;
-use crate::ui::features::roster::{render_roster_view, RosterCallbacks, RosterParams};
+use crate::state::semantic::SemanticHit;
+use crate::ui::features::roster::{render_roster_view, LabMode, ProfileTab, RosterCallbacks, RosterParams};
 use gpui_kit::*;
 use std::rc::Rc;
 
@@ -16,6 +17,7 @@ impl AppView {
             theme: &self.theme,
             profile_tab: self.arena.profile_tab,
             beliefs: Some(self.arena.beliefs_panel.clone().into()),
+            recommended: self.roster_recommendations(),
         };
         let callbacks = RosterCallbacks {
             select: Rc::new(bind.with(Self::lab_select_profile)),
@@ -26,7 +28,22 @@ impl AppView {
             activate_persona: Rc::new(bind.with(Self::lab_activate_persona)),
             trigger_agent: Rc::new(bind.with(Self::lab_trigger_agent)),
             switch_profile_tab: Rc::new(bind.with(Self::switch_profile_tab)),
+            open_post: Rc::new(bind.with(Self::reveal_post)),
         };
         render_roster_view(params, callbacks)
+    }
+
+    /// The selected profile's recommended posts while its Recommended tab is open (the
+    /// roster shows the first contact when none is selected).
+    fn roster_recommendations(&self) -> Rc<[SemanticHit]> {
+        if self.arena.profile_tab != ProfileTab::Recommended {
+            return Rc::from([]);
+        }
+        let contacts = match self.current_lab_mode() {
+            LabMode::NetworkAgents => self.state.current_network_agents(),
+            LabMode::PersonaLab => self.state.current_network_personas(),
+        };
+        let selected = self.lab.selected_profile_id.as_ref().filter(|id| contacts.iter().any(|p| &p.id == *id)).or_else(|| contacts.first().map(|p| &p.id));
+        self.profile_hits(selected)
     }
 }

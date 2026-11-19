@@ -11,6 +11,7 @@ mod inspector_grounding;
 mod inspector_header;
 mod inspector_mode_toggle;
 pub mod inspector_outline;
+mod inspector_related;
 mod inspector_replies;
 mod inputs;
 mod load_more;
@@ -26,7 +27,7 @@ pub use consts::{
     MAX_INSPECTOR_REPLIES,
 };
 pub use params::{
-    CycleProfileCallback, DeletePostCallback, FeedParams, LikePostCallback, LoadMoreCallback, PostActionCallback, QuotePostCallback, ReplyPostCallback, RepostPostCallback,
+    CycleProfileCallback, DeletePostCallback, FeedDiscovery, FeedOrder, FeedParams, SelectFeedOrderCallback, LikePostCallback, LoadMoreCallback, PostActionCallback, QuotePostCallback, ReplyPostCallback, RepostPostCallback,
     SelectFeedTabCallback, SelectPostCallback, ToggleRepliesCallback, LearnPostCallback, LearningPosts,
 };
 pub use render::render_main_feed;

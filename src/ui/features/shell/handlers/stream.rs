@@ -3,7 +3,7 @@
 use super::super::view::AppView;
 use crate::domain::post::{SourceKind, SourceRef};
 use crate::domain::{PostId, ProfileId};
-use crate::state::{feed_position, FeedTab, NavigationTab, WikilinkTarget};
+use crate::state::{ranked_feed_position, FeedTab, NavigationTab, WikilinkTarget};
 use crate::ui::features::sidebar_left::NavRef;
 use gpui_kit::*;
 
@@ -40,10 +40,10 @@ impl AppView {
     /// Widens the stream window to include `post_id` (falling back to "For you" when the
     /// active tab filters it out) and scrolls it into view.
     fn scroll_stream_to(&mut self, post_id: &PostId, cx: &mut Context<Self>) {
-        let mut position = feed_position(&self.state, self.feed.feed_tab, post_id);
+        let mut position = ranked_feed_position(&self.state, self.feed.feed_tab, self.feed_ranking().as_ref(), post_id);
         if position.is_none() && self.feed.feed_tab != FeedTab::ForYou {
             self.feed.feed_tab = FeedTab::ForYou;
-            position = feed_position(&self.state, FeedTab::ForYou, post_id);
+            position = ranked_feed_position(&self.state, FeedTab::ForYou, self.feed_ranking().as_ref(), post_id);
         }
         if let Some(index) = position {
             self.feed.feed_visible_count = self.feed.feed_visible_count.max(index + 1);
@@ -86,6 +86,7 @@ impl AppView {
     pub(crate) fn sync_stream(&mut self, cx: &App) {
         let query = self.feed.search_input.read(cx).value().to_string();
         let (tab, limit) = (self.feed.feed_tab, self.feed.feed_visible_count);
-        self.feed.stream.sync(&self.state, tab, &query, limit);
+        let ranking = self.feed_ranking();
+        self.feed.stream.sync(&self.state, tab, &query, limit, ranking.as_ref());
     }
 }

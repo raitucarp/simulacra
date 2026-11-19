@@ -25,6 +25,39 @@ pub type CycleProfileCallback = Box<dyn Fn(&mut Window, &mut App) + 'static>;
 pub type LoadMoreCallback = Box<dyn Fn(&mut Window, &mut App) + 'static>;
 pub type SelectFeedTabCallback = Box<dyn Fn(FeedTab, &mut Window, &mut App) + 'static>;
 pub type ToggleRepliesCallback = Box<dyn Fn(&mut Window, &mut App) + 'static>;
+/// Picks the "For you" order (the stream header's switch).
+pub type SelectFeedOrderCallback = std::rc::Rc<dyn Fn(FeedOrder, &mut Window, &mut App) + 'static>;
+
+/// How the "For you" stream is ordered.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum FeedOrder {
+    /// Newest conversations first.
+    #[default]
+    Latest,
+    /// Conversations closest in meaning to what the user writes, replies to and likes,
+    /// blended with freshness.
+    Recommended,
+}
+
+impl FeedOrder {
+    /// The other order (the switch toggles).
+    pub fn toggled(self) -> Self {
+        match self {
+            Self::Latest => Self::Recommended,
+            Self::Recommended => Self::Latest,
+        }
+    }
+}
+
+/// Recommendations on the timeline: the "For you" order and the focused post's related posts.
+#[derive(Clone)]
+pub struct FeedDiscovery {
+    pub order: FeedOrder,
+    pub on_select_order: SelectFeedOrderCallback,
+    /// Posts nearest the focused post in meaning, from other conversations.
+    pub related: std::rc::Rc<[crate::state::semantic::SemanticHit]>,
+}
+
 /// Runs a registry command (the stream header's capture and import buttons).
 pub type RunCommandCallback = std::rc::Rc<dyn Fn(crate::ui::features::command_palette::CommandId, &mut Window, &mut App) + 'static>;
 
@@ -74,4 +107,5 @@ pub struct FeedParams<'a, C> {
     pub data: Option<crate::ui::features::data::DataSource>,
     pub inspector: super::inspector_outline::InspectorView,
     pub on_inspector: super::inspector_outline::InspectorCallback,
+    pub discovery: FeedDiscovery,
 }

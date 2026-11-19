@@ -1,11 +1,12 @@
-//! Stream pane header: clickable Threads-style "For you" / "Dialectic" tabs.
+//! Stream pane header: clickable Threads-style "For you" / "Dialectic" tabs, and on "For you"
+//! the switch between the newest-first and the recommended order.
 
-use super::consts::STREAM_TAB_ID;
-use super::params::{RunCommandCallback, SelectFeedTabCallback};
+use super::consts::{FEED_ORDER_ID, STREAM_TAB_ID};
+use super::params::{FeedDiscovery, FeedOrder, RunCommandCallback, SelectFeedTabCallback};
 use crate::ui::features::command_palette::{spec, CommandId};
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::button::{Button, ButtonVariants};
-use gpui_kit::component::Icon;
+use gpui_kit::component::{Icon, Sizable};
 use crate::state::FeedTab;
 use crate::theme::ThemeTokens;
 use gpui_kit::{
@@ -21,7 +22,9 @@ pub(crate) fn render_stream_header(
     active: FeedTab,
     on_select: Rc<SelectFeedTabCallback>,
     on_command: RunCommandCallback,
+    discovery: &FeedDiscovery,
 ) -> Div {
+    let order = (active == FeedTab::ForYou).then(|| render_order_switch(theme, discovery));
     let tabs = FeedTab::ALL
         .into_iter()
         .enumerate()
@@ -36,7 +39,23 @@ pub(crate) fn render_stream_header(
         .items_center()
         .justify_between()
         .child(div().flex().items_center().gap(theme.spacing_xl).h_full().children(tabs))
-        .child(render_header_commands(theme, on_command))
+        .child(div().flex().items_center().gap(theme.inline_gap).children(order).child(render_header_commands(theme, on_command)))
+}
+
+/// "Latest" / "Recommended": shows the current "For you" order; clicking switches it.
+fn render_order_switch(theme: &ThemeTokens, discovery: &FeedDiscovery) -> Button {
+    let (icon, label, tooltip) = match discovery.order {
+        FeedOrder::Latest => (LucideIcon::Clock, t!("feed.order.latest"), t!("feed.order.latest_hint")),
+        FeedOrder::Recommended => (LucideIcon::Sparkles, t!("feed.order.recommended"), t!("feed.order.recommended_hint")),
+    };
+    let (next, on_select) = (discovery.order.toggled(), discovery.on_select_order.clone());
+    Button::new(FEED_ORDER_ID)
+        .ghost()
+        .small()
+        .icon(Icon::new(icon).size(theme.icon_size_md))
+        .label(label.to_string())
+        .tooltip(tooltip.to_string())
+        .on_click(move |_, window, cx| on_select(next, window, cx))
 }
 
 /// The quick-capture and import buttons at the right of the header.

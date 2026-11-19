@@ -1,0 +1,67 @@
+//! What the store says about a profile's interests (its engagement [`Signal`]s), and which
+//! posts it may be recommended.
+
+use crate::domain::recommend::{Candidate, Signal};
+use crate::domain::{NetworkId, Post, PostId, ProfileId};
+use crate::state::AppState;
+use std::collections::HashSet;
+
+/// How much each kind of engagement says about an interest.
+const WROTE: f32 = 1.0;
+const ANSWERED: f32 = 0.7;
+const QUOTED: f32 = 0.7;
+const REPOSTED: f32 = 0.6;
+const LIKED: f32 = 0.5;
+
+/// Posts of `network`, newest first (store order).
+pub fn network_posts<'a>(state: &'a AppState, network: &'a NetworkId) -> impl Iterator<Item = &'a Post> + 'a {
+    state.posts.iter().filter(move |post| &post.network_id == network)
+}
+
+/// Every engagement of `profile` in `network`: posts it wrote, answered, quoted or reposted,
+/// and (for the profile the user is acting as) the posts the user liked or reposted.
+pub fn signals_of(state: &AppState, profile: &ProfileId, network: &NetworkId) -> Vec<Signal> {
+    let acting = &state.active_profile_id == profile;
+    let mut signals = Vec::new();
+    for post in network_posts(state, network) {
+        let mut push = |id: &PostId, weight: f32| signals.push(Signal { post: id.clone(), weight, at: post.created_at });
+        if &post.author_id == profile {
+            if !post.is_repost() {
+                push(&post.id, WROTE);
+            }
+            post.reply_to_id.iter().for_each(|parent| push(parent, ANSWERED));
+            post.quote_id.iter().for_each(|quoted| push(quoted, QUOTED));
+            post.repost_id.iter().for_each(|original| push(original, REPOSTED));
+        }
+        if acting && post.is_liked {
+            push(&post.id, LIKED);
+        }
+        if acting && post.is_reposted {
+            push(&post.id, REPOSTED);
+        }
+    }
+    signals
+}
+
+/// Posts of `network` that `profile` did not write, repost or already answer, newest first.
+pub fn candidates_for(state: &AppState, profile: &ProfileId, network: &NetworkId) -> Vec<Candidate> {
+    let answered: HashSet<&PostId> = network_posts(state, network).filter(|p| &p.author_id == profile).filter_map(|p| p.reply_to_id.as_ref()).collect();
+    network_posts(state, network)
+        .filter(|post| &post.author_id != profile && !post.is_repost() && !answered.contains(&post.id))
+        .map(|post| Candidate { post: post.id.clone(), created_at: post.created_at })
+        .collect()
+}
+
+/// The first post of `post`'s conversation (following parents; stops on a missing parent or
+/// a cycle).
+pub fn conversation_root(state: &AppState, post: &Post) -> PostId {
+    let mut seen = HashSet::new();
+    let mut current = post;
+    while let Some(parent) = current.reply_to_id.as_ref().and_then(|id| state.get_post_by_id(id.as_str())) {
+        if !seen.insert(current.id.clone()) {
+            break;
+        }
+        current = parent;
+    }
+    current.id.clone()
+}

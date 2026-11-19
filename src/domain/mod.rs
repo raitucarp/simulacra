@@ -26,6 +26,7 @@ pub mod post;
 pub mod post_actions;
 pub mod profile;
 pub mod readability; // sb F3
+pub mod recommend;
 pub mod review;
 pub mod spend; // sb P16: ask before spending
 pub mod thinking;

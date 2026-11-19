@@ -43,8 +43,8 @@ pub fn owner_vectors(index: &VectorIndex, kind: OwnerKind, model: &str) -> Vec<(
         .collect()
 }
 
-/// The unit mean of `owner`'s chunks of `model`.
-fn centroid(index: &VectorIndex, owner: &EmbeddingOwner, model: &str) -> Option<Vec<f32>> {
+/// The unit mean of `owner`'s chunks of `model` (`None` when it has none).
+pub fn centroid(index: &VectorIndex, owner: &EmbeddingOwner, model: &str) -> Option<Vec<f32>> {
     let vectors: Vec<&[f32]> = index.chunks(owner).iter().filter(|c| c.model == model).map(|c| c.vector.as_slice()).collect();
     mean_vector(&vectors).map(l2_normalized)
 }

@@ -24,6 +24,8 @@ pub enum ProfileTab {
     Profile,
     /// Its beliefs and their revision log.
     Beliefs,
+    /// The posts closest in meaning to what it writes and answers.
+    Recommended,
 }
 
 /// A shared callback taking a profile id.
@@ -43,6 +45,8 @@ pub struct RosterCallbacks {
     pub trigger_agent: ProfileCallback,
     /// sb F1: shows the profile or its beliefs.
     pub switch_profile_tab: Rc<dyn Fn(ProfileTab, &mut Window, &mut App)>,
+    /// Opens a recommended post in the timeline.
+    pub open_post: super::recommended::OpenPostCallback,
 }
 
 /// Plain data the roster renders from.
@@ -54,6 +58,8 @@ pub struct RosterParams<'a> {
     /// sb F1: the overview's tab, and the selected agent's Beliefs tab.
     pub profile_tab: ProfileTab,
     pub beliefs: Option<AnyView>,
+    /// The selected profile's recommended posts.
+    pub recommended: Rc<[crate::state::semantic::SemanticHit]>,
 }
 
 /// Values derived once per render.

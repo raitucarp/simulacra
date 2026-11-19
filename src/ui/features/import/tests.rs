@@ -49,3 +49,21 @@ fn failures_are_kept_and_labels_read_well() {
     let position = UnitPosition { chapter: 0, paragraph: Some(1), sentence: Some(2) };
     assert!(position_label(position, Some("Loomings")).contains("Loomings"));
 }
+
+/// Ctrl+V in a focused text field (an API key in Settings, the search box) pastes into the
+/// field; only with no field focused does it capture the clipboard as a post. The toolkit
+/// registers the input's binding at startup, before the app's own, as here.
+#[test]
+fn a_focused_text_input_keeps_its_own_paste() {
+    use super::keys::{paste_bindings, PasteAnywhere};
+    use gpui_kit::component::input::Paste;
+    use gpui_kit::{KeyBinding, KeyContext, Keymap, Keystroke};
+    let input_paste = KeyBinding::new("ctrl-v", Paste, Some("Input"));
+    let keymap = Keymap::new([input_paste].into_iter().chain(paste_bindings()).collect());
+    let chord = [Keystroke::parse("ctrl-v").expect("chord")];
+    let context = |name: &str| KeyContext::parse(name).expect("context");
+    let (in_field, _) = keymap.bindings_for_input(&chord, &[context("Shell"), context("Input")]);
+    assert!(in_field[0].action().partial_eq(&Paste), "a focused input must get the paste");
+    let (no_field, _) = keymap.bindings_for_input(&chord, &[context("Shell")]);
+    assert!(no_field[0].action().partial_eq(&PasteAnywhere), "with no input focused, paste captures");
+}

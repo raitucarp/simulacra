@@ -1,62 +1,136 @@
 name: CI
 
-# Every pull request and push to main: build every target (warnings fail) and run the full test
-# suite. Pull requests test on Linux and Windows; main and releases add macOS, whose runner minutes
-# cost ten times as much on a private repository. Installers are built only by the Release
-# workflow, which calls this workflow first (unless CI already passed on the tagged commit), so
-# nothing is published from a commit whose tests fail.
+# Pull requests and pushes to main. Order:
+#   1. changes: works out whether anything but documentation changed.
+#   2. Fast gates, in parallel: dependency policy (cargo-deny, plus dependency review on pull
+#      requests) and the workflow security audit (zizmor).
+#   3. Once both pass and code changed: clippy on Linux, and the test suite on Linux and Windows
+#      (pull requests) or Linux, Windows and macOS (main, whose macOS minutes cost more).
+#   4. CI passed: one status for branch protection, green only when every job above succeeded
+#      or was skipped on purpose.
+# Installers are built only by the Release workflow.
 
 on:
   push:
     branches: [main]
   pull_request:
   workflow_dispatch:
-  workflow_call:
 
 permissions:
   contents: read
 
+# A new push to a pull request cancels its older run; every commit on main keeps its own run.
 concurrency:
-  group: ${{ github.workflow }}-ci-${{ github.ref }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+  group: ci-${{ github.event.pull_request.number || github.sha }}
+  cancel-in-progress: true
 
 env:
   CARGO_TERM_COLOR: always
-  CARGO_INCREMENTAL: 0
 
 jobs:
+  changes:
+    name: Changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      code: ${{ steps.diff.outputs.code }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Did anything but documentation change?
+        id: diff
+        env:
+          EVENT: ${{ github.event_name }}
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          if [ "$EVENT" != "pull_request" ]; then
+            echo "code=true" >> "$GITHUB_OUTPUT"; exit 0
+          fi
+          changed=$(git diff --name-only "origin/$BASE_REF...HEAD")
+          echo "$changed"
+          if echo "$changed" | grep -qvE '(\.md$|^LICENSE)'; then
+            echo "code=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Only documentation changed; the build and tests are skipped."
+            echo "code=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  dependencies:
+    name: Dependencies
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # Vulnerabilities, licences, banned crates and allowed sources (deny.toml).
+      - uses: EmbarkStudios/cargo-deny-action@3c6349835b2b7b196a839186cb8b78e02f7b5f25 # v2.1.1
+        with:
+          command: check
+          arguments: --all-features
+      # What this pull request adds: new dependencies with known vulnerabilities fail it.
+      - if: github.event_name == 'pull_request'
+        uses: actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294 # v5.0.0
+        with:
+          fail-on-severity: moderate
+
+  workflows:
+    name: Workflow audit
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # Pinned actions, least-privilege tokens, no template injection, no cache poisoning.
+      - uses: zizmorcore/zizmor-action@45d7276c9ca790aabd705e31ca99c6185c3e76dd # v0.8.1
+        with:
+          version: 1.32.0
+          advanced-security: false
+
+  clippy:
+    name: Clippy
+    needs: [changes, dependencies, workflows]
+    if: needs.changes.outputs.code == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup-rust
+        with:
+          cache-key: clippy-Linux
+          save-cache: "true"
+      # The lint policy lives in Cargo.toml ([lints.clippy]); any remaining warning fails.
+      - name: Clippy (no warnings allowed)
+        run: cargo clippy --locked --all-targets -- -D warnings
+
   test:
-    name: Check and test (${{ matrix.name }})
+    name: Test
+    needs: [changes, dependencies, workflows]
+    if: needs.changes.outputs.code == 'true'
     strategy:
       fail-fast: false
       matrix:
         include: ${{ fromJSON(github.event_name == 'pull_request' && '[{"name":"Linux","os":"ubuntu-24.04"},{"name":"Windows","os":"windows-latest"}]' || '[{"name":"Linux","os":"ubuntu-24.04"},{"name":"Windows","os":"windows-latest"},{"name":"macOS","os":"macos-latest"}]') }}
-    runs-on: ${{ matrix.os }}
-    timeout-minutes: 90
-    # Simulacra's own code is compiled without optimisation here: that compile is five to six
-    # times faster than at the opt-level 1 of local test runs, and the suite still runs in seconds.
-    # Dependencies keep opt-level 3 (Cargo.toml), so their cached builds are unaffected.
-    env:
-      CARGO_PROFILE_DEV_OPT_LEVEL: 0
-      CARGO_PROFILE_TEST_OPT_LEVEL: 0
+    uses: ./.github/workflows/test.yml
+    with:
+      name: ${{ matrix.name }}
+      os: ${{ matrix.os }}
+
+  passed:
+    name: CI passed
+    needs: [changes, dependencies, workflows, clippy, test]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
-      - uses: dtolnay/rust-toolchain@stable
-      - name: Install Linux system libraries
-        if: runner.os == 'Linux'
-        run: bash .github/scripts/install-linux-deps.sh
-      # Compiled dependencies are cached per OS. A pull request restores its own cache or main's
-      # and saves its own, so the next push to the same pull request starts warm.
-      - uses: Swatinem/rust-cache@v2
-        with:
-          shared-key: test-${{ runner.os }}
-          cache-on-failure: true
-      # One compile covers every target (lib, binary, tests) and runs the tests; a
-      # separate `cargo check` would compile the crate a second time. Warnings fail the job.
-      # RUSTFLAGS is not used for that, because it would replace the Windows stack-size flag
-      # set in .cargo/config.toml.
-      - name: Build and test (no warnings allowed)
-        shell: bash
+      - name: Every job succeeded or was skipped on purpose
+        if: contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled')
         run: |
-          cargo test --locked --no-fail-fast --all-targets 2>&1 | tee test.log
-          if grep -E "^warning" test.log; then echo "::error::the build reported warnings"; exit 1; fi
+          echo "::error::A CI job failed or was cancelled."
+          exit 1
+      - run: echo "CI passed."

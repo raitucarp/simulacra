@@ -1,6 +1,6 @@
 # The toolchain CI and local builds share, so a new Rust release never breaks the build
 # unannounced. Dependabot opens a pull request when a newer stable release is out.
 [toolchain]
-channel = "1.99.1"
+channel = "1.100.0"
 components = ["clippy", "rustfmt"]
 profile = "minimal"

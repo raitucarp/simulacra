@@ -4,14 +4,31 @@
 //! so the same palette always yields the same tokens, in light and dark mode alike.
 
 mod accents;
+mod actions;
+mod arena;
 mod chrome;
+mod data;
 mod forge;
+mod image_prompt;
+mod import;
+mod insight_more;
+mod insights;
+mod learning;
+mod journal;
+mod media;
 mod metrics;
+mod navigation;
 mod panels;
+mod responsive;
+mod review;
 mod scales;
+mod semantic;
 mod spacing;
+mod suggestions;
 mod surfaces;
 mod text;
+mod thinking;
+mod vault;
 
 pub use metrics::{DEFAULT_FONT_FAMILY, DEFAULT_MONO_FONT_FAMILY};
 pub use scales::{Density, RadiusScale, TypeScale};
@@ -38,6 +55,21 @@ pub fn derive_tokens(
     chrome::apply_settings_layout(&mut t);
     forge::apply_forge_layout(&mut t);
     panels::apply_panel_layout(&mut t);
+    navigation::apply_navigation_layout(&mut t);
+    import::apply_import_layout(&mut t);
+    media::apply_media_layout(&mut t);
+    semantic::apply_semantic_layout(&mut t);
+    review::apply_review_layout(&mut t);
+    review::apply_review_map_layout(&mut t);
+    insights::apply_insights_layout(&mut t); insight_more::apply_insight_more_layout(&mut t); // sb F3: lens views
+    learning::apply_learning_layout(&mut t);
+    journal::apply_journal_layout(&mut t); arena::apply_arena_layout(&mut t); // sb F1: Arena and Beliefs sizes
+    responsive::apply_responsive_layout(&mut t);
+    vault::apply_vault_layout(&mut t);
+    actions::apply_actions_layout(&mut t);
+    suggestions::apply_suggestions_layout(&mut t);
+    image_prompt::apply_image_prompt_layout(&mut t);
+    thinking::apply_thinking_layout(&mut t); data::apply_data_layout(&mut t); // sb F2
     surfaces::apply_surfaces(&mut t, palette);
     text::apply_text(&mut t, palette);
     accents::apply_accents(&mut t, palette);

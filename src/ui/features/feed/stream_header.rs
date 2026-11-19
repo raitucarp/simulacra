@@ -1,7 +1,11 @@
 //! Stream pane header: clickable Threads-style "For you" / "Dialectic" tabs.
 
 use super::consts::STREAM_TAB_ID;
-use super::params::SelectFeedTabCallback;
+use super::params::{RunCommandCallback, SelectFeedTabCallback};
+use crate::ui::features::command_palette::{spec, CommandId};
+use crate::ui::icons::LucideIcon;
+use gpui_kit::component::button::{Button, ButtonVariants};
+use gpui_kit::component::Icon;
 use crate::state::FeedTab;
 use crate::theme::ThemeTokens;
 use gpui_kit::{
@@ -16,6 +20,7 @@ pub(crate) fn render_stream_header(
     theme: &ThemeTokens,
     active: FeedTab,
     on_select: Rc<SelectFeedTabCallback>,
+    on_command: RunCommandCallback,
 ) -> Div {
     let tabs = FeedTab::ALL
         .into_iter()
@@ -31,12 +36,27 @@ pub(crate) fn render_stream_header(
         .items_center()
         .justify_between()
         .child(div().flex().items_center().gap(theme.spacing_xl).h_full().children(tabs))
+        .child(render_header_commands(theme, on_command))
+}
+
+/// The quick-capture and import buttons at the right of the header.
+fn render_header_commands(theme: &ThemeTokens, on_command: RunCommandCallback) -> Div {
+    let buttons = [(CommandId::NewNote, LucideIcon::Feather), (CommandId::ImportFile, LucideIcon::FileUp)].map(|(command, icon)| {
+        let run = on_command.clone();
+        Button::new(command.wire_key())
+            .ghost()
+            .icon(Icon::new(icon).size(theme.icon_size_md))
+            .tooltip(spec(command).title())
+            .on_click(move |_, window, cx| run(command, window, cx))
+    });
+    div().flex().items_center().gap(theme.inline_gap).children(buttons)
 }
 
 fn tab_label_text(tab: FeedTab) -> String {
     match tab {
         FeedTab::ForYou => t!("feed.for_you"),
         FeedTab::Dialectic => t!("feed.dialectic"),
+        FeedTab::Inbox => t!("feed.inbox"),
     }
     .to_string()
 }

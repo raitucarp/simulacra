@@ -1,7 +1,7 @@
 //! Renders the panel through the stateless [`ComposerModalView`] dialog.
 
 use super::super::messages::visible_problem_message;
-use super::super::modal::{ComposerModalView, DraftActionCallback, DraftEditor, ModalCallbacks};
+use super::super::modal::{ComposerModalView, DraftActionCallback, DraftEditor, ModalCallbacks, PasteCallback};
 use super::ComposerModalPanel;
 use gpui_kit::*;
 use std::rc::Rc;
@@ -21,6 +21,12 @@ fn act_at(entity: &Entity<ComposerModalPanel>, action: PanelDraftAction) -> Draf
     Rc::new(move |index, window, cx| entity.update(cx, |this, cx| action(this, index, window, cx)))
 }
 
+/// Routes a draft's paste to the panel (images are attached instead of pasted as text).
+fn paste(entity: &Entity<ComposerModalPanel>) -> PasteCallback {
+    let entity = entity.clone();
+    Rc::new(move |item, window, cx| entity.update(cx, |this, cx| this.paste_media(item, window, cx)))
+}
+
 fn callbacks(entity: &Entity<ComposerModalPanel>) -> ModalCallbacks {
     type P = ComposerModalPanel;
     ModalCallbacks {
@@ -33,8 +39,11 @@ fn callbacks(entity: &Entity<ComposerModalPanel>) -> ModalCallbacks {
         on_clear_link: act(entity, P::clear_link),
         on_add_draft: act(entity, P::add_draft),
         on_insert_tag: act(entity, P::insert_tag),
+        on_image_ideas: act(entity, P::image_ideas),
         on_remove_draft: act_at(entity, P::remove_draft),
         on_split_draft: act_at(entity, P::split_draft),
+        on_remove_image: act_at(entity, P::remove_image),
+        on_paste: paste(entity),
     }
 }
 
@@ -60,11 +69,14 @@ impl Render for ComposerModalPanel {
             drafts,
             link_input: self.link_input.clone(),
             image_input: self.image_input.clone(),
-            image_path: self.image_attachment(cx),
+            images: self.image_views(),
+            pending_images: self.pending_images(),
             is_link_input_open: self.is_link_input_open,
             is_image_input_open: self.is_image_input_open,
             notice,
             can_post: problem.is_none(),
+            atomic_hint: self.atomic_hint_view(cx),
+            readability: self.readability_view(cx),
             callbacks: callbacks(&cx.entity()),
         }
     }

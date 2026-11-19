@@ -55,6 +55,17 @@ pub struct SliderRange {
     pub ceiling: u16,
 }
 
+/// A kit slider over `range` at `value`. The maximum is set before the minimum: the kit
+/// clamps its thumb on every bound change, and a minimum above its default maximum (100, e.g.
+/// the photo zoom's 1000) would otherwise make that clamp panic.
+pub(super) fn fresh_slider(range: SliderRange, value: u16) -> SliderState {
+    SliderState::new()
+        .max(f32::from(range.max))
+        .min(f32::from(range.min))
+        .step(f32::from(range.step))
+        .default_value(f32::from(value))
+}
+
 /// The slider entity for `id` (created on first use) and the live value while dragging.
 pub struct SliderBinding {
     pub slider: Entity<SliderState>,
@@ -71,13 +82,7 @@ pub fn keyed_slider(
     cx: &mut App,
 ) -> SliderBinding {
     let slot = window.use_keyed_state(id, cx, |window, cx| {
-        let slider = cx.new(|_| {
-            SliderState::new()
-                .min(f32::from(range.min))
-                .max(f32::from(range.max))
-                .step(f32::from(range.step))
-                .default_value(f32::from(value))
-        });
+        let slider = cx.new(|_| fresh_slider(range, value));
         SliderSlot::new(slider, window, cx)
     });
     let (slider, dragging) = slot.update(cx, |slot, _| {
@@ -115,4 +120,17 @@ pub fn keyboard_slider(
             })
         })
         .child(Slider::new(&binding.slider).disabled(disabled))
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{fresh_slider, SliderRange};
+    use crate::domain::portrait::{ZOOM_MAX, ZOOM_MIN, ZOOM_STEP};
+
+    #[test]
+    fn a_range_starting_above_the_kit_default_maximum_builds() {
+        let range = SliderRange { min: ZOOM_MIN, max: ZOOM_MAX, step: ZOOM_STEP, ceiling: ZOOM_MAX };
+        let slider = fresh_slider(range, ZOOM_MIN);
+        assert_eq!((slider.min_value(), slider.max_value()), (f32::from(ZOOM_MIN), f32::from(ZOOM_MAX)));
+    }
 }

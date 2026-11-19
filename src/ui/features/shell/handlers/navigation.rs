@@ -35,6 +35,8 @@ impl AppView {
             // Default to selecting the currently active user persona when opening Persona Lab
             let active_id = self.state.active_profile_id.clone();
             self.select_lab_profile(active_id, window, cx);
+        } else if tab == NavigationTab::MindGraph {
+            self.graph.panel.update(cx, |panel, cx| panel.fit_to_view(cx));
         }
         cx.notify();
     }
@@ -44,7 +46,7 @@ impl AppView {
         self.open_composer_modal(ComposerModalMode::NewThread, window, cx);
     }
 
-    /// Opens `agent_id` in the Agent Lab from the sidebar member list.
+    /// Opens `agent_id` in the Agent Lab (Mind Graph agent nodes).
     pub(crate) fn select_sidebar_agent(&mut self, agent_id: ProfileId, window: &mut Window, cx: &mut Context<Self>) {
         self.close_forge(window, cx);
         self.state.active_tab = NavigationTab::AgentLab;

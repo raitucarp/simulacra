@@ -12,7 +12,7 @@ mod profiles;
 #[cfg(test)]
 mod tests;
 
-pub use catalog::{seed_documents, seed_networks, seed_trending};
+pub use catalog::{seed_documents, seed_library, seed_networks, seed_trending};
 pub use posts::seed_posts;
 pub use profiles::seed_profiles;
 

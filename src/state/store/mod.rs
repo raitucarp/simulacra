@@ -5,8 +5,11 @@
 
 mod action_target;
 mod authors;
+mod catalogue;
 mod avatar;
 mod bootstrap;
+mod bulk_posts;
+mod captures;
 mod day_filter;
 mod documents;
 mod indices;
@@ -19,12 +22,16 @@ mod post_index;
 mod post_meta;
 mod post_delete;
 mod posts;
+mod preferences;
 mod forge_autosave;
+mod identities;
 mod profile_create;
 mod profiles;
 mod reposts;
+mod revisions; // sb F2
 mod search;
 mod settings;
+mod seed_catalogue;
 mod snapshot;
 mod threads;
 mod upgrade;
@@ -59,7 +66,15 @@ pub enum NavigationTab {
     AgentLab,
     PersonaLab,
     MindGraph,
+    /// Spaced-repetition review, quizzes and statistics (sb C1).
+    Review,
     Appearance,
+    /// Charts and graph analytics of the network (sb D2).
+    Insights,
+    /// The private journal, mood log, focus sessions and time capsules (sb E3).
+    Journal,
+    /// Debates and thought experiments between agents (sb F1).
+    Arena,
 }
 
 /// Application state container.
@@ -76,6 +91,8 @@ pub struct AppState {
     /// Incrementally maintained lookups and derived body data over `posts`.
     pub index: PostIndex,
     pub documents: Vec<GroundingDocument>,
+    /// The vault catalogue's subject vocabulary and collections.
+    pub library: crate::domain::document::Library,
     pub trending: Vec<TrendingTopic>,
     pub draft_text: String,
     /// Local calendar day the timeline is narrowed to (set from the cadence heatmap).
@@ -86,11 +103,16 @@ pub struct AppState {
     /// The user's theme choice; `theme_tokens` is always derived from it.
     pub theme_settings: crate::theme::ThemeSettings,
     pub theme_tokens: crate::theme::ThemeTokens,
+    /// Typed global preferences; read through `preferences()`, replaced through
+    /// `update_preferences` (which validates and persists them).
+    pub(crate) preferences: crate::domain::preferences::Preferences,
     /// Handle to the vault worker thread (`None` when running without persistence).
     pub db: Option<Vault>,
     /// Why the vault could not be opened or read at startup (the session then runs on
     /// unsaved seed data); taken once by the shell to show a notice.
     pub load_error: Option<crate::error::AppError>,
+    /// Cached link previews and image scans (sb C3), filled in the background by the shell.
+    pub media: crate::domain::media::MediaCatalog,
 }
 
 impl Default for AppState {

@@ -5,7 +5,7 @@ edition = "2021"
 
 [dependencies]
 gpui-kit = "0.8.1"
-rusqlite = { version = "0.32", features = ["bundled"] }
+rusqlite = { version = "0.32", features = ["bundled", "backup"] }
 tokio = { version = "1", features = ["full"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
@@ -19,6 +19,24 @@ rfd = "0.15"
 base64 = "0.22"
 # Already in the graph via gpui-kit-assets; embeds `assets/illustrations` (read from disk in debug builds).
 rust-embed = { version = "8.7", features = ["include-exclude"] }
+# Import pipeline: EPUB/DOCX/ODT containers (deflate through the flate2 already in the graph),
+# the PDF text layer, file checksums and legacy MOBI code pages (markup is read by our own
+# tolerant tokenizer, which XHTML, MOBI HTML, OPF, NCX, DOCX and ODT all share).
+zip = { version = "9", default-features = false, features = ["deflate-flate2"] }
+lopdf = { version = "0.47", default-features = false }
+sha2 = "0.11"
+encoding_rs = "0.8"
+# Post media (sb C3): link-preview URLs and off-thread image decoding / thumbnails (both
+# already in the graph through reqwest and gpui, with the same features).
+url = "2"
+image = { version = "0.25", default-features = false, features = ["png", "jpeg", "gif", "webp", "bmp"] }
+
+# Encrypted snapshots (sb F2): Argon2id key derivation and XChaCha20-Poly1305 sealing from
+# RustCrypto (released versions, pinned), and zeroize (already in the graph) for the
+# passphrase and derived key; rusqlite's online backup restores a verified snapshot.
+argon2 = { version = "=0.5.3", features = ["zeroize"] }
+chacha20poly1305 = "=0.10.1"
+zeroize = "1.8"
 
 [dev-dependencies]
 resvg = "0.45.1"
@@ -42,3 +60,29 @@ lto = "thin"
 codegen-units = 1
 panic = "abort"
 strip = true
+
+# Installers built by the release workflow (`cargo packager`, see .github/workflows/release.yml).
+# Every asset the app needs is embedded in the binary, so each installer ships one executable.
+[package.metadata.packager]
+product-name = "Simulacra"
+identifier = "app.simulacra.desktop"
+publisher = "Simulacra"
+category = "Productivity"
+description = "A local-first second brain where autonomous agents and your own personas think in public."
+copyright = "Copyright © 2026 Ribhararnus Pracutiar"
+out-dir = "target/packages"
+icons = [
+  "packaging/icons/32x32.png",
+  "packaging/icons/128x128.png",
+  "packaging/icons/256x256.png",
+  "packaging/icons/512x512.png",
+  "packaging/icons/icon.icns",
+  "packaging/icons/icon.ico",
+]
+binaries = [{ path = "simulacra", main = true }]
+
+[package.metadata.packager.deb]
+depends = ["libxkbcommon0", "libxkbcommon-x11-0", "libwayland-client0", "libfontconfig1", "libgtk-3-0", "libvulkan1"]
+
+[package.metadata.packager.macos]
+minimum-system-version = "11.0"

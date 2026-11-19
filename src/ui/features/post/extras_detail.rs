@@ -50,7 +50,7 @@ fn source_line(source: &SourceRef, theme: &ThemeTokens, on_open: Option<OpenSour
 
 /// The detail card of `extras`, or `None` when nothing is recorded.
 pub(crate) fn render_extras_detail(extras: &PostExtras, theme: &ThemeTokens, on_open: Option<&OpenSourceAction>) -> Option<Div> {
-    if extras.is_empty() {
+    if !extras.has_details() {
         return None;
     }
     let mood = extras.mood.as_deref().map(|mood| block(t!("post.extras_mood").to_string(), div().flex().child(mood_chip(mood, theme)), theme));

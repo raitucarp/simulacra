@@ -7,7 +7,10 @@
 mod callbacks;
 mod consts;
 mod inspector;
+mod inspector_grounding;
 mod inspector_header;
+mod inspector_mode_toggle;
+pub mod inspector_outline;
 mod inspector_replies;
 mod inputs;
 mod load_more;
@@ -23,9 +26,8 @@ pub use consts::{
     MAX_INSPECTOR_REPLIES,
 };
 pub use params::{
-    AddDocCallback, CycleProfileCallback, DeleteDocCallback, DeletePostCallback, FeedParams,
-    ImportDocCallback, LikePostCallback, LoadMoreCallback, QuotePostCallback, ReplyPostCallback, RepostPostCallback,
-    SelectFeedTabCallback, SelectPostCallback, ToggleRepliesCallback,
+    CycleProfileCallback, DeletePostCallback, FeedParams, LikePostCallback, LoadMoreCallback, PostActionCallback, QuotePostCallback, ReplyPostCallback, RepostPostCallback,
+    SelectFeedTabCallback, SelectPostCallback, ToggleRepliesCallback, LearnPostCallback, LearningPosts,
 };
 pub use render::render_main_feed;
 pub use stream::{FeedReader, StreamInputs, StreamRows};

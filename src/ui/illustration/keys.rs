@@ -94,5 +94,30 @@ art_keys! {
     EmptyKey in "empty" as Empty {
         NoPosts => "no_posts", NoAgents => "no_agents", NoDocuments => "no_documents",
         NoNetwork => "no_network", NoResults => "no_results", GraphEmpty => "graph_empty",
+        VaultEmpty => "vault_empty", VaultNoMatches => "vault_no_matches",
+        ReviewEmpty => "review_empty", ReviewDone => "review_done",
+        // sb D3
+        InspectorIdle => "inspector_idle", ActionsIdle => "actions_idle", ImageIdeas => "image_ideas",
+        ImageResults => "image_results", ImportNothing => "import_nothing", CredentialsNone => "credentials_none",
+        SubjectsNone => "subjects_none",
+        // sb E3
+        JournalEmpty => "journal_empty", MoodEmpty => "mood_empty", FocusEmpty => "focus_empty", CapsulesEmpty => "capsules_empty",
+        CapsuleSealed => "capsule_sealed",
+    }
+}
+
+art_keys! {
+    /// Small reusable spot scene (sb D3).
+    SpotKey in "spot" as TraitCard {
+        Ideas => "ideas", Connections => "connections", Memory => "memory", Reading => "reading",
+        Writing => "writing", Debate => "debate", Calm => "calm",
+        Journal => "journal", // sb E3: the Journal page header
+    }
+}
+
+art_keys! {
+    /// Art beside a notice: a missing key, offline, a failure, work in progress (sb D3).
+    NoticeKey in "notice" as TraitCard {
+        NoKey => "no_key", Offline => "offline", Error => "error", Working => "working",
     }
 }

@@ -10,7 +10,31 @@ gpui_kit::assets::icon_assets!(
         CircleQuestionMark, Clock, Compass, Copy, Cpu, Dices, Ellipsis, ExternalLink, Eye, FileText,
         Folder, Funnel, GitBranch, Globe, Hash, Heart, Image, Info, Keyboard, Library, Link2, Lock, Maximize2,
         MessageSquare, Minimize2, Minus, Moon, Palette, PanelLeft, PanelRight, Pin, Plus, RefreshCw,
-        Repeat, Search, Send, Settings, Share2, SlidersHorizontal, Sparkles, SquarePen, Sun, Tag,
+        Repeat, Search, Send, Settings, Share2, SlidersHorizontal, Sparkles, SquarePen, Sun, SunMoon, Tag,
         Terminal, Trash, User, UserCheck, Users, Volume2, Wifi, X, Zap,
+        // sb A2
+        Command, CornerDownLeft, FileUp, MessageSquarePlus, PanelLeftClose, PanelLeftOpen, PinOff, Star,
+        StickyNote, UserPlus,
+        // sb B1
+        LayoutGrid, List, Bookmark, Quote, ArrowUpDown, BookMarked, Languages, MapPin,
+        // sb B2
+        Feather, Pilcrow, VenetianMask,
+        // sb C2
+        Network, Shield, Scale, Puzzle, Swords, Gauge, GitCompareArrows, FlaskConical, ListTree, ChevronsDownUp,
+        // sb C3
+        ImagePlus,
+        // sb C1
+        GraduationCap, Layers, ListOrdered, ChartColumn, Flame, Target, Lightbulb, RotateCcw, WandSparkles,
+        TextCursorInput, Trophy, Pause, Play,
+        // sb C1b
+        MessageSquareReply, CircleStop, Eraser, ArrowLeftRight, ListChecks,
+        // sb E3
+        NotebookPen, HeartPulse, Timer, Mail, MailOpen, LockOpen, Shuffle, Paperclip, HandHeart,
+        // sb E1
+        Waypoints, Atom, Percent, ChartScatter, Split, CalendarClock, GripVertical,
+        // sb F1
+        Save,
+        // sb F2
+        Pencil, RotateCcwClock, BookmarkCheck, FolderPlus, Download, KeyRound, ShieldCheck, ArchiveRestore, Package, LockKeyhole, FileDiff,
     ]
 );

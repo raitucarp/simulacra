@@ -25,7 +25,7 @@ pub fn render_credentials_section(theme: &ThemeTokens, props: CredentialsPanePro
         .on_click(move |_, window, cx| on_add(window, cx));
     let mut body = card(theme).gap(theme.spacing_sm).child(muted_note(theme, t!("settings.credentials_note")));
     if props.rows.is_empty() {
-        body = body.child(muted_note(theme, t!("settings.credentials_empty")));
+        body = body.child(div().py(theme.stack_gap).flex().justify_center().child(crate::ui::components::art_state(crate::ui::components::ArtState::hint(crate::ui::illustration::Illustration::empty(crate::ui::illustration::EmptyKey::CredentialsNone).width(theme.art_notice_width), t!("settings.credentials_empty").to_string()), theme)));
     }
     for row in &props.rows {
         body = body.child(render_row(theme, row, &props.on_edit, &props.on_remove));

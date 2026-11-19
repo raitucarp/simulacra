@@ -64,6 +64,7 @@ lucide_catalog! {
     Heart => "icons/heart.svg",
     HelpCircle => "icons/circle-question-mark.svg",
     Image => "icons/image.svg",
+    ImagePlus => "icons/image-plus.svg",
     EyeOff => "icons/eye-off.svg",
     Info => "icons/info.svg",
     Keyboard => "icons/keyboard.svg",
@@ -90,6 +91,7 @@ lucide_catalog! {
     Sliders => "icons/sliders-horizontal.svg",
     Sparkles => "icons/sparkles.svg",
     Sun => "icons/sun.svg",
+    SunMoon => "icons/sun-moon.svg",
     Tag => "icons/tag.svg",
     Terminal => "icons/terminal.svg",
     Trash => "icons/trash.svg",
@@ -102,4 +104,46 @@ lucide_catalog! {
     Wifi => "icons/wifi.svg",
     X => "icons/x.svg",
     Zap => "icons/zap.svg",
+    // sb A2: navigation rail, "New" menu, pins and the command palette
+    Command => "icons/command.svg",
+    CornerDownLeft => "icons/corner-down-left.svg",
+    FileUp => "icons/file-up.svg",
+    MessageSquarePlus => "icons/message-square-plus.svg",
+    PanelLeftClose => "icons/panel-left-close.svg",
+    PanelLeftOpen => "icons/panel-left-open.svg",
+    PinOff => "icons/pin-off.svg",
+    Star => "icons/star.svg",
+    StickyNote => "icons/sticky-note.svg",
+    UserPlus => "icons/user-plus.svg",
+    // sb B1: Knowledge Vault (view switcher, sort, citations, catalogue fields)
+    LayoutGrid => "icons/layout-grid.svg",
+    List => "icons/list.svg",
+    Bookmark => "icons/bookmark.svg",
+    Quote => "icons/quote.svg",
+    ArrowUpDown => "icons/arrow-up-down.svg",
+    BookMarked => "icons/book-marked.svg",
+    Languages => "icons/languages.svg",
+    MapPin => "icons/map-pin.svg",
+    Feather => "icons/feather.svg", Inbox => "icons/inbox.svg", Pilcrow => "icons/pilcrow.svg", VenetianMask => "icons/venetian-mask.svg", // Import and capture
+    Network => "icons/network.svg", Shield => "icons/shield.svg", Scale => "icons/scale.svg", Puzzle => "icons/puzzle.svg", Swords => "icons/swords.svg", Gauge => "icons/gauge.svg", GitCompareArrows => "icons/git-compare-arrows.svg", FlaskConical => "icons/flask-conical.svg", ListTree => "icons/list-tree.svg", ChevronsDownUp => "icons/chevrons-down-up.svg", // sb C2: post actions and the outline view
+    // sb C1: review page, quizzes and statistics
+    GraduationCap => "icons/graduation-cap.svg",
+    Layers => "icons/layers.svg",
+    ListOrdered => "icons/list-ordered.svg",
+    ChartColumn => "icons/chart-column.svg",
+    Flame => "icons/flame.svg",
+    Target => "icons/target.svg",
+    Lightbulb => "icons/lightbulb.svg",
+    RotateCcw => "icons/rotate-ccw.svg",
+    CircleX => "icons/circle-x.svg",
+    WandSparkles => "icons/wand-sparkles.svg",
+    TextCursorInput => "icons/text-cursor-input.svg",
+    Trophy => "icons/trophy.svg",
+    Pause => "icons/pause.svg",
+    Play => "icons/play.svg",
+    MessageSquareReply => "icons/message-square-reply.svg", CircleStop => "icons/circle-stop.svg", Eraser => "icons/eraser.svg", ArrowLeftRight => "icons/arrow-left-right.svg", ListChecks => "icons/list-checks.svg", // sb C1b
+    NotebookPen => "icons/notebook-pen.svg", HeartPulse => "icons/heart-pulse.svg", Timer => "icons/timer.svg", Mail => "icons/mail.svg", MailOpen => "icons/mail-open.svg", LockOpen => "icons/lock-open.svg", Shuffle => "icons/shuffle.svg", Paperclip => "icons/paperclip.svg", HandHeart => "icons/hand-heart.svg", // sb E3
+    Waypoints => "icons/waypoints.svg", Atom => "icons/atom.svg", Percent => "icons/percent.svg", ChartScatter => "icons/chart-scatter.svg", Split => "icons/split.svg", CalendarClock => "icons/calendar-clock.svg", GripVertical => "icons/grip-vertical.svg", // sb E1
+    Save => "icons/save.svg", // sb F1
+    Pencil => "icons/pencil.svg", RotateCcwClock => "icons/rotate-ccw-clock.svg", BookmarkCheck => "icons/bookmark-check.svg", FolderPlus => "icons/folder-plus.svg", Download => "icons/download.svg", KeyRound => "icons/key-round.svg", ShieldCheck => "icons/shield-check.svg", ArchiveRestore => "icons/archive-restore.svg", Package => "icons/package.svg", LockKeyhole => "icons/lock-keyhole.svg", FileDiff => "icons/file-diff.svg", // sb F2
 }

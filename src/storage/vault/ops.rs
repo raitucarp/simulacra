@@ -13,6 +13,11 @@ impl Vault {
         self.write(move |db| db.save_post(&post))
     }
 
+    /// Queues upserting `posts` in one transaction (all or nothing).
+    pub fn save_posts(&self, posts: Vec<Post>) -> Result<()> {
+        self.write(move |db| db.save_posts(&posts))
+    }
+
     /// Queues deleting `post_id` and its instant reposts.
     pub fn delete_post_with_reposts(&self, post_id: &PostId) -> Result<()> {
         let id = post_id.clone();
@@ -98,6 +103,12 @@ impl Vault {
     pub fn save_theme_settings(&self, settings: &ThemeSettings) -> Result<()> {
         let settings = settings.clone();
         self.write(move |db| db.save_theme_settings(&settings))
+    }
+
+    /// Queues persisting every preference category.
+    pub fn save_preferences(&self, prefs: &crate::domain::preferences::Preferences) -> Result<()> {
+        let prefs = prefs.clone();
+        self.write(move |db| db.save_preferences(&prefs))
     }
 
     /// Reads a setting (after every queued write).

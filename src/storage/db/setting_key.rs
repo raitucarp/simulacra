@@ -33,7 +33,8 @@ setting_keys! {
     ActiveNetwork => "active_network_id",
     /// Active authoring profile.
     ActiveProfile => "active_profile_id",
-    /// Global autonomous-scheduler switch.
+    /// Legacy global autonomous-scheduler switch; migrated into
+    /// `preferences.agents.autonomous_posting` on first load, then removed.
     SchedulerEnabled => "scheduler_enabled",
     /// LLM provider identifier, credentials, model and sampling settings.
     LlmProvider => "llm_provider",
@@ -55,6 +56,10 @@ setting_keys! {
     ThemeTypeScale => "theme.type_scale",
     ThemeRadiusScale => "theme.radius_scale",
     ThemeFontFamily => "theme.font_family",
+    /// Appearance mode (`dark`, `light` or `system`) and the preferred palette of each mode.
+    ThemeAppearance => "theme.appearance_mode",
+    ThemeDarkPalette => "theme.dark_palette_id",
+    ThemeLightPalette => "theme.light_palette_id",
     /// In-progress Agent Forge draft (JSON from `AgentDraft::to_autosave`).
     ForgeAutosave => "forge.autosave",
     /// Whether Mnemo the guide owl is hidden in the Agent Forge (`true` / `false`).
@@ -65,6 +70,29 @@ setting_keys! {
     PanelLayouts => "ui.panel_layouts",
     /// JSON array of the seed profile ids the user deleted (never re-seeded).
     DismissedSeeds => "seeds.dismissed",
+    /// Typed preferences, one JSON row per settings category (`domain::preferences`).
+    /// The Insights page's view, filter and display choices (JSON, sb D2).
+    InsightsState => "insights.state",
+    PrefsGeneral => "preferences.general",
+    PrefsAppearance => "preferences.appearance",
+    PrefsWriting => "preferences.writing",
+    PrefsAi => "preferences.ai",
+    PrefsEmbeddings => "preferences.embeddings",
+    PrefsImages => "preferences.images",
+    PrefsAgents => "preferences.agents",
+    PrefsLearning => "preferences.learning",
+    PrefsImport => "preferences.import",
+    PrefsPrivacy => "preferences.privacy",
+    PrefsNotifications => "preferences.notifications",
+    PrefsAdvanced => "preferences.advanced",
     /// Pre-palette serialized `ThemeTokens`; migrated on load, then removed.
     LegacyThemeTokens => "theme_tokens",
+    /// sb A2: JSON of the left sidebar's width preference, collapsed sections, pins and recents.
+    SidebarNavigation => "ui.sidebar_navigation",
+    /// sb A2: JSON of the command palette's recently and frequently opened items.
+    PaletteHistory => "ui.palette_history",
+    /// sb B3: JSON of today's embedding requests and estimated tokens (the daily AI budget).
+    EmbeddingUsage => "embeddings.usage",
+    /// sb C2: how the thread inspector shows a thread (`cards` or `outline`).
+    InspectorMode => "ui.inspector_mode",
 }

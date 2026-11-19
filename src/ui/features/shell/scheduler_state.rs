@@ -1,7 +1,7 @@
 //! Runtime state of the autonomous scheduler: the switch, generation queue, heartbeat
 //! task, the most recent LLM failure and the failure dedupe / backoff gate.
 
-use crate::agent::schedule::{FailureGates, GenerationQueue};
+use crate::agent::schedule::{FailureGates, GenerationQueue, DEFAULT_QUEUE_CAPACITY};
 use crate::agent::LlmFailure;
 use crate::domain::ProfileId;
 use chrono::{DateTime, Utc};
@@ -33,15 +33,15 @@ pub struct SchedulerState {
 }
 
 impl SchedulerState {
-    /// Fresh state with the persisted switch value and a time-derived seed.
-    pub(super) fn new(enabled: bool) -> Self {
+    /// Fresh state with the persisted switch and concurrency, and a time-derived seed.
+    pub(super) fn new(enabled: bool, max_concurrent: usize) -> Self {
         let seed = SystemTime::now()
             .duration_since(UNIX_EPOCH)
             .map(|elapsed| elapsed.as_nanos() as u64)
             .unwrap_or_default();
         Self {
             enabled,
-            queue: GenerationQueue::default(),
+            queue: GenerationQueue::new(DEFAULT_QUEUE_CAPACITY, max_concurrent),
             last_dispatch: HashMap::new(),
             tick: 0,
             seed,

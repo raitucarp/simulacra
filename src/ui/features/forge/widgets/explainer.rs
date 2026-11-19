@@ -27,6 +27,7 @@ pub struct ExplainerButton {
     id: SharedString,
     icon: LucideIcon,
     body: CardBody,
+    label: Option<SharedString>,
     theme: ThemeTokens,
 }
 
@@ -37,7 +38,13 @@ impl ExplainerButton {
 
     /// An `icon` trigger for any card `body` (sized and padded by the body itself).
     pub fn custom(id: impl Into<SharedString>, icon: LucideIcon, body: CardBody, theme: &ThemeTokens) -> Self {
-        Self { id: id.into(), icon, body, theme: theme.clone() }
+        Self { id: id.into(), icon, body, label: None, theme: theme.clone() }
+    }
+
+    /// Shows `label` after the icon (a small text pill such as "Why?").
+    pub fn label(mut self, label: impl Into<SharedString>) -> Self {
+        self.label = Some(label.into());
+        self
     }
 
     /// A button for field `path`, or `None` when the field has no explainer texts.
@@ -93,7 +100,11 @@ impl RenderOnce for ExplainerButton {
             .cursor_pointer()
             .text_color(theme.text_muted)
             .on_key_down(move |event: &KeyDownEvent, _, cx| on_trigger_key(&key_pin, &pin_key, event, cx))
-            .child(Icon::new(self.icon).size(theme.font_size_sm));
+            .flex()
+            .items_center()
+            .gap(theme.spacing_2xs)
+            .child(Icon::new(self.icon).size(theme.font_size_sm))
+            .children(self.label.clone().map(|label| div().text_size(theme.font_size_2xs).font_weight(FontWeight::SEMIBOLD).child(label)));
         let (body, card_theme, open_key) = (self.body.clone(), theme.clone(), key.clone());
         let hover = HoverCard::new(key)
             .trigger(trigger)

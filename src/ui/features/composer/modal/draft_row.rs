@@ -24,7 +24,10 @@ impl ComposerModalView {
             .gap(theme.spacing_xs)
             .child(self.identity_line())
             .child(self.textarea(index, draft));
-        let column = if index == 0 { self.first_post_extras(column) } else { column };
+        let column = if index == 0 && !self.is_editing() { self.first_post_extras(column) } else { column };
+        let hint = self.atomic_hint.as_ref().filter(|hint| hint.draft == index).map(|hint| crate::ui::features::thinking::atomic::render_atomic_hint(&hint.report, hint.on_split.clone(), hint.on_dismiss.clone(), theme));
+        let meter = self.readability.as_ref().filter(|meter| meter.draft == index).map(|meter| super::super::panel::readability_meter::render_readability_meter(meter, theme));
+        let column = column.children(hint).children(meter);
         div()
             .w_full()
             .px(theme.panel_padding)

@@ -22,11 +22,12 @@ mod rhetoric;
 mod trait_block;
 mod voice;
 
-use super::super::common::{labeled, message};
+use super::super::common::message;
 use crate::state::forge::{DraftEdit, IssueKind, Severity, TextField, ValidationIssue, ARG_VALUE};
 use crate::ui::features::forge::text::{tr, tr_with};
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
 use crate::ui::features::forge::widgets::ForgeTextInput;
+use crate::state::forge::suggest::Param;
 use gpui_kit::*;
 
 const TEXT_ID_PREFIX: &str = "forge-text";
@@ -92,8 +93,15 @@ impl ForgeView {
         }
     }
 
-    /// A captioned text input with its issue lines underneath.
+    /// The text input of `field` with its example chips (the name has its own ideas row).
+    pub(super) fn text_with_examples(&self, field: TextField, input: impl IntoElement, handle: &ForgeHandle) -> Div {
+        let examples = (field != TextField::Name).then(|| self.text_examples(field, handle)).flatten();
+        div().flex().flex_col().gap(self.theme.spacing_xs).child(input).children(examples)
+    }
+
+    /// A captioned text input with example chips, "Why?" / "Suggest" and its issue lines.
     pub(super) fn text_row(&self, field: TextField, handle: &ForgeHandle) -> Div {
-        labeled(field.path(), self.text_input(field, handle), &self.theme).children(self.issue_lines(field.path()))
+        let control = self.text_with_examples(field, self.text_input(field, handle), handle);
+        self.hinted(Param::Text(field), control, handle).children(self.issue_lines(field.path()))
     }
 }

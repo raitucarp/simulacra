@@ -7,7 +7,8 @@ use super::paint::ScenePainter;
 use super::panel::MindGraphPanel;
 use super::viewport::Frame;
 use crate::domain::graph::NODE_KINDS;
-use crate::ui::components::{persisted_v_resizable, SplitPane};
+use crate::ui::components::{art_state, persisted_v_resizable, ArtState, SplitPane};
+use crate::ui::illustration::{EmptyKey, Illustration};
 use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::*;
 use rust_i18n::t;
@@ -59,10 +60,8 @@ impl MindGraphPanel {
     }
 
     fn render_empty(&self) -> Div {
-        div()
-            .text_size(self.theme.font_size_sm)
-            .text_color(self.theme.text_muted)
-            .child(t!("graph.empty").to_string())
+        let art = Illustration::empty(EmptyKey::GraphEmpty).width(self.theme.art_empty_width);
+        art_state(ArtState::titled(art, t!("graph.empty").to_string(), t!("art.graph_empty_hint").to_string()), &self.theme)
     }
 
     fn render_card(&self, cx: &mut Context<Self>) -> Div {
@@ -74,11 +73,11 @@ impl MindGraphPanel {
         let on_reset = Box::new(cx.listener(|this, _: &ClickEvent, _, cx| this.reset_view(cx)));
         let details = div().size_full().pt(theme.stack_gap).child(render_details(selection, on_open, on_reset, theme).w_full());
         let split = persisted_v_resizable(SPLIT_ID, theme)
-            .pane(SplitPane::flex(theme.split_flex_min).child(self.render_canvas(cx)))
+            .pane(SplitPane::flex(theme.graph_canvas_height).child(self.render_canvas(cx)))
             .pane(SplitPane::sized(theme.graph_details_height, theme.graph_details_min..theme.graph_details_max).child(details));
         div()
             .flex_1()
-            .min_h(theme.graph_view_min_height)
+            .min_h_0()
             .w_full()
             .p(theme.card_padding)
             .rounded(theme.radius_lg)

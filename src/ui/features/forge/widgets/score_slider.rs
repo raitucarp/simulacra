@@ -9,6 +9,7 @@
 
 use super::explainer::ExplainerButton;
 use super::slider_slot::{keyboard_slider, keyed_slider, SliderRange};
+use super::suggest::SliderHint;
 use super::ValueCallback;
 use crate::domain::agent_config::AgentConfig;
 use crate::state::forge::attributes::{budget_remaining, BUDGET_FIELDS};
@@ -34,6 +35,7 @@ pub struct ScoreSlider {
     value: u8,
     ceiling: u8,
     disabled: bool,
+    hint: Option<SliderHint>,
     theme: ThemeTokens,
     on_change: ValueCallback<u8>,
 }
@@ -48,11 +50,18 @@ impl ScoreSlider {
         } else {
             MAX_SCORE
         };
-        Self { field, value, ceiling, disabled: false, theme: theme.clone(), on_change: Rc::new(on_change) }
+        Self { field, value, ceiling, disabled: false, hint: None, theme: theme.clone(), on_change: Rc::new(on_change) }
     }
 
     pub fn disabled(mut self, disabled: bool) -> Self {
         self.disabled = disabled;
+        self
+    }
+
+    /// Shows the slider's suggestions: "Why?" and "Suggest" by the name, the typical band and
+    /// any AI values under the track.
+    pub fn hint(mut self, hint: Option<SliderHint>) -> Self {
+        self.hint = hint;
         self
     }
 
@@ -77,7 +86,8 @@ impl ScoreSlider {
             .items_center()
             .gap(theme.spacing_xs)
             .child(div().text_size(theme.font_size_sm).text_color(theme.text_primary).child(field_label(self.field.path())))
-            .children(ExplainerButton::for_field(self.field.path(), theme));
+            .children(ExplainerButton::for_field(self.field.path(), theme))
+            .children(self.hint.as_ref().map(|hint| hint.header(&format!("{SLIDER_ID_PREFIX}-{}", self.field.path()), theme)));
         div().flex().items_center().justify_between().child(name).child(level)
     }
 }
@@ -98,6 +108,7 @@ impl RenderOnce for ScoreSlider {
             .gap(theme.spacing_xs)
             .child(self.header(shown))
             .child(keyboard_slider(SharedString::from(format!("{id}-{KEYS_SUFFIX}")), &binding, (u16::from(self.value), range), self.disabled, theme, on_release))
+            .children(self.hint.as_ref().map(|hint| hint.footer(&id, theme)))
             .when(at_ceiling, |col| {
                 col.child(div().text_size(theme.font_size_2xs).text_color(theme.warning).child(tr(NO_POINTS_KEY)))
             })

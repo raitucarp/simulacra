@@ -29,6 +29,7 @@ pub struct MultiSelectGrid<T: TraitOption> {
     columns: usize,
     card_width: Pixels,
     descriptions: bool,
+    suggested: Vec<&'static str>,
     theme: ThemeTokens,
     on_change: ValueCallback<OptionSet<T>>,
 }
@@ -48,6 +49,7 @@ impl<T: TraitOption> MultiSelectGrid<T> {
             columns: super::GRID_COLUMNS,
             card_width: theme.forge_option_card_width,
             descriptions: false,
+            suggested: Vec::new(),
             theme: theme.clone(),
             on_change: Rc::new(on_change),
         }
@@ -62,6 +64,12 @@ impl<T: TraitOption> MultiSelectGrid<T> {
     /// Width of each card.
     pub fn card_width(mut self, width: Pixels) -> Self {
         self.card_width = width;
+        self
+    }
+
+    /// Marks the options with these keys as good starting picks.
+    pub fn suggested(mut self, keys: Vec<&'static str>) -> Self {
+        self.suggested = keys;
         self
     }
 
@@ -92,6 +100,7 @@ impl<T: TraitOption> MultiSelectGrid<T> {
         let mut spec = OptionCardSpec::new((self.id.clone(), at.to_string()), art, trait_label(option), self.card_width);
         spec.description = self.descriptions.then(|| trait_description(option)).flatten();
         spec.selected = chosen;
+        spec.suggested = self.suggested.contains(&option.key());
         let (on_change, toggled) = (self.on_change.clone(), self.selected.toggled(option));
         GridCell::card(spec, &self.theme, Rc::new(move |window, cx| on_change(toggled.clone(), window, cx)))
     }
@@ -110,6 +119,7 @@ struct SetPick {
     theme: ThemeTokens,
     columns: usize,
     card_width: Pixels,
+    suggested: Vec<&'static str>,
     on_change: ValueCallback<TraitSetValue>,
 }
 
@@ -121,19 +131,20 @@ impl TraitSetVisitor for SetPick {
         MultiSelectGrid::new(self.id, current, &self.theme, move |set: OptionSet<T>, window, cx| on_change(wrap(set), window, cx))
             .columns(self.columns)
             .card_width(self.card_width)
+            .suggested(self.suggested)
             .into_any_element()
     }
 }
 
 /// Toggleable cards for every option of `field`, ringing those chosen on `cfg`, `columns` per
-/// row and `card_width` wide; each toggle calls `on_change` with the field's new value.
+/// row and `card_width` wide, `suggested` keys badged; each toggle calls `on_change` with the
+/// field's new value.
 pub fn trait_set_grid(
-    id: SharedString,
-    field: TraitSet,
+    (id, field): (SharedString, TraitSet),
     cfg: &AgentConfig,
     (columns, card_width): (usize, Pixels),
-    theme: &ThemeTokens,
+    (theme, suggested): (&ThemeTokens, Vec<&'static str>),
     on_change: ValueCallback<TraitSetValue>,
 ) -> AnyElement {
-    field.read(cfg).visit(SetPick { id, theme: theme.clone(), columns, card_width, on_change })
+    field.read(cfg).visit(SetPick { id, theme: theme.clone(), columns, card_width, suggested, on_change })
 }

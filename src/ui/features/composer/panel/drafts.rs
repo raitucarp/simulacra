@@ -41,11 +41,22 @@ impl ComposerModalPanel {
             }
             InputEvent::Change => {
                 self.error = None;
+                self.schedule_atomic_hint(cx);
+                self.schedule_readability(cx);
                 cx.notify();
             }
             InputEvent::PressEnter { secondary: true, .. } => self.submit(window, cx),
             _ => {}
         }
+    }
+
+    /// Opens the modal in `mode` with `text` in its first post (sb E3: "Turn into a post").
+    pub fn open_with_text(&mut self, mode: ComposerModalMode, text: String, window: &mut Window, cx: &mut Context<Self>) {
+        self.open(mode, window, cx);
+        if let Some(input) = self.drafts.first().map(|slot| slot.input.clone()) {
+            input.update(cx, |state, cx| state.set_value(text, window, cx));
+        }
+        cx.notify();
     }
 
     /// Appends an empty post to the thread and focuses it.
@@ -72,8 +83,15 @@ impl ComposerModalPanel {
             return;
         };
         let text = input.read(cx).value().to_string();
-        let chunks = split_into_thread(&text, MAX_POST_CHARS);
-        let Some((first, rest)) = chunks.split_first().filter(|(_, rest)| !rest.is_empty()) else {
+        self.replace_draft(index, split_into_thread(&text, MAX_POST_CHARS), window, cx);
+    }
+
+    /// Replaces the draft at `index` with `chunks` (one draft each), focusing the last one.
+    pub(super) fn replace_draft(&mut self, index: usize, chunks: Vec<String>, window: &mut Window, cx: &mut Context<Self>) {
+        let Some(input) = self.drafts.get(index).map(|slot| slot.input.clone()) else {
+            return;
+        };
+        let Some((first, rest)) = chunks.split_first() else {
             return;
         };
         input.update(cx, |state, cx| state.set_value(first.clone(), window, cx));
@@ -94,6 +112,14 @@ impl ComposerModalPanel {
         }
     }
 
+    /// Puts `text` into the first post (a composer opened prefilled, sb E2).
+    pub fn prefill(&mut self, text: &str, window: &mut Window, cx: &mut Context<Self>) {
+        if let Some(first) = self.drafts.first() {
+            first.input.update(cx, |state, cx| state.set_value(text.to_string(), window, cx));
+        }
+        cx.notify();
+    }
+
     pub(super) fn focus_draft(&self, index: usize, window: &mut Window, cx: &mut App) {
         if let Some(slot) = self.drafts.get(index) {
             slot.input.update(cx, |state, cx| state.focus(window, cx));
@@ -107,7 +133,7 @@ impl ComposerModalPanel {
 
     /// Whether a link or an image is attached (they belong to the first post).
     fn has_media(&self, cx: &App) -> bool {
-        !self.link_input.read(cx).value().trim().is_empty() || self.image_attachment(cx).is_some()
+        !self.link_input.read(cx).value().trim().is_empty() || !self.images.is_empty() || self.typed_image(cx).is_some()
     }
 
     /// The first post that blocks publishing (quotes always need commentary text).

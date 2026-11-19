@@ -8,6 +8,8 @@ use crate::ui::features::forge::screens::common::{card, heading, muted};
 use crate::ui::features::forge::text::{tr, tr_count};
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
 use crate::ui::features::forge::widgets::ScoreSlider;
+use crate::state::forge::suggest::Param;
+use crate::ui::features::forge::text::field_label;
 use gpui_kit::*;
 
 const SKILLS_KEY: &str = "forge.ui.mind.skills";
@@ -37,7 +39,7 @@ impl ForgeView {
             .flex()
             .flex_col()
             .gap(theme.spacing_xs)
-            .child(ScoreSlider::new(field, cfg, theme, move |v, w, cx| edit(v, w, cx)))
+            .child(ScoreSlider::new(field, cfg, theme, move |v, w, cx| edit(v, w, cx)).hint(self.slider_hint(Param::Score(field), &field_label(field.path()), handle)))
             .child(self.ladder(step))
             .child(div().text_size(theme.font_size_2xs).text_color(theme.text_muted).child(next))
             .children(self.issue_lines(field.path()))

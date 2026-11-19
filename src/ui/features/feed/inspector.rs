@@ -3,11 +3,14 @@
 use super::callbacks::PostCallbacks;
 use super::consts::{INSPECTOR_SCROLL_ID, MAX_INSPECTOR_NESTED_REPLIES, MAX_INSPECTOR_REPLIES};
 use super::inspector_header::{render_inspector_header, render_quick_reply_bar};
+use super::inspector_outline::{render_outline_pane, InspectorCallback, InspectorMode, InspectorView};
 use super::inspector_replies::conversation_children;
 use super::params::ToggleRepliesCallback;
 use crate::domain::Post;
 use crate::state::{build_conversation, AppState, Conversation, ReplyLimits};
 use crate::theme::ThemeTokens;
+use crate::ui::components::{art_state, ArtState};
+use crate::ui::illustration::{EmptyKey, Illustration};
 use gpui_kit::component::scroll::ScrollableElement;
 use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::{div, Div, InteractiveElement, IntoElement, ParentElement, Styled};
@@ -22,6 +25,9 @@ pub(crate) struct InspectorContext<'a> {
     /// Whether every reply is shown instead of the collapsed preview.
     pub expanded: bool,
     pub on_toggle_replies: Rc<ToggleRepliesCallback>,
+    /// sb C2: cards or outline, the outline's memory and focus, and the commands they send.
+    pub view: &'a InspectorView,
+    pub on_inspector: InspectorCallback,
 }
 
 impl InspectorContext<'_> {
@@ -40,14 +46,19 @@ pub(crate) fn render_inspector_pane(ctx: &InspectorContext<'_>, focused: Option<
     let theme = ctx.theme;
     let conversation = focused.map(|post| build_conversation(ctx.state, post, ctx.limits()));
     let replies_count = conversation.as_ref().map(|c| c.direct_total);
+    let body = match (ctx.view.mode, focused, ctx.view.argument.clone()) {
+        (InspectorMode::Outline, Some(post), _) => render_outline_pane(ctx.state, post, ctx.view, &ctx.on_inspector, theme).into_any_element(),
+        (InspectorMode::Argument, Some(_), Some(argument)) => argument.into_any_element(),
+        _ => render_thread_scroll(ctx, conversation.as_ref()).into_any_element(),
+    };
     div()
         .w_full()
         .h_full()
         .flex()
         .flex_col()
         .bg(theme.bg_app)
-        .child(render_inspector_header(theme, replies_count))
-        .child(render_thread_scroll(ctx, conversation.as_ref()))
+        .child(render_inspector_header(theme, replies_count, ctx.view.mode, &ctx.on_inspector))
+        .child(body)
         .when_some(focused, |this, root| {
             this.child(render_quick_reply_bar(root, ctx.state.author_of(root), theme, ctx.callbacks.on_reply.clone()))
         })
@@ -65,11 +76,8 @@ fn render_thread_scroll(ctx: &InspectorContext<'_>, conversation: Option<&Conver
         .flex_col()
         .when_some(conversation, |this, c| this.children(conversation_children(ctx, c)))
         .when(is_empty, |this| {
-            this.p(theme.panel_padding).items_center().justify_center().child(
-                div()
-                    .text_size(theme.font_size_sm)
-                    .text_color(theme.text_muted)
-                    .child(t!("feed.select_to_inspect").to_string()),
-            )
+            let art = Illustration::empty(EmptyKey::InspectorIdle).width(theme.art_empty_width);
+            let state = ArtState::titled(art, t!("feed.select_to_inspect").to_string(), t!("art.inspector_idle_hint").to_string());
+            this.p(theme.panel_padding).items_center().justify_center().child(art_state(state, theme))
         })
 }

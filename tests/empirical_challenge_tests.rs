@@ -7,7 +7,7 @@ use simulacra::state::AppState;
 use simulacra::storage::Database;
 use simulacra::theme::minimalist_dark;
 use simulacra::ui::molecules::post_item::{
-    extract_host_domain, render_post_item, PostAction, PostCardHandlers, ThreadlineStyle,
+    extract_host_domain, render_post_item, LearnControls, PostAction, PostCardHandlers, ThreadlineStyle,
 };
 use std::rc::Rc;
 
@@ -19,10 +19,15 @@ fn noop_handlers() -> PostCardHandlers {
         on_like: noop.clone(),
         on_reply: noop.clone(),
         on_repost: noop.clone(),
-        on_quote: noop,
+        on_quote: noop.clone(),
+        on_find_similar: noop,
+        learn: LearnControls::inert(),
         on_open_post: Rc::new(|_, _, _| {}),
         on_delete: None,
         links: Default::default(),
+        on_post_action: None,
+        credence: None,
+        data: None,
     }
 }
 use simulacra::ui::organisms::compute_stream_threadline_style;
@@ -796,6 +801,8 @@ fn test_stress_multi_user_repost_isolation_in_memory_and_raw_sqlite() {
 
         // In raw SQLite: verify directly via rusqlite
         {
+            // Writes reach SQLite on the vault's worker thread; wait for them before reading the file.
+            state.db.as_ref().expect("vault").flush().expect("flush queued writes");
             let conn = rusqlite::Connection::open(&temp_db_path).expect("open raw sqlite");
             let count: i64 = conn
                 .query_row(
@@ -831,6 +838,8 @@ fn test_stress_multi_user_repost_isolation_in_memory_and_raw_sqlite() {
 
         // Verification: In raw SQLite, User A's repost row is deleted, but User B and User C rows are PRESERVED
         {
+            // Writes reach SQLite on the vault's worker thread; wait for them before reading the file.
+            state.db.as_ref().expect("vault").flush().expect("flush queued writes");
             let conn = rusqlite::Connection::open(&temp_db_path).expect("open raw sqlite");
             let count_a: i64 = conn
                 .query_row(
@@ -893,6 +902,8 @@ fn test_stress_multi_user_repost_isolation_in_memory_and_raw_sqlite() {
 
         // In raw SQLite: zero repost rows
         {
+            // Writes reach SQLite on the vault's worker thread; wait for them before reading the file.
+            state.db.as_ref().expect("vault").flush().expect("flush queued writes");
             let conn = rusqlite::Connection::open(&temp_db_path).expect("open raw sqlite");
             let total_remaining: i64 = conn
                 .query_row(

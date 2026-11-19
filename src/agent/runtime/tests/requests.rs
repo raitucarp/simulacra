@@ -123,3 +123,29 @@ async fn custom_image_engines_save_the_picture_into_the_media_folder() {
     assert_eq!(result.extras().image_prompt.as_deref(), Some("lighthouse"));
     let _ = std::fs::remove_file(path);
 }
+
+#[tokio::test]
+async fn a_post_without_an_image_prompt_gets_the_agents_default_prompt() {
+    let server = MockServer::start(vec![
+        MockReply::json(super::openai_text("Memory is a river. It keeps moving.")),
+        MockReply::json(json!({ "image": { "b64": format!("data:image/png;base64,{PNG_1X1_BASE64}") } })),
+    ]);
+    let image_request = CustomRequest {
+        url: format!("{}/image", server.url),
+        body_template: r#"{"prompt": {{prompt}}}"#.into(),
+        reply_path: "image.b64".into(),
+        ..CustomRequest::default()
+    };
+    let engine = EngineConfig {
+        image: ImageEngineConfig { engine: ImageEngine::Custom(image_request), style_prefix: "ink wash".into(), trigger: ImageTrigger::Always, ..ImageEngineConfig::default() },
+        ..EngineConfig::default()
+    };
+    let mut plan = super::plan(LlmProvider::OpenAi, &server.url, engine);
+    plan.image_subject = crate::domain::image_prompt::ImageSubject { noun: "a crow".into(), ..Default::default() };
+    let result = run_engine(&plan, "S", "U", None, 0).await.expect("engine runs");
+    let sent = server.requests()[1].json()["prompt"].as_str().unwrap_or_default().to_string();
+    assert!(sent.starts_with("ink wash, clean flat vector illustration"), "{sent}");
+    assert!(sent.contains("visual metaphor for: Memory is a river") && sent.contains("as imagined by a crow"), "{sent}");
+    assert!(!sent.contains("It keeps moving"));
+    let _ = result.image_path.map(std::fs::remove_file);
+}

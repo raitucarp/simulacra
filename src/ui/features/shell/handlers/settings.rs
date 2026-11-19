@@ -5,12 +5,15 @@ use super::super::view::AppView;
 use crate::agent::LlmProvider;
 use crate::theme::ThemeSettings;
 use crate::ui::features::settings::{AppearanceEvent, AppearancePanel, SettingsTab};
+use crate::domain::preferences::ToastKind;
+use gpui_kit::component::notification::Notification;
 use gpui_kit::*;
+use rust_i18n::t;
 
 impl AppView {
-    pub(crate) fn select_settings_tab(&mut self, tab: SettingsTab, _: &mut Window, cx: &mut Context<Self>) {
-        self.chrome.active_settings_tab = tab;
-        cx.notify();
+    /// Shows a category (from the rail), clearing the search.
+    pub(crate) fn select_settings_tab(&mut self, tab: SettingsTab, window: &mut Window, cx: &mut Context<Self>) {
+        self.open_settings_section(tab, window, cx);
     }
 
     /// Applies every theme change made in the Appearance pane.
@@ -53,8 +56,9 @@ impl AppView {
     }
 
     /// Persists the draft merged with the typed fields (an empty model falls back to the default)
-    /// and forgets past LLM failures, so the scheduler retries and reports afresh.
-    pub(crate) fn save_settings(&mut self, _: &mut Window, cx: &mut Context<Self>) {
+    /// and forgets past LLM failures, so the scheduler retries and reports afresh. The window
+    /// stays open.
+    pub(crate) fn save_settings(&mut self, window: &mut Window, cx: &mut Context<Self>) {
         let typed = self.llm_inputs.values(cx);
         let settings = self.chrome.settings_draft.apply(&self.state.llm_settings, typed);
         let mut credentials = self.state.credentials.clone();
@@ -62,13 +66,15 @@ impl AppView {
         self.state.update_llm_settings(settings);
         self.state.update_credentials(credentials);
         self.reset_llm_failures();
-        self.chrome.is_settings_open = false;
+        let note = Notification::success(t!("prefs.ui.ai_saved").to_string());
+        self.toast(ToastKind::Confirmation, note, window, cx);
         cx.notify();
     }
 
     /// Closes the modal, discarding unsaved provider/model picks and typed values.
     pub(crate) fn close_settings(&mut self, window: &mut Window, cx: &mut Context<Self>) {
         self.revert_settings_draft(window, cx);
+        self.settings_ui.confirm_reset = false;
         self.chrome.is_settings_open = false;
         cx.notify();
     }

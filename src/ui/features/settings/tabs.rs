@@ -1,76 +1,117 @@
-//! Categorical tabs for the vertical settings navigation rail.
+//! The categories of the settings window, in rail order, with their icon, header art and
+//! translated texts.
 
 use crate::ui::icons::LucideIcon;
-use rust_i18n::t;
+use crate::ui::illustration::{ILLUSTRATION_EXT, ILLUSTRATION_ROOT};
+use super::text::tr;
 
-/// Categorical tabs for the vertical settings navigation rail.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+/// Folder of the category header illustrations.
+const ART_DIR: &str = "settings";
+/// Prefix of every category text key.
+const KEY_PREFIX: &str = "prefs.section";
+
+/// A category of the settings window.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum SettingsTab {
     General,
-    AiIntelligence,
     Appearance,
-    KnowledgeVault,
+    ReadingWriting,
+    AiIntelligence,
+    Embeddings,
+    Images,
+    Agents,
+    Learning,
+    Import,
+    PrivacyData,
+    Notifications,
+    Shortcuts,
+    Advanced,
 }
 
 impl SettingsTab {
-    pub const ALL: [SettingsTab; 4] = [
-        SettingsTab::General,
-        SettingsTab::AiIntelligence,
-        SettingsTab::Appearance,
-        SettingsTab::KnowledgeVault,
+    /// Every category, in rail order.
+    pub const ALL: [SettingsTab; 13] = [
+        Self::General, Self::Appearance, Self::ReadingWriting, Self::AiIntelligence, Self::Embeddings,
+        Self::Images, Self::Agents, Self::Learning, Self::Import, Self::PrivacyData, Self::Notifications,
+        Self::Shortcuts, Self::Advanced,
     ];
 
-    /// i18n key of [`Self::label`].
-    pub fn label_key(self) -> &'static str {
+    /// Stable id (element ids, i18n keys, art file and the command palette).
+    pub const fn id(self) -> &'static str {
         match self {
-            Self::General => "settings.tab_general",
-            Self::AiIntelligence => "settings.tab_ai",
-            Self::Appearance => "settings.tab_appearance",
-            Self::KnowledgeVault => "settings.tab_vault",
+            Self::General => "general",
+            Self::Appearance => "appearance",
+            Self::ReadingWriting => "reading_writing",
+            Self::AiIntelligence => "ai_models",
+            Self::Embeddings => "embeddings",
+            Self::Images => "images",
+            Self::Agents => "agents",
+            Self::Learning => "learning",
+            Self::Import => "import",
+            Self::PrivacyData => "privacy_data",
+            Self::Notifications => "notifications",
+            Self::Shortcuts => "shortcuts",
+            Self::Advanced => "advanced",
         }
     }
 
-    pub fn icon(self) -> LucideIcon {
+    /// The category with `id`.
+    pub fn from_id(id: &str) -> Option<Self> {
+        Self::ALL.into_iter().find(|tab| tab.id() == id)
+    }
+
+    pub const fn icon(self) -> LucideIcon {
         match self {
             Self::General => LucideIcon::Sliders,
-            Self::AiIntelligence => LucideIcon::Bot,
             Self::Appearance => LucideIcon::Palette,
-            Self::KnowledgeVault => LucideIcon::Brain,
+            Self::ReadingWriting => LucideIcon::Edit,
+            Self::AiIntelligence => LucideIcon::Bot,
+            Self::Embeddings => LucideIcon::Brain,
+            Self::Images => LucideIcon::Image,
+            Self::Agents => LucideIcon::Users,
+            Self::Learning => LucideIcon::BookOpen,
+            Self::Import => LucideIcon::Archive,
+            Self::PrivacyData => LucideIcon::Lock,
+            Self::Notifications => LucideIcon::Volume2,
+            Self::Shortcuts => LucideIcon::Keyboard,
+            Self::Advanced => LucideIcon::Terminal,
         }
     }
 
-    /// i18n key of [`Self::title`].
-    pub fn title_key(self) -> &'static str {
-        match self {
-            Self::General => "settings.title_general",
-            Self::AiIntelligence => "settings.title_ai",
-            Self::Appearance => "settings.title_appearance",
-            Self::KnowledgeVault => "settings.tab_vault",
-        }
+    /// The neighbour `offset` places away in rail order, wrapping at both ends.
+    pub fn step(self, offset: isize) -> Self {
+        let count = Self::ALL.len() as isize;
+        let index = Self::ALL.iter().position(|tab| *tab == self).unwrap_or_default() as isize;
+        Self::ALL[(index + offset).rem_euclid(count) as usize]
     }
 
-    /// i18n key of [`Self::description`].
-    pub fn description_key(self) -> &'static str {
-        match self {
-            Self::General => "settings.desc_general",
-            Self::AiIntelligence => "settings.desc_ai",
-            Self::Appearance => "settings.desc_appearance",
-            Self::KnowledgeVault => "settings.desc_vault",
-        }
+    /// Header illustration: `illustrations/settings/<id>.svg`.
+    pub fn illustration(self) -> String {
+        format!("{ILLUSTRATION_ROOT}/{ART_DIR}/{}.{ILLUSTRATION_EXT}", self.id())
     }
 
-    /// Translated rail label.
-    pub fn label(self) -> String {
-        t!(self.label_key()).to_string()
+    /// i18n key of one of this category's texts (`title`, `description`, `keywords`).
+    pub fn text_key(self, part: &str) -> String {
+        format!("{KEY_PREFIX}.{}.{part}", self.id())
     }
 
-    /// Translated content-pane heading.
+    /// Translated rail label and heading.
     pub fn title(self) -> String {
-        t!(self.title_key()).to_string()
+        tr(&self.text_key(TITLE))
     }
 
-    /// Translated content-pane subtitle.
+    /// Translated heading subtitle.
     pub fn description(self) -> String {
-        t!(self.description_key()).to_string()
+        tr(&self.text_key(DESCRIPTION))
+    }
+
+    /// Translated search keywords (comma separated).
+    pub fn keywords(self) -> String {
+        tr(&self.text_key(KEYWORDS))
     }
 }
+
+/// Text part names shared by categories, groups and rows.
+pub(super) const TITLE: &str = "title";
+pub(super) const DESCRIPTION: &str = "description";
+pub(super) const KEYWORDS: &str = "keywords";

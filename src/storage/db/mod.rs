@@ -4,25 +4,52 @@
 //! `Database` is a single type whose `impl` blocks are spread across the sibling
 //! modules by table (networks, profiles, posts, trending, settings, documents).
 
+mod arena;
+mod arena_schema;
+mod beliefs;
+mod catalogue;
+mod data_schema;
+mod restore;
+mod revisions;
+mod saved; // sb F2: history, bookmarks, collection items, restore
 mod dismissed_seeds;
-mod documents;
+mod embeddings;
+mod embeddings_schema;
+mod learning;
+mod learning_schema;
+mod journal;
+mod journal_schema;
 pub mod location;
+mod media;
+mod media_schema;
 mod migrate;
 mod networks;
+mod post_batch;
 mod post_delete;
 mod post_updates;
 mod posts;
+mod preferences;
 mod profiles;
+mod review;
+mod review_migration;
+mod review_schema;
 mod schema;
 mod setting_key;
 mod settings;
 mod theme_settings;
+mod thinking;
+mod thinking_schema;
 mod trending;
 pub(super) mod versions;
 
 #[cfg(test)]
 mod tests;
 
+pub use catalogue::{build_catalogue_search, fts_match_expression, CatalogueSearch, DocumentText};
+pub use arena::ArenaRecord;
+pub use journal::StoredRecord;
+pub use restore::{verify_database_file, DatabaseSummary};
+pub use preferences::{preference_rows, PREFERENCE_KEYS};
 pub use setting_key::SettingKey;
 
 use crate::error::{AppError, Result};

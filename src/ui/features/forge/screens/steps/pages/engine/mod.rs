@@ -6,6 +6,7 @@
 mod credential;
 mod custom_tool;
 mod headers;
+mod hinted;
 mod image;
 mod kit;
 mod model;

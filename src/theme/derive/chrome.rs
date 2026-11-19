@@ -37,5 +37,10 @@ pub(super) fn apply_settings_layout(t: &mut ThemeTokens) {
         settings_tab_indicator_width: px(3.0), settings_tab_indicator_height: px(16.0),
         theme_preview_card_width: px(172.0), theme_preview_avatar_size: px(16.0),
         color_field_width: px(262.0), hex_readout_width: px(76.0),
+        settings_modal_max_width: px(1080.0), settings_modal_max_height: px(760.0), settings_modal_inset: px(24.0),
+        settings_rail_item_height: px(34.0), settings_rail_compact_width: px(56.0), settings_row_label_min_width: px(220.0),
+        settings_text_control_width: px(240.0), settings_number_readout_width: px(84.0),
+        settings_header_art_width: px(88.0), settings_empty_art_width: px(160.0),
+        settings_disabled_opacity: 0.45,
     });
 }

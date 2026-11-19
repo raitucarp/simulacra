@@ -4,6 +4,7 @@ use super::super::view::AppView;
 use crate::domain::post::{SourceKind, SourceRef};
 use crate::domain::{PostId, ProfileId};
 use crate::state::{feed_position, FeedTab, NavigationTab, WikilinkTarget};
+use crate::ui::features::sidebar_left::NavRef;
 use gpui_kit::*;
 
 impl AppView {
@@ -28,6 +29,7 @@ impl AppView {
         if !self.feed.search_input.read(cx).value().trim().is_empty() {
             self.feed.search_input.update(cx, |input, cx| input.set_value("", window, cx));
         }
+        self.note_recent(NavRef::Thread(post_id.clone()));
         self.feed.selected_thread_post_id = Some(post_id.clone());
         self.feed.inspector_expanded = false;
         // Clearing the search re-windows the stream on its change event; scroll after that.
@@ -56,7 +58,7 @@ impl AppView {
     pub(crate) fn open_wikilink(&mut self, target: String, window: &mut Window, cx: &mut Context<Self>) {
         match self.state.resolve_wikilink_target(&target) {
             Some(WikilinkTarget::Post(id)) => self.reveal_post(id, window, cx),
-            Some(WikilinkTarget::Document(_)) => self.select_nav(NavigationTab::Knowledge, window, cx),
+            Some(WikilinkTarget::Document(id)) => self.open_vault_document(&id, window, cx),
             None => {}
         }
     }
@@ -65,7 +67,7 @@ impl AppView {
     /// the stream, the profile in the roster, or the web page in the browser.
     pub(crate) fn open_source(&mut self, source: SourceRef, window: &mut Window, cx: &mut Context<Self>) {
         match source.kind {
-            SourceKind::VaultDoc => self.select_nav(NavigationTab::Knowledge, window, cx),
+            SourceKind::VaultDoc => self.open_vault_document(&source.id, window, cx),
             SourceKind::Post => self.reveal_post(PostId::from(source.id), window, cx),
             SourceKind::Profile => {
                 let id = ProfileId::from(source.id);

@@ -19,17 +19,20 @@ pub enum FeedTab {
     ForYou,
     /// Only debates: conversations with replies, or containing a quote.
     Dialectic,
+    /// Captured posts (quick capture, paste, drop): the second brain's inbox.
+    Inbox,
 }
 
 impl FeedTab {
-    /// Both tabs, in display order.
-    pub const ALL: [Self; 2] = [Self::ForYou, Self::Dialectic];
+    /// Every tab, in display order.
+    pub const ALL: [Self; 3] = [Self::ForYou, Self::Dialectic, Self::Inbox];
 
     /// Whether a grouped conversation belongs to this tab.
     pub fn includes(self, conversation: &[&Post]) -> bool {
         match self {
             Self::ForYou => true,
             Self::Dialectic => conversation.len() > 1 || conversation.iter().any(|p| p.is_quote()),
+            Self::Inbox => conversation.iter().any(|p| crate::state::AppState::is_capture(p)),
         }
     }
 }

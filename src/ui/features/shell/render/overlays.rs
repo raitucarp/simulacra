@@ -20,6 +20,7 @@ impl AppView {
             bind.act(Self::toggle_lang_menu),
             bind.act(Self::toggle_settings),
         )
+        .appearance_toggle(self.state.theme_settings.appearance, bind.act(Self::cycle_appearance))
     }
 
     /// Language menu, while open.
@@ -40,7 +41,7 @@ impl AppView {
             WorkspacePopover::new(
                 self.state.current_network().cloned(),
                 self.state.networks.clone(),
-                self.chrome.is_left_sidebar_collapsed,
+                self.is_left_rail(),
                 self.theme.clone(),
                 bind.with(Self::select_network),
                 bind.act(Self::dismiss_workspace),

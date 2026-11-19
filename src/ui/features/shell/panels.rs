@@ -11,6 +11,7 @@
 use super::binder::Binder;
 use super::view::AppView;
 use crate::ui::render_stats;
+use crate::ui::responsive::LayoutClass;
 use gpui_kit::*;
 
 /// A section of the window rendered by its own cached view.
@@ -39,16 +40,17 @@ pub struct ShellPanel {
 }
 
 impl Render for ShellPanel {
-    fn render(&mut self, _: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
+    fn render(&mut self, window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
         render_stats::record(self.section.stats_name());
         let Some(app) = self.app.upgrade() else {
             return div().into_any_element();
         };
         let bind = Binder::from_entity(app.clone());
         let view = app.read(cx);
+        let class = LayoutClass::of_window(window, &view.theme);
         match self.section {
             ShellSection::LeftSidebar => view.left_sidebar(&bind).into_any_element(),
-            ShellSection::Center => view.center_panel(&bind),
+            ShellSection::Center => view.center_panel(&bind, class),
             ShellSection::RightSidebar => view.right_sidebar(&bind).into_any_element(),
         }
     }

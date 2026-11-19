@@ -2,6 +2,7 @@
 
 use super::super::view::AppView;
 use crate::domain::PostId;
+use crate::ui::features::sidebar_left::NavRef;
 use crate::ui::features::composer::{publish_error_message, ComposerModalMode};
 use crate::ui::features::feed::FEED_WINDOW_INCREMENT;
 use gpui_kit::*;
@@ -39,6 +40,7 @@ impl AppView {
         if self.feed.selected_thread_post_id.as_ref() != Some(&post_id) {
             self.feed.inspector_expanded = false;
         }
+        self.note_recent(NavRef::Thread(post_id.clone()));
         self.feed.selected_thread_post_id = Some(post_id);
         cx.notify();
     }
@@ -76,27 +78,6 @@ impl AppView {
     /// Cycles the active user persona from the feed.
     pub(crate) fn cycle_profile(&mut self, _: &mut Window, cx: &mut Context<Self>) {
         let _ = self.state.cycle_active_persona();
-        cx.notify();
-    }
-
-    /// Adds a new grounding document to the Knowledge Vault.
-    pub fn add_document(
-        &mut self,
-        title: String,
-        content: String,
-        window: &mut Window,
-        cx: &mut Context<Self>,
-    ) {
-        if self.state.add_document(&title, &content).is_ok() {
-            self.feed.doc_title_input.update(cx, |state, cx| state.set_value("", window, cx));
-            self.feed.doc_content_input.update(cx, |state, cx| state.set_value("", window, cx));
-            cx.notify();
-        }
-    }
-
-    /// Removes a document from the vault.
-    pub fn delete_document(&mut self, doc_id: String, cx: &mut Context<Self>) {
-        let _ = self.state.delete_document(&doc_id);
         cx.notify();
     }
 }

@@ -40,7 +40,13 @@ impl AppView {
         window: &mut Window,
         cx: &mut Context<Self>,
     ) {
-        let ComposerModalEvent::Submit(submission) = event;
+        let submission = match event {
+            ComposerModalEvent::Submit(submission) => submission,
+            ComposerModalEvent::ImageIdeas(text) => return self.open_image_ideas_for_draft(text.clone(), window, cx),
+        };
+        if let ComposerModalMode::Edit(target) = &submission.mode {
+            return self.save_post_edit(target.post.id.clone(), submission.drafts.first().cloned().unwrap_or_default(), window, cx); // sb F2
+        }
         let (thread, anchor) = thread_from_submission(submission.clone());
         match self.state.submit_thread(&thread, &anchor) {
             Ok(ids) => {
@@ -59,16 +65,18 @@ impl AppView {
 
 /// Store drafts (attachments on the first post) and the anchor implied by the modal mode.
 fn thread_from_submission(submission: ComposerSubmission) -> (Vec<ThreadDraft>, ThreadAnchor) {
-    let ComposerSubmission { mode, drafts, link, image } = submission;
+    let ComposerSubmission { mode, drafts, link, images } = submission;
     let mut thread: Vec<ThreadDraft> = drafts.into_iter().map(ThreadDraft::text).collect();
     if let Some(first) = thread.first_mut() {
         first.link = link;
-        first.image = image;
+        first.image = images.first().map(|image| image.path.clone());
+        first.images = images;
     }
     let anchor = match mode {
         ComposerModalMode::NewThread => ThreadAnchor::default(),
         ComposerModalMode::Reply(parent) => ThreadAnchor { reply_to: Some(parent.post.id), quote_of: None },
         ComposerModalMode::Quote(quoted) => ThreadAnchor { reply_to: None, quote_of: Some(quoted.post.id) },
+        ComposerModalMode::Edit(_) => ThreadAnchor::default(),
     };
     (thread, anchor)
 }

@@ -5,11 +5,21 @@
 //! toast it. Reads are synchronous round trips through the same queue, so they always observe
 //! every earlier write. Dropping the last handle flushes the queue and joins the worker.
 
+mod arena;
+mod catalogue_ops;
+mod data; // sb F2
+mod embeddings;
+mod learning;
+mod journal;
+mod media;
 mod ops;
+mod review;
+mod thinking;
 #[cfg(test)]
 mod tests;
 
 use super::Database;
+pub use thinking::ThinkingRows;
 use crate::error::{AppError, Result};
 use std::cell::RefCell;
 use std::rc::Rc;

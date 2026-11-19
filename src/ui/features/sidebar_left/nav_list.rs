@@ -1,65 +1,63 @@
-//! Primary navigation button stack (Home, Knowledge, Agents, Mind Graph, Appearance).
+//! The primary places: Timeline, Knowledge Vault, Personas & Agents, Mind Graph and Review, each with
+//! its count. Preferences (Appearance) live in the footer instead.
 
-use super::nav_button::render_nav_button;
-use super::NavHandle;
+use super::nav_button::{render_nav_button, NavButtonSpec};
+use super::SidebarCallbacks;
 use crate::state::{AppState, NavigationTab};
 use crate::theme::ThemeTokens;
+use crate::ui::features::command_palette::CommandId;
 use crate::ui::icons::LucideIcon;
-use gpui_kit::{div, Div, ParentElement, Styled};
+use gpui_kit::prelude::FluentBuilder;
+use gpui_kit::*;
 use rust_i18n::t;
+use std::rc::Rc;
 
-/// One row of the navigation table.
-struct NavEntry {
-    label: String,
+/// One place: its tab, label key, icon and the command that opens it (for the shortcut).
+struct Place {
+    tab: NavigationTab,
+    label_key: &'static str,
     icon: LucideIcon,
-    target: NavigationTab,
-    is_active: bool,
-    badge: Option<usize>,
+    command: CommandId,
 }
 
-fn nav_entries(state: &AppState, is_lab_active: bool, doc_count: usize) -> [NavEntry; 5] {
-    let active = |tab: NavigationTab| state.active_tab == tab;
-    let entry = |label: String, icon, target, is_active, badge| NavEntry {
-        label,
-        icon,
-        target,
-        is_active,
-        badge,
-    };
-    let posts = Some(state.current_network_post_count());
-    let agents = Some(state.current_network_agents().len());
-    [
-        entry(t!("nav.home").to_string(), LucideIcon::Activity, NavigationTab::Timeline, active(NavigationTab::Timeline), posts),
-        entry(t!("nav.knowledge").to_string(), LucideIcon::BookOpen, NavigationTab::Knowledge, active(NavigationTab::Knowledge), Some(doc_count)),
-        entry(t!("nav.agent_lab").to_string(), LucideIcon::Users, NavigationTab::AgentLab, is_lab_active, agents),
-        entry(t!("nav.mind_graph").to_string(), LucideIcon::Share2, NavigationTab::MindGraph, active(NavigationTab::MindGraph), None),
-        entry(t!("nav.appearance").to_string(), LucideIcon::Palette, NavigationTab::Appearance, active(NavigationTab::Appearance), None),
-    ]
+const PLACES: [Place; 8] = [
+    Place { tab: NavigationTab::Timeline, label_key: "nav.home", icon: LucideIcon::Activity, command: CommandId::GoTimeline },
+    Place { tab: NavigationTab::Knowledge, label_key: "nav.knowledge", icon: LucideIcon::BookOpen, command: CommandId::GoKnowledge },
+    Place { tab: NavigationTab::AgentLab, label_key: "nav.agent_lab", icon: LucideIcon::Users, command: CommandId::GoAgents },
+    Place { tab: NavigationTab::MindGraph, label_key: "nav.mind_graph", icon: LucideIcon::Share2, command: CommandId::GoMindGraph },
+    Place { tab: NavigationTab::Review, label_key: "nav.review", icon: LucideIcon::GraduationCap, command: CommandId::GoReview },
+    Place { tab: NavigationTab::Insights, label_key: "nav.insights", icon: LucideIcon::ChartColumn, command: CommandId::GoInsights },
+    Place { tab: NavigationTab::Journal, label_key: "nav.journal", icon: LucideIcon::NotebookPen, command: CommandId::GoJournal },
+    Place { tab: NavigationTab::Arena, label_key: "nav.arena", icon: LucideIcon::Swords, command: CommandId::GoArena },
+];
+
+/// Whether `place` is the active screen (the Persona Lab counts as Personas & Agents).
+fn is_active(place: &Place, active: NavigationTab) -> bool {
+    place.tab == active || (place.tab == NavigationTab::AgentLab && active == NavigationTab::PersonaLab)
 }
 
-/// Renders the navigation stack; each button routes to its tab through `on_select_nav`.
-pub(super) fn render_nav_list(
-    state: &AppState,
-    is_lab_active: bool,
-    is_collapsed: bool,
-    doc_count: usize,
-    on_select_nav: &NavHandle,
-    theme: &ThemeTokens,
-) -> Div {
-    let buttons = nav_entries(state, is_lab_active, doc_count).into_iter().map(|entry| {
-        let nav = on_select_nav.clone();
-        let target = entry.target;
-        render_nav_button(
-            &entry.label,
-            entry.icon,
-            entry.is_active,
-            is_collapsed,
-            entry.badge,
-            theme,
-            move |_, window, cx| {
-                nav(target, window, cx);
-            },
-        )
+fn count_of(tab: NavigationTab, state: &AppState, review_due: Option<usize>) -> Option<usize> {
+    match tab {
+        NavigationTab::Review => review_due,
+        NavigationTab::Timeline => Some(state.current_network_post_count()),
+        NavigationTab::Knowledge => Some(state.current_documents().count()),
+        NavigationTab::AgentLab => Some(state.current_network_agents().len() + state.current_network_personas().len()),
+        _ => None,
+    }
+}
+
+/// `review_due`: cards waiting on the Review page (sb C1).
+pub(super) fn render_nav_list(state: &AppState, review_due: Option<usize>, is_rail: bool, callbacks: &SidebarCallbacks, theme: &ThemeTokens) -> Div {
+    let buttons = PLACES.iter().map(|place| {
+        let spec = NavButtonSpec {
+            label: t!(place.label_key).to_string(),
+            icon: place.icon,
+            is_active: is_active(place, state.active_tab),
+            count: count_of(place.tab, state, review_due),
+            command: Some(place.command),
+        };
+        let (nav, tab) = (callbacks.on_select_nav.clone(), place.tab);
+        render_nav_button(spec, is_rail, theme, Rc::new(move |window, cx| nav(tab, window, cx)))
     });
-    div().flex().flex_col().gap(theme.spacing_xs).children(buttons)
+    div().flex().flex_col().gap(theme.spacing_2xs).when(is_rail, |list| list.items_center()).children(buttons)
 }

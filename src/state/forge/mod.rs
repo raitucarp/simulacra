@@ -20,6 +20,7 @@ pub mod engine;
 pub mod fields;
 pub mod roll;
 mod step;
+pub mod suggest;
 pub mod validate;
 mod voice;
 

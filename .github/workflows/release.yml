@@ -1,0 +1,88 @@
+name: Release
+
+# Publishes Simulacra on the Releases page: installers for Windows, macOS (Apple silicon and
+# Intel) and Linux, plain archives and SHA256 checksums. Push a tag such as `v0.1.0` that matches
+# the version in Cargo.toml, or start it by hand from the Actions tab for an existing tag.
+# Order: the tag is checked, then the CI tests run on it, then the installers are built (reusing
+# the release cache main keeps warm), and only then is anything published.
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing tag to build and publish (for example v0.1.0)
+        required: true
+
+permissions:
+  contents: write
+
+env:
+  RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
+
+jobs:
+  tag:
+    name: Check the tag
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.RELEASE_TAG }}
+      - name: The tag must match Cargo.toml
+        run: |
+          version=$(grep -m1 '^version' Cargo.toml | cut -d'"' -f2)
+          if [ "v$version" != "$RELEASE_TAG" ]; then
+            echo "::error::Tag $RELEASE_TAG does not match Cargo.toml version $version"; exit 1
+          fi
+
+  test:
+    name: CI
+    needs: tag
+    uses: ./.github/workflows/ci.yml
+
+  build:
+    name: Installers
+    needs: test
+    uses: ./.github/workflows/build.yml
+    with:
+      ref: ${{ inputs.tag || github.ref_name }}
+
+  publish:
+    name: Publish the release
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: dist-*
+          path: dist
+          merge-multiple: true
+
+      - name: Write checksums
+        run: |
+          cd dist
+          sha256sum * > SHA256SUMS.txt
+          cat SHA256SUMS.txt
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ env.RELEASE_TAG }}
+          name: Simulacra ${{ env.RELEASE_TAG }}
+          generate_release_notes: true
+          fail_on_unmatched_files: true
+          files: dist/*
+          body: |
+            ## Downloads
+            | Platform | Installer | Without installer |
+            |---|---|---|
+            | Windows 10/11 (x64) | `simulacra_*_x64-setup.exe` | `simulacra-*-windows-x64.zip` |
+            | macOS 11+ (Apple silicon) | `Simulacra_*_aarch64.dmg` | `simulacra-*-macos-arm64.tar.gz` |
+            | macOS 11+ (Intel) | `Simulacra_*_x64.dmg` | `simulacra-*-macos-x64.tar.gz` |
+            | Linux (x64) | `.deb` or `.AppImage` | `simulacra-*-linux-x64.tar.gz` |
+
+            Every asset the app uses (illustrations, themes, palettes, seed data, translations) is built into the executable.
+            Verify downloads against `SHA256SUMS.txt`.
+
+            The installers are not code-signed yet. On Windows, SmartScreen may ask you to confirm ("More info" → "Run anyway").
+            On macOS, right-click the app and choose Open the first time.

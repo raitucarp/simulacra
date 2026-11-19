@@ -13,7 +13,7 @@ WCAG AA contrast. The `credit` field of every JSON file names its upstream sourc
 | Catppuccin Latte, Frappé, Macchiato, Mocha | [catppuccin](https://github.com/catppuccin/catppuccin) | Catppuccin contributors | MIT |
 | Dracula | [Dracula Theme](https://github.com/dracula/dracula-theme) | Zeno Rocha | MIT |
 | Everforest | [everforest](https://github.com/sainnhe/everforest) | sainnhe | MIT |
-| GitHub Dark, GitHub Light | [primer/github-vscode-theme](https://github.com/primer/github-vscode-theme) | GitHub, Inc. | MIT |
+| Graphite Dark, Graphite Light (adapted from GitHub Dark and Light) | [primer/github-vscode-theme](https://github.com/primer/github-vscode-theme) | GitHub, Inc. | MIT |
 | Gruvbox Dark, Gruvbox Light | [gruvbox](https://github.com/morhetz/gruvbox) | Pavel Pertsev | MIT |
 | Kanagawa | [kanagawa.nvim](https://github.com/rebelot/kanagawa.nvim) | rebelot | MIT |
 | Monokai | Monokai color scheme | Wimer Hazenberg | Color values only (widely redistributed palette) |
@@ -25,7 +25,7 @@ WCAG AA contrast. The `credit` field of every JSON file names its upstream sourc
 | Synthwave '84 | [synthwave-vscode](https://github.com/robb0wen/synthwave-vscode) | Robb Owen | MIT |
 | Tokyo Night, Tokyo Night Day | [tokyo-night-vscode-theme](https://github.com/enkia/tokyo-night-vscode-theme) | enkia | MIT |
 
-Simulacra Midnight, Obsidian Zinc and Midnight Slate are original Simulacra palettes.
+Simulacra Midnight, Volcanic Zinc and Midnight Slate are original Simulacra palettes.
 
 The MIT License requires that the copyright notice and permission notice be included in
 all copies or substantial portions of the software. For each MIT-licensed project above:

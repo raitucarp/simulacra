@@ -10,7 +10,7 @@ pub(crate) const DEFAULT_TEMPERATURE: f32 = 0.7;
 pub(crate) const DEFAULT_MAX_TOKENS: u32 = 300;
 
 /// LLM Configuration Settings.
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LlmSettings {
     pub provider: LlmProvider,
     pub api_key: String,

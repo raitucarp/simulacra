@@ -3,9 +3,10 @@
 use super::networks::recount_networks;
 use super::{AppState, NavigationTab};
 use super::snapshot::StoredSettings;
+use crate::domain::document::Library;
 use crate::domain::{GroundingDocument, Network, NetworkId, Post, ProfileId, Profile, TrendingTopic};
 use crate::error::Result;
-use crate::state::seed::{seed_documents, seed_networks, seed_posts, seed_profiles, seed_trending};
+use crate::state::seed::{seed_documents, seed_library, seed_networks, seed_posts, seed_profiles, seed_trending};
 use crate::storage::{Database, Vault};
 use std::collections::HashMap;
 
@@ -17,6 +18,8 @@ pub(super) struct StoreData {
     pub archived_authors: HashMap<ProfileId, Profile>,
     pub posts: Vec<Post>,
     pub documents: Vec<GroundingDocument>,
+    /// Subject vocabulary and collections of the vault catalogue.
+    pub library: Library,
     pub trending: Vec<TrendingTopic>,
 }
 
@@ -29,6 +32,7 @@ impl StoreData {
             archived_authors: db.load_archived_authors().unwrap_or_default(),
             posts: db.load_posts()?,
             documents: db.load_all_documents().unwrap_or_default(),
+            library: db.load_library().unwrap_or_default(),
             trending: db.load_trending()?,
         })
     }
@@ -43,6 +47,7 @@ impl StoreData {
             archived_authors: HashMap::new(),
             posts: seed_posts(),
             documents,
+            library: seed_library(),
             trending: seed_trending(),
         }
     }
@@ -53,6 +58,8 @@ impl StoreData {
         let results = self.networks.iter().map(|n| database.save_network(n))
             .chain(self.user_profiles.iter().map(|p| database.save_profile(p)))
             .chain(self.posts.iter().map(|p| database.save_post(p)))
+            .chain(self.library.subjects.iter().map(|s| database.save_subject(s)))
+            .chain(self.library.collections.iter().map(|c| database.save_collection(c)))
             .chain(self.documents.iter().map(|d| database.save_document(d)))
             .chain(self.trending.iter().map(|t| database.save_trending(t)));
         results.fold(Ok(()), |first, next| first.and(next))
@@ -78,6 +85,7 @@ impl AppState {
             posts: data.posts,
             index: Default::default(),
             documents: data.documents,
+            library: data.library,
             trending: data.trending,
             draft_text: String::new(),
             feed_day_filter: None,
@@ -85,8 +93,10 @@ impl AppState {
             credentials: settings.credentials,
             theme_tokens: settings.theme.tokens(),
             theme_settings: settings.theme,
+            preferences: settings.preferences,
             db,
             load_error: None,
+            media: Default::default(),
         }
     }
 }

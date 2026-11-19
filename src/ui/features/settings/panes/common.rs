@@ -40,33 +40,6 @@ pub(in crate::ui::features::settings) fn muted_note(theme: &ThemeTokens, text: i
     div().min_w_0().text_size(theme.font_size_hint).text_color(theme.text_muted).child(text.into())
 }
 
-/// Primary body-sized text line.
-pub(in crate::ui::features::settings) fn body_text(theme: &ThemeTokens, text: impl Into<SharedString>) -> Div {
-    div().min_w_0().text_size(theme.font_size_label).text_color(theme.text_primary).child(text.into())
-}
-
-/// Medium-weight title over a secondary subtitle in the given font family.
-pub(in crate::ui::features::settings) fn title_with_subtitle(
-    theme: &ThemeTokens,
-    title: impl IntoElement,
-    subtitle: impl Into<SharedString>,
-    subtitle_family: impl Into<SharedString>,
-) -> Div {
-    div()
-        .min_w_0()
-        .flex()
-        .flex_col()
-        .gap(theme.spacing_2xs)
-        .child(field_title(theme, title))
-        .child(
-            div()
-                .text_size(theme.font_size_hint)
-                .font_family(subtitle_family)
-                .text_color(theme.text_secondary)
-                .child(subtitle.into()),
-        )
-}
-
 /// Medium-weight primary field title.
 pub(in crate::ui::features::settings) fn field_title(theme: &ThemeTokens, text: impl IntoElement) -> Div {
     div()

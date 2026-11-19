@@ -1,6 +1,8 @@
 //! Engine metadata of a generated post: its mood, image prompt, the tools the agent used and
-//! the sources it drew on. Persisted as one JSON column; empty for human posts.
+//! the sources it drew on. Persisted as one JSON column; empty for typed human posts.
+//! Imported and captured posts record their origin and the passage they cite.
 
+use super::provenance::{PostOrigin, SourceLocator};
 use serde::{Deserialize, Serialize};
 
 /// Structured-output fields and tool provenance attached to an agent post.
@@ -17,12 +19,23 @@ pub struct PostExtras {
     /// Documents, posts, profiles and pages the tools returned.
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub sources: Vec<SourceRef>,
+    /// Set on imported and captured posts (captures make up the Inbox).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub origin: Option<PostOrigin>,
+    /// Images attached in the composer, with alt text (sb C3); `image_path` holds the first.
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub images: Vec<crate::domain::media::ImageAttachment>,
 }
 
 impl PostExtras {
     /// Whether nothing is recorded (the column then stores `{}`).
     pub fn is_empty(&self) -> bool {
         self == &Self::default()
+    }
+
+    /// Whether there is anything to show behind the post (the origin and images alone are not).
+    pub fn has_details(&self) -> bool {
+        Self { origin: None, images: Vec::new(), ..self.clone() } != Self::default()
     }
 
     /// Adds `source` unless an identical reference is already listed.
@@ -65,10 +78,19 @@ pub struct SourceRef {
     pub kind: SourceKind,
     pub id: String,
     pub title: String,
+    /// The cited place inside a document (imported passages).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub locator: Option<SourceLocator>,
 }
 
 impl SourceRef {
     pub fn new(kind: SourceKind, id: impl Into<String>, title: impl Into<String>) -> Self {
-        Self { kind, id: id.into(), title: title.into() }
+        Self { kind, id: id.into(), title: title.into(), locator: None }
+    }
+
+    /// The reference narrowed to a place inside the document.
+    #[must_use]
+    pub fn at(self, locator: SourceLocator) -> Self {
+        Self { locator: Some(locator), ..self }
     }
 }

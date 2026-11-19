@@ -15,6 +15,8 @@
 //! - [`ToggleCard`]: a switch card for a `ToggleField`.
 //! - [`ExplainerButton`]: a "?" hover card saying what a setting is and how it changes posts.
 //! - [`KeyboardHint`]: a keyboard icon whose hover card lists the forge's shortcuts.
+//! - [`suggest`]: example chips, the typical band under sliders, "Suggested" badges and the
+//!   "Why?" card (sb D1).
 
 mod card_grid;
 mod explainer;
@@ -30,7 +32,9 @@ mod option_card;
 mod option_grid;
 mod score_slider;
 mod slider_slot;
+pub mod suggest;
 mod text_input;
+mod text_input_slot;
 mod toggle_card;
 mod trait_grid;
 

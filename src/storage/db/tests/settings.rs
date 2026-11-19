@@ -113,6 +113,22 @@ fn legacy_preset_tokens_and_corrupt_rows_migrate_cleanly() {
 }
 
 #[test]
+fn appearance_rows_round_trip_and_old_settings_migrate() {
+    use crate::theme::settings::AppearanceMode;
+    let db = Database::in_memory().expect("in-memory db");
+    db.set_setting(SettingKey::ThemePresetId, "one-light").unwrap();
+    let migrated = db.load_theme_settings();
+    assert_eq!(migrated.appearance, AppearanceMode::Light, "a light palette keeps the app light");
+    assert_eq!(migrated.preferred.light, "one-light");
+    assert_eq!(migrated.preferred.dark, DEFAULT_PALETTE_ID);
+
+    let mut settings = migrated;
+    settings.set_appearance(AppearanceMode::System, crate::theme::PaletteMode::Dark);
+    db.save_theme_settings(&settings).expect("save");
+    assert_eq!(db.load_theme_settings(), settings);
+}
+
+#[test]
 fn dismissed_seeds_accumulate_and_tolerate_a_corrupt_row() {
     use crate::domain::ProfileId;
     let db = Database::in_memory().expect("in-memory db");

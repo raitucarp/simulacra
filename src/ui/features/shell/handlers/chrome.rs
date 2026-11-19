@@ -5,6 +5,7 @@ use crate::i18n::Language;
 use crate::state::NavigationTab;
 use crate::ui::features::feed::DEFAULT_FEED_WINDOW_SIZE;
 use crate::ui::features::sidebar_right::RightSidebarTab;
+use crate::ui::responsive::LayoutClass;
 use chrono::NaiveDate;
 use gpui_kit::*;
 
@@ -13,16 +14,23 @@ impl AppView {
     pub fn switch_language(&mut self, lang: Language, cx: &mut Context<Self>) {
         self.chrome.current_language = lang;
         crate::i18n::set_locale(lang);
+        self.state.set_language(lang);
         cx.notify();
     }
 
-    pub(crate) fn toggle_left_sidebar(&mut self, _: &mut Window, cx: &mut Context<Self>) {
-        self.chrome.is_left_sidebar_collapsed = !self.chrome.is_left_sidebar_collapsed;
+    /// Shows or hides the right panel: its drawer in the compact layout, else its column.
+    pub(crate) fn toggle_right_sidebar(&mut self, window: &mut Window, cx: &mut Context<Self>) {
+        let chrome = &mut self.chrome;
+        if LayoutClass::of_window(window, &self.theme).is_compact() {
+            chrome.is_right_drawer_open = !chrome.is_right_drawer_open;
+        } else {
+            chrome.is_right_sidebar_open = !chrome.is_right_sidebar_open;
+        }
         cx.notify();
     }
 
-    pub(crate) fn toggle_right_sidebar(&mut self, _: &mut Window, cx: &mut Context<Self>) {
-        self.chrome.is_right_sidebar_open = !self.chrome.is_right_sidebar_open;
+    pub(crate) fn close_right_drawer(&mut self, _: &mut Window, cx: &mut Context<Self>) {
+        self.chrome.is_right_drawer_open = false;
         cx.notify();
     }
 

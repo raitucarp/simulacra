@@ -177,6 +177,7 @@ fn live_prompts_carry_the_network_and_its_grounding_sources() {
     let context = PromptContext {
         network_name: "Epistemology & Mind".to_string(),
         grounding_docs: vec!["Meno".to_string(), "Theaetetus".to_string()],
+        ..PromptContext::default()
     };
     let prompt = DialecticEngine::system_prompt_in(&agent, &context);
     assert!(prompt.contains("Network: Epistemology & Mind"));

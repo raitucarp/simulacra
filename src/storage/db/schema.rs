@@ -91,6 +91,15 @@ impl Database {
     /// and performs safe, non-destructive column migrations.
     pub(super) fn init_schema(&self) -> Result<()> {
         self.conn.execute_batch(CREATE_TABLES).map_err(db_err)?;
+        self.create_catalogue_tables()?;
+        self.conn.execute_batch(super::embeddings_schema::CREATE_EMBEDDINGS).map_err(db_err)?;
+        self.conn.execute_batch(super::media_schema::CREATE_MEDIA_TABLES).map_err(db_err)?;
+        self.conn.execute_batch(super::review_schema::CREATE_REVIEW).map_err(db_err)?;
+        self.conn.execute_batch(super::learning_schema::CREATE_LEARNING).map_err(db_err)?; // sb E2
+        self.conn.execute_batch(super::journal_schema::CREATE_JOURNAL).map_err(db_err)?;
+        self.conn.execute_batch(super::arena_schema::CREATE_ARENA).map_err(db_err)?;
+        self.conn.execute_batch(super::thinking_schema::CREATE_THINKING_TABLES).map_err(db_err)?;
+        self.conn.execute_batch(super::data_schema::CREATE_DATA_TABLES).map_err(db_err)?; // sb F2
         self.migrate_posts_schema()?;
         self.conn
             .execute_batch(CREATE_MIGRATED_INDEXES)

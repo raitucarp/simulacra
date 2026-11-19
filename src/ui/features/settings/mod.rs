@@ -1,25 +1,37 @@
-//! Global settings modal dialog featuring vertical category tabs
-//! (General, AI Intelligence, Appearance, Knowledge Vault) with true Threads OLED styling.
+//! The settings window: a searchable category rail (General, Appearance, Reading & Writing,
+//! AI & Models, Embeddings, Images, Agents & Simulation, Learning, Import, Privacy & Data,
+//! Notifications, Shortcuts, Advanced) beside grouped cards of setting rows.
+//!
+//! - `catalog`: the pure information architecture, commands, search and palette sections.
+//! - `row` / `controls`: the setting row (label, description, control, reset to default).
+//! - `layout`: frame, rail, header, body and footer; `panes`: the hosted AI provider,
+//!   scheduler status and Appearance panes; `credentials`: the stored keys.
+//!
+//! Every preference is a typed `domain::preferences::SettingField`, saved as it changes;
+//! only the AI provider draft waits for "Save & apply".
 
 mod callbacks;
+pub mod catalog;
 mod consts;
-mod content;
+mod controls;
 mod credentials;
-mod general_props;
+mod layout;
 mod modal;
 mod panes;
+mod props;
 mod provider_grid;
-mod rail;
+mod row;
 mod tabs;
+mod text;
 
 pub use callbacks::{
-    ModalCloseCallback, SaveSettingsCallback, SelectPresetModelCallback, SelectProviderCallback,
-    SelectTabCallback, ToggleSchedulerCallback,
+    CommandAction, EditAction, PlainAction, RowAction, SelectPresetModelCallback, SelectProviderCallback, SettingsActions, TabAction,
 };
-pub use panes::{AppearanceEvent, AppearancePanel};
+pub use catalog::{settings_sections, SettingRow, SettingsCommand, SettingsSectionEntry, ThemeScale};
 pub use credentials::{CredentialEditorView, CredentialRowView, CredentialsPaneProps};
-pub use general_props::GeneralPaneProps;
 pub use modal::SettingsModal;
+pub use panes::{AppearanceEvent, AppearancePanel};
+pub use props::{AiPaneProps, PersonaOption, SchedulerStatus, SettingsData, SettingsInputs};
 pub use tabs::SettingsTab;
 
 #[cfg(test)]

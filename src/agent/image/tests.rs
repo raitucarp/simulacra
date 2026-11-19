@@ -112,3 +112,18 @@ async fn engine_errors_are_reported() {
     let error = generate(&job(ImageEngine::OpenAi, &server.url), "x").await.expect_err("no image");
     assert_eq!(error, "OpenAI returned no image");
 }
+
+#[tokio::test]
+async fn a_negative_prompt_reaches_stable_diffusion_only_when_given() {
+    let a1111 = MockServer::start(vec![MockReply::json(json!({ "images": [PNG_1X1_BASE64] })), MockReply::json(json!({ "images": [PNG_1X1_BASE64] }))]);
+    let job_a = job(ImageEngine::LocalSd { flavor: SdFlavor::A1111, url: a1111.url.clone() }, "");
+    assert!(generate_with(&job_a, "moss", Some("text, watermark")).await.is_ok());
+    assert!(generate(&job_a, "moss").await.is_ok());
+    let requests = a1111.requests();
+    assert_eq!(requests[0].json()["negative_prompt"], "text, watermark");
+    assert!(requests[1].json().get("negative_prompt").is_none());
+    let workflow = comfy::comfy_workflow("", "moss", Some("blur"), 64, 64);
+    assert_eq!(workflow["3"]["inputs"]["text"], "blur");
+    assert_eq!(comfy::comfy_workflow("", "moss", None, 64, 64)["3"]["inputs"]["text"], "blurry, low quality, watermark, text");
+    let _ = std::fs::remove_dir_all(&job_a.media_dir);
+}

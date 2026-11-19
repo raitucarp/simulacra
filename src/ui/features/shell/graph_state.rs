@@ -71,13 +71,13 @@ impl AppView {
     }
 
     /// Navigates to where a graph node lives: thread, vault, tag search or lab profile.
-    fn open_graph_node(&mut self, node: NodeRef, window: &mut Window, cx: &mut Context<Self>) {
+    pub(super) fn open_graph_node(&mut self, node: NodeRef, window: &mut Window, cx: &mut Context<Self>) {
         match node {
             NodeRef::Post(id) => {
                 self.select_post(id, window, cx);
                 self.select_nav(NavigationTab::Timeline, window, cx);
             }
-            NodeRef::Document(_) => self.select_nav(NavigationTab::Knowledge, window, cx),
+            NodeRef::Document(id) => self.open_vault_document(&id, window, cx),
             NodeRef::Hashtag(tag) => {
                 self.select_nav(NavigationTab::Timeline, window, cx);
                 self.search_topic(&tag, window, cx);

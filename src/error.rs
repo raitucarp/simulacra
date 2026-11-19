@@ -28,6 +28,10 @@ pub enum AppError {
     /// Database persistence failure.
     #[error("database error: {0}")]
     DatabaseError(String),
+
+    /// A document's title or catalogue record failed validation.
+    #[error("invalid document: {0}")]
+    InvalidDocument(String),
 }
 
 /// Convenience result type for Simulacra operations.

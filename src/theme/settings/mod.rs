@@ -1,9 +1,13 @@
 //! The user's persisted theme choice: active palette, color overrides, custom palettes,
-//! scales and font family. Tokens are always derived from this, never stored.
+//! scales, font family, appearance mode and the preferred palette of each mode. Tokens are
+//! always derived from this, never stored.
 
+mod appearance;
+mod appearance_mode;
 mod edit;
 mod migrate;
 
+pub use appearance_mode::{default_palette_for, AppearanceMode, PreferredThemes};
 pub use migrate::{migrate_legacy_tokens, LegacyTheme, MIGRATED_PALETTE_ID, MIGRATED_PALETTE_NAME};
 
 use crate::theme::derive::{derive_tokens, Density, RadiusScale, TypeScale, DEFAULT_FONT_FAMILY};
@@ -28,6 +32,10 @@ pub struct ThemeSettings {
     pub radius_scale: RadiusScale,
     /// Interface font family (UI, display and body roles).
     pub font_family: String,
+    /// Dark, Light or follow the system.
+    pub appearance: AppearanceMode,
+    /// The palette shown in each mode.
+    pub preferred: PreferredThemes,
 }
 
 impl Default for ThemeSettings {
@@ -40,6 +48,8 @@ impl Default for ThemeSettings {
             type_scale: TypeScale::default(),
             radius_scale: RadiusScale::default(),
             font_family: DEFAULT_FONT_FAMILY.to_string(),
+            appearance: AppearanceMode::default(),
+            preferred: PreferredThemes::default(),
         }
     }
 }

@@ -1,47 +1,29 @@
-//! General pane, engine section: the autonomous-scheduler switch, status and last LLM error.
+//! Agents & Simulation status row: the scheduler status pill, heartbeat, queue and the last
+//! model failure (the switch itself is the "Autonomous posting" row above it).
 
-use super::super::consts::SCHEDULER_SWITCH_ID;
-use super::super::general_props::GeneralPaneProps;
-use super::common::{body_text, card, muted_note, section, section_label, spaced_row};
+use super::super::props::SchedulerStatus;
+use super::common::muted_note;
 use crate::theme::ThemeTokens;
 use crate::ui::icons::LucideIcon;
-use gpui_kit::component::switch::Switch;
 use gpui_kit::component::Icon;
 use gpui_kit::{div, Div, FontWeight, ParentElement, Styled};
 use rust_i18n::t;
 
-/// Section 1: Autonomous Dialectic Engine (scheduler switch, queue status, last error).
-pub(super) fn render_engine_section(theme: &ThemeTokens, props: &mut GeneralPaneProps) -> Div {
-    let enabled = props.scheduler_enabled;
-    let queue = t!("scheduler.queue_status", running = props.running, queued = props.queued);
-    let hint = t!("scheduler.toggle_hint", seconds = props.heartbeat_seconds);
-    section(
-        spaced_row()
-            .child(section_label(theme, t!("scheduler.section_title")))
-            .child(render_status_badge(theme, enabled)),
-        card(theme)
-            .gap(theme.spacing_sm)
-            .child(
-                spaced_row()
-                    .child(body_text(theme, t!("scheduler.toggle_label")))
-                    .child(render_switch(theme, props)),
-            )
-            .child(muted_note(theme, hint))
-            .child(muted_note(theme, queue))
-            .children(props.last_error.as_ref().map(|err| render_last_error(theme, err))),
-            theme,
-    )
-}
-
-/// The controlled on/off switch; forwards the requested value to the owner.
-fn render_switch(theme: &ThemeTokens, props: &mut GeneralPaneProps) -> Switch {
-    let switch = Switch::new(SCHEDULER_SWITCH_ID)
-        .checked(props.scheduler_enabled)
-        .color(theme.accent_success);
-    match props.on_toggle_scheduler.take() {
-        Some(on_toggle) => switch.on_click(move |checked, window, cx| on_toggle(*checked, window, cx)),
-        None => switch,
-    }
+/// Status pill, heartbeat and queue lines, and the last error when there is one.
+pub(in crate::ui::features::settings) fn render_scheduler_status(theme: &ThemeTokens, status: &SchedulerStatus) -> Div {
+    let queue = t!("scheduler.queue_status", running = status.running, queued = status.queued);
+    let hint = t!("scheduler.toggle_hint", seconds = status.heartbeat_seconds);
+    div()
+        .w_full()
+        .py(theme.spacing_sm)
+        .flex()
+        .flex_col()
+        .items_start()
+        .gap(theme.spacing_xs)
+        .child(render_status_badge(theme, status.enabled))
+        .child(muted_note(theme, hint))
+        .child(muted_note(theme, queue))
+        .children(status.last_error.as_ref().map(|err| render_last_error(theme, err)))
 }
 
 /// Status pill: emerald "Scheduler On" or muted "Scheduler Off".
@@ -63,16 +45,10 @@ fn render_status_badge(theme: &ThemeTokens, enabled: bool) -> Div {
         .border(theme.border_width_hairline)
         .border_color(border)
         .child(Icon::new(icon).size(theme.icon_size_xs).text_color(fg))
-        .child(
-            div()
-                .text_size(theme.font_size_hint)
-                .font_weight(FontWeight::MEDIUM)
-                .text_color(fg)
-                .child(label.to_string()),
-        )
+        .child(div().text_size(theme.font_size_hint).font_weight(FontWeight::MEDIUM).text_color(fg).child(label.to_string()))
 }
 
-/// Danger-tinted line describing the most recent LLM failure.
+/// Danger-tinted line describing the most recent model failure.
 fn render_last_error(theme: &ThemeTokens, (provider, message): &(String, String)) -> Div {
     div()
         .text_size(theme.font_size_hint)

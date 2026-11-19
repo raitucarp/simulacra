@@ -4,7 +4,7 @@
 use super::{feed_entries, FeedTab};
 use crate::domain::{NetworkId, Post};
 use crate::state::AppState;
-use chrono::NaiveDate;
+use jiff::civil::Date;
 use std::rc::Rc;
 
 /// Everything a stream listing depends on.
@@ -14,7 +14,7 @@ struct StreamKey {
     len: usize,
     network: NetworkId,
     tab: FeedTab,
-    day: Option<NaiveDate>,
+    day: Option<Date>,
     query: String,
 }
 

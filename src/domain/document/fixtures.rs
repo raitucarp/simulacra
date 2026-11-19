@@ -3,7 +3,6 @@
 use super::record::{CatalogueRecord, Classification, Creator, CreatorRole, Discipline, DocumentKind, Period, Reading};
 use super::{CollectionId, GroundingDocument, Library, Subject, SubjectId};
 use crate::domain::NetworkId;
-use chrono::{TimeZone, Utc};
 
 pub const NET: &str = "net_test";
 pub const PHILOSOPHY: &str = "subj_philosophy";
@@ -37,9 +36,9 @@ fn record(kind: DocumentKind, author: &str, date: &str, subjects: &[&str]) -> Ca
     }
 }
 
-fn doc(id: &str, title: &str, day: u32, record: CatalogueRecord) -> GroundingDocument {
+fn doc(id: &str, title: &str, day: i8, record: CatalogueRecord) -> GroundingDocument {
     let mut doc = GroundingDocument::new(id, NetworkId::new(NET), title, format!("{title} body text about substance and words."));
-    doc.created_at = Utc.with_ymd_and_hms(2026, 1, day, 12, 0, 0).unwrap();
+    doc.created_at = crate::time::utc(2026, 1, day, 12, 0, 0);
     doc.with_record(record)
 }
 

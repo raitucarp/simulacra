@@ -2,7 +2,7 @@
 
 use super::parse_seed;
 use crate::domain::{NetworkId, Post, PostId, ProfileId};
-use chrono::{DateTime, Duration, Utc};
+use jiff::Timestamp;
 use serde::Deserialize;
 
 const POSTS_ASSET: &str = "posts.json";
@@ -39,8 +39,8 @@ struct PostSeed {
 }
 
 impl PostSeed {
-    fn into_post(self, now: DateTime<Utc>) -> Post {
-        let created_at = now - Duration::hours(self.age_hours);
+    fn into_post(self, now: Timestamp) -> Post {
+        let created_at = now - jiff::SignedDuration::from_hours(self.age_hours);
         Post {
             id: self.id,
             network_id: self.network_id,
@@ -65,7 +65,7 @@ impl PostSeed {
 }
 
 pub fn seed_posts() -> Vec<Post> {
-    let now = Utc::now();
+    let now = Timestamp::now();
     let seeds: Vec<PostSeed> = parse_seed(POSTS_ASSET, POSTS_JSON);
     seeds
         .into_iter()

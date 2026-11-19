@@ -5,7 +5,7 @@
 
 use super::summary::MoodMean;
 use crate::domain::journal::activity::{ActivityByDay, ActivityKind};
-use chrono::NaiveDate;
+use jiff::civil::Date;
 use std::collections::BTreeMap;
 
 /// Days with a check-in needed before an association is described.
@@ -92,7 +92,7 @@ fn strength_of(r: f64) -> Strength {
 }
 
 /// The association of `activity` with `measure` over the days with a check-in.
-pub fn associate(mood: &BTreeMap<NaiveDate, MoodMean>, activity: &ActivityByDay, kind: ActivityKind, measure: MoodMeasure) -> Association {
+pub fn associate(mood: &BTreeMap<Date, MoodMean>, activity: &ActivityByDay, kind: ActivityKind, measure: MoodMeasure) -> Association {
     let pairs: Vec<(f64, f64)> = mood.iter().map(|(day, mean)| (activity.get(day).map(|a| kind.of(a)).unwrap_or(0.0), measure.of(mean))).collect();
     let days = pairs.len();
     let r = (days >= MIN_DAYS).then(|| pearson(&pairs)).flatten();
@@ -105,6 +105,6 @@ pub fn associate(mood: &BTreeMap<NaiveDate, MoodMean>, activity: &ActivityByDay,
 }
 
 /// Every activity against every mood measure.
-pub fn associations(mood: &BTreeMap<NaiveDate, MoodMean>, activity: &ActivityByDay) -> Vec<Association> {
+pub fn associations(mood: &BTreeMap<Date, MoodMean>, activity: &ActivityByDay) -> Vec<Association> {
     ActivityKind::ALL.iter().flat_map(|kind| MoodMeasure::ALL.iter().map(move |measure| associate(mood, activity, *kind, *measure))).collect()
 }

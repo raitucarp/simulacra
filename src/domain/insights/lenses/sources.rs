@@ -10,7 +10,8 @@ use crate::domain::insights::report::EXCERPT_CHARS;
 use crate::domain::learning::concept::{concept_key, concepts_of, dedup};
 use crate::domain::review::{Anchor, ReviewItem, Subject};
 use crate::domain::NetworkId;
-use chrono::{DateTime, Duration, NaiveDate, Utc};
+use jiff::Timestamp;
+use jiff::civil::Date;
 
 /// Joins a document's title and description into one text to read.
 const TEXT_JOINT: &str = ". ";
@@ -21,7 +22,7 @@ pub struct ReviewSource {
     pub network: NetworkId,
     pub text: String,
     pub tags: Vec<String>,
-    pub created_at: DateTime<Utc>,
+    pub created_at: Timestamp,
 }
 
 /// A review item's own words: the learner's text and a quoted passage, or a map's title.
@@ -49,15 +50,15 @@ pub struct Source {
     pub kind: SourceKind,
     /// Post or document id (empty for review items, which open nothing).
     pub id: String,
-    pub day: NaiveDate,
+    pub day: Date,
     pub excerpt: String,
     pub concepts: Vec<String>,
 }
 
 /// Every source under `filter`, oldest first.
 pub fn all(input: &LensInput, analysed: &Analysed, filter: &InsightsFilter) -> Vec<Source> {
-    let since = filter.range.days().map(|days| input.now - Duration::days(days));
-    let admits = |network: &NetworkId, at: DateTime<Utc>| (filter.all_networks || network == &input.network) && since.is_none_or(|since| at >= since);
+    let since = filter.range.days().map(|days| input.now - crate::time::days(days));
+    let admits = |network: &NetworkId, at: Timestamp| (filter.all_networks || network == &input.network) && since.is_none_or(|since| at >= since);
     let posts = analysed.posts.iter().map(|post| Source { kind: SourceKind::Post, id: post.id.as_str().to_string(), day: analysed.day(post.created_at), excerpt: excerpt(&post.content, EXCERPT_CHARS), concepts: concepts_of(&post.content) });
     let documents = input.documents.iter().filter(|doc| admits(&doc.network_id, doc.created_at)).map(|doc| {
         let labels = doc.record.subjects.iter().filter_map(|id| input.subjects.iter().find(|(s, _)| s == id).map(|(_, label)| concept_key(label)));

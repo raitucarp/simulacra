@@ -28,7 +28,7 @@ impl Database {
     /// Stores one earlier version.
     pub fn save_revision(&self, revision: &Revision) -> Result<()> {
         let subject = &revision.subject;
-        let values = params![revision.id.as_str(), subject.kind(), subject.id(), revision.saved_at.to_rfc3339(), revision.title, revision.content, revision.record_json];
+        let values = params![revision.id.as_str(), subject.kind(), subject.id(), crate::time::rfc3339(revision.saved_at), revision.title, revision.content, revision.record_json];
         self.conn.execute(INSERT_REVISION, values).map_err(db_err)?;
         Ok(())
     }

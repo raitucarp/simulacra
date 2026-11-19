@@ -1,8 +1,8 @@
 use super::*;
-use chrono::TimeZone;
+use jiff::Timestamp;
 
-fn at(hour: u32) -> DateTime<Utc> {
-    Utc.with_ymd_and_hms(2026, 11, 18, hour, 0, 0).unwrap()
+fn at(hour: i8) -> Timestamp {
+    crate::time::utc(2026, 11, 18, hour, 0, 0)
 }
 
 fn rendered(ops: &[DiffOp]) -> String {

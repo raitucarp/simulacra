@@ -3,7 +3,8 @@
 
 use super::model::Credence;
 use crate::domain::document::keyed::keyed_enum;
-use chrono::{Days, Months, NaiveDate};
+use jiff::civil::Date;
+use jiff::Span;
 use std::cmp::Ordering;
 
 keyed_enum! {
@@ -16,19 +17,19 @@ keyed_enum! {
     }
 }
 
-const WEEK_DAYS: u64 = 7;
-const MONTH: u32 = 1;
-const QUARTER_MONTHS: u32 = 3;
-const YEAR_MONTHS: u32 = 12;
+const WEEK_DAYS: i64 = 7;
+const MONTH: i64 = 1;
+const QUARTER_MONTHS: i64 = 3;
+const YEAR_MONTHS: i64 = 12;
 
 impl DuePreset {
     /// The date this preset names, from `today` (the last valid day when a month is short).
-    pub fn date_from(self, today: NaiveDate) -> NaiveDate {
+    pub fn date_from(self, today: Date) -> Date {
         let later = match self {
-            Self::Week => today.checked_add_days(Days::new(WEEK_DAYS)),
-            Self::Month => today.checked_add_months(Months::new(MONTH)),
-            Self::Quarter => today.checked_add_months(Months::new(QUARTER_MONTHS)),
-            Self::Year => today.checked_add_months(Months::new(YEAR_MONTHS)),
+            Self::Week => today.checked_add(Span::new().days(WEEK_DAYS)).ok(),
+            Self::Month => today.checked_add(Span::new().months(MONTH)).ok(),
+            Self::Quarter => today.checked_add(Span::new().months(QUARTER_MONTHS)).ok(),
+            Self::Year => today.checked_add(Span::new().months(YEAR_MONTHS)).ok(),
         };
         later.unwrap_or(today)
     }
@@ -48,6 +49,6 @@ pub fn open_by_due(credences: &[Credence]) -> Vec<&Credence> {
 }
 
 /// Open predictions whose date has come by `today`, in due order.
-pub fn due_on(credences: &[Credence], today: NaiveDate) -> Vec<&Credence> {
+pub fn due_on(credences: &[Credence], today: Date) -> Vec<&Credence> {
     open_by_due(credences).into_iter().filter(|c| c.is_due(today)).collect()
 }

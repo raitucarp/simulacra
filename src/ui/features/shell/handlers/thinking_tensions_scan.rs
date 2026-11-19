@@ -90,7 +90,7 @@ impl AppView {
             return;
         }
         if let Some(vault) = self.state.db.as_ref() {
-            let _ = vault.save_tension_records(records.clone(), chrono::Utc::now().timestamp());
+            let _ = vault.save_tension_records(records.clone(), jiff::Timestamp::now().as_second());
         }
         self.thinking.tensions.extend(records.into_iter().map(|record| (record.pair.clone(), record)));
     }

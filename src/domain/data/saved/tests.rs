@@ -1,9 +1,9 @@
 use super::*;
 use crate::domain::review::connections::MapPoint;
-use chrono::TimeZone;
+use jiff::Timestamp;
 
-fn at(minute: u32) -> DateTime<Utc> {
-    Utc.with_ymd_and_hms(2026, 11, 18, 9, minute, 0).unwrap()
+fn at(minute: i8) -> Timestamp {
+    crate::time::utc(2026, 11, 18, 9, minute, 0)
 }
 
 fn shelf_id() -> CollectionId {
@@ -11,7 +11,7 @@ fn shelf_id() -> CollectionId {
 }
 
 fn entry(item: ItemRef, position: i64) -> CollectionEntry {
-    CollectionEntry { collection: shelf_id(), item, position, note: String::new(), added_at: at(position as u32) }
+    CollectionEntry { collection: shelf_id(), item, position, note: String::new(), added_at: at(position as i8) }
 }
 
 fn post(id: &str) -> ItemRef {

@@ -1,16 +1,17 @@
 use crate::domain::{NetworkId, PostId};
 use crate::state::store::AppState;
-use chrono::{DateTime, NaiveDate, TimeZone, Utc};
+use jiff::Timestamp;
+use jiff::civil::Date;
 
-fn date(y: i32, m: u32, d: u32) -> NaiveDate {
-    NaiveDate::from_ymd_opt(y, m, d).unwrap()
+fn date(y: i16, m: i8, d: i8) -> Date {
+    jiff::civil::date(y, m, d)
 }
 
-fn at(d: NaiveDate, hour: u32) -> DateTime<Utc> {
-    Utc.from_utc_datetime(&d.and_hms_opt(hour, 0, 0).unwrap())
+fn at(d: Date, hour: i8) -> Timestamp {
+    crate::time::at_utc(d, hour, 0, 0)
 }
 
-fn restamp(state: &mut AppState, id: &PostId, when: DateTime<Utc>) {
+fn restamp(state: &mut AppState, id: &PostId, when: Timestamp) {
     state.posts.iter_mut().find(|p| &p.id == id).unwrap().created_at = when;
 }
 
@@ -25,9 +26,9 @@ fn day_filter_keeps_only_that_days_posts() {
     restamp(&mut state, &late, at(day, 23));
     restamp(&mut state, &next, at(date(2001, 2, 4), 1));
 
-    let ids: Vec<PostId> = state.day_filtered_posts_in(day, "", Utc).map(|p| p.id.clone()).collect();
+    let ids: Vec<PostId> = state.day_filtered_posts_in(day, "", jiff::tz::TimeZone::UTC).map(|p| p.id.clone()).collect();
     assert_eq!(ids, vec![late.clone(), on_day.clone()], "newest first, like the stream");
-    let matching: Vec<PostId> = state.day_filtered_posts_in(day, "morning", Utc).map(|p| p.id.clone()).collect();
+    let matching: Vec<PostId> = state.day_filtered_posts_in(day, "morning", jiff::tz::TimeZone::UTC).map(|p| p.id.clone()).collect();
     assert_eq!(matching, vec![on_day]);
 }
 
@@ -38,7 +39,7 @@ fn day_filter_is_scoped_to_the_active_network() {
     let moved = state.submit_post("Belongs elsewhere").unwrap();
     restamp(&mut state, &moved, at(day, 12));
     state.posts.iter_mut().find(|p| p.id == moved).unwrap().network_id = NetworkId::new("net_elsewhere");
-    assert_eq!(state.day_filtered_posts_in(day, "", Utc).count(), 0);
+    assert_eq!(state.day_filtered_posts_in(day, "", jiff::tz::TimeZone::UTC).count(), 0);
 }
 
 #[test]
@@ -66,12 +67,11 @@ fn heatmap_counts_the_active_network_today() {
 #[test]
 fn grouped_feed_entries_respect_the_day_filter() {
     use crate::state::{feed_entries, FeedTab};
-    use chrono::Local;
     let mut state = AppState::new_in_memory();
     let day = date(2001, 2, 3);
     let id = state.submit_post("A thought from long ago").unwrap();
-    let local_noon = Local.from_local_datetime(&day.and_hms_opt(12, 0, 0).unwrap()).earliest().unwrap();
-    restamp(&mut state, &id, local_noon.with_timezone(&Utc));
+    let local_noon = day.at(12, 0, 0, 0).to_zoned_datetime(jiff::tz::TimeZone::system()).unwrap().timestamp();
+    restamp(&mut state, &id, local_noon);
     let unfiltered = feed_entries(&state, FeedTab::ForYou).len();
 
     state.toggle_feed_day_filter(day);

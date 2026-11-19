@@ -3,7 +3,6 @@ mod offline;
 mod served;
 
 use super::context::{DocumentSnapshot, PostSnapshot, ProfileSnapshot, ToolContext};
-use chrono::{TimeZone, Utc};
 
 /// Three documents: one on monism, one on attention, one on cooking.
 pub(super) fn documents() -> Vec<DocumentSnapshot> {
@@ -17,7 +16,7 @@ pub(super) fn documents() -> Vec<DocumentSnapshot> {
 
 /// A small network: two profiles, a root post with one reply and an unrelated post.
 pub(super) fn context() -> ToolContext {
-    let at = |minute| Utc.with_ymd_and_hms(2026, 11, 17, 9, minute, 0).single().expect("time");
+    let at = |minute| crate::time::utc(2026, 11, 17, 9, minute, 0);
     let post = |id: &str, handle: &str, content: &str, minute, reply_to: Option<&str>| PostSnapshot {
         id: id.into(),
         author_handle: handle.into(),

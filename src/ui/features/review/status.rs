@@ -3,10 +3,10 @@
 use crate::domain::review::day::days_between;
 use crate::domain::review::ReviewItem;
 use crate::ui::features::post::LearnStatus;
-use chrono::NaiveDate;
+use jiff::civil::Date;
 
 /// Where `item` stands on `today`: paused, new, due (or overdue), or due in some days.
-pub fn learn_status(item: &ReviewItem, today: NaiveDate) -> LearnStatus {
+pub fn learn_status(item: &ReviewItem, today: Date) -> LearnStatus {
     match (item.suspended, item.schedule.is_new(), item.schedule.due <= today) {
         (true, _, _) => LearnStatus::Suspended,
         (_, true, _) => LearnStatus::New,

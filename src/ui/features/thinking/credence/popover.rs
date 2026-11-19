@@ -28,7 +28,7 @@ pub fn summary(chip: &CredenceChip) -> String {
         None => t!("thinking.credence.summary", percent = chip.percent).to_string(),
     };
     match chip.due.filter(|_| chip.outcome.is_none()) {
-        Some(due) => format!("{base} · {}", t!("thinking.credence.due_on", date = due.format(DAY_FORMAT).to_string())),
+        Some(due) => format!("{base} · {}", t!("thinking.credence.due_on", date = due.strftime(DAY_FORMAT).to_string())),
         None => base,
     }
 }

@@ -5,7 +5,7 @@ use super::AppState;
 use crate::domain::data::history::{edited_post, is_real_edit, Revision, RevisionSubject};
 use crate::domain::{first_thread_problem, GroundingDocument, PostId};
 use crate::error::{AppError, Result};
-use chrono::Utc;
+use jiff::Timestamp;
 
 impl AppState {
     /// Replaces the text of the user's own post `id` (agents' posts are never edited),
@@ -21,7 +21,7 @@ impl AppState {
         if !is_real_edit(&post.content, content) {
             return Ok(None);
         }
-        let revision = Revision::of(RevisionSubject::Post(id.clone()), &post.content, Utc::now());
+        let revision = Revision::of(RevisionSubject::Post(id.clone()), &post.content, Timestamp::now());
         let edited = edited_post(&post, content);
         if let Some(ref db) = self.db {
             db.edit_post_content(edited.clone(), revision.clone())?;
@@ -44,7 +44,7 @@ impl AppState {
             return;
         }
         let record = serde_json::to_string(&before.record).unwrap_or_default();
-        let revision = Revision::of(RevisionSubject::Document(before.id.clone()), &before.content, Utc::now()).with_record(&before.title, record);
+        let revision = Revision::of(RevisionSubject::Document(before.id.clone()), &before.content, Timestamp::now()).with_record(&before.title, record);
         if let Some(ref db) = self.db {
             if let Err(err) = db.save_revision(revision) {
                 eprintln!("simulacra: document revision not queued: {err}");

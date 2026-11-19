@@ -36,7 +36,7 @@ impl Database {
     }
 
     pub fn save_bookmark(&self, bookmark: &Bookmark) -> Result<()> {
-        self.conn.execute(INSERT_BOOKMARK, params![bookmark.post.as_str(), bookmark.created_at.to_rfc3339()]).map_err(db_err)?;
+        self.conn.execute(INSERT_BOOKMARK, params![bookmark.post.as_str(), crate::time::rfc3339(bookmark.created_at)]).map_err(db_err)?;
         Ok(())
     }
 
@@ -49,7 +49,7 @@ impl Database {
     pub fn save_collection_entries(&self, entries: &[CollectionEntry]) -> Result<()> {
         let transaction = self.conn.unchecked_transaction().map_err(db_err)?;
         for e in entries {
-            let values = params![e.collection.as_str(), e.item.kind(), e.item.id(), e.position, e.note, e.added_at.to_rfc3339()];
+            let values = params![e.collection.as_str(), e.item.kind(), e.item.id(), e.position, e.note, crate::time::rfc3339(e.added_at)];
             self.conn.execute(UPSERT_ENTRY, values).map_err(db_err)?;
         }
         transaction.commit().map_err(db_err)

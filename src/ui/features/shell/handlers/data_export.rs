@@ -7,7 +7,8 @@ use crate::domain::data::export::{bundle_files, plan_export, ExportOptions, Expo
 use crate::domain::preferences::ToastKind;
 use crate::storage::data::write_bundle;
 use crate::ui::features::data::{tr, DataEvent, ExportDialog, ScopeKind};
-use chrono::{Duration, Local, NaiveDate, Utc};
+use jiff::Timestamp;
+use jiff::civil::Date;
 use gpui_kit::component::notification::Notification;
 use gpui_kit::component::WindowExt;
 use gpui_kit::*;
@@ -47,16 +48,16 @@ impl AppView {
     }
 
     fn fill_date_range(&mut self, days: i64, window: &mut Window, cx: &mut Context<Self>) {
-        let today = Local::now().date_naive();
-        let from = (today - Duration::days(days)).format(DATE_FORMAT).to_string();
+        let today = crate::time::local_now().date();
+        let from = (today - crate::time::days(days)).strftime(DATE_FORMAT).to_string();
         self.data.inputs.from.update(cx, |input, cx| input.set_value(from, window, cx));
-        self.data.inputs.to.update(cx, |input, cx| input.set_value(today.format(DATE_FORMAT).to_string(), window, cx));
+        self.data.inputs.to.update(cx, |input, cx| input.set_value(today.strftime(DATE_FORMAT).to_string(), window, cx));
         self.refresh_export_preview(cx);
     }
 
     /// The dialog's choice as export options, or why it is incomplete.
     fn export_options(&self, dialog: &ExportDialog, cx: &App) -> Result<ExportOptions, String> {
-        let date = |input: &Entity<gpui_kit::component::input::InputState>| NaiveDate::parse_from_str(input.read(cx).value().trim(), DATE_FORMAT).map_err(|_| tr("data.export.bad_date"));
+        let date = |input: &Entity<gpui_kit::component::input::InputState>| Date::strptime(DATE_FORMAT, input.read(cx).value().trim()).map_err(|_| tr("data.export.bad_date"));
         let scope = match dialog.scope {
             ScopeKind::Everything => ExportScope::Everything,
             ScopeKind::Collection => ExportScope::Collection(dialog.collection.clone().ok_or_else(|| tr("data.export.pick_collection"))?),
@@ -89,7 +90,7 @@ impl AppView {
             settings,
             journal: include_journal.then(|| self.journal.book.clone()),
             media_dir: self.state.media_dir(),
-            exported_at: Utc::now(),
+            exported_at: Timestamp::now(),
             app_version: env!("CARGO_PKG_VERSION").to_string(),
         }
     }
@@ -110,7 +111,7 @@ impl AppView {
     fn run_export(&mut self, window: &mut Window, cx: &mut Context<Self>) {
         let Some(options) = self.data.export.as_ref().and_then(|dialog| self.export_options(dialog, cx).ok()) else { return };
         let source = self.export_source(options.include_journal);
-        let name = Local::now().format(FILE_NAME_FORMAT).to_string();
+        let name = crate::time::local_now().strftime(FILE_NAME_FORMAT).to_string();
         let filter = tr("data.export.file_filter");
         cx.spawn_in(window, async move |view, cx| {
             let Some(file) = rfd::AsyncFileDialog::new().set_file_name(name).add_filter(filter, &ZIP_EXTENSIONS).save_file().await else { return };

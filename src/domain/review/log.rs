@@ -4,7 +4,8 @@ use super::item::{ItemId, ReviewItem};
 use super::grade::{Confidence, Grade};
 use super::schedule::{review, Phase, Policy};
 use crate::domain::NetworkId;
-use chrono::{DateTime, NaiveDate, Utc};
+use jiff::Timestamp;
+use jiff::civil::Date;
 use serde::{Deserialize, Serialize};
 
 /// How the card was practised.
@@ -56,8 +57,8 @@ pub struct ReviewEntry {
     #[serde(alias = "card_id")]
     pub item_id: ItemId,
     pub network_id: NetworkId,
-    pub reviewed_at: DateTime<Utc>,
-    pub day: NaiveDate,
+    pub reviewed_at: Timestamp,
+    pub day: Date,
     pub grade: Grade,
     pub mode: ReviewMode,
     #[serde(default)]
@@ -83,7 +84,7 @@ impl ReviewEntry {
 }
 
 /// `item` after `answer` on `today`, with its log entry.
-pub fn apply_answer(item: &ReviewItem, answer: &Answer, now: DateTime<Utc>, today: NaiveDate, policy: &Policy) -> (ReviewItem, ReviewEntry) {
+pub fn apply_answer(item: &ReviewItem, answer: &Answer, now: Timestamp, today: Date, policy: &Policy) -> (ReviewItem, ReviewEntry) {
     let schedule = review(&item.schedule, answer.grade, today, policy);
     let memory = schedule.memory.unwrap_or(super::fsrs::Memory { stability: 0.0, difficulty: 0.0 });
     let entry = ReviewEntry {

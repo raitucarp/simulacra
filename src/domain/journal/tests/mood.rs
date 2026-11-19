@@ -4,12 +4,12 @@ use crate::domain::journal::mood::correlate::{associate, associations, pearson, 
 use crate::domain::journal::mood::summary::{by_hour, by_weekday, daily_means, MoodMean};
 use crate::domain::journal::mood::{parse_tags, Affect, AffectRegion, CheckinDraft, MoodCheckin};
 use crate::domain::journal::RecordId;
-use chrono::{Duration, FixedOffset, TimeZone, Utc};
+use jiff::Timestamp;
+use jiff::tz::{Offset, TimeZone};
 use std::collections::BTreeMap;
 
-fn checkin(offset: i64, hour: u32, valence: f32, energy: u8) -> MoodCheckin {
-    let zone = FixedOffset::east_opt(7 * 3600).unwrap();
-    let at = zone.from_local_datetime(&day(offset).and_hms_opt(hour, 0, 0).unwrap()).unwrap();
+fn checkin(offset: i64, hour: i8, valence: f32, energy: u8) -> MoodCheckin {
+    let at = day(offset).at(hour, 0, 0, 0).to_zoned_datetime(TimeZone::fixed(Offset::constant(7))).unwrap();
     let draft = CheckinDraft { affect: Some(Affect::new(valence, 0.0)), energy, ..CheckinDraft::default() };
     draft.into_checkin(RecordId::new(format!("m{offset}-{hour}")), at, day(offset)).unwrap()
 }
@@ -43,9 +43,9 @@ fn grid_clicks_map_to_points_and_back() {
 
 #[test]
 fn drafts_need_a_point_and_clean_their_fields() {
-    assert!(CheckinDraft::default().into_checkin(RecordId::new("x"), Utc::now().fixed_offset(), day(0)).is_none());
+    assert!(CheckinDraft::default().into_checkin(RecordId::new("x"), Timestamp::now().to_zoned_datetime(jiff::tz::TimeZone::UTC), day(0)).is_none());
     let draft = CheckinDraft { affect: Some(Affect::new(0.2, 0.2)), energy: 9, sleep_hours: Some(30.0), tags: vec!["#Work, walk".into()], note: "  ok ".into(), wants_support: true };
-    let saved = draft.into_checkin(RecordId::new("x"), Utc::now().fixed_offset(), day(0)).unwrap();
+    let saved = draft.into_checkin(RecordId::new("x"), Timestamp::now().to_zoned_datetime(jiff::tz::TimeZone::UTC), day(0)).unwrap();
     assert_eq!((saved.energy, saved.sleep_hours, saved.note.as_str(), saved.wants_support), (5, Some(24.0), "ok", true));
     assert_eq!(saved.tags, ["work", "walk"]);
     assert_eq!(parse_tags("a a, #b"), ["a", "b"]);
@@ -56,7 +56,7 @@ fn summaries_by_day_weekday_and_hour() {
     let list = vec![checkin(0, 9, 0.5, 4), checkin(0, 21, -0.5, 2), checkin(7, 9, 1.0, 5)];
     let daily = daily_means(&list);
     assert_eq!(daily.get(&day(0)).map(|m| (m.valence, m.energy, m.count)), Some((0.0, 3.0, 2)));
-    let weekday = chrono::Datelike::weekday(&day(0)).num_days_from_monday() as usize;
+    let weekday = day(0).weekday().to_monday_zero_offset() as usize;
     assert_eq!(by_weekday(&list)[weekday].count, 3, "same weekday a week apart");
     let hours = by_hour(&list);
     assert_eq!((hours[9].count, hours[21].count, hours[12].count), (2, 1, 0), "local hours of the check-ins");
@@ -70,7 +70,7 @@ fn pearson_and_its_edge_cases() {
     assert_eq!(pearson(&[(1.0, 1.0)]), None);
 }
 
-fn mood_days(days: usize, valence: impl Fn(usize) -> f32) -> BTreeMap<chrono::NaiveDate, MoodMean> {
+fn mood_days(days: usize, valence: impl Fn(usize) -> f32) -> BTreeMap<jiff::civil::Date, MoodMean> {
     (0..days).map(|i| (day(i as i64), MoodMean { valence: valence(i), arousal: 0.0, energy: 3.0, count: 1 })).collect()
 }
 
@@ -101,8 +101,8 @@ fn associations_report_strength_direction_and_days() {
 
 #[test]
 fn review_sessions_split_on_long_gaps_and_days() {
-    let t0 = Utc.with_ymd_and_hms(2026, 3, 2, 8, 0, 0).unwrap();
-    let answers = [(day(0), t0), (day(0), t0 + Duration::minutes(5)), (day(0), t0 + Duration::minutes(50)), (day(1), t0 + Duration::days(1))];
+    let t0 = crate::time::utc(2026, 3, 2, 8, 0, 0);
+    let answers = [(day(0), t0), (day(0), t0 + jiff::SignedDuration::from_mins(5)), (day(0), t0 + jiff::SignedDuration::from_mins(50)), (day(1), t0 + crate::time::days(1))];
     let sessions = review_sessions_by_day(&answers);
     assert_eq!((sessions.get(&day(0)), sessions.get(&day(1))), (Some(&2), Some(&1)));
     let merged = activity_by_day(&BTreeMap::from([(day(0), 3)]), &sessions, &BTreeMap::from([(day(2), 25)]));

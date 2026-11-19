@@ -3,10 +3,10 @@ use crate::domain::review::connections::seed::{map_from_document, map_from_posts
 use crate::domain::review::connections::{MapEdge, MapPoint, MAX_POINTS};
 use crate::domain::{NetworkId, Post, PostId, ProfileId};
 
-fn post(id: &str, reply_to: Option<&str>, minute: u32, text: &str) -> Post {
+fn post(id: &str, reply_to: Option<&str>, minute: i8, text: &str) -> Post {
     let mut post = Post::create(PostId::new(id), NetworkId::new("n"), ProfileId::new("p"), text).unwrap();
     post.reply_to_id = reply_to.map(PostId::new);
-    post.created_at = chrono::TimeZone::with_ymd_and_hms(&chrono::Utc, 2026, 1, 1, 0, minute, 0).unwrap();
+    post.created_at = crate::time::utc(2026, 1, 1, 0, minute, 0);
     post
 }
 

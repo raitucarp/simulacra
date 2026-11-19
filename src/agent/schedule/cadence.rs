@@ -1,8 +1,8 @@
 //! Maps a [`PostingCadence`] to a minimum posting interval and the hours it may post in.
 
+use jiff::SignedDuration;
 use super::window::HourWindow;
 use crate::domain::agent_config::PostingCadence;
-use chrono::Duration;
 
 /// Minimum gap for the 15-minute cadences.
 const QUARTER_HOUR_MINUTES: i64 = 15;
@@ -38,8 +38,8 @@ pub struct CadenceRule {
 
 impl CadenceRule {
     /// Minimum interval between two posts.
-    pub fn min_interval(&self) -> Duration {
-        Duration::minutes(self.min_interval_minutes)
+    pub fn min_interval(&self) -> SignedDuration {
+        jiff::SignedDuration::from_mins(self.min_interval_minutes)
     }
 
     /// Whether the cadence permits posting at local `hour`.

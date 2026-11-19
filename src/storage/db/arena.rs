@@ -25,7 +25,7 @@ impl ArenaRecord for Debate {
         &self.id
     }
     fn updated(&self) -> String {
-        self.updated_at.to_rfc3339()
+        crate::time::rfc3339(self.updated_at)
     }
 }
 
@@ -35,7 +35,7 @@ impl ArenaRecord for Experiment {
         &self.id
     }
     fn updated(&self) -> String {
-        self.updated_at.to_rfc3339()
+        crate::time::rfc3339(self.updated_at)
     }
 }
 

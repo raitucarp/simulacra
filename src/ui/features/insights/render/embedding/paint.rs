@@ -31,7 +31,7 @@ pub fn map_colour(report: &InsightsReport, colouring: MapColour, i: usize, span:
     match colouring {
         MapColour::Kind => post.map_or(theme.text_muted, |p| kind_colour(p.kind, theme)),
         MapColour::Time => {
-            let at = post.map_or(span.0, |p| p.created_at.timestamp());
+            let at = post.map_or(span.0, |p| p.created_at.as_second());
             let share = (at - span.0) as f32 / (span.1 - span.0).max(1) as f32;
             mix(theme.border_strong, theme.accent_brand, share)
         }

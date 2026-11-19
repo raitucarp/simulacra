@@ -15,7 +15,7 @@ use crate::ui::features::command_palette::{excerpt, CommandId, PaletteTarget};
 use crate::ui::features::journal::data::LinkChoice;
 use crate::ui::features::journal::{JournalData, JournalTab, WikilinkPreviews};
 use crate::ui::icons::LucideIcon;
-use chrono::{Local, NaiveDate};
+use jiff::civil::Date;
 use gpui_kit::*;
 use rust_i18n::t;
 use std::collections::BTreeMap;
@@ -46,7 +46,7 @@ impl AppView {
         self.journal.panel.update(cx, |panel, cx| panel.open_entry(&id, window, cx));
     }
 
-    pub(in crate::ui::features::shell) fn journal_data(&self, today: NaiveDate) -> JournalData {
+    pub(in crate::ui::features::shell) fn journal_data(&self, today: Date) -> JournalData {
         JournalData {
             book: Rc::new(self.journal.book.clone()),
             today,
@@ -61,8 +61,8 @@ impl AppView {
     /// Posts the user wrote (any persona), review sessions and focus minutes per journal day.
     fn journal_activity(&self) -> ActivityByDay {
         let state = &self.state;
-        let posts = state.posts.iter().filter(|p| state.author_of(p).is_human_persona()).fold(BTreeMap::new(), |mut days: BTreeMap<NaiveDate, usize>, post| {
-            *days.entry(journal_day(&post.created_at.with_timezone(&Local))).or_default() += 1;
+        let posts = state.posts.iter().filter(|p| state.author_of(p).is_human_persona()).fold(BTreeMap::new(), |mut days: BTreeMap<Date, usize>, post| {
+            *days.entry(journal_day(&crate::time::local(post.created_at))).or_default() += 1;
             days
         });
         let answers: Vec<_> = self.review.deck.log.iter().map(|entry| (entry.day, entry.reviewed_at)).collect();

@@ -6,7 +6,7 @@ use super::rng::roll_percent;
 use super::window::HourWindow;
 use crate::domain::traits::Weekday;
 use crate::domain::{AgentConfig, Post, ProfileId};
-use chrono::{DateTime, Datelike, FixedOffset, Timelike, Utc};
+use jiff::{Timestamp, ZonedDateTime};
 use std::collections::HashMap;
 
 /// One agent as seen by the scheduler.
@@ -15,14 +15,14 @@ pub struct AgentSlot<'a> {
     pub id: &'a ProfileId,
     pub config: &'a AgentConfig,
     /// When the agent last posted or was last dispatched, if ever.
-    pub last_activity: Option<DateTime<Utc>>,
+    pub last_activity: Option<Timestamp>,
 }
 
 /// Inputs shared by every decision on one heartbeat tick.
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone)]
 pub struct ScheduleContext {
     /// Current local time (its hour drives the hour windows).
-    pub now: DateTime<FixedOffset>,
+    pub now: ZonedDateTime,
     /// Session seed for the spontaneity rolls.
     pub seed: u64,
     /// Monotonic heartbeat counter, so each tick rolls afresh.
@@ -59,7 +59,7 @@ pub fn evaluate(slot: &AgentSlot<'_>, ctx: &ScheduleContext) -> Decision {
     let Some(rule) = cadence_rule(cfg.posting_cadence) else {
         return Decision::ManualOnly;
     };
-    if !cfg.active_days.contains(Weekday::from_chrono(ctx.now.weekday())) {
+    if !cfg.active_days.contains(Weekday::from_jiff(ctx.now.weekday())) {
         return Decision::OffDay;
     }
     let hour = ctx.now.hour() as u8;
@@ -69,8 +69,8 @@ pub fn evaluate(slot: &AgentSlot<'_>, ctx: &ScheduleContext) -> Decision {
     if !rule.allows_hour(hour) {
         return Decision::OutsideCadenceSlot;
     }
-    let now_utc = ctx.now.with_timezone(&Utc);
-    if slot.last_activity.is_some_and(|last| now_utc - last < rule.min_interval()) {
+    let now_utc = ctx.now.timestamp();
+    if slot.last_activity.is_some_and(|last| now_utc.duration_since(last) < rule.min_interval()) {
         return Decision::CoolingDown;
     }
     let chance = posting_chance(cfg.spontaneity_rate, cfg.chronotype, hour);
@@ -91,8 +91,8 @@ pub fn due_agents(slots: &[AgentSlot<'_>], ctx: &ScheduleContext) -> Vec<Profile
 }
 
 /// The most recent post time of every author in `posts`.
-pub fn latest_activity(posts: &[Post]) -> HashMap<ProfileId, DateTime<Utc>> {
-    let mut latest: HashMap<ProfileId, DateTime<Utc>> = HashMap::new();
+pub fn latest_activity(posts: &[Post]) -> HashMap<ProfileId, Timestamp> {
+    let mut latest: HashMap<ProfileId, Timestamp> = HashMap::new();
     for post in posts {
         latest
             .entry(post.author_id.clone())

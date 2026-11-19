@@ -3,7 +3,7 @@
 
 use crate::domain::document::keyed::keyed_enum;
 use crate::domain::ProfileId;
-use chrono::{DateTime, Utc};
+use jiff::Timestamp;
 use serde::{Deserialize, Serialize};
 
 /// Percent points of the whole credence scale.
@@ -113,8 +113,8 @@ pub struct Belief {
     pub proposition: String,
     pub credence: Credence,
     pub source: BeliefSource,
-    pub created_at: DateTime<Utc>,
-    pub updated_at: DateTime<Utc>,
+    pub created_at: Timestamp,
+    pub updated_at: Timestamp,
     /// Pinned beliefs stay in the prompt and are changed only by the user.
     #[serde(default)]
     pub pinned: bool,
@@ -146,5 +146,5 @@ pub struct Revision {
     pub cause: RevisionCause,
     pub reason: String,
     pub source: BeliefSource,
-    pub at: DateTime<Utc>,
+    pub at: Timestamp,
 }

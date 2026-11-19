@@ -7,7 +7,7 @@ use crate::domain::data::saved::{collection_items, moved, CollectionEntry, ItemR
 use crate::domain::document::{CollectionId, DocumentId};
 use crate::state::semantic::hits::shortened;
 use crate::ui::features::data::{format_time, tr, DataEvent, SavedItemView, SavedTarget, SavedView, ShelfChip};
-use chrono::Utc;
+use jiff::Timestamp;
 use gpui_kit::*;
 
 /// Characters of a post shown as its row title.
@@ -28,7 +28,7 @@ impl AppView {
             SavedTarget::Collection(id) => {
                 let members: Vec<DocumentId> = self.state.documents.iter().filter(|d| d.record.collections.contains(id)).map(|d| DocumentId::new(d.id.clone())).collect();
                 let exists = |item: &ItemRef| matches!(item, ItemRef::Post(post) if self.state.get_post(post).is_some());
-                collection_items(id, &self.data.shelf.entries, &members, &exists, Utc::now())
+                collection_items(id, &self.data.shelf.entries, &members, &exists, Timestamp::now())
             }
         }
     }

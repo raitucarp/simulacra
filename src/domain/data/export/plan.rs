@@ -7,7 +7,8 @@ use super::{ExportOptions, ExportScope, ExportSource};
 use crate::domain::data::saved::ItemRef;
 use crate::domain::review::ReviewItem;
 use crate::domain::{GroundingDocument, Post, PostId, Profile};
-use chrono::{DateTime, Local, NaiveDate, Utc};
+use jiff::Timestamp;
+use jiff::civil::Date;
 use std::collections::HashSet;
 
 /// One thread of the export (only its selected posts).
@@ -42,11 +43,11 @@ pub struct ExportPlan {
     pub counts: Counts,
 }
 
-fn local_day(at: DateTime<Utc>) -> NaiveDate {
-    at.with_timezone(&Local).date_naive()
+fn local_day(at: Timestamp) -> Date {
+    crate::time::local_date(at)
 }
 
-fn in_range(at: DateTime<Utc>, from: NaiveDate, to: NaiveDate) -> bool {
+fn in_range(at: Timestamp, from: Date, to: Date) -> bool {
     (from..=to).contains(&local_day(at))
 }
 
@@ -124,7 +125,7 @@ pub fn plan_export(source: &ExportSource, options: &ExportOptions) -> ExportPlan
 
 /// The journal's records in scope, as a JSON object of four lists, and how many there are.
 pub(super) fn journal_in_scope(book: &crate::domain::journal::JournalBook, scope: &ExportScope) -> (serde_json::Value, usize) {
-    let keep = |day: NaiveDate| match scope {
+    let keep = |day: Date| match scope {
         ExportScope::DateRange { from, to } => (*from..=*to).contains(&day),
         _ => true,
     };

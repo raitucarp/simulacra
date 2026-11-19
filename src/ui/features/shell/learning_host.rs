@@ -8,7 +8,7 @@ use crate::domain::learning::weekly::{weekly_review_due, WeeklyReminder};
 use crate::domain::learning::LearningRecords;
 use crate::state::AppState;
 use crate::ui::features::review::learning::TutorStatus;
-use chrono::{Datelike, Local, NaiveDate, Timelike};
+use jiff::civil::Date;
 use gpui_kit::component::notification::Notification;
 use gpui_kit::component::WindowExt;
 use gpui_kit::*;
@@ -23,7 +23,7 @@ pub struct LearningHost {
     /// Bumped on every request; a finished request only lands if it is still the latest.
     pub(super) generation: u64,
     /// The day the weekly reminder was last shown on.
-    weekly_shown_on: Option<NaiveDate>,
+    weekly_shown_on: Option<Date>,
 }
 
 impl LearningHost {
@@ -44,11 +44,11 @@ impl LearningHost {
 
 impl AppView {
     /// On the weekly review's day, at or after its hour, once: a nudge to do it.
-    pub(super) fn remind_weekly_review(&mut self, today: NaiveDate, window: &mut Window, cx: &mut Context<Self>) {
+    pub(super) fn remind_weekly_review(&mut self, today: Date, window: &mut Window, cx: &mut Context<Self>) {
         let prefs = &self.state.preferences().learning;
         let reminder = WeeklyReminder { enabled: prefs.weekly_review_reminder, weekday: prefs.weekly_review_day.weekday(), hour: prefs.weekly_review_hour };
-        let now = Local::now();
-        if !weekly_review_due(&reminder, today, today.weekday(), now.hour(), self.review.learning.weekly_shown_on) {
+        let now = crate::time::local_now();
+        if !weekly_review_due(&reminder, today, today.weekday(), now.hour() as u32, self.review.learning.weekly_shown_on) {
             return;
         }
         self.review.learning.weekly_shown_on = Some(today);

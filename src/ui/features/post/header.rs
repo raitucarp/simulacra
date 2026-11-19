@@ -57,7 +57,7 @@ pub(crate) fn render_author_row(
 
 fn render_author_meta(post: &Post, author: &Profile, is_instant_repost: bool, theme: &ThemeTokens) -> Div {
     let is_agent = matches!(author.role, ProfileRole::Agent { .. });
-    let time_str = post.created_at.format(TIME_FORMAT).to_string();
+    let time_str = post.created_at.strftime(TIME_FORMAT).to_string();
     // Wraps between whole items (the badge and time move to a second line in a narrow
     // column); a name or handle too long for a line of its own ends in an ellipsis.
     div()

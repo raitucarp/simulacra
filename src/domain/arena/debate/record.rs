@@ -8,7 +8,7 @@ use super::schedule::schedule;
 use crate::domain::arena::ArenaId;
 use crate::domain::thinking::argument::ArgumentMap;
 use crate::domain::PostId;
-use chrono::{DateTime, Utc};
+use jiff::Timestamp;
 use serde::{Deserialize, Serialize};
 
 /// One debate.
@@ -26,8 +26,8 @@ pub struct Debate {
     /// The root post once published as a thread.
     #[serde(default)]
     pub published: Option<PostId>,
-    pub created_at: DateTime<Utc>,
-    pub updated_at: DateTime<Utc>,
+    pub created_at: Timestamp,
+    pub updated_at: Timestamp,
 }
 
 /// Where a debate stands.
@@ -42,7 +42,7 @@ pub enum Phase {
 
 impl Debate {
     /// A new debate of `setup`, with no turns yet.
-    pub fn new(id: ArenaId, setup: DebateSetup, now: DateTime<Utc>) -> Self {
+    pub fn new(id: ArenaId, setup: DebateSetup, now: Timestamp) -> Self {
         Self { id, setup, turns: Vec::new(), verdict: None, map: None, published: None, created_at: now, updated_at: now }
     }
 
@@ -60,7 +60,7 @@ impl Debate {
     }
 
     /// The debate with `text` spoken in its next slot (unchanged when no slot is left).
-    pub fn with_turn(&self, text: &str, now: DateTime<Utc>) -> Self {
+    pub fn with_turn(&self, text: &str, now: Timestamp) -> Self {
         let Phase::Speaking(slot) = self.phase() else { return self.clone() };
         let mut next = self.clone();
         next.turns.push(Turn { slot, text: text.trim().to_string(), at: now });
@@ -69,12 +69,12 @@ impl Debate {
     }
 
     /// The debate judged.
-    pub fn with_verdict(&self, verdict: Verdict, map: Option<ArgumentMap>, now: DateTime<Utc>) -> Self {
+    pub fn with_verdict(&self, verdict: Verdict, map: Option<ArgumentMap>, now: Timestamp) -> Self {
         Self { verdict: Some(verdict), map, updated_at: now, ..self.clone() }
     }
 
     /// The debate published as the thread rooted at `root`.
-    pub fn with_published(&self, root: PostId, now: DateTime<Utc>) -> Self {
+    pub fn with_published(&self, root: PostId, now: Timestamp) -> Self {
         Self { published: Some(root), updated_at: now, ..self.clone() }
     }
 

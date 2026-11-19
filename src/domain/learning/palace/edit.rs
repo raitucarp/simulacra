@@ -4,7 +4,7 @@
 use super::{Locus, Palace, PalaceId, PlacedTarget, Placement, Room, RoomKind, ROOM_ID_PREFIX};
 use crate::domain::learning::fresh_id;
 use crate::domain::NetworkId;
-use chrono::{DateTime, Utc};
+use jiff::Timestamp;
 
 /// Which way a room moves along the route.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -14,7 +14,7 @@ pub enum Direction {
 }
 
 /// A new palace with one room of `kind`.
-pub fn new_palace(id: PalaceId, network_id: NetworkId, name: &str, first: (RoomKind, &str), now: DateTime<Utc>) -> Palace {
+pub fn new_palace(id: PalaceId, network_id: NetworkId, name: &str, first: (RoomKind, &str), now: Timestamp) -> Palace {
     let palace = Palace { id, network_id, name: name.trim().to_string(), rooms: Vec::new(), created_at: now };
     with_room(palace, first.0, first.1)
 }

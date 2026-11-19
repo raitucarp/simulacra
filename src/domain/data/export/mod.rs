@@ -32,7 +32,8 @@ use crate::domain::document::{CollectionId, Library};
 use crate::domain::journal::JournalBook;
 use crate::domain::review::ReviewItem;
 use crate::domain::{GroundingDocument, Post, Profile, ProfileId};
-use chrono::{DateTime, NaiveDate, Utc};
+use jiff::Timestamp;
+use jiff::civil::Date;
 use std::collections::HashMap;
 use std::path::PathBuf;
 
@@ -48,7 +49,7 @@ pub enum ExportScope {
     /// The posts and documents of one collection.
     Collection(CollectionId),
     /// Posts, documents and journal records of these days (inclusive, local calendar).
-    DateRange { from: NaiveDate, to: NaiveDate },
+    DateRange { from: Date, to: Date },
     /// One persona's posts and the documents it added.
     Persona(ProfileId),
 }
@@ -92,7 +93,7 @@ pub struct ExportSource {
     pub settings: Vec<(String, String)>,
     pub journal: Option<JournalBook>,
     pub media_dir: PathBuf,
-    pub exported_at: DateTime<Utc>,
+    pub exported_at: Timestamp,
     pub app_version: String,
 }
 

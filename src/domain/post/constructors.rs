@@ -3,7 +3,7 @@
 use super::{Post, MAX_POST_CHARS};
 use crate::domain::ids::{NetworkId, PostId, ProfileId};
 use crate::error::{AppError, Result};
-use chrono::Utc;
+use jiff::Timestamp;
 
 impl Post {
     /// Backwards-compatible constructor for standard thought posts.
@@ -54,7 +54,7 @@ impl Post {
             network_id: network_id.into(),
             author_id: author.into(),
             content: trimmed.to_string(),
-            created_at: Utc::now(),
+            created_at: Timestamp::now(),
             likes: 0,
             is_liked: false,
             replies_count: 0,

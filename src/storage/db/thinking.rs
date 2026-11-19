@@ -8,7 +8,8 @@ use crate::domain::thinking::credence::{Credence, Outcome};
 use crate::domain::thinking::tensions::{TensionRecord, TensionStatus, Verdict};
 use crate::domain::PostId;
 use crate::error::Result;
-use chrono::{DateTime, NaiveDate, Utc};
+use jiff::Timestamp;
+use jiff::civil::Date;
 use rusqlite::{params, Row};
 
 const UPSERT_MAP: &str = "INSERT INTO argument_maps (root_id, map_json, updated_at) VALUES (?1, ?2, ?3)
@@ -54,8 +55,8 @@ impl Database {
     pub fn save_credence(&self, credence: &Credence) -> Result<()> {
         let c = credence;
         let values = params![
-            c.post_id.as_str(), c.percent, c.sentence, c.resolves_by.map(|d| d.format(DAY_FORMAT).to_string()), c.note,
-            c.outcome.map(Outcome::key), c.created_at.to_rfc3339(), c.resolved_at.map(|at| at.to_rfc3339())
+            c.post_id.as_str(), c.percent, c.sentence, c.resolves_by.map(|d| d.strftime(DAY_FORMAT).to_string()), c.note,
+            c.outcome.map(Outcome::key), crate::time::rfc3339(c.created_at), c.resolved_at.map(|at| crate::time::rfc3339(at))
         ];
         self.conn.execute(UPSERT_CREDENCE, values).map_err(db_err).map(|_| ())
     }
@@ -77,8 +78,8 @@ impl Database {
     }
 }
 
-fn instant(text: Option<String>) -> Option<DateTime<Utc>> {
-    DateTime::parse_from_rfc3339(&text?).ok().map(|at| at.with_timezone(&Utc))
+fn instant(text: Option<String>) -> Option<Timestamp> {
+    crate::time::parse_timestamp(&text?)
 }
 
 /// A credence row (`None` when its percent or creation time is unreadable).
@@ -91,7 +92,7 @@ fn credence_from_row(row: &Row<'_>) -> rusqlite::Result<Option<Credence>> {
         post_id: PostId::from(row.get::<_, String>(0).unwrap_or_default().as_str()),
         percent,
         sentence: row.get(2).unwrap_or_default(),
-        resolves_by: due.and_then(|d| NaiveDate::parse_from_str(&d, DAY_FORMAT).ok()),
+        resolves_by: due.and_then(|d| Date::strptime(DAY_FORMAT, &d).ok()),
         note: row.get(4).unwrap_or_default(),
         outcome: outcome.and_then(|key| Outcome::from_key(&key)),
         created_at,

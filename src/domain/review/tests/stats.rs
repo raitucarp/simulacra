@@ -3,12 +3,12 @@ use crate::domain::review::log::{apply_answer, Answer, ReviewEntry, ReviewMode};
 use crate::domain::review::schedule::{Phase, Policy};
 use crate::domain::review::stats::*;
 use crate::domain::review::{Confidence, Grade};
-use chrono::Utc;
+use jiff::Timestamp;
 
 fn entry(on: i64, grade: Grade, phase_before: Phase) -> ReviewEntry {
     let card = basic("c", "q", "a");
     let answer = Answer { item_id: card.id.clone(), grade, mode: ReviewMode::Review, confidence: None, correct: None };
-    let (_, entry) = apply_answer(&card, &answer, Utc::now(), day(on), &Policy::with_retention_percent(90));
+    let (_, entry) = apply_answer(&card, &answer, Timestamp::now(), day(on), &Policy::with_retention_percent(90));
     ReviewEntry { phase_before, ..entry }
 }
 

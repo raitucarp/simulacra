@@ -1,7 +1,6 @@
 //! Month labels above the heatmap's week columns.
 
 use super::{ActivityHeatmap, HEATMAP_WEEKS};
-use chrono::Datelike;
 
 /// Minimum number of week columns between two month labels so they never overlap.
 const MIN_LABEL_GAP_WEEKS: usize = 3;
@@ -12,7 +11,7 @@ pub struct MonthLabel {
     /// Week column index.
     pub week: usize,
     /// Calendar month, `1..=12`.
-    pub month: u32,
+    pub month: i8,
 }
 
 impl ActivityHeatmap {

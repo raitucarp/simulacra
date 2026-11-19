@@ -1,7 +1,6 @@
 use super::intake::{first_sentence, legacy_record, validate_in_year, FieldProblem};
 use super::record::*;
 use super::{chunk_count, GroundingDocument, NewDocument};
-use chrono::{TimeZone, Utc};
 
 #[test]
 fn legacy_documents_become_notes_with_a_derived_record() {
@@ -25,7 +24,7 @@ fn a_legacy_record_serialized_before_catalogues_existed_still_loads() {
 #[test]
 fn new_documents_are_trimmed_and_get_their_derived_fields() {
     let record = CatalogueRecord { kind: DocumentKind::WebPage, ..Default::default() };
-    let added = Utc.with_ymd_and_hms(2026, 3, 1, 9, 0, 0).unwrap();
+    let added = crate::time::utc(2026, 3, 1, 9, 0, 0);
     let doc = NewDocument::new("net", "  Notes  ", " one two three ")
         .with_record(record)
         .from_origin(OriginKind::Url, "https://example.org/a")

@@ -24,7 +24,7 @@ impl AppView {
         let (queue, batch) = std::mem::take(&mut self.semantic.queue).take_batch(BATCH_SIZE);
         self.semantic.queue = queue;
         let Some(batch) = batch else { return };
-        let today = chrono::Local::now().format(DAY_FORMAT).to_string();
+        let today = crate::time::local_now().strftime(DAY_FORMAT).to_string();
         let tokens = estimate_tokens(batch.jobs.iter().map(|job| job.text.as_str()));
         let limits = BudgetLimits::from_prefs(&self.state.preferences().ai);
         if !self.semantic.usage.allows(limits, &today, 1, tokens) {

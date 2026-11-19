@@ -2,7 +2,7 @@ use super::*;
 use crate::domain::data::history::{version_list, Revision, RevisionSubject};
 use crate::domain::document::CollectionId;
 use crate::domain::PostId;
-use chrono::Utc;
+use jiff::Timestamp;
 use std::collections::{HashMap, HashSet};
 use std::rc::Rc;
 
@@ -12,7 +12,7 @@ fn subject() -> RevisionSubject {
 
 #[test]
 fn history_opens_on_the_latest_earlier_version() {
-    let revisions = vec![Revision::of(subject(), "before", Utc::now())];
+    let revisions = vec![Revision::of(subject(), "before", Timestamp::now())];
     let sheet = HistorySheet::new(subject(), "title".into(), version_list("", "after", &revisions));
     assert_eq!(sheet.selected, 1);
     let alone = HistorySheet::new(subject(), "title".into(), version_list("", "only", &[]));

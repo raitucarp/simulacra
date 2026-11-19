@@ -2,7 +2,7 @@
 //! key backs off only the agents that use it.
 
 use super::FailureGate;
-use chrono::{DateTime, Utc};
+use jiff::Timestamp;
 use std::collections::HashMap;
 
 /// Failure gates by engine key.
@@ -23,7 +23,7 @@ impl FailureGates {
     }
 
     /// Whether agents on `key` may generate at `now`.
-    pub fn allows_generation(&self, key: &str, now: DateTime<Utc>) -> bool {
+    pub fn allows_generation(&self, key: &str, now: Timestamp) -> bool {
         self.gates.get(key).is_none_or(|gate| gate.allows_generation(now))
     }
 

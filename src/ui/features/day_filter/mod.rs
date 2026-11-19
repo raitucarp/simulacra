@@ -3,7 +3,7 @@
 
 use crate::theme::ThemeTokens;
 use crate::ui::icons::LucideIcon;
-use chrono::{Datelike, NaiveDate};
+use jiff::civil::Date;
 use gpui_kit::component::Icon;
 use gpui_kit::*;
 use crate::i18n::plural_key;
@@ -25,18 +25,18 @@ const DAY_POSTS_KEY: &str = "cadence.day_posts";
 pub type ClearDayFilterCallback = Box<dyn Fn(&mut Window, &mut App) + 'static>;
 
 /// Abbreviated, localized name of month `month` (`1..=12`).
-pub fn month_label(month: u32) -> String {
+pub fn month_label(month: i8) -> String {
     let idx = (month as usize).saturating_sub(1).min(MONTH_KEYS.len() - 1);
     t!(MONTH_KEYS[idx]).to_string()
 }
 
 /// Localized short date, e.g. "Nov 16, 2026".
-pub fn format_day(date: NaiveDate) -> String {
+pub fn format_day(date: Date) -> String {
     t!("cadence.date", month = month_label(date.month()), day = date.day(), year = date.year()).to_string()
 }
 
 /// "N posts on <date>" summary for a heatmap day.
-pub fn day_summary(date: NaiveDate, count: u32) -> String {
+pub fn day_summary(date: Date, count: u32) -> String {
     let date = format_day(date);
     if count == 0 {
         return t!("cadence.day_none", date = date).to_string();
@@ -47,7 +47,7 @@ pub fn day_summary(date: NaiveDate, count: u32) -> String {
 }
 
 /// Dismissible chip announcing the active day filter.
-pub fn render_day_filter_chip(day: NaiveDate, on_clear: ClearDayFilterCallback, theme: &ThemeTokens) -> impl IntoElement {
+pub fn render_day_filter_chip(day: Date, on_clear: ClearDayFilterCallback, theme: &ThemeTokens) -> impl IntoElement {
     let clear = div()
         .id(CLEAR_ID)
         .w(theme.chip_dismiss_size)

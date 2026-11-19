@@ -1,39 +1,41 @@
 use super::levels::quantile_levels;
 use super::*;
 use crate::domain::{NetworkId, Post, Profile};
-use chrono::{DateTime, Datelike, FixedOffset, NaiveDate, TimeZone, Utc, Weekday};
+use jiff::Timestamp;
+use jiff::civil::{Date, Weekday};
+use jiff::tz::Offset;
 
 const NET: &str = "net_a";
 const OTHER_NET: &str = "net_b";
 
-fn date(y: i32, m: u32, d: u32) -> NaiveDate {
-    NaiveDate::from_ymd_opt(y, m, d).unwrap()
+fn date(y: i16, m: i8, d: i8) -> Date {
+    jiff::civil::date(y, m, d)
 }
 
 /// Monday, 16 November 2026.
-fn today() -> NaiveDate {
+fn today() -> Date {
     date(2026, 11, 16)
 }
 
-fn post_at(id: &str, net: &str, at: DateTime<Utc>) -> Post {
+fn post_at(id: &str, net: &str, at: Timestamp) -> Post {
     let author = Profile::new_primary("u", "User", "@user");
     let mut post = Post::create(id, net, author, "thought").unwrap();
     post.created_at = at;
     post
 }
 
-fn noon(d: NaiveDate) -> DateTime<Utc> {
-    Utc.from_utc_datetime(&d.and_hms_opt(12, 0, 0).unwrap())
+fn noon(d: Date) -> Timestamp {
+    crate::time::at_utc(d, 12, 0, 0)
 }
 
 fn build(posts: &[Post]) -> ActivityHeatmap {
-    ActivityHeatmap::build(posts, &NetworkId::new(NET), today(), &Utc)
+    ActivityHeatmap::build(posts, &NetworkId::new(NET), today(), &jiff::tz::TimeZone::UTC)
 }
 
 #[test]
 fn grid_is_weekday_aligned_and_ends_today() {
     let heatmap = build(&[]);
-    assert_eq!(heatmap.start().weekday(), Weekday::Sun);
+    assert_eq!(heatmap.start().weekday(), Weekday::Sunday);
     assert_eq!(heatmap.date_at(HEATMAP_WEEKS - 1, 1), today());
     assert_eq!(weekday_row(today()), 1);
     assert!(heatmap.day(HEATMAP_WEEKS - 1, 2).is_none(), "future days are hidden");
@@ -77,9 +79,9 @@ fn only_the_requested_network_is_counted() {
 
 #[test]
 fn buckets_use_the_local_calendar_date() {
-    let early_utc = Utc.from_utc_datetime(&today().and_hms_opt(2, 0, 0).unwrap());
+    let early_utc = crate::time::at_utc(today(), 2, 0, 0);
     let posts = vec![post_at("late_evening", NET, early_utc)];
-    let west = FixedOffset::west_opt(5 * 3600).unwrap();
+    let west = jiff::tz::TimeZone::fixed(Offset::constant(-5));
     let heatmap = ActivityHeatmap::build(&posts, &NetworkId::new(NET), today(), &west);
     assert_eq!(heatmap.count_on(date(2026, 11, 15)), 1);
     assert_eq!(heatmap.count_on(today()), 0);

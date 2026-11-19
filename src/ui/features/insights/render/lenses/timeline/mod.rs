@@ -19,7 +19,7 @@ use crate::ui::features::insights::chart::summary::summary_line;
 use crate::ui::features::insights::chart::tooltip::{floating_tooltip, tooltip_card};
 use crate::ui::features::insights::panel::InsightsPanel;
 use crate::ui::icons::LucideIcon;
-use chrono::{Datelike, NaiveDate};
+use jiff::civil::Date;
 use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::{Icon, Sizable};
 use gpui_kit::*;
@@ -38,7 +38,7 @@ const AXIS_LABEL_SPAN: f32 = 2.0;
 const TIP_HEIGHT: f32 = 64.0;
 
 /// A short label for the period starting on `day`.
-fn period_label(day: NaiveDate, days: usize) -> String {
+fn period_label(day: Date, days: usize) -> String {
     if days >= MONTHLY_DAYS { format!("{} {}", month_label(day.month()), day.year()) } else { format!("{} {}", month_label(day.month()), day.day()) }
 }
 

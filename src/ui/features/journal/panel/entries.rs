@@ -8,7 +8,7 @@ use crate::domain::journal::{JournalEntry, RecordId};
 use crate::ui::features::journal::events::JournalEvent;
 use crate::ui::features::journal::tab::JournalTab;
 use crate::ui::features::journal::text::tr;
-use chrono::Utc;
+use jiff::Timestamp;
 use gpui_kit::{Context, Window};
 
 impl JournalPanel {
@@ -48,7 +48,7 @@ impl JournalPanel {
         if body.trim().is_empty() {
             return;
         }
-        let now = Utc::now();
+        let now = Timestamp::now();
         let existing = editor.id.as_ref().and_then(|id| find(&self.data.book.entries, id)).cloned();
         let entry = match existing {
             Some(entry) => entry.edited(body, now),

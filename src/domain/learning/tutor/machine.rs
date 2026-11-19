@@ -9,7 +9,7 @@ use super::summary::TutorSummary;
 use super::{Assessment, Exchange, SessionId, SocraticMove, TutorPhase, TutorQuestion, TutorSession, TutorSource};
 use crate::domain::learning::bloom::BloomLevel;
 use crate::domain::NetworkId;
-use chrono::{DateTime, Utc};
+use jiff::Timestamp;
 
 /// Longest answer kept, in characters.
 pub const MAX_ANSWER_CHARS: usize = 2_000;
@@ -25,17 +25,17 @@ pub struct SessionStart {
 
 impl TutorSession {
     /// A new session waiting for its opening question.
-    pub fn start(id: SessionId, start: SessionStart, now: DateTime<Utc>) -> Self {
+    pub fn start(id: SessionId, start: SessionStart, now: Timestamp) -> Self {
         let SessionStart { network_id, source, title, material } = start;
         Self { id, network_id, source, title, material, exchanges: Vec::new(), closing: false, summary: None, items_created: 0, created_at: now, updated_at: now }
     }
 
-    fn touched(self, now: DateTime<Utc>) -> Self {
+    fn touched(self, now: Timestamp) -> Self {
         Self { updated_at: now, ..self }
     }
 
     /// The opening question: it elicits the learner's model at the bottom rung.
-    pub fn with_opening(self, question: &str, now: DateTime<Utc>) -> Self {
+    pub fn with_opening(self, question: &str, now: Timestamp) -> Self {
         if self.phase() != TutorPhase::NeedsQuestion {
             return self;
         }
@@ -46,7 +46,7 @@ impl TutorSession {
     }
 
     /// The learner's answer to the open question (blank answers are ignored).
-    pub fn with_answer(self, answer: &str, now: DateTime<Utc>) -> Self {
+    pub fn with_answer(self, answer: &str, now: Timestamp) -> Self {
         let text: String = answer.trim().chars().take(MAX_ANSWER_CHARS).collect();
         if self.phase() != TutorPhase::AwaitingAnswer || text.is_empty() {
             return self;
@@ -60,7 +60,7 @@ impl TutorSession {
 
     /// The assessment of the last answer and the next question, placed by the level rules;
     /// the session closes instead when it has done its work.
-    pub fn with_turn(self, reply: TurnReply, now: DateTime<Utc>) -> Self {
+    pub fn with_turn(self, reply: TurnReply, now: Timestamp) -> Self {
         if self.phase() != TutorPhase::NeedsAssessment {
             return self;
         }
@@ -81,7 +81,7 @@ impl TutorSession {
 
     /// Closes the dialogue: an unanswered question is dropped and the summary is due. A
     /// session without a single answer has nothing to sum up and stays as it is.
-    pub fn close(self, now: DateTime<Utc>) -> Self {
+    pub fn close(self, now: Timestamp) -> Self {
         let exchanges: Vec<Exchange> = self.exchanges.iter().filter(|exchange| exchange.answer.is_some()).cloned().collect();
         if self.summary.is_some() || exchanges.is_empty() {
             return self;
@@ -90,7 +90,7 @@ impl TutorSession {
     }
 
     /// The closing summary.
-    pub fn with_summary(self, summary: TutorSummary, now: DateTime<Utc>) -> Self {
+    pub fn with_summary(self, summary: TutorSummary, now: Timestamp) -> Self {
         if self.phase() != TutorPhase::NeedsSummary {
             return self;
         }
@@ -98,7 +98,7 @@ impl TutorSession {
     }
 
     /// `count` review items were made from the summary's gaps.
-    pub fn with_items_created(self, count: usize, now: DateTime<Utc>) -> Self {
+    pub fn with_items_created(self, count: usize, now: Timestamp) -> Self {
         Self { items_created: self.items_created + count, ..self }.touched(now)
     }
 }

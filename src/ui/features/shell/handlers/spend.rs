@@ -20,7 +20,7 @@ pub(in crate::ui::features::shell) type SpendResume = Box<dyn FnOnce(&mut AppVie
 
 /// Today's budget key.
 pub(in crate::ui::features::shell) fn budget_day() -> String {
-    chrono::Local::now().format(DAY_FORMAT).to_string()
+    crate::time::local_now().strftime(DAY_FORMAT).to_string()
 }
 
 impl AppView {

@@ -2,7 +2,7 @@
 //! and by hour of the day, each with its number of check-ins.
 
 use super::MoodCheckin;
-use chrono::{Datelike, NaiveDate, Timelike};
+use jiff::civil::Date;
 use std::collections::BTreeMap;
 
 pub const WEEKDAYS: usize = 7;
@@ -27,8 +27,8 @@ fn mean_of<'a>(checkins: impl Iterator<Item = &'a MoodCheckin>) -> MoodMean {
 }
 
 /// The mean of each journal day with check-ins.
-pub fn daily_means(checkins: &[MoodCheckin]) -> BTreeMap<NaiveDate, MoodMean> {
-    let days: BTreeMap<NaiveDate, Vec<&MoodCheckin>> = checkins.iter().fold(BTreeMap::new(), |mut days, c| {
+pub fn daily_means(checkins: &[MoodCheckin]) -> BTreeMap<Date, MoodMean> {
+    let days: BTreeMap<Date, Vec<&MoodCheckin>> = checkins.iter().fold(BTreeMap::new(), |mut days, c| {
         days.entry(c.day).or_insert_with(Vec::new).push(c);
         days
     });
@@ -37,7 +37,7 @@ pub fn daily_means(checkins: &[MoodCheckin]) -> BTreeMap<NaiveDate, MoodMean> {
 
 /// Means by weekday, Monday first (local time of each check-in).
 pub fn by_weekday(checkins: &[MoodCheckin]) -> [MoodMean; WEEKDAYS] {
-    std::array::from_fn(|weekday| mean_of(checkins.iter().filter(|c| c.at.weekday().num_days_from_monday() as usize == weekday)))
+    std::array::from_fn(|weekday| mean_of(checkins.iter().filter(|c| c.at.weekday().to_monday_zero_offset() as usize == weekday)))
 }
 
 /// Means by local hour of the day.
@@ -48,6 +48,6 @@ pub fn by_hour(checkins: &[MoodCheckin]) -> [MoodMean; HOURS] {
 /// Check-ins newest first.
 pub fn newest_checkins(checkins: &[MoodCheckin]) -> Vec<&MoodCheckin> {
     let mut sorted: Vec<&MoodCheckin> = checkins.iter().collect();
-    sorted.sort_by_key(|a| std::cmp::Reverse(a.at));
+    sorted.sort_by_key(|a| std::cmp::Reverse(a.at.timestamp()));
     sorted
 }

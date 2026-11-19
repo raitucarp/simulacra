@@ -4,12 +4,12 @@
 use super::FeedTab;
 use crate::domain::{Post, PostId};
 use crate::state::AppState;
-use chrono::{DateTime, Utc};
+use jiff::Timestamp;
 use std::cmp::Reverse;
 use std::collections::HashMap;
 
 /// Recency of `posts[idx]`: creation time, ties broken by store order (lower index = newer).
-type Recency = (DateTime<Utc>, Reverse<usize>);
+type Recency = (Timestamp, Reverse<usize>);
 
 fn recency(posts: &[&Post], idx: usize) -> Recency {
     (posts[idx].created_at, Reverse(idx))

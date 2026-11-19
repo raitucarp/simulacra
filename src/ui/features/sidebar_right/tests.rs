@@ -41,7 +41,7 @@ fn month_labels_never_overlap_and_the_later_month_wins() {
         .filter(|label| label.week < HEATMAP_WEEKS)
         .collect();
     let placed = geometry.place_labels(&labels, px(26.0));
-    let months: Vec<u32> = placed.iter().map(|label| label.month).collect();
+    let months: Vec<i8> = placed.iter().map(|label| label.month).collect();
     assert!(!months.contains(&11), "the crowded leading month is dropped: {months:?}");
     assert!(months.contains(&12) && months.contains(&1));
     for pair in placed.windows(2) {

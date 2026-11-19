@@ -13,7 +13,7 @@ use crate::domain::review::{ItemId, ReviewItem, Subject};
 use crate::domain::{Post, PostId};
 use crate::state::NavigationTab;
 use crate::ui::features::review::{PickerMode, PostView};
-use chrono::Utc;
+use jiff::Timestamp;
 use gpui_kit::*;
 use rust_i18n::t;
 use std::collections::HashMap;
@@ -74,7 +74,7 @@ impl AppView {
         let item = match existing {
             Some(item) => ReviewItem { subject: Subject::Connections { map }, ..item },
             None => {
-                let context = NewItemContext { network_id: self.state.active_network_id.clone(), created_at: Utc::now(), today: review_today() };
+                let context = NewItemContext { network_id: self.state.active_network_id.clone(), created_at: Timestamp::now(), today: review_today() };
                 new_map_item(map, &context, ItemId::generate())
             }
         };

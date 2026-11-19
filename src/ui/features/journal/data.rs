@@ -7,7 +7,7 @@ use crate::domain::journal::JournalBook;
 use crate::domain::post::{tokenize_post_body, BodyToken};
 use crate::domain::{Post, Profile};
 use crate::ui::features::post::PostLookup;
-use chrono::NaiveDate;
+use jiff::civil::Date;
 use std::collections::HashMap;
 use std::path::PathBuf;
 use std::rc::Rc;
@@ -45,7 +45,7 @@ pub struct LinkChoice {
 #[derive(Debug, Clone, PartialEq)]
 pub struct JournalData {
     pub book: Rc<JournalBook>,
-    pub today: NaiveDate,
+    pub today: Date,
     pub activity: Rc<ActivityByDay>,
     pub wikilinks: Rc<WikilinkPreviews>,
     /// The open thought and a few vault documents, for linking a focus session.
@@ -56,7 +56,7 @@ pub struct JournalData {
 }
 
 impl JournalData {
-    pub fn empty(today: NaiveDate) -> Self {
+    pub fn empty(today: Date) -> Self {
         Self {
             book: Rc::default(),
             today,

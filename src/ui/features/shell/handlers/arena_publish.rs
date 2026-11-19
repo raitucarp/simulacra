@@ -20,7 +20,7 @@ impl AppView {
     /// Splits `parts` to the post limit, publishes them as one thread and opens it.
     fn publish_parts(&mut self, parts: &[ThreadPart], window: &mut Window, cx: &mut Context<Self>) -> Option<PostId> {
         let limit = effective_post_limit(self.state.preferences().writing.post_length_limit);
-        let posts = build_thread(&split_parts(parts, limit), &self.state.active_network_id, chrono::Utc::now(), AppState::fresh_post_id).ok()?;
+        let posts = build_thread(&split_parts(parts, limit), &self.state.active_network_id, jiff::Timestamp::now(), AppState::fresh_post_id).ok()?;
         let root = posts.first()?.id.clone();
         if let Err(err) = self.state.publish_batch(posts) {
             self.report_storage_failure(&err, window, cx);
@@ -50,7 +50,7 @@ impl AppView {
         let root = ThreadPart { author, text: Self::motion_post(&debate) };
         let parts = debate_parts(&debate, root, self.verdict_part(&debate));
         if let Some(root) = self.publish_parts(&parts, window, cx) {
-            self.save_debate(debate.with_published(root, chrono::Utc::now()));
+            self.save_debate(debate.with_published(root, jiff::Timestamp::now()));
             self.arena_changed(cx);
         }
     }

@@ -4,6 +4,7 @@ mod arena;
 mod catalogue;
 mod embeddings;
 mod learning;
+mod legacy_time;
 mod journal;
 mod location;
 mod media;

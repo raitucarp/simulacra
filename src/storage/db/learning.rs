@@ -4,7 +4,7 @@
 use super::{collect_rows, db_err, Database};
 use crate::domain::learning::{Goal, LearningRecords, Palace, TutorSession};
 use crate::error::Result;
-use chrono::Utc;
+use jiff::Timestamp;
 use rusqlite::params;
 use serde::de::DeserializeOwned;
 use serde::Serialize;
@@ -57,7 +57,7 @@ impl Database {
 
     fn save_record<T: Serialize>(&self, table: Table, id: &str, network: &str, record: &T) -> Result<()> {
         let json = serde_json::to_string(record).map_err(db_err)?;
-        self.conn.execute(table.upsert(), params![id, network, Utc::now().to_rfc3339(), json]).map_err(db_err).map(|_| ())
+        self.conn.execute(table.upsert(), params![id, network, crate::time::rfc3339(Timestamp::now()), json]).map_err(db_err).map(|_| ())
     }
 
     fn delete_record(&self, table: Table, id: &str) -> Result<()> {

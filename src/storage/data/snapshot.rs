@@ -34,7 +34,7 @@ pub fn pre_restore_path(db_path: &Path) -> PathBuf {
     if !plain.exists() {
         return plain;
     }
-    with_suffix(db_path, &format!(".{}{PRE_RESTORE_SUFFIX}", chrono::Local::now().format(STAMP_FORMAT)))
+    with_suffix(db_path, &format!(".{}{PRE_RESTORE_SUFFIX}", crate::time::local_now().strftime(STAMP_FORMAT)))
 }
 
 fn snapshot_error(err: SnapshotError) -> AppError {

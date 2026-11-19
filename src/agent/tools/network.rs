@@ -69,7 +69,7 @@ fn list<'a>(posts: impl Iterator<Item = &'a PostSnapshot>, limit: usize) -> Tool
 
 fn format_post(post: &PostSnapshot) -> String {
     let reply = post.reply_to.as_ref().map(|id| format!(" (reply to {id})")).unwrap_or_default();
-    let when = post.created_at.format("%Y-%m-%d %H:%M");
+    let when = post.created_at.strftime("%Y-%m-%d %H:%M");
     format!("[{}] {} {} at {when}{reply}: {}", post.id, post.author_name, post.author_handle, post.content)
 }
 

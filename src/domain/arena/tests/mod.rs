@@ -30,6 +30,6 @@ pub(super) fn setup(format: DebateFormat, debaters: &[(&str, Side)], rounds: u8)
     }
 }
 
-pub(super) fn now() -> chrono::DateTime<chrono::Utc> {
-    chrono::DateTime::parse_from_rfc3339("2026-11-18T10:00:00Z").expect("time").with_timezone(&chrono::Utc)
+pub(super) fn now() -> jiff::Timestamp {
+    "2026-11-18T10:00:00Z".parse::<jiff::Timestamp>().expect("time")
 }

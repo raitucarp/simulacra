@@ -1,13 +1,12 @@
 use super::*;
 use crate::domain::{Post, PostId, Profile};
 use crate::state::{AppState, ThreadAnchor, ThreadDraft};
-use chrono::{Duration, TimeZone, Utc};
 
 /// A post created `minute` minutes after a fixed epoch, optionally replying to `parent`.
 fn post_at(id: &str, minute: i64, parent: Option<&str>) -> Post {
     let author = Profile::new_primary("u1", "Architect", "@arch");
     let mut post = Post::create(id, "net", author, id).expect("valid post");
-    post.created_at = Utc.with_ymd_and_hms(2026, 1, 1, 0, 0, 0).unwrap() + Duration::minutes(minute);
+    post.created_at = crate::time::utc(2026, 1, 1, 0, 0, 0) + jiff::SignedDuration::from_mins(minute);
     post.reply_to_id = parent.map(PostId::new);
     post
 }

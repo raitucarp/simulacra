@@ -16,7 +16,7 @@ pub use provenance::{fnv1a, text_checksum, OriginKind, Provenance};
 pub use reading::{Reading, ReadingStatus, PROGRESS_COMPLETE};
 
 use super::ids::{CollectionId, SubjectId};
-use chrono::{DateTime, Utc};
+use jiff::Timestamp;
 use serde::{Deserialize, Serialize};
 
 /// Physical or textual size of a work.
@@ -67,7 +67,7 @@ pub struct CatalogueRecord {
     pub reading: Reading,
     /// Last edit of the record (none until it is edited).
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub updated_at: Option<DateTime<Utc>>,
+    pub updated_at: Option<Timestamp>,
 }
 
 /// Marker of a negative (before the common era) year.

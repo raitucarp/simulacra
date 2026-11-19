@@ -2,16 +2,16 @@ use super::*;
 use crate::domain::data::saved::ItemRef;
 use crate::domain::document::Collection;
 use crate::domain::{NetworkId, PostId};
-use chrono::TimeZone;
+use jiff::Timestamp;
 use serde_json::json;
 
 const NET: &str = "net_main";
 
-fn at(day: u32) -> DateTime<Utc> {
-    Utc.with_ymd_and_hms(2026, 11, day, 12, 0, 0).unwrap()
+fn at(day: i8) -> Timestamp {
+    crate::time::utc(2026, 11, day, 12, 0, 0)
 }
 
-fn post(id: &str, author: &str, text: &str, day: u32, reply_to: Option<&str>) -> Post {
+fn post(id: &str, author: &str, text: &str, day: i8, reply_to: Option<&str>) -> Post {
     let mut post = Post::create(id, NET, author, text).unwrap();
     post.created_at = at(day);
     post.reply_to_id = reply_to.map(PostId::new);
@@ -84,7 +84,7 @@ fn collection_scope_takes_its_posts_and_filed_documents() {
 #[test]
 fn date_range_is_inclusive() {
     let source = source();
-    let day = |d: u32| at(d).with_timezone(&chrono::Local).date_naive();
+    let day = |d: i8| crate::time::local_date(at(d));
     let plan = plan_export(&source, &options(ExportScope::DateRange { from: day(3), to: day(5) }));
     assert_eq!(plan.counts.posts, 2);
     assert_eq!(plan.counts.documents, 1);
@@ -125,7 +125,7 @@ fn bundle_lists_manifest_threads_documents_agents_and_settings() {
 #[test]
 fn journal_is_left_out_unless_ticked() {
     let mut source = source();
-    let day = at(3).with_timezone(&chrono::Local).date_naive();
+    let day = crate::time::local_date(at(3));
     let entry = crate::domain::journal::JournalEntry::new(crate::domain::journal::RecordId::new("j1"), day, at(3), "private thought");
     source.journal = Some(crate::domain::journal::JournalBook { entries: vec![entry], ..Default::default() });
     let off = bundle_files(&plan_export(&source, &options(ExportScope::Everything)), &source);

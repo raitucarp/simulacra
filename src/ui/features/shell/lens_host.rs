@@ -14,7 +14,7 @@ use crate::domain::insights::lenses::{review_source, LensInput, LensReport};
 use crate::domain::readability::ReadingLanguage;
 use crate::state::NavigationTab;
 use crate::ui::features::insights::PageState;
-use chrono::{Local, Utc};
+use jiff::Timestamp;
 use gpui_kit::*;
 use std::collections::VecDeque;
 use std::rc::Rc;
@@ -66,8 +66,8 @@ impl AppView {
             review: self.review.deck.items.iter().filter(|item| !item.retired).map(review_source).collect(),
             vectors,
             language: self.reading_language(),
-            offset: Some(*Local::now().offset()),
-            ..LensInput::empty(state.active_network_id.clone(), Utc::now())
+            offset: Some(crate::time::local_now().offset()),
+            ..LensInput::empty(state.active_network_id.clone(), Timestamp::now())
         }
     }
 

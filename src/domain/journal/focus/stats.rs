@@ -2,7 +2,7 @@
 //! and minutes per day.
 
 use super::{FocusSession, Outcome};
-use chrono::NaiveDate;
+use jiff::civil::Date;
 use std::collections::BTreeMap;
 
 /// Totals over the log.
@@ -32,7 +32,7 @@ pub fn totals(sessions: &[FocusSession]) -> FocusTotals {
 }
 
 /// Focus minutes per journal day.
-pub fn minutes_by_day(sessions: &[FocusSession]) -> BTreeMap<NaiveDate, u32> {
+pub fn minutes_by_day(sessions: &[FocusSession]) -> BTreeMap<Date, u32> {
     sessions.iter().fold(BTreeMap::new(), |mut days, s| {
         *days.entry(s.day).or_default() += s.focused_minutes;
         days

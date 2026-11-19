@@ -9,7 +9,7 @@ use crate::agent::runtime::GLOBAL_GATE_KEY;
 use crate::agent::schedule::FailureCause;
 use crate::agent::LlmFailure;
 use crate::domain::preferences::ToastKind;
-use chrono::Utc;
+use jiff::Timestamp;
 use crate::error::AppError;
 use gpui_kit::component::notification::Notification;
 use gpui_kit::component::WindowExt;
@@ -30,7 +30,7 @@ impl AppView {
     /// shows it as a toast (provider + short message) only the first time its cause is seen
     /// since the last reset.
     pub(super) fn report_llm_failure(&mut self, gate_key: &str, failure: LlmFailure, window: &mut Window, cx: &mut Context<Self>) {
-        let first = self.scheduler.failures.gate_mut(gate_key).record_failure(FailureCause::of(&failure), Utc::now());
+        let first = self.scheduler.failures.gate_mut(gate_key).record_failure(FailureCause::of(&failure), Timestamp::now());
         if first {
             eprintln!("simulacra: {} request failed: {}", failure.provider, failure.message);
             let provider = failure.provider.to_string();

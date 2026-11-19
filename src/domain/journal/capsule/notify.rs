@@ -2,10 +2,10 @@
 //! The shell shows one notice for them and marks them announced, so each is told once.
 
 use super::{CapsuleState, TimeCapsule};
-use chrono::NaiveDate;
+use jiff::civil::Date;
 
 /// Capsules ready on `today` that were never announced.
-pub fn to_announce(capsules: &[TimeCapsule], today: NaiveDate) -> Vec<&TimeCapsule> {
+pub fn to_announce(capsules: &[TimeCapsule], today: Date) -> Vec<&TimeCapsule> {
     capsules.iter().filter(|c| !c.announced && c.state(today) == CapsuleState::Ready).collect()
 }
 
@@ -16,7 +16,7 @@ pub fn announced(capsule: &TimeCapsule) -> TimeCapsule {
 
 /// Capsules in the list order of the Capsules tab: ready first, then sealed by opening day,
 /// then opened (most recently opened first).
-pub fn in_list_order(capsules: &[TimeCapsule], today: NaiveDate) -> Vec<&TimeCapsule> {
+pub fn in_list_order(capsules: &[TimeCapsule], today: Date) -> Vec<&TimeCapsule> {
     let rank = |c: &TimeCapsule| match c.state(today) {
         CapsuleState::Ready => 0,
         CapsuleState::Sealed { .. } => 1,

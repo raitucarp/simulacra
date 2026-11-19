@@ -6,7 +6,7 @@ use crate::state::NavigationTab;
 use crate::ui::features::feed::DEFAULT_FEED_WINDOW_SIZE;
 use crate::ui::features::sidebar_right::RightSidebarTab;
 use crate::ui::responsive::LayoutClass;
-use chrono::NaiveDate;
+use jiff::civil::Date;
 use gpui_kit::*;
 
 impl AppView {
@@ -85,7 +85,7 @@ impl AppView {
 
     /// Narrows the feed to a cadence heatmap day (showing the timeline), or clears the
     /// filter when the same day is clicked again.
-    pub(crate) fn toggle_calendar_day(&mut self, day: NaiveDate, _: &mut Window, cx: &mut Context<Self>) {
+    pub(crate) fn toggle_calendar_day(&mut self, day: Date, _: &mut Window, cx: &mut Context<Self>) {
         if self.state.toggle_feed_day_filter(day).is_some() {
             self.state.active_tab = NavigationTab::Timeline;
         }

@@ -91,7 +91,7 @@ impl VaultPanel {
             .cursor_pointer()
             .hover(move |s| s.border_color(border))
             .on_click(cx.listener(move |_, _, _, cx| cx.emit(VaultEvent::OpenPost(post.clone()))))
-            .child(meta_line(vec![link.author.clone(), link.created_at.format(BACKLINK_DATE_FORMAT).to_string()], theme))
+            .child(meta_line(vec![link.author.clone(), link.created_at.strftime(BACKLINK_DATE_FORMAT).to_string()], theme))
             .child(div().text_size(theme.font_size_sm).line_height(relative(theme.line_height_body)).text_color(theme.text_primary).child(link.excerpt))
             .into_any_element()
     }

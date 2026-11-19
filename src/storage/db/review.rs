@@ -62,7 +62,7 @@ impl Database {
     /// Appends one answer to the log.
     pub fn append_review_entry(&self, entry: &ReviewEntry) -> Result<()> {
         let values = params![
-            entry.item_id.as_str(), entry.network_id.as_str(), entry.reviewed_at.to_rfc3339(), entry.day.to_string(),
+            entry.item_id.as_str(), entry.network_id.as_str(), crate::time::rfc3339(entry.reviewed_at), entry.day.to_string(),
             entry.grade.key(), entry.mode.key(), json(entry)?
         ];
         self.conn.execute(INSERT_ENTRY, values).map_err(db_err)?;
@@ -77,7 +77,7 @@ pub(super) fn upsert_review_items(conn: &Connection, items: &[ReviewItem]) -> Re
         let anchor_key = item.subject.anchor().map(|anchor| anchor.key()).unwrap_or_default();
         let values = params![
             item.id.as_str(), item.network_id.as_str(), item.subject.key(), anchor_key, json(&item.subject)?, json(&item.tags)?,
-            item.created_at.to_rfc3339(), json(&item.schedule)?, item.schedule.due.to_string(), sql_bool(item.suspended), sql_bool(item.retired)
+            crate::time::rfc3339(item.created_at), json(&item.schedule)?, item.schedule.due.to_string(), sql_bool(item.suspended), sql_bool(item.retired)
         ];
         stmt.execute(values).map_err(db_err)?;
     }

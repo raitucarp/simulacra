@@ -16,7 +16,7 @@ use super::evidence::{collect_evidence, ConceptEvidence, GapInputs};
 use super::{DimensionScores, GapEntry, GapReport, DIMENSIONS};
 use crate::domain::learning::bloom::BloomLevel;
 use crate::domain::review::day::days_between;
-use chrono::NaiveDate;
+use jiff::civil::Date;
 
 /// Weights in [`super::GapDimension::ALL`] order; they sum to one.
 pub const DIMENSION_WEIGHTS: DimensionScores = [0.20, 0.15, 0.25, 0.20, 0.10, 0.10];
@@ -35,12 +35,12 @@ pub fn saturate(count: usize, half: f64) -> f64 {
 }
 
 /// Recency on `today` of a concept last touched on `last`.
-pub fn recency(last: Option<NaiveDate>, today: NaiveDate) -> f64 {
+pub fn recency(last: Option<Date>, today: Date) -> f64 {
     last.map_or(0.0, |day| HALF.powf(f64::from(days_between(day, today)) / RECENCY_HALF_LIFE_DAYS))
 }
 
 /// The six scores of `evidence` on `today`.
-pub fn dimension_scores(evidence: &ConceptEvidence, today: NaiveDate) -> DimensionScores {
+pub fn dimension_scores(evidence: &ConceptEvidence, today: Date) -> DimensionScores {
     [
         saturate(evidence.own_posts, WRITING_HALF),
         saturate(evidence.sources, SOURCES_HALF),

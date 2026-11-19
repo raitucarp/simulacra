@@ -62,7 +62,7 @@ impl AppView {
     /// Keeps `map` for its thread and queues it for the vault.
     fn save_argument_map(&mut self, map: ArgumentMap) {
         if let Some(vault) = self.state.db.as_ref() {
-            let _ = vault.save_argument_map(map.clone(), chrono::Utc::now().timestamp());
+            let _ = vault.save_argument_map(map.clone(), jiff::Timestamp::now().as_second());
         }
         self.thinking.maps.insert(map.root.clone(), map);
     }

@@ -4,14 +4,15 @@
 use super::{Goal, GoalId, GoalLink, GoalTask, TASK_ID_PREFIX};
 use crate::domain::learning::fresh_id;
 use crate::domain::NetworkId;
-use chrono::{DateTime, NaiveDate, Utc};
+use jiff::Timestamp;
+use jiff::civil::Date;
 
 /// What the learner typed for a new goal.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub struct GoalDraft {
     pub title: String,
     pub why: String,
-    pub target: NaiveDate,
+    pub target: Date,
 }
 
 /// Why a goal draft cannot be saved.
@@ -33,7 +34,7 @@ impl GoalProblem {
 }
 
 /// The first problem of `draft` started `today`, if any.
-pub fn goal_problem(draft: &GoalDraft, today: NaiveDate) -> Option<GoalProblem> {
+pub fn goal_problem(draft: &GoalDraft, today: Date) -> Option<GoalProblem> {
     match (draft.title.trim().is_empty(), draft.target <= today) {
         (true, _) => Some(GoalProblem::MissingTitle),
         (false, true) => Some(GoalProblem::TargetInPast),
@@ -42,7 +43,7 @@ pub fn goal_problem(draft: &GoalDraft, today: NaiveDate) -> Option<GoalProblem> 
 }
 
 /// The new goal of `draft` (none while it has a problem).
-pub fn new_goal(draft: &GoalDraft, network_id: NetworkId, id: GoalId, today: NaiveDate, now: DateTime<Utc>) -> Option<Goal> {
+pub fn new_goal(draft: &GoalDraft, network_id: NetworkId, id: GoalId, today: Date, now: Timestamp) -> Option<Goal> {
     goal_problem(draft, today).is_none().then(|| Goal {
         id,
         network_id,
@@ -73,7 +74,7 @@ pub fn without_link(goal: Goal, link: &GoalLink) -> Goal {
 }
 
 /// `goal` with a task per text (blank texts and texts it already has are skipped).
-pub fn with_tasks(goal: Goal, texts: &[String], today: NaiveDate) -> Goal {
+pub fn with_tasks(goal: Goal, texts: &[String], today: Date) -> Goal {
     let mut tasks = goal.tasks.clone();
     for text in texts.iter().map(|t| t.trim()).filter(|t| !t.is_empty()) {
         if !tasks.iter().any(|task| !task.done && task.text == text) {
@@ -84,7 +85,7 @@ pub fn with_tasks(goal: Goal, texts: &[String], today: NaiveDate) -> Goal {
 }
 
 /// `goal` with task `id` ticked or unticked on `today`.
-pub fn toggled_task(goal: Goal, id: &str, today: NaiveDate) -> Goal {
+pub fn toggled_task(goal: Goal, id: &str, today: Date) -> Goal {
     let tasks = goal.tasks.iter().map(|task| match task.id == id {
         true => GoalTask { done: !task.done, done_on: (!task.done).then_some(today), ..task.clone() },
         false => task.clone(),

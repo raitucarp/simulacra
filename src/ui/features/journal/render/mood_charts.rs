@@ -12,7 +12,7 @@ use crate::theme::color::with_alpha;
 use crate::ui::features::insights::chart::columns::{Column, ColumnChart};
 use crate::ui::icons::LucideIcon;
 use crate::ui::responsive::LayoutClass;
-use chrono::NaiveDate;
+use jiff::civil::Date;
 use gpui_kit::*;
 use rust_i18n::t;
 use std::collections::BTreeMap;
@@ -31,7 +31,7 @@ impl JournalPanel {
         let checkins = &self.data.book.checkins;
         let weeks = if class.is_compact() { WEEKS_COMPACT } else { WEEKS_WIDE };
         let means = daily_means(checkins);
-        let counts: BTreeMap<NaiveDate, usize> = means.iter().map(|(d, m)| (*d, m.count)).collect();
+        let counts: BTreeMap<Date, usize> = means.iter().map(|(d, m)| (*d, m.count)).collect();
         let strip = crate::domain::journal::calendar::heat_strip(&counts, self.data.today, weeks);
         let fill = |cell: &HeatmapCell| self.mood_fill(cell, &means);
         let tip = |cell: &HeatmapCell| match means.get(&cell.day) {
@@ -48,7 +48,7 @@ impl JournalPanel {
             .child(self.hour_chart(&by_hour(checkins)))
     }
 
-    fn mood_fill(&self, cell: &HeatmapCell, means: &BTreeMap<NaiveDate, MoodMean>) -> Rgba {
+    fn mood_fill(&self, cell: &HeatmapCell, means: &BTreeMap<Date, MoodMean>) -> Rgba {
         let theme = &self.theme;
         let Some(mean) = means.get(&cell.day).filter(|_| !cell.future) else { return super::heat::heat_colour(&HeatmapCell { level: 0, ..*cell }, theme.accent_brand, theme) };
         let level = heatmap_level((mean.valence.abs() * LEVEL_SCALE) as usize, LEVEL_SCALE as usize).clamp(1, HEATMAP_LEVELS);

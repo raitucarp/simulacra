@@ -13,7 +13,7 @@ use crate::domain::activity::ActivityHeatmap;
 use crate::domain::Post;
 use crate::state::graph::GraphScene;
 use crate::state::AppState;
-use chrono::NaiveDate;
+use jiff::civil::Date;
 use crate::theme::ThemeTokens;
 use gpui_kit::component::input::InputState;
 use gpui_kit::prelude::FluentBuilder;
@@ -39,7 +39,7 @@ pub struct UnifiedRightSidebarParams<'a> {
     pub posts: &'a [Post],
     pub heatmap: &'a ActivityHeatmap,
     /// Day the feed is filtered to, highlighted in the heatmap.
-    pub selected_day: Option<NaiveDate>,
+    pub selected_day: Option<Date>,
     pub on_click_day: ClickDayCallback,
     /// Cached graph scene shared with the full Mind Graph view.
     pub graph: Rc<GraphScene>,

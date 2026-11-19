@@ -20,7 +20,7 @@ const MAX_SCANS: usize = 2;
 const MEDIA_THREAD_NAME: &str = "simulacra-media";
 
 fn unix_now() -> i64 {
-    chrono::Utc::now().timestamp()
+    jiff::Timestamp::now().as_second()
 }
 
 impl AppView {

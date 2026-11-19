@@ -18,6 +18,7 @@ pub mod prelude;
 pub mod state;
 pub mod storage;
 pub mod theme;
+pub mod time;
 pub mod ui;
 
 pub use error::{AppError, Result};

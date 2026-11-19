@@ -5,7 +5,7 @@ use crate::domain::thinking::credence::{Credence, Outcome};
 use crate::domain::thinking::tensions::{Classification, TensionRecord, TensionStatus, Verdict};
 use crate::domain::PostId;
 use crate::storage::db::Database;
-use chrono::{NaiveDate, TimeZone, Utc};
+use jiff::civil::Date;
 
 const NOW: i64 = 1_800_000_000;
 
@@ -32,8 +32,8 @@ fn the_schema_is_idempotent_and_maps_upsert_by_root() {
 #[test]
 fn credences_round_trip_with_dates_and_outcomes() {
     let db = Database::in_memory().unwrap();
-    let created = Utc.with_ymd_and_hms(2026, 3, 1, 9, 30, 0).unwrap();
-    let open = Credence::new(PostId::from("p1"), 70, created).with_due(NaiveDate::from_ymd_opt(2026, 6, 1)).with_sentence(Some("Rates fall".into()));
+    let created = crate::time::utc(2026, 3, 1, 9, 30, 0);
+    let open = Credence::new(PostId::from("p1"), 70, created).with_due(Date::new(2026, 6, 1).ok()).with_sentence(Some("Rates fall".into()));
     let resolved = Credence::new(PostId::from("p2"), 20, created).resolved(Outcome::False, "It did not happen", created);
     db.save_credence(&open).unwrap();
     db.save_credence(&resolved).unwrap();

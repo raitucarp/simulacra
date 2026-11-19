@@ -11,7 +11,7 @@ use crate::domain::insights::{InsightsInput, InsightsReport};
 use crate::state::{AppState, NavigationTab};
 use crate::storage::SettingKey;
 use crate::ui::features::insights::{InsightsPanel, PageState};
-use chrono::{Local, Utc};
+use jiff::Timestamp;
 use gpui_kit::*;
 use std::collections::VecDeque;
 use std::rc::Rc;
@@ -55,7 +55,7 @@ impl AppView {
     /// What the store side of a report depends on.
     pub(super) fn insights_data_fingerprint(&self) -> u64 {
         let state = &self.state;
-        let key = format!("{}|{}|{}|{}|{}|{}", state.active_network_id.as_str(), state.index.revision(), state.documents.len(), state.user_profiles.len(), self.semantic.index.len(), Local::now().date_naive());
+        let key = format!("{}|{}|{}|{}|{}|{}", state.active_network_id.as_str(), state.index.revision(), state.documents.len(), state.user_profiles.len(), self.semantic.index.len(), crate::time::local_now().date());
         fnv1a(key.as_bytes())
     }
 
@@ -78,8 +78,8 @@ impl AppView {
             profiles: state.user_profiles.clone(),
             subjects: state.library.subjects.iter().map(|s| (s.id.clone(), s.label.clone())).collect(),
             vectors,
-            now: Utc::now(),
-            offset: Some(*Local::now().offset()),
+            now: Timestamp::now(),
+            offset: Some(crate::time::local_now().offset()),
         }
     }
 

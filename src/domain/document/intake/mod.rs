@@ -10,7 +10,7 @@ use super::ids::{generated_id, DOCUMENT_ID_PREFIX};
 use super::record::{text_checksum, word_count, CatalogueRecord, OriginKind, Provenance};
 use super::{chunk_count, GroundingDocument};
 use crate::domain::NetworkId;
-use chrono::{DateTime, Utc};
+use jiff::Timestamp;
 
 /// A document about to be added: what an editor, importer or seed knows about it.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -51,7 +51,7 @@ impl NewDocument {
 
     /// The stored document with id `id`, added at `added_at`: title and text trimmed,
     /// derived fields (word count, chunks, checksum, default format) filled in.
-    pub fn into_document(self, id: impl Into<String>, added_at: DateTime<Utc>) -> GroundingDocument {
+    pub fn into_document(self, id: impl Into<String>, added_at: Timestamp) -> GroundingDocument {
         let content = self.content.trim().to_string();
         let record = with_derived_fields(self.record, &content);
         GroundingDocument {
@@ -67,7 +67,7 @@ impl NewDocument {
 
     /// [`Self::into_document`] with a fresh id, added now.
     pub fn into_new_document(self) -> GroundingDocument {
-        self.into_document(generated_id(DOCUMENT_ID_PREFIX), Utc::now())
+        self.into_document(generated_id(DOCUMENT_ID_PREFIX), Timestamp::now())
     }
 }
 

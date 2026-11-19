@@ -21,7 +21,7 @@ impl AppView {
         if scenario_problem(&scenario).is_some() || agents.is_empty() || (run && self.arena.run.is_some()) {
             return;
         }
-        let now = chrono::Utc::now();
+        let now = jiff::Timestamp::now();
         let experiment = match id.and_then(|id| self.arena.experiments.iter().find(|kept| kept.id == id).cloned()) {
             Some(kept) => Experiment { scenario, agents, preset, ..kept.cleared(now) },
             None => Experiment::new(ArenaId::random(), scenario, agents, preset, now),
@@ -67,7 +67,7 @@ impl AppView {
             Ok(raw) => {
                 let (stance, verdict, reasoning) = parse_cell_answer(&raw).unwrap_or_else(|| (Stance::Undecided, first_line(&raw), String::new()));
                 if let Some(experiment) = self.arena.experiments.iter().find(|kept| kept.id == id).cloned() {
-                    self.save_experiment(experiment.with_answer(CellAnswer { agent, cell, stance, verdict, reasoning }, chrono::Utc::now()));
+                    self.save_experiment(experiment.with_answer(CellAnswer { agent, cell, stance, verdict, reasoning }, jiff::Timestamp::now()));
                 }
                 self.advance_experiment(&id, cx);
             }

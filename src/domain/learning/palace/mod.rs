@@ -16,7 +16,7 @@ pub use walk::{plan_walk, route, Walk, WalkScope, WalkStop};
 
 use crate::domain::review::ItemId;
 use crate::domain::NetworkId;
-use chrono::{DateTime, Utc};
+use jiff::Timestamp;
 use serde::{Deserialize, Serialize};
 
 /// Prefix of palace ids.
@@ -83,7 +83,7 @@ pub struct Palace {
     pub network_id: NetworkId,
     pub name: String,
     pub rooms: Vec<Room>,
-    pub created_at: DateTime<Utc>,
+    pub created_at: Timestamp,
 }
 
 impl Palace {

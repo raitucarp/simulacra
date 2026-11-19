@@ -5,7 +5,7 @@
 use super::item::{ItemId, ReviewItem};
 use super::log::ReviewEntry;
 use super::schedule::Phase;
-use chrono::NaiveDate;
+use jiff::civil::Date;
 use std::collections::{HashMap, HashSet};
 
 /// The daily limits (Settings › Learning).
@@ -40,7 +40,7 @@ impl TodayPlan {
 }
 
 /// Distinct cards answered today and how many of them were new.
-fn answered_today(log: &[ReviewEntry], today: NaiveDate) -> (usize, usize) {
+fn answered_today(log: &[ReviewEntry], today: Date) -> (usize, usize) {
     let today_entries: Vec<&ReviewEntry> = log.iter().filter(|entry| entry.day == today).collect();
     let answered: HashSet<&ItemId> = today_entries.iter().map(|entry| &entry.item_id).collect();
     let introduced = today_entries.iter().filter(|entry| entry.phase_before == Phase::New).count();
@@ -48,7 +48,7 @@ fn answered_today(log: &[ReviewEntry], today: NaiveDate) -> (usize, usize) {
 }
 
 /// Due learnt cards, most overdue first, and new cards, oldest first.
-fn candidates(cards: &[ReviewItem], today: NaiveDate) -> (Vec<&ReviewItem>, Vec<&ReviewItem>) {
+fn candidates(cards: &[ReviewItem], today: Date) -> (Vec<&ReviewItem>, Vec<&ReviewItem>) {
     let mut due: Vec<&ReviewItem> = cards.iter().filter(|c| c.is_active() && c.schedule.is_due(today)).collect();
     due.sort_by(|a, b| a.schedule.due.cmp(&b.schedule.due).then_with(|| a.id.cmp(&b.id)));
     let mut new: Vec<&ReviewItem> = cards.iter().filter(|c| c.is_active() && c.schedule.is_new()).collect();
@@ -57,7 +57,7 @@ fn candidates(cards: &[ReviewItem], today: NaiveDate) -> (Vec<&ReviewItem>, Vec<
 }
 
 /// Counts for the overview and the sizes of today's queue.
-pub fn plan_today(cards: &[ReviewItem], log: &[ReviewEntry], today: NaiveDate, limits: DailyLimits) -> TodayPlan {
+pub fn plan_today(cards: &[ReviewItem], log: &[ReviewEntry], today: Date, limits: DailyLimits) -> TodayPlan {
     let (due, new) = candidates(cards, today);
     let (answered, introduced) = answered_today(log, today);
     let room = (limits.reviews as usize).saturating_sub(answered);
@@ -68,7 +68,7 @@ pub fn plan_today(cards: &[ReviewItem], log: &[ReviewEntry], today: NaiveDate, l
 
 /// Today's queue: due and new cards within the limits, new cards spread evenly between the
 /// reviews, then cards from one source moved apart where possible.
-pub fn build_queue(cards: &[ReviewItem], log: &[ReviewEntry], today: NaiveDate, limits: DailyLimits) -> Vec<ItemId> {
+pub fn build_queue(cards: &[ReviewItem], log: &[ReviewEntry], today: Date, limits: DailyLimits) -> Vec<ItemId> {
     let plan = plan_today(cards, log, today, limits);
     let (due, new) = candidates(cards, today);
     let (due, new) = (&due[..plan.queued_due], &new[..plan.queued_new]);

@@ -26,7 +26,7 @@ const PREVIEW_SEED: u64 = 0x5EED;
 
 /// The simulated week of `cfg` for the agent with `id`.
 fn preview_week(cfg: &AgentConfig, id: &ProfileId) -> WeekPreview {
-    let tick = chrono::Duration::from_std(HEARTBEAT_INTERVAL).unwrap_or_default();
+    let tick = jiff::SignedDuration::try_from(HEARTBEAT_INTERVAL).unwrap_or_default();
     simulate_week(cfg, id, tick, PREVIEW_SEED)
 }
 

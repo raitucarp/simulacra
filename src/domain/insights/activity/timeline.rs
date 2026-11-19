@@ -3,7 +3,7 @@
 
 use super::KindCounts;
 use crate::domain::insights::facts::{PostFacts, PostKind};
-use chrono::{Duration, NaiveDate};
+use jiff::civil::Date;
 
 /// Bars at most.
 pub const MAX_BUCKETS: usize = 90;
@@ -11,7 +11,7 @@ pub const MAX_BUCKETS: usize = 90;
 /// One bar: the first day, how many days it covers and the posts by kind.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub struct TimeBucket {
-    pub start: NaiveDate,
+    pub start: Date,
     pub days: usize,
     pub counts: KindCounts,
 }
@@ -22,23 +22,23 @@ impl TimeBucket {
     }
 
     /// The last day covered.
-    pub fn end(&self) -> NaiveDate {
-        self.start + Duration::days(self.days as i64 - 1)
+    pub fn end(&self) -> Date {
+        self.start + crate::time::days(self.days as i64 - 1)
     }
 }
 
 /// Buckets from `start` (or the first post's day) to `today`, empty when there is no post.
-pub fn timeline(posts: &[PostFacts], start: Option<NaiveDate>, today: NaiveDate) -> Vec<TimeBucket> {
+pub fn timeline(posts: &[PostFacts], start: Option<Date>, today: Date) -> Vec<TimeBucket> {
     let first = posts.iter().map(|p| p.day).min();
     let Some(first) = start.or(first).map(|day| day.min(today)) else { return Vec::new() };
-    let span = (today - first).num_days() as usize + 1;
+    let span = (today - first).get_days() as usize + 1;
     let width = span.div_ceil(MAX_BUCKETS).max(1);
     let count = span.div_ceil(width);
     let mut buckets: Vec<TimeBucket> = (0..count)
-        .map(|i| TimeBucket { start: first + Duration::days((i * width) as i64), days: width, counts: [0; PostKind::COUNT] })
+        .map(|i| TimeBucket { start: first + crate::time::days((i * width) as i64), days: width, counts: [0; PostKind::COUNT] })
         .collect();
     for post in posts.iter().filter(|p| p.day >= first && p.day <= today) {
-        let at = (post.day - first).num_days() as usize / width;
+        let at = (post.day - first).get_days() as usize / width;
         if let Some(bucket) = buckets.get_mut(at) {
             bucket.counts[post.kind.index()] += 1;
         }

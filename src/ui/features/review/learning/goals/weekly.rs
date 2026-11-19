@@ -54,7 +54,7 @@ impl ReviewPanel {
     pub(super) fn render_weekly(&self, class: LayoutClass, cx: &mut Context<Self>) -> impl IntoElement {
         let theme = &self.theme;
         let window = WeekWindow::ending(self.data.today);
-        let range = t!("learning.weekly.range", from = window.start.format(DATE_FORMAT).to_string(), to = window.end.format(DATE_FORMAT).to_string()).to_string();
+        let range = t!("learning.weekly.range", from = window.start.strftime(DATE_FORMAT).to_string(), to = window.end.strftime(DATE_FORMAT).to_string()).to_string();
         let back = Button::new(BACK_ID).ghost().xsmall().icon(Icon::new(LucideIcon::ArrowLeft)).label(tr("learning.goals.all")).on_click(cx.listener(|this, _, _, cx| this.show_goals(GoalsScreen::List, cx)));
         let head = surface(theme)
             .child(control_row(theme).child(back))

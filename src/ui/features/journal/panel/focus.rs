@@ -7,7 +7,7 @@ use crate::domain::journal::focus::timer::whole_minutes;
 use crate::domain::journal::focus::{custom_minutes, FocusLink, FocusSession, FocusTimer, Outcome, PRESET_MINUTES};
 use crate::domain::journal::{journal_day, RecordId};
 use crate::ui::features::journal::events::JournalEvent;
-use chrono::{DateTime, Local, Utc};
+use jiff::Timestamp;
 use gpui_kit::{Context, Window};
 use std::time::Duration;
 
@@ -21,7 +21,7 @@ pub struct FocusRun {
     pub preset: Option<u32>,
     pub link: Option<FocusLink>,
     pub timer: Option<FocusTimer>,
-    pub started_at: Option<DateTime<Utc>>,
+    pub started_at: Option<Timestamp>,
     pub intention: String,
     pub distractions: u32,
     /// The finished session awaiting its reflection (already stored).
@@ -31,7 +31,7 @@ pub struct FocusRun {
 
 /// Wall-clock milliseconds now.
 pub fn now_ms() -> i64 {
-    Utc::now().timestamp_millis()
+    Timestamp::now().as_millisecond()
 }
 
 impl JournalPanel {
@@ -62,7 +62,7 @@ impl JournalPanel {
             other => other.clone(),
         };
         let intention = JournalFields::text(&self.fields.intention, cx);
-        self.focus_run = FocusRun { timer: Some(FocusTimer::start(minutes, now_ms())), started_at: Some(Utc::now()), intention, link, finished: None, distractions: 0, ..self.focus_run.clone() };
+        self.focus_run = FocusRun { timer: Some(FocusTimer::start(minutes, now_ms())), started_at: Some(Timestamp::now()), intention, link, finished: None, distractions: 0, ..self.focus_run.clone() };
         self.start_ticker(cx);
         cx.notify();
     }
@@ -102,7 +102,7 @@ impl JournalPanel {
         self.ticker = None;
         let run = &self.focus_run;
         let session = FocusSession {
-            id: RecordId::random(), day: journal_day(&Local::now()), started_at, ended_at: Utc::now(), intention: run.intention.clone(),
+            id: RecordId::random(), day: journal_day(&crate::time::local_now()), started_at, ended_at: Timestamp::now(), intention: run.intention.clone(),
             planned_minutes: whole_minutes(timer.planned_ms), focused_minutes: whole_minutes(timer.elapsed(now_ms())), link: run.link.clone(),
             distractions: run.distractions, outcome: None, reflection: String::new(),
         };

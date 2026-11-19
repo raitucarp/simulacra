@@ -14,16 +14,17 @@ use super::tutor::{SessionId, TutorSession, TutorSource};
 use crate::domain::review::item::{Anchor, AnchorSide, ItemId, ReviewItem, Subject};
 use crate::domain::review::schedule::ItemSchedule;
 use crate::domain::NetworkId;
-use chrono::{DateTime, NaiveDate, TimeZone, Utc};
+use jiff::Timestamp;
+use jiff::civil::Date;
 
 /// A fixed day.
-pub(super) fn day(offset: i64) -> NaiveDate {
-    NaiveDate::from_ymd_opt(2026, 11, 2).unwrap() + chrono::Duration::days(offset)
+pub(super) fn day(offset: i64) -> Date {
+    jiff::civil::date(2026, 11, 2) + crate::time::days(offset)
 }
 
 /// A fixed moment on day `offset`.
-pub(super) fn at(offset: i64) -> DateTime<Utc> {
-    Utc.from_utc_datetime(&day(offset).and_hms_opt(10, 0, 0).unwrap())
+pub(super) fn at(offset: i64) -> Timestamp {
+    crate::time::at_utc(day(offset), 10, 0, 0)
 }
 
 pub(super) fn network() -> NetworkId {

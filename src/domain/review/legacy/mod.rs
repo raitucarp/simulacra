@@ -10,7 +10,7 @@ use super::item::{Anchor, AnchorSide, ItemId, ReviewItem, Subject};
 use super::schedule::ItemSchedule;
 use crate::domain::post::SourceLocator;
 use crate::domain::NetworkId;
-use chrono::{DateTime, Utc};
+use jiff::Timestamp;
 use serde::Deserialize;
 use std::collections::HashSet;
 
@@ -45,7 +45,7 @@ pub struct LegacyRow {
     pub kind_json: String,
     pub source_json: String,
     pub tags_json: String,
-    pub created_at: DateTime<Utc>,
+    pub created_at: Timestamp,
     pub schedule_json: String,
     pub suspended: bool,
 }

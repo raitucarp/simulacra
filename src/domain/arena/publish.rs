@@ -5,7 +5,7 @@
 
 use crate::domain::{split_into_thread, NetworkId, Post, PostId, ProfileId};
 use crate::error::Result;
-use chrono::{DateTime, Duration, Utc};
+use jiff::Timestamp;
 
 /// Milliseconds between consecutive posts of the thread, so reading order survives sorting.
 pub const THREAD_SPACING_MS: i64 = 1;
@@ -27,12 +27,12 @@ pub fn split_parts(parts: &[ThreadPart], limit: usize) -> Vec<ThreadPart> {
 
 /// The posts of `parts` (already split) in reading order: each replies to the one before,
 /// reply counters set, the first created at `start`.
-pub fn build_thread(parts: &[ThreadPart], network: &NetworkId, start: DateTime<Utc>, mut next_id: impl FnMut() -> PostId) -> Result<Vec<Post>> {
+pub fn build_thread(parts: &[ThreadPart], network: &NetworkId, start: Timestamp, mut next_id: impl FnMut() -> PostId) -> Result<Vec<Post>> {
     let mut posts: Vec<Post> = Vec::with_capacity(parts.len());
     for part in parts {
         let parent = posts.last().map(|post| post.id.clone());
         let mut post = Post::create_with_attachments(next_id(), network.clone(), part.author.clone(), &part.text, None, None, parent, None, None)?;
-        post.created_at = start + Duration::milliseconds(posts.len() as i64 * THREAD_SPACING_MS);
+        post.created_at = start + jiff::SignedDuration::from_millis(posts.len() as i64 * THREAD_SPACING_MS);
         if let Some(previous) = posts.last_mut() {
             previous.replies_count = 1;
         }

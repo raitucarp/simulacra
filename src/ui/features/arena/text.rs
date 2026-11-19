@@ -4,7 +4,7 @@
 use crate::domain::arena::debate::{Criterion, DebateFormat, SetupProblem, Side, TurnRole};
 use crate::domain::arena::lab::{ScenarioProblem, Stance};
 use crate::domain::thinking::argument::Standing;
-use chrono::{DateTime, Local, Utc};
+use jiff::Timestamp;
 use rust_i18n::t;
 
 /// How saved records show their time.
@@ -56,6 +56,6 @@ pub fn scenario_problem_text(problem: ScenarioProblem) -> String {
 }
 
 /// A time in the user's local zone.
-pub fn stamp(at: DateTime<Utc>) -> String {
-    at.with_timezone(&Local).format(STAMP_FORMAT).to_string()
+pub fn stamp(at: Timestamp) -> String {
+    crate::time::local(at).strftime(STAMP_FORMAT).to_string()
 }

@@ -72,7 +72,7 @@ fn date_problem(record: &CatalogueRecord, current_year: i32) -> Option<FieldProb
 
 /// Every problem of `title` and `record`, in field order (empty when valid).
 pub fn validate(title: &str, record: &CatalogueRecord) -> Vec<FieldProblem> {
-    validate_in_year(title, record, chrono::Datelike::year(&chrono::Utc::now()))
+    validate_in_year(title, record, i32::from(crate::time::utc_date(jiff::Timestamp::now()).year()))
 }
 
 /// [`validate`] as of `current_year` (pure, for tests).

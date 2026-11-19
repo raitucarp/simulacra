@@ -3,16 +3,17 @@
 
 use super::*;
 use crate::domain::PostId;
-use chrono::{DateTime, Duration, NaiveDate, TimeZone, Utc};
+use jiff::Timestamp;
+use jiff::civil::Date;
 
 const CLOSE: f64 = 1e-9;
 
-fn now() -> DateTime<Utc> {
-    Utc.with_ymd_and_hms(2026, 11, 18, 12, 0, 0).single().expect("valid time")
+fn now() -> Timestamp {
+    crate::time::utc(2026, 11, 18, 12, 0, 0)
 }
 
-fn day(y: i32, m: u32, d: u32) -> NaiveDate {
-    NaiveDate::from_ymd_opt(y, m, d).expect("valid date")
+fn day(y: i16, m: i8, d: i8) -> Date {
+    jiff::civil::date(y, m, d)
 }
 
 fn credence(id: &str, percent: u8) -> Credence {
@@ -59,7 +60,7 @@ fn resolving_closes_and_reopening_opens() {
 
 #[test]
 fn open_predictions_come_in_due_order() {
-    let later = Credence { created_at: now() + Duration::hours(1), ..credence("late", 50) };
+    let later = Credence { created_at: now() + jiff::SignedDuration::from_hours(1), ..credence("late", 50) };
     let list = vec![
         credence("undated", 50),
         credence("second", 50).with_due(Some(day(2026, 12, 1))),

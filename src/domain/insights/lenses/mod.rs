@@ -30,7 +30,9 @@ use crate::domain::document::SubjectId;
 use crate::domain::graph::excerpt;
 use crate::domain::readability::ReadingLanguage;
 use crate::domain::{GroundingDocument, NetworkId, Post, Profile};
-use chrono::{DateTime, FixedOffset, NaiveDate, Utc};
+use jiff::Timestamp;
+use jiff::civil::Date;
+use jiff::tz::Offset;
 use std::collections::HashMap;
 
 /// Everything the lenses are computed from.
@@ -46,13 +48,13 @@ pub struct LensInput {
     /// Post id and unit embedding vector (one model).
     pub vectors: Vec<(String, Vec<f32>)>,
     pub language: ReadingLanguage,
-    pub now: DateTime<Utc>,
-    pub offset: Option<FixedOffset>,
+    pub now: Timestamp,
+    pub offset: Option<Offset>,
 }
 
 impl LensInput {
     /// A snapshot of `network` at `now` with nothing in it yet.
-    pub fn empty(network: NetworkId, now: DateTime<Utc>) -> Self {
+    pub fn empty(network: NetworkId, now: Timestamp) -> Self {
         let (posts, documents, profiles, subjects, review, vectors) = Default::default();
         Self { network, posts, documents, profiles, subjects, review, vectors, language: ReadingLanguage::default(), now, offset: None }
     }
@@ -74,14 +76,14 @@ pub struct Analysed<'a> {
     pub authors: Vec<AuthorFacts>,
     /// Author index of each analysed post.
     pub author_of: Vec<usize>,
-    pub offset: FixedOffset,
-    pub today: NaiveDate,
+    pub offset: Offset,
+    pub today: Date,
 }
 
 impl Analysed<'_> {
     /// Local day of `at`.
-    pub fn day(&self, at: DateTime<Utc>) -> NaiveDate {
-        at.with_timezone(&self.offset).date_naive()
+    pub fn day(&self, at: Timestamp) -> Date {
+        self.offset.to_datetime(at).date()
     }
 }
 
@@ -102,7 +104,7 @@ impl LensReport {
 
 /// The posts `filter` lets through, their authors (first appearance order) and the clock.
 pub fn analyse<'a>(input: &'a LensInput, filter: &InsightsFilter) -> Analysed<'a> {
-    let offset = input.offset.unwrap_or_else(|| FixedOffset::east_opt(0).expect("zero offset"));
+    let offset = input.offset.unwrap_or_else(|| Offset::UTC);
     let profile_of: HashMap<&str, &Profile> = input.profiles.iter().map(|p| (p.id.as_str(), p)).collect();
     let posts: Vec<&Post> = input.posts.iter().filter(|p| filter.accepts(p, profile_of.get(p.author_id.as_str()).copied(), input.now, &input.network)).collect();
     let mut index: HashMap<&str, usize> = HashMap::new();
@@ -117,7 +119,7 @@ pub fn analyse<'a>(input: &'a LensInput, filter: &InsightsFilter) -> Analysed<'a
             })
         })
         .collect();
-    Analysed { posts, authors, author_of, offset, today: input.now.with_timezone(&offset).date_naive() }
+    Analysed { posts, authors, author_of, offset, today: offset.to_datetime(input.now).date() }
 }
 
 fn summary(post: &Post, author: usize) -> PostSummary {

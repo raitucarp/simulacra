@@ -8,7 +8,7 @@ use super::Room;
 use crate::domain::insights::activity::{Histogram, KindCounts};
 use crate::domain::insights::{InsightsReport, PostKind};
 use crate::ui::features::day_filter::{format_day, month_label};
-use chrono::{Datelike, NaiveDate};
+use jiff::civil::Date;
 use crate::ui::features::insights::chart::columns::{Column, ColumnChart};
 use crate::ui::features::insights::chart::legend::{legend, LegendEntry};
 use crate::ui::features::insights::chart::palette::kind_colour;
@@ -21,7 +21,7 @@ use rust_i18n::t;
 use std::rc::Rc;
 
 /// A short axis label: month and day.
-fn short_day(day: NaiveDate) -> String {
+fn short_day(day: Date) -> String {
     format!("{} {}", month_label(day.month()), day.day())
 }
 

@@ -41,7 +41,7 @@ pub fn slug(text: &str) -> String {
 fn author_line(post: &Post, source: &ExportSource) -> String {
     let (name, handle) = source.authors.get(&post.author_id).map_or_else(|| (post.author_id.to_string(), String::new()), |p| (p.name.clone(), p.handle.clone()));
     let who = if handle.is_empty() { name } else { format!("{name} ({handle})") };
-    format!("### {who} · {}\n\n", post.created_at.format(TIME_FORMAT))
+    format!("### {who} · {}\n\n", post.created_at.strftime(TIME_FORMAT))
 }
 
 fn post_block(post: &Post, source: &ExportSource, image_path: &dyn Fn(&str) -> String) -> String {
@@ -70,7 +70,7 @@ pub fn thread_markdown(thread: &ThreadExport, source: &ExportSource, image_path:
     let title = thread_title(&first.content);
     let head = front_matter(vec![
         ("title", json!(title)), ("thread", json!(thread.root.as_str())), ("network", json!(source.network_name)),
-        ("created", json!(first.created_at.to_rfc3339())), ("updated", json!(last.created_at.to_rfc3339())),
+        ("created", json!(crate::time::rfc3339(first.created_at))), ("updated", json!(crate::time::rfc3339(last.created_at))),
         ("posts", json!(thread.posts.len())), ("authors", json!(authors)), ("tags", json!(tags)),
     ]);
     let body: Vec<String> = thread.posts.iter().map(|p| post_block(p, source, image_path)).collect();
@@ -87,7 +87,7 @@ pub fn document_markdown(doc: &GroundingDocument, library: &Library, original: O
         ("title", json!(doc.title)), ("subtitle", json!(record.subtitle)), ("kind", json!(record.kind)),
         ("creators", json!(creators)), ("date", json!(record.date)), ("publisher", json!(record.publisher)),
         ("language", json!(record.language)), ("identifier", json!(record.identifier.value)), ("subjects", json!(subjects)),
-        ("collections", json!(collections)), ("added", json!(doc.created_at.to_rfc3339())), ("source", json!(record.provenance.source)),
+        ("collections", json!(collections)), ("added", json!(crate::time::rfc3339(doc.created_at))), ("source", json!(record.provenance.source)),
         ("rights", json!(record.rights)), ("original", json!(original.unwrap_or_default())),
     ]);
     let summary = if record.description.trim().is_empty() { String::new() } else { format!("> {}\n\n", record.description.trim().replace('\n', "\n> ")) };

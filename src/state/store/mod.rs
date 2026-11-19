@@ -96,7 +96,7 @@ pub struct AppState {
     pub trending: Vec<TrendingTopic>,
     pub draft_text: String,
     /// Local calendar day the timeline is narrowed to (set from the cadence heatmap).
-    pub feed_day_filter: Option<chrono::NaiveDate>,
+    pub feed_day_filter: Option<jiff::civil::Date>,
     pub llm_settings: crate::agent::LlmSettings,
     /// Provider and service keys referenced by agent engines (Settings › AI).
     pub credentials: crate::agent::credentials::CredentialStore,

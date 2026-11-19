@@ -11,7 +11,7 @@ pub mod tensions;
 use crate::domain::thinking::credence::{CalibrationSummary, Outcome};
 use crate::domain::thinking::tensions::{TensionSide, Verdict};
 use crate::domain::PostId;
-use chrono::NaiveDate;
+use jiff::civil::Date;
 use gpui_kit::{App, Window};
 use std::rc::Rc;
 
@@ -21,7 +21,7 @@ pub struct PredictionRow {
     pub post_id: PostId,
     pub excerpt: String,
     pub percent: u8,
-    pub due: Option<NaiveDate>,
+    pub due: Option<Date>,
     pub is_due: bool,
 }
 

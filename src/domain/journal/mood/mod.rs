@@ -10,7 +10,8 @@ pub use affect::{Affect, AffectRegion};
 
 use super::ids::RecordId;
 use super::records::Record;
-use chrono::{DateTime, FixedOffset, NaiveDate};
+use jiff::ZonedDateTime;
+use jiff::civil::Date;
 use serde::{Deserialize, Serialize};
 
 /// Lowest and highest energy level.
@@ -24,9 +25,10 @@ pub const SLEEP_MAX_HOURS: f32 = 24.0;
 pub struct MoodCheckin {
     pub id: RecordId,
     /// When, with the local offset it was made at (weekday and hour summaries use it).
-    pub at: DateTime<FixedOffset>,
+    #[serde(with = "crate::time::serde_offset")]
+    pub at: ZonedDateTime,
     /// Its journal day.
-    pub day: NaiveDate,
+    pub day: Date,
     pub affect: Affect,
     /// 1 (drained) to 5 (energised).
     pub energy: u8,
@@ -66,7 +68,7 @@ impl Default for CheckinDraft {
 
 impl CheckinDraft {
     /// The check-in, once a point on the grid is chosen.
-    pub fn into_checkin(self, id: RecordId, at: DateTime<FixedOffset>, day: NaiveDate) -> Option<MoodCheckin> {
+    pub fn into_checkin(self, id: RecordId, at: ZonedDateTime, day: Date) -> Option<MoodCheckin> {
         let affect = self.affect?;
         let sleep_hours = self.sleep_hours.filter(|h| h.is_finite() && *h >= 0.0).map(|h| h.min(SLEEP_MAX_HOURS));
         let tags = parse_tags(&self.tags.join(","));

@@ -26,7 +26,7 @@ pub enum FaceRole {
 /// A post exactly as the stream shows its author row and body.
 pub fn render_post_face(view: &PostView, theme: &ThemeTokens) -> Div {
     let (post, author) = (&view.post, &view.author);
-    let time = post.created_at.format(TIME_FORMAT).to_string();
+    let time = post.created_at.strftime(TIME_FORMAT).to_string();
     let meta = div()
         .flex()
         .flex_wrap()

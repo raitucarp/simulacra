@@ -50,7 +50,7 @@ impl Database {
         let mentions_json = serde_json::to_string(&post.mentions).map_err(db_err)?;
         let linked_posts_json = serde_json::to_string(&post.linked_posts).map_err(db_err)?;
         let extras_json = serde_json::to_string(&post.extras).map_err(db_err)?;
-        let created_at_str = post.created_at.to_rfc3339();
+        let created_at_str = crate::time::rfc3339(post.created_at);
 
         self.conn
             .execute(

@@ -1,7 +1,6 @@
 use super::layout::{GraphLayout, LAYOUT_CENTER};
 use super::*;
 use crate::domain::{GroundingDocument, NetworkId, Post, PostId, Profile, ProfileId};
-use chrono::{Duration, TimeZone, Utc};
 
 const NET: &str = "net_a";
 const OTHER: &str = "net_b";
@@ -15,7 +14,7 @@ fn bob() -> Profile {
 }
 
 fn stamp(mut post: Post, minute: i64) -> Post {
-    post.created_at = Utc.with_ymd_and_hms(2026, 1, 1, 0, 0, 0).unwrap() + Duration::minutes(minute);
+    post.created_at = crate::time::utc(2026, 1, 1, 0, 0, 0) + jiff::SignedDuration::from_mins(minute);
     post
 }
 

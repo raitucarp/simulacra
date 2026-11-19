@@ -6,7 +6,7 @@
 
 use super::{Palace, PalaceId, PlacedTarget};
 use crate::domain::review::{Answer, Grade, ItemId, ReviewItem, ReviewMode};
-use chrono::NaiveDate;
+use jiff::civil::Date;
 
 /// Which loci a walk visits.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
@@ -41,7 +41,7 @@ pub fn route(palace: &Palace) -> Vec<(usize, usize, PlacedTarget)> {
 }
 
 /// The stops of a walk over `palace`; `item_of` finds the active review item of a target.
-pub fn plan_walk(palace: &Palace, scope: WalkScope, item_of: &dyn Fn(&PlacedTarget) -> Option<ReviewItem>, today: NaiveDate) -> Vec<WalkStop> {
+pub fn plan_walk(palace: &Palace, scope: WalkScope, item_of: &dyn Fn(&PlacedTarget) -> Option<ReviewItem>, today: Date) -> Vec<WalkStop> {
     route(palace)
         .into_iter()
         .filter_map(|(room, locus, target)| {

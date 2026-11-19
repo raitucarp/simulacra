@@ -63,7 +63,7 @@ impl AppView {
             window.push_notification(Notification::error(t!("prefs.ui.no_vault").to_string()), cx);
             return;
         };
-        let path = dir.join(BACKUP_DIR).join(chrono::Local::now().format(BACKUP_FILE_FORMAT).to_string());
+        let path = dir.join(BACKUP_DIR).join(crate::time::local_now().strftime(BACKUP_FILE_FORMAT).to_string());
         let target = path.clone();
         let written = std::fs::create_dir_all(dir.join(BACKUP_DIR))
             .map_err(|err| err.to_string())

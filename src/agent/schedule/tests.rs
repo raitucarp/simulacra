@@ -1,13 +1,14 @@
 use super::*;
 use crate::domain::{AgentConfig, HumanChronotype, PostingCadence, ProfileId};
-use chrono::{DateTime, Duration, FixedOffset, TimeZone, Utc};
+use jiff::{Timestamp, ZonedDateTime};
+use jiff::tz::{Offset, TimeZone};
 
 const SEED: u64 = 42;
 
 /// Local time 2026-11-16 at `hour:minute` in UTC+07:00.
-fn local(hour: u32, minute: u32) -> DateTime<FixedOffset> {
-    let offset = FixedOffset::east_opt(7 * 3600).expect("valid offset");
-    offset.with_ymd_and_hms(2026, 11, 16, hour, minute, 0).single().expect("valid time")
+fn local(hour: i8, minute: i8) -> ZonedDateTime {
+    let civil = jiff::civil::date(2026, 11, 16).at(hour, minute, 0, 0);
+    civil.to_zoned_datetime(TimeZone::fixed(Offset::constant(7))).expect("valid time")
 }
 
 /// A config that always posts when eligible (no spontaneity jitter, all-day hours).
@@ -22,11 +23,11 @@ fn clockwork(cadence: PostingCadence) -> AgentConfig {
     }
 }
 
-fn ctx_at(now: DateTime<FixedOffset>, tick: u64) -> ScheduleContext {
+fn ctx_at(now: ZonedDateTime, tick: u64) -> ScheduleContext {
     ScheduleContext { now, seed: SEED, tick }
 }
 
-fn decide(cfg: &AgentConfig, last: Option<DateTime<Utc>>, now: DateTime<FixedOffset>) -> Decision {
+fn decide(cfg: &AgentConfig, last: Option<Timestamp>, now: ZonedDateTime) -> Decision {
     let id = ProfileId::new("agent_test");
     evaluate(&AgentSlot { id: &id, config: cfg, last_activity: last }, &ctx_at(now, 0))
 }
@@ -77,11 +78,11 @@ fn cadence_intervals_gate_repeat_posts() {
     ];
     for (cadence, minutes) in cases {
         let cfg = clockwork(cadence);
-        let now_utc = now.with_timezone(&Utc);
-        let just_before = now_utc - Duration::minutes(minutes) + Duration::seconds(1);
-        let exactly = now_utc - Duration::minutes(minutes);
-        assert_eq!(decide(&cfg, Some(just_before), now), Decision::CoolingDown, "{cadence:?}");
-        assert_eq!(decide(&cfg, Some(exactly), now), Decision::Due, "{cadence:?}");
+        let now_utc = now.timestamp();
+        let just_before = now_utc - jiff::SignedDuration::from_mins(minutes) + jiff::SignedDuration::from_secs(1);
+        let exactly = now_utc - jiff::SignedDuration::from_mins(minutes);
+        assert_eq!(decide(&cfg, Some(just_before), now.clone()), Decision::CoolingDown, "{cadence:?}");
+        assert_eq!(decide(&cfg, Some(exactly), now.clone()), Decision::Due, "{cadence:?}");
     }
 }
 
@@ -172,8 +173,8 @@ fn manual_start_rejects_an_agent_already_in_flight() {
 #[test]
 fn latest_activity_keeps_each_authors_newest_post() {
     let author = crate::domain::Profile::new_agent("agent_x", "X", "@x", "Tester");
-    let old = Utc.with_ymd_and_hms(2026, 1, 1, 0, 0, 0).single().expect("valid");
-    let new = old + Duration::hours(3);
+    let old = crate::time::utc(2026, 1, 1, 0, 0, 0);
+    let new = old + jiff::SignedDuration::from_hours(3);
     let post = |at| crate::domain::Post { created_at: at, author_id: author.id.clone(), ..sample_post() };
     let latest = latest_activity(&[post(new), post(old)]);
     assert_eq!(latest.get(&author.id), Some(&new));
@@ -186,7 +187,7 @@ fn sample_post() -> crate::domain::Post {
         network_id: NetworkId::new("net_test"),
         author_id: Profile::new_primary("u1", "User", "@user").id,
         content: String::new(),
-        created_at: Utc::now(),
+        created_at: Timestamp::now(),
         likes: 0,
         is_liked: false,
         replies_count: 0,

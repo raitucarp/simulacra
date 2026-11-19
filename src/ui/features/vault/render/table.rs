@@ -97,7 +97,7 @@ impl VaultPanel {
             (muted(first_creator(doc)).into_any_element(), Some(theme.vault_column_creator_width), false),
             (muted(kind_label(doc.record.kind)).into_any_element(), Some(theme.vault_column_kind_width), false),
             (muted(doc.record.published_year().map(|y| y.to_string()).unwrap_or_default()).into_any_element(), Some(theme.vault_column_year_width), true),
-            (muted(doc.created_at.format(ADDED_FORMAT).to_string()).into_any_element(), Some(theme.vault_column_added_width), false),
+            (muted(doc.created_at.strftime(ADDED_FORMAT).to_string()).into_any_element(), Some(theme.vault_column_added_width), false),
             (muted(links.to_string()).into_any_element(), Some(theme.vault_column_links_width), true),
         ];
         div()

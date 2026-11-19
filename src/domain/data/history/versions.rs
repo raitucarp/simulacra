@@ -2,7 +2,7 @@
 //! one, newest first, the oldest marked as the original.
 
 use super::Revision;
-use chrono::{DateTime, Utc};
+use jiff::Timestamp;
 
 /// Where a version stands in the history.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -21,7 +21,7 @@ pub struct Version {
     /// The revision holding this version (`None` for the current one).
     pub revision: Option<super::RevisionId>,
     /// When this version stopped being current (`None` for the current one).
-    pub replaced_at: Option<DateTime<Utc>>,
+    pub replaced_at: Option<Timestamp>,
     pub title: String,
     pub content: String,
     pub record_json: String,

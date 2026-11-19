@@ -4,7 +4,7 @@ use crate::domain::post::SourceLocator;
 use crate::domain::review::schedule::{ItemSchedule, SAME_DAY};
 use crate::domain::review::{day::days_between, Grade};
 use crate::i18n::t_count;
-use chrono::NaiveDate;
+use jiff::civil::Date;
 use rust_i18n::t;
 
 const DAYS_PER_MONTH: f64 = 30.44;
@@ -35,7 +35,7 @@ pub fn interval_label(days: u32) -> String {
 }
 
 /// When an item is due, from `today`.
-pub fn due_label(schedule: &ItemSchedule, today: NaiveDate) -> String {
+pub fn due_label(schedule: &ItemSchedule, today: Date) -> String {
     if schedule.is_new() {
         return tr("review.due.new");
     }

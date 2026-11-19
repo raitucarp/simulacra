@@ -2,7 +2,7 @@ use super::day;
 use crate::domain::review::day::{review_day, DAY_ROLLOVER_HOUR};
 use crate::domain::review::schedule::{preview, review, ItemSchedule, Phase, Policy, SAME_DAY};
 use crate::domain::review::Grade;
-use chrono::{FixedOffset, NaiveDate, TimeZone};
+use jiff::tz::Offset;
 
 fn policy() -> Policy {
     Policy::with_retention_percent(90)
@@ -75,18 +75,18 @@ fn intervals_never_exceed_the_cap() {
 
 #[test]
 fn the_review_day_rolls_over_after_the_small_hours() {
-    let zone = FixedOffset::east_opt(7 * 3600).unwrap();
-    let late = zone.with_ymd_and_hms(2026, 3, 2, (DAY_ROLLOVER_HOUR - 1) as u32, 30, 0).unwrap();
-    let early = zone.with_ymd_and_hms(2026, 3, 2, DAY_ROLLOVER_HOUR as u32, 0, 0).unwrap();
-    assert_eq!(review_day(&late), NaiveDate::from_ymd_opt(2026, 3, 1).unwrap(), "3:30 still counts as yesterday");
-    assert_eq!(review_day(&early), NaiveDate::from_ymd_opt(2026, 3, 2).unwrap());
+    let zone = jiff::tz::TimeZone::fixed(Offset::constant(7));
+    let at = |hour: i64, minute| jiff::civil::date(2026, 3, 2).at(hour as i8, minute, 0, 0).to_zoned_datetime(zone.clone()).unwrap();
+    let (late, early) = (at(DAY_ROLLOVER_HOUR - 1, 30), at(DAY_ROLLOVER_HOUR, 0));
+    assert_eq!(review_day(&late), jiff::civil::date(2026, 3, 1), "3:30 still counts as yesterday");
+    assert_eq!(review_day(&early), jiff::civil::date(2026, 3, 2));
 }
 
 #[test]
 fn overdue_reviews_use_the_real_elapsed_time() {
     let card = &run(&[Grade::Good, Grade::Good], &policy())[1];
     let on_time = review(card, Grade::Good, card.due, &policy());
-    let late = review(card, Grade::Good, card.due + chrono::Duration::days(20), &policy());
+    let late = review(card, Grade::Good, card.due + crate::time::days(20), &policy());
     assert!(late.memory.unwrap().stability > on_time.memory.unwrap().stability, "a harder recall strengthens more");
-    assert!(card.retrievability(card.due + chrono::Duration::days(20), &policy().params).unwrap() < 0.9);
+    assert!(card.retrievability(card.due + crate::time::days(20), &policy().params).unwrap() < 0.9);
 }

@@ -74,7 +74,7 @@ impl ToolContext {
     pub fn capture(network: &NetworkId, posts: &[Post], profiles: &[Profile], documents: &[GroundingDocument]) -> Self {
         let by_id: HashMap<&str, &Profile> = profiles.iter().map(|p| (p.id.as_str(), p)).collect();
         let mut network_posts: Vec<&Post> = posts.iter().filter(|p| &p.network_id == network).collect();
-        network_posts.sort_by(|a, b| b.created_at.cmp(&a.created_at));
+        network_posts.sort_by_key(|a| std::cmp::Reverse(a.created_at));
         network_posts.truncate(MAX_CONTEXT_POSTS);
         Self {
             posts: network_posts.into_iter().map(|post| post_snapshot(post, by_id.get(post.author_id.as_str()))).collect(),

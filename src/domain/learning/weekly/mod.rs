@@ -98,7 +98,7 @@ pub fn weekly_digest(inputs: &WeekInputs<'_>) -> WeeklyDigest {
     let window = WeekWindow::ending(inputs.today);
     let log: Vec<&ReviewEntry> = inputs.log.iter().filter(|entry| window.contains(entry.day)).collect();
     let mut posts: Vec<&OwnPost> = inputs.own_posts.iter().filter(|post| window.contains(post.day)).collect();
-    posts.sort_by(|a, b| b.day.cmp(&a.day));
+    posts.sort_by_key(|a| std::cmp::Reverse(a.day));
     let horizon = add_days(inputs.today, WEEK_DAYS - 1);
     let active = || inputs.items.iter().filter(|item| item.is_active() && !item.schedule.is_new());
     WeeklyDigest {

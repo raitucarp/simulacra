@@ -83,7 +83,7 @@ fn capitalization_style_is_applied() {
 
 #[test]
 fn emoji_usage_adds_real_emoji() {
-    assert!(!BASELINE.chars().any(|c| !c.is_ascii()));
+    assert!(BASELINE.is_ascii());
     assert!(with(|c| c.emoji_usage = Emoji::RareSubtle).ends_with("this. 🌿"));
     assert!(with(|c| c.emoji_usage = Emoji::ModerateExpressive).ends_with("🤔✨"));
     assert!(with(|c| c.emoji_usage = Emoji::KaomojiTextOnly).ends_with("(・_・;)"));

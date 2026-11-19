@@ -2,10 +2,12 @@
 name = "simulacra"
 version = "0.1.0"
 edition = "2021"
+# An application, never published to crates.io (lets cargo-deny skip licence checks on it).
+publish = false
 
 [dependencies]
 gpui-kit = "0.8.1"
-rusqlite = { version = "0.32", features = ["bundled", "backup"] }
+rusqlite = { version = "0.41", features = ["bundled", "backup"] }
 tokio = { version = "1", features = ["full"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
@@ -14,7 +16,7 @@ uuid = { version = "1", features = ["v4", "serde"] }
 thiserror = "2.0"
 rust-i18n = "4.2"
 reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
-nano-vectordb-rs = { git = "https://github.com/VectorInstitute/nano-vectordb-rs" }
+nano-vectordb-rs = { git = "https://github.com/VectorInstitute/nano-vectordb-rs", rev = "9963b3d8334f6193f114832521391f29eda67e35", version = "0.1.1" }
 rfd = "0.15"
 base64 = "0.22"
 # Already in the graph via gpui-kit-assets; embeds `assets/illustrations` (read from disk in debug builds).
@@ -40,6 +42,19 @@ zeroize = "1.8"
 
 [dev-dependencies]
 resvg = "0.45.1"
+
+# Clippy policy, following the gpui codebase (Zed): the style group stays advisory and builder-heavy
+# UI types are allowed to be complex, while real mistakes are denied. CI runs clippy with -D warnings.
+[lints.clippy]
+style = { level = "allow", priority = -1 }
+type_complexity = "allow"
+too_many_arguments = "allow"
+large_enum_variant = "allow"
+# Enums declared through `keyed_enum!` cannot take `#[derive(Default)]`, so their defaults are written out.
+derivable_impls = "allow"
+dbg_macro = "deny"
+todo = "deny"
+declare_interior_mutable_const = "deny"
 
 [profile.dev]
 opt-level = 1

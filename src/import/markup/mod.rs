@@ -75,8 +75,8 @@ impl<'a> Tokens<'a> {
             return Some(Token::Text(&body[..end]));
         }
         for (open, close) in [("<!--", "-->"), ("<!", ">"), ("<?", "?>")] {
-            if rest.starts_with(open) {
-                self.at += rest[open.len()..].find(close).map_or(rest.len(), |end| open.len() + end + close.len());
+            if let Some(after) = rest.strip_prefix(open) {
+                self.at += after.find(close).map_or(rest.len(), |end| open.len() + end + close.len());
                 return None;
             }
         }

@@ -96,7 +96,7 @@ pub fn post_links(attached: Option<&str>, content: &str) -> Vec<String> {
 /// The last path segment of `url` (`seminar-clip.mp4`), percent-decoding left as written.
 pub fn link_file_name(url: &str) -> Option<String> {
     let parsed = Url::parse(url.trim()).ok()?;
-    let name = parsed.path_segments()?.filter(|segment| !segment.is_empty()).next_back()?;
+    let name = parsed.path_segments()?.rfind(|segment| !segment.is_empty())?;
     Some(name.to_string())
 }
 

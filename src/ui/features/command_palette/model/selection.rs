@@ -33,11 +33,11 @@ pub fn next_group_start(groups: &[ResultGroup], selected: usize) -> usize {
 /// First result of the selected group, or of the previous group when already on it.
 pub fn previous_group_start(groups: &[ResultGroup], selected: usize) -> usize {
     let starts = group_starts(groups);
-    let current = starts.iter().copied().filter(|&start| start <= selected).last().unwrap_or(0);
+    let current = starts.iter().copied().rfind(|&start| start <= selected).unwrap_or(0);
     if current < selected {
         return current;
     }
-    starts.iter().copied().filter(|&start| start < current).last().or_else(|| starts.last().copied()).unwrap_or(0)
+    starts.iter().copied().rfind(|&start| start < current).or_else(|| starts.last().copied()).unwrap_or(0)
 }
 
 /// The (group, item) position of a flat index.

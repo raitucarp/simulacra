@@ -42,6 +42,6 @@ pub fn minutes_by_day(sessions: &[FocusSession]) -> BTreeMap<NaiveDate, u32> {
 /// Sessions newest first.
 pub fn newest_sessions(sessions: &[FocusSession]) -> Vec<&FocusSession> {
     let mut sorted: Vec<&FocusSession> = sessions.iter().collect();
-    sorted.sort_by(|a, b| b.started_at.cmp(&a.started_at));
+    sorted.sort_by_key(|a| std::cmp::Reverse(a.started_at));
     sorted
 }

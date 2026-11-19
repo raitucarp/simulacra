@@ -25,7 +25,7 @@ fn defaults_are_unmodified_and_every_field_round_trips() {
 fn other_value(field: SettingField, prefs: &Preferences) -> Option<SettingValue> {
     match (field.kind(), field.get(prefs)) {
         (FieldKind::Toggle, SettingValue::Toggle(on)) => Some(SettingValue::Toggle(!on)),
-        (FieldKind::Choice(keys), SettingValue::Choice(key)) => keys.iter().find(|k| **k != key).map(|k| SettingValue::Choice(*k)),
+        (FieldKind::Choice(keys), SettingValue::Choice(key)) => keys.iter().find(|k| **k != key).map(|k| SettingValue::Choice(k)),
         (FieldKind::Number(spec), SettingValue::Number(n)) => {
             let up = spec.bounds.stepped(n, 1);
             Some(SettingValue::Number(if up != n { up } else { spec.bounds.stepped(n, -1) }))

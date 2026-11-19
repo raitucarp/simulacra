@@ -79,9 +79,9 @@ impl ColumnChart {
         div().relative().flex_none().w(theme.insights_axis_width).h(self.height).children(marks)
     }
 
-    fn grid(&self, ticks: &[f64], scale: LinearScale) -> impl Iterator<Item = Div> {
+    fn grid<'a>(&self, ticks: &'a [f64], scale: LinearScale) -> impl Iterator<Item = Div> + 'a {
         let theme = self.theme.clone();
-        ticks.to_vec().into_iter().map(move |tick| {
+        ticks.iter().copied().map(move |tick| {
             div().absolute().left_0().right_0().bottom(relative(scale.share(tick))).h(theme.border_width_hairline).bg(theme.border_subtle)
         })
     }

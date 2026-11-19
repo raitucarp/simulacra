@@ -1,0 +1,110 @@
+name: Package
+
+# Reusable: builds the release binary for one target, packages its installers with
+# cargo-packager (NSIS setup, DMG, .deb, AppImage) plus a plain archive, and uploads them as the
+# `dist-<slug>` artifact. Release builds never touch the Actions cache: what users download is
+# compiled from the tagged source alone.
+
+on:
+  workflow_call:
+    inputs:
+      name:
+        description: Platform name shown in the job title
+        type: string
+        required: true
+      os:
+        description: Runner image
+        type: string
+        required: true
+      target:
+        description: Rust target triple
+        type: string
+        required: true
+      formats:
+        description: cargo-packager formats, comma separated
+        type: string
+        required: true
+      slug:
+        description: Short platform name used in file and artifact names
+        type: string
+        required: true
+      ref:
+        description: Commit or tag to build
+        type: string
+        required: true
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_INCREMENTAL: 0
+
+jobs:
+  package:
+    name: Package (${{ inputs.name }})
+    runs-on: ${{ inputs.os }}
+    timeout-minutes: 90
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ inputs.ref }}
+          persist-credentials: false
+
+      - uses: $/.github/actions/setup-rust
+        with:
+          target: ${{ inputs.target }}
+
+      - name: Build the release binary
+        env:
+          TARGET: ${{ inputs.target }}
+        run: cargo build --locked --release --target "$TARGET"
+
+      - name: Install cargo-packager
+        uses: taiki-e/install-action@cfdb7ed4ccc7c7dce37759eae89dc5674b469b39 # v2.90.3
+        with:
+          tool: cargo-packager@0.11.8
+
+      - name: Build installers
+        env:
+          TARGET: ${{ inputs.target }}
+          FORMATS: ${{ inputs.formats }}
+          # linuxdeploy is itself an AppImage; run it without FUSE on the CI runner.
+          APPIMAGE_EXTRACT_AND_RUN: "1"
+        run: cargo packager --release --target "$TARGET" --formats "$FORMATS"
+
+      - name: Collect release files
+        env:
+          TARGET: ${{ inputs.target }}
+          SLUG: ${{ inputs.slug }}
+        run: |
+          version=$(grep -m1 '^version' Cargo.toml | cut -d'"' -f2)
+          mkdir -p dist
+          # Installers (the macOS .app bundle is a folder; the .dmg already contains it).
+          find target/packages -maxdepth 1 -type f \
+            \( -name '*.exe' -o -name '*.msi' -o -name '*.dmg' -o -name '*.deb' -o -name '*.AppImage' \) \
+            -exec cp {} dist/ \;
+          # A plain archive of the executable for people who prefer no installer.
+          bin_dir="target/$TARGET/release"
+          name="simulacra-$version-$SLUG"
+          staging="$RUNNER_TEMP/$name"
+          mkdir -p "$staging"
+          cp README.md THIRD_PARTY.md "$staging/"
+          if [ "$RUNNER_OS" = "Windows" ]; then
+            cp "$bin_dir/simulacra.exe" "$staging/"
+            (cd "$RUNNER_TEMP" && 7z a -tzip "$GITHUB_WORKSPACE/dist/$name.zip" "$name" > /dev/null)
+          else
+            cp "$bin_dir/simulacra" "$staging/"
+            tar -C "$RUNNER_TEMP" -czf "dist/$name.tar.gz" "$name"
+          fi
+          ls -la dist
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: dist-${{ inputs.slug }}
+          path: dist/*
+          if-no-files-found: error
+          retention-days: 14

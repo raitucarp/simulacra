@@ -51,7 +51,7 @@ impl AppView {
         let Some(vault) = self.state.db.as_ref() else { return Vec::new() };
         let query = CatalogueQuery { text: concept.to_string(), ..CatalogueQuery::new(self.state.active_network_id.clone()) };
         let ids = vault.search_catalogue(&query, &self.state.library.tree()).unwrap_or_default();
-        let count = ids.len().min(HIT_LIMIT).max(1) as f32; // at least one, so the division is safe
+        let count = ids.len().clamp(1, HIT_LIMIT) as f32; // at least one, so the division is safe
         let scored: Vec<ScoredOwner> = ids
             .into_iter()
             .take(HIT_LIMIT)

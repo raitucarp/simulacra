@@ -23,7 +23,7 @@ pub fn heatmap_level(count: usize, max: usize) -> u8 {
     if count == 0 || max == 0 {
         return 0;
     }
-    (((count * HEATMAP_LEVELS as usize) + max - 1) / max).clamp(1, HEATMAP_LEVELS as usize) as u8
+    (count * HEATMAP_LEVELS as usize).div_ceil(max).clamp(1, HEATMAP_LEVELS as usize) as u8
 }
 
 /// `weeks` week columns ending with the week of `today` (each Monday first), oldest first.

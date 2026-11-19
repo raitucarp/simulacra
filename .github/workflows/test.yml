@@ -1,0 +1,68 @@
+name: Test
+
+# Reusable: builds every target and runs the full test suite on one platform. CI calls it for
+# each platform; the Release workflow calls it once per platform, and each platform's installers
+# wait only for that platform's tests.
+
+on:
+  workflow_call:
+    inputs:
+      name:
+        description: Platform name shown in the job title
+        type: string
+        required: true
+      os:
+        description: Runner image
+        type: string
+        required: true
+      cache:
+        description: Restore and save the compiled-dependency cache
+        type: boolean
+        default: true
+      ref:
+        description: Commit or tag to test (defaults to the triggering commit)
+        type: string
+        default: ""
+
+permissions:
+  contents: read
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_INCREMENTAL: 0
+  # Simulacra's own code compiles without optimisation in CI: five to six times faster than the
+  # opt-level 1 of local test runs, and the suite still runs in seconds. Dependencies keep
+  # opt-level 3 (Cargo.toml), so their cached builds are unaffected.
+  CARGO_PROFILE_DEV_OPT_LEVEL: 0
+  CARGO_PROFILE_TEST_OPT_LEVEL: 0
+
+jobs:
+  test:
+    name: Test (${{ inputs.name }})
+    runs-on: ${{ inputs.os }}
+    timeout-minutes: 60
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ inputs.ref }}
+          persist-credentials: false
+
+      - uses: $/.github/actions/setup-rust
+        with:
+          cache-key: ${{ inputs.cache && format('test-{0}', runner.os) || '' }}
+          save-cache: ${{ inputs.cache }}
+
+      # One compile covers every target (library, binary, tests) and runs the tests. Warnings
+      # fail the job here too, which catches platform-only code that clippy on Linux never sees.
+      # RUSTFLAGS is not used for that: it would replace the Windows stack size in .cargo/config.toml.
+      - name: Build and test (no warnings allowed)
+        run: |
+          set -o pipefail
+          cargo test --locked --no-fail-fast --all-targets 2>&1 | tee "$RUNNER_TEMP/test.log"
+          if grep -E "^warning" "$RUNNER_TEMP/test.log"; then
+            echo "::error::the build reported warnings"
+            exit 1
+          fi

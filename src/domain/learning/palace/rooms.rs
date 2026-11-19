@@ -1,5 +1,5 @@
 //! The room types of a memory palace and their loci: each room scene
-//! (`assets/illustrations/palace/<kind>.svg`, drawn by `_tools/palace_art.py`) has five
+//! (`assets/illustrations/palace/<kind>.svg`) has five
 //! places along a walk from left to right, at the positions below on its 160 × 120 canvas.
 //! The art draws a landmark at each position; keep both in step.
 

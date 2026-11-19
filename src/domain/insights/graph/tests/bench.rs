@@ -10,6 +10,12 @@ const NODES: usize = 5_000;
 const EDGES: usize = 20_000;
 /// Generous enough for a loaded machine and a debug build; a quadratic regression blows it.
 const BUDGET: Duration = Duration::from_secs(40);
+/// How much more time an unoptimised build (`opt-level = 0`, see build.rs) gets. Layout runs about
+/// 15 times slower there, yet a quadratic regression at the target size still overshoots by far.
+#[cfg(unoptimized)]
+const UNOPTIMISED_SLOWDOWN: u32 = 8;
+#[cfg(not(unoptimized))]
+const UNOPTIMISED_SLOWDOWN: u32 = 1;
 
 /// A deterministic pseudo-random graph: a reply tree (every node answers an earlier one) plus
 /// extra links between nearby and far nodes, like posts, quotes and hashtags.
@@ -38,5 +44,5 @@ fn target_size_metrics_and_layout_fit_the_budget() {
     assert_eq!(metrics.pagerank.len(), NODES);
     assert!(metrics.betweenness_sampled);
     assert_eq!(positions.len(), NODES);
-    assert!(total < BUDGET, "metrics {analysed:?}, metrics + layout {total:?}");
+    assert!(total < BUDGET * UNOPTIMISED_SLOWDOWN, "metrics {analysed:?}, metrics + layout {total:?}");
 }

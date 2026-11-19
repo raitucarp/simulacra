@@ -2,9 +2,9 @@ name: Build installers
 
 # Reusable: builds release binaries for Windows x64, macOS (Apple silicon and Intel) and Linux x64,
 # packages installers with cargo-packager (NSIS setup, DMG, .deb, AppImage) plus plain archives,
-# and uploads them as `dist-<platform>` artifacts. CI calls it on pushes to main (which also keeps
-# the release cache warm for tags); the Release workflow calls it before publishing. It can also
-# be started by hand from the Actions tab to try packaging changes on any branch.
+# and uploads them as `dist-<platform>` artifacts. The Release workflow calls it before
+# publishing. It can also be started by hand from the Actions tab to try packaging changes on any
+# branch; a manual run on main also saves the release cache that the next tag starts from.
 
 on:
   workflow_call:
@@ -71,8 +71,8 @@ jobs:
         run: bash .github/scripts/install-linux-deps.sh
 
       # Release builds cannot reuse the test cache (different optimisation and LTO), so each
-      # target keeps its own. Only main saves it: tags may restore caches from the default branch
-      # but not from other tags, and pull-request caches would crowd out the 10 GB repo budget.
+      # target keeps its own. Only a run on main saves it: tags may restore caches from the
+      # default branch but not from other tags, so a cache saved by a tag could never be reused.
       - uses: Swatinem/rust-cache@v2
         with:
           shared-key: release-${{ matrix.target }}

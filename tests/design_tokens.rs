@@ -1,5 +1,5 @@
 //! Design-token guard: UI code takes every visual size and color from `ThemeTokens`
-//! (AGENTS.md rule 1), never from raw literals or Tailwind-style rem utilities.
+//! never from raw literals or Tailwind-style rem utilities.
 //!
 //! Scans `src/ui/**` (test files excluded) and fails on:
 //! - `px(` / `rems(` / `relative(` called with a numeric literal;

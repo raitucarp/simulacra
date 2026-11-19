@@ -2,7 +2,8 @@ name: Package
 
 # Reusable: builds the release binary for one target, packages its installers with
 # cargo-packager (NSIS setup, DMG, .deb, AppImage) plus a plain archive, and uploads them as the
-# `dist-<slug>` artifact. Release builds never touch the Actions cache: what users download is
+# `dist-<slug>` artifact. Called by the Release workflow, and by Package check to try any branch
+# without publishing. Release builds never touch the Actions cache: what users download is
 # compiled from the tagged source alone.
 
 on:

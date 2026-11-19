@@ -4,7 +4,7 @@
 
 use super::{db_err, Database};
 use crate::error::Result;
-use rusqlite::{Connection, DatabaseName, OpenFlags};
+use rusqlite::{Connection, OpenFlags, MAIN_DB};
 use std::path::Path;
 
 /// `PRAGMA quick_check` answers this when the file is sound.
@@ -48,6 +48,6 @@ impl Database {
     /// Replaces the whole live database with the database at `source` (verify it first).
     pub fn restore_from_file(&self, source: &Path) -> Result<()> {
         let mut target = Connection::open(self.path()).map_err(db_err)?;
-        target.restore(DatabaseName::Main, source, None::<fn(rusqlite::backup::Progress)>).map_err(db_err)
+        target.restore(MAIN_DB, source, None::<fn(rusqlite::backup::Progress)>).map_err(db_err)
     }
 }

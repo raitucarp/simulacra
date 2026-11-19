@@ -113,6 +113,9 @@ pub struct AppState {
     pub load_error: Option<crate::error::AppError>,
     /// Cached link previews and image scans (sb C3), filled in the background by the shell.
     pub media: crate::domain::media::MediaCatalog,
+    /// Bumped whenever the user likes or unlikes a post (recommendations depend on likes, the
+    /// post index revision does not change for them).
+    pub engagement: u64,
 }
 
 impl Default for AppState {

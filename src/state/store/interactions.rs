@@ -61,6 +61,7 @@ impl AppState {
 
         if let Some(post) = post {
             post.toggle_like();
+            self.engagement += 1;
             if let Some(ref db) = self.db {
                 let _ = db.update_post_like(post_id, post.likes, post.is_liked);
             }

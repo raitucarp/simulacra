@@ -1,6 +1,7 @@
 //! Recommendations in the window, all from post embeddings: the "For you" order and its
 //! ranking, the focused post's related posts, and the selected profile's recommended posts.
-//! Each result is cached until the posts, the vector index, the model or the hour changes.
+//! Each result is cached until the posts or the user's likes, the vector index, the model or
+//! the hour changes.
 
 use super::binder::Binder;
 use super::view::AppView;
@@ -23,7 +24,8 @@ const SECONDS_PER_HOUR: i64 = 3_600;
 /// What a cached result was computed from.
 #[derive(Debug, Clone, PartialEq, Eq)]
 struct Stamp {
-    posts: (u64, usize),
+    /// Post index revision, post count and like changes.
+    posts: (u64, usize, u64),
     vectors: usize,
     model: String,
     hour: i64,
@@ -55,7 +57,7 @@ fn cached<T: Clone>(cache: &Cached<T>, stamp: Stamp, make: impl FnOnce() -> T) -
 
 impl AppView {
     fn recommend_stamp(&self, model: &str, subject: String) -> Stamp {
-        let posts = (self.state.index.revision(), self.state.posts.len());
+        let posts = (self.state.index.revision(), self.state.posts.len(), self.state.engagement);
         let hour = Timestamp::now().as_second() / SECONDS_PER_HOUR;
         Stamp { posts, vectors: self.semantic.index.len(), model: model.to_owned(), hour, subject }
     }

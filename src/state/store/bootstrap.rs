@@ -99,6 +99,7 @@ impl AppState {
             db,
             load_error: None,
             media: Default::default(),
+            engagement: 0,
         }
     }
 }

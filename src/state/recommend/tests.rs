@@ -96,3 +96,17 @@ fn related_posts_come_from_other_conversations() {
     assert!(related.iter().all(|hit| hit.owner.id != root.as_str()), "{related:?}");
     assert_eq!(related.len(), 2, "the reply in its own thread is left out, cooking fills in");
 }
+
+#[test]
+fn a_like_shapes_the_users_interest_and_bumps_the_engagement_revision() {
+    let mut w = world();
+    let liked = post(&mut w, "ada", "duty", [1.0, 0.0, 0.0], None);
+    let near = post(&mut w, "bo", "virtue", [0.9, 0.1, 0.0], None);
+    let cooking = post(&mut w, "bo", "bread", [0.0, 0.0, 1.0], None);
+    assert!(recommender(&w).for_you().is_empty(), "no engagement yet");
+    let before = w.state.engagement;
+    w.state.toggle_like(&liked);
+    assert!(w.state.engagement > before, "cached recommendations see the like");
+    let scores = recommender(&w).for_you();
+    assert!(scores[&near] > scores[&cooking], "{scores:?}");
+}

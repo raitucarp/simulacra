@@ -9,7 +9,11 @@ all-features = true
 # depends on them directly; deep in the UI toolkit's tree they are reported upstream instead.
 unmaintained = "workspace"
 yanked = "deny"
-ignore = []
+ignore = [
+    # chrono is flagged unmaintained (informational, no fixed version exists). Simulacra uses it
+    # for every timestamp; moving to jiff is planned as its own change.
+    { id = "RUSTSEC-2026-0543", reason = "no fixed version; migration to jiff planned" },
+]
 
 [licenses]
 # Permissive licences, plus MPL-2.0 (file-level copyleft, fine to ship in a binary).
@@ -26,7 +30,6 @@ allow = [
     "MIT",
     "MIT-0",
     "MPL-2.0",
-    "NCSA",
     "Unicode-3.0",
     "Unlicense",
     "Zlib",
@@ -38,8 +41,9 @@ confidence-threshold = 0.9
 ignore = true
 
 [bans]
-# The UI toolkit pulls several major versions of some crates; that is reported, not refused.
-multiple-versions = "warn"
+# The UI toolkit pulls several major versions of some crates (about 75); listing them on every
+# run would bury real findings, and they are out of Simulacra's hands.
+multiple-versions = "allow"
 wildcards = "deny"
 
 [sources]

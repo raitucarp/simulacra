@@ -50,7 +50,7 @@ jobs:
           ref: ${{ inputs.ref }}
           persist-credentials: false
 
-      - uses: ./.github/actions/setup-rust
+      - uses: $/.github/actions/setup-rust
         with:
           cache-key: ${{ inputs.cache && format('test-{0}', runner.os) || '' }}
           save-cache: ${{ inputs.cache }}

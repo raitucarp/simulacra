@@ -65,11 +65,15 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      # Vulnerabilities, licences, banned crates and allowed sources (deny.toml).
-      - uses: EmbarkStudios/cargo-deny-action@3c6349835b2b7b196a839186cb8b78e02f7b5f25 # v2.1.1
+      - uses: $/.github/actions/setup-rust
         with:
-          command: check
-          arguments: --all-features
+          linux-libraries: "false"
+      - uses: taiki-e/install-action@cfdb7ed4ccc7c7dce37759eae89dc5674b469b39 # v2.90.3
+        with:
+          tool: cargo-deny@0.20.2
+      # Vulnerabilities, licences, banned crates and allowed sources (deny.toml).
+      - name: cargo deny check
+        run: cargo deny --all-features check
       # What this pull request adds: new dependencies with known vulnerabilities fail it.
       - if: github.event_name == 'pull_request'
         uses: actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294 # v5.0.0
@@ -100,7 +104,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: ./.github/actions/setup-rust
+      - uses: $/.github/actions/setup-rust
         with:
           cache-key: clippy-Linux
           save-cache: "true"
@@ -116,7 +120,7 @@ jobs:
       fail-fast: false
       matrix:
         include: ${{ fromJSON(github.event_name == 'pull_request' && '[{"name":"Linux","os":"ubuntu-24.04"},{"name":"Windows","os":"windows-latest"}]' || '[{"name":"Linux","os":"ubuntu-24.04"},{"name":"Windows","os":"windows-latest"},{"name":"macOS","os":"macos-latest"}]') }}
-    uses: ./.github/workflows/test.yml
+    uses: $/.github/workflows/test.yml
     with:
       name: ${{ matrix.name }}
       os: ${{ matrix.os }}

@@ -17,6 +17,10 @@ inputs:
     description: Whether this job may save the cache ("true" or "false").
     required: false
     default: "false"
+  linux-libraries:
+    description: Install the Linux system libraries needed to compile ("false" for metadata-only jobs).
+    required: false
+    default: "true"
 
 runs:
   using: composite
@@ -33,7 +37,7 @@ runs:
 
     # X11, Wayland, Vulkan and fonts for gpui; GTK 3 for the native file dialog.
     - name: Install Linux system libraries
-      if: runner.os == 'Linux'
+      if: runner.os == 'Linux' && inputs.linux-libraries == 'true'
       shell: bash
       run: |
         sudo apt-get update

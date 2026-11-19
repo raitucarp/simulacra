@@ -83,30 +83,34 @@ jobs:
         with:
           ref: ${{ env.RELEASE_TAG }}
           persist-credentials: false
-      - uses: EmbarkStudios/cargo-deny-action@3c6349835b2b7b196a839186cb8b78e02f7b5f25 # v2.1.1
+      - uses: $/.github/actions/setup-rust
         with:
-          command: check
-          arguments: --all-features
+          linux-libraries: "false"
+      - uses: taiki-e/install-action@cfdb7ed4ccc7c7dce37759eae89dc5674b469b39 # v2.90.3
+        with:
+          tool: cargo-deny@0.20.2
+      - name: cargo deny check
+        run: cargo deny --all-features check
 
   test-linux:
     name: Linux
     needs: tag
     if: needs.tag.outputs.tested != 'true'
-    uses: ./.github/workflows/test.yml
+    uses: $/.github/workflows/test.yml
     with: { name: Linux, os: ubuntu-24.04, cache: false, ref: "${{ inputs.tag || github.ref_name }}" }
 
   test-windows:
     name: Windows
     needs: tag
     if: needs.tag.outputs.tested != 'true'
-    uses: ./.github/workflows/test.yml
+    uses: $/.github/workflows/test.yml
     with: { name: Windows, os: windows-latest, cache: false, ref: "${{ inputs.tag || github.ref_name }}" }
 
   test-macos:
     name: macOS
     needs: tag
     if: needs.tag.outputs.tested != 'true'
-    uses: ./.github/workflows/test.yml
+    uses: $/.github/workflows/test.yml
     with: { name: macOS, os: macos-latest, cache: false, ref: "${{ inputs.tag || github.ref_name }}" }
 
   # Each platform's installers wait for that platform's tests (or their skip) and the policy.
@@ -114,7 +118,7 @@ jobs:
     name: Linux
     needs: [tag, dependencies, test-linux]
     if: ${{ !cancelled() && needs.tag.result == 'success' && needs.dependencies.result == 'success' && contains(fromJSON('["success","skipped"]'), needs.test-linux.result) }}
-    uses: ./.github/workflows/package.yml
+    uses: $/.github/workflows/package.yml
     with:
       name: Linux x64
       os: ubuntu-22.04
@@ -127,7 +131,7 @@ jobs:
     name: Windows
     needs: [tag, dependencies, test-windows]
     if: ${{ !cancelled() && needs.tag.result == 'success' && needs.dependencies.result == 'success' && contains(fromJSON('["success","skipped"]'), needs.test-windows.result) }}
-    uses: ./.github/workflows/package.yml
+    uses: $/.github/workflows/package.yml
     with:
       name: Windows x64
       os: windows-latest
@@ -140,7 +144,7 @@ jobs:
     name: macOS Apple silicon
     needs: [tag, dependencies, test-macos]
     if: ${{ !cancelled() && needs.tag.result == 'success' && needs.dependencies.result == 'success' && contains(fromJSON('["success","skipped"]'), needs.test-macos.result) }}
-    uses: ./.github/workflows/package.yml
+    uses: $/.github/workflows/package.yml
     with:
       name: macOS Apple silicon
       os: macos-latest
@@ -153,7 +157,7 @@ jobs:
     name: macOS Intel
     needs: [tag, dependencies, test-macos]
     if: ${{ !cancelled() && needs.tag.result == 'success' && needs.dependencies.result == 'success' && contains(fromJSON('["success","skipped"]'), needs.test-macos.result) }}
-    uses: ./.github/workflows/package.yml
+    uses: $/.github/workflows/package.yml
     with:
       name: macOS Intel
       os: macos-latest
@@ -205,25 +209,30 @@ jobs:
         with:
           subject-path: dist/*
 
-      - uses: softprops/action-gh-release@8a0cd651e5b2365bd640854a3fa5dfc70e4875f3 # v3.0.4
-        with:
-          tag_name: ${{ env.RELEASE_TAG }}
-          name: Simulacra ${{ env.RELEASE_TAG }}
-          generate_release_notes: true
-          fail_on_unmatched_files: true
-          files: dist/*
-          body: |
-            ## Downloads
-            | Platform | Installer | Without installer |
-            |---|---|---|
-            | Windows 10/11 (x64) | `simulacra_*_x64-setup.exe` | `simulacra-*-windows-x64.zip` |
-            | macOS 11+ (Apple silicon) | `Simulacra_*_aarch64.dmg` | `simulacra-*-macos-arm64.tar.gz` |
-            | macOS 11+ (Intel) | `Simulacra_*_x64.dmg` | `simulacra-*-macos-x64.tar.gz` |
-            | Linux (x64) | `.deb` or `.AppImage` | `simulacra-*-linux-x64.tar.gz` |
+      # The GitHub CLI on the runner publishes the release; no third-party action is needed.
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cat > "$RUNNER_TEMP/notes.md" <<'NOTES'
+          ## Downloads
+          | Platform | Installer | Without installer |
+          |---|---|---|
+          | Windows 10/11 (x64) | `simulacra_*_x64-setup.exe` | `simulacra-*-windows-x64.zip` |
+          | macOS 11+ (Apple silicon) | `Simulacra_*_aarch64.dmg` | `simulacra-*-macos-arm64.tar.gz` |
+          | macOS 11+ (Intel) | `Simulacra_*_x64.dmg` | `simulacra-*-macos-x64.tar.gz` |
+          | Linux (x64) | `.deb` or `.AppImage` | `simulacra-*-linux-x64.tar.gz` |
 
-            Every asset the app uses (illustrations, themes, palettes, seed data, translations) is built into the executable.
-            Verify downloads against `SHA256SUMS.txt`, or check where a file was built with
-            `gh attestation verify <file> --repo raitucarp/simulacra`.
+          Every asset the app uses (illustrations, themes, palettes, seed data, translations) is built into the executable.
+          Verify downloads against `SHA256SUMS.txt`, or check where a file was built with
+          `gh attestation verify <file> --repo raitucarp/simulacra`.
 
-            The installers are not code-signed yet. On Windows, SmartScreen may ask you to confirm ("More info" → "Run anyway").
-            On macOS, right-click the app and choose Open the first time.
+          The installers are not code-signed yet. On Windows, SmartScreen may ask you to confirm ("More info" → "Run anyway").
+          On macOS, right-click the app and choose Open the first time.
+          NOTES
+          gh release create "$RELEASE_TAG" dist/* \
+            --repo "$GITHUB_REPOSITORY" \
+            --verify-tag \
+            --title "Simulacra $RELEASE_TAG" \
+            --notes-file "$RUNNER_TEMP/notes.md" \
+            --generate-notes

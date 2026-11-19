@@ -41,7 +41,7 @@ chacha20poly1305 = "=0.10.1"
 zeroize = "1.8"
 
 [dev-dependencies]
-resvg = "0.45.1"
+resvg = "0.46.0"
 
 # Clippy policy, following the gpui codebase (Zed): the style group stays advisory and builder-heavy
 # UI types are allowed to be complex, while real mistakes are denied. CI runs clippy with -D warnings.

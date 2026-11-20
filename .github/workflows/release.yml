@@ -169,7 +169,15 @@ jobs:
   publish:
     name: Publish the release
     needs: [tag, package-linux, package-windows, package-macos-arm64, package-macos-x64]
-    if: ${{ !cancelled() && !contains(needs.*.result, 'failure') && !contains(needs.*.result, 'skipped') }}
+    # Each result is checked by name: `needs.*.result` also sees the test jobs above, which are
+    # skipped on purpose when CI already passed, so it would skip the publish too.
+    if: >-
+      ${{ !cancelled()
+      && needs.tag.result == 'success'
+      && needs.package-linux.result == 'success'
+      && needs.package-windows.result == 'success'
+      && needs.package-macos-arm64.result == 'success'
+      && needs.package-macos-x64.result == 'success' }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:

@@ -2,7 +2,7 @@
 //! mock OpenAI-compatible server; the outcome carries the reply, its thread and its sources.
 
 use super::{openai_text, openai_tool_call, plan, tool_context};
-use crate::agent::engine::{DialecticEngine, EngineJob, PromptContext};
+use crate::agent::engine::{DialecticEngine, EngineJob, JobKind, PromptContext};
 use crate::agent::llm::LlmProvider;
 use crate::agent::mock_server::{MockReply, MockServer};
 use crate::domain::engine::{EngineConfig, OutputMode, SchemaPreset, StructuredOutput, ToolGrant};
@@ -17,9 +17,13 @@ fn parent() -> AuthoredPost {
 }
 
 fn job(engine: EngineConfig, endpoint: &str) -> EngineJob {
+    job_of(JobKind::Reply(parent()), engine, endpoint)
+}
+
+pub(super) fn job_of(kind: JobKind, engine: EngineConfig, endpoint: &str) -> EngineJob {
     let agent = Profile::new_agent("agent_spinoza", "Baruch", "@baruch", "Lens grinder");
     EngineJob {
-        parent: parent(),
+        kind,
         agent,
         network: NetworkId::new("net_x"),
         context: PromptContext { network_name: "Mind".into(), grounding_docs: vec!["Ethics".into()], ..PromptContext::default() },

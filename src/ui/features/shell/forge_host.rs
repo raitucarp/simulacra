@@ -3,6 +3,7 @@
 
 use super::view::AppView;
 use crate::domain::portrait::AvatarMode;
+use crate::domain::post::TriggerMode;
 use crate::domain::ProfileId;
 use crate::state::forge::ForgeKind;
 use crate::state::NavigationTab;
@@ -101,7 +102,7 @@ impl AppView {
         self.lab.selected_profile_id = Some(id.clone());
         forge.update(cx, |forge, cx| forge.committed(bring_to_life, cx));
         if intro_post && is_agent {
-            self.trigger_simulation_for_agent(Some(id), window, cx);
+            self.trigger_simulation_for_agent(Some(id), TriggerMode::Reply, window, cx);
         }
     }
 

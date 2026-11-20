@@ -4,6 +4,7 @@
 use super::super::scheduler_state::HEARTBEAT_INTERVAL;
 use super::super::view::AppView;
 use crate::agent::runtime::EnginePlan;
+use crate::agent::JobKind;
 use crate::agent::schedule::{due_agents, latest_activity, AgentSlot, Clock, ScheduleContext, SystemClock};
 use crate::domain::{AuthoredPost, NetworkId, Profile, ProfileId};
 use crate::state::recommend::Recommender;
@@ -80,7 +81,7 @@ impl AppView {
             match self.scheduled_job(&id).filter(|(agent, _, _)| self.engine_allowed(agent)) {
                 Some((agent, parent, network)) => {
                     self.scheduler.last_dispatch.insert(id.clone(), Timestamp::now());
-                    self.spawn_generation(agent, parent, network, window, cx);
+                    self.spawn_generation(agent, JobKind::Reply(parent), network, window, cx);
                 }
                 None => self.scheduler.queue.complete(&id),
             }

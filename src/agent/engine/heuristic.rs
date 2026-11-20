@@ -1,11 +1,16 @@
-//! Offline heuristic reply text, used directly or as the LLM fallback.
+//! Offline heuristic post text (replies and new posts), used directly or as the LLM fallback.
 
 use super::voices::{CannedVoice, CANNED_VOICES, PARENT_REF_PLACEHOLDER};
 use super::DialecticEngine;
+use crate::domain::post::ResolvedSeed;
 use crate::domain::{CapitalizationStyle, Post, Profile};
 
 /// Lead phrase used when the persona has no usable signature phrase.
 const DEFAULT_LEAD: &str = "Reflecting on this";
+/// Subject of an unseeded new post when the persona lists no hobbies.
+const DEFAULT_SUBJECT: &str = "an open question";
+/// Separator between hobbies in the persona config.
+const HOBBY_SEPARATOR: char = ',';
 /// Separator between signature phrases in the persona config.
 const SIGNATURE_PHRASE_SEPARATOR: char = ';';
 /// Separator between variants inside one signature phrase.
@@ -27,11 +32,50 @@ impl DialecticEngine {
             None => generic_text(agent_profile, &parent_ref),
         };
 
-        match agent_profile.config.capitalization {
-            CapitalizationStyle::AllLowercase => raw.to_lowercase(),
-            _ => raw,
-        }
+        styled(agent_profile, raw)
     }
+
+    /// Heuristic text opening a new conversation about the seed (or, with no seed, the
+    /// agent's first hobby), in the agent's language and capitalization style.
+    pub(super) fn generate_heuristic_root_text(agent_profile: &Profile, seed: &ResolvedSeed) -> String {
+        let subject = root_subject(agent_profile, seed);
+        let lead = signature_lead(agent_profile);
+        let occupation = &agent_profile.config.occupation;
+        let mbti = agent_profile.config.mbti.code();
+        let raw = if speaks_indonesian(agent_profile) {
+            format!("{lead} — sebagai {occupation} ({mbti}), aku terus kembali memikirkan {subject}. Apa yang perlu kita pahami lebih dulu? #Dialektika")
+        } else {
+            format!("{lead} — as a {occupation} ({mbti}), I keep coming back to {subject}. What would it take to see it clearly? #Dialectic")
+        };
+        styled(agent_profile, raw)
+    }
+}
+
+/// `raw` in the agent's capitalization style.
+fn styled(agent_profile: &Profile, raw: String) -> String {
+    match agent_profile.config.capitalization {
+        CapitalizationStyle::AllLowercase => raw.to_lowercase(),
+        _ => raw,
+    }
+}
+
+/// The seed topic (citing the seed document as a `[[wikilink]]`), else the agent's first hobby.
+fn root_subject(agent_profile: &Profile, seed: &ResolvedSeed) -> String {
+    let cite = seed.document.as_ref().map(|doc| format!("[[{}]]", doc.title));
+    match (seed.topic.as_str(), cite) {
+        ("", Some(cite)) => cite,
+        ("", None) => {
+            let hobby = agent_profile.config.hobbies.split(HOBBY_SEPARATOR).next().unwrap_or_default().trim();
+            if hobby.is_empty() { DEFAULT_SUBJECT.to_string() } else { hobby.to_lowercase() }
+        }
+        (topic, Some(cite)) => format!("{topic} ({cite})"),
+        (topic, None) => topic.to_string(),
+    }
+}
+
+fn speaks_indonesian(agent_profile: &Profile) -> bool {
+    let lang_lower = agent_profile.config.primary_language.to_lowercase();
+    INDONESIAN_LANGUAGE_MARKERS.iter().any(|marker| lang_lower.contains(marker))
 }
 
 /// Picks the first keyword-matching template of `voice` (or its fallback) and fills it in.
@@ -66,12 +110,8 @@ fn generic_text(agent_profile: &Profile, parent_ref: &str) -> String {
     let lead = signature_lead(agent_profile);
     let occupation = &agent_profile.config.occupation;
     let mbti = agent_profile.config.mbti.code();
-    let lang_lower = agent_profile.config.primary_language.to_lowercase();
 
-    if INDONESIAN_LANGUAGE_MARKERS
-        .iter()
-        .any(|marker| lang_lower.contains(marker))
-    {
+    if speaks_indonesian(agent_profile) {
         format!(
             "{lead} — menarik melihat perspektif di {parent_ref} dari sudut pandang {occupation} ({mbti}). Bagaimana implikasi jangka panjangnya menurutmu? #Dialektika"
         )

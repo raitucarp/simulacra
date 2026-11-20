@@ -1,6 +1,7 @@
 mod job;
 mod native;
 mod requests;
+mod root_job;
 
 use crate::agent::credentials::{Credential, CredentialKind, CredentialStore};
 use crate::agent::llm::{LlmProvider, LlmSettings};

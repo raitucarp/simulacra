@@ -9,6 +9,7 @@ mod lifecycle;
 mod parse;
 mod provenance;
 mod relations;
+pub mod seed;
 mod tokens;
 
 pub use authored::AuthoredPost;
@@ -17,6 +18,7 @@ pub use kind::PostKind;
 pub use lifecycle::{PostLifecycle, PostStatus};
 pub use parse::{HASHTAG_SIGIL, WIKILINK_CLOSE, WIKILINK_OPEN};
 pub use provenance::{PostOrigin, SourceLocator};
+pub use seed::{PostSeed, ResolvedSeed, SeedDocument, TriggerMode};
 pub use tokens::{
     has_rich_markup, is_trailing_punctuation, tokenize_post_body, visible_len, visible_text, visible_text_len, wikilink_targets, BodyToken,
     Mark,

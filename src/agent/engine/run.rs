@@ -1,16 +1,18 @@
-//! Reply generation entry points: LLM (async, blocking, background thread) and heuristic.
+//! Generation entry points: LLM (async, blocking, background thread) and heuristic.
 //!
 //! Every LLM path keeps the offline heuristic reply as a fallback, but never hides the
 //! failure: it is returned alongside the reply in a [`SimulationOutcome`]. The background
 //! paths run through the per-agent engine runtime ([`super::job`]).
 
 use super::job::EngineJob;
+use super::kind::JobKind;
 use super::outcome::SimulationOutcome;
 use super::prompts::PromptContext;
 use super::reply::build_reply;
 use super::DialecticEngine;
 use crate::agent::llm::LlmClient;
 use crate::agent::runtime::{EnginePlan, GLOBAL_GATE_KEY};
+use crate::domain::post::ResolvedSeed;
 use crate::domain::{AuthoredPost, NetworkId, Post, Profile};
 use tokio::sync::oneshot;
 
@@ -77,8 +79,16 @@ impl DialecticEngine {
         build_reply(parent_post, agent_profile.clone(), network_id.clone(), response_text)
     }
 
+    /// Generates a new top-level persona post from `seed` (synchronous heuristic mode, used
+    /// when no model is configured).
+    pub fn generate_root_post(agent_profile: &Profile, network_id: &NetworkId, seed: &ResolvedSeed) -> Post {
+        let kind = JobKind::NewPost(seed.clone());
+        let text = kind.heuristic_text(agent_profile);
+        kind.post(agent_profile.clone(), network_id.clone(), text, Default::default())
+    }
+
     /// A job for the classic engine: `client`, free text, no tools, no image.
     fn classic_job(parent: AuthoredPost, agent: Profile, network: NetworkId, client: LlmClient, context: PromptContext) -> EngineJob {
-        EngineJob { parent, agent, network, context, plan: EnginePlan::from_client(client), tools: None, roll: 0 }
+        EngineJob { kind: JobKind::Reply(parent), agent, network, context, plan: EnginePlan::from_client(client), tools: None, roll: 0 }
     }
 }

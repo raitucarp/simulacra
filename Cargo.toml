@@ -1,6 +1,6 @@
 [package]
 name = "simulacra"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 # An application, never published to crates.io (lets cargo-deny skip licence checks on it).
 publish = false

@@ -8,7 +8,7 @@ use crate::domain::journal::focus::stats::minutes_by_day;
 use crate::domain::journal::focus::FocusLink;
 use crate::domain::journal::journal_day;
 use crate::domain::journal::privacy::{palette_entries, JournalPrivacy};
-use crate::domain::post::{tokenize_post_body, BodyToken};
+use crate::domain::post::{tokenize_post_body, wikilink_targets};
 use crate::state::{NavigationTab, WikilinkTarget};
 use crate::ui::features::command_palette::model::{PaletteGroup, PaletteItem};
 use crate::ui::features::command_palette::{excerpt, CommandId, PaletteTarget};
@@ -71,10 +71,7 @@ impl AppView {
 
     /// What every `[[target]]` in the entries names: a post's excerpt or a document's title.
     fn journal_wikilinks(&self) -> WikilinkPreviews {
-        let targets = self.journal.book.entries.iter().flat_map(|e| tokenize_post_body(&e.body)).filter_map(|token| match token {
-            BodyToken::Wikilink { target, .. } => Some(target),
-            _ => None,
-        });
+        let targets = self.journal.book.entries.iter().flat_map(|e| wikilink_targets(&tokenize_post_body(&e.body)));
         let preview = |target: &str| match self.state.resolve_wikilink_target(target) {
             Some(WikilinkTarget::Post(id)) => self.state.resolve_wikilink_fast(id.as_str()),
             Some(WikilinkTarget::Document(id)) => self.state.documents.iter().find(|d| d.id == id).map(|d| d.title.clone()).unwrap_or(id),

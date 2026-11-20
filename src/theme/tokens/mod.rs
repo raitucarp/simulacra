@@ -15,6 +15,7 @@ theme_tokens! {
     strings: [font_family_ui, font_family_display, font_family_body, font_family_mono],
     colors: [
         bg_app, bg_card, bg_elevated, bg_sidebar, bg_callout, hover_bg, // Surface & Background Colors
+        bg_code, // Inline code and code block fill in post bodies
         border, border_subtle, border_strong, border_focus, // Border Colors
         focus_ring, // Keyboard focus ring (focus-visible outline of custom controls and kit widgets)
         text_primary, text_secondary, text_muted, // Text & Content Colors

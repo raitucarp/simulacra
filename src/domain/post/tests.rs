@@ -45,6 +45,17 @@ fn test_exceeding_character_limit_fails() {
 }
 
 #[test]
+fn test_character_limit_ignores_markup() {
+    let author = Profile::new_primary("u1", "Architect", "@arch");
+    let marked = format!("__{}__ `x`", "a".repeat(276));
+    assert!(marked.chars().count() > MAX_POST_CHARS);
+    assert!(Post::create("p1", "net1", author.clone(), &marked).is_ok());
+    let over = format!("**{}**", "a".repeat(281));
+    let result = Post::create("p2", "net1", author, &over);
+    assert_eq!(result, Err(AppError::ContentTooLong { max: 280, actual: 281 }));
+}
+
+#[test]
 fn test_create_with_attachments_and_links() {
     let author = Profile::new_primary("u1", "Architect", "@arch");
     let post = Post::create_with_attachments(

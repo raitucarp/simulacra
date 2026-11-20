@@ -78,6 +78,14 @@ fn draft_issue_flags_empty_and_too_long() {
 }
 
 #[test]
+fn draft_length_counts_visible_text_not_markup() {
+    let fits = format!("**{}**", "a".repeat(MAX_POST_CHARS));
+    assert_eq!(draft_issue(&fits, false), None);
+    let over = format!("*{}*", "a".repeat(MAX_POST_CHARS + 2));
+    assert_eq!(draft_issue(&over, false), Some(DraftIssue::TooLong { actual: MAX_POST_CHARS + 2, max: MAX_POST_CHARS }));
+}
+
+#[test]
 fn first_thread_problem_reports_the_first_blocking_draft() {
     let long = "b".repeat(MAX_POST_CHARS + 1);
     let drafts = ["fine", long.as_str(), ""];

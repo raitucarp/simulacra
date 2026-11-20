@@ -39,7 +39,7 @@ impl PostComposerView {
         window: &mut Window,
         cx: &mut Context<Self>,
     ) -> Self {
-        let initial_len = trimmed_len(&composer_input.read(cx).value());
+        let initial_len = visible_draft_len(&composer_input.read(cx).value());
         cx.bind_keys([
             KeyBinding::new(SUBMIT_BINDING_CTRL, SubmitPostDraft, Some(INPUT_KEY_CONTEXT)),
             KeyBinding::new(SUBMIT_BINDING_CMD, SubmitPostDraft, Some(INPUT_KEY_CONTEXT)),
@@ -66,7 +66,7 @@ impl PostComposerView {
     ) {
         match event {
             InputEvent::Change => {
-                let new_len = trimmed_len(&entity.read(cx).value());
+                let new_len = visible_draft_len(&entity.read(cx).value());
                 if self.draft_length != new_len || self.error.is_some() {
                     self.draft_length = new_len;
                     self.error = None;
@@ -127,6 +127,7 @@ impl PostComposerView {
     }
 }
 
-fn trimmed_len(text: &str) -> usize {
-    text.trim().chars().count()
+/// Draft length the character limit applies to: visible text, markup excluded.
+fn visible_draft_len(text: &str) -> usize {
+    crate::domain::post::visible_text_len(text)
 }

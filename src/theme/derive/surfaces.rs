@@ -13,6 +13,8 @@ const HOVER_ALPHA: f32 = 0.04;
 const TAB_ACTIVE_ALPHA: f32 = 0.05;
 /// Foreground alpha of a pressed control.
 const PRESSED_ALPHA: f32 = 0.08;
+/// Foreground alpha of the inline code and code block fill.
+const CODE_ALPHA: f32 = 0.07;
 /// Foreground alpha of a hovered window caption button.
 const WINDOW_CONTROL_HOVER_ALPHA: f32 = 0.12;
 /// Foreground alpha of a resting / hovered scrollbar thumb.
@@ -40,7 +42,7 @@ pub(super) fn apply_surfaces(t: &mut ThemeTokens, palette: &ThemePalette) {
         graph_edge: mix(c.border, c.fg_muted, GRAPH_EDGE_MIX),
 
         hover_bg: with_alpha(c.fg, HOVER_ALPHA), bg_tab_active: with_alpha(c.fg, TAB_ACTIVE_ALPHA),
-        pressed_bg: with_alpha(c.fg, PRESSED_ALPHA),
+        pressed_bg: with_alpha(c.fg, PRESSED_ALPHA), bg_code: with_alpha(c.fg, CODE_ALPHA),
         bg_window_control_hover: with_alpha(c.fg, WINDOW_CONTROL_HOVER_ALPHA),
         scrollbar: with_alpha(c.fg, SCROLLBAR_ALPHA),
         scrollbar_hover: with_alpha(c.fg, SCROLLBAR_HOVER_ALPHA),

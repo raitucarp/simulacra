@@ -1,6 +1,6 @@
 //! Validated construction of thought posts.
 
-use super::{Post, MAX_POST_CHARS};
+use super::{visible_text_len, Post, MAX_POST_CHARS};
 use crate::domain::ids::{NetworkId, PostId, ProfileId};
 use crate::error::{AppError, Result};
 use jiff::Timestamp;
@@ -90,12 +90,12 @@ fn clean_attachment(value: Option<String>) -> Option<String> {
     value.map(|s| s.trim().to_string()).filter(|s| !s.is_empty())
 }
 
-/// Rejects empty posts (unless media or a repost carries them) and posts over the limit.
+/// Rejects empty posts (unless media or a repost carries them) and posts whose visible text is over the limit.
 fn validate_content(trimmed: &str, has_media: bool, is_repost: bool) -> Result<()> {
     if trimmed.is_empty() && !has_media && !is_repost {
         return Err(AppError::EmptyContent);
     }
-    let char_count = trimmed.chars().count();
+    let char_count = visible_text_len(trimmed);
     if char_count > MAX_POST_CHARS {
         return Err(AppError::ContentTooLong {
             max: MAX_POST_CHARS,

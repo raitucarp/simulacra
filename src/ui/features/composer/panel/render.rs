@@ -58,7 +58,7 @@ impl Render for ComposerModalPanel {
             .drafts
             .iter()
             .map(|slot| {
-                let length = slot.input.read(cx).value().trim().chars().count();
+                let length = crate::domain::post::visible_text_len(&slot.input.read(cx).value());
                 DraftEditor { input: slot.input.clone(), length }
             })
             .collect();

@@ -4,14 +4,14 @@ mod split;
 
 pub use split::split_into_thread;
 
-use super::post::MAX_POST_CHARS;
+use super::post::{visible_text_len, MAX_POST_CHARS};
 
 /// Why a single thread draft cannot be published.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum DraftIssue {
     /// No text (and no attachment that could carry the post).
     Empty,
-    /// More characters than the per-post limit.
+    /// More visible characters (markup excluded) than the per-post limit.
     TooLong { actual: usize, max: usize },
 }
 
@@ -38,7 +38,7 @@ pub fn draft_issue(text: &str, has_media: bool) -> Option<DraftIssue> {
     if trimmed.is_empty() && !has_media {
         return Some(DraftIssue::Empty);
     }
-    let actual = trimmed.chars().count();
+    let actual = visible_text_len(trimmed);
     (actual > MAX_POST_CHARS).then_some(DraftIssue::TooLong { actual, max: MAX_POST_CHARS })
 }
 

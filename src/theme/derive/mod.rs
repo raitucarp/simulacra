@@ -28,6 +28,7 @@ mod suggestions;
 mod surfaces;
 mod text;
 mod thinking;
+mod tints;
 mod vault;
 
 pub use metrics::{DEFAULT_FONT_FAMILY, DEFAULT_MONO_FONT_FAMILY};
@@ -59,8 +60,7 @@ pub fn derive_tokens(
     import::apply_import_layout(&mut t);
     media::apply_media_layout(&mut t);
     semantic::apply_semantic_layout(&mut t);
-    review::apply_review_layout(&mut t);
-    review::apply_review_map_layout(&mut t);
+    review::apply_review_layout(&mut t); review::apply_review_map_layout(&mut t);
     insights::apply_insights_layout(&mut t); insight_more::apply_insight_more_layout(&mut t); // sb F3: lens views
     learning::apply_learning_layout(&mut t);
     journal::apply_journal_layout(&mut t); arena::apply_arena_layout(&mut t); // sb F1: Arena and Beliefs sizes
@@ -72,8 +72,8 @@ pub fn derive_tokens(
     thinking::apply_thinking_layout(&mut t); data::apply_data_layout(&mut t); // sb F2
     surfaces::apply_surfaces(&mut t, palette);
     text::apply_text(&mut t, palette);
-    accents::apply_accents(&mut t, palette);
-    accents::apply_shades(&mut t, palette);
+    accents::apply_accents(&mut t, palette); accents::apply_shades(&mut t, palette);
+    tints::apply_tints(&mut t, palette); // sb C1: after the text colors it keeps readable
     t.quantize_colors();
     t
 }

@@ -1,4 +1,5 @@
-//! Encrypted snapshots (sb F2): a whole-database backup sealed with a passphrase.
+//! Encrypted snapshots (sb F2): a whole-database backup sealed with a passphrase. The
+//! key derivation and seal are the shared [`crypto`](crate::domain::crypto) module's.
 //!
 //! - **Key:** Argon2id (RustCrypto `argon2`, version 0x13) over the passphrase and a random
 //!   16-byte salt, with the cost parameters stored in the header.

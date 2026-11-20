@@ -1,4 +1,8 @@
-//! sRGB color math for theme derivation: mixing, alpha, hex text and WCAG 2.x contrast.
+//! sRGB color math for theme derivation: mixing, alpha, hue, hex text and WCAG 2.x contrast.
+
+mod hue;
+
+pub use hue::with_hue;
 
 use gpui_kit::Rgba;
 

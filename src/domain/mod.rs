@@ -8,6 +8,7 @@ pub mod archetype;
 pub mod arena;
 pub mod beliefs;
 pub mod compose; // T1: free compose text to a tree of drafts
+pub mod crypto; // sb X1: password-based seal shared by snapshots and encrypted posts
 pub mod data; // sb F2: history, collections and bookmarks, export, snapshots
 pub mod document;
 pub mod embedding;

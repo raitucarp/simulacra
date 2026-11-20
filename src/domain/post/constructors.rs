@@ -55,9 +55,7 @@ impl Post {
             author_id: author.into(),
             content: trimmed.to_string(),
             created_at: Timestamp::now(),
-            likes: 0,
-            is_liked: false,
-            replies_count: 0,
+            likes: 0, is_liked: false, replies_count: 0,
             mentions,
             linked_posts,
             reply_to_id,
@@ -65,11 +63,8 @@ impl Post {
             repost_id,
             link_url: clean_link,
             image_path: clean_image,
-            reposts_count: 0,
-            is_reposted: false,
-            extras: Default::default(),
-            kind: Default::default(),
-            lifecycle: Default::default(),
+            reposts_count: 0, is_reposted: false,
+            extras: Default::default(), kind: Default::default(), lifecycle: Default::default(),
         })
     }
 }

@@ -8,7 +8,7 @@ mod semver;
 mod versions;
 
 pub use edit::edited_post;
-pub use semver::SemVer;
+pub use semver::{Bump, ParseSemVerError, SemVer, MAJOR_REMOVED_PERCENT, PATCH_MAX_WORDS};
 pub use diff::{diff_stats, tokens, word_diff, DiffOp, DiffStats, MAX_DIFF_CELLS};
 pub use versions::{version_list, Version, VersionKind};
 

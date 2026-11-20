@@ -4,6 +4,7 @@ mod dossier;
 mod ontology;
 mod sections;
 mod system;
+mod root;
 mod template;
 mod user;
 

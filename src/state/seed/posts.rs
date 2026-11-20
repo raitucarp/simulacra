@@ -60,6 +60,8 @@ impl PostSeed {
             reposts_count: self.reposts_count,
             is_reposted: self.is_reposted,
             extras: Default::default(),
+            kind: Default::default(),
+            lifecycle: Default::default(),
         }
     }
 }

@@ -15,6 +15,7 @@ theme_tokens! {
     strings: [font_family_ui, font_family_display, font_family_body, font_family_mono],
     colors: [
         bg_app, bg_card, bg_elevated, bg_sidebar, bg_callout, hover_bg, // Surface & Background Colors
+        bg_code, // Inline code and code block fill in post bodies
         border, border_subtle, border_strong, border_focus, // Border Colors
         focus_ring, // Keyboard focus ring (focus-visible outline of custom controls and kit widgets)
         text_primary, text_secondary, text_muted, // Text & Content Colors
@@ -28,6 +29,8 @@ theme_tokens! {
         accent_dialectic_subtle, accent_dialectic_border,
         graph_edge, // Mind Graph Topological Colors
         bg_feed_post, // Feed Surface Specialization (R2 Seamless Flat OLED)
+        tint_amber_bg, tint_amber_border, tint_rose_bg, tint_rose_border, tint_sky_bg, tint_sky_border, // sb C1: tinted post containers (read through `theme::tint_colors`)
+        tint_mint_bg, tint_mint_border, tint_violet_bg, tint_violet_border, tint_slate_bg, tint_slate_border,
     ],
     pixels: [
         font_size_2xs, font_size_xs, font_size_sm, font_size_base, font_size_md, font_size_lg, // Typography Scales

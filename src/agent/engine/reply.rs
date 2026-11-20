@@ -1,4 +1,4 @@
-//! The constructors for agent reply posts and their chained follow-ups.
+//! The constructors for agent posts: replies, new top-level posts and chained follow-ups.
 
 use crate::domain::{AuthoredPost, NetworkId, Post, PostId, Profile, ProfileId};
 use jiff::Timestamp;
@@ -22,6 +22,17 @@ pub(super) fn build_reply(
     content: String,
 ) -> Post {
     Post {
+        mentions: vec![parent_post.author.handle.clone()],
+        linked_posts: vec![parent_post.id.clone()],
+        reply_to_id: Some(parent_post.id.clone()),
+        ..build_root_post(agent_profile, network_id, content)
+    }
+}
+
+/// Builds a fresh top-level `Post` authored by `agent_profile`: it replies to, links and
+/// mentions no one (its thread parts are chained under it with [`build_followup`]).
+pub(super) fn build_root_post(agent_profile: Profile, network_id: NetworkId, content: String) -> Post {
+    Post {
         id: new_post_id(),
         network_id,
         author_id: agent_profile.id,
@@ -30,9 +41,9 @@ pub(super) fn build_reply(
         likes: 0,
         is_liked: false,
         replies_count: 0,
-        mentions: vec![parent_post.author.handle.clone()],
-        linked_posts: vec![parent_post.id.clone()],
-        reply_to_id: Some(parent_post.id.clone()),
+        mentions: Vec::new(),
+        linked_posts: Vec::new(),
+        reply_to_id: None,
         quote_id: None,
         repost_id: None,
         link_url: None,
@@ -40,6 +51,8 @@ pub(super) fn build_reply(
         reposts_count: 0,
         is_reposted: false,
         extras: Default::default(),
+        kind: Default::default(),
+        lifecycle: Default::default(),
     }
 }
 

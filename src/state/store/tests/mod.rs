@@ -1,6 +1,7 @@
 //! Unit tests for the central state store.
 
 mod action_target;
+mod authoring;
 mod avatar;
 mod captures;
 mod controls;

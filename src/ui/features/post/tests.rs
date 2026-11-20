@@ -220,11 +220,3 @@ fn test_slice_of_refs_lookup_matches_owned_excerpt() {
     assert_eq!(refs.resolve_wikilink("post_missing_slug"), "#miss");
     assert!(refs.find_post("post_ref_1").is_some());
 }
-
-#[test]
-fn test_body_text_wraps_word_by_word() {
-    let words: Vec<&str> = body::wrap_units("  Substance is one\tand  infinite; ").collect();
-    assert_eq!(words, vec!["Substance", "is", "one", "and", "infinite;"]);
-    assert_eq!(body::wrap_units("   ").count(), 0);
-    assert_eq!(body::wrap_units("実体は一つで無限である").count(), 1);
-}

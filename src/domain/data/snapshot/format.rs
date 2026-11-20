@@ -12,36 +12,18 @@
 //! | 8 | payload length (ciphertext with its 16-byte tag) |
 
 use super::SnapshotError;
+/// The cost parameters, salt and nonce sizes are the shared crypto module's (version 1 was
+/// written with exactly these; the costs a file may ask for are bounded by `is_sane`).
+pub use crate::domain::crypto::{KdfParams, NONCE_LEN, SALT_LEN};
 
 pub const MAGIC: &[u8; 8] = b"SIMSNAP\0";
 pub const FORMAT_VERSION: u16 = 1;
-pub const SALT_LEN: usize = 16;
-pub const NONCE_LEN: usize = 24;
 /// Bytes of the header.
 pub const HEADER_LEN: usize = MAGIC.len() + 2 + 1 + 12 + SALT_LEN + NONCE_LEN + 8 + 8;
+// Version 1 fixes the salt and nonce sizes in the file layout.
+const _: () = assert!(SALT_LEN == 16 && NONCE_LEN == 24);
 /// The only key derivation of version 1.
 const KDF_ARGON2ID: u8 = 1;
-/// Largest costs a file may ask for (a hostile file must not exhaust memory or time).
-const MAX_MEMORY_KIB: u32 = 1 << 20;
-const MAX_ITERATIONS: u32 = 16;
-const MAX_LANES: u32 = 8;
-
-/// Argon2id cost parameters.
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct KdfParams {
-    pub memory_kib: u32,
-    pub iterations: u32,
-    pub lanes: u32,
-}
-
-impl KdfParams {
-    /// 64 MiB, three passes, one lane: about half a second on a laptop.
-    pub const DEFAULT: Self = Self { memory_kib: 64 * 1024, iterations: 3, lanes: 1 };
-
-    fn is_sane(self) -> bool {
-        (1..=MAX_LANES).contains(&self.lanes) && (1..=MAX_ITERATIONS).contains(&self.iterations) && self.memory_kib <= MAX_MEMORY_KIB
-    }
-}
 
 /// Everything before the sealed payload.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]

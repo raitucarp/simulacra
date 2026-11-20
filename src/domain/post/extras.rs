@@ -3,6 +3,7 @@
 //! Imported and captured posts record their origin and the passage they cite.
 
 use super::provenance::{PostOrigin, SourceLocator};
+use crate::domain::symbols::PostSymbols;
 use serde::{Deserialize, Serialize};
 
 /// Structured-output fields and tool provenance attached to an agent post.
@@ -25,6 +26,12 @@ pub struct PostExtras {
     /// Images attached in the composer, with alt text (sb C3); `image_path` holds the first.
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub images: Vec<crate::domain::media::ImageAttachment>,
+    /// Entry kind, state, signifiers and custom icons (shown in place of the avatar).
+    #[serde(skip_serializing_if = "PostSymbols::is_empty")]
+    pub symbols: PostSymbols,
+    /// The colour the post's container is tinted with (sb C1); unknown keys read as none.
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "super::tint::lenient")]
+    pub tint: Option<super::tint::Tint>,
 }
 
 impl PostExtras {
@@ -33,9 +40,10 @@ impl PostExtras {
         self == &Self::default()
     }
 
-    /// Whether there is anything to show behind the post (the origin and images alone are not).
+    /// Whether there is anything to show behind the post (the origin, images, symbols and tint
+    /// alone are not).
     pub fn has_details(&self) -> bool {
-        Self { origin: None, images: Vec::new(), ..self.clone() } != Self::default()
+        Self { origin: None, images: Vec::new(), symbols: PostSymbols::default(), tint: None, ..self.clone() } != Self::default()
     }
 
     /// Adds `source` unless an identical reference is already listed.

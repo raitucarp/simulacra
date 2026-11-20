@@ -7,6 +7,7 @@ use crate::domain::Post;
 /// fallback text was substituted.
 #[derive(Debug, Clone)]
 pub struct SimulationOutcome {
+    /// The generated post: a reply, or a new top-level post (`reply_to_id` is `None`).
     pub reply: Post,
     /// Follow-up posts chained under `reply` (structured thread parts), in order.
     pub thread: Vec<Post>,

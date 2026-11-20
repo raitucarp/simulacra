@@ -1,9 +1,13 @@
-//! Post body renderer: word-level flex wrapping of text, wikilink pills, and hashtags.
+//! Post body renderer: word-level flex wrapping of marked text, wikilink pills, hashtags,
+//! inline code and fenced code blocks.
 //!
 //! Feed cards render the tokens the store cached at insert time; clicking a hashtag or a
 //! wikilink pill dispatches to [`BodyLinks`] instead of selecting the surrounding card.
 
-use super::consts::{CARRIAGE_RETURN, LINE_BREAK};
+mod layout;
+mod marks;
+
+use super::consts::LINE_BREAK;
 use super::lookup::PostLookup;
 use crate::domain::post::{tokenize_post_body, BodyToken};
 use crate::theme::ThemeTokens;
@@ -11,6 +15,7 @@ use crate::ui::atoms::{render_hashtag_span, render_obsidian_pill};
 use gpui_kit::{
     div, AnyElement, App, Div, InteractiveElement, IntoElement, MouseButton, ParentElement, Styled, Window, relative,
 };
+use layout::{blank_line_after, layout, Item};
 use std::rc::Rc;
 
 /// Opens the hashtag or wikilink target named by the string.
@@ -46,21 +51,9 @@ pub fn render_body_tokens<L: PostLookup>(
             return body_text(theme).w_full().min_w_0().child(text.clone()).into_any_element();
         }
     }
-    let mut elements = Vec::with_capacity(tokens.len());
-    for token in tokens {
-        match token {
-            BodyToken::Text(text) => push_text_lines(text, theme, &mut elements),
-            BodyToken::Wikilink { target, trailing } => {
-                let pill = render_obsidian_pill(&lookup.resolve_wikilink(target), theme);
-                let pill = clickable(pill, target, links.on_wikilink.as_ref());
-                elements.push(with_trailing(pill, trailing, theme));
-            }
-            BodyToken::Hashtag { tag, trailing } => {
-                let span = clickable(render_hashtag_span(tag, theme), tag, links.on_tag.as_ref());
-                elements.push(with_trailing(span, trailing, theme));
-            }
-        }
-    }
+    let items = layout(tokens);
+    let elements: Vec<AnyElement> =
+        items.iter().enumerate().map(|(index, item)| render_item(&items, index, item, &lookup, theme, links)).collect();
     div()
         .w_full()
         .flex()
@@ -70,6 +63,34 @@ pub fn render_body_tokens<L: PostLookup>(
         .gap_y_0()
         .children(elements)
         .into_any_element()
+}
+
+/// One inline item as an element; breaks become full-width rows (taller before a blank line).
+fn render_item<L: PostLookup>(
+    items: &[Item<'_>],
+    index: usize,
+    item: &Item<'_>,
+    lookup: &L,
+    theme: &ThemeTokens,
+    links: &BodyLinks,
+) -> AnyElement {
+    match item {
+        Item::Word { text, marks } => {
+            body_text(theme).min_w_0().child(marks::styled_word(text.clone(), marks, theme)).into_any_element()
+        }
+        Item::Break if blank_line_after(items, index) => div().w_full().h(theme.paragraph_break_height).into_any_element(),
+        Item::Break => div().w_full().into_any_element(),
+        Item::Code(code) => marks::inline_code(code, theme),
+        Item::Block { code, .. } => marks::code_block(code, theme),
+        Item::Wikilink { target, trailing } => {
+            let pill = render_obsidian_pill(&lookup.resolve_wikilink(target), theme);
+            with_trailing(clickable(pill, target, links.on_wikilink.as_ref()), trailing, theme)
+        }
+        Item::Hashtag { tag, trailing } => {
+            let span = clickable(render_hashtag_span(tag, theme), tag, links.on_tag.as_ref());
+            with_trailing(span, trailing, theme)
+        }
+    }
 }
 
 /// Makes an inline link dispatch `action(value)` on press without selecting the card.
@@ -96,11 +117,6 @@ fn body_text(theme: &ThemeTokens) -> Div {
         .line_height(relative(theme.line_height_body))
 }
 
-/// Splits a text line into the words that flow (and wrap) as separate inline items.
-pub(super) fn wrap_units(line: &str) -> impl Iterator<Item = &str> {
-    line.split_whitespace()
-}
-
 /// Wraps an inline element with its trailing punctuation so they never wrap apart.
 fn with_trailing(element: AnyElement, trailing: &str, theme: &ThemeTokens) -> AnyElement {
     if trailing.is_empty() {
@@ -115,20 +131,5 @@ fn with_trailing(element: AnyElement, trailing: &str, theme: &ThemeTokens) -> An
         .into_any_element()
 }
 
-/// Emits text lines, inserting full-width breaks (and paragraph spacers for blank lines).
-fn push_text_lines(text: &str, theme: &ThemeTokens, elements: &mut Vec<AnyElement>) {
-    for (index, line) in text.split(LINE_BREAK).enumerate() {
-        let clean_line = line.trim_end_matches(CARRIAGE_RETURN);
-        if index > 0 {
-            let line_break = if clean_line.trim().is_empty() {
-                div().w_full().h(theme.paragraph_break_height)
-            } else {
-                div().w_full()
-            };
-            elements.push(line_break.into_any_element());
-        }
-        for word in wrap_units(clean_line) {
-            elements.push(body_text(theme).min_w_0().child(word.to_string()).into_any_element());
-        }
-    }
-}
+#[cfg(test)]
+mod tests;

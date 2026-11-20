@@ -1,6 +1,7 @@
 //! Tables of version history, bookmarks and collection items (sb F2), created idempotently
 //! on every open:
-//! - `revisions`: earlier versions of posts and vault documents (text, title, record JSON);
+//! - `revisions`: earlier versions of posts and vault documents (text, title, record JSON),
+//!   each with its version number and the revision it was edited from (`revision_chain`);
 //! - `bookmarks`: bookmarked posts;
 //! - `collection_items`: the order and note of each item of a vault collection, and the
 //!   membership of posts (documents stay filed through their catalogue records).
@@ -14,7 +15,9 @@ pub(super) const CREATE_DATA_TABLES: &str = r#"
                     saved_at TEXT NOT NULL,
                     title TEXT NOT NULL DEFAULT '',
                     content TEXT NOT NULL,
-                    record_json TEXT NOT NULL DEFAULT ''
+                    record_json TEXT NOT NULL DEFAULT '',
+                    parent_id TEXT,
+                    version TEXT NOT NULL DEFAULT ''
                 );
                 CREATE INDEX IF NOT EXISTS idx_revisions_subject ON revisions(subject_kind, subject_id, saved_at);
 

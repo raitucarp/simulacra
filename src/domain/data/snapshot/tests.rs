@@ -127,3 +127,42 @@ fn error_keys_are_distinct() {
     let keys: std::collections::HashSet<&str> = errors.iter().map(|e| e.key()).collect();
     assert_eq!(keys.len(), errors.len());
 }
+
+/// `seal_with(PAYLOAD, PASSPHRASE, FAST, CREATED_AT, [7; 16], [9; 24])` as written by the
+/// snapshot module's own Argon2id + XChaCha20-Poly1305 code before it moved to
+/// `domain::crypto` (sb X1, main at 0f56f23).
+const SEALED_BEFORE_THE_MOVE: &str = concat!(
+    "53494d534e41500001000108000000010000000100000007070707070707070707070707070707",
+    "090909090909090909090909090909090909090909090909c086fd6a000000004700000000000000",
+    "c71605b3ac9796d38a9a2f12236421eb52f714168cb82cb6f6ffa419df959f0fc05debb1998dd42a",
+    "02fd68e8587a16dfa98f1a4cc69abe27fceb748a9441f54b79b425c77c2c2b",
+);
+
+fn bytes(hex: &str) -> Vec<u8> {
+    (0..hex.len()).step_by(2).map(|at| u8::from_str_radix(&hex[at..at + 2], 16).expect("hex")).collect()
+}
+
+#[test]
+fn a_snapshot_sealed_before_the_crypto_move_still_opens() {
+    let file = bytes(SEALED_BEFORE_THE_MOVE);
+    let opened = open(&file, PASSPHRASE).expect("opened");
+    assert_eq!(opened.plaintext.as_slice(), PAYLOAD);
+    assert_eq!((opened.header.kdf, opened.header.created_at), (FAST, CREATED_AT));
+    assert_eq!((opened.header.salt, opened.header.nonce), ([7; SALT_LEN], [9; NONCE_LEN]));
+    assert_eq!(open(&file, "lamp not a mirror 43").err(), Some(SnapshotError::WrongPassphrase));
+}
+
+#[test]
+fn sealing_still_writes_the_bytes_written_before_the_crypto_move() {
+    let file = seal_with(PAYLOAD, PASSPHRASE, FAST, CREATED_AT, [7; SALT_LEN], [9; NONCE_LEN]).expect("sealed");
+    assert_eq!(file, bytes(SEALED_BEFORE_THE_MOVE));
+}
+
+#[test]
+fn the_payload_is_the_shared_seal_over_the_header() {
+    use crate::domain::crypto::{open_with, SealParams};
+    let file = bytes(SEALED_BEFORE_THE_MOVE);
+    let params = SealParams { kdf: FAST, salt: [7; SALT_LEN], nonce: [9; NONCE_LEN] };
+    let plaintext = open_with(&params, &file[HEADER_LEN..], PASSPHRASE, &file[..HEADER_LEN]).expect("opened by the crypto module");
+    assert_eq!(plaintext.as_slice(), PAYLOAD);
+}

@@ -16,5 +16,5 @@ pub mod schedule;
 pub mod template;
 pub mod tools;
 
-pub use engine::{DialecticEngine, EngineJob, PromptContext, SimulationOutcome};
+pub use engine::{DialecticEngine, EngineJob, JobKind, PromptContext, SimulationOutcome};
 pub use llm::{LlmClient, LlmFailure, LlmProvider, LlmSettings};

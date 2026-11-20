@@ -110,3 +110,18 @@ fn people_get_no_embodiment_section() {
     let prompt = p.config.assemble_system_prompt(&p, NETWORK, &docs());
     assert!(!prompt.contains("[EMBODIMENT") && prompt.contains("[RHETORIC, STYLE, SEMIOTICS & POST STRUCTURE]"));
 }
+
+#[test]
+fn a_root_prompt_opens_a_conversation_from_the_seed() {
+    use crate::domain::post::ResolvedSeed;
+    let p = seeded();
+    let seed = ResolvedSeed { topic: "Is virtue teachable?".into(), document: None };
+    let root = p.config.assemble_root_prompt(&p, &seed);
+    assert!(root.starts_with("AUTONOMOUS NETWORK STREAM SYNTHESIS:"));
+    assert!(root.contains("NEW CONVERSATION") && root.contains("Topic to start from:\n\"Is virtue teachable?\""));
+    assert!(root.ends_with("Compose your authentic human opening post as Sokrates of Alopece (@sokrates) strictly under 280 characters in English."));
+    assert!(!root.contains("[[") && !root.contains("No topic was given"));
+    let can = tin_can();
+    let open = can.config.assemble_root_prompt(&can, &ResolvedSeed::default());
+    assert!(open.contains("No topic was given") && open.contains("Compose your authentic opening post as"));
+}

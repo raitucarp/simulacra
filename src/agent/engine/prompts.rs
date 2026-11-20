@@ -1,6 +1,7 @@
 //! Persona prompt assembly (system + user prompts).
 
 use super::DialecticEngine;
+use crate::domain::post::ResolvedSeed;
 use crate::domain::{AuthoredPost, Profile};
 
 /// Network name used when no explicit network context is supplied.
@@ -66,5 +67,11 @@ impl DialecticEngine {
             &parent_post.content,
             is_mentioned,
         )
+    }
+
+    /// The user prompt asking `agent_profile` to start a new top-level conversation from
+    /// `seed` (or, when the seed is empty, from its own interests).
+    pub fn root_user_prompt(agent_profile: &Profile, seed: &ResolvedSeed) -> String {
+        agent_profile.config.assemble_root_prompt(agent_profile, seed)
     }
 }

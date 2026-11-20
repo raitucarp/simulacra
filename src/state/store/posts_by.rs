@@ -1,0 +1,38 @@
+//! One author's posts, newest first, a page at a time.
+
+use super::AppState;
+use crate::domain::{Post, ProfileId};
+
+/// One page of a newest-first listing: page `number` (counted from 0) of `size` items.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub struct Page {
+    pub number: usize,
+    pub size: usize,
+}
+
+impl Page {
+    /// The first page of `size` items.
+    pub const fn first(size: usize) -> Self {
+        Self { number: 0, size }
+    }
+
+    /// The page after this one.
+    pub const fn next(self) -> Self {
+        Self { number: self.number + 1, ..self }
+    }
+
+    /// How many items come before this page.
+    pub const fn offset(self) -> usize {
+        self.number.saturating_mul(self.size)
+    }
+}
+
+impl AppState {
+    /// The posts `profile` wrote, in every network and of every kind and status (replies and
+    /// reposts included), newest first (ties by id), on `page`. Empty past the last page.
+    pub fn posts_by(&self, profile: &ProfileId, page: Page) -> Vec<&Post> {
+        let mut written: Vec<&Post> = self.posts.iter().filter(|post| &post.author_id == profile).collect();
+        written.sort_by(|a, b| b.created_at.cmp(&a.created_at).then_with(|| b.id.as_str().cmp(a.id.as_str())));
+        written.into_iter().skip(page.offset()).take(page.size).collect()
+    }
+}

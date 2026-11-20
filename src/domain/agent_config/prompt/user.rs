@@ -5,7 +5,7 @@ use crate::domain::post::MAX_POST_CHARS;
 use crate::domain::profile::Profile;
 
 /// Qualifies the reply of a human ("your authentic human response"); other beings drop it.
-const HUMAN_RESPONSE: &str = "human ";
+pub(super) const HUMAN_RESPONSE: &str = "human ";
 
 impl AgentConfig {
     /// Assembles the user/context turn prompt for replying to or synthesizing a post in a network.
@@ -57,7 +57,7 @@ impl AgentConfig {
         )
     }
 
-    fn stream_synthesis_context(&self) -> String {
+    pub(super) fn stream_synthesis_context(&self) -> String {
         format!(
             "AUTONOMOUS NETWORK STREAM SYNTHESIS:\n\
              - Your Posting Cadence: {}\n\

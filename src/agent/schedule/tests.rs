@@ -201,6 +201,8 @@ fn sample_post() -> crate::domain::Post {
         reposts_count: 0,
         is_reposted: false,
         extras: Default::default(),
+        kind: Default::default(),
+        lifecycle: Default::default(),
     }
 }
 

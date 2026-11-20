@@ -68,6 +68,7 @@ mod semantic_similar;
 mod settings;
 mod sidebar_nav;
 mod simulation;
+mod simulation_job;
 mod simulation_notices;
 mod spend; // sb P16: the budget path and ask before spending
 pub(super) use spend::SpendResume;

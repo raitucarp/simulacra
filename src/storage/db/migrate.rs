@@ -7,7 +7,7 @@ use crate::error::{AppError, Result};
 const DUPLICATE_COLUMN_MARKER: &str = "duplicate column";
 
 /// Column additions applied to existing user vaults, in order.
-const MIGRATION_STATEMENTS: [&str; 12] = [
+const MIGRATION_STATEMENTS: [&str; 19] = [
     "ALTER TABLE posts ADD COLUMN reply_to_id TEXT;",
     "ALTER TABLE posts ADD COLUMN quote_id TEXT;",
     "ALTER TABLE posts ADD COLUMN repost_id TEXT;",
@@ -20,6 +20,15 @@ const MIGRATION_STATEMENTS: [&str; 12] = [
     "ALTER TABLE profiles ADD COLUMN config_json TEXT NOT NULL DEFAULT '{}';",
     "ALTER TABLE posts ADD COLUMN extras_json TEXT NOT NULL DEFAULT '{}';",
     "ALTER TABLE profiles ADD COLUMN kind TEXT NOT NULL DEFAULT 'standard';",
+    // Post kinds (F1) and lifecycle (F2): rows stored before them read as standard and published.
+    "ALTER TABLE posts ADD COLUMN kind TEXT NOT NULL DEFAULT 'standard';",
+    "ALTER TABLE posts ADD COLUMN status TEXT NOT NULL DEFAULT 'published';",
+    "ALTER TABLE posts ADD COLUMN publish_at TEXT;",
+    "ALTER TABLE posts ADD COLUMN archive_at TEXT;",
+    "ALTER TABLE posts ADD COLUMN delete_at TEXT;",
+    // Version chains of revisions (V1); the versioned migration fills existing rows.
+    "ALTER TABLE revisions ADD COLUMN parent_id TEXT;",
+    "ALTER TABLE revisions ADD COLUMN version TEXT NOT NULL DEFAULT '';",
 ];
 
 impl Database {

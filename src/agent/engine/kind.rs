@@ -1,0 +1,49 @@
+//! What an engine job generates: a reply to a post, or a new top-level post from a seed.
+
+use super::reply::{build_reply, build_root_post};
+use super::DialecticEngine;
+use crate::domain::post::{PostExtras, ResolvedSeed, SourceKind, SourceRef};
+use crate::domain::{AuthoredPost, NetworkId, Post, Profile};
+
+/// The kind of post an [`super::EngineJob`] produces.
+#[derive(Debug, Clone, PartialEq)]
+pub enum JobKind {
+    /// Reply to (and mention the author of) this post.
+    Reply(AuthoredPost),
+    /// Start a new conversation, seeded by an optional topic and/or vault document.
+    NewPost(ResolvedSeed),
+}
+
+impl JobKind {
+    /// The user turn for `agent`.
+    pub(super) fn user_prompt(&self, agent: &Profile) -> String {
+        match self {
+            Self::Reply(parent) => DialecticEngine::persona_user_prompt(parent, agent),
+            Self::NewPost(seed) => DialecticEngine::root_user_prompt(agent, seed),
+        }
+    }
+
+    /// The offline text used when no model could be reached.
+    pub(super) fn heuristic_text(&self, agent: &Profile) -> String {
+        match self {
+            Self::Reply(parent) => DialecticEngine::generate_heuristic_text(parent, agent),
+            Self::NewPost(seed) => DialecticEngine::generate_heuristic_root_text(agent, seed),
+        }
+    }
+
+    /// The post carrying `content` and `extras`; a new post also cites its seed document.
+    pub(super) fn post(&self, agent: Profile, network: NetworkId, content: String, extras: PostExtras) -> Post {
+        let mut post = match self {
+            Self::Reply(parent) => build_reply(parent, agent, network, content),
+            Self::NewPost(_) => build_root_post(agent, network, content),
+        };
+        post.extras = extras;
+        if let Self::NewPost(ResolvedSeed { document: Some(doc), .. }) = self {
+            let sources = &mut post.extras.sources;
+            if !sources.iter().any(|s| s.kind == SourceKind::VaultDoc && s.id == doc.id) {
+                sources.push(SourceRef::new(SourceKind::VaultDoc, &doc.id, &doc.title));
+            }
+        }
+        post
+    }
+}

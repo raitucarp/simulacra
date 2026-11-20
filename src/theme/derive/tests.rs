@@ -83,6 +83,20 @@ fn light_palettes_get_light_mode_overlays() {
 }
 
 #[test]
+fn code_fill_tints_the_feed_in_both_modes_and_keeps_text_readable() {
+    let light = derive_default_tokens(palette("one-light"));
+    let dark = derive_default_tokens(palette(DEFAULT_PALETTE_ID));
+    let on = |t: &crate::theme::ThemeTokens| composite(t.bg_code, t.bg_feed_post);
+    assert!(relative_luminance(on(&light)) < relative_luminance(light.bg_feed_post), "light code fill darkens");
+    assert!(relative_luminance(on(&dark)) > relative_luminance(dark.bg_feed_post), "dark code fill lightens");
+    for palette in ThemeRegistry::global().all() {
+        let t = derive_default_tokens(palette);
+        let ratio = contrast_ratio(t.text_primary, on(&t));
+        assert!(ratio >= AA_TEXT_CONTRAST, "{}: code text on bg_code = {ratio:.2}", palette.id);
+    }
+}
+
+#[test]
 fn scales_resize_metrics_but_not_colors() {
     let p = palette(DEFAULT_PALETTE_ID);
     let compact = derive_tokens(p, Density::Compact, TypeScale::Small, RadiusScale::Sharp);

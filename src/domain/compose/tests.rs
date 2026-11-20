@@ -1,0 +1,128 @@
+use super::*;
+
+fn n(text: &str) -> ComposeNode {
+    ComposeNode::new(text)
+}
+
+fn tree(text: &str, children: Vec<ComposeNode>) -> ComposeNode {
+    n(text).with_children(children)
+}
+
+#[test]
+fn every_non_empty_line_is_a_post() {
+    assert_eq!(split_compose("one\ntwo\nthree"), vec![n("one"), n("two"), n("three")]);
+}
+
+#[test]
+fn blank_and_whitespace_lines_are_ignored() {
+    let text = "\n\none\n   \n\t\n\ntwo\n\n";
+    assert_eq!(split_compose(text), vec![n("one"), n("two")]);
+    assert!(split_compose("").is_empty());
+    assert!(split_compose(" \n\t\n").is_empty());
+}
+
+#[test]
+fn bullet_markers_are_stripped_and_can_be_mixed() {
+    let text = "- dash\n* star\nplain\n-\ttabbed\n*   wide";
+    let expected = vec![n("dash"), n("star"), n("plain"), n("tabbed"), n("wide")];
+    assert_eq!(split_compose(text), expected);
+}
+
+#[test]
+fn markers_without_whitespace_and_numbers_stay_text() {
+    let text = "-5 degrees\n**bold** start\n1. first\n2) second\n---\n*";
+    let expected = vec![n("-5 degrees"), n("**bold** start"), n("1. first"), n("2) second"), n("---")];
+    assert_eq!(split_compose(text), expected);
+}
+
+#[test]
+fn empty_bullets_are_ignored() {
+    assert_eq!(split_compose("- \n*\n-   \nreal"), vec![n("real")]);
+}
+
+#[test]
+fn only_the_first_marker_is_stripped() {
+    assert_eq!(split_compose("- - inner\n* - mixed"), vec![n("- inner"), n("- mixed")]);
+}
+
+#[test]
+fn two_spaces_nest_as_a_reply() {
+    let text = "- root\n  - reply\n    - deeper\n  - second reply\n- next root";
+    let expected = vec![
+        tree("root", vec![tree("reply", vec![n("deeper")]), n("second reply")]),
+        n("next root"),
+    ];
+    assert_eq!(split_compose(text), expected);
+    assert_eq!(draft_count(&split_compose(text)), 5);
+}
+
+#[test]
+fn tabs_count_as_one_level_each() {
+    let text = "root\n\treply\n\t\tdeeper\n\t  also deeper";
+    let expected = vec![tree("root", vec![tree("reply", vec![n("deeper"), n("also deeper")])])];
+    assert_eq!(split_compose(text), expected);
+}
+
+#[test]
+fn indentation_works_without_bullets_and_with_mixed_bullets() {
+    let text = "topic\n  * point\n  - counterpoint\n    plain detail";
+    let expected = vec![tree("topic", vec![n("point"), tree("counterpoint", vec![n("plain detail")])])];
+    assert_eq!(split_compose(text), expected);
+}
+
+#[test]
+fn jumping_several_levels_in_is_still_a_direct_reply() {
+    let text = "root\n      far in\nback";
+    assert_eq!(split_compose(text), vec![tree("root", vec![n("far in")]), n("back")]);
+}
+
+#[test]
+fn dedenting_between_levels_attaches_to_the_nearest_shallower_line() {
+    // Levels 0, 3, 1: the level-1 line is a reply to the root, next to the level-3 line.
+    let text = "root\n      deep\n  middle\n    under middle";
+    let expected = vec![tree("root", vec![n("deep"), tree("middle", vec![n("under middle")])])];
+    assert_eq!(split_compose(text), expected);
+}
+
+#[test]
+fn odd_spaces_round_down_and_leading_indent_on_first_line_is_a_root() {
+    assert_eq!(indent_level("   x"), 1);
+    assert_eq!(indent_level(" x"), 0);
+    assert_eq!(indent_level("\t \tx"), 2);
+    let text = "    starts indented\n  shallower\nroot";
+    assert_eq!(split_compose(text), vec![n("starts indented"), n("shallower"), n("root")]);
+}
+
+#[test]
+fn indented_line_after_a_blank_line_still_nests() {
+    let text = "root\n\n  reply after blank";
+    assert_eq!(split_compose(text), vec![tree("root", vec![n("reply after blank")])]);
+}
+
+#[test]
+fn crlf_line_endings_are_handled() {
+    let text = "- root\r\n  - reply\r\n\r\nnext\r\n";
+    assert_eq!(split_compose(text), vec![tree("root", vec![n("reply")]), n("next")]);
+}
+
+#[test]
+fn unicode_text_is_kept_intact() {
+    let text = "- 日本語のポスト\n  - réponse ✨ 🚀\n\u{3000}全角スペース";
+    let expected = vec![tree("日本語のポスト", vec![n("réponse ✨ 🚀")]), n("全角スペース")];
+    assert_eq!(split_compose(text), expected, "full-width space is trimmed, not indentation");
+}
+
+#[test]
+fn trailing_whitespace_is_trimmed() {
+    assert_eq!(split_compose("- hello   \t\n"), vec![n("hello")]);
+}
+
+#[test]
+fn strip_bullet_reports_markers() {
+    assert_eq!(strip_bullet("- a"), Some("a"));
+    assert_eq!(strip_bullet("*\tb"), Some("b"));
+    assert_eq!(strip_bullet("-"), Some(""));
+    assert_eq!(strip_bullet("-a"), None);
+    assert_eq!(strip_bullet("+ a"), None);
+    assert_eq!(strip_bullet(""), None);
+}

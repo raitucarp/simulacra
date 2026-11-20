@@ -123,7 +123,8 @@ fn revisions_and_post_edits_persist_together() {
     db.edit_post_content(&edited, &revision).unwrap();
     assert_eq!(db.load_posts().unwrap()[0].content, "second words");
     let stored = db.revisions_of(&RevisionSubject::Post(PostId::new("post_1"))).unwrap();
-    assert_eq!(stored, vec![revision]);
+    let numbered = Revision { version: Some(crate::domain::data::history::SemVer::ORIGINAL), ..revision };
+    assert_eq!(stored, vec![numbered]);
     assert_eq!(db.revision_counts("post").unwrap(), vec![("post_1".to_string(), 1)]);
 }
 

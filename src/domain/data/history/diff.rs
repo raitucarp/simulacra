@@ -110,7 +110,8 @@ fn merged(ops: impl Iterator<Item = DiffOp>) -> Vec<DiffOp> {
     })
 }
 
-fn word_count(text: &str) -> usize {
+/// Words in `text` (whitespace and punctuation are not counted).
+pub(super) fn word_count(text: &str) -> usize {
     tokens(text).iter().filter(|t| t.chars().next().is_some_and(|c| class_of(c) == Class::Word)).count()
 }
 

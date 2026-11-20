@@ -7,6 +7,7 @@ pub mod agent_config;
 pub mod archetype;
 pub mod arena;
 pub mod beliefs;
+pub mod compose; // T1: free compose text to a tree of drafts
 pub mod data; // sb F2: history, collections and bookmarks, export, snapshots
 pub mod document;
 pub mod embedding;
@@ -28,9 +29,12 @@ pub mod profile;
 pub mod readability; // sb F3
 pub mod recommend;
 pub mod review;
+pub mod search_query; // Q2: search query language
 pub mod spend; // sb P16: ask before spending
+pub mod symbols; // S1: entry, state, signifiers, custom icons
 pub mod thinking;
 pub mod thread;
+pub mod todo; // D2: to-do tree with spans
 pub mod topic;
 pub mod traits;
 

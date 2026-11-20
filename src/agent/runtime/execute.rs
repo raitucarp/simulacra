@@ -32,8 +32,7 @@ impl EngineResult {
             image_prompt: self.draft.image_prompt.clone(),
             tools: self.tools.clone(),
             sources: self.sources.clone(),
-            origin: None,
-            images: Vec::new(),
+            ..PostExtras::default()
         }
     }
 }

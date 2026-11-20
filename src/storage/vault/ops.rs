@@ -121,6 +121,13 @@ impl Vault {
         self.read(Database::load_posts)
     }
 
+    /// Ids of at most `limit` posts whose text matches `text`, best first (after every
+    /// queued write).
+    pub fn search_posts(&self, text: &str, limit: usize) -> Result<Vec<PostId>> {
+        let text = text.to_string();
+        self.read(move |db| db.search_posts(&text, limit))
+    }
+
     /// Reads every network (after every queued write).
     pub fn load_networks(&self) -> Result<Vec<Network>> {
         self.read(Database::load_networks)

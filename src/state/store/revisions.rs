@@ -1,7 +1,7 @@
 //! Version history in the store (sb F2): editing one of the user's own posts, and keeping a
 //! vault document's previous text, title and record whenever it is edited.
 
-use super::AppState;
+use super::{require_persona, AppState};
 use crate::domain::data::history::{edited_post, is_real_edit, Revision, RevisionSubject};
 use crate::domain::{first_thread_problem, GroundingDocument, PostId};
 use crate::error::{AppError, Result};
@@ -12,9 +12,7 @@ impl AppState {
     /// keeping the previous text as a revision. `Ok(None)` when nothing changed.
     pub fn edit_post(&mut self, id: &PostId, content: &str) -> Result<Option<Revision>> {
         let post = self.get_post(id).cloned().ok_or_else(|| AppError::DatabaseError(format!("post '{id}' not found")))?;
-        if !self.author_of(&post).is_human_persona() {
-            return Err(AppError::DatabaseError(format!("post '{id}' is not yours to edit")));
-        }
+        require_persona(self.author_of(&post))?;
         if let Some(problem) = first_thread_problem(&[content], post.has_attachments() || !post.extras.images.is_empty()) {
             return Err(AppError::DatabaseError(format!("{:?}", problem.issue)));
         }

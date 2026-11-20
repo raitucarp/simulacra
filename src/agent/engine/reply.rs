@@ -40,6 +40,8 @@ pub(super) fn build_reply(
         reposts_count: 0,
         is_reposted: false,
         extras: Default::default(),
+        kind: Default::default(),
+        lifecycle: Default::default(),
     }
 }
 

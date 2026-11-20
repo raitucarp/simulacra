@@ -4,6 +4,8 @@ mod author_ref;
 mod authored;
 mod constructors;
 mod extras;
+mod kind;
+mod lifecycle;
 mod parse;
 mod provenance;
 mod relations;
@@ -11,6 +13,8 @@ mod tokens;
 
 pub use authored::AuthoredPost;
 pub use extras::{PostExtras, SourceKind, SourceRef, ToolUse};
+pub use kind::PostKind;
+pub use lifecycle::{PostLifecycle, PostStatus};
 pub use parse::{HASHTAG_SIGIL, WIKILINK_CLOSE, WIKILINK_OPEN};
 pub use provenance::{PostOrigin, SourceLocator};
 pub use tokens::{has_rich_markup, is_trailing_punctuation, tokenize_post_body, BodyToken};
@@ -54,6 +58,12 @@ pub struct Post {
     /// Engine metadata (mood, image prompt, tools used, sources); empty for human posts.
     #[serde(default, skip_serializing_if = "PostExtras::is_empty")]
     pub extras: PostExtras,
+    /// The form of the thought (`posts.kind`).
+    #[serde(default, skip_serializing_if = "PostKind::is_standard")]
+    pub kind: PostKind,
+    /// Publication state and due moments (`posts.status`, `publish_at`, `archive_at`, `delete_at`).
+    #[serde(default, skip_serializing_if = "PostLifecycle::is_default")]
+    pub lifecycle: PostLifecycle,
 }
 
 impl Post {

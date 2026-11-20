@@ -52,7 +52,12 @@ const CREATE_TABLES: &str = r#"
                     image_path TEXT,
                     reposts_count INTEGER NOT NULL DEFAULT 0,
                     is_reposted INTEGER NOT NULL DEFAULT 0,
-                    extras_json TEXT NOT NULL DEFAULT '{}'
+                    extras_json TEXT NOT NULL DEFAULT '{}',
+                    kind TEXT NOT NULL DEFAULT 'standard',
+                    status TEXT NOT NULL DEFAULT 'published',
+                    publish_at TEXT,
+                    archive_at TEXT,
+                    delete_at TEXT
                 );
 
                 CREATE TABLE IF NOT EXISTS trending (
@@ -101,6 +106,7 @@ impl Database {
         self.conn.execute_batch(super::thinking_schema::CREATE_THINKING_TABLES).map_err(db_err)?;
         self.conn.execute_batch(super::data_schema::CREATE_DATA_TABLES).map_err(db_err)?; // sb F2
         self.migrate_posts_schema()?;
+        self.create_posts_index()?; // Q1, once posts has every column
         self.conn
             .execute_batch(CREATE_MIGRATED_INDEXES)
             .map_err(db_err)?;

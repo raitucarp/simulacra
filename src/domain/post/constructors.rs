@@ -66,7 +66,10 @@ impl Post {
             link_url: clean_link,
             image_path: clean_image,
             reposts_count: 0,
-            is_reposted: false, extras: Default::default(),
+            is_reposted: false,
+            extras: Default::default(),
+            kind: Default::default(),
+            lifecycle: Default::default(),
         })
     }
 }

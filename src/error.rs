@@ -25,6 +25,10 @@ pub enum AppError {
     #[error("vector operation failed: {0}")]
     VectorError(String),
 
+    /// An action only the user's own personas may take was attempted for an agent.
+    #[error("profile '{0}' is not one of your personas")]
+    NotAPersona(String),
+
     /// Database persistence failure.
     #[error("database error: {0}")]
     DatabaseError(String),

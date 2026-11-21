@@ -14,4 +14,5 @@ mod scale;
 mod lifecycle;
 mod posts;
 mod profiles;
+mod scheduled;
 mod threads;

@@ -29,6 +29,10 @@ pub enum AppError {
     #[error("profile '{0}' is not one of your personas")]
     NotAPersona(String),
 
+    /// A post was scheduled for a moment that is not in the future.
+    #[error("a post can only be scheduled for a moment in the future")]
+    ScheduleNotInFuture,
+
     /// Database persistence failure.
     #[error("database error: {0}")]
     DatabaseError(String),

@@ -31,6 +31,7 @@ mod profile_create;
 mod profiles;
 mod reposts;
 mod revisions; // sb F2
+mod scheduled;
 mod search;
 mod settings;
 mod seed_catalogue;
@@ -90,8 +91,12 @@ pub struct AppState {
     pub archived_authors: HashMap<ProfileId, Profile>,
     pub active_profile_id: ProfileId,
     pub active_tab: NavigationTab,
-    /// Every post, newest first. Mutate through the store methods so `index` stays in sync.
+    /// Every published or archived post, newest first. Mutate through the store methods so
+    /// `index` stays in sync.
     pub posts: Vec<Post>,
+    /// Scheduled posts, soonest due first: out of `posts` (so out of the feed, search and
+    /// agents' context) until they are published.
+    scheduled: Vec<Post>,
     /// Incrementally maintained lookups and derived body data over `posts`.
     pub index: PostIndex,
     pub documents: Vec<GroundingDocument>,

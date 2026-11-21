@@ -6,7 +6,7 @@ use super::params::{
 };
 use crate::domain::post::PostLifecycle;
 use crate::domain::preferences::ArchiveAfter;
-use crate::domain::{Post, PostId, Profile};
+use crate::domain::{Post, PostId};
 use crate::ui::features::data::DataControls;
 use crate::state::AppState;
 use crate::theme::ThemeTokens;
@@ -64,7 +64,8 @@ impl PostCallbacks {
     /// Card handlers for `post`. Like, reply, repost, quote and open act on `target` (the
     /// original of an instant repost); delete stays on the card's own thought and is offered
     /// only on thoughts written by a user persona.
-    fn handlers_for(&self, post: &Post, author: &Profile, target: CardTarget, selectable: bool) -> PostCardHandlers {
+    fn handlers_for(&self, post: &Post, state: &AppState, target: CardTarget, selectable: bool) -> PostCardHandlers {
+        let author = state.author_of(post);
         let CardTarget { id: target_id, handle, .. } = target.clone();
         let (reply, reply_id) = (self.on_reply.clone(), target_id.clone());
         let select = self.on_select.clone();
@@ -82,7 +83,7 @@ impl PostCallbacks {
             on_post_action: Some(bind_action(&self.on_post_action, &target_id)),
             credence: self.credence.as_ref().filter(|_| target.human).map(|source| source.controls(&target_id)),
             data: self.data.as_ref().map(|source| DataControls { lifecycle: target.lifecycle, auto_archive: target.auto_archive, ..source.controls(&target_id, target.human) }),
-            reactions: self.reactions.as_ref().map(|source| source.controls(&target_id)),
+            reactions: self.reactions.as_ref().map(|source| source.controls(&target_id, state)),
         }
     }
 
@@ -101,7 +102,7 @@ impl PostCallbacks {
         mode: CardMode,
     ) -> AnyElement {
         let target = CardTarget::resolve(post, state);
-        let handlers = self.handlers_for(post, state.author_of(post), target, mode.selectable);
+        let handlers = self.handlers_for(post, state, target, mode.selectable);
         render_post_item(post, state, theme, mode.is_focused, mode.style, handlers).into_any_element()
     }
 }

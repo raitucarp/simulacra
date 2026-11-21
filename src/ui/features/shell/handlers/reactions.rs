@@ -27,6 +27,11 @@ impl AppView {
                 self.reactions.memory.tone = tone;
                 self.reactions.save_memory(&self.state);
             }
+            ReactionEvent::Toggle(post, emoji) => {
+                if self.state.toggle_reaction(&post, &emoji).is_some() {
+                    self.feed.stream.remeasure();
+                }
+            }
             ReactionEvent::Pick(post, emoji) => {
                 if self.state.toggle_reaction(&post, &emoji).is_some() {
                     self.reactions.memory.used(&emoji);

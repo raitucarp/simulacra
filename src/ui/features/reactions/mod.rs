@@ -1,19 +1,22 @@
-//! Reactions on post cards (epic R): the emoji picker (R5).
+//! Reactions on post cards (epic R): the emoji picker (R5) and the reaction bar (R6).
 //!
 //! The shell owns what the picker remembers and which card it is open on; every card gets
 //! [`ReactionControls`] built from one [`ReactionSource`], and sends [`ReactionEvent`]s back.
 
+mod chips;
 mod grid;
 mod picker;
 mod trigger;
 #[cfg(test)]
 mod tests;
 
+pub use chips::{chip_views, names_line, render_reaction_bar, ChipView, TOOLTIP_NAMES};
 pub use picker::{picker_emoji, tab_label};
 pub use trigger::render_add_reaction;
 
 use crate::domain::emoji::{EmojiGroup, PickerMemory, SkinTone};
-use crate::domain::PostId;
+use crate::domain::{PostId, ProfileId};
+use crate::state::AppState;
 use gpui_kit::component::input::InputState;
 use gpui_kit::{App, Entity, Window};
 use std::rc::Rc;
@@ -42,6 +45,8 @@ pub enum ReactionEvent {
     SetTone(Option<SkinTone>),
     /// An emoji picked for the post: toggles the acting persona's reaction with it.
     Pick(PostId, String),
+    /// A chip clicked: toggles the acting persona's reaction with its emoji.
+    Toggle(PostId, String),
 }
 
 /// Sends a reaction event to the shell.
@@ -61,6 +66,8 @@ pub struct ReactionControls {
     pub post_id: PostId,
     /// `Some` while the picker is open on this card.
     pub picker: Option<PickerView>,
+    /// The reaction bar's chips (empty without reactions).
+    pub chips: Vec<ChipView>,
     pub on_event: ReactionAction,
 }
 
@@ -74,10 +81,12 @@ pub struct ReactionSource {
 }
 
 impl ReactionSource {
-    /// The controls of `post`'s card.
-    pub fn controls(&self, post: &PostId) -> ReactionControls {
+    /// The controls of `post`'s card, its chips read from `state` (as the acting persona).
+    pub fn controls(&self, post: &PostId, state: &AppState) -> ReactionControls {
         let open = self.open.as_ref() == Some(post);
-        ReactionControls { post_id: post.clone(), picker: open.then(|| self.picker.clone()), on_event: self.on_event.clone() }
+        let name_of = |id: &ProfileId| state.find_author(id).map_or_else(|| id.to_string(), |profile| profile.name.clone());
+        let chips = state.reactions_of(post).map(|set| chip_views(set, &state.active_profile_id, &name_of)).unwrap_or_default();
+        ReactionControls { post_id: post.clone(), picker: open.then(|| self.picker.clone()), chips, on_event: self.on_event.clone() }
     }
 }
 

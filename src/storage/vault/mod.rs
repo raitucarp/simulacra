@@ -13,6 +13,7 @@ mod learning;
 mod journal;
 mod media;
 mod ops;
+mod reactions; // R1
 mod review;
 mod thinking;
 #[cfg(test)]

@@ -27,6 +27,7 @@ pub mod portrait;
 pub mod post;
 pub mod post_actions;
 pub mod profile;
+pub mod reaction; // R: emoji reactions and claps
 pub mod readability; // sb F3
 pub mod recommend;
 pub mod review;

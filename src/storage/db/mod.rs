@@ -1,6 +1,6 @@
 //! SQLite persistence layer for Simulacra.
 //!
-//! Stores network domains, profiles, thoughts/posts, likes, and settings locally.
+//! Stores network domains, profiles, thoughts/posts, likes, reactions, and settings locally.
 //! `Database` is a single type whose `impl` blocks are spread across the sibling
 //! modules by table (networks, profiles, posts, trending, settings, documents).
 
@@ -33,6 +33,7 @@ mod posts;
 mod posts_fts;
 mod preferences;
 mod profiles;
+mod reactions; // R1
 mod review;
 mod review_migration;
 mod review_schema;

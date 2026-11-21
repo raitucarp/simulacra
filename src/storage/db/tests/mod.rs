@@ -12,6 +12,7 @@ mod post_shape;
 mod posts;
 mod posts_fts;
 mod preferences;
+mod reactions;
 mod review;
 mod revision_chain;
 mod schema;

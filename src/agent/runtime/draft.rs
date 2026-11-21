@@ -1,6 +1,6 @@
 //! The post an engine answer describes, and how a structured answer maps onto it.
 
-use crate::domain::engine::{parse_tint, value_at, value_text, OutputMapping};
+use crate::domain::engine::{parse_reactions, parse_tint, value_at, value_text, OutputMapping};
 use crate::domain::post::Tint;
 use crate::domain::post::sanitize::sanitize_agent_markdown;
 use serde_json::Value;
@@ -21,6 +21,8 @@ pub struct PostDraft {
     pub thread_parts: Vec<String>,
     /// The container tint the answer names (sb C4; kept only while the agent may tint).
     pub tint: Option<Tint>,
+    /// Emoji for the answered post (R8; kept only while the agent may react).
+    pub reactions: Vec<String>,
 }
 
 impl PostDraft {
@@ -47,6 +49,7 @@ impl PostDraft {
             mood: non_blank(text(&mapping.mood)),
             thread_parts,
             tint: text(&mapping.tint).as_deref().and_then(parse_tint),
+            reactions: parse_reactions(&string_list(mapped(answer, &mapping.reactions), false)),
         })
     }
 

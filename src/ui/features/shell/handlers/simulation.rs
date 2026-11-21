@@ -71,7 +71,8 @@ impl AppView {
     ) {
         self.scheduler.queue.complete(agent_id);
         match outcome {
-            Ok(SimulationOutcome { reply, thread, llm_error, gate_key, image_error }) => {
+            Ok(SimulationOutcome { reply, thread, llm_error, gate_key, image_error, reactions }) => {
+                let answered = reply.reply_to_id.clone(); // R8: the post its reactions go to
                 let generated = llm_error.is_none(); // sb F1: only a model's reply updates beliefs
                 match llm_error {
                     Some(failure) => self.report_llm_failure(&gate_key, failure, window, cx),
@@ -85,6 +86,9 @@ impl AppView {
                 }
                 for post in std::iter::once(reply).chain(thread) {
                     self.insert_simulated_reply(post, window, cx);
+                }
+                if answered.is_some_and(|post| self.state.react_as_agent(&post, agent_id, &reactions, jiff::Timestamp::now()) > 0) {
+                    self.feed.stream.remeasure();
                 }
             }
             Err(_) => self.report_worker_failure(window, cx),

@@ -3,6 +3,7 @@
 //! engagement revision recommendations follow.
 
 use super::AppState;
+use crate::domain::engine::reactions_left;
 use crate::domain::reaction::{normalize_emoji, PostReactions, Reaction};
 use crate::domain::{PostId, ProfileId};
 use jiff::Timestamp;
@@ -28,6 +29,20 @@ impl AppState {
         let (post, emoji) = (self.reaction_target(post)?, normalize_emoji(emoji)?);
         let changed = self.reactions.add(&post, profile, &emoji, at);
         self.saved_reaction(changed)
+    }
+
+    /// The agent `agent` reacts to `post` with each of `emoji` (R8), as far as its hourly
+    /// limit ([`crate::domain::engine::AGENT_REACTIONS_PER_HOUR`]) allows; an emoji it
+    /// already gave is not counted again. Returns how many reactions were added.
+    pub fn react_as_agent(&mut self, post: &PostId, agent: &ProfileId, emoji: &[String], now: Timestamp) -> usize {
+        let mut added = 0;
+        for emoji in emoji {
+            if reactions_left(agent, self.reactions.given_by(agent), now) == 0 {
+                break;
+            }
+            added += usize::from(self.add_reaction_as(post, agent, emoji, now).is_some());
+        }
+        added
     }
 
     /// The acting persona claps `times` more on `post`.

@@ -66,13 +66,13 @@ pub fn set_output_kind(engine: &mut EngineConfig, kind: OutputKind) {
 }
 
 /// Loads a preset's schema and mapping; `Custom` keeps the current schema to edit by hand.
-/// Whether the agent may tint is a setting, not part of the schema, so it stays.
+/// Whether the agent may tint or react is a setting, not part of the schema, so it stays.
 pub fn apply_preset(engine: &mut EngineConfig, preset: SchemaPreset) {
     let OutputMode::JsonSchema(structured) = &mut engine.output else { return };
     if preset == SchemaPreset::Custom {
         structured.preset = SchemaPreset::Custom;
     } else {
-        *structured = StructuredOutput { may_tint: structured.may_tint, ..StructuredOutput::from_preset(preset) };
+        *structured = StructuredOutput { may_tint: structured.may_tint, may_react: structured.may_react, ..StructuredOutput::from_preset(preset) };
     }
 }
 
@@ -80,6 +80,13 @@ pub fn apply_preset(engine: &mut EngineConfig, preset: SchemaPreset) {
 pub fn set_may_tint(engine: &mut EngineConfig, may_tint: bool) {
     if let OutputMode::JsonSchema(structured) = &mut engine.output {
         structured.may_tint = may_tint;
+    }
+}
+
+/// Lets the agent react to the posts it answers, or not (R8).
+pub fn set_may_react(engine: &mut EngineConfig, may_react: bool) {
+    if let OutputMode::JsonSchema(structured) = &mut engine.output {
+        structured.may_react = may_react;
     }
 }
 

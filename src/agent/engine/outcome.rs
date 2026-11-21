@@ -17,4 +17,7 @@ pub struct SimulationOutcome {
     pub gate_key: String,
     /// Why a triggered image could not be generated (redacted); the post was kept.
     pub image_error: Option<String>,
+    /// Emoji the agent gives the post it answered (R8: only replies, and only while it may
+    /// react); the store applies them within the agent's hourly limit.
+    pub reactions: Vec<String>,
 }

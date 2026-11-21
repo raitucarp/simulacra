@@ -151,3 +151,15 @@ fn own_model_default_matches_the_provider() {
     let own = OwnModel::for_provider(LlmProvider::Groq);
     assert_eq!(own.model_or_default(), LlmProvider::Groq.default_model());
 }
+
+#[test]
+fn the_react_switch_is_off_by_default_and_survives_a_preset_change() {
+    let mut engine = EngineConfig::default();
+    mutate::set_output_kind(&mut engine, OutputKind::JsonSchema);
+    assert_eq!(engine.structured().map(|s| s.may_react), Some(false));
+    mutate::set_may_react(&mut engine, true);
+    mutate::apply_preset(&mut engine, SchemaPreset::Expressive);
+    assert_eq!(engine.structured().map(|s| (s.preset, s.may_react, s.may_tint)), Some((SchemaPreset::Expressive, true, false)));
+    mutate::set_may_react(&mut engine, false);
+    assert_eq!(engine.structured().map(|s| s.may_react), Some(false));
+}

@@ -47,7 +47,7 @@ impl EnginePlan {
     /// Resolves `engine`; images are saved under `media_dir`.
     pub fn resolve(engine: &EngineConfig, global: &LlmSettings, credentials: &CredentialStore, media_dir: PathBuf) -> Self {
         let (settings, endpoint, gate_key) = text_settings(&engine.text, global, credentials);
-        let structured = engine.structured().map(StructuredOutput::with_tint_field); // sb C4
+        let structured = engine.structured().map(|output| output.with_tint_field().with_reactions_field()); // sb C4, R8
         let (transport, gate_key) = match &engine.request {
             RequestMode::Native => (Transport::Native(LlmClient::new(settings).with_endpoint(&endpoint)), gate_key),
             RequestMode::Custom(request) => {

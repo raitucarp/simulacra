@@ -32,7 +32,7 @@ impl DialecticEngine {
             Err(raw) => (Self::generate_heuristic_text(parent_post, agent_profile), Some(client.describe_failure(&raw))),
         };
         let reply = build_reply(parent_post, agent_profile.clone(), network_id.clone(), content);
-        SimulationOutcome { reply, thread: Vec::new(), llm_error, gate_key: GLOBAL_GATE_KEY.to_string(), image_error: None }
+        SimulationOutcome { reply, thread: Vec::new(), llm_error, gate_key: GLOBAL_GATE_KEY.to_string(), image_error: None, reactions: Vec::new() }
     }
 
     /// Spawns a classic (global model, free text) simulation on a worker thread.

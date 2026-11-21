@@ -58,7 +58,7 @@ impl DialecticEngine {
                 let failure = job.plan.transport.describe_failure(&raw, &job.plan.credentials.secrets());
                 let text = job.kind.heuristic_text(&job.agent);
                 let reply = job.kind.post(job.agent, job.network, text, Default::default());
-                SimulationOutcome { reply, thread: Vec::new(), llm_error: Some(failure), gate_key: job.plan.gate_key, image_error: None }
+                SimulationOutcome { reply, thread: Vec::new(), llm_error: Some(failure), gate_key: job.plan.gate_key, image_error: None, reactions: Vec::new() }
             }
         }
     }
@@ -75,6 +75,7 @@ impl DialecticEngine {
             followup.extras.tint = reply.extras.tint; // sb C4: a tinted thread is tinted throughout
             thread.push(followup);
         }
-        SimulationOutcome { reply, thread, llm_error: None, gate_key: job.plan.gate_key, image_error: result.image_error }
+        let reactions = if matches!(job.kind, JobKind::Reply(_)) { result.draft.reactions.clone() } else { Vec::new() };
+        SimulationOutcome { reply, thread, llm_error: None, gate_key: job.plan.gate_key, image_error: result.image_error, reactions }
     }
 }

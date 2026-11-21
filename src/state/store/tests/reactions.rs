@@ -47,3 +47,18 @@ fn reactions_land_on_the_original_of_an_instant_repost_and_go_with_a_deleted_pos
     state.delete_post(&original).expect("delete");
     assert!(state.reactions_of(&original).is_none());
 }
+
+#[test]
+fn an_agent_reacts_within_its_hourly_limit() {
+    use crate::domain::engine::AGENT_REACTIONS_PER_HOUR;
+    let mut state = AppState::new_in_memory();
+    let posts: Vec<_> = (0..AGENT_REACTIONS_PER_HOUR + 2).map(|n| state.submit_post(&format!("thought {n}")).expect("post")).collect();
+    let (agent, now) = (ProfileId::new("agent_x"), jiff::Timestamp::now());
+    let emoji = vec![FIRE.to_string(), "\u{1F914}".to_string()];
+    assert_eq!(state.react_as_agent(&posts[0], &agent, &emoji, now), 2);
+    assert_eq!(state.react_as_agent(&posts[0], &agent, &emoji, now), 0, "the same emoji again adds nothing");
+    let added: usize = posts[1..].iter().map(|post| state.react_as_agent(post, &agent, &emoji[..1], now)).sum();
+    assert_eq!(added, AGENT_REACTIONS_PER_HOUR - 2, "the limit stops the rest");
+    let later = now + jiff::SignedDuration::from_secs(2 * 3_600);
+    assert_eq!(state.react_as_agent(posts.last().unwrap(), &agent, &emoji[..1], later), 1, "an hour later it may react again");
+}

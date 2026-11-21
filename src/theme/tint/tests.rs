@@ -13,7 +13,7 @@ fn text_on_every_tint_meets_aa_in_every_palette() {
         modes.push(t.mode);
         for &tint in Tint::ALL {
             let background = tint_colors(tint, &t).background;
-            for (role, text) in [("text_primary", t.text_primary), ("text_secondary", t.text_secondary)] {
+            for (role, text) in [("text_primary", t.text_primary), ("text_secondary", t.text_secondary), ("text_muted", t.text_muted)] {
                 let ratio = contrast_ratio(text, background);
                 assert!(ratio >= AA_TEXT_CONTRAST, "{}: {role} on {} = {ratio:.2}", palette.id, tint.key());
             }

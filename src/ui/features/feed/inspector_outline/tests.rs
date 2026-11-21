@@ -111,3 +111,12 @@ fn memory_keeps_each_thread_apart_and_modes_round_trip() {
     assert_eq!(InspectorMode::from_key(InspectorMode::Outline.key()), Some(InspectorMode::Outline));
     assert_eq!(InspectorMode::default().toggled(), InspectorMode::Outline);
 }
+
+#[test]
+fn a_tinted_post_carries_its_tint_to_its_bullet() {
+    use crate::domain::post::Tint;
+    let mut posts = posts();
+    posts[1].extras.tint = Some(Tint::Mint);
+    let rows = visible_rows(&tree_of(&posts), &BTreeSet::new());
+    assert_eq!(rows.iter().map(|row| row.tint).collect::<Vec<_>>(), [None, Some(Tint::Mint), None, None]);
+}

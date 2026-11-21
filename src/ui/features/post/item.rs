@@ -8,14 +8,13 @@ use super::extras::render_post_extras;
 use super::header::{render_author_row, render_repost_header};
 use super::lookup::PostLookup;
 use super::quote_card::render_quote_embed;
+use super::surface::card_surface;
 use super::threadline::{render_avatar_column, ThreadlineStyle};
 use crate::domain::Post;
 use crate::theme::ThemeTokens;
 use crate::ui::features::media::render_post_media;
 use gpui_kit::prelude::FluentBuilder;
-use gpui_kit::{
-    div, Div, InteractiveElement, IntoElement, MouseButton, ParentElement, Rgba, Styled,
-};
+use gpui_kit::{div, Div, InteractiveElement, IntoElement, MouseButton, ParentElement, Styled};
 
 /// Comprehensive Threads-style Post Molecule with tokenized layout, context-aware threadline,
 /// attachment embeds (image & link), quote cards, repost header, click-to-focus inspection,
@@ -29,7 +28,8 @@ pub fn render_post_item<L: PostLookup>(
     handlers: PostCardHandlers,
 ) -> impl IntoElement {
     let (effective_post, is_instant_repost) = resolve_effective_post(post, &lookup);
-    let (bg_color, hover_bg) = surface_colors(is_focused, theme);
+    let surface = card_surface(effective_post.extras.tint, is_focused, theme);
+    let hover_bg = surface.hover;
     let has_repost_header = post.repost_id.is_some();
     let on_select = handlers.on_select.clone();
 
@@ -37,10 +37,11 @@ pub fn render_post_item<L: PostLookup>(
         .id(format!("{POST_ITEM_ID_PREFIX}{}", post.id))
         .w_full()
         .px(theme.panel_padding)
-        .bg(bg_color)
+        .bg(surface.background)
         .hover(move |s| s.bg(hover_bg))
         .border_b(theme.border_width_hairline)
-        .border_color(theme.border_subtle)
+        .when(surface.edge.is_some(), |card| card.border_l(theme.border_width_threadline))
+        .border_color(surface.rule)
         .cursor_default()
         .on_mouse_down(MouseButton::Left, move |_ev, window, cx| on_select(window, cx))
         .flex()
@@ -48,15 +49,6 @@ pub fn render_post_item<L: PostLookup>(
         .gap(theme.spacing_md)
         .child(render_avatar_column(lookup.author_of(effective_post), threadline_style, has_repost_header, theme))
         .child(render_content_column(post, effective_post, is_instant_repost, lookup, theme, handlers))
-}
-
-/// Card background and hover colors (focused cards stay elevated on hover).
-fn surface_colors(is_focused: bool, theme: &ThemeTokens) -> (Rgba, Rgba) {
-    if is_focused {
-        (theme.bg_elevated, theme.bg_elevated)
-    } else {
-        (theme.bg_feed_post, theme.hover_bg)
-    }
 }
 
 /// Resolves the original thought an instant repost wraps (same rule as the action target).

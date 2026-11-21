@@ -3,8 +3,9 @@
 //!
 //! Amber, rose, sky and mint take the palette's warning, danger, info and success colors,
 //! slate its muted foreground, and violet the info color turned to a violet hue (no palette
-//! slot is reliably violet). A background that would leave primary or secondary text below
-//! WCAG AA is moved back toward the plain background until it passes.
+//! slot is reliably violet). A background that would leave primary, secondary or muted text below
+//! WCAG AA is moved back toward the plain background until it passes; muted text (handles,
+//! timestamps) counts too, since a tinted card shows all three.
 
 use crate::theme::color::{ensure_contrast, mix, with_hue, AA_TEXT_CONTRAST};
 use crate::theme::palette::ThemePalette;
@@ -34,7 +35,7 @@ fn tint(bg: Rgba, hue: Rgba, text: &[Rgba], dark: bool) -> (Rgba, Rgba) {
 /// Every tint's background and border. Runs after the text colors, which it keeps readable.
 pub(super) fn apply_tints(t: &mut ThemeTokens, palette: &ThemePalette) {
     let c = &palette.colors;
-    let text = [t.text_primary, t.text_secondary];
+    let text = [t.text_primary, t.text_secondary, t.text_muted];
     let dark = palette.mode.is_dark();
     let of = |hue| tint(c.bg, hue, &text, dark);
     let ((amber_bg, amber_border), (rose_bg, rose_border), (sky_bg, sky_border)) = (of(c.warning), of(c.danger), of(c.info));

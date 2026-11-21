@@ -15,6 +15,7 @@ mod host;
 mod item;
 mod lookup;
 mod quote_card;
+mod surface;
 mod threadline;
 
 pub use actions::ActionClickCallback;
@@ -27,6 +28,7 @@ pub(crate) use attachments::missing_image;
 pub use host::extract_host_domain;
 pub use item::render_post_item;
 pub use lookup::PostLookup;
+pub(crate) use surface::row_tint;
 pub use threadline::ThreadlineStyle;
 
 #[cfg(test)]

@@ -1,6 +1,7 @@
 //! What the store says about a profile's interests (its engagement [`Signal`]s), and which
 //! posts it may be recommended.
 
+use crate::domain::reaction::Reaction;
 use crate::domain::recommend::{Candidate, Signal};
 use crate::domain::{NetworkId, Post, PostId, ProfileId};
 use crate::state::AppState;
@@ -12,6 +13,25 @@ const ANSWERED: f32 = 0.7;
 const QUOTED: f32 = 0.7;
 const REPOSTED: f32 = 0.6;
 const LIKED: f32 = 0.5;
+/// How much a reaction says: an emoji counts like a like; claps start there and grow with
+/// each clap up to a cap.
+const REACTED: f32 = 0.5;
+const CLAP_STEP: f32 = 0.05;
+const CLAPPED_MAX: f32 = 0.8;
+
+/// The weight of `reaction`'s engagement.
+pub fn reaction_weight(reaction: &Reaction) -> f32 {
+    match reaction.is_clap() {
+        true => (REACTED + CLAP_STEP * reaction.count.saturating_sub(1) as f32).min(CLAPPED_MAX),
+        false => REACTED,
+    }
+}
+
+/// The reactions `profile` gave to posts of `network`, as signals at the moment of each.
+fn reaction_signals(state: &AppState, profile: &ProfileId, network: &NetworkId) -> Vec<Signal> {
+    let posts: HashSet<&PostId> = network_posts(state, network).map(|post| &post.id).collect();
+    state.reactions.given_by(profile).filter(|row| posts.contains(&row.post_id)).map(|row| Signal { post: row.post_id.clone(), weight: reaction_weight(row), at: row.updated_at }).collect()
+}
 
 /// Posts of `network`, newest first (store order).
 pub fn network_posts<'a>(state: &'a AppState, network: &'a NetworkId) -> impl Iterator<Item = &'a Post> + 'a {
@@ -19,7 +39,8 @@ pub fn network_posts<'a>(state: &'a AppState, network: &'a NetworkId) -> impl It
 }
 
 /// Every engagement of `profile` in `network`: posts it wrote, answered, quoted or reposted,
-/// and (for the profile the user is acting as) the posts the user liked or reposted.
+/// reacted to or clapped for, and (for the profile the user is acting as) the posts the user
+/// liked or reposted.
 pub fn signals_of(state: &AppState, profile: &ProfileId, network: &NetworkId) -> Vec<Signal> {
     let acting = &state.active_profile_id == profile;
     let mut signals = Vec::new();
@@ -40,6 +61,7 @@ pub fn signals_of(state: &AppState, profile: &ProfileId, network: &NetworkId) ->
             push(&post.id, REPOSTED);
         }
     }
+    signals.extend(reaction_signals(state, profile, network));
     signals
 }
 

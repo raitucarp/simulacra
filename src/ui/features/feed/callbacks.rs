@@ -4,7 +4,9 @@ use super::params::{
     DeletePostCallback, FindSimilarCallback, LearnPostCallback, LearningPosts, LikePostCallback, PostActionCallback, QuotePostCallback,
     ReplyPostCallback, RepostPostCallback, SelectPostCallback,
 };
+use crate::domain::post::PostLifecycle;
 use crate::domain::{Post, PostId, Profile};
+use crate::ui::features::data::DataControls;
 use crate::state::AppState;
 use crate::theme::ThemeTokens;
 use crate::ui::features::post::{render_post_item, BodyLinks, LearnControls, PostAction, PostCardHandlers, ThreadlineStyle};
@@ -76,7 +78,7 @@ impl PostCallbacks {
             links: self.links.clone(),
             on_post_action: Some(bind_action(&self.on_post_action, &target_id)),
             credence: self.credence.as_ref().filter(|_| target.human).map(|source| source.controls(&target_id)),
-            data: self.data.as_ref().map(|source| source.controls(&target_id, target.human)),
+            data: self.data.as_ref().map(|source| DataControls { lifecycle: target.lifecycle, ..source.controls(&target_id, target.human) }),
         }
     }
 
@@ -107,12 +109,15 @@ struct CardTarget {
     handle: String,
     /// The thought was written by one of the user's personas (sb E1: credences).
     human: bool,
+    /// Where the target stands (archived, Y5).
+    lifecycle: PostLifecycle,
 }
 
 impl CardTarget {
     fn resolve(post: &Post, state: &AppState) -> Self {
         let id = state.action_target(&post.id);
         let author = state.get_post(&id).map_or_else(|| state.author_of(post), |p| state.author_of(p));
-        Self { id, handle: author.handle.clone(), human: author.is_human_persona() }
+        let lifecycle = state.get_post(&id).map_or(post.lifecycle, |p| p.lifecycle);
+        Self { id, handle: author.handle.clone(), human: author.is_human_persona(), lifecycle }
     }
 }

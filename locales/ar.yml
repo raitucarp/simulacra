@@ -5651,3 +5651,8 @@ data.scheduled.cancel_title: "هل تريد إلغاء هذا المنشور ا�
 data.scheduled.cancel_desc: "سيُحذف ولن يُنشر أبدًا. وتُلغى معه المنشورات اللاحقة في سلسلته."
 data.scheduled.cancelled: "أُلغي المنشور المجدول."
 data.scheduled.saved: "حُدّث المنشور المجدول."
+data.menu.archive: "أرشفة"
+data.menu.unarchive: "إلغاء الأرشفة"
+data.archived_mark: "مؤرشف"
+data.archived: "أُرشف. خرج من الخلاصة، ولا يزال البحث يجده."
+data.unarchived: "عاد إلى الخلاصة."

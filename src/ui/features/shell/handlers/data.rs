@@ -17,7 +17,7 @@ impl AppView {
         use DataEvent as E;
         let was_open = self.data_sheet_open();
         match event {
-            E::EditPost(_) | E::ToggleBookmark(_) | E::AddToCollection(..) | E::RemoveFromCollection(..) | E::NewCollectionFor(_) => self.on_post_data_event(event, window, cx),
+            E::EditPost(_) | E::SetArchived(..) | E::ToggleBookmark(_) | E::AddToCollection(..) | E::RemoveFromCollection(..) | E::NewCollectionFor(_) => self.on_post_data_event(event, window, cx),
             E::OpenPostHistory(_) | E::OpenDocumentHistory(_) | E::SelectVersion(_) | E::RestoreVersion(_) | E::CloseHistory => self.on_history_event(event, window, cx),
             E::OpenExport | E::SetScope(_) | E::PickCollection(_) | E::PickPersona(_) | E::LastDays(_) | E::ToggleOriginals | E::ToggleJournal | E::RunExport | E::CloseExport => self.on_export_event(event, window, cx),
             E::OpenSnapshot | E::CreateSnapshot | E::CloseSnapshot => self.on_snapshot_event(event, window, cx),

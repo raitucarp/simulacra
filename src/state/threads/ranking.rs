@@ -24,7 +24,7 @@ impl FeedRanking {
 
 /// The active network's stream for `tab`, ordered by `ranking` when given (recency otherwise).
 pub fn ranked_feed_entries<'a>(state: &'a AppState, tab: FeedTab, ranking: Option<&FeedRanking>) -> Vec<&'a Post> {
-    let posts: Vec<&Post> = state.day_scoped(state.current_network_posts()).collect();
+    let posts: Vec<&Post> = state.day_scoped(state.feed_posts()).collect();
     let mut conversations: Vec<Vec<&Post>> = group_conversations(&posts).into_iter().filter(|c| tab.includes(c)).collect();
     if let Some(ranking) = ranking {
         conversations.sort_by(|a, b| ranking.best(b).total_cmp(&ranking.best(a)));

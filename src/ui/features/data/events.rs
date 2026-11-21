@@ -42,6 +42,8 @@ impl ScopeKind {
 pub enum DataEvent {
     /// Post "…" menu.
     EditPost(PostId),
+    /// Archives the post (`true`) or brings it back to the feed (Y5).
+    SetArchived(PostId, bool),
     OpenPostHistory(PostId),
     ToggleBookmark(PostId),
     AddToCollection(PostId, CollectionId),

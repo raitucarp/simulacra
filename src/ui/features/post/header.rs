@@ -75,6 +75,7 @@ fn render_author_meta(post: &Post, author: &Profile, is_instant_repost: bool, th
         .when(is_instant_repost, |this| {
             this.child(mono_meta(theme, theme.font_size_2xs).text_color(theme.accent_agent).child(t!("post.original_marker").to_string()))
         })
+        .when(post.lifecycle.is_archived(), |this| this.child(mono_meta(theme, theme.font_size_2xs).child(t!("data.archived_mark").to_string()))) // Y5: found by search
 }
 
 /// The author's name or handle: one line, cut with an ellipsis when it cannot fit.

@@ -4,6 +4,7 @@
 //! modules by concern (loading, networks, profiles, posts, indices, ...).
 
 mod action_target;
+mod archive; // Y5
 mod authors;
 mod catalogue;
 mod avatar;

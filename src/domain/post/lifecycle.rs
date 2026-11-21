@@ -66,6 +66,11 @@ impl PostLifecycle {
         self.status == PostStatus::Scheduled
     }
 
+    /// Whether the post is archived: out of the feed, still found by search (Y5).
+    pub fn is_archived(&self) -> bool {
+        self.status == PostStatus::Archived
+    }
+
     /// Whether a scheduled post is due at `now` (one without a moment is due at once).
     pub fn is_due_to_publish(&self, now: Timestamp) -> bool {
         self.is_scheduled() && self.publish_at.is_none_or(|at| at <= now)

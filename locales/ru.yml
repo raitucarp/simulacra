@@ -5651,3 +5651,8 @@ data.scheduled.cancel_title: "Отменить этот запланирован
 data.scheduled.cancel_desc: "Он будет удалён и не выйдет. Следующие посты его ветки отменяются вместе с ним."
 data.scheduled.cancelled: "Запланированный пост отменён."
 data.scheduled.saved: "Запланированный пост обновлён."
+data.menu.archive: "В архив"
+data.menu.unarchive: "Вернуть из архива"
+data.archived_mark: "в архиве"
+data.archived: "Перенесено в архив. Пост исчез из ленты, но поиск его находит."
+data.unarchived: "Снова в ленте."

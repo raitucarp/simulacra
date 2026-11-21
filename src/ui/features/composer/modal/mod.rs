@@ -71,6 +71,8 @@ pub struct ModalCallbacks {
     pub on_toggle_preview: ModalActionCallback,
     /// Picks the thread's container tint (sb C3).
     pub on_pick_tint: super::tint_picker::TintCallback,
+    /// Opens or closes the "Schedule…" picker (Y3).
+    pub on_toggle_schedule: ModalActionCallback,
 }
 
 /// Stateless dialog rendering a composer snapshot.
@@ -95,6 +97,8 @@ pub struct ComposerModalView {
     pub preview: bool,
     /// The container tint every post of the thread (or the edited post) gets (sb C3).
     pub tint: Option<crate::domain::post::Tint>,
+    /// The open "Schedule…" picker (Y3); `None` while closed.
+    pub schedule: Option<super::schedule_picker::ScheduleView>,
     pub callbacks: ModalCallbacks,
     /// sb E1: the atomic-note hint under one draft.
     pub atomic_hint: Option<AtomicHintView>,

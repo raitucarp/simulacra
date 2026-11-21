@@ -11,6 +11,7 @@ mod lifecycle;
 mod parse;
 mod provenance;
 mod relations;
+pub mod schedule;
 pub mod sanitize;
 pub mod seed;
 mod tint;

@@ -4,6 +4,7 @@
 use super::super::consts::MODAL_SUBMIT_POST_BTN_ID;
 use super::super::format::format_buttons;
 use super::super::preview::preview_button;
+use super::super::schedule_picker::schedule_button;
 use super::super::tint_picker::tint_picker;
 use gpui_kit::prelude::FluentBuilder;
 use super::ComposerModalView;
@@ -20,13 +21,7 @@ impl ComposerModalView {
     pub(super) fn footer(&self, can_post: bool) -> Div {
         let theme = &self.theme;
         let on_submit_btn = self.callbacks.on_submit.clone();
-        let label = if self.is_editing() {
-            t!("data.edit.save")
-        } else if self.drafts.len() > 1 {
-            t!("composer.post_all_button")
-        } else {
-            t!("composer.post_button")
-        };
+        let label = self.submit_label();
         div()
             .w_full()
             .px(theme.panel_padding)
@@ -47,6 +42,18 @@ impl ComposerModalView {
                         (on_submit_btn)(window, cx);
                     }),
             )
+    }
+
+    /// The primary button's label: save, post (all) or, with a moment picked (Y3), schedule (all).
+    fn submit_label(&self) -> std::borrow::Cow<'static, str> {
+        let scheduling = self.schedule.as_ref().and_then(|view| view.choice).is_some_and(|choice| choice.is_ok());
+        match (self.is_editing(), scheduling, self.drafts.len() > 1) {
+            (true, _, _) => t!("data.edit.save"),
+            (false, true, true) => t!("composer.schedule_all_button"),
+            (false, true, false) => t!("composer.schedule_button"),
+            (false, false, true) => t!("composer.post_all_button"),
+            (false, false, false) => t!("composer.post_button"),
+        }
     }
 
     /// The tint picker of the thread (sb C3), between the drafts and the footer.
@@ -73,6 +80,7 @@ impl ComposerModalView {
             .gap(theme.control_gap)
             .child(toggle)
             .when(!self.preview, |row| row.child(format_buttons(MODAL_FORMAT_SCOPE, self.callbacks.on_format.clone(), theme)))
+            .when(!self.is_editing(), |row| row.child(schedule_button(self.schedule.is_some(), self.callbacks.on_toggle_schedule.clone())))
             .child(hint)
     }
 }

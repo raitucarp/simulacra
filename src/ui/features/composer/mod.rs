@@ -9,6 +9,7 @@ pub mod inline;
 pub mod keys;
 mod messages;
 mod preview;
+mod schedule_picker;
 pub mod modal;
 pub mod panel;
 mod snippet;

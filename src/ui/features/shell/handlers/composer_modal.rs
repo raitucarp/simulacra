@@ -6,7 +6,13 @@ use crate::ui::features::composer::{
     publish_error_message, ComposerModalEvent, ComposerModalMode, ComposerModalPanel,
     ComposerSubmission,
 };
+use crate::domain::post::schedule::format_moment;
+use crate::domain::preferences::ToastKind;
+use gpui_kit::component::notification::Notification;
 use gpui_kit::*;
+use jiff::tz::TimeZone;
+use jiff::Timestamp;
+use rust_i18n::t;
 
 impl AppView {
     /// Opens the Threads-style composer modal in the specified mode (NewThread, Reply, Quote).
@@ -48,12 +54,19 @@ impl AppView {
             let text = submission.drafts.first().cloned().unwrap_or_default();
             return self.save_post_edit(target.post.id.clone(), (text, submission.tint), window, cx); // sb F2, C3
         }
+        let publish_at = submission.publish_at;
         let (thread, anchor) = thread_from_submission(submission.clone());
-        match self.state.submit_thread(&thread, &anchor) {
-            Ok(ids) => {
+        let published = match publish_at {
+            Some(at) => self.state.schedule_thread(&thread, &anchor, at, Timestamp::now()).map(|_| None),
+            None => self.state.submit_thread(&thread, &anchor).map(|ids| ids.last().cloned()),
+        };
+        match published {
+            Ok(last) => {
                 self.close_composer_modal(window, cx);
-                if let Some(last) = ids.last().cloned() {
-                    self.reveal_post(last, window, cx);
+                match (last, publish_at) {
+                    (Some(last), _) => self.reveal_post(last, window, cx),
+                    (None, Some(at)) => self.toast_scheduled(at, window, cx),
+                    (None, None) => {}
                 }
             }
             Err(err) => {
@@ -62,12 +75,19 @@ impl AppView {
             }
         }
     }
+
+    /// Says when a scheduled thread goes out (Y3); it stays out of the feed until then.
+    fn toast_scheduled(&mut self, at: Timestamp, window: &mut Window, cx: &mut Context<Self>) {
+        let when = format_moment(at, &TimeZone::system());
+        let text = t!("composer.schedule.done", when = when).to_string();
+        self.toast(ToastKind::Confirmation, Notification::success(text), window, cx);
+    }
 }
 
 /// Store drafts (attachments on the first post, the tint on every post) and the anchor
 /// implied by the modal mode.
 fn thread_from_submission(submission: ComposerSubmission) -> (Vec<ThreadDraft>, ThreadAnchor) {
-    let ComposerSubmission { mode, drafts, link, images, tint } = submission;
+    let ComposerSubmission { mode, drafts, link, images, tint, publish_at: _ } = submission;
     let mut thread: Vec<ThreadDraft> = drafts.into_iter().map(|text| ThreadDraft { tint, ..ThreadDraft::text(text) }).collect();
     if let Some(first) = thread.first_mut() {
         first.link = link;

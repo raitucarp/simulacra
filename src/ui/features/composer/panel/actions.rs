@@ -15,7 +15,8 @@ impl ComposerModalPanel {
         let link = cx.subscribe(&self.link_input, notify_on_change);
         let image = cx.subscribe(&self.image_input, notify_on_change);
         let enter = cx.subscribe_in(&self.image_input, window, Self::on_image_path_event);
-        vec![link, image, enter]
+        let schedule = cx.subscribe(&self.schedule.input, notify_on_change);
+        vec![link, image, enter, schedule]
     }
 
     /// Attaches the typed image path on Enter and empties the field.
@@ -43,23 +44,25 @@ impl ComposerModalPanel {
         self.drafts.truncate(1);
         self.reset_atomic_hint();
         self.reset_readability();
+        self.reset_schedule(window, cx);
         if let Some(first) = self.drafts.first() {
             first.input.update(cx, |state, cx| state.set_value("", window, cx));
         }
     }
 
-    /// Emits the thread for publishing, or re-renders to explain why it cannot be posted.
+    /// Emits the thread for publishing (or scheduling, Y3), or re-renders to explain why it
+    /// cannot be posted.
     pub fn submit(&mut self, _: &mut Window, cx: &mut Context<Self>) {
-        if self.submit_problem(cx).is_some() {
+        let (Ok(publish_at), None) = (self.schedule_choice(cx).transpose(), self.submit_problem(cx)) else {
             cx.notify();
             return;
-        }
+        };
         let link_val = self.link_input.read(cx).value().to_string();
         let link = (!link_val.trim().is_empty()).then(|| link_val.trim().to_string());
         let images = self.image_attachments(cx);
         let drafts = self.draft_texts(cx);
         let mode = self.mode.clone();
-        cx.emit(ComposerModalEvent::Submit(ComposerSubmission { mode, drafts, link, images, tint: self.tint }));
+        cx.emit(ComposerModalEvent::Submit(ComposerSubmission { mode, drafts, link, images, tint: self.tint, publish_at }));
     }
 
     /// A typed image path that points to an existing file.

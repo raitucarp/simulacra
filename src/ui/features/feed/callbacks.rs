@@ -5,6 +5,7 @@ use super::params::{
     ReplyPostCallback, RepostPostCallback, SelectPostCallback,
 };
 use crate::domain::post::PostLifecycle;
+use crate::domain::preferences::ArchiveAfter;
 use crate::domain::{Post, PostId, Profile};
 use crate::ui::features::data::DataControls;
 use crate::state::AppState;
@@ -78,7 +79,7 @@ impl PostCallbacks {
             links: self.links.clone(),
             on_post_action: Some(bind_action(&self.on_post_action, &target_id)),
             credence: self.credence.as_ref().filter(|_| target.human).map(|source| source.controls(&target_id)),
-            data: self.data.as_ref().map(|source| DataControls { lifecycle: target.lifecycle, ..source.controls(&target_id, target.human) }),
+            data: self.data.as_ref().map(|source| DataControls { lifecycle: target.lifecycle, auto_archive: target.auto_archive, ..source.controls(&target_id, target.human) }),
         }
     }
 
@@ -111,13 +112,16 @@ struct CardTarget {
     human: bool,
     /// Where the target stands (archived, Y5).
     lifecycle: PostLifecycle,
+    /// The "Archive automatically" choice it follows (Y6).
+    auto_archive: Option<ArchiveAfter>,
 }
 
 impl CardTarget {
     fn resolve(post: &Post, state: &AppState) -> Self {
         let id = state.action_target(&post.id);
         let author = state.get_post(&id).map_or_else(|| state.author_of(post), |p| state.author_of(p));
-        let lifecycle = state.get_post(&id).map_or(post.lifecycle, |p| p.lifecycle);
-        Self { id, handle: author.handle.clone(), human: author.is_human_persona(), lifecycle }
+        let target = state.get_post(&id).unwrap_or(post);
+        let (lifecycle, auto_archive) = (target.lifecycle, ArchiveAfter::of(target.created_at, target.lifecycle.archive_at));
+        Self { id, handle: author.handle.clone(), human: author.is_human_persona(), lifecycle, auto_archive }
     }
 }

@@ -6,6 +6,7 @@ use super::events::{DataAction, DataEvent};
 use super::text::tr;
 use crate::domain::document::CollectionId;
 use crate::domain::post::PostLifecycle;
+use crate::domain::preferences::ArchiveAfter;
 use crate::domain::PostId;
 use crate::theme::ThemeTokens;
 use crate::ui::icons::LucideIcon;
@@ -46,6 +47,7 @@ impl DataSource {
             member_of: self.memberships.get(post.as_str()).cloned().unwrap_or_default(),
             history_open: self.history_open,
             lifecycle: PostLifecycle::default(),
+            auto_archive: None,
             on_event: self.on_event.clone(),
         }
     }
@@ -63,6 +65,8 @@ pub struct DataControls {
     pub history_open: bool,
     /// Where the post stands (archived, Y5); set by the feed from the post itself.
     pub lifecycle: PostLifecycle,
+    /// The "Archive automatically" choice the post follows, if any (Y6).
+    pub auto_archive: Option<ArchiveAfter>,
     pub on_event: DataAction,
 }
 
@@ -74,7 +78,7 @@ impl DataControls {
     }
 }
 
-fn item(label: String, icon: LucideIcon, event: DataEvent, on_event: &DataAction) -> PopupMenuItem {
+pub(super) fn item(label: String, icon: LucideIcon, event: DataEvent, on_event: &DataAction) -> PopupMenuItem {
     let on_event = on_event.clone();
     PopupMenuItem::new(label).icon(Icon::new(icon)).on_click(move |_, window, cx| on_event(event.clone(), window, cx))
 }
@@ -98,9 +102,7 @@ pub fn with_data_items(menu: PopupMenu, controls: Option<&DataControls>, window:
     let mut menu = menu.separator();
     if controls.own {
         menu = menu.item(item(tr("data.menu.edit"), LucideIcon::Pencil, DataEvent::EditPost(post.clone()), &controls.on_event));
-        let archived = controls.lifecycle.is_archived();
-        let (label, icon) = if archived { (tr("data.menu.unarchive"), LucideIcon::ArchiveRestore) } else { (tr("data.menu.archive"), LucideIcon::Archive) };
-        menu = menu.item(item(label, icon, DataEvent::SetArchived(post.clone(), !archived), &controls.on_event)); // Y5
+        menu = super::lifecycle_menu::with_lifecycle_items(menu, &controls, window, cx); // Y5, Y6
     }
     if controls.revisions > 0 {
         let label = t!("data.menu.history", count = controls.revisions).to_string();

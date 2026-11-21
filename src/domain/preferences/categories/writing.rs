@@ -2,7 +2,7 @@
 //! identity and what wikilinks and hashtags do.
 
 use super::super::bounds::Bounds;
-use super::super::choices::{HashtagClick, PostIdentity, WikilinkClick};
+use super::super::choices::{ArchiveAfter, HashtagClick, PostIdentity, WikilinkClick};
 use crate::domain::post::MAX_POST_CHARS;
 use serde::{Deserialize, Serialize};
 
@@ -34,6 +34,8 @@ pub struct WritingPrefs {
     pub atomic_hints: bool,
     /// sb F3: a quiet readability meter under composer drafts.
     pub readability_meter: bool,
+    /// Y6: how long after they go out the user's posts move to the archive.
+    pub auto_archive: ArchiveAfter,
 }
 
 impl Default for WritingPrefs {
@@ -48,6 +50,7 @@ impl Default for WritingPrefs {
             hashtag_click: HashtagClick::default(),
             atomic_hints: true,
             readability_meter: true,
+            auto_archive: ArchiveAfter::default(),
         }
     }
 }

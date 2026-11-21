@@ -19,6 +19,10 @@ impl AppView {
         match event {
             DataEvent::EditPost(id) => self.open_post_editor(&id, window, cx),
             DataEvent::SetArchived(id, archived) => self.set_archived(&id, archived, window, cx),
+            DataEvent::SetAutoArchive(id, after) => {
+                let set = self.state.set_auto_archive(&id, after);
+                self.report_data_error(set, window, cx);
+            }
             DataEvent::ToggleBookmark(id) => self.toggle_bookmark(&id, window, cx),
             DataEvent::AddToCollection(id, collection) => self.file_post(&id, &collection, window, cx),
             DataEvent::RemoveFromCollection(id, collection) => self.remove_entry(&collection, ItemRef::Post(id), cx),
@@ -65,6 +69,13 @@ impl AppView {
                 self.toast(ToastKind::Confirmation, Notification::success(text), window, cx);
             }
             Err(err) => self.notify_data(publish_error_message(&err), window, cx),
+        }
+    }
+
+    /// Says why a post action failed; a success shows itself on the card.
+    fn report_data_error<T>(&self, result: crate::error::Result<T>, window: &mut Window, cx: &mut Context<Self>) {
+        if let Err(err) = result {
+            self.notify_data(publish_error_message(&err), window, cx);
         }
     }
 

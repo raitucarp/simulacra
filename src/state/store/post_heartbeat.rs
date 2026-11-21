@@ -1,5 +1,6 @@
 //! The post lifecycle heartbeat (Y2): on every tick of the scheduler heartbeat, scheduled
-//! posts whose moment has come are published. The clock is injected so ticks are testable.
+//! posts whose moment has come are published and posts due to be archived are archived (Y6).
+//! The clock is injected so ticks are testable.
 
 use super::AppState;
 use crate::agent::schedule::Clock;
@@ -13,12 +14,14 @@ use jiff::Timestamp;
 pub struct LifecycleReport {
     /// Scheduled posts that went out, in publishing order.
     pub published: Vec<PostId>,
+    /// Posts that moved to the archive (Y6).
+    pub archived: Vec<PostId>,
 }
 
 impl LifecycleReport {
     /// Whether the tick changed nothing.
     pub fn is_empty(&self) -> bool {
-        self.published.is_empty()
+        self.published.is_empty() && self.archived.is_empty()
     }
 }
 
@@ -26,7 +29,8 @@ impl AppState {
     /// One heartbeat at `clock`'s current time.
     pub fn lifecycle_heartbeat(&mut self, clock: &dyn Clock) -> Result<LifecycleReport> {
         let now = clock.now().timestamp();
-        Ok(LifecycleReport { published: self.publish_due(now)? })
+        let published = self.publish_due(now)?;
+        Ok(LifecycleReport { published, archived: self.archive_due(now)? })
     }
 
     /// Publishes every scheduled post due at `now`, in publishing order.
@@ -36,7 +40,8 @@ impl AppState {
         due.into_iter().map(|post| self.release_scheduled(post, now)).collect()
     }
 
-    /// Puts a scheduled post on the timeline as written at `now` (its reply counts the parent).
+    /// Puts a scheduled post on the timeline as written at `now` (its reply counts the parent;
+    /// the default auto-archive moment counts from then).
     pub(super) fn release_scheduled(&mut self, post: Post, now: Timestamp) -> Result<PostId> {
         let lifecycle = PostLifecycle { status: PostStatus::Published, publish_at: None, ..post.lifecycle };
         let id = post.id.clone();

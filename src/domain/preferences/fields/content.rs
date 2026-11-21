@@ -2,7 +2,7 @@
 
 use super::macros::category_fields;
 use super::value::{choice, choice_value, choices, count, number, number_value, toggle, FieldKind, NumberUnit, SettingValue};
-use crate::domain::preferences::{HashtagClick, ImportSegmentation, PostIdentity, WikilinkClick};
+use crate::domain::preferences::{ArchiveAfter, HashtagClick, ImportSegmentation, PostIdentity, WikilinkClick};
 use crate::domain::preferences::{ImportPrefs, WritingPrefs, AUTOSAVE_SECONDS, MAX_FILE_MB, POST_LENGTH};
 
 category_fields! {
@@ -11,7 +11,7 @@ category_fields! {
         PostLengthLimit => "post_length_limit", AutoSplitThreads => "auto_split_threads",
         AutosaveSeconds => "autosave_seconds", Spellcheck => "spellcheck", DefaultIdentity => "default_identity",
         WikilinkClick => "wikilink_click", HashtagClick => "hashtag_click", AtomicHints => "atomic_hints",
-        ReadabilityMeter => "readability_meter",
+        ReadabilityMeter => "readability_meter", AutoArchive => "auto_archive",
     }
 }
 
@@ -24,6 +24,7 @@ impl WritingField {
             Self::DefaultIdentity => choices::<PostIdentity>(),
             Self::WikilinkClick => choices::<WikilinkClick>(),
             Self::HashtagClick => choices::<HashtagClick>(),
+            Self::AutoArchive => choices::<ArchiveAfter>(),
         }
     }
 
@@ -38,6 +39,7 @@ impl WritingField {
             Self::HashtagClick => choice_value(prefs.hashtag_click),
             Self::AtomicHints => SettingValue::Toggle(prefs.atomic_hints),
             Self::ReadabilityMeter => SettingValue::Toggle(prefs.readability_meter),
+            Self::AutoArchive => choice_value(prefs.auto_archive),
         }
     }
 
@@ -52,6 +54,7 @@ impl WritingField {
             Self::HashtagClick => WritingPrefs { hashtag_click: choice(value, prefs.hashtag_click), ..prefs },
             Self::AtomicHints => WritingPrefs { atomic_hints: toggle(value, prefs.atomic_hints), ..prefs },
             Self::ReadabilityMeter => WritingPrefs { readability_meter: toggle(value, prefs.readability_meter), ..prefs },
+            Self::AutoArchive => WritingPrefs { auto_archive: choice(value, prefs.auto_archive), ..prefs },
         }
     }
 }

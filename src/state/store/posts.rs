@@ -35,8 +35,10 @@ impl AppState {
         Ok(post_id)
     }
 
-    /// Persists a validated post, bumps its parent's reply counter and prepends it.
+    /// Persists a validated post (with the user's default auto-archive moment, Y6), bumps its
+    /// parent's reply counter and prepends it.
     pub(super) fn commit_post(&mut self, post: Post) -> Result<()> {
+        let post = self.with_default_archive(post);
         if let Some(ref db) = self.db {
             db.save_post(&post)?;
         }

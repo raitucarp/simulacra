@@ -2,6 +2,7 @@
 
 use crate::domain::data::saved::ItemRef;
 use crate::domain::document::CollectionId;
+use crate::domain::preferences::ArchiveAfter;
 use crate::domain::{PostId, ProfileId};
 use gpui_kit::{App, Window};
 use std::rc::Rc;
@@ -44,6 +45,8 @@ pub enum DataEvent {
     EditPost(PostId),
     /// Archives the post (`true`) or brings it back to the feed (Y5).
     SetArchived(PostId, bool),
+    /// Archives the post this long after it went out (Y6).
+    SetAutoArchive(PostId, ArchiveAfter),
     OpenPostHistory(PostId),
     ToggleBookmark(PostId),
     AddToCollection(PostId, CollectionId),

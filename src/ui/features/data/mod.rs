@@ -9,6 +9,7 @@ mod diff_view;
 mod events;
 mod export;
 mod history;
+mod lifecycle_menu; // Y5, Y6
 mod post_menu;
 mod saved;
 mod scheduled; // Y4

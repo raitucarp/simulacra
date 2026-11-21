@@ -148,6 +148,9 @@ composer:
   format_code: "コード"
   format_spoiler: "ネタバレ"
   format_shortcut: "%{label}（%{keys}）"
+  preview_show: "プレビュー"
+  preview_hide: "編集に戻る"
+  preview_empty: "まだプレビューする内容がありません"
 
 feed:
   no_posts: "このネットワークにはまだ思考がありません。上から最初のひらめきを共有しましょう！"

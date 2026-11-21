@@ -148,6 +148,9 @@ composer:
   format_code: "Code"
   format_spoiler: "Spoiler"
   format_shortcut: "%{label} (%{keys})"
+  preview_show: "Aperçu"
+  preview_hide: "Revenir à l'édition"
+  preview_empty: "Rien à prévisualiser pour l'instant"
 
 feed:
   no_posts: "Aucune pensée dans ce réseau pour le moment. Partage la première étincelle ci-dessus !"

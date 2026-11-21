@@ -8,6 +8,7 @@ mod format_keys;
 pub mod inline;
 pub mod keys;
 mod messages;
+mod preview;
 pub mod modal;
 pub mod panel;
 mod snippet;

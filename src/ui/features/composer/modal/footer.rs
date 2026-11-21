@@ -3,6 +3,8 @@
 
 use super::super::consts::MODAL_SUBMIT_POST_BTN_ID;
 use super::super::format::format_buttons;
+use super::super::preview::preview_button;
+use gpui_kit::prelude::FluentBuilder;
 use super::ComposerModalView;
 use gpui_kit::base::Disableable;
 use gpui_kit::component::button::{Button, ButtonVariants};
@@ -46,15 +48,18 @@ impl ComposerModalView {
             )
     }
 
-    /// The format toolbar (acting on the last focused draft) and the audience hint.
+    /// The preview toggle, the format toolbar (acting on the last focused draft; hidden while
+    /// previewing) and the audience hint.
     fn footer_tools(&self) -> Div {
         let theme = &self.theme;
         let hint = div().text_size(theme.font_size_xs).text_color(theme.text_muted).child(t!("composer.post_options").to_string());
+        let toggle = preview_button(MODAL_FORMAT_SCOPE, self.preview, self.callbacks.on_toggle_preview.clone());
         div()
             .flex()
             .items_center()
             .gap(theme.control_gap)
-            .child(format_buttons(MODAL_FORMAT_SCOPE, self.callbacks.on_format.clone(), theme))
+            .child(toggle)
+            .when(!self.preview, |row| row.child(format_buttons(MODAL_FORMAT_SCOPE, self.callbacks.on_format.clone(), theme)))
             .child(hint)
     }
 }

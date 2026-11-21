@@ -3,6 +3,7 @@
 //! Features isolated View rendering for 120 FPS sub-millisecond typing latency.
 
 mod layout;
+mod preview;
 mod render;
 
 use super::keys::{SubmitPostDraft, INPUT_KEY_CONTEXT, SUBMIT_BINDING_CMD, SUBMIT_BINDING_CTRL};
@@ -26,6 +27,8 @@ pub struct PostComposerView {
     draft_length: usize,
     /// Why the last submission failed, cleared on the next edit.
     error: Option<String>,
+    /// The draft is shown as it will read once posted.
+    preview: bool,
     on_submit: SubmitPostCallback,
     _sub: Subscription,
 }
@@ -51,6 +54,7 @@ impl PostComposerView {
             theme,
             draft_length: initial_len,
             error: None,
+            preview: false,
             on_submit: Box::new(on_submit),
             _sub: sub,
         }
@@ -122,6 +126,7 @@ impl PostComposerView {
             state.focus(window, cx);
         });
         self.draft_length = 0;
+        self.preview = false;
         self.error = None;
         cx.notify();
     }

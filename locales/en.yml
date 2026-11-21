@@ -148,6 +148,9 @@ composer:
   format_code: "Code"
   format_spoiler: "Spoiler"
   format_shortcut: "%{label} (%{keys})"
+  preview_show: "Preview"
+  preview_hide: "Back to editing"
+  preview_empty: "Nothing to preview yet"
 
 feed:
   no_posts: "No thoughts in this network yet. Share the first spark above!"

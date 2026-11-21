@@ -3,6 +3,7 @@
 use super::super::consts::{MODAL_FALLBACK_HANDLE, MODAL_TEXTAREA_WRAPPER_ID, TOPIC_PREFIX};
 use super::super::format_keys::handle_format_actions;
 use super::super::keys::{is_submit_chord, SubmitPostDraft};
+use super::super::preview::render_preview;
 use super::quote_preview::render_quote_preview;
 use super::{ComposerModalView, DraftEditor};
 use gpui_kit::component::input::Textarea;
@@ -50,6 +51,14 @@ impl ComposerModalView {
             .when(self.is_image_input_open, |this| this.child(self.image_input_row()))
             .children(self.media_tray())
             .child(self.attachment_bar())
+    }
+
+    /// The draft's editor, or the draft as it will read once posted while previewing.
+    pub(super) fn draft_body(&self, index: usize, draft: &DraftEditor) -> AnyElement {
+        if self.preview {
+            return render_preview(&draft.text, &self.theme);
+        }
+        self.textarea(index, draft).into_any_element()
     }
 
     /// Text area wrapper that submits on the action binding or a Ctrl/Cmd+Enter keystroke;

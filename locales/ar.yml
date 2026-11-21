@@ -148,6 +148,9 @@ composer:
   format_code: "شيفرة"
   format_spoiler: "محتوى مخفي"
   format_shortcut: "%{label} (%{keys})"
+  preview_show: "معاينة"
+  preview_hide: "العودة إلى التحرير"
+  preview_empty: "لا شيء للمعاينة بعد"
 
 feed:
   no_posts: "لا أفكار في هذه الشبكة بعد. شارك الشرارة الأولى أعلاه!"

@@ -46,6 +46,7 @@ fn callbacks(entity: &Entity<ComposerModalPanel>) -> ModalCallbacks {
         on_remove_image: act_at(entity, P::remove_image),
         on_paste: paste(entity),
         on_format: format_draft(entity),
+        on_toggle_preview: act(entity, P::toggle_preview),
     }
 }
 
@@ -66,8 +67,9 @@ impl Render for ComposerModalPanel {
             .drafts
             .iter()
             .map(|slot| {
-                let length = crate::domain::post::visible_text_len(&slot.input.read(cx).value());
-                DraftEditor { input: slot.input.clone(), length }
+                let text = slot.input.read(cx).value().to_string();
+                let length = crate::domain::post::visible_text_len(&text);
+                DraftEditor { input: slot.input.clone(), length, text }
             })
             .collect();
         ComposerModalView {
@@ -83,6 +85,7 @@ impl Render for ComposerModalPanel {
             is_image_input_open: self.is_image_input_open,
             notice,
             can_post: problem.is_none(),
+            preview: self.preview,
             atomic_hint: self.atomic_hint_view(cx),
             readability: self.readability_view(cx),
             callbacks: callbacks(&cx.entity()),

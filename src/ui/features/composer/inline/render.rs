@@ -5,7 +5,7 @@ use super::super::consts::{
     HASHTAG_TOKEN, INLINE_FALLBACK_INITIAL, INLINE_TEXTAREA_WRAPPER_ID, INSERT_LINK_BTN_ID,
     INSERT_TAG_BTN_ID, SUBMIT_POST_BTN_ID, WIKILINK_OPEN_TOKEN,
 };
-use super::super::format::{apply_format, format_buttons, FormatCallback};
+use super::super::format::{apply_format, FormatCallback};
 use super::super::format_keys::handle_format_actions;
 use super::super::keys::{is_submit_chord, SubmitPostDraft};
 use super::super::messages::render_notice;
@@ -42,7 +42,7 @@ impl Render for PostComposerView {
                 HASHTAG_TOKEN,
                 &self.composer_input,
             ),
-            format_buttons(INLINE_FORMAT_SCOPE, format_input(&self.composer_input), theme),
+            self.format_tools(cx),
             self.submit_button(cx),
             self.draft_length,
             theme,
@@ -50,7 +50,7 @@ impl Render for PostComposerView {
         let notice = self.notice(cx).map(|text| render_notice(text, theme));
         composer_row(
             avatar_column(avatar, theme),
-            editor_column(self.textarea(cx), notice, actions, theme),
+            editor_column(self.editor(cx), notice, actions, theme),
             theme,
         )
     }
@@ -69,7 +69,7 @@ impl PostComposerView {
     }
 
     /// Textarea wrapper that submits on the action binding or a Ctrl/Cmd+Enter keystroke.
-    fn textarea(&self, cx: &mut Context<Self>) -> Stateful<Div> {
+    pub(super) fn textarea(&self, cx: &mut Context<Self>) -> Stateful<Div> {
         handle_format_actions(div().id(INLINE_TEXTAREA_WRAPPER_ID), &self.composer_input)
             .w_full()
             .on_action(cx.listener(|this, _: &SubmitPostDraft, window, cx| {
@@ -87,10 +87,10 @@ impl PostComposerView {
 }
 
 /// Id scope of the inline composer's format buttons.
-const INLINE_FORMAT_SCOPE: &str = "inline";
+pub(super) const INLINE_FORMAT_SCOPE: &str = "inline";
 
 /// Format callback acting on the inline draft.
-fn format_input(input: &Entity<TextareaState>) -> FormatCallback {
+pub(super) fn format_input(input: &Entity<TextareaState>) -> FormatCallback {
     let input = input.clone();
     Rc::new(move |mark, window, cx| apply_format(&input, mark, window, cx))
 }

@@ -148,6 +148,9 @@ composer:
   format_code: "Código"
   format_spoiler: "Spoiler"
   format_shortcut: "%{label} (%{keys})"
+  preview_show: "Pré-visualizar"
+  preview_hide: "Voltar a editar"
+  preview_empty: "Ainda não há nada para pré-visualizar"
 
 feed:
   no_posts: "Ainda não há pensamentos nesta rede. Compartilhe a primeira faísca acima!"

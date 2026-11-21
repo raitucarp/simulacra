@@ -148,6 +148,9 @@ composer:
   format_code: "Kode"
   format_spoiler: "Spoiler"
   format_shortcut: "%{label} (%{keys})"
+  preview_show: "Pratinjau"
+  preview_hide: "Kembali menyunting"
+  preview_empty: "Belum ada yang bisa dipratinjau"
 
 feed:
   no_posts: "Belum ada pemikiran di jaringan ini. Mulailah percikan pertama di atas!"

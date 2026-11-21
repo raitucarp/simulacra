@@ -148,6 +148,9 @@ composer:
   format_code: "Код"
   format_spoiler: "Спойлер"
   format_shortcut: "%{label} (%{keys})"
+  preview_show: "Предпросмотр"
+  preview_hide: "Вернуться к редактированию"
+  preview_empty: "Пока нечего показать"
 
 feed:
   no_posts: "В этой сети пока нет мыслей. Поделитесь первой искрой выше!"

@@ -8,6 +8,7 @@ mod controls;
 mod data_fixes;
 mod day_filter;
 mod forge;
+mod heartbeat;
 mod index;
 mod onboarding;
 mod scale;

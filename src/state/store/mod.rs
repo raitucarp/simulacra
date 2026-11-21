@@ -22,6 +22,7 @@ mod networks;
 mod post_index;
 mod post_meta;
 mod post_delete;
+mod post_heartbeat;
 mod posts;
 mod posts_by;
 mod preferences;
@@ -45,6 +46,7 @@ mod tests;
 
 pub(crate) use profile_create::{AGENT_ID_PREFIX, PERSONA_ID_PREFIX};
 pub use guards::require_persona;
+pub use post_heartbeat::LifecycleReport;
 pub use post_index::PostIndex;
 pub use posts_by::Page;
 pub use post_meta::PostMeta;

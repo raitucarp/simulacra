@@ -12,14 +12,21 @@ use jiff::Timestamp;
 use gpui_kit::*;
 
 impl AppView {
-    /// Starts the heartbeat loop; it runs for the view's lifetime and is a no-op while
-    /// the scheduler switch is off.
+    /// Starts the heartbeat loop; it runs for the view's lifetime. Every tick publishes due
+    /// scheduled posts (Y2, also once right away); agents' turns are a no-op while the
+    /// scheduler switch is off.
     pub(in crate::ui::features::shell) fn start_scheduler_heartbeat(&mut self, window: &mut Window, cx: &mut Context<Self>) {
-        let task = cx.spawn_in(window, async move |entity, cx| loop {
-            cx.background_executor().timer(HEARTBEAT_INTERVAL).await;
-            let ticked = entity.update_in(cx, |this, window, cx| this.scheduler_tick(window, cx));
-            if ticked.is_err() {
-                break;
+        let task = cx.spawn_in(window, async move |entity, cx| {
+            let _ = entity.update_in(cx, |this, window, cx| this.post_lifecycle_tick(&SystemClock, window, cx));
+            loop {
+                cx.background_executor().timer(HEARTBEAT_INTERVAL).await;
+                let ticked = entity.update_in(cx, |this, window, cx| {
+                    this.post_lifecycle_tick(&SystemClock, window, cx);
+                    this.scheduler_tick(window, cx);
+                });
+                if ticked.is_err() {
+                    break;
+                }
             }
         });
         self.scheduler.heartbeat = Some(task);

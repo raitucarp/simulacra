@@ -51,6 +51,7 @@ mod post_actions;
 mod post_actions_context;
 mod post_actions_output;
 mod post_actions_run;
+mod post_lifecycle;
 mod post_menu;
 mod posts;
 mod preferences;

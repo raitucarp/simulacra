@@ -4,6 +4,17 @@ version = "0.1.1"
 edition = "2021"
 # An application, never published to crates.io (lets cargo-deny skip licence checks on it).
 publish = false
+default-run = "simulacra"
+
+[features]
+# Builds the code generators (the emoji table, R3: `cargo run --features codegen --bin emoji-table`);
+# never needed to build or test the app.
+codegen = []
+
+[[bin]]
+name = "emoji-table"
+path = "src/bin/emoji_table.rs"
+required-features = ["codegen"]
 
 [dependencies]
 gpui-kit = "0.8.1"

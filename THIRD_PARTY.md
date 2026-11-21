@@ -46,3 +46,51 @@ all copies or substantial portions of the software. For each MIT-licensed projec
 > HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
 > CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR
 > THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+## Emoji data (`src/domain/emoji/table.rs`)
+
+The emoji names, groups, versions and skin-tone variants of the reaction picker are
+generated from `emoji-test.txt`, **Unicode emoji version 17.0** (dated 2025-08-04, part of
+Unicode Technical Standard #51), by the `emoji-table` tool (`src/bin/emoji_table.rs`, see
+`src/domain/emoji/generate`). The input was the copy of that file shipped inside the
+`unicode-width` 0.2.2 crate's test data; nothing was downloaded. Only data was taken (code
+points, names, group and subgroup names, emoji versions); the table is regenerated with
+`cargo run --features codegen --bin emoji-table -- <path to emoji-test.txt>`.
+
+The data is © 2025 Unicode, Inc. and is used under the Unicode License v3:
+
+> UNICODE LICENSE V3
+>
+> COPYRIGHT AND PERMISSION NOTICE
+>
+> Copyright © 1991-2025 Unicode, Inc.
+>
+> NOTICE TO USER: Carefully read the following legal agreement. BY DOWNLOADING, INSTALLING,
+> COPYING OR OTHERWISE USING DATA FILES, AND/OR SOFTWARE, YOU UNEQUIVOCALLY ACCEPT, AND AGREE
+> TO BE BOUND BY, ALL OF THE TERMS AND CONDITIONS OF THIS AGREEMENT. IF YOU DO NOT AGREE, DO
+> NOT DOWNLOAD, INSTALL, COPY, DISTRIBUTE OR USE THE DATA FILES OR SOFTWARE.
+>
+> Permission is hereby granted, free of charge, to any person obtaining a copy of data files
+> and any associated documentation (the "Data Files") or software and any associated
+> documentation (the "Software") to deal in the Data Files or Software without restriction,
+> including without limitation the rights to use, copy, modify, merge, publish, distribute,
+> and/or sell copies of the Data Files or Software, and to permit persons to whom the Data
+> Files or Software are furnished to do so, provided that either (a) this copyright and
+> permission notice appear with all copies of the Data Files or Software, or (b) this
+> copyright and permission notice appear in associated Documentation.
+>
+> THE DATA FILES AND SOFTWARE ARE PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+> IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+> PARTICULAR PURPOSE AND NONINFRINGEMENT OF THIRD PARTY RIGHTS.
+>
+> IN NO EVENT SHALL THE COPYRIGHT HOLDER OR HOLDERS INCLUDED IN THIS NOTICE BE LIABLE FOR ANY
+> CLAIM, OR ANY SPECIAL INDIRECT OR CONSEQUENTIAL DAMAGES, OR ANY DAMAGES WHATSOEVER RESULTING
+> FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER
+> TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THE DATA
+> FILES OR SOFTWARE.
+>
+> Except as contained in this notice, the name of a copyright holder shall not be used in
+> advertising or otherwise to promote the sale, use or other dealings in these Data Files or
+> Software without prior written authorization of the copyright holder.
+>
+> SPDX-License-Identifier: Unicode-3.0

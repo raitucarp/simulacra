@@ -77,6 +77,23 @@ fn deleting_removes_rows_and_reposts_are_never_indexed() {
 }
 
 #[test]
+fn scheduled_posts_are_found_only_once_published() {
+    use crate::domain::post::{PostLifecycle, PostStatus};
+    let db = Database::in_memory().unwrap();
+    let at = jiff::Timestamp::now();
+    let waiting = Post { lifecycle: PostLifecycle::scheduled(at), ..post("later", "a lighthouse at dawn") };
+    db.save_post(&waiting).unwrap();
+    db.save_post(&post("now", "a lighthouse at dusk")).unwrap();
+    let archived = Post { lifecycle: PostLifecycle { status: PostStatus::Archived, ..PostLifecycle::default() }, ..post("old", "a lighthouse long ago") };
+    db.save_post(&archived).unwrap();
+    let mut found = search(&db, "lighthouse");
+    found.sort();
+    assert_eq!(found, vec!["now", "old"], "archived posts stay searchable");
+    db.save_post(&Post { lifecycle: PostLifecycle::default(), ..waiting }).unwrap();
+    assert_eq!(search(&db, "dawn"), vec!["later"]);
+}
+
+#[test]
 fn posts_stored_before_the_index_are_backfilled() {
     let conn = rusqlite::Connection::open_in_memory().unwrap();
     conn.execute_batch(

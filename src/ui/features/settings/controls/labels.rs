@@ -28,6 +28,7 @@ fn option_group(field: SettingField) -> Option<&'static str> {
         F::Writing(WritingField::DefaultIdentity) | F::Import(ImportField::Identity) => "identity",
         F::Writing(WritingField::WikilinkClick) => "wikilink_click",
         F::Writing(WritingField::HashtagClick) => "hashtag_click",
+        F::Writing(WritingField::AutoArchive) => "auto_archive",
         F::Import(ImportField::Segmentation) => "segmentation",
         F::Embeddings(EmbeddingField::Provider) => "embedding_provider",
         F::Images(ImageField::DefaultEngine) => "image_engine",

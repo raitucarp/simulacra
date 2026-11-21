@@ -111,4 +111,6 @@ command_ids! {
     InsightsTimeline => "insights_timeline",
     InsightsDiversity => "insights_diversity",
     InsightsReadability => "insights_readability",
+    /// Y4: the scheduled queue.
+    ScheduledPosts => "scheduled_posts",
 }

@@ -3,7 +3,7 @@
 //! `publish_at`, `archive_at` and `delete_at` columns; posts stored before these existed read
 //! back as published with nothing due.
 //!
-//! This is the model only: nothing schedules, archives or deletes posts from it yet.
+//! A scheduled post stays out of the timeline (the store keeps it aside) until it is due.
 
 use crate::domain::document::keyed::keyed_enum;
 use jiff::Timestamp;
@@ -54,5 +54,25 @@ impl PostLifecycle {
     /// Published, with nothing due (serde skips the field then).
     pub fn is_default(&self) -> bool {
         *self == Self::default()
+    }
+
+    /// Waiting to be published at `at`.
+    pub fn scheduled(at: Timestamp) -> Self {
+        Self { status: PostStatus::Scheduled, publish_at: Some(at), ..Self::default() }
+    }
+
+    /// Whether the post waits to be published.
+    pub fn is_scheduled(&self) -> bool {
+        self.status == PostStatus::Scheduled
+    }
+
+    /// Whether the post is archived: out of the feed, still found by search (Y5).
+    pub fn is_archived(&self) -> bool {
+        self.status == PostStatus::Archived
+    }
+
+    /// Whether a scheduled post is due at `now` (one without a moment is due at once).
+    pub fn is_due_to_publish(&self, now: Timestamp) -> bool {
+        self.is_scheduled() && self.publish_at.is_none_or(|at| at <= now)
     }
 }

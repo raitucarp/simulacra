@@ -29,9 +29,10 @@ impl Page {
 
 impl AppState {
     /// The posts `profile` wrote, in every network and of every kind and status (replies and
-    /// reposts included), newest first (ties by id), on `page`. Empty past the last page.
+    /// reposts included, scheduled ones too), newest first (ties by id), on `page`. Empty
+    /// past the last page.
     pub fn posts_by(&self, profile: &ProfileId, page: Page) -> Vec<&Post> {
-        let mut written: Vec<&Post> = self.posts.iter().filter(|post| &post.author_id == profile).collect();
+        let mut written: Vec<&Post> = self.posts.iter().chain(&self.scheduled).filter(|post| &post.author_id == profile).collect();
         written.sort_by(|a, b| b.created_at.cmp(&a.created_at).then_with(|| b.id.as_str().cmp(a.id.as_str())));
         written.into_iter().skip(page.offset()).take(page.size).collect()
     }

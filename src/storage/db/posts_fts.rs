@@ -7,6 +7,7 @@
 
 use super::{collect_rows, db_err, Database};
 use crate::domain::document::query::MIN_TERM_CHARS;
+use crate::domain::post::PostStatus;
 use crate::domain::PostId;
 use crate::error::Result;
 use rusqlite::params;
@@ -41,8 +42,10 @@ const REINDEX_POSTS: &str = r#"
     INSERT INTO posts_fts (post_id, content) SELECT id, content FROM posts WHERE content != '';
 "#;
 
-/// Matching post ids, best match first (bm25: lower is better), ties by id.
-const SEARCH_POSTS: &str = "SELECT post_id FROM posts_fts WHERE posts_fts MATCH ?1 ORDER BY bm25(posts_fts), post_id LIMIT ?2";
+/// Matching post ids, best match first (bm25: lower is better), ties by id. Posts with
+/// status `?3` (scheduled, not yet published) are left out.
+const SEARCH_POSTS: &str = "SELECT post_id FROM posts_fts WHERE posts_fts MATCH ?1 \
+    AND post_id NOT IN (SELECT id FROM posts WHERE status = ?3) ORDER BY bm25(posts_fts), post_id LIMIT ?2";
 
 /// The FTS5 expression for `text`: every term (letters and digits, at least
 /// [`MIN_TERM_CHARS`] long) required, each as a quoted prefix, so user text can never inject
@@ -67,11 +70,13 @@ impl Database {
         self.conn.execute_batch(REINDEX_POSTS).map_err(db_err)
     }
 
-    /// Ids of at most `limit` posts whose text matches every term of `text`, best first.
+    /// Ids of at most `limit` published or archived posts whose text matches every term of
+    /// `text`, best first (scheduled posts stay hidden until they are published).
     pub fn search_posts(&self, text: &str, limit: usize) -> Result<Vec<PostId>> {
         let Some(expression) = post_match_expression(text) else { return Ok(Vec::new()) };
         let mut stmt = self.conn.prepare(SEARCH_POSTS).map_err(db_err)?;
-        let rows = stmt.query_map(params![expression, limit as i64], |row| row.get::<_, String>(0)).map_err(db_err)?;
+        let hidden = PostStatus::Scheduled.key();
+        let rows = stmt.query_map(params![expression, limit as i64, hidden], |row| row.get::<_, String>(0)).map_err(db_err)?;
         Ok(collect_rows(rows)?.into_iter().map(PostId::new).collect())
     }
 }

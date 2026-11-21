@@ -95,7 +95,7 @@ impl AppState {
         }
 
         self.archived_authors.remove(&target_id);
-        self.index.authors_changed();
+        self.index.listing_changed();
         if let Some(ref db) = self.db {
             db.save_profile(&updated)?;
         }
@@ -123,7 +123,7 @@ impl AppState {
             }
         }
         self.archived_authors.insert(removed.id.clone(), removed);
-        self.index.authors_changed();
+        self.index.listing_changed();
 
         if &self.active_profile_id == profile_id {
             self.activate_first_human_persona();

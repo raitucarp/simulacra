@@ -8,7 +8,7 @@ mod actions;
 mod atomic;
 mod drafts;
 mod edit; // sb F2: edit mode
-mod format; mod host; mod media; mod preview; mod readability; pub mod readability_meter; mod render; // sb F3: the readability meter; posts B: formatting
+mod format; mod host; mod media; mod preview; mod readability; pub mod readability_meter; mod render; mod schedule; // sb F3: the readability meter; posts B: formatting
 
 use super::consts::MODAL_LINK_PLACEHOLDER;
 use super::modal::ComposerModalMode;
@@ -31,6 +31,8 @@ pub struct ComposerSubmission {
     pub images: Vec<ImageAttachment>,
     /// The container tint of every post of the thread, or of the edited post (sb C3).
     pub tint: Option<Tint>,
+    /// When the thread is to go out (Y3); `None` posts it at once.
+    pub publish_at: Option<jiff::Timestamp>,
 }
 
 /// Events emitted by [`ComposerModalPanel`].
@@ -77,6 +79,7 @@ pub struct ComposerModalPanel {
     /// Drafts shown through the post body renderer instead of their editors.
     preview: bool,
     tint: Option<Tint>, // sb C3: the picked container tint
+    schedule: schedule::SchedulePicker, // Y3: the "Schedule…" picker
     _subscriptions: Vec<Subscription>,
 }
 
@@ -92,6 +95,7 @@ impl ComposerModalPanel {
         let link_input = cx.new(|cx| InputState::new(window, cx).placeholder(MODAL_LINK_PLACEHOLDER));
         let image_placeholder = t!("composer.image_path_placeholder").to_string();
         let image_input = cx.new(|cx| InputState::new(window, cx).placeholder(image_placeholder));
+        let schedule = schedule::SchedulePicker::new(window, cx);
         let mut panel = Self {
             is_open: false,
             mode: ComposerModalMode::NewThread,
@@ -107,7 +111,7 @@ impl ComposerModalPanel {
             error: None,
             theme,
             profile,
-            atomic: Default::default(), readability: Default::default(), preview: false, tint: None, _subscriptions: Vec::new(),
+            atomic: Default::default(), readability: Default::default(), preview: false, tint: None, schedule, _subscriptions: Vec::new(),
         };
         panel._subscriptions = panel.subscribe(window, cx);
         panel.drafts.push(panel.new_draft_slot(window, cx));

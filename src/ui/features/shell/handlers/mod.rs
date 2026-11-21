@@ -23,6 +23,7 @@ mod data_history;
 mod data_posts;
 mod data_restore;
 mod data_saved;
+mod data_scheduled; // Y4
 mod data_shelf;
 mod data_snapshot;
 mod image_ideas;
@@ -51,6 +52,8 @@ mod post_actions;
 mod post_actions_context;
 mod post_actions_output;
 mod post_actions_run;
+mod post_expiry; // Y7
+mod post_lifecycle;
 mod post_menu;
 mod posts;
 mod preferences;

@@ -49,6 +49,7 @@ fn callbacks(entity: &Entity<ComposerModalPanel>) -> ModalCallbacks {
         on_format: format_draft(entity),
         on_toggle_preview: act(entity, P::toggle_preview),
         on_pick_tint: pick_tint(entity),
+        on_toggle_schedule: act(entity, P::toggle_schedule),
     }
 }
 
@@ -92,9 +93,10 @@ impl Render for ComposerModalPanel {
             is_link_input_open: self.is_link_input_open,
             is_image_input_open: self.is_image_input_open,
             notice,
-            can_post: problem.is_none(),
+            can_post: problem.is_none() && !matches!(self.schedule_choice(cx), Some(Err(_))),
             preview: self.preview,
             tint: self.tint,
+            schedule: self.schedule_view(cx),
             atomic_hint: self.atomic_hint_view(cx),
             readability: self.readability_view(cx),
             callbacks: callbacks(&cx.entity()),

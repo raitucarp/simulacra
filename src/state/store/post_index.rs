@@ -128,9 +128,10 @@ impl PostIndex {
         self.revision += 1;
     }
 
-    /// Marks author data (names, handles, archived authors) as changed: listings that match
-    /// on authors, such as cached search results, must be recomputed.
-    pub fn authors_changed(&mut self) {
+    /// Marks author data (names, handles, archived authors) or a post's place in the feed
+    /// (archived, Y5) as changed: listings over the posts, such as the cached stream, must be
+    /// recomputed.
+    pub fn listing_changed(&mut self) {
         self.revision += 1;
     }
 

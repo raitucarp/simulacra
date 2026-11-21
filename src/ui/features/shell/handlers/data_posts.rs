@@ -18,6 +18,12 @@ impl AppView {
     pub(in crate::ui::features::shell) fn on_post_data_event(&mut self, event: DataEvent, window: &mut Window, cx: &mut Context<Self>) {
         match event {
             DataEvent::EditPost(id) => self.open_post_editor(&id, window, cx),
+            DataEvent::SetArchived(id, archived) => self.set_archived(&id, archived, window, cx),
+            DataEvent::SetAutoArchive(id, after) => {
+                let set = self.state.set_auto_archive(&id, after);
+                self.report_data_error(set, window, cx);
+            }
+            DataEvent::SetAutoDelete(id, after) => self.request_auto_delete(id, after, window, cx),
             DataEvent::ToggleBookmark(id) => self.toggle_bookmark(&id, window, cx),
             DataEvent::AddToCollection(id, collection) => self.file_post(&id, &collection, window, cx),
             DataEvent::RemoveFromCollection(id, collection) => self.remove_entry(&collection, ItemRef::Post(id), cx),
@@ -53,6 +59,24 @@ impl AppView {
                 let message = publish_error_message(&err);
                 self.composer_modal.update(cx, |panel, cx| panel.set_error(message, cx));
             }
+        }
+    }
+
+    /// Archives the post `id` or brings it back to the feed (Y5).
+    fn set_archived(&mut self, id: &PostId, archived: bool, window: &mut Window, cx: &mut Context<Self>) {
+        match self.state.set_archived(id, archived) {
+            Ok(_) => {
+                let text = if archived { tr("data.archived") } else { tr("data.unarchived") };
+                self.toast(ToastKind::Confirmation, Notification::success(text), window, cx);
+            }
+            Err(err) => self.notify_data(publish_error_message(&err), window, cx),
+        }
+    }
+
+    /// Says why a post action failed; a success shows itself on the card.
+    fn report_data_error<T>(&self, result: crate::error::Result<T>, window: &mut Window, cx: &mut Context<Self>) {
+        if let Err(err) = result {
+            self.notify_data(publish_error_message(&err), window, cx);
         }
     }
 

@@ -41,7 +41,7 @@ impl AppState {
         }
         let id = profile.id.clone();
         self.user_profiles.push(profile);
-        self.index.authors_changed();
+        self.index.listing_changed();
         Ok(id)
     }
 

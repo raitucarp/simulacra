@@ -4,7 +4,10 @@
 //! modules by concern (loading, networks, profiles, posts, indices, ...).
 
 mod action_target;
+mod archive; // Y5
 mod authors;
+mod auto_archive; // Y6
+mod auto_delete; // Y7
 mod catalogue;
 mod avatar;
 mod bootstrap;
@@ -22,6 +25,7 @@ mod networks;
 mod post_index;
 mod post_meta;
 mod post_delete;
+mod post_heartbeat;
 mod posts;
 mod posts_by;
 mod preferences;
@@ -31,6 +35,8 @@ mod profile_create;
 mod profiles;
 mod reposts;
 mod revisions; // sb F2
+mod scheduled;
+mod scheduled_queue; // Y4
 mod search;
 mod settings;
 mod seed_catalogue;
@@ -44,8 +50,10 @@ mod tests;
 
 pub(crate) use profile_create::{AGENT_ID_PREFIX, PERSONA_ID_PREFIX};
 pub use guards::require_persona;
+pub use post_heartbeat::LifecycleReport;
 pub use post_index::PostIndex;
 pub use posts_by::Page;
+pub use scheduled_queue::ScheduledEdit;
 pub use post_meta::PostMeta;
 pub use network_create::{network_slug, validate_network_name, NetworkNameError, MAX_NETWORK_NAME_CHARS};
 pub use threads::{ThreadAnchor, ThreadDraft};
@@ -90,8 +98,12 @@ pub struct AppState {
     pub archived_authors: HashMap<ProfileId, Profile>,
     pub active_profile_id: ProfileId,
     pub active_tab: NavigationTab,
-    /// Every post, newest first. Mutate through the store methods so `index` stays in sync.
+    /// Every published or archived post, newest first. Mutate through the store methods so
+    /// `index` stays in sync.
     pub posts: Vec<Post>,
+    /// Scheduled posts, soonest due first: out of `posts` (so out of the feed, search and
+    /// agents' context) until they are published.
+    scheduled: Vec<Post>,
     /// Incrementally maintained lookups and derived body data over `posts`.
     pub index: PostIndex,
     pub documents: Vec<GroundingDocument>,

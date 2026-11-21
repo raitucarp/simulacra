@@ -5,7 +5,7 @@ use super::super::binder::Binder;
 use super::super::view::AppView;
 use crate::domain::data::saved::ItemRef;
 use crate::ui::features::command_palette::CommandId;
-use crate::ui::features::data::{closes_on_escape, render_export_sheet, render_history_sheet, render_restore_sheet, render_snapshot_sheet, DataAction, DataEvent, DataSource};
+use crate::ui::features::data::{closes_on_escape, render_export_sheet, render_history_sheet, render_restore_sheet, render_scheduled_sheet, render_snapshot_sheet, DataAction, DataEvent, DataSource};
 use gpui_kit::component::input::{InputEvent, InputState};
 use gpui_kit::*;
 use std::collections::HashMap;
@@ -17,11 +17,12 @@ impl AppView {
         use DataEvent as E;
         let was_open = self.data_sheet_open();
         match event {
-            E::EditPost(_) | E::ToggleBookmark(_) | E::AddToCollection(..) | E::RemoveFromCollection(..) | E::NewCollectionFor(_) => self.on_post_data_event(event, window, cx),
+            E::EditPost(_) | E::SetArchived(..) | E::SetAutoArchive(..) | E::SetAutoDelete(..) | E::ToggleBookmark(_) | E::AddToCollection(..) | E::RemoveFromCollection(..) | E::NewCollectionFor(_) => self.on_post_data_event(event, window, cx),
             E::OpenPostHistory(_) | E::OpenDocumentHistory(_) | E::SelectVersion(_) | E::RestoreVersion(_) | E::CloseHistory => self.on_history_event(event, window, cx),
             E::OpenExport | E::SetScope(_) | E::PickCollection(_) | E::PickPersona(_) | E::LastDays(_) | E::ToggleOriginals | E::ToggleJournal | E::RunExport | E::CloseExport => self.on_export_event(event, window, cx),
             E::OpenSnapshot | E::CreateSnapshot | E::CloseSnapshot => self.on_snapshot_event(event, window, cx),
             E::OpenRestore | E::PickSnapshotFile | E::VerifySnapshot | E::ConfirmRestore | E::CloseRestore => self.on_restore_event(event, window, cx),
+            E::OpenScheduled | E::EditScheduled(_) | E::PublishScheduledNow(_) | E::CancelScheduled(_) | E::CloseScheduled => self.on_scheduled_event(event, window, cx),
             _ => self.on_saved_event(event, window, cx),
         }
         self.hand_keyboard_to_sheet(was_open, window, cx);
@@ -29,7 +30,7 @@ impl AppView {
     }
 
     fn data_sheet_open(&self) -> bool {
-        self.data.history.is_some() || self.data.export.is_some() || self.data.snapshot.is_some() || self.data.restore.is_some()
+        self.data.history.is_some() || self.data.export.is_some() || self.data.snapshot.is_some() || self.data.restore.is_some() || self.data.scheduled_open
     }
 
     /// A sheet that just opened takes the keyboard (unless one of its fields already did), so
@@ -82,6 +83,7 @@ impl AppView {
             },
             CommandId::ExportBundle => DataEvent::OpenExport,
             CommandId::EncryptedSnapshot => DataEvent::OpenSnapshot,
+            CommandId::ScheduledPosts => DataEvent::OpenScheduled,
             _ => DataEvent::OpenRestore,
         };
         self.on_data_event(event, window, cx);
@@ -111,6 +113,8 @@ impl AppView {
             (render_export_sheet(dialog, on_event.clone(), theme), DataEvent::CloseExport)
         } else if let Some(dialog) = &self.data.snapshot {
             (render_snapshot_sheet(dialog, on_event.clone(), theme), DataEvent::CloseSnapshot)
+        } else if self.data.scheduled_open {
+            (render_scheduled_sheet(&self.scheduled_rows(), on_event.clone(), theme), DataEvent::CloseScheduled)
         } else {
             (render_restore_sheet(self.data.restore.as_ref()?, on_event.clone(), theme), DataEvent::CloseRestore)
         };

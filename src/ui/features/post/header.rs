@@ -51,6 +51,7 @@ pub(crate) fn render_author_row(
         .gap(theme.spacing_xs)
         .child(render_author_meta(post, author, is_instant_repost, theme))
         .children(handlers.data.as_ref().and_then(|data| crate::ui::features::data::render_edited_mark(data, theme))) // sb F2
+        .children(super::countdown::render_countdown_chip(post, theme)) // Y7
         .children(handlers.learn.status.map(|status| render_learn_badge(status, theme)))
         .child(div().flex_none().child(render_overflow_menu(post, handlers)))
 }
@@ -75,6 +76,7 @@ fn render_author_meta(post: &Post, author: &Profile, is_instant_repost: bool, th
         .when(is_instant_repost, |this| {
             this.child(mono_meta(theme, theme.font_size_2xs).text_color(theme.accent_agent).child(t!("post.original_marker").to_string()))
         })
+        .when(post.lifecycle.is_archived(), |this| this.child(mono_meta(theme, theme.font_size_2xs).child(t!("data.archived_mark").to_string()))) // Y5: found by search
 }
 
 /// The author's name or handle: one line, cut with an ellipsis when it cannot fit.

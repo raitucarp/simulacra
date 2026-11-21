@@ -51,7 +51,7 @@ impl AppState {
     }
 
     /// Validates the anchor and every draft, returning the chained (not yet stored) posts.
-    fn build_thread(&self, drafts: &[ThreadDraft], anchor: &ThreadAnchor) -> Result<Vec<Post>> {
+    pub(super) fn build_thread(&self, drafts: &[ThreadDraft], anchor: &ThreadAnchor) -> Result<Vec<Post>> {
         if drafts.is_empty() {
             return Err(AppError::EmptyContent);
         }

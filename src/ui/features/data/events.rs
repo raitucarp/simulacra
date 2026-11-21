@@ -2,6 +2,8 @@
 
 use crate::domain::data::saved::ItemRef;
 use crate::domain::document::CollectionId;
+use crate::domain::post::auto_delete::DeleteAfter;
+use crate::domain::preferences::ArchiveAfter;
 use crate::domain::{PostId, ProfileId};
 use gpui_kit::{App, Window};
 use std::rc::Rc;
@@ -42,6 +44,12 @@ impl ScopeKind {
 pub enum DataEvent {
     /// Post "…" menu.
     EditPost(PostId),
+    /// Archives the post (`true`) or brings it back to the feed (Y5).
+    SetArchived(PostId, bool),
+    /// Archives the post this long after it went out (Y6).
+    SetAutoArchive(PostId, ArchiveAfter),
+    /// Deletes the post this long from now (`None` keeps it, Y7).
+    SetAutoDelete(PostId, Option<DeleteAfter>),
     OpenPostHistory(PostId),
     ToggleBookmark(PostId),
     AddToCollection(PostId, CollectionId),
@@ -85,6 +93,12 @@ pub enum DataEvent {
     CancelNote,
     OpenItem(ItemRef),
     LearnShelf,
+    /// Scheduled queue sheet (Y4).
+    OpenScheduled,
+    EditScheduled(PostId),
+    PublishScheduledNow(PostId),
+    CancelScheduled(PostId),
+    CloseScheduled,
 }
 
 /// Sends a data event to the shell.

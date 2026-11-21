@@ -24,6 +24,15 @@ impl ComposerModalView {
         matches!(self.mode, ComposerModalMode::Edit(_))
     }
 
+    /// Whether the "Schedule…" picker is offered: for new posts, and while editing one that
+    /// still waits to go out (Y4).
+    pub(super) fn can_schedule(&self) -> bool {
+        match &self.mode {
+            ComposerModalMode::Edit(target) => target.post.lifecycle.is_scheduled(),
+            _ => true,
+        }
+    }
+
     pub(super) fn reply_parent(&self) -> Option<&AuthoredPost> {
         match &self.mode {
             ComposerModalMode::Reply(parent) => Some(parent),

@@ -77,6 +77,7 @@ impl AppState {
         settings: StoredSettings,
         db: Option<Vault>,
     ) -> Self {
+        let (scheduled, posts) = data.posts.into_iter().partition(|post| post.lifecycle.is_scheduled());
         Self {
             networks: data.networks,
             active_network_id,
@@ -84,7 +85,8 @@ impl AppState {
             archived_authors: data.archived_authors,
             active_profile_id,
             active_tab: NavigationTab::Timeline,
-            posts: data.posts,
+            posts,
+            scheduled: super::scheduled::soonest_first(scheduled),
             index: Default::default(),
             documents: data.documents,
             library: data.library,

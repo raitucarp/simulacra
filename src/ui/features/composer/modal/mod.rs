@@ -41,6 +41,8 @@ pub enum ComposerModalMode {
 pub struct DraftEditor {
     pub input: Entity<TextareaState>,
     pub length: usize,
+    /// The draft text (what the preview renders).
+    pub text: String,
 }
 
 /// Every interaction the dialog dispatches back to its owner.
@@ -63,6 +65,10 @@ pub struct ModalCallbacks {
     /// Removes the attached image at an index (sb C3).
     pub on_remove_image: DraftActionCallback,
     pub on_paste: PasteCallback,
+    /// Toggles a mark on the selection of the last focused draft.
+    pub on_format: super::format::FormatCallback,
+    /// Switches between the editors and the preview.
+    pub on_toggle_preview: ModalActionCallback,
 }
 
 /// Stateless dialog rendering a composer snapshot.
@@ -83,6 +89,8 @@ pub struct ComposerModalView {
     /// Publish error or the reason the thread cannot be posted yet.
     pub notice: Option<String>,
     pub can_post: bool,
+    /// Drafts are shown as they will read once posted.
+    pub preview: bool,
     pub callbacks: ModalCallbacks,
     /// sb E1: the atomic-note hint under one draft.
     pub atomic_hint: Option<AtomicHintView>,

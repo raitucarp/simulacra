@@ -7,6 +7,7 @@ mod accents;
 mod actions;
 mod arena;
 mod chrome;
+mod code;
 mod data;
 mod forge;
 mod image_prompt;
@@ -74,6 +75,7 @@ pub fn derive_tokens(
     text::apply_text(&mut t, palette);
     accents::apply_accents(&mut t, palette); accents::apply_shades(&mut t, palette);
     tints::apply_tints(&mut t, palette); // sb C1: after the text colors it keeps readable
+    code::apply_code(&mut t, palette); // posts B: syntax colors, after the surfaces they sit on
     t.quantize_colors();
     t
 }

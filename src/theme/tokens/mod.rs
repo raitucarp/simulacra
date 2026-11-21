@@ -16,6 +16,8 @@ theme_tokens! {
     colors: [
         bg_app, bg_card, bg_elevated, bg_sidebar, bg_callout, hover_bg, // Surface & Background Colors
         bg_code, // Inline code and code block fill in post bodies
+        code_keyword, code_type, code_string, code_number, code_comment, // Syntax colors of code blocks, readable on `bg_code`
+        spoiler_fill, spoiler_revealed_bg, // Hidden spoiler fill (also its text color, so the text keeps its size unseen) and the faint tint of a revealed one
         border, border_subtle, border_strong, border_focus, // Border Colors
         focus_ring, // Keyboard focus ring (focus-visible outline of custom controls and kit widgets)
         text_primary, text_secondary, text_muted, // Text & Content Colors

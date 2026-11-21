@@ -142,6 +142,15 @@ composer:
   insert_tag: "Вставить хештег (#)"
   attach_link: "Прикрепить ссылку"
   more_options: "Ещё"
+  format_bold: "Жирный"
+  format_italic: "Курсив"
+  format_underline: "Подчёркнутый"
+  format_code: "Код"
+  format_spoiler: "Спойлер"
+  format_shortcut: "%{label} (%{keys})"
+  preview_show: "Предпросмотр"
+  preview_hide: "Вернуться к редактированию"
+  preview_empty: "Пока нечего показать"
 
 feed:
   no_posts: "В этой сети пока нет мыслей. Поделитесь первой искрой выше!"
@@ -253,6 +262,10 @@ post:
   refs_none: "Нет цитируемых или связанных мыслей"
   refs_quote: "Цитаты: %{excerpt}"
   refs_link: "Ссылается на: %{excerpt}"
+  code_plain: "Обычный текст"
+  code_copy: "Копировать код"
+  code_copied: "Код скопирован"
+  spoiler_reveal: "Показать спойлер"
 
 appearance:
   gallery_title: "ГАЛЕРЕЯ ТЕМ"

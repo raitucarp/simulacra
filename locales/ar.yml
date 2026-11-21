@@ -142,6 +142,15 @@ composer:
   insert_tag: "إدراج وسم (#)"
   attach_link: "إرفاق رابط"
   more_options: "المزيد"
+  format_bold: "عريض"
+  format_italic: "مائل"
+  format_underline: "تسطير"
+  format_code: "شيفرة"
+  format_spoiler: "محتوى مخفي"
+  format_shortcut: "%{label} (%{keys})"
+  preview_show: "معاينة"
+  preview_hide: "العودة إلى التحرير"
+  preview_empty: "لا شيء للمعاينة بعد"
 
 feed:
   no_posts: "لا أفكار في هذه الشبكة بعد. شارك الشرارة الأولى أعلاه!"
@@ -253,6 +262,10 @@ post:
   refs_none: "لا أفكار مقتبسة أو مرتبطة"
   refs_quote: "اقتباسات: %{excerpt}"
   refs_link: "يرتبط بـ: %{excerpt}"
+  code_plain: "نص عادي"
+  code_copy: "نسخ الشيفرة"
+  code_copied: "تم نسخ الشيفرة"
+  spoiler_reveal: "إظهار المحتوى المخفي"
 
 appearance:
   gallery_title: "معرض السمات"

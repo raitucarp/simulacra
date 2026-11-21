@@ -105,6 +105,6 @@ pub(super) fn render_spark_item<L: PostLookup>(
         .flex_col()
         .gap(theme.spacing_xs_plus)
         .child(render_item_header(post, lookup.author_of(post), theme))
-        .child(div().w_full().child(render_body_tokens(&lookup.body_tokens(post), lookup, theme, &BodyLinks::default())))
+        .child(div().w_full().child(render_body_tokens(&lookup.body_tokens(post), lookup, theme, &BodyLinks::default().scoped(post.id.to_string()))))
         .child(render_stats(post, theme))
 }

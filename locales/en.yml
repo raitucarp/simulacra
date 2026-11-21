@@ -142,6 +142,15 @@ composer:
   insert_tag: "Insert hashtag (#)"
   attach_link: "Attach link"
   more_options: "More options"
+  format_bold: "Bold"
+  format_italic: "Italic"
+  format_underline: "Underline"
+  format_code: "Code"
+  format_spoiler: "Spoiler"
+  format_shortcut: "%{label} (%{keys})"
+  preview_show: "Preview"
+  preview_hide: "Back to editing"
+  preview_empty: "Nothing to preview yet"
 
 feed:
   no_posts: "No thoughts in this network yet. Share the first spark above!"
@@ -253,6 +262,10 @@ post:
   refs_none: "No quoted or linked thoughts"
   refs_quote: "Quotes: %{excerpt}"
   refs_link: "Links to: %{excerpt}"
+  code_plain: "Plain text"
+  code_copy: "Copy code"
+  code_copied: "Code copied"
+  spoiler_reveal: "Show spoiler"
 
 appearance:
   gallery_title: "THEME GALLERY"

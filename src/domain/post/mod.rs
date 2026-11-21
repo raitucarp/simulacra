@@ -2,6 +2,8 @@
 
 mod author_ref;
 mod authored;
+pub mod format;
+pub mod highlight;
 mod constructors;
 mod extras;
 mod kind;
@@ -9,6 +11,7 @@ mod lifecycle;
 mod parse;
 mod provenance;
 mod relations;
+pub mod sanitize;
 pub mod seed;
 mod tint;
 mod tokens;

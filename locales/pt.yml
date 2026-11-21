@@ -142,6 +142,15 @@ composer:
   insert_tag: "Inserir hashtag (#)"
   attach_link: "Anexar link"
   more_options: "Mais opções"
+  format_bold: "Negrito"
+  format_italic: "Itálico"
+  format_underline: "Sublinhado"
+  format_code: "Código"
+  format_spoiler: "Spoiler"
+  format_shortcut: "%{label} (%{keys})"
+  preview_show: "Pré-visualizar"
+  preview_hide: "Voltar a editar"
+  preview_empty: "Ainda não há nada para pré-visualizar"
 
 feed:
   no_posts: "Ainda não há pensamentos nesta rede. Compartilhe a primeira faísca acima!"
@@ -253,6 +262,10 @@ post:
   refs_none: "Nenhum pensamento citado ou vinculado"
   refs_quote: "Cita: %{excerpt}"
   refs_link: "Vincula a: %{excerpt}"
+  code_plain: "Texto simples"
+  code_copy: "Copiar código"
+  code_copied: "Código copiado"
+  spoiler_reveal: "Mostrar spoiler"
 
 appearance:
   gallery_title: "GALERIA DE TEMAS"

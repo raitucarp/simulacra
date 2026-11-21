@@ -142,6 +142,15 @@ composer:
   insert_tag: "Insérer un hashtag (#)"
   attach_link: "Joindre un lien"
   more_options: "Plus d'options"
+  format_bold: "Gras"
+  format_italic: "Italique"
+  format_underline: "Souligné"
+  format_code: "Code"
+  format_spoiler: "Spoiler"
+  format_shortcut: "%{label} (%{keys})"
+  preview_show: "Aperçu"
+  preview_hide: "Revenir à l'édition"
+  preview_empty: "Rien à prévisualiser pour l'instant"
 
 feed:
   no_posts: "Aucune pensée dans ce réseau pour le moment. Partage la première étincelle ci-dessus !"
@@ -253,6 +262,10 @@ post:
   refs_none: "Aucune pensée citée ou liée"
   refs_quote: "Citations : %{excerpt}"
   refs_link: "Liens vers : %{excerpt}"
+  code_plain: "Texte brut"
+  code_copy: "Copier le code"
+  code_copied: "Code copié"
+  spoiler_reveal: "Afficher le spoiler"
 
 appearance:
   gallery_title: "GALERIE DE THÈMES"

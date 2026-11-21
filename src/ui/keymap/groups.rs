@@ -2,6 +2,7 @@
 
 use super::shortcuts::{LightboxKey, PaletteKey, ReviewKey, ShortcutTarget, SHORTCUTS};
 use crate::ui::features::command_palette::{spec, CommandId};
+use crate::ui::features::composer::format_label_key;
 use rust_i18n::t;
 
 /// A section of the shortcut sheet.
@@ -36,7 +37,7 @@ impl ShortcutGroup {
 pub fn group_of(target: ShortcutTarget) -> ShortcutGroup {
     match target {
         ShortcutTarget::Command(id) => command_group(id),
-        ShortcutTarget::SubmitPost => ShortcutGroup::Writing,
+        ShortcutTarget::SubmitPost | ShortcutTarget::Format(_) => ShortcutGroup::Writing,
         ShortcutTarget::ForgeUndo | ShortcutTarget::ForgeRedo | ShortcutTarget::ForgeDismiss => ShortcutGroup::Forge,
         ShortcutTarget::Palette(_) => ShortcutGroup::Palette,
         ShortcutTarget::CloseSheet | ShortcutTarget::Lightbox(_) => ShortcutGroup::General,
@@ -78,6 +79,7 @@ pub const fn target_label_key(target: ShortcutTarget) -> Option<&'static str> {
         ShortcutTarget::Lightbox(LightboxKey::Previous) => "keymap.target.lightbox_previous",
         ShortcutTarget::Lightbox(LightboxKey::Next) => "keymap.target.lightbox_next",
         ShortcutTarget::Review(key) => review_label_key(key),
+        ShortcutTarget::Format(mark) => format_label_key(mark),
     })
 }
 

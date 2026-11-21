@@ -33,7 +33,7 @@ gpui_kit::assets::icon_assets!(
         // sb E1
         Waypoints, Atom, Percent, ChartScatter, Split, CalendarClock, GripVertical,
         // sb F1
-        Save,
+        Save, Bold, Italic, Underline, Code,
         // sb F2
         Pencil, RotateCcwClock, BookmarkCheck, FolderPlus, Download, KeyRound, ShieldCheck, ArchiveRestore, Package, LockKeyhole, FileDiff,
     ]

@@ -28,6 +28,11 @@ const BORDER_STRONG_MIX: f32 = 0.06;
 const INPUT_BG_MIX: f32 = 0.5;
 /// How far graph edges move from the border toward the muted text color.
 const GRAPH_EDGE_MIX: f32 = 0.3;
+/// How far a hidden spoiler's fill moves from the background toward the muted text color
+/// (opaque, so text drawn in the same color vanishes into it).
+const SPOILER_FILL_MIX: f32 = 0.5;
+/// Foreground alpha of the tint under a revealed spoiler.
+const SPOILER_REVEALED_ALPHA: f32 = 0.06;
 
 /// Background layers, borders, hover/pressed overlays, inputs and scrollbars.
 pub(super) fn apply_surfaces(t: &mut ThemeTokens, palette: &ThemePalette) {
@@ -46,5 +51,6 @@ pub(super) fn apply_surfaces(t: &mut ThemeTokens, palette: &ThemePalette) {
         bg_window_control_hover: with_alpha(c.fg, WINDOW_CONTROL_HOVER_ALPHA),
         scrollbar: with_alpha(c.fg, SCROLLBAR_ALPHA),
         scrollbar_hover: with_alpha(c.fg, SCROLLBAR_HOVER_ALPHA),
+        spoiler_fill: mix(c.bg, c.fg_muted, SPOILER_FILL_MIX), spoiler_revealed_bg: with_alpha(c.fg, SPOILER_REVEALED_ALPHA),
     });
 }

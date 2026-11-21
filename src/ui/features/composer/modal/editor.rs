@@ -1,7 +1,9 @@
 //! Editor pieces of a draft row: identity line, text area and the first post's attachments.
 
 use super::super::consts::{MODAL_FALLBACK_HANDLE, MODAL_TEXTAREA_WRAPPER_ID, TOPIC_PREFIX};
+use super::super::format_keys::handle_format_actions;
 use super::super::keys::{is_submit_chord, SubmitPostDraft};
+use super::super::preview::render_preview;
 use super::quote_preview::render_quote_preview;
 use super::{ComposerModalView, DraftEditor};
 use gpui_kit::component::input::Textarea;
@@ -51,14 +53,21 @@ impl ComposerModalView {
             .child(self.attachment_bar())
     }
 
+    /// The draft's editor, or the draft as it will read once posted while previewing.
+    pub(super) fn draft_body(&self, index: usize, draft: &DraftEditor) -> AnyElement {
+        if self.preview {
+            return render_preview(&draft.text, &self.theme);
+        }
+        self.textarea(index, draft).into_any_element()
+    }
+
     /// Text area wrapper that submits on the action binding or a Ctrl/Cmd+Enter keystroke;
     /// the panel validates and explains a blocked submission.
     pub(super) fn textarea(&self, index: usize, draft: &DraftEditor) -> Stateful<Div> {
         let on_submit_action = self.callbacks.on_submit.clone();
         let on_submit_key = self.callbacks.on_submit.clone();
         let on_paste = self.callbacks.on_paste.clone();
-        div()
-            .id((MODAL_TEXTAREA_WRAPPER_ID, index))
+        handle_format_actions(div().id((MODAL_TEXTAREA_WRAPPER_ID, index)), &draft.input)
             .w_full()
             .on_action(move |_: &SubmitPostDraft, window, cx| (on_submit_action)(window, cx))
             .capture_key_down(move |event: &KeyDownEvent, window, cx| {

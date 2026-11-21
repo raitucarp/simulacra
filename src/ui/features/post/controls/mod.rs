@@ -15,7 +15,7 @@ pub(crate) use refs::{collect_references, render_refs_button, PostReference};
 #[cfg(test)]
 use refs::ReferenceKind;
 pub use share::{post_permalink, share_text};
-pub(crate) use share::render_share_button;
+pub(crate) use share::{copy_with_toast, render_share_button};
 
 #[cfg(test)]
 mod tests;

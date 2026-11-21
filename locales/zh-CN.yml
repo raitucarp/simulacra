@@ -142,6 +142,15 @@ composer:
   insert_tag: "插入话题标签（#）"
   attach_link: "附加链接"
   more_options: "更多选项"
+  format_bold: "粗体"
+  format_italic: "斜体"
+  format_underline: "下划线"
+  format_code: "代码"
+  format_spoiler: "剧透"
+  format_shortcut: "%{label}（%{keys}）"
+  preview_show: "预览"
+  preview_hide: "返回编辑"
+  preview_empty: "暂无可预览的内容"
 
 feed:
   no_posts: "本网络还没有想法。在上方分享第一个火花吧！"
@@ -253,6 +262,10 @@ post:
   refs_none: "没有引用或链接的想法"
   refs_quote: "引用：%{excerpt}"
   refs_link: "链接到：%{excerpt}"
+  code_plain: "纯文本"
+  code_copy: "复制代码"
+  code_copied: "代码已复制"
+  spoiler_reveal: "显示剧透内容"
 
 appearance:
   gallery_title: "主题库"

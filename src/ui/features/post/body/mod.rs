@@ -1,21 +1,24 @@
 //! Post body renderer: word-level flex wrapping of marked text, wikilink pills, hashtags,
-//! inline code and fenced code blocks.
+//! inline code, spoilers and fenced code blocks.
 //!
 //! Feed cards render the tokens the store cached at insert time; clicking a hashtag or a
 //! wikilink pill dispatches to [`BodyLinks`] instead of selecting the surrounding card.
 
+mod code_block;
+mod inline;
 mod layout;
 mod marks;
+mod spoiler;
 
 use super::consts::LINE_BREAK;
 use super::lookup::PostLookup;
 use crate::domain::post::{tokenize_post_body, BodyToken};
 use crate::theme::ThemeTokens;
 use crate::ui::atoms::{render_hashtag_span, render_obsidian_pill};
-use gpui_kit::{
-    div, AnyElement, App, Div, InteractiveElement, IntoElement, MouseButton, ParentElement, Styled, Window, relative,
-};
+use gpui_kit::{div, AnyElement, App, IntoElement, ParentElement, Styled, Window};
+use inline::{body_text, clickable, with_trailing};
 use layout::{blank_line_after, layout, Item};
+use spoiler::{hidden_spoiler, is_revealed, revealed_spoiler, SpoilerKey};
 use std::rc::Rc;
 
 /// Opens the hashtag or wikilink target named by the string.
@@ -32,6 +35,15 @@ pub struct BodyLinks {
     pub on_source: Option<super::extras::OpenSourceAction>,
     /// Image click: opens the lightbox on that image of the post (sb C3).
     pub on_media: Option<crate::ui::features::media::OpenMediaAction>,
+    /// The post the body belongs to, which its spoilers' reveals are kept under.
+    pub scope: String,
+}
+
+impl BodyLinks {
+    /// These links for the body of post `scope`.
+    pub fn scoped(&self, scope: impl Into<String>) -> Self {
+        Self { scope: scope.into(), ..self.clone() }
+    }
 }
 
 /// Tokenizes `content` and renders it with inert links (previews, tests, the spark feed).
@@ -51,9 +63,6 @@ pub fn render_body_tokens<L: PostLookup>(
             return body_text(theme).w_full().min_w_0().child(text.clone()).into_any_element();
         }
     }
-    let items = layout(tokens);
-    let elements: Vec<AnyElement> =
-        items.iter().enumerate().map(|(index, item)| render_item(&items, index, item, &lookup, theme, links)).collect();
     div()
         .w_full()
         .flex()
@@ -61,8 +70,12 @@ pub fn render_body_tokens<L: PostLookup>(
         .items_center()
         .gap_x(theme.inline_gap)
         .gap_y_0()
-        .children(elements)
+        .children(render_items(&layout(tokens), &lookup, theme, links))
         .into_any_element()
+}
+
+fn render_items<L: PostLookup>(items: &[Item<'_>], lookup: &L, theme: &ThemeTokens, links: &BodyLinks) -> Vec<AnyElement> {
+    items.iter().enumerate().map(|(index, item)| render_item(items, index, item, lookup, theme, links)).collect()
 }
 
 /// One inline item as an element; breaks become full-width rows (taller before a blank line).
@@ -81,7 +94,7 @@ fn render_item<L: PostLookup>(
         Item::Break if blank_line_after(items, index) => div().w_full().h(theme.paragraph_break_height).into_any_element(),
         Item::Break => div().w_full().into_any_element(),
         Item::Code(code) => marks::inline_code(code, theme),
-        Item::Block { code, .. } => marks::code_block(code, theme),
+        Item::Block { lang, code } => code_block::code_block(index, *lang, code, theme),
         Item::Wikilink { target, trailing } => {
             let pill = render_obsidian_pill(&lookup.resolve_wikilink(target), theme);
             with_trailing(clickable(pill, target, links.on_wikilink.as_ref()), trailing, theme)
@@ -90,45 +103,14 @@ fn render_item<L: PostLookup>(
             let span = clickable(render_hashtag_span(tag, theme), tag, links.on_tag.as_ref());
             with_trailing(span, trailing, theme)
         }
+        Item::Spoiler { ordinal, text, items: inner } => {
+            let key = SpoilerKey { scope: links.scope.clone(), ordinal: *ordinal, text: text.clone() };
+            match is_revealed(&key) {
+                true => revealed_spoiler(render_items(inner, lookup, theme, links), theme),
+                false => hidden_spoiler(index, key, theme),
+            }
+        }
     }
-}
-
-/// Makes an inline link dispatch `action(value)` on press without selecting the card.
-fn clickable(element: impl IntoElement, value: &str, action: Option<&OpenTextAction>) -> AnyElement {
-    let Some(action) = action.cloned() else {
-        return element.into_any_element();
-    };
-    let value = value.to_string();
-    div()
-        .child(element)
-        .on_mouse_down(MouseButton::Left, move |_, window, cx| {
-            cx.stop_propagation();
-            action(value.clone(), window, cx);
-        })
-        .into_any_element()
-}
-
-/// Base body prose text style.
-fn body_text(theme: &ThemeTokens) -> Div {
-    div()
-        .font_family(theme.font_family_body.clone())
-        .text_size(theme.font_size_md)
-        .text_color(theme.text_primary)
-        .line_height(relative(theme.line_height_body))
-}
-
-/// Wraps an inline element with its trailing punctuation so they never wrap apart.
-fn with_trailing(element: AnyElement, trailing: &str, theme: &ThemeTokens) -> AnyElement {
-    if trailing.is_empty() {
-        return element;
-    }
-    div()
-        .flex()
-        .items_center()
-        .gap_0()
-        .child(element)
-        .child(body_text(theme).child(trailing.to_string()))
-        .into_any_element()
 }
 
 #[cfg(test)]

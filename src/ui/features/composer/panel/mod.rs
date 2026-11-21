@@ -8,7 +8,7 @@ mod actions;
 mod atomic;
 mod drafts;
 mod edit; // sb F2: edit mode
-mod media; mod readability; pub mod readability_meter; mod render; // sb F3: the readability meter
+mod format; mod host; mod media; mod preview; mod readability; pub mod readability_meter; mod render; // sb F3: the readability meter; posts B: formatting
 
 use super::consts::MODAL_LINK_PLACEHOLDER;
 use super::modal::ComposerModalMode;
@@ -71,6 +71,8 @@ pub struct ComposerModalPanel {
     profile: Option<Profile>,
     atomic: atomic::AtomicHintState, // sb E1: the atomic-note hint
     readability: readability::ReadabilityState, // sb F3: the readability meter
+    /// Drafts shown through the post body renderer instead of their editors.
+    preview: bool,
     _subscriptions: Vec<Subscription>,
 }
 
@@ -101,7 +103,7 @@ impl ComposerModalPanel {
             error: None,
             theme,
             profile,
-            atomic: Default::default(), readability: Default::default(), _subscriptions: Vec::new(),
+            atomic: Default::default(), readability: Default::default(), preview: false, _subscriptions: Vec::new(),
         };
         panel._subscriptions = panel.subscribe(window, cx);
         panel.drafts.push(panel.new_draft_slot(window, cx));
@@ -126,25 +128,5 @@ impl ComposerModalPanel {
         self.is_open = false;
         self.clear(window, cx);
         cx.notify();
-    }
-
-    /// Shows why the host could not publish the submitted thread.
-    pub fn set_error(&mut self, message: String, cx: &mut Context<Self>) {
-        self.error = Some(message);
-        cx.notify();
-    }
-
-    pub fn set_profile(&mut self, profile: Option<&Profile>, cx: &mut Context<Self>) {
-        if self.profile.as_ref() != profile {
-            self.profile = profile.cloned();
-            cx.notify();
-        }
-    }
-
-    pub fn set_theme(&mut self, theme: &ThemeTokens, cx: &mut Context<Self>) {
-        if &self.theme != theme {
-            self.theme = theme.clone();
-            cx.notify();
-        }
     }
 }

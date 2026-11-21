@@ -58,7 +58,7 @@ fn render_quoted_card<L: PostLookup>(
                 .font_family(theme.font_family_body.clone())
                 .text_size(theme.font_size_xs)
                 .text_color(theme.text_secondary)
-                .child(render_body_tokens(&lookup.body_tokens(quoted), lookup, theme, links)),
+                .child(render_body_tokens(&lookup.body_tokens(quoted), lookup, theme, &links.scoped(quoted.id.to_string()))),
         )
 }
 

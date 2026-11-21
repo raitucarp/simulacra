@@ -142,6 +142,15 @@ composer:
   insert_tag: "Hashtag einfügen (#)"
   attach_link: "Link anhängen"
   more_options: "Weitere Optionen"
+  format_bold: "Fett"
+  format_italic: "Kursiv"
+  format_underline: "Unterstrichen"
+  format_code: "Code"
+  format_spoiler: "Spoiler"
+  format_shortcut: "%{label} (%{keys})"
+  preview_show: "Vorschau"
+  preview_hide: "Zurück zum Bearbeiten"
+  preview_empty: "Noch nichts für die Vorschau"
 
 feed:
   no_posts: "In diesem Netzwerk gibt es noch keine Gedanken. Teile oben den ersten Funken!"
@@ -253,6 +262,10 @@ post:
   refs_none: "Keine zitierten oder verlinkten Gedanken"
   refs_quote: "Zitate: %{excerpt}"
   refs_link: "Verlinkt auf: %{excerpt}"
+  code_plain: "Klartext"
+  code_copy: "Code kopieren"
+  code_copied: "Code kopiert"
+  spoiler_reveal: "Spoiler anzeigen"
 
 appearance:
   gallery_title: "THEME-GALERIE"

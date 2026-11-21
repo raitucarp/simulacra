@@ -94,7 +94,7 @@ fn render_content_column<L: PostLookup>(
                 .w_full()
                 .min_w_0()
                 .py(theme.spacing_2xs)
-                .child(render_body_tokens(&lookup.body_tokens(effective), lookup, theme, &handlers.links)),
+                .child(render_body_tokens(&lookup.body_tokens(effective), lookup, theme, &handlers.links.scoped(effective.id.to_string()))),
         )
         .children(render_post_extras(&effective.extras, theme, handlers.links.on_source.as_ref()))
         .children(render_post_media(effective, lookup, theme, handlers.links.on_media.as_ref()))

@@ -43,7 +43,7 @@ pub fn share_text(post: &Post, author: &Profile) -> String {
 }
 
 /// Writes `text` to the system clipboard and confirms with a toast.
-pub(super) fn copy_with_toast(text: String, toast: String, window: &mut Window, cx: &mut App) {
+pub(crate) fn copy_with_toast(text: String, toast: String, window: &mut Window, cx: &mut App) {
     cx.write_to_clipboard(ClipboardItem::new_string(text));
     window.push_notification(Notification::success(toast).id::<ClipboardNotice>(), cx);
 }

@@ -1,19 +1,14 @@
-//! Marked words and code: bold, italic and underline as `StyledText` highlights, inline code
-//! and fenced blocks in the mono face on the `bg_code` fill.
+//! Marked words and inline code: bold, italic and underline as `StyledText` highlights, and
+//! inline code in the mono face on the `bg_code` fill (fenced blocks live in `code_block`).
 //!
-//! Code blocks are a plain monospace block for now; highlighting and the language label come
-//! with the code block card. Spoilers render as plain text until the reveal control exists.
+//! A spoiler draws no highlight of its own: `spoiler` hides and reveals the whole group.
 
 use super::layout::MarkSet;
 use crate::theme::ThemeTokens;
 use gpui_kit::{
-    div, relative, AnyElement, Div, FontStyle, FontWeight, HighlightStyle, IntoElement, ParentElement, Styled, StyledText,
-    UnderlineStyle,
+    div, AnyElement, Div, FontStyle, FontWeight, HighlightStyle, IntoElement, ParentElement, Styled, StyledText, UnderlineStyle,
 };
 use std::ops::Range;
-
-/// Text shown for an empty code line, so it keeps its height.
-const EMPTY_CODE_LINE: &str = " ";
 
 /// The highlight a set of marks draws; `None` when it changes nothing (plain or spoiler only).
 pub(super) fn mark_highlight(marks: MarkSet, theme: &ThemeTokens) -> Option<HighlightStyle> {
@@ -55,21 +50,3 @@ pub(super) fn inline_code(code: &str, theme: &ThemeTokens) -> AnyElement {
         .into_any_element()
 }
 
-/// A fenced code block: full width, one row per source line, plain (no highlighting yet).
-pub(super) fn code_block(code: &str, theme: &ThemeTokens) -> AnyElement {
-    let lines = code.split('\n').map(|line| {
-        let line = if line.is_empty() { EMPTY_CODE_LINE } else { line };
-        div().min_w_0().child(line.to_string())
-    });
-    code_surface(theme)
-        .w_full()
-        .my(theme.spacing_xs)
-        .px(theme.spacing_sm)
-        .py(theme.spacing_xs)
-        .rounded(theme.radius_sm)
-        .line_height(relative(theme.line_height_body))
-        .flex()
-        .flex_col()
-        .children(lines)
-        .into_any_element()
-}

@@ -5,7 +5,7 @@
 //! wrap as one unit.
 
 use super::super::consts::{CARRIAGE_RETURN, LINE_BREAK};
-use crate::domain::post::{BodyToken, Mark};
+use crate::domain::post::{visible_text, BodyToken, Mark};
 use std::ops::Range;
 
 /// The marks in force on a run of text.
@@ -14,7 +14,7 @@ pub(crate) struct MarkSet {
     pub bold: bool,
     pub italic: bool,
     pub underline: bool,
-    /// Parsed but not hidden yet: the spoiler reveal is its own task, so the text shows plainly.
+    /// Inside a spoiler (its items are grouped in an [`Item::Spoiler`], which hides them).
     pub spoiler: bool,
 }
 
@@ -42,6 +42,9 @@ pub(crate) enum Item<'a> {
     Hashtag { tag: &'a str, trailing: &'a str },
     /// A fenced block; it fills the width, so it sits on its own line.
     Block { lang: Option<&'a str>, code: &'a str },
+    /// A spoiler: the `ordinal`-th of the body, its visible `text` and its own items (a
+    /// spoiler inside a spoiler is part of the outer one).
+    Spoiler { ordinal: usize, text: String, items: Vec<Item<'a>> },
 }
 
 /// Whether the line after the break at `index` is blank (drawn as a paragraph gap).
@@ -62,6 +65,8 @@ struct Builder<'a> {
     items: Vec<Item<'a>>,
     word: String,
     marks: Vec<(Range<usize>, MarkSet)>,
+    /// Spoilers laid out so far.
+    spoilers: usize,
 }
 
 impl<'a> Builder<'a> {
@@ -82,12 +87,23 @@ impl<'a> Builder<'a> {
             BodyToken::Wikilink { target, trailing } => self.item(Item::Wikilink { target, trailing }),
             BodyToken::Hashtag { tag, trailing } => self.item(Item::Hashtag { tag, trailing }),
             BodyToken::CodeBlock { lang, code } => self.item(Item::Block { lang: lang.as_deref(), code }),
+            BodyToken::Spoiler(children) if !marks.spoiler => self.spoiler(children, marks),
             BodyToken::Bold(_) | BodyToken::Italic(_) | BodyToken::Underline(_) | BodyToken::Spoiler(_) => {
                 if let Some((mark, children)) = token.as_mark() {
                     self.tokens(children, marks.with(mark));
                 }
             }
         }
+    }
+
+    /// Lays a spoiler's children out as their own group.
+    fn spoiler(&mut self, children: &'a [BodyToken], marks: MarkSet) {
+        let mut inner = Builder::default();
+        inner.tokens(children, marks.with(Mark::Spoiler));
+        inner.flush();
+        let ordinal = self.spoilers;
+        self.spoilers += 1;
+        self.item(Item::Spoiler { ordinal, text: visible_text(children), items: inner.items });
     }
 
     /// Splits text into words at whitespace and into lines at line breaks.

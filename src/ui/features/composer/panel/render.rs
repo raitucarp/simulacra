@@ -1,5 +1,6 @@
 //! Renders the panel through the stateless [`ComposerModalView`] dialog.
 
+use super::super::format::FormatCallback;
 use super::super::messages::visible_problem_message;
 use super::super::modal::{ComposerModalView, DraftActionCallback, DraftEditor, ModalCallbacks, PasteCallback};
 use super::ComposerModalPanel;
@@ -44,7 +45,15 @@ fn callbacks(entity: &Entity<ComposerModalPanel>) -> ModalCallbacks {
         on_split_draft: act_at(entity, P::split_draft),
         on_remove_image: act_at(entity, P::remove_image),
         on_paste: paste(entity),
+        on_format: format_draft(entity),
+        on_toggle_preview: act(entity, P::toggle_preview),
     }
+}
+
+/// Routes a toolbar mark to the last focused draft.
+fn format_draft(entity: &Entity<ComposerModalPanel>) -> FormatCallback {
+    let entity = entity.clone();
+    Rc::new(move |mark, window, cx| entity.update(cx, |this, cx| this.format_active(mark, window, cx)))
 }
 
 impl Render for ComposerModalPanel {
@@ -58,8 +67,9 @@ impl Render for ComposerModalPanel {
             .drafts
             .iter()
             .map(|slot| {
-                let length = crate::domain::post::visible_text_len(&slot.input.read(cx).value());
-                DraftEditor { input: slot.input.clone(), length }
+                let text = slot.input.read(cx).value().to_string();
+                let length = crate::domain::post::visible_text_len(&text);
+                DraftEditor { input: slot.input.clone(), length, text }
             })
             .collect();
         ComposerModalView {
@@ -75,6 +85,7 @@ impl Render for ComposerModalPanel {
             is_image_input_open: self.is_image_input_open,
             notice,
             can_post: problem.is_none(),
+            preview: self.preview,
             atomic_hint: self.atomic_hint_view(cx),
             readability: self.readability_view(cx),
             callbacks: callbacks(&cx.entity()),

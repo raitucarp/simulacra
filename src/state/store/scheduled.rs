@@ -56,7 +56,7 @@ impl AppState {
     }
 
     /// Persists a scheduled post and queues it in publishing order.
-    fn hold_scheduled(&mut self, post: Post) -> Result<()> {
+    pub(super) fn hold_scheduled(&mut self, post: Post) -> Result<()> {
         if let Some(ref db) = self.db {
             db.save_post(&post)?;
         }

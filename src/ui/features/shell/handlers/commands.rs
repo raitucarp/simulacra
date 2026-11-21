@@ -42,7 +42,7 @@ impl AppView {
             CommandId::ShowShortcuts => self.toggle_shortcut_sheet(window, cx),
             CommandId::OpenPalette => self.open_palette(PaletteMode::Everything, window, cx),
             CommandId::OpenCommands => self.open_palette(PaletteMode::Commands, window, cx),
-            CommandId::ReplayWelcome => self.replay_welcome(window, cx), CommandId::OpenCollection | CommandId::BookmarkPost | CommandId::ExportBundle | CommandId::EncryptedSnapshot | CommandId::RestoreSnapshot => self.run_data_command(id, window, cx), // sb F2
+            CommandId::ReplayWelcome => self.replay_welcome(window, cx), CommandId::OpenCollection | CommandId::BookmarkPost | CommandId::ExportBundle | CommandId::EncryptedSnapshot | CommandId::RestoreSnapshot | CommandId::ScheduledPosts => self.run_data_command(id, window, cx), // sb F2, Y4
             CommandId::SemanticSearch => self.open_palette(PaletteMode::Semantic, window, cx),
             CommandId::FindSimilar => self.find_similar_to_open_thought(window, cx),
             CommandId::LearnPost => self.learn_focused_post(window, cx),

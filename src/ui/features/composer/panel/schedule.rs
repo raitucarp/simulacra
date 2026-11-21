@@ -43,6 +43,13 @@ impl ComposerModalPanel {
         cx.notify();
     }
 
+    /// Opens the picker on `at` (editing a waiting post, Y4).
+    pub(super) fn open_schedule_at(&mut self, at: Timestamp, window: &mut Window, cx: &mut Context<Self>) {
+        self.schedule.open = true;
+        let text = format_moment(at, &jiff::tz::TimeZone::system());
+        self.schedule.input.update(cx, |state, cx| state.set_value(text, window, cx));
+    }
+
     /// Closes the picker: the thread posts at once again.
     pub(super) fn clear_schedule(&mut self, window: &mut Window, cx: &mut Context<Self>) {
         self.reset_schedule(window, cx);

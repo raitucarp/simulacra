@@ -33,6 +33,7 @@ mod profiles;
 mod reposts;
 mod revisions; // sb F2
 mod scheduled;
+mod scheduled_queue; // Y4
 mod search;
 mod settings;
 mod seed_catalogue;
@@ -49,6 +50,7 @@ pub use guards::require_persona;
 pub use post_heartbeat::LifecycleReport;
 pub use post_index::PostIndex;
 pub use posts_by::Page;
+pub use scheduled_queue::ScheduledEdit;
 pub use post_meta::PostMeta;
 pub use network_create::{network_slug, validate_network_name, NetworkNameError, MAX_NETWORK_NAME_CHARS};
 pub use threads::{ThreadAnchor, ThreadDraft};

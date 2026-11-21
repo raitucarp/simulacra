@@ -52,6 +52,9 @@ impl AppView {
         };
         if let ComposerModalMode::Edit(target) = &submission.mode {
             let text = submission.drafts.first().cloned().unwrap_or_default();
+            if target.post.lifecycle.is_scheduled() {
+                return self.save_scheduled_edit(target.post.id.clone(), (text, submission.tint), submission.publish_at, window, cx); // Y4
+            }
             return self.save_post_edit(target.post.id.clone(), (text, submission.tint), window, cx); // sb F2, C3
         }
         let publish_at = submission.publish_at;

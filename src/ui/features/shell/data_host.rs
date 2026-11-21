@@ -33,6 +33,8 @@ pub struct DataHost {
     pub export: Option<ExportDialog>,
     pub snapshot: Option<SnapshotDialog>,
     pub restore: Option<RestoreDialog>,
+    /// The scheduled queue sheet is open (Y4).
+    pub scheduled_open: bool,
     /// The verified snapshot waiting for the go-ahead.
     pub staged: Option<StagedRestore>,
     /// The Knowledge page shows the Saved view instead of the library.
@@ -99,6 +101,7 @@ impl DataHost {
             export: None,
             snapshot: None,
             restore: None,
+            scheduled_open: false,
             staged: None,
             showing_saved: false,
             target: SavedTarget::Bookmarks,

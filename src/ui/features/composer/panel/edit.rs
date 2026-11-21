@@ -14,8 +14,12 @@ impl ComposerModalPanel {
     /// Opens the composer on `target`'s text and tint, the cursor after its last character.
     pub fn open_edit(&mut self, target: AuthoredPost, window: &mut Window, cx: &mut Context<Self>) {
         let (text, tint) = (target.post.content.clone(), target.post.extras.tint);
+        let waiting = target.post.lifecycle.publish_at.filter(|_| target.post.lifecycle.is_scheduled());
         self.open(ComposerModalMode::Edit(Box::new(target)), window, cx);
         self.tint = tint;
+        if let Some(at) = waiting {
+            self.open_schedule_at(at, window, cx); // Y4: a waiting post keeps its moment
+        }
         if let Some(input) = self.drafts.first().map(|slot| slot.input.clone()) {
             input.update(cx, |state, cx| {
                 state.insert(text, window, cx);

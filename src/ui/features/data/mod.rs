@@ -11,6 +11,7 @@ mod export;
 mod history;
 mod post_menu;
 mod saved;
+mod scheduled; // Y4
 mod sheet;
 mod snapshot;
 mod text;
@@ -20,6 +21,7 @@ pub use export::{render_export_sheet, ExportDialog};
 pub use history::{render_history_sheet, HistorySheet};
 pub use post_menu::{render_edited_mark, with_data_items, DataControls, DataSource};
 pub use saved::{render_knowledge_switch, render_saved_page, SavedItemView, SavedView, ShelfChip};
+pub use scheduled::{render_scheduled_sheet, ScheduledRow};
 pub use sheet::closes_on_escape;
 pub use snapshot::{render_restore_sheet, render_snapshot_sheet, RestoreDialog, RestoreStep, SnapshotDialog};
 pub use text::{format_time, tr};

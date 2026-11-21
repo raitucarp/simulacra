@@ -16,4 +16,5 @@ mod lifecycle;
 mod posts;
 mod profiles;
 mod scheduled;
+mod scheduled_queue;
 mod threads;

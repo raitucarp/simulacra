@@ -85,6 +85,12 @@ pub enum DataEvent {
     CancelNote,
     OpenItem(ItemRef),
     LearnShelf,
+    /// Scheduled queue sheet (Y4).
+    OpenScheduled,
+    EditScheduled(PostId),
+    PublishScheduledNow(PostId),
+    CancelScheduled(PostId),
+    CloseScheduled,
 }
 
 /// Sends a data event to the shell.

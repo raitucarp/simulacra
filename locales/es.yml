@@ -256,6 +256,7 @@ post:
   code_plain: "Texto sin formato"
   code_copy: "Copiar código"
   code_copied: "Código copiado"
+  spoiler_reveal: "Mostrar spoiler"
 
 appearance:
   gallery_title: "GALERÍA DE TEMAS"

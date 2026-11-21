@@ -256,6 +256,7 @@ post:
   code_plain: "Обычный текст"
   code_copy: "Копировать код"
   code_copied: "Код скопирован"
+  spoiler_reveal: "Показать спойлер"
 
 appearance:
   gallery_title: "ГАЛЕРЕЯ ТЕМ"

@@ -256,6 +256,7 @@ post:
   code_plain: "Teks biasa"
   code_copy: "Salin kode"
   code_copied: "Kode disalin"
+  spoiler_reveal: "Tampilkan spoiler"
 
 appearance:
   gallery_title: "GALERI TEMA"

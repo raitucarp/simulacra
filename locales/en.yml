@@ -256,6 +256,7 @@ post:
   code_plain: "Plain text"
   code_copy: "Copy code"
   code_copied: "Code copied"
+  spoiler_reveal: "Show spoiler"
 
 appearance:
   gallery_title: "THEME GALLERY"

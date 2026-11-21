@@ -1,7 +1,7 @@
 //! Marked words and inline code: bold, italic and underline as `StyledText` highlights, and
 //! inline code in the mono face on the `bg_code` fill (fenced blocks live in `code_block`).
 //!
-//! Spoilers render as plain text until the reveal control exists.
+//! A spoiler draws no highlight of its own: `spoiler` hides and reveals the whole group.
 
 use super::layout::MarkSet;
 use crate::theme::ThemeTokens;

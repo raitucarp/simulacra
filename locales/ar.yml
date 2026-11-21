@@ -256,6 +256,7 @@ post:
   code_plain: "نص عادي"
   code_copy: "نسخ الشيفرة"
   code_copied: "تم نسخ الشيفرة"
+  spoiler_reveal: "إظهار المحتوى المخفي"
 
 appearance:
   gallery_title: "معرض السمات"

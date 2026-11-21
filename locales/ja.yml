@@ -256,6 +256,7 @@ post:
   code_plain: "プレーンテキスト"
   code_copy: "コードをコピー"
   code_copied: "コードをコピーしました"
+  spoiler_reveal: "ネタバレを表示"
 
 appearance:
   gallery_title: "テーマギャラリー"

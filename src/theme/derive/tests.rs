@@ -112,6 +112,19 @@ fn syntax_colors_read_on_the_code_fill_and_differ_from_plain_text() {
 }
 
 #[test]
+fn spoiler_fill_is_opaque_and_stands_apart_from_the_feed() {
+    for palette in ThemeRegistry::global().all() {
+        let t = derive_default_tokens(palette);
+        assert_eq!(t.spoiler_fill.a, 1.0, "{}: text in the fill color must vanish into it", palette.id);
+        assert!(contrast_ratio(t.spoiler_fill, t.bg_feed_post) >= SPOILER_MIN_CONTRAST, "{}: hidden spoiler is visible as a block", palette.id);
+        assert!(t.spoiler_revealed_bg.a < 1.0, "{}: revealed spoilers only tint", palette.id);
+    }
+}
+
+/// A hidden spoiler only has to read as a block, not as text.
+const SPOILER_MIN_CONTRAST: f32 = 1.3;
+
+#[test]
 fn scales_resize_metrics_but_not_colors() {
     let p = palette(DEFAULT_PALETTE_ID);
     let compact = derive_tokens(p, Density::Compact, TypeScale::Small, RadiusScale::Sharp);

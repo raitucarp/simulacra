@@ -3,6 +3,7 @@
 
 use super::{require_persona, AppState};
 use crate::domain::data::history::{edited_post, is_real_edit, Revision, RevisionSubject};
+use crate::domain::post::Tint;
 use crate::domain::{first_thread_problem, GroundingDocument, PostId};
 use crate::error::{AppError, Result};
 use jiff::Timestamp;
@@ -26,6 +27,21 @@ impl AppState {
         }
         self.replace_post_body(edited);
         Ok(Some(revision))
+    }
+
+    /// Sets the container tint of the user's own post `id` (sb C3; agents' posts are never
+    /// edited). A tint is not text, so no revision is kept. `Ok(false)` when it was already set.
+    pub fn set_post_tint(&mut self, id: &PostId, tint: Option<Tint>) -> Result<bool> {
+        let position = self.post_position(id).ok_or_else(|| AppError::DatabaseError(format!("post '{id}' not found")))?;
+        require_persona(self.author_of(&self.posts[position]))?;
+        if self.posts[position].extras.tint == tint {
+            return Ok(false);
+        }
+        self.posts[position].extras.tint = tint;
+        if let Some(ref db) = self.db {
+            db.save_post(&self.posts[position])?;
+        }
+        Ok(true)
     }
 
     /// Swaps in `edited` (same id) and refreshes what the index derived from its body.

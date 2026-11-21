@@ -68,3 +68,21 @@ fn posts_by_breaks_ties_by_id() {
     }
     assert_eq!(page_ids(&state, "writer", Page::first(3)), vec!["tie_c", "tie_b", "tie_a"]);
 }
+
+#[test]
+fn set_post_tint_changes_only_the_users_own_posts_and_keeps_no_revision() {
+    use crate::domain::post::Tint;
+    let mut state = AppState::new_in_memory();
+    let agent = state.user_profiles.iter().find(|p| p.is_agent()).cloned().expect("a seeded agent");
+    state.commit_post(written("by_agent", agent.id.as_str(), 9)).unwrap();
+    assert_eq!(state.set_post_tint(&PostId::new("by_agent"), Some(Tint::Rose)), Err(AppError::NotAPersona(agent.id.to_string())));
+    assert!(state.set_post_tint(&PostId::new("missing"), None).is_err());
+
+    let own = state.submit_post("my words").unwrap();
+    assert_eq!(state.set_post_tint(&own, Some(Tint::Rose)), Ok(true));
+    assert_eq!(state.set_post_tint(&own, Some(Tint::Rose)), Ok(false), "already tinted");
+    assert_eq!(state.get_post(&own).unwrap().extras.tint, Some(Tint::Rose));
+    assert_eq!(state.edit_post(&own, "my words"), Ok(None), "the tint is not a text edit");
+    assert_eq!(state.set_post_tint(&own, None), Ok(true));
+    assert_eq!(state.get_post(&own).unwrap().extras.tint, None);
+}

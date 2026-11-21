@@ -1,6 +1,7 @@
 //! The thread as a tree (root post → replies → their replies) and its visible rows once
 //! collapsed branches are folded away. Pure: posts come in through lookup closures.
 
+use crate::domain::post::Tint;
 use crate::domain::{Post, PostId};
 use std::collections::{BTreeSet, HashSet};
 
@@ -13,6 +14,8 @@ pub struct OutlineNode {
     pub id: PostId,
     pub author: String,
     pub text: String,
+    /// The post's container tint (sb C2), shown on its bullet.
+    pub tint: Option<Tint>,
     pub children: Vec<OutlineNode>,
 }
 
@@ -24,6 +27,8 @@ pub struct OutlineRow {
     pub depth: usize,
     pub author: String,
     pub text: String,
+    /// The post's container tint (sb C2), shown on its bullet.
+    pub tint: Option<Tint>,
     pub has_children: bool,
     pub collapsed: bool,
     /// Replies folded under a collapsed bullet (all levels).
@@ -54,7 +59,7 @@ fn node<'a>(post: &'a Post, depth: usize, replies_of: &impl Fn(&PostId) -> Vec<&
     let fresh: Vec<&Post> = replies.into_iter().filter(|reply| seen.insert(reply.id.clone())).collect();
     let children = fresh.into_iter().map(|reply| node(reply, depth + 1, replies_of, author_of, seen)).collect();
     let text = post.content.split_whitespace().collect::<Vec<_>>().join(" ");
-    OutlineNode { id: post.id.clone(), author: author_of(post), text, children }
+    OutlineNode { id: post.id.clone(), author: author_of(post), text, tint: post.extras.tint, children }
 }
 
 impl OutlineNode {
@@ -90,6 +95,7 @@ fn push_rows(node: &OutlineNode, parent: Option<&PostId>, depth: usize, collapse
         depth,
         author: node.author.clone(),
         text: node.text.clone(),
+        tint: node.tint,
         has_children: !node.children.is_empty(),
         collapsed: is_collapsed,
         hidden: if is_collapsed { node.descendants() } else { 0 },

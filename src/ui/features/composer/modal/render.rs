@@ -57,7 +57,9 @@ impl ComposerModalView {
             .child(self.thread_body())
             // 4. Why the thread cannot be posted (or why publishing failed)
             .when_some(self.notice.clone(), |this, notice| this.child(self.notice_row(notice)))
-            // 5. Modal Footer: Privacy indicator & Post button
+            // 5. The container tint of the thread (sb C3)
+            .child(self.tint_row())
+            // 6. Modal Footer: Privacy indicator & Post button
             .child(self.footer(self.can_post))
     }
 }

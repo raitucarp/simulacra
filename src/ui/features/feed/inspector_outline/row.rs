@@ -1,9 +1,12 @@
 //! One outline bullet: a chevron (or a dot for a leaf), the author's short name, dimmed, and
-//! the post's text. The cursor row is tinted; the inspected post is marked with the accent.
+//! the post's text. The cursor row is shaded; the inspected post is marked with the accent;
+//! a tinted post's bullet takes its tint's fill and edge (sb C2).
 
 use super::memory::OutlineCommand;
 use super::tree::OutlineRow;
+use crate::theme::color::composite;
 use crate::theme::ThemeTokens;
+use crate::ui::features::post::row_tint;
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::Icon;
 use gpui_kit::prelude::FluentBuilder;
@@ -30,7 +33,8 @@ pub(super) fn render_row(row: &OutlineRow, marks: RowMarks, on_command: RowActio
     let (focus_id, open_id) = (row.id.clone(), row.id.clone());
     let toggle = on_command.clone();
     let indent = theme.outline_indent * row.depth as f32;
-    let hover = theme.hover_bg;
+    let tint = row_tint(row.tint, theme);
+    let hover = tint.map_or(theme.hover_bg, |(fill, _)| composite(theme.hover_bg, fill));
     div()
         .id(SharedString::from(format!("{ROW_ID_PREFIX}{}", row.id)))
         .flex()
@@ -41,7 +45,8 @@ pub(super) fn render_row(row: &OutlineRow, marks: RowMarks, on_command: RowActio
         .py(theme.spacing_3xs)
         .rounded(theme.radius_sm)
         .cursor_pointer()
-        .when(marks.is_cursor, |row| row.bg(theme.hover_bg))
+        .when_some(tint, |row, (fill, edge)| row.bg(fill).border_l(theme.border_width_threadline).border_color(edge))
+        .when(marks.is_cursor, |row| row.bg(hover))
         .hover(move |row| row.bg(hover))
         .on_click(move |event, window, cx| match event.click_count() >= OPEN_CLICKS {
             true => on_command(OutlineCommand::Open(open_id.clone()), window, cx),

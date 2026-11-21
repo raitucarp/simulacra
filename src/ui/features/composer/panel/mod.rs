@@ -13,6 +13,7 @@ mod format; mod host; mod media; mod preview; mod readability; pub mod readabili
 use super::consts::MODAL_LINK_PLACEHOLDER;
 use super::modal::ComposerModalMode;
 use crate::domain::media::ImageAttachment;
+use crate::domain::post::Tint;
 use crate::domain::Profile;
 use crate::theme::ThemeTokens;
 use gpui_kit::component::input::{InputState, TextareaState};
@@ -28,6 +29,8 @@ pub struct ComposerSubmission {
     pub link: Option<String>,
     /// Attached images with their descriptions (sb C3), at most a gallery's worth.
     pub images: Vec<ImageAttachment>,
+    /// The container tint of every post of the thread, or of the edited post (sb C3).
+    pub tint: Option<Tint>,
 }
 
 /// Events emitted by [`ComposerModalPanel`].
@@ -73,6 +76,7 @@ pub struct ComposerModalPanel {
     readability: readability::ReadabilityState, // sb F3: the readability meter
     /// Drafts shown through the post body renderer instead of their editors.
     preview: bool,
+    tint: Option<Tint>, // sb C3: the picked container tint
     _subscriptions: Vec<Subscription>,
 }
 
@@ -103,7 +107,7 @@ impl ComposerModalPanel {
             error: None,
             theme,
             profile,
-            atomic: Default::default(), readability: Default::default(), preview: false, _subscriptions: Vec::new(),
+            atomic: Default::default(), readability: Default::default(), preview: false, tint: None, _subscriptions: Vec::new(),
         };
         panel._subscriptions = panel.subscribe(window, cx);
         panel.drafts.push(panel.new_draft_slot(window, cx));

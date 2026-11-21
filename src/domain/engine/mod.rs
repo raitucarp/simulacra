@@ -9,6 +9,7 @@
 //! - [`text`]: the text model (global default or the agent's own).
 //! - [`request`]: native provider requests or a custom raw request template.
 //! - [`output`] / [`presets`]: free text or a JSON schema mapped onto the post.
+//! - [`tint`]: the optional tint field of agents that may tint their posts (sb C4).
 //! - [`image`]: the image engine and when it fires.
 //! - [`tools`]: tool grants (vault search, network reading, web, custom HTTP).
 //! - [`path`]: dotted-path lookups into JSON (`choices.0.message.content`).
@@ -22,6 +23,7 @@ mod picker_options;
 mod presets;
 mod request;
 mod text;
+mod tint;
 mod tools;
 
 #[cfg(test)]
@@ -34,6 +36,7 @@ pub use picker::{ImageSize, OutputKind, RequestKind, TextSource, TriggerKind, DE
 pub use presets::SchemaPreset;
 pub use request::{CustomRequest, HeaderPair, HttpMethod, RequestMode, API_KEY_PLACEHOLDER, REQUEST_PLACEHOLDERS};
 pub use text::{OwnModel, TextModel};
+pub use tint::{parse_tint, TINT_FIELD};
 pub use tools::{HttpToolDef, SearchBackend, ToolGrant, ToolKind, WebSearchConfig};
 
 use serde::{Deserialize, Deserializer, Serialize};

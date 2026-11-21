@@ -12,6 +12,8 @@ pub struct ThreadDraft {
     pub image: Option<String>,
     /// Images attached in the composer with their alt text (sb C3); `image` is the first.
     pub images: Vec<crate::domain::media::ImageAttachment>,
+    /// The container tint picked in the composer (sb C3).
+    pub tint: Option<crate::domain::post::Tint>,
 }
 
 impl ThreadDraft {
@@ -74,6 +76,7 @@ impl AppState {
                 None,
             )?;
             post.extras.images = draft.images.clone();
+            post.extras.tint = draft.tint;
             parent = Some(post.id.clone());
             posts.push(post);
         }

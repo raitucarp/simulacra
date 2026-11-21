@@ -45,7 +45,8 @@ impl AppView {
             ComposerModalEvent::ImageIdeas(text) => return self.open_image_ideas_for_draft(text.clone(), window, cx),
         };
         if let ComposerModalMode::Edit(target) = &submission.mode {
-            return self.save_post_edit(target.post.id.clone(), submission.drafts.first().cloned().unwrap_or_default(), window, cx); // sb F2
+            let text = submission.drafts.first().cloned().unwrap_or_default();
+            return self.save_post_edit(target.post.id.clone(), (text, submission.tint), window, cx); // sb F2, C3
         }
         let (thread, anchor) = thread_from_submission(submission.clone());
         match self.state.submit_thread(&thread, &anchor) {
@@ -63,10 +64,11 @@ impl AppView {
     }
 }
 
-/// Store drafts (attachments on the first post) and the anchor implied by the modal mode.
+/// Store drafts (attachments on the first post, the tint on every post) and the anchor
+/// implied by the modal mode.
 fn thread_from_submission(submission: ComposerSubmission) -> (Vec<ThreadDraft>, ThreadAnchor) {
-    let ComposerSubmission { mode, drafts, link, images } = submission;
-    let mut thread: Vec<ThreadDraft> = drafts.into_iter().map(ThreadDraft::text).collect();
+    let ComposerSubmission { mode, drafts, link, images, tint } = submission;
+    let mut thread: Vec<ThreadDraft> = drafts.into_iter().map(|text| ThreadDraft { tint, ..ThreadDraft::text(text) }).collect();
     if let Some(first) = thread.first_mut() {
         first.link = link;
         first.image = images.first().map(|image| image.path.clone());

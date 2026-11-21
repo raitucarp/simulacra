@@ -9,7 +9,8 @@ use crate::agent::llm::wire::STRUCTURED_OUTPUT_NAME;
 use crate::agent::llm::{redact_secrets, ChatMessage, ChatRequest, SchemaStrategy, ToolChoice, ToolSpec};
 use crate::agent::tools::{ToolBox, ToolContext};
 use crate::domain::image_prompt::default_post_prompt;
-use crate::domain::post::{PostExtras, SourceRef, ToolUse};
+use crate::domain::engine::StructuredOutput;
+use crate::domain::post::{PostExtras, SourceRef, Tint, ToolUse};
 
 const EMPTY_ANSWER_ERROR: &str = "The model returned an empty post";
 
@@ -32,6 +33,7 @@ impl EngineResult {
             image_prompt: self.draft.image_prompt.clone(),
             tools: self.tools.clone(),
             sources: self.sources.clone(),
+            tint: self.draft.tint,
             ..PostExtras::default()
         }
     }
@@ -46,7 +48,7 @@ pub async fn run_engine(plan: &EnginePlan, system: &str, user: &str, tool_ctx: O
     let (request, strategy) = build_request(plan, system, user, toolbox.as_ref());
     let emit = strategy == Some(SchemaStrategy::EmitTool);
     let outcome = converse(&plan.transport, request, toolbox.as_ref(), emit, plan.max_steps).await?;
-    let draft = match (&plan.structured, outcome.answer) {
+    let mut draft = match (&plan.structured, outcome.answer) {
         (Some(structured), Answer::Structured(json)) => PostDraft::from_structured(&json, &structured.mapping).unwrap_or_default(),
         (Some(structured), Answer::Text(text)) => parse_or_repair(&plan.transport, outcome.request, text, structured).await?,
         (None, Answer::Text(text)) => PostDraft::from_text(&text),
@@ -55,9 +57,16 @@ pub async fn run_engine(plan: &EnginePlan, system: &str, user: &str, tool_ctx: O
     if draft.content.trim().is_empty() {
         return Err(EMPTY_ANSWER_ERROR.to_string());
     }
+    draft.tint = allowed_tint(plan.structured.as_ref(), draft.tint);
     let mut result = EngineResult { draft, tools: outcome.tools, sources: outcome.sources, ..EngineResult::default() };
     illustrate(plan, &mut result, roll).await;
     Ok(result)
+}
+
+/// The answer's tint, kept only when the agent may tint (sb C4: off by default, so a tint
+/// mapped by hand is still dropped while the setting is off; free text never tints).
+pub fn allowed_tint(structured: Option<&StructuredOutput>, tint: Option<Tint>) -> Option<Tint> {
+    tint.filter(|_| structured.is_some_and(|output| output.may_tint))
 }
 
 /// The first request (tools, native search, structured-output wiring) and the strategy used.

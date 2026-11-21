@@ -6,6 +6,7 @@ use super::super::view::AppView;
 use crate::domain::data::saved::{next_position, toggled_bookmark, CollectionEntry, ItemRef};
 use crate::domain::document::CollectionId;
 use crate::domain::preferences::ToastKind;
+use crate::domain::post::Tint;
 use crate::domain::PostId;
 use crate::ui::features::composer::publish_error_message;
 use crate::ui::features::data::{tr, DataEvent, SavedTarget};
@@ -36,9 +37,11 @@ impl AppView {
         self.composer_modal.update(cx, |panel, cx| panel.open_edit(target, window, cx));
     }
 
-    /// Saves the composer's edit of `id` (the previous text becomes a revision).
-    pub(crate) fn save_post_edit(&mut self, id: PostId, text: String, window: &mut Window, cx: &mut Context<Self>) {
-        match self.state.edit_post(&id, &text) {
+    /// Saves the composer's edit of `id`: its text (the previous one becomes a revision),
+    /// then its tint (sb C3), which keeps no revision.
+    pub(crate) fn save_post_edit(&mut self, id: PostId, (text, tint): (String, Option<Tint>), window: &mut Window, cx: &mut Context<Self>) {
+        let saved = self.state.edit_post(&id, &text).and_then(|revision| self.state.set_post_tint(&id, tint).map(|_| revision));
+        match saved {
             Ok(revision) => {
                 if revision.is_some() {
                     *self.data.revision_counts.entry(id.as_str().to_string()).or_default() += 1;

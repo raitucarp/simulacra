@@ -69,6 +69,8 @@ pub struct ModalCallbacks {
     pub on_format: super::format::FormatCallback,
     /// Switches between the editors and the preview.
     pub on_toggle_preview: ModalActionCallback,
+    /// Picks the thread's container tint (sb C3).
+    pub on_pick_tint: super::tint_picker::TintCallback,
 }
 
 /// Stateless dialog rendering a composer snapshot.
@@ -91,6 +93,8 @@ pub struct ComposerModalView {
     pub can_post: bool,
     /// Drafts are shown as they will read once posted.
     pub preview: bool,
+    /// The container tint every post of the thread (or the edited post) gets (sb C3).
+    pub tint: Option<crate::domain::post::Tint>,
     pub callbacks: ModalCallbacks,
     /// sb E1: the atomic-note hint under one draft.
     pub atomic_hint: Option<AtomicHintView>,

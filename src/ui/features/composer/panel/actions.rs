@@ -34,6 +34,7 @@ impl ComposerModalPanel {
         self.is_link_input_open = false;
         self.is_image_input_open = false;
         self.preview = false;
+        self.tint = None;
         self.images.clear();
         self.error = None;
         for input in [&self.link_input, &self.image_input] {
@@ -58,7 +59,7 @@ impl ComposerModalPanel {
         let images = self.image_attachments(cx);
         let drafts = self.draft_texts(cx);
         let mode = self.mode.clone();
-        cx.emit(ComposerModalEvent::Submit(ComposerSubmission { mode, drafts, link, images }));
+        cx.emit(ComposerModalEvent::Submit(ComposerSubmission { mode, drafts, link, images, tint: self.tint }));
     }
 
     /// A typed image path that points to an existing file.

@@ -4,6 +4,7 @@
 use super::super::consts::MODAL_SUBMIT_POST_BTN_ID;
 use super::super::format::format_buttons;
 use super::super::preview::preview_button;
+use super::super::tint_picker::tint_picker;
 use gpui_kit::prelude::FluentBuilder;
 use super::ComposerModalView;
 use gpui_kit::base::Disableable;
@@ -46,6 +47,18 @@ impl ComposerModalView {
                         (on_submit_btn)(window, cx);
                     }),
             )
+    }
+
+    /// The tint picker of the thread (sb C3), between the drafts and the footer.
+    pub(super) fn tint_row(&self) -> Div {
+        let theme = &self.theme;
+        div()
+            .w_full()
+            .px(theme.panel_padding)
+            .py(theme.spacing_xs)
+            .border_t(theme.border_width_hairline)
+            .border_color(theme.border_subtle)
+            .child(tint_picker(self.tint, self.callbacks.on_pick_tint.clone(), theme))
     }
 
     /// The preview toggle, the format toolbar (acting on the last focused draft; hidden while

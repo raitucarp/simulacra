@@ -89,3 +89,14 @@ fn replies_index_counts_only_reply_to_relations() {
     assert_eq!(replies, vec![&reply]);
     assert_eq!(state.index.reply_positions(&root).count(), 1);
 }
+
+#[test]
+fn a_picked_tint_reaches_every_post_of_the_thread() {
+    use crate::domain::post::Tint;
+    let mut state = AppState::new_in_memory();
+    let tinted: Vec<ThreadDraft> = drafts(&["first", "second"]).into_iter().map(|draft| ThreadDraft { tint: Some(Tint::Sky), ..draft }).collect();
+    let ids = state.submit_thread(&tinted, &ThreadAnchor::default()).expect("thread");
+    assert!(ids.iter().all(|id| post(&state, id).extras.tint == Some(Tint::Sky)));
+    let plain = state.submit_thread(&drafts(&["plain"]), &ThreadAnchor::default()).expect("thread");
+    assert_eq!(post(&state, &plain[0]).extras.tint, None);
+}

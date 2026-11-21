@@ -2,6 +2,7 @@
 
 use super::super::format::FormatCallback;
 use super::super::messages::visible_problem_message;
+use super::super::tint_picker::TintCallback;
 use super::super::modal::{ComposerModalView, DraftActionCallback, DraftEditor, ModalCallbacks, PasteCallback};
 use super::ComposerModalPanel;
 use gpui_kit::*;
@@ -47,6 +48,7 @@ fn callbacks(entity: &Entity<ComposerModalPanel>) -> ModalCallbacks {
         on_paste: paste(entity),
         on_format: format_draft(entity),
         on_toggle_preview: act(entity, P::toggle_preview),
+        on_pick_tint: pick_tint(entity),
     }
 }
 
@@ -54,6 +56,12 @@ fn callbacks(entity: &Entity<ComposerModalPanel>) -> ModalCallbacks {
 fn format_draft(entity: &Entity<ComposerModalPanel>) -> FormatCallback {
     let entity = entity.clone();
     Rc::new(move |mark, window, cx| entity.update(cx, |this, cx| this.format_active(mark, window, cx)))
+}
+
+/// Routes a picked tint to the panel (sb C3).
+fn pick_tint(entity: &Entity<ComposerModalPanel>) -> TintCallback {
+    let entity = entity.clone();
+    Rc::new(move |tint, _, cx| entity.update(cx, |this, cx| this.pick_tint(tint, cx)))
 }
 
 impl Render for ComposerModalPanel {
@@ -86,6 +94,7 @@ impl Render for ComposerModalPanel {
             notice,
             can_post: problem.is_none(),
             preview: self.preview,
+            tint: self.tint,
             atomic_hint: self.atomic_hint_view(cx),
             readability: self.readability_view(cx),
             callbacks: callbacks(&cx.entity()),

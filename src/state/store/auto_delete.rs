@@ -18,6 +18,14 @@ impl AppState {
         Ok(())
     }
 
+    /// Whether posts by other authors reply to or quote post `id` (Y8): deleting it would
+    /// leave them without the post they answer.
+    pub fn answered_by_others(&self, id: &PostId) -> bool {
+        let Some(author) = self.get_post(id).map(|post| &post.author_id) else { return false };
+        let answers = |post: &Post| post.reply_to_id.as_ref() == Some(id) || post.quote_id.as_ref() == Some(id);
+        self.posts.iter().any(|post| &post.author_id != author && answers(post))
+    }
+
     /// Deletes every post whose moment has come at `now`, returning their ids.
     pub fn delete_due(&mut self, now: Timestamp) -> Result<Vec<PostId>> {
         let due = |post: &Post| post.lifecycle.delete_at.is_some_and(|at| at <= now);

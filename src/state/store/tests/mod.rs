@@ -1,6 +1,7 @@
 //! Unit tests for the central state store.
 
 mod action_target;
+mod answered;
 mod archive;
 mod authoring;
 mod auto_archive;

@@ -37,4 +37,6 @@ pub struct PostCardHandlers {
     pub credence: Option<crate::ui::features::thinking::credence::CredenceControls>,
     /// sb F2: Edit, History, Bookmark, collections and the "edited" mark; `None` hides them.
     pub data: Option<crate::ui::features::data::DataControls>,
+    /// Epic R: the reaction picker; `None` hides it.
+    pub reactions: Option<crate::ui::features::reactions::ReactionControls>,
 }

@@ -19,6 +19,7 @@ pub mod onboarding;
 pub mod popovers;
 pub mod post;
 pub mod post_actions;
+pub mod reactions; // epic R
 pub mod review;
 pub mod roster;
 pub mod semantic;

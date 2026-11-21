@@ -36,5 +36,7 @@ gpui_kit::assets::icon_assets!(
         Save, Bold, Italic, Underline, Code,
         // sb F2
         Pencil, RotateCcwClock, BookmarkCheck, FolderPlus, Download, KeyRound, ShieldCheck, ArchiveRestore, Package, LockKeyhole, FileDiff,
+        // epic R
+        FaceSlightlySmilingPlus,
     ]
 );

@@ -1,6 +1,6 @@
 //! The checked-in emoji table (R3): complete, consistent and searchable by glyph.
 
-use super::{find_emoji, EmojiGroup, SkinTone, EMOJI, UNICODE_EMOJI_VERSION};
+use crate::domain::emoji::{find_emoji, EmojiGroup, SkinTone, EMOJI, UNICODE_EMOJI_VERSION};
 use crate::domain::reaction::CLAP;
 use std::collections::HashSet;
 

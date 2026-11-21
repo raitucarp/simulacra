@@ -35,6 +35,8 @@ pub(crate) struct PostCallbacks {
     pub credence: Option<crate::ui::features::thinking::credence::CredenceSource>,
     /// sb F2: edit, history, bookmarks and collections.
     pub data: Option<crate::ui::features::data::DataSource>,
+    /// Epic R: reactions.
+    pub reactions: Option<crate::ui::features::reactions::ReactionSource>,
 }
 
 /// Visual and interaction mode of a rendered card.
@@ -80,6 +82,7 @@ impl PostCallbacks {
             on_post_action: Some(bind_action(&self.on_post_action, &target_id)),
             credence: self.credence.as_ref().filter(|_| target.human).map(|source| source.controls(&target_id)),
             data: self.data.as_ref().map(|source| DataControls { lifecycle: target.lifecycle, auto_archive: target.auto_archive, ..source.controls(&target_id, target.human) }),
+            reactions: self.reactions.as_ref().map(|source| source.controls(&target_id)),
         }
     }
 

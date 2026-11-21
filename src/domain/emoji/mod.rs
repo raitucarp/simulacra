@@ -3,11 +3,13 @@
 
 pub mod generate;
 mod groups;
+mod picker; // R5
 mod table;
 #[cfg(test)]
 mod tests;
 
 pub use groups::{EmojiGroup, SkinTone};
+pub use picker::{group_emoji, is_pickable, pickable, search_emoji, PickerMemory, PICKER_MAX_EMOJI_VERSION, RECENT_LIMIT, SEARCH_LIMIT};
 pub use table::{EMOJI, UNICODE_EMOJI_VERSION};
 
 /// The Unicode emoji version an emoji arrived in (`E13.0` is `{ major: 13, minor: 0 }`).

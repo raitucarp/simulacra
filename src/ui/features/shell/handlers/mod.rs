@@ -57,6 +57,7 @@ mod post_lifecycle;
 mod post_menu;
 mod posts;
 mod preferences;
+mod reactions; // epic R
 mod review_events;
 mod review_learn;
 mod review_maps;

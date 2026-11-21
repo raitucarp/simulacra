@@ -19,6 +19,7 @@ mod scale;
 mod lifecycle;
 mod posts;
 mod profiles;
+mod reactions;
 mod scheduled;
 mod scheduled_queue;
 mod threads;

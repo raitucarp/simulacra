@@ -33,6 +33,7 @@ mod forge_autosave;
 mod identities;
 mod profile_create;
 mod profiles;
+mod reactions; // epic R
 mod reposts;
 mod revisions; // sb F2
 mod scheduled;
@@ -132,6 +133,8 @@ pub struct AppState {
     /// Bumped whenever the user likes or unlikes a post (recommendations depend on likes, the
     /// post index revision does not change for them).
     pub engagement: u64,
+    /// Emoji reactions and claps of every post (epic R), saved as they change.
+    pub reactions: crate::domain::reaction::ReactionBook,
 }
 
 impl Default for AppState {

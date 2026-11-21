@@ -78,6 +78,8 @@ pub struct AppView {
     pub image_ideas: ImageIdeasUi,
     /// sb E1: argument maps, credences, tensions and the atomicity sheet.
     pub thinking: ThinkingHost,
+    /// Epic R: the emoji picker and what it remembers.
+    pub reactions: super::reactions_host::ReactionsHost,
     /// sb F2: history, export, snapshots, collections and bookmarks.
     pub data: DataHost,
     /// sb P16: what "Ask before spending" allowed this session.

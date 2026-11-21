@@ -50,6 +50,49 @@ fn the_composer_submit_chord_is_kept() {
 }
 
 #[test]
+fn format_chords_are_bound_in_text_fields() {
+    use crate::domain::post::format::FormatMark;
+    let chords: Vec<(&str, FormatMark)> = SHORTCUTS
+        .iter()
+        .filter_map(|s| match s.target {
+            ShortcutTarget::Format(mark) => Some((s.keys, mark)),
+            _ => None,
+        })
+        .collect();
+    let expected = [("secondary-b", FormatMark::Bold), ("secondary-i", FormatMark::Italic), ("secondary-u", FormatMark::Underline), ("secondary-e", FormatMark::Code), ("secondary-shift-s", FormatMark::Spoiler)];
+    assert_eq!(chords, expected);
+    assert!(SHORTCUTS.iter().filter(|s| matches!(s.target, ShortcutTarget::Format(_))).all(|s| s.scope == KeyScope::Input));
+}
+
+/// Ctrl/Cmd+B is also the shell's "toggle sidebar". In a text field the format binding is
+/// deeper, so it is tried first; the shell's stays next in line (a field that does not
+/// handle formatting lets it through). With no field focused only the shell's matches.
+/// The toolkit registers its own bindings first, as here; none of them uses these chords.
+#[test]
+fn format_chords_do_not_clash_with_the_shell_keymap() {
+    use crate::ui::features::composer::FormatBold;
+    use gpui_kit::{KeyBinding, KeyContext, Keymap};
+    let keys = chord_for(ShortcutTarget::Format(crate::domain::post::format::FormatMark::Bold)).expect("bold chord");
+    assert_eq!(Some(keys), shortcut_for(CommandId::ToggleSidebar), "the chords overlap on purpose");
+    assert_eq!(keys, "secondary-b");
+    let keys = if cfg!(target_os = "macos") { "cmd-b" } else { "ctrl-b" };
+    let shell = KeyBinding::new(keys, RunCommand(CommandId::ToggleSidebar), Some(SHELL_KEY_CONTEXT));
+    let field = KeyBinding::new(keys, FormatBold, Some(context_of(KeyScope::Input)));
+    let keymap = Keymap::new(vec![shell, field]);
+    let chord = [Keystroke::parse(keys).expect("chord")];
+    let context = |name: &str| KeyContext::parse(name).expect("context");
+    let (in_field, _) = keymap.bindings_for_input(&chord, &[context(SHELL_KEY_CONTEXT), context("Input")]);
+    assert!(in_field[0].action().partial_eq(&FormatBold), "a focused field formats first");
+    assert!(in_field.iter().any(|b| b.action().partial_eq(&RunCommand(CommandId::ToggleSidebar))), "the shell binding stays next");
+    let (no_field, _) = keymap.bindings_for_input(&chord, &[context(SHELL_KEY_CONTEXT)]);
+    assert_eq!(no_field.len(), 1);
+    assert!(no_field[0].action().partial_eq(&RunCommand(CommandId::ToggleSidebar)));
+    for mark_keys in ["secondary-i", "secondary-u", "secondary-e", "secondary-shift-s"] {
+        assert!(!SHORTCUTS.iter().any(|s| s.keys == mark_keys && s.scope == KeyScope::Shell), "{mark_keys} is free in the shell");
+    }
+}
+
+#[test]
 fn palette_keys_outrank_the_kit_input_context() {
     assert!(context_of(KeyScope::Palette).ends_with("> Input"));
     assert!(context_of(KeyScope::Palette).starts_with(PALETTE_KEY_CONTEXT));

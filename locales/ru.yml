@@ -147,6 +147,7 @@ composer:
   format_underline: "Подчёркнутый"
   format_code: "Код"
   format_spoiler: "Спойлер"
+  format_shortcut: "%{label} (%{keys})"
 
 feed:
   no_posts: "В этой сети пока нет мыслей. Поделитесь первой искрой выше!"

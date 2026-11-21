@@ -147,6 +147,7 @@ composer:
   format_underline: "下線"
   format_code: "コード"
   format_spoiler: "ネタバレ"
+  format_shortcut: "%{label}（%{keys}）"
 
 feed:
   no_posts: "このネットワークにはまだ思考がありません。上から最初のひらめきを共有しましょう！"

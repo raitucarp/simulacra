@@ -6,7 +6,7 @@ use super::shortcuts::{LightboxKey, PaletteKey, ReviewKey, Shortcut, ShortcutTar
 use crate::ui::features::command_palette::{
     CommandId, ConfirmSelection, DismissPalette, NextGroup, PreviousGroup, SelectNext, SelectPrevious,
 };
-use crate::ui::features::composer::SubmitPostDraft;
+use crate::ui::features::composer::{format_action, SubmitPostDraft};
 use crate::ui::features::forge::view::{Dismiss, Redo, Undo};
 use crate::ui::features::media::{CloseLightbox, NextImage, PreviousImage};
 use crate::ui::features::review::keys::{GradeAgain, GradeEasy, GradeGood, GradeHard, RevealAnswer};
@@ -42,6 +42,7 @@ pub fn action_of(target: ShortcutTarget) -> Box<dyn Action> {
         ShortcutTarget::Palette(key) => palette_action(key),
         ShortcutTarget::Lightbox(key) => lightbox_action(key),
         ShortcutTarget::Review(key) => review_action(key),
+        ShortcutTarget::Format(mark) => format_action(mark),
     }
 }
 

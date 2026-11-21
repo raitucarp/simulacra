@@ -147,6 +147,7 @@ composer:
   format_underline: "تسطير"
   format_code: "شيفرة"
   format_spoiler: "محتوى مخفي"
+  format_shortcut: "%{label} (%{keys})"
 
 feed:
   no_posts: "لا أفكار في هذه الشبكة بعد. شارك الشرارة الأولى أعلاه!"

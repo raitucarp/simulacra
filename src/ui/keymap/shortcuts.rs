@@ -4,6 +4,7 @@
 //! Keys use gpui's notation; `secondary-` is Ctrl on Windows and Linux and Cmd on macOS.
 
 use crate::ui::features::command_palette::CommandId;
+use crate::domain::post::format::FormatMark;
 
 /// Where a shortcut is active (the key context it is bound in).
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -60,15 +61,13 @@ pub enum ShortcutTarget {
     Review(ReviewKey),
     /// Moves through or closes the image lightbox (sb C3).
     Lightbox(LightboxKey),
+    /// Toggles a mark on the selection of a composer draft.
+    Format(FormatMark),
 }
 
 /// A lightbox key (sb C3).
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub enum LightboxKey {
-    Close,
-    Previous,
-    Next,
-}
+pub enum LightboxKey { Close, Previous, Next }
 
 /// One binding: a key chord, what it does and where.
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -90,10 +89,7 @@ const fn scoped(keys: &'static str, target: ShortcutTarget, scope: KeyScope) -> 
     Shortcut { keys, target, scope }
 }
 
-use CommandId as C;
-use PaletteKey as P;
-use ReviewKey as R;
-use ShortcutTarget as T;
+use CommandId as C; use FormatMark as F; use PaletteKey as P; use ReviewKey as R; use ShortcutTarget as T;
 
 /// The keymap. The first chord of a target is the one shown next to it in menus and the palette.
 pub const SHORTCUTS: &[Shortcut] = &[
@@ -118,6 +114,9 @@ pub const SHORTCUTS: &[Shortcut] = &[
     shell("secondary-8", C::GoJournal),
     shell("secondary-9", C::GoArena),
     scoped("secondary-enter", T::SubmitPost, KeyScope::Input),
+    scoped("secondary-b", T::Format(F::Bold), KeyScope::Input), scoped("secondary-i", T::Format(F::Italic), KeyScope::Input),
+    scoped("secondary-u", T::Format(F::Underline), KeyScope::Input), scoped("secondary-e", T::Format(F::Code), KeyScope::Input),
+    scoped("secondary-shift-s", T::Format(F::Spoiler), KeyScope::Input),
     scoped("secondary-z", T::ForgeUndo, KeyScope::Forge),
     scoped("secondary-shift-z", T::ForgeRedo, KeyScope::Forge),
     scoped("ctrl-y", T::ForgeRedo, KeyScope::Forge),
@@ -140,7 +139,11 @@ pub const SHORTCUTS: &[Shortcut] = &[
     scoped("4", T::Review(R::Easy), KeyScope::Review),
 ];
 
-/// The chord shown for `id` (its first binding), if it has one.
+/// The chord shown for command `id` (its first binding), if it has one.
 pub fn shortcut_for(id: CommandId) -> Option<&'static str> {
-    SHORTCUTS.iter().find(|shortcut| shortcut.target == T::Command(id)).map(|shortcut| shortcut.keys)
+    chord_for(T::Command(id))
+}
+/// The chord shown for `target` (its first binding), if it has one.
+pub fn chord_for(target: ShortcutTarget) -> Option<&'static str> {
+    SHORTCUTS.iter().find(|shortcut| shortcut.target == target).map(|shortcut| shortcut.keys)
 }

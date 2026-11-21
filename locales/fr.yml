@@ -147,6 +147,7 @@ composer:
   format_underline: "Souligné"
   format_code: "Code"
   format_spoiler: "Spoiler"
+  format_shortcut: "%{label} (%{keys})"
 
 feed:
   no_posts: "Aucune pensée dans ce réseau pour le moment. Partage la première étincelle ci-dessus !"

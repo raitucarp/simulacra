@@ -4,6 +4,7 @@
 use crate::domain::post::format::{toggle_mark, FormatMark};
 use crate::theme::ThemeTokens;
 use crate::ui::icons::LucideIcon;
+use crate::ui::keymap::{chord_for, chord_text, ShortcutTarget};
 use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::input::TextareaState;
 use gpui_kit::component::{Icon, Sizable};
@@ -29,13 +30,22 @@ pub(super) fn format_icon(mark: FormatMark) -> LucideIcon {
 }
 
 /// Locale key of a mark's button label.
-pub(super) const fn format_label_key(mark: FormatMark) -> &'static str {
+pub const fn format_label_key(mark: FormatMark) -> &'static str {
     match mark {
         FormatMark::Bold => "composer.format_bold",
         FormatMark::Italic => "composer.format_italic",
         FormatMark::Underline => "composer.format_underline",
         FormatMark::Code => "composer.format_code",
         FormatMark::Spoiler => "composer.format_spoiler",
+    }
+}
+
+/// A button's tooltip: the mark's name and its shortcut (`Bold (Ctrl+B)`).
+pub(super) fn format_tooltip(mark: FormatMark) -> String {
+    let label = t!(format_label_key(mark)).to_string();
+    match chord_for(ShortcutTarget::Format(mark)) {
+        Some(chord) => t!("composer.format_shortcut", label = label, keys = chord_text(chord)).to_string(),
+        None => label,
     }
 }
 
@@ -58,7 +68,7 @@ pub(super) fn format_buttons(scope: &'static str, on_format: FormatCallback, the
             .ghost()
             .small()
             .icon(Icon::new(format_icon(mark)))
-            .tooltip(t!(format_label_key(mark)).to_string())
+            .tooltip(format_tooltip(mark))
             .on_click(move |_, window, cx| on_format(mark, window, cx))
     });
     div().flex().items_center().gap(theme.control_gap).children(buttons)
@@ -77,6 +87,14 @@ mod tests {
             let key = format_label_key(mark);
             assert_ne!(rust_i18n::t!(key, locale = "en"), key, "{mark:?}");
             assert!(key.ends_with(mark.id()));
+        }
+    }
+
+    #[test]
+    fn tooltips_name_the_shortcut() {
+        for mark in FormatMark::ALL {
+            let chord = chord_for(ShortcutTarget::Format(mark)).expect("every mark has a chord");
+            assert!(format_tooltip(mark).contains(&chord_text(chord)), "{mark:?}");
         }
     }
 

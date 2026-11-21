@@ -6,6 +6,7 @@ use super::super::consts::{
     INSERT_TAG_BTN_ID, SUBMIT_POST_BTN_ID, WIKILINK_OPEN_TOKEN,
 };
 use super::super::format::{apply_format, format_buttons, FormatCallback};
+use super::super::format_keys::handle_format_actions;
 use super::super::keys::{is_submit_chord, SubmitPostDraft};
 use super::super::messages::render_notice;
 use super::super::snippet::insert_token;
@@ -69,8 +70,7 @@ impl PostComposerView {
 
     /// Textarea wrapper that submits on the action binding or a Ctrl/Cmd+Enter keystroke.
     fn textarea(&self, cx: &mut Context<Self>) -> Stateful<Div> {
-        div()
-            .id(INLINE_TEXTAREA_WRAPPER_ID)
+        handle_format_actions(div().id(INLINE_TEXTAREA_WRAPPER_ID), &self.composer_input)
             .w_full()
             .on_action(cx.listener(|this, _: &SubmitPostDraft, window, cx| {
                 this.submit(window, cx);

@@ -1,6 +1,7 @@
 //! Editor pieces of a draft row: identity line, text area and the first post's attachments.
 
 use super::super::consts::{MODAL_FALLBACK_HANDLE, MODAL_TEXTAREA_WRAPPER_ID, TOPIC_PREFIX};
+use super::super::format_keys::handle_format_actions;
 use super::super::keys::{is_submit_chord, SubmitPostDraft};
 use super::quote_preview::render_quote_preview;
 use super::{ComposerModalView, DraftEditor};
@@ -57,8 +58,7 @@ impl ComposerModalView {
         let on_submit_action = self.callbacks.on_submit.clone();
         let on_submit_key = self.callbacks.on_submit.clone();
         let on_paste = self.callbacks.on_paste.clone();
-        div()
-            .id((MODAL_TEXTAREA_WRAPPER_ID, index))
+        handle_format_actions(div().id((MODAL_TEXTAREA_WRAPPER_ID, index)), &draft.input)
             .w_full()
             .on_action(move |_: &SubmitPostDraft, window, cx| (on_submit_action)(window, cx))
             .capture_key_down(move |event: &KeyDownEvent, window, cx| {

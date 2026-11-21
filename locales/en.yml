@@ -147,6 +147,7 @@ composer:
   format_underline: "Underline"
   format_code: "Code"
   format_spoiler: "Spoiler"
+  format_shortcut: "%{label} (%{keys})"
 
 feed:
   no_posts: "No thoughts in this network yet. Share the first spark above!"

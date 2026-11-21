@@ -147,6 +147,7 @@ composer:
   format_underline: "Sublinhado"
   format_code: "Código"
   format_spoiler: "Spoiler"
+  format_shortcut: "%{label} (%{keys})"
 
 feed:
   no_posts: "Ainda não há pensamentos nesta rede. Compartilhe a primeira faísca acima!"

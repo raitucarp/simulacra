@@ -147,6 +147,7 @@ composer:
   format_underline: "Subrayado"
   format_code: "Código"
   format_spoiler: "Spoiler"
+  format_shortcut: "%{label} (%{keys})"
 
 feed:
   no_posts: "Aún no hay pensamientos en esta red. ¡Comparte la primera chispa arriba!"

@@ -147,6 +147,7 @@ composer:
   format_underline: "Unterstrichen"
   format_code: "Code"
   format_spoiler: "Spoiler"
+  format_shortcut: "%{label} (%{keys})"
 
 feed:
   no_posts: "In diesem Netzwerk gibt es noch keine Gedanken. Teile oben den ersten Funken!"

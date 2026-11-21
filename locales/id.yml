@@ -147,6 +147,7 @@ composer:
   format_underline: "Garis bawah"
   format_code: "Kode"
   format_spoiler: "Spoiler"
+  format_shortcut: "%{label} (%{keys})"
 
 feed:
   no_posts: "Belum ada pemikiran di jaringan ini. Mulailah percikan pertama di atas!"

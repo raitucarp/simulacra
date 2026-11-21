@@ -1,6 +1,6 @@
 //! Reactions wiring of the shell (epic R): which card the emoji picker is open on, its
 //! search field and tab, and what it remembers (recent emoji and skin tone, saved in the
-//! vault's settings).
+//! vault's settings) and the clap button being held.
 
 use super::view::AppView;
 use crate::domain::emoji::PickerMemory;
@@ -11,6 +11,7 @@ use crate::ui::features::reactions::PickerTab;
 use gpui_kit::component::input::InputState;
 use gpui_kit::*;
 use rust_i18n::t;
+use std::time::Instant;
 
 /// Everything the reactions keep in the shell.
 pub struct ReactionsHost {
@@ -19,6 +20,18 @@ pub struct ReactionsHost {
     pub search: Entity<InputState>,
     pub tab: PickerTab,
     pub memory: PickerMemory,
+    /// The clap button being held down (R7), with the task timing its burst.
+    pub hold: Option<ClapHold>,
+}
+
+/// A press on a clap button: where, whether Alt was held, since when, and how many claps
+/// its burst has given so far. Dropping it stops the burst's timer.
+pub struct ClapHold {
+    pub post: PostId,
+    pub alt: bool,
+    pub started: Instant,
+    pub given: u32,
+    pub _task: Task<()>,
 }
 
 impl ReactionsHost {
@@ -29,7 +42,7 @@ impl ReactionsHost {
         let placeholder = t!("reactions.picker.search_placeholder").to_string();
         let search = cx.new(|cx| InputState::new(window, cx).placeholder(placeholder));
         let tab = if memory.recent.is_empty() { PickerTab::Group(crate::domain::emoji::EmojiGroup::SmileysEmotion) } else { PickerTab::Recent };
-        Self { open: None, search, tab, memory }
+        Self { open: None, search, tab, memory, hold: None }
     }
 
     /// Saves what the picker remembers.

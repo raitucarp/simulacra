@@ -1,15 +1,18 @@
-//! Reactions on post cards (epic R): the emoji picker (R5) and the reaction bar (R6).
+//! Reactions on post cards (epic R): the emoji picker (R5), the reaction bar (R6) and the
+//! clap button (R7).
 //!
 //! The shell owns what the picker remembers and which card it is open on; every card gets
 //! [`ReactionControls`] built from one [`ReactionSource`], and sends [`ReactionEvent`]s back.
 
 mod chips;
+mod clap;
 mod grid;
 mod picker;
 mod trigger;
 #[cfg(test)]
 mod tests;
 
+pub use clap::{clap_view, render_clap_button, ClapView};
 pub use chips::{chip_views, names_line, render_reaction_bar, ChipView, TOOLTIP_NAMES};
 pub use picker::{picker_emoji, tab_label};
 pub use trigger::render_add_reaction;
@@ -47,6 +50,10 @@ pub enum ReactionEvent {
     Pick(PostId, String),
     /// A chip clicked: toggles the acting persona's reaction with its emoji.
     Toggle(PostId, String),
+    /// The clap button went down (with Alt held: `true`).
+    ClapPress(PostId, bool),
+    /// The clap button came up, or the pointer left it while down.
+    ClapRelease(PostId),
 }
 
 /// Sends a reaction event to the shell.
@@ -68,6 +75,7 @@ pub struct ReactionControls {
     pub picker: Option<PickerView>,
     /// The reaction bar's chips (empty without reactions).
     pub chips: Vec<ChipView>,
+    pub clap: ClapView,
     pub on_event: ReactionAction,
 }
 
@@ -85,8 +93,10 @@ impl ReactionSource {
     pub fn controls(&self, post: &PostId, state: &AppState) -> ReactionControls {
         let open = self.open.as_ref() == Some(post);
         let name_of = |id: &ProfileId| state.find_author(id).map_or_else(|| id.to_string(), |profile| profile.name.clone());
-        let chips = state.reactions_of(post).map(|set| chip_views(set, &state.active_profile_id, &name_of)).unwrap_or_default();
-        ReactionControls { post_id: post.clone(), picker: open.then(|| self.picker.clone()), chips, on_event: self.on_event.clone() }
+        let (set, acting) = (state.reactions_of(post), &state.active_profile_id);
+        let chips = set.map(|set| chip_views(set, acting, &name_of)).unwrap_or_default();
+        let clap = clap_view(set, acting, &name_of);
+        ReactionControls { post_id: post.clone(), picker: open.then(|| self.picker.clone()), chips, clap, on_event: self.on_event.clone() }
     }
 }
 

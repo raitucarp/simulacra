@@ -1,5 +1,6 @@
 //! Reactions in the shell (epic R): the controls every card gets, and the picker's events
-//! (open, close, tab, skin tone, pick), each reaction saved to the vault as it happens.
+//! (open, close, tab, skin tone, pick), the chips' toggles and the clap button's press and
+//! release, each reaction saved to the vault as it happens.
 
 use super::super::binder::Binder;
 use super::super::view::AppView;
@@ -27,6 +28,8 @@ impl AppView {
                 self.reactions.memory.tone = tone;
                 self.reactions.save_memory(&self.state);
             }
+            ReactionEvent::ClapPress(post, alt) => self.press_clap(post, alt, window, cx),
+            ReactionEvent::ClapRelease(post) => self.release_clap(post, cx),
             ReactionEvent::Toggle(post, emoji) => {
                 if self.state.toggle_reaction(&post, &emoji).is_some() {
                     self.feed.stream.remeasure();

@@ -81,6 +81,7 @@ pub(crate) fn render_action_bar(
         .child(render_action_btn(format!("{QUOTE_BTN_ID_PREFIX}{id}"), quote, theme, handlers.on_quote.clone()))
         .child(render_refs_button(post, refs, handlers.on_open_post.clone()))
         .child(render_share_button(post, author, theme))
+        .children(handlers.reactions.as_ref().map(|c| crate::ui::features::reactions::render_clap_button(&c.post_id, &c.clap, &c.on_event, theme)))
         .children(handlers.reactions.as_ref().map(|controls| crate::ui::features::reactions::render_add_reaction(controls, theme)))
         .children(handlers.credence.as_ref().and_then(|controls| crate::ui::features::thinking::credence::render_credence_chip(controls, theme)))
 }

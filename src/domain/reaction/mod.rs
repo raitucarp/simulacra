@@ -6,6 +6,7 @@
 
 mod book;
 mod emoji_text;
+pub mod gesture; // R7: the clap button's click, Alt-click and hold
 mod post_reactions;
 mod totals;
 #[cfg(test)]

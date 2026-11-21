@@ -72,3 +72,19 @@ fn long_name_lists_end_with_how_many_more() {
     assert!(line.contains('3'), "{line}");
     assert_eq!(names_line(&names[..2]), "agent 0, agent 1");
 }
+
+#[test]
+fn the_clap_button_counts_every_clap_and_names_the_clappers() {
+    use super::clap::clap_view;
+    let (post, me, soc) = (PostId::new("p1"), ProfileId::new("me"), ProfileId::new("soc"));
+    let none = clap_view(None, &me, &name_of);
+    assert_eq!((none.total, none.mine), (0, 0));
+    assert!(!none.tooltip.is_empty(), "the tooltip says how the button works");
+    let mut set = PostReactions::default();
+    set.clap(&post, &soc, 7, at(1));
+    set.clap(&post, &me, 2, at(2));
+    set.add(&post, &me, "\u{1F525}", at(3));
+    let view = clap_view(Some(&set), &me, &name_of);
+    assert_eq!((view.total, view.mine), (9, 2));
+    assert!(view.tooltip.contains("Socrates") && view.tooltip.contains('7') && view.tooltip.contains("Ada"), "{}", view.tooltip);
+}

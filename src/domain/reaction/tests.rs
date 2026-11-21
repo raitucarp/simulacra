@@ -108,3 +108,21 @@ fn only_short_pictographic_text_is_an_emoji() {
         assert_eq!(normalize_emoji(bad), None, "{bad:?}");
     }
 }
+
+#[test]
+fn a_click_claps_once_an_alt_click_takes_one_back_and_a_hold_bursts() {
+    use super::gesture::{burst_claps, owed, release, ClapRelease, BURST_INTERVAL, HOLD_DELAY};
+    use std::time::Duration;
+    let quick = Duration::from_millis(80);
+    assert_eq!((burst_claps(quick, false), release(quick, false)), (0, ClapRelease::Clap));
+    assert_eq!(release(quick, true), ClapRelease::Unclap);
+    assert_eq!(release(HOLD_DELAY * 4, true), ClapRelease::Unclap, "an Alt press never bursts");
+    assert_eq!(burst_claps(HOLD_DELAY * 4, true), 0);
+
+    assert_eq!(burst_claps(HOLD_DELAY, false), 1, "the burst starts with a clap");
+    let held = HOLD_DELAY + BURST_INTERVAL * 9 + Duration::from_millis(5);
+    assert_eq!(burst_claps(held, false), 10);
+    assert_eq!(release(held, false), ClapRelease::Done, "a burst adds nothing on release");
+    assert_eq!(owed(held, 7), 3, "each tick claps only what is still owed");
+    assert_eq!(owed(held, 12), 0);
+}

@@ -58,6 +58,7 @@ mod post_menu;
 mod posts;
 mod preferences;
 mod reactions; // epic R
+mod reactions_clap; // R7
 mod review_events;
 mod review_learn;
 mod review_maps;

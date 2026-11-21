@@ -38,13 +38,29 @@ fn markdown_blocks_and_inline_markup() {
         blocks,
         vec![
             (BlockKind::Heading(1), "Notes".into()),
-            (BlockKind::Paragraph, "Some bold and a link here continued.".into()),
+            (BlockKind::Paragraph, "Some **bold** and a link here continued.".into()),
             (BlockKind::Quote, "A quote".into()),
             (BlockKind::ListItem, "item one".into()),
             (BlockKind::ListItem, "item two".into()),
-            (BlockKind::Preformatted, "let x = 1;".into()),
+            (BlockKind::Preformatted, "```\nlet x = 1;\n```".into()),
             (BlockKind::Heading(2), "Next".into()),
             (BlockKind::Paragraph, "End.".into()),
+        ]
+    );
+}
+
+#[test]
+fn markdown_keeps_post_marks_and_fence_tags_but_not_rules_or_strikethrough() {
+    let md = "# **Plain** title\n\n__u__ *i* `c` ||s|| ~~gone~~ kept\n\n***\n\n```py\nprint(1)\n```";
+    let content = parse_markdown(md);
+    assert_eq!(content.metadata.title.as_deref(), Some("Plain title"), "headings are plain text");
+    let blocks: Vec<(BlockKind, String)> = content.sections.iter().flat_map(|s| s.blocks.iter()).map(|b| (b.kind, b.text.clone())).collect();
+    assert_eq!(
+        blocks,
+        vec![
+            (BlockKind::Heading(1), "Plain title".into()),
+            (BlockKind::Paragraph, "__u__ *i* `c` ||s|| gone kept".into()),
+            (BlockKind::Preformatted, "```py\nprint(1)\n```".into()),
         ]
     );
 }

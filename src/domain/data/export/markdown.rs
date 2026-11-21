@@ -1,6 +1,6 @@
 //! Markdown of threads and vault records. Front matter values are written as JSON scalars
-//! and lists, which every YAML reader accepts; post text is kept verbatim, so `[[wikilinks]]`
-//! and `#tags` survive.
+//! and lists, which every YAML reader accepts; post text is kept verbatim, so `[[wikilinks]]`,
+//! `#tags` and the post marks (bold, italic, underline, code, spoilers, fenced blocks) survive.
 
 use super::{ExportSource, ThreadExport};
 use crate::domain::document::Library;

@@ -104,6 +104,30 @@ fn thread_markdown_has_front_matter_and_keeps_wikilinks() {
     assert!(thread.contains("[[mirror]]"));
 }
 
+/// A thread exported as Markdown and imported again (paragraph units) gives back every
+/// post's text with its marks, code block and language tag.
+#[test]
+fn marks_survive_a_markdown_round_trip() {
+    use crate::import::{parse_document, segment_document, Format, Granularity};
+    let bodies = [
+        "**Bold**, *italic*, __underlined__, `code` and ||a spoiler|| with #Tag and [[mirror]].",
+        "```rust\nfn main() {\n    let x = 1;\n}\n```",
+        "***Both*** and **nested *italic***.",
+    ];
+    let replies_to = [None, Some("m0"), Some("m1")];
+    let mut source = source();
+    source.posts = bodies.iter().zip(replies_to).enumerate().map(|(i, (text, parent))| post(&format!("m{i}"), "user_main", text, 2 + i as i8, parent)).collect();
+    let plan = plan_export(&source, &options(ExportScope::Everything));
+    let files = bundle_files(&plan, &source);
+    let markdown = files.iter().find_map(|f| match &f.body { FileBody::Text(t) if f.path.starts_with("threads/") => Some(t.clone()), _ => None }).expect("thread file");
+    let doc = parse_document(Format::Markdown, markdown.as_bytes(), "thread.md");
+    let units: Vec<String> = segment_document(&doc, Granularity::Paragraph).into_iter().map(|unit| unit.text).collect();
+    for body in bodies {
+        assert!(units.iter().any(|unit| unit == body), "lost {body:?} in {units:#?}");
+    }
+    assert!(!units.iter().any(|unit| unit.trim() == "---"), "post separators are not posts");
+}
+
 #[test]
 fn bundle_lists_manifest_threads_documents_agents_and_settings() {
     let source = source();

@@ -30,6 +30,8 @@ pub struct Counts {
     pub agents: usize,
     pub settings: usize,
     pub journal_records: usize,
+    /// Reactions and claps given to the exported posts (R10).
+    pub reactions: usize,
 }
 
 /// The selection, ready to be written.
@@ -40,6 +42,8 @@ pub struct ExportPlan {
     pub documents: Vec<GroundingDocument>,
     pub review: Vec<ReviewItem>,
     pub agents: Vec<Profile>,
+    /// The rows of `reactions/reactions.json` (R10).
+    pub reactions: Vec<crate::domain::reaction::Reaction>,
     pub counts: Counts,
 }
 
@@ -108,6 +112,7 @@ pub fn plan_export(source: &ExportSource, options: &ExportOptions) -> ExportPlan
     let review = selected_review(source, &options.scope, &post_ids, &doc_ids);
     let agents = selected_agents(source, &options.scope, &posts);
     let threads: Vec<ThreadExport> = group_threads(&source.posts, &posts).into_iter().map(|(root, posts)| ThreadExport { root, posts }).collect();
+    let reactions: Vec<_> = source.reactions.iter().filter(|row| post_ids.contains(row.post_id.as_str())).cloned().collect();
     let images = threads.iter().flat_map(|t| &t.posts).map(|p| super::bundle::post_images(p).len()).sum();
     let counts = Counts {
         threads: threads.len(),
@@ -119,8 +124,9 @@ pub fn plan_export(source: &ExportSource, options: &ExportOptions) -> ExportPlan
         agents: agents.len(),
         settings: if options.scope == ExportScope::Everything { source.settings.len() } else { 0 },
         journal_records: source.journal.as_ref().filter(|_| options.include_journal).map_or(0, |book| journal_in_scope(book, &options.scope).1),
+        reactions: reactions.len(),
     };
-    ExportPlan { options: options.clone(), threads, documents, review, agents, counts }
+    ExportPlan { options: options.clone(), threads, documents, review, agents, reactions, counts }
 }
 
 /// The journal's records in scope, as a JSON object of four lists, and how many there are.

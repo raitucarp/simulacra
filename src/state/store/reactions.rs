@@ -61,6 +61,23 @@ impl AppState {
         self.saved_reaction(changed)
     }
 
+    /// Imports reactions read from a bundle (R10): rows on posts this store has are kept
+    /// (on the original of an instant repost); a row replaces the stored one of the same
+    /// profile and emoji only when it is newer. Returns how many rows were saved.
+    pub fn import_reactions(&mut self, rows: Vec<Reaction>) -> usize {
+        let mut saved = 0;
+        for row in rows {
+            let Some(post) = self.reaction_target(&row.post_id) else { continue };
+            let stored = self.reactions.of(&post).and_then(|set| set.rows().iter().find(|r| r.profile_id == row.profile_id && r.emoji == row.emoji));
+            if stored.is_some_and(|stored| stored.updated_at >= row.updated_at) {
+                continue;
+            }
+            let row = Reaction { post_id: post, ..row };
+            self.reactions.put(row.clone());
+            saved += usize::from(self.saved_reaction(Some(row)).is_some());
+        }
+        saved
+    }
     /// The post a reaction lands on: the original of an instant repost, when it exists.
     fn reaction_target(&self, post: &PostId) -> Option<PostId> {
         let target = self.action_target(post);

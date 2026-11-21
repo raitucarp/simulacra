@@ -89,6 +89,7 @@ impl AppView {
             entries: self.data.shelf.entries.clone(),
             settings,
             journal: include_journal.then(|| self.journal.book.clone()),
+            reactions: self.state.reactions.rows().filter(|row| self.state.get_post(&row.post_id).is_some_and(|post| &post.network_id == network)).cloned().collect(),
             media_dir: self.state.media_dir(),
             exported_at: Timestamp::now(),
             app_version: env!("CARGO_PKG_VERSION").to_string(),

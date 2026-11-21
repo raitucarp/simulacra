@@ -62,3 +62,28 @@ fn an_agent_reacts_within_its_hourly_limit() {
     let later = now + jiff::SignedDuration::from_secs(2 * 3_600);
     assert_eq!(state.react_as_agent(posts.last().unwrap(), &agent, &emoji[..1], later), 1, "an hour later it may react again");
 }
+
+#[test]
+fn exported_reactions_import_into_a_store_with_the_same_posts() {
+    use crate::domain::data::export::{reactions_json, read_reactions};
+    let vault = Vault::spawn(Database::in_memory().expect("db")).expect("vault");
+    let mut state = AppState::fallback_seed(Some(vault.clone()));
+    let post = state.submit_post("exported and imported").expect("post");
+    state.toggle_reaction(&post, FIRE);
+    state.clap(&post, 5);
+    state.add_reaction_as(&post, &ProfileId::new("agent_x"), "\u{1F914}", jiff::Timestamp::now());
+    let rows: Vec<_> = state.reactions_of(&post).expect("reactions").rows().to_vec();
+    let file = reactions_json(&rows, &Default::default());
+
+    let fresh_vault = Vault::spawn(Database::in_memory().expect("db")).expect("vault");
+    let mut fresh = AppState::fallback_seed(Some(fresh_vault.clone()));
+    let copy = state.get_post(&post).cloned().expect("post");
+    fresh.insert_reply_after_parent(copy).expect("same post");
+    let mut imported = read_reactions(&file).expect("reads");
+    imported.push(crate::domain::reaction::Reaction { post_id: crate::domain::PostId::new("elsewhere"), ..rows[0].clone() });
+    assert_eq!(fresh.import_reactions(imported.clone()), 3, "rows on unknown posts are skipped");
+    assert_eq!(fresh.reactions_of(&post).map(|set| set.rows().to_vec()), Some(rows.clone()));
+    assert_eq!(fresh.import_reactions(imported), 0, "importing again changes nothing");
+    let reloaded = AppState::load_from_db(&fresh_vault).expect("reload");
+    assert_eq!(reloaded.reactions_of(&post).map(|set| set.rows().len()), Some(3), "imported rows are saved");
+}

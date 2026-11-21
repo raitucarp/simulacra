@@ -1,12 +1,17 @@
-//! Modal footer: post options hint and the primary post (or "post all") button.
+//! Modal footer: the format toolbar and post options hint, and the primary post (or
+//! "post all") button.
 
 use super::super::consts::MODAL_SUBMIT_POST_BTN_ID;
+use super::super::format::format_buttons;
 use super::ComposerModalView;
 use gpui_kit::base::Disableable;
 use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::Sizable;
 use gpui_kit::*;
 use rust_i18n::t;
+
+/// Id scope of the modal's format buttons.
+const MODAL_FORMAT_SCOPE: &str = "modal";
 
 impl ComposerModalView {
     pub(super) fn footer(&self, can_post: bool) -> Div {
@@ -28,12 +33,7 @@ impl ComposerModalView {
             .flex()
             .items_center()
             .justify_between()
-            .child(
-                div()
-                    .text_size(theme.font_size_xs)
-                    .text_color(theme.text_muted)
-                    .child(t!("composer.post_options").to_string()),
-            )
+            .child(self.footer_tools())
             .child(
                 Button::new(MODAL_SUBMIT_POST_BTN_ID)
                     .primary()
@@ -44,5 +44,17 @@ impl ComposerModalView {
                         (on_submit_btn)(window, cx);
                     }),
             )
+    }
+
+    /// The format toolbar (acting on the last focused draft) and the audience hint.
+    fn footer_tools(&self) -> Div {
+        let theme = &self.theme;
+        let hint = div().text_size(theme.font_size_xs).text_color(theme.text_muted).child(t!("composer.post_options").to_string());
+        div()
+            .flex()
+            .items_center()
+            .gap(theme.control_gap)
+            .child(format_buttons(MODAL_FORMAT_SCOPE, self.callbacks.on_format.clone(), theme))
+            .child(hint)
     }
 }

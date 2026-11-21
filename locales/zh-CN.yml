@@ -142,6 +142,11 @@ composer:
   insert_tag: "插入话题标签（#）"
   attach_link: "附加链接"
   more_options: "更多选项"
+  format_bold: "粗体"
+  format_italic: "斜体"
+  format_underline: "下划线"
+  format_code: "代码"
+  format_spoiler: "剧透"
 
 feed:
   no_posts: "本网络还没有想法。在上方分享第一个火花吧！"

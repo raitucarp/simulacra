@@ -67,10 +67,11 @@ pub(super) fn editor_column(
         .child(toolbar)
 }
 
-/// Bottom toolbar: insert buttons on the left, character meter and submit on the right.
+/// Bottom toolbar: insert and format buttons on the left, character meter and submit on the right.
 pub(super) fn toolbar(
     link_button: impl IntoElement,
     tag_button: impl IntoElement,
+    format_buttons: impl IntoElement,
     submit_button: impl IntoElement,
     draft_length: usize,
     theme: &ThemeTokens,
@@ -87,7 +88,8 @@ pub(super) fn toolbar(
                 .items_center()
                 .gap(theme.spacing_xs)
                 .child(link_button)
-                .child(tag_button),
+                .child(tag_button)
+                .child(format_buttons),
         )
         .child(
             div()

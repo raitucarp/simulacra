@@ -142,6 +142,11 @@ composer:
   insert_tag: "إدراج وسم (#)"
   attach_link: "إرفاق رابط"
   more_options: "المزيد"
+  format_bold: "عريض"
+  format_italic: "مائل"
+  format_underline: "تسطير"
+  format_code: "شيفرة"
+  format_spoiler: "محتوى مخفي"
 
 feed:
   no_posts: "لا أفكار في هذه الشبكة بعد. شارك الشرارة الأولى أعلاه!"

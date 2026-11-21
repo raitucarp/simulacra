@@ -142,6 +142,11 @@ composer:
   insert_tag: "Inserir hashtag (#)"
   attach_link: "Anexar link"
   more_options: "Mais opções"
+  format_bold: "Negrito"
+  format_italic: "Itálico"
+  format_underline: "Sublinhado"
+  format_code: "Código"
+  format_spoiler: "Spoiler"
 
 feed:
   no_posts: "Ainda não há pensamentos nesta rede. Compartilhe a primeira faísca acima!"

@@ -8,7 +8,7 @@ mod actions;
 mod atomic;
 mod drafts;
 mod edit; // sb F2: edit mode
-mod media; mod readability; pub mod readability_meter; mod render; // sb F3: the readability meter
+mod format; mod media; mod readability; pub mod readability_meter; mod render; // sb F3: the readability meter; posts B: formatting
 
 use super::consts::MODAL_LINK_PLACEHOLDER;
 use super::modal::ComposerModalMode;

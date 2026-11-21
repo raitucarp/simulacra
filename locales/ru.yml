@@ -142,6 +142,11 @@ composer:
   insert_tag: "Вставить хештег (#)"
   attach_link: "Прикрепить ссылку"
   more_options: "Ещё"
+  format_bold: "Жирный"
+  format_italic: "Курсив"
+  format_underline: "Подчёркнутый"
+  format_code: "Код"
+  format_spoiler: "Спойлер"
 
 feed:
   no_posts: "В этой сети пока нет мыслей. Поделитесь первой искрой выше!"

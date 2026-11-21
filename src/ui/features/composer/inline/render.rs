@@ -5,6 +5,7 @@ use super::super::consts::{
     HASHTAG_TOKEN, INLINE_FALLBACK_INITIAL, INLINE_TEXTAREA_WRAPPER_ID, INSERT_LINK_BTN_ID,
     INSERT_TAG_BTN_ID, SUBMIT_POST_BTN_ID, WIKILINK_OPEN_TOKEN,
 };
+use super::super::format::{apply_format, format_buttons, FormatCallback};
 use super::super::keys::{is_submit_chord, SubmitPostDraft};
 use super::super::messages::render_notice;
 use super::super::snippet::insert_token;
@@ -18,6 +19,7 @@ use gpui_kit::component::input::{Textarea, TextareaState};
 use gpui_kit::component::{Icon, Sizable};
 use gpui_kit::*;
 use rust_i18n::t;
+use std::rc::Rc;
 
 impl Render for PostComposerView {
     fn render(&mut self, _window: &mut Window, cx: &mut Context<Self>) -> impl IntoElement {
@@ -39,6 +41,7 @@ impl Render for PostComposerView {
                 HASHTAG_TOKEN,
                 &self.composer_input,
             ),
+            format_buttons(INLINE_FORMAT_SCOPE, format_input(&self.composer_input), theme),
             self.submit_button(cx),
             self.draft_length,
             theme,
@@ -81,6 +84,15 @@ impl PostComposerView {
             }))
             .child(Textarea::new(&self.composer_input).bordered(false))
     }
+}
+
+/// Id scope of the inline composer's format buttons.
+const INLINE_FORMAT_SCOPE: &str = "inline";
+
+/// Format callback acting on the inline draft.
+fn format_input(input: &Entity<TextareaState>) -> FormatCallback {
+    let input = input.clone();
+    Rc::new(move |mark, window, cx| apply_format(&input, mark, window, cx))
 }
 
 /// Ghost `(id, icon, tooltip)` button inserting `token` at the draft cursor as a new word.

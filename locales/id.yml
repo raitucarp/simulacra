@@ -142,6 +142,11 @@ composer:
   insert_tag: "Sisipkan tagar (#)"
   attach_link: "Lampirkan tautan"
   more_options: "Opsi lainnya"
+  format_bold: "Tebal"
+  format_italic: "Miring"
+  format_underline: "Garis bawah"
+  format_code: "Kode"
+  format_spoiler: "Spoiler"
 
 feed:
   no_posts: "Belum ada pemikiran di jaringan ini. Mulailah percikan pertama di atas!"

@@ -142,6 +142,11 @@ composer:
   insert_tag: "Hashtag einfügen (#)"
   attach_link: "Link anhängen"
   more_options: "Weitere Optionen"
+  format_bold: "Fett"
+  format_italic: "Kursiv"
+  format_underline: "Unterstrichen"
+  format_code: "Code"
+  format_spoiler: "Spoiler"
 
 feed:
   no_posts: "In diesem Netzwerk gibt es noch keine Gedanken. Teile oben den ersten Funken!"

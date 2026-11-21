@@ -3,6 +3,7 @@
 
 mod avatar;
 mod consts;
+mod format;
 pub mod inline;
 pub mod keys;
 mod messages;

@@ -63,6 +63,8 @@ pub struct ModalCallbacks {
     /// Removes the attached image at an index (sb C3).
     pub on_remove_image: DraftActionCallback,
     pub on_paste: PasteCallback,
+    /// Toggles a mark on the selection of the last focused draft.
+    pub on_format: super::format::FormatCallback,
 }
 
 /// Stateless dialog rendering a composer snapshot.

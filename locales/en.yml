@@ -142,6 +142,11 @@ composer:
   insert_tag: "Insert hashtag (#)"
   attach_link: "Attach link"
   more_options: "More options"
+  format_bold: "Bold"
+  format_italic: "Italic"
+  format_underline: "Underline"
+  format_code: "Code"
+  format_spoiler: "Spoiler"
 
 feed:
   no_posts: "No thoughts in this network yet. Share the first spark above!"

@@ -24,6 +24,12 @@ impl Vault {
         self.write(move |db| db.delete_post_with_reposts(&id))
     }
 
+    /// Queues deleting what is kept about the deleted post `post_id` (Y7).
+    pub fn purge_post_traces(&self, post_id: &PostId) -> Result<()> {
+        let id = post_id.clone();
+        self.write(move |db| db.purge_post_traces(&id))
+    }
+
     /// Queues an upsert of `profile`.
     pub fn save_profile(&self, profile: &Profile) -> Result<()> {
         let profile = profile.clone();

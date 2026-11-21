@@ -23,6 +23,7 @@ impl AppView {
                 let set = self.state.set_auto_archive(&id, after);
                 self.report_data_error(set, window, cx);
             }
+            DataEvent::SetAutoDelete(id, after) => self.set_auto_delete(&id, after, window, cx),
             DataEvent::ToggleBookmark(id) => self.toggle_bookmark(&id, window, cx),
             DataEvent::AddToCollection(id, collection) => self.file_post(&id, &collection, window, cx),
             DataEvent::RemoveFromCollection(id, collection) => self.remove_entry(&collection, ItemRef::Post(id), cx),

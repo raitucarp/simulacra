@@ -49,7 +49,7 @@ const COUNT_LABEL_BASES: &[&str] = &[
     "graph.mini_nodes", "graph.mini_edges", "feed.replies_count", "feed.show_more",
     "feed.show_more_replies", "sidebar.posts_count", "sidebar.doc_count", "sidebar.member_count",
     "sidebar.member_agents", "cadence.badge", "cadence.day_posts", "post.refs_open_thread",
-    "post.scheduled.published", "data.scheduled.count", "post.auto_archived",
+    "post.scheduled.published", "data.scheduled.count", "post.auto_archived", "post.auto_deleted",
 ];
 
 #[test]

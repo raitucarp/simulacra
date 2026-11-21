@@ -2,6 +2,7 @@
 
 use crate::domain::data::saved::ItemRef;
 use crate::domain::document::CollectionId;
+use crate::domain::post::auto_delete::DeleteAfter;
 use crate::domain::preferences::ArchiveAfter;
 use crate::domain::{PostId, ProfileId};
 use gpui_kit::{App, Window};
@@ -47,6 +48,8 @@ pub enum DataEvent {
     SetArchived(PostId, bool),
     /// Archives the post this long after it went out (Y6).
     SetAutoArchive(PostId, ArchiveAfter),
+    /// Deletes the post this long from now (`None` keeps it, Y7).
+    SetAutoDelete(PostId, Option<DeleteAfter>),
     OpenPostHistory(PostId),
     ToggleBookmark(PostId),
     AddToCollection(PostId, CollectionId),

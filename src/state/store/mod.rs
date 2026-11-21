@@ -7,6 +7,7 @@ mod action_target;
 mod archive; // Y5
 mod authors;
 mod auto_archive; // Y6
+mod auto_delete; // Y7
 mod catalogue;
 mod avatar;
 mod bootstrap;

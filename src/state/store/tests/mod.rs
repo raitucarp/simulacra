@@ -4,6 +4,7 @@ mod action_target;
 mod archive;
 mod authoring;
 mod auto_archive;
+mod auto_delete;
 mod avatar;
 mod captures;
 mod controls;

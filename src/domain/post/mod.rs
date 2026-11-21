@@ -1,6 +1,7 @@
 //! Thought post entity, parsing logic, and character limit rules.
 
 mod author_ref;
+pub mod auto_delete; // Y7
 mod authored;
 pub mod format;
 pub mod highlight;

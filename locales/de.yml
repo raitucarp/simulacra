@@ -253,6 +253,9 @@ post:
   refs_none: "Keine zitierten oder verlinkten Gedanken"
   refs_quote: "Zitate: %{excerpt}"
   refs_link: "Verlinkt auf: %{excerpt}"
+  code_plain: "Klartext"
+  code_copy: "Code kopieren"
+  code_copied: "Code kopiert"
 
 appearance:
   gallery_title: "THEME-GALERIE"

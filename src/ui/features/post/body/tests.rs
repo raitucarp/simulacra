@@ -1,7 +1,9 @@
 //! Body layout: words, mark ranges, breaks and code items; mark highlights from theme tokens.
 
+use super::code_block::{code_block, language_label, style_color};
 use super::layout::{blank_line_after, layout, Item, MarkSet};
 use super::marks::mark_highlight;
+use crate::domain::post::highlight::CodeStyle;
 use crate::domain::post::tokenize_post_body;
 use crate::theme::ThemeTokens;
 use gpui_kit::{FontStyle, FontWeight};
@@ -87,6 +89,26 @@ fn links_and_tags_inside_marks_stay_atoms() {
             Item::Hashtag { tag: "#tag", trailing: "!" },
         ]
     );
+}
+
+#[test]
+fn code_block_colors_are_theme_tokens_and_the_label_names_the_language() {
+    let theme = ThemeTokens::default();
+    assert_eq!(style_color(CodeStyle::Keyword, &theme), theme.code_keyword);
+    assert_eq!(style_color(CodeStyle::Type, &theme), theme.code_type);
+    assert_eq!(style_color(CodeStyle::String, &theme), theme.code_string);
+    assert_eq!(style_color(CodeStyle::Number, &theme), theme.code_number);
+    assert_eq!(style_color(CodeStyle::Comment, &theme), theme.code_comment);
+    assert_eq!(language_label(Some("rust")), "rust");
+    let plain = language_label(None);
+    assert!(!plain.is_empty() && plain != "post.code_plain", "a block without a tag is labelled as plain text");
+}
+
+#[test]
+fn a_code_block_renders_highlighted_and_plain() {
+    let theme = ThemeTokens::default();
+    let _rust = code_block(0, Some("rust"), "fn main() {\n\n    let x = 1; // one\n}", &theme);
+    let _plain = code_block(1, None, "", &theme);
 }
 
 #[test]

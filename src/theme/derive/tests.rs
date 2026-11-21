@@ -97,6 +97,21 @@ fn code_fill_tints_the_feed_in_both_modes_and_keeps_text_readable() {
 }
 
 #[test]
+fn syntax_colors_read_on_the_code_fill_and_differ_from_plain_text() {
+    for palette in ThemeRegistry::global().all() {
+        let t = derive_default_tokens(palette);
+        for surface in [t.bg_feed_post, t.bg_card, t.bg_elevated] {
+            let fill = composite(t.bg_code, surface);
+            for (name, color) in [("keyword", t.code_keyword), ("type", t.code_type), ("string", t.code_string), ("number", t.code_number), ("comment", t.code_comment)] {
+                let ratio = contrast_ratio(color, fill);
+                assert!(ratio >= AA_TEXT_CONTRAST, "{}: code {name} on bg_code = {ratio:.2}", palette.id);
+            }
+        }
+        assert_ne!(t.code_keyword, t.text_primary, "{}: keywords stand out", palette.id);
+    }
+}
+
+#[test]
 fn scales_resize_metrics_but_not_colors() {
     let p = palette(DEFAULT_PALETTE_ID);
     let compact = derive_tokens(p, Density::Compact, TypeScale::Small, RadiusScale::Sharp);

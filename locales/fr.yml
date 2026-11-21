@@ -253,6 +253,9 @@ post:
   refs_none: "Aucune pensée citée ou liée"
   refs_quote: "Citations : %{excerpt}"
   refs_link: "Liens vers : %{excerpt}"
+  code_plain: "Texte brut"
+  code_copy: "Copier le code"
+  code_copied: "Code copié"
 
 appearance:
   gallery_title: "GALERIE DE THÈMES"

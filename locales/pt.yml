@@ -253,6 +253,9 @@ post:
   refs_none: "Nenhum pensamento citado ou vinculado"
   refs_quote: "Cita: %{excerpt}"
   refs_link: "Vincula a: %{excerpt}"
+  code_plain: "Texto simples"
+  code_copy: "Copiar código"
+  code_copied: "Código copiado"
 
 appearance:
   gallery_title: "GALERIA DE TEMAS"

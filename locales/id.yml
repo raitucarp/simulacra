@@ -253,6 +253,9 @@ post:
   refs_none: "Tidak ada pemikiran yang dikutip atau ditautkan"
   refs_quote: "Mengutip: %{excerpt}"
   refs_link: "Menautkan: %{excerpt}"
+  code_plain: "Teks biasa"
+  code_copy: "Salin kode"
+  code_copied: "Kode disalin"
 
 appearance:
   gallery_title: "GALERI TEMA"

@@ -253,6 +253,9 @@ post:
   refs_none: "引用やリンクされた思考はありません"
   refs_quote: "引用：%{excerpt}"
   refs_link: "リンク先：%{excerpt}"
+  code_plain: "プレーンテキスト"
+  code_copy: "コードをコピー"
+  code_copied: "コードをコピーしました"
 
 appearance:
   gallery_title: "テーマギャラリー"

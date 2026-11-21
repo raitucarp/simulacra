@@ -253,6 +253,9 @@ post:
   refs_none: "Нет цитируемых или связанных мыслей"
   refs_quote: "Цитаты: %{excerpt}"
   refs_link: "Ссылается на: %{excerpt}"
+  code_plain: "Обычный текст"
+  code_copy: "Копировать код"
+  code_copied: "Код скопирован"
 
 appearance:
   gallery_title: "ГАЛЕРЕЯ ТЕМ"

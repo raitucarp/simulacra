@@ -2,6 +2,7 @@
 
 mod author_ref;
 mod authored;
+pub mod highlight;
 mod constructors;
 mod extras;
 mod kind;

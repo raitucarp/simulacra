@@ -253,6 +253,9 @@ post:
   refs_none: "لا أفكار مقتبسة أو مرتبطة"
   refs_quote: "اقتباسات: %{excerpt}"
   refs_link: "يرتبط بـ: %{excerpt}"
+  code_plain: "نص عادي"
+  code_copy: "نسخ الشيفرة"
+  code_copied: "تم نسخ الشيفرة"
 
 appearance:
   gallery_title: "معرض السمات"

@@ -1,6 +1,7 @@
 //! The post an engine answer describes, and how a structured answer maps onto it.
 
 use crate::domain::engine::{value_at, value_text, OutputMapping};
+use crate::domain::post::sanitize::sanitize_agent_markdown;
 use serde_json::Value;
 
 /// Hashtag sigil.
@@ -22,15 +23,15 @@ pub struct PostDraft {
 impl PostDraft {
     /// A free-text answer.
     pub fn from_text(text: &str) -> Self {
-        Self { content: text.trim().to_string(), ..Self::default() }
+        Self { content: sanitize_agent_markdown(text).trim().to_string(), ..Self::default() }
     }
 
     /// Maps a structured answer through `mapping`. When the content is missing, the first
     /// thread part becomes the content; `None` when nothing postable is found.
     pub fn from_structured(answer: &Value, mapping: &OutputMapping) -> Option<Self> {
         let text = |path: &str| (!path.trim().is_empty()).then(|| value_text(answer, path)).flatten();
-        let non_blank = |value: Option<String>| value.map(|v| v.trim().to_string()).filter(|v| !v.is_empty());
-        let mut thread_parts = string_list(mapped(answer, &mapping.thread_parts), false);
+        let non_blank = |value: Option<String>| value.map(|v| sanitize_agent_markdown(&v).trim().to_string()).filter(|v| !v.is_empty());
+        let mut thread_parts: Vec<String> = string_list(mapped(answer, &mapping.thread_parts), false).iter().map(|part| sanitize_agent_markdown(part).trim().to_string()).filter(|part| !part.is_empty()).collect();
         let content = match non_blank(text(&mapping.content)) {
             Some(content) => content,
             None if !thread_parts.is_empty() => thread_parts.remove(0),

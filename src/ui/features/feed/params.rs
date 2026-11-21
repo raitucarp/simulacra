@@ -105,6 +105,8 @@ pub struct FeedParams<'a, C> {
     pub credence: Option<crate::ui::features::thinking::credence::CredenceSource>,
     /// sb F2: edit, history, bookmarks and collections on every card.
     pub data: Option<crate::ui::features::data::DataSource>,
+    /// Epic R: reactions on every card.
+    pub reactions: Option<crate::ui::features::reactions::ReactionSource>,
     pub inspector: super::inspector_outline::InspectorView,
     pub on_inspector: super::inspector_outline::InspectorCallback,
     pub discovery: FeedDiscovery,

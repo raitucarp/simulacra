@@ -58,6 +58,7 @@ pub async fn run_engine(plan: &EnginePlan, system: &str, user: &str, tool_ctx: O
         return Err(EMPTY_ANSWER_ERROR.to_string());
     }
     draft.tint = allowed_tint(plan.structured.as_ref(), draft.tint);
+    draft.reactions = allowed_reactions(plan.structured.as_ref(), std::mem::take(&mut draft.reactions));
     let mut result = EngineResult { draft, tools: outcome.tools, sources: outcome.sources, ..EngineResult::default() };
     illustrate(plan, &mut result, roll).await;
     Ok(result)
@@ -67,6 +68,12 @@ pub async fn run_engine(plan: &EnginePlan, system: &str, user: &str, tool_ctx: O
 /// mapped by hand is still dropped while the setting is off; free text never tints).
 pub fn allowed_tint(structured: Option<&StructuredOutput>, tint: Option<Tint>) -> Option<Tint> {
     tint.filter(|_| structured.is_some_and(|output| output.may_tint))
+}
+
+/// The answer's reactions, kept only when the agent may react (R8: off by default; free
+/// text never reacts).
+pub fn allowed_reactions(structured: Option<&StructuredOutput>, reactions: Vec<String>) -> Vec<String> {
+    if structured.is_some_and(|output| output.may_react) { reactions } else { Vec::new() }
 }
 
 /// The first request (tools, native search, structured-output wiring) and the strategy used.

@@ -73,6 +73,8 @@ setting_keys! {
     /// Typed preferences, one JSON row per settings category (`domain::preferences`).
     /// The Insights page's view, filter and display choices (JSON, sb D2).
     InsightsState => "insights.state",
+    /// What the emoji picker remembers: recent emoji and the skin tone (JSON, epic R).
+    EmojiPicker => "emoji.picker",
     PrefsGeneral => "preferences.general",
     PrefsAppearance => "preferences.appearance",
     PrefsWriting => "preferences.writing",

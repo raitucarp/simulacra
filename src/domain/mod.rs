@@ -11,6 +11,7 @@ pub mod compose; // T1: free compose text to a tree of drafts
 pub mod crypto; // sb X1: password-based seal shared by snapshots and encrypted posts
 pub mod data; // sb F2: history, collections and bookmarks, export, snapshots
 pub mod document;
+pub mod emoji; // R3: emoji names, groups and skin tones
 pub mod embedding;
 pub mod engine;
 pub mod graph;
@@ -27,6 +28,7 @@ pub mod portrait;
 pub mod post;
 pub mod post_actions;
 pub mod profile;
+pub mod reaction; // R: emoji reactions and claps
 pub mod readability; // sb F3
 pub mod recommend;
 pub mod review;

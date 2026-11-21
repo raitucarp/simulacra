@@ -7,6 +7,7 @@
 //! - `review/items.csv` and `review/items.json`: the review items.
 //! - `agents/*.json`: agent and persona configurations, secrets redacted.
 //! - `settings.json`: an explicit allow-list of settings; credentials and API keys never.
+//! - `reactions/reactions.json`: the reactions and claps given to the exported posts (R10).
 //! - `journal/journal.json`: only when "Include private journal" is ticked.
 //! - `manifest.json`: format and app versions, scope and counts.
 //!
@@ -16,6 +17,7 @@
 mod bundle;
 mod markdown;
 mod plan;
+mod reactions; // R10
 mod secrets;
 mod tables;
 mod threads;
@@ -23,6 +25,7 @@ mod threads;
 pub use bundle::{bundle_files, BundleFile, FileBody, MANIFEST_PATH};
 pub use markdown::{document_markdown, slug, thread_markdown, thread_title};
 pub use plan::{plan_export, Counts, ExportPlan, ThreadExport};
+pub use reactions::{reactions_json, read_reactions, REACTIONS_PATH};
 pub use secrets::{redacted_profile, SETTINGS_ALLOW_LIST};
 pub use tables::{csv_field, review_csv};
 pub use threads::thread_root;
@@ -92,6 +95,8 @@ pub struct ExportSource {
     pub entries: Vec<CollectionEntry>,
     pub settings: Vec<(String, String)>,
     pub journal: Option<JournalBook>,
+    /// Every reaction to the active network's posts (R10).
+    pub reactions: Vec<crate::domain::reaction::Reaction>,
     pub media_dir: PathBuf,
     pub exported_at: Timestamp,
     pub app_version: String,

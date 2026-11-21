@@ -37,7 +37,7 @@ fn source() -> ExportSource {
     let authors = [me.clone(), socrates.clone()].into_iter().map(|p| (p.id.clone(), p)).collect();
     ExportSource {
         network_name: "Main".into(), posts, authors, profiles: vec![me, socrates], documents: vec![doc], library, review: Vec::new(), entries,
-        settings: vec![("preferences.general".into(), "{\"language\":\"en\"}".into())], journal: None,
+        settings: vec![("preferences.general".into(), "{\"language\":\"en\"}".into())], journal: None, reactions: Vec::new(),
         media_dir: PathBuf::from("media"), exported_at: at(10), app_version: "0.1.0".into(),
     }
 }
@@ -206,4 +206,27 @@ fn reply_cycles_do_not_hang_the_root_search() {
     let by_id: std::collections::HashMap<&str, &Post> = [("a", &a), ("b", &b)].into_iter().collect();
     let root = thread_root(&a, &by_id);
     assert!(root.id.as_str() == "a" || root.id.as_str() == "b");
+}
+
+#[test]
+fn reactions_of_exported_posts_round_trip_through_the_bundle() {
+    use crate::domain::reaction::{Reaction, CLAP};
+    let row = |post: &str, profile: &str, emoji: &str, count: u32| Reaction { post_id: PostId::new(post), profile_id: ProfileId::new(profile), emoji: emoji.into(), count, updated_at: at(7) };
+    let mut source = source();
+    source.reactions = vec![row("p1", "agent_s", "\u{1F525}", 1), row("p1", "user_main", CLAP, 12), row("p4", "user_main", "\u{1F914}", 1)];
+    let everything = plan_export(&source, &options(ExportScope::Everything));
+    assert_eq!(everything.counts.reactions, 3);
+    let files = bundle_files(&everything, &source);
+    let text = text_of(&files, REACTIONS_PATH);
+    assert!(text.contains("@socrates"), "rows name who reacted");
+    assert_eq!(read_reactions(text).expect("reads back"), source.reactions);
+    assert!(text_of(&files, MANIFEST_PATH).contains("\"reactions\": 3"));
+
+    let persona = plan_export(&source, &options(ExportScope::Persona(ProfileId::new("user_main"))));
+    assert_eq!(persona.reactions, source.reactions[..2].to_vec(), "only reactions to exported posts travel");
+    let mut empty = self::source();
+    empty.reactions.clear();
+    assert!(!paths(&bundle_files(&plan_export(&empty, &options(ExportScope::Everything)), &empty)).contains(&REACTIONS_PATH));
+    assert!(read_reactions("{}").is_err());
+    assert_eq!(read_reactions(r#"[{"post_id":"p1","profile_id":"u","emoji":"lol","count":1,"updated_at":"2026-11-07T12:00:00Z"}]"#), Ok(Vec::new()), "text that is not an emoji is left out");
 }

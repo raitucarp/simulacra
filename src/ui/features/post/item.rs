@@ -93,5 +93,6 @@ fn render_content_column<L: PostLookup>(
         .when_some(effective.quote_id.as_ref(), |this, quote_id| {
             this.child(render_quote_embed(quote_id.as_str(), lookup, handlers.on_open_post.clone(), &handlers.links, theme))
         })
+        .children(handlers.reactions.as_ref().and_then(|controls| crate::ui::features::reactions::render_reaction_bar(&controls.post_id, &controls.chips, &controls.on_event, theme)))
         .child(render_action_bar(effective, lookup.author_of(effective), refs, theme, &handlers))
 }

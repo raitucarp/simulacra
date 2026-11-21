@@ -35,6 +35,10 @@ pub struct StructuredOutput {
     /// Whether the agent may tint its posts (sb C4); off by default, and not written while off.
     #[serde(skip_serializing_if = "std::ops::Not::not")]
     pub may_tint: bool,
+    /// Whether the agent may react to the posts it answers (R8); off by default, and not
+    /// written while off.
+    #[serde(skip_serializing_if = "std::ops::Not::not")]
+    pub may_react: bool,
 }
 
 impl Default for StructuredOutput {
@@ -46,7 +50,7 @@ impl Default for StructuredOutput {
 impl StructuredOutput {
     /// The built-in schema and mapping of `preset`.
     pub fn from_preset(preset: SchemaPreset) -> Self {
-        Self { preset, schema: preset.schema().to_string(), mapping: preset.mapping(), may_tint: false }
+        Self { preset, schema: preset.schema().to_string(), mapping: preset.mapping(), may_tint: false, may_react: false }
     }
 
     /// The parsed schema, when it is a JSON object.
@@ -72,6 +76,10 @@ pub struct OutputMapping {
     /// The post's container tint (a tint key; sb C4, read only while the agent may tint).
     #[serde(skip_serializing_if = "String::is_empty")]
     pub tint: String,
+    /// Emoji reacting to the answered post (array of strings; R8, read only while the agent
+    /// may react).
+    #[serde(skip_serializing_if = "String::is_empty")]
+    pub reactions: String,
 }
 
 impl OutputMapping {
@@ -85,6 +93,7 @@ impl OutputMapping {
             mood: "mood".into(),
             thread_parts: "thread_parts".into(),
             tint: String::new(),
+            reactions: String::new(),
         }
     }
 }

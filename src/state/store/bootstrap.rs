@@ -4,6 +4,7 @@ use super::networks::recount_networks;
 use super::{AppState, NavigationTab};
 use super::snapshot::StoredSettings;
 use crate::domain::document::Library;
+use crate::domain::reaction::ReactionBook;
 use crate::domain::{GroundingDocument, Network, NetworkId, Post, ProfileId, Profile, TrendingTopic};
 use crate::error::Result;
 use crate::state::seed::{seed_documents, seed_library, seed_networks, seed_posts, seed_profiles, seed_trending};
@@ -21,6 +22,8 @@ pub(super) struct StoreData {
     /// Subject vocabulary and collections of the vault catalogue.
     pub library: Library,
     pub trending: Vec<TrendingTopic>,
+    /// Emoji reactions and claps (epic R).
+    pub reactions: ReactionBook,
 }
 
 impl StoreData {
@@ -34,6 +37,7 @@ impl StoreData {
             documents: db.load_all_documents().unwrap_or_default(),
             library: db.load_library().unwrap_or_default(),
             trending: db.load_trending()?,
+            reactions: db.load_reactions().map(ReactionBook::from_rows).unwrap_or_default(),
         })
     }
 
@@ -49,6 +53,7 @@ impl StoreData {
             documents,
             library: seed_library(),
             trending: seed_trending(),
+            reactions: ReactionBook::default(),
         }
     }
 
@@ -61,7 +66,8 @@ impl StoreData {
             .chain(self.library.subjects.iter().map(|s| database.save_subject(s)))
             .chain(self.library.collections.iter().map(|c| database.save_collection(c)))
             .chain(self.documents.iter().map(|d| database.save_document(d)))
-            .chain(self.trending.iter().map(|t| database.save_trending(t)));
+            .chain(self.trending.iter().map(|t| database.save_trending(t)))
+            .chain(self.reactions.rows().map(|r| database.save_reaction(r)));
         // Collecting first runs every save, even after a failure; the first error is returned.
         let outcomes: Vec<Result<()>> = results.collect();
         outcomes.into_iter().collect()
@@ -102,6 +108,7 @@ impl AppState {
             load_error: None,
             media: Default::default(),
             engagement: 0,
+            reactions: data.reactions,
         }
     }
 }

@@ -24,6 +24,7 @@ impl AppState {
         while let Some(position) = self.posts.iter().position(doomed) {
             self.remove_post_at(position);
         }
+        self.reactions.forget(post_id);
         self.release_parent_counter(&post);
         self.release_repost_counter(&post);
         Ok(())

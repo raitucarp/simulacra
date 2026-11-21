@@ -110,3 +110,29 @@ fn a_like_shapes_the_users_interest_and_bumps_the_engagement_revision() {
     let scores = recommender(&w).for_you();
     assert!(scores[&near] > scores[&cooking], "{scores:?}");
 }
+
+#[test]
+fn reactions_and_claps_shape_interest_like_a_like_does() {
+    let mut w = world();
+    let reacted = post(&mut w, "ada", "duty", [1.0, 0.0, 0.0], None);
+    let near = post(&mut w, "bo", "virtue", [0.9, 0.1, 0.0], None);
+    let cooking = post(&mut w, "bo", "bread", [0.0, 0.0, 1.0], None);
+    assert!(recommender(&w).for_you().is_empty(), "no engagement yet");
+    let before = w.state.engagement;
+    w.state.toggle_reaction(&reacted, "\u{1F525}");
+    assert!(w.state.engagement > before, "cached recommendations see the reaction");
+    let scores = recommender(&w).for_you();
+    assert!(scores[&near] > scores[&cooking], "{scores:?}");
+
+    let me = w.state.active_profile_id.clone();
+    let network = w.state.active_network_id.clone();
+    let weight = |state: &AppState| signals_of(state, &me, &network).iter().filter(|s| s.post == cooking).map(|s| s.weight).sum::<f32>();
+    w.state.clap(&cooking, 1);
+    let one_clap = weight(&w.state);
+    w.state.clap(&cooking, 40);
+    assert!(weight(&w.state) > one_clap, "more claps say more");
+    assert!(weight(&w.state) <= 0.8 + f32::EPSILON, "up to a cap");
+    let agent = ProfileId::new("ada");
+    w.state.add_reaction_as(&near, &agent, "\u{1F914}", now());
+    assert!(signals_of(&w.state, &agent, &network).iter().any(|s| s.post == near && s.at == now()), "an agent's reactions are its signals, at the moment it reacted");
+}

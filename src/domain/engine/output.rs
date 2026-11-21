@@ -32,6 +32,9 @@ pub struct StructuredOutput {
     pub preset: SchemaPreset,
     pub schema: String,
     pub mapping: OutputMapping,
+    /// Whether the agent may tint its posts (sb C4); off by default, and not written while off.
+    #[serde(skip_serializing_if = "std::ops::Not::not")]
+    pub may_tint: bool,
 }
 
 impl Default for StructuredOutput {
@@ -43,7 +46,7 @@ impl Default for StructuredOutput {
 impl StructuredOutput {
     /// The built-in schema and mapping of `preset`.
     pub fn from_preset(preset: SchemaPreset) -> Self {
-        Self { preset, schema: preset.schema().to_string(), mapping: preset.mapping() }
+        Self { preset, schema: preset.schema().to_string(), mapping: preset.mapping(), may_tint: false }
     }
 
     /// The parsed schema, when it is a JSON object.
@@ -66,10 +69,14 @@ pub struct OutputMapping {
     pub mood: String,
     /// Follow-up posts chained under the reply (array of strings).
     pub thread_parts: String,
+    /// The post's container tint (a tint key; sb C4, read only while the agent may tint).
+    #[serde(skip_serializing_if = "String::is_empty")]
+    pub tint: String,
 }
 
 impl OutputMapping {
-    /// The mapping where every field reads the same-named top-level key.
+    /// The mapping where every field reads the same-named top-level key (the tint stays
+    /// unmapped until the agent may tint, see [`StructuredOutput::with_tint_field`]).
     pub fn top_level() -> Self {
         Self {
             content: "content".into(),
@@ -77,6 +84,7 @@ impl OutputMapping {
             hashtags: "hashtags".into(),
             mood: "mood".into(),
             thread_parts: "thread_parts".into(),
+            tint: String::new(),
         }
     }
 }

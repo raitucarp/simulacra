@@ -9,7 +9,7 @@ use crate::state::forge::engine::{mutate, object_problem};
 use crate::state::forge::EngineSection;
 use crate::ui::features::forge::text::tr;
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
-use crate::ui::features::forge::widgets::IllustratedOptionGrid;
+use crate::ui::features::forge::widgets::{IllustratedOptionGrid, ToggleCard};
 use crate::state::forge::suggest::{EngineParam, Param};
 use gpui_kit::*;
 
@@ -20,13 +20,18 @@ const MAPPING_ROOT: &str = "forge.ui.engine.map";
 type MappingSlot = (&'static str, fn(&mut OutputMapping) -> &mut String);
 
 /// The post fields an answer can fill, in display order.
-const MAPPING: [MappingSlot; 5] = [
+const MAPPING: [MappingSlot; 6] = [
     ("content", |m| &mut m.content),
     ("image_prompt", |m| &mut m.image_prompt),
     ("hashtags", |m| &mut m.hashtags),
     ("mood", |m| &mut m.mood),
     ("thread_parts", |m| &mut m.thread_parts),
+    ("tint", |m| &mut m.tint),
 ];
+/// sb C4: the switch letting the agent tint its posts (off by default).
+const MAY_TINT_ID: &str = "forge-engine-may-tint";
+const MAY_TINT_KEY: &str = "forge.ui.engine.may_tint";
+const MAY_TINT_HINT_KEY: &str = "forge.ui.engine.may_tint_hint";
 
 /// Mutable access to the structured output, when the agent answers in JSON.
 pub(super) fn structured(engine: &mut EngineConfig) -> Option<&mut StructuredOutput> {
@@ -52,7 +57,15 @@ impl ForgeView {
             .child(head)
             .child(self.schema_card(structured, handle))
             .child(self.mapping_card(&structured.mapping, handle))
+            .child(self.tint_card(structured.may_tint, handle))
             .child(self.preview_card(structured, handle))
+    }
+
+    /// Whether the agent may give its posts a container tint (sb C4).
+    fn tint_card(&self, may_tint: bool, handle: &ForgeHandle) -> Div {
+        let set = handle.with(|this: &mut ForgeView, on: bool, _, cx| this.edit_engine(None, |e| mutate::set_may_tint(e, on), cx));
+        let toggle = ToggleCard::custom(MAY_TINT_ID, tr(MAY_TINT_KEY), may_tint, &self.theme, move |on, w, cx| set(on, w, cx)).hint(Some(tr(MAY_TINT_HINT_KEY)));
+        card(&self.theme).child(toggle)
     }
 
     fn schema_card(&self, output: &StructuredOutput, handle: &ForgeHandle) -> Div {

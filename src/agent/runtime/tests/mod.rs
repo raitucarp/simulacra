@@ -3,6 +3,7 @@ mod draft;
 mod native;
 mod requests;
 mod root_job;
+mod tint;
 
 use crate::agent::credentials::{Credential, CredentialKind, CredentialStore};
 use crate::agent::llm::{LlmProvider, LlmSettings};

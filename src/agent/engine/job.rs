@@ -71,7 +71,9 @@ impl DialecticEngine {
         let mut thread = Vec::new();
         for part in result.draft.thread_parts.iter().filter(|part| !part.trim().is_empty()) {
             let previous = thread.last().unwrap_or(&reply);
-            thread.push(build_followup(previous, author.clone(), part.trim().to_string()));
+            let mut followup = build_followup(previous, author.clone(), part.trim().to_string());
+            followup.extras.tint = reply.extras.tint; // sb C4: a tinted thread is tinted throughout
+            thread.push(followup);
         }
         SimulationOutcome { reply, thread, llm_error: None, gate_key: job.plan.gate_key, image_error: result.image_error }
     }

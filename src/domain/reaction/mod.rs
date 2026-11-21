@@ -4,6 +4,18 @@
 //! profile and emoji (`post_reactions`): an emoji reaction counts once, while claps (the
 //! [`CLAP`] emoji) count every time a profile claps.
 
+mod book;
+mod emoji_text;
+mod post_reactions;
+mod totals;
+#[cfg(test)]
+mod tests;
+
+pub use book::ReactionBook;
+pub use emoji_text::{normalize_emoji, MAX_EMOJI_CHARS};
+pub use post_reactions::PostReactions;
+pub use totals::ReactionChip;
+
 use super::ids::{PostId, ProfileId};
 use jiff::Timestamp;
 use serde::{Deserialize, Serialize};

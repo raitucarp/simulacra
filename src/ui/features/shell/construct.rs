@@ -65,7 +65,7 @@ impl AppView {
         let scheduler = SchedulerState::new(state.scheduler_enabled(), state.preferences().agents.max_concurrent as usize);
         let (sidebar, palette) = (SidebarState::load(state.db.as_ref(), window.viewport_size().width), PaletteHost::new(state.db.as_ref(), cx));
         let mut view = Self {
-            theme: state.theme_tokens.clone(), post_actions: PostActionsUi::new(window, cx), image_ideas: ImageIdeasUi::new(window, cx), inspector: InspectorState::load(state.db.as_ref(), cx),
+            code: super::code_host::CodeHost::new(&state), theme: state.theme_tokens.clone(), post_actions: PostActionsUi::new(window, cx), image_ideas: ImageIdeasUi::new(window, cx), inspector: InspectorState::load(state.db.as_ref(), cx),
             state,
             chrome: ChromeState { is_onboarding_open: onboarding, ..ChromeState::new(initial_lang) },
             feed, composer_modal, appearance, llm_inputs, settings_ui,

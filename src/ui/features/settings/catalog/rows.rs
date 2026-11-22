@@ -46,6 +46,8 @@ pub enum EmbeddedPane {
     SymbolSets,
     /// Who made the downloaded icon sets (decision #19: the only place naming them).
     Licences,
+    /// The runtimes code blocks run in, and Refresh (P1).
+    Runtimes,
 }
 
 /// One row of the settings window.
@@ -92,5 +94,6 @@ const fn pane_key(pane: EmbeddedPane) -> &'static str {
         EmbeddedPane::Themes => "themes",
         EmbeddedPane::SymbolSets => "symbol_sets",
         EmbeddedPane::Licences => "licences",
+        EmbeddedPane::Runtimes => "runtimes",
     }
 }

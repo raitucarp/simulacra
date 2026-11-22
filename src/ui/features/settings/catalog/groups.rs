@@ -66,6 +66,7 @@ const AGENTS: &[SettingsGroup] = &[
 ];
 const SYMBOLS: &[SettingsGroup] = &[group("sets", &[Embedded(Pane::SymbolSets)])]; // S13
 const LICENCES: &[SettingsGroup] = &[group("icons", &[Embedded(Pane::Licences)])];
+const CODE: &[SettingsGroup] = &[group("runtimes", &[Embedded(Pane::Runtimes)])]; // P1
 const LEARNING: &[SettingsGroup] = &[
     group("reviews", &[Field(F::Learning(Lrn::DailyReviewLimit)), Field(F::Learning(Lrn::NewCardsPerDay)), Field(F::Learning(Lrn::DesiredRetention))]),
     group("reminder", &[Field(F::Learning(Lrn::ReviewReminder)), Field(F::Learning(Lrn::ReminderHour))]),
@@ -107,6 +108,7 @@ pub fn groups(tab: SettingsTab) -> &'static [SettingsGroup] {
         SettingsTab::Shortcuts => SHORTCUTS,
         SettingsTab::Symbols => SYMBOLS,
         SettingsTab::Licences => LICENCES,
+        SettingsTab::Code => CODE,
         SettingsTab::Advanced => ADVANCED,
     }
 }

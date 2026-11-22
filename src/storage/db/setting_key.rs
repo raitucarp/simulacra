@@ -105,4 +105,6 @@ setting_keys! {
     InspectorMode => "ui.inspector_mode",
     /// Q5: JSON of the saved searches.
     SavedSearches => "search.saved",
+    /// P1: JSON of the runtimes the last detection found (`domain::code::RuntimeCache`).
+    CodeRuntimes => "code.runtimes",
 }

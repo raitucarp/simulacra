@@ -5,6 +5,7 @@ pub mod graph;
 pub mod mock;
 pub mod recommend;
 pub mod search; // Q3: the search executor
+pub mod code; // epic P: running code blocks
 pub mod seed;
 pub mod semantic;
 pub mod store;

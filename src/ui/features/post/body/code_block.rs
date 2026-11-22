@@ -3,6 +3,7 @@
 
 use crate::domain::post::highlight::{highlight_lines, CodeHighlight, CodeStyle};
 use crate::theme::ThemeTokens;
+use super::code_run::RunButton;
 use crate::ui::features::post::controls::copy_with_toast;
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::button::{Button, ButtonVariants};
@@ -16,6 +17,8 @@ use std::ops::Range;
 
 /// Element id of a block's copy button (suffixed with the block's item index).
 const COPY_BUTTON_ID: &str = "code-block-copy";
+/// Element id of a block's Run button (P5).
+const RUN_BUTTON_ID: &str = "code-block-run";
 /// Text shown for an empty code line, so it keeps its height.
 const EMPTY_CODE_LINE: &str = " ";
 const LINE_BREAK: char = '\n';
@@ -44,8 +47,14 @@ fn line_styles(spans: &[CodeHighlight], theme: &ThemeTokens) -> Vec<(Range<usize
         .collect()
 }
 
-/// A fenced code block card; `index` keeps its copy button's id unique within the body.
-pub(crate) fn code_block(index: usize, lang: Option<&str>, code: &str, theme: &ThemeTokens) -> AnyElement {
+/// A code block card without Run (file previews, L9).
+pub(crate) fn code_block_card(index: usize, lang: Option<&str>, code: &str, theme: &ThemeTokens) -> AnyElement {
+    code_block(index, lang, code, theme, None)
+}
+
+/// A fenced code block card; `index` keeps its buttons' ids unique within the body; `run` is
+/// its Run button, when the block may run (P5).
+pub(super) fn code_block(index: usize, lang: Option<&str>, code: &str, theme: &ThemeTokens, run: Option<RunButton>) -> AnyElement {
     let lines = code.split(LINE_BREAK).zip(highlight_lines(lang, code)).map(|(line, spans)| {
         let row = if line.is_empty() { StyledText::new(EMPTY_CODE_LINE) } else { StyledText::new(line.to_string()).with_highlights(line_styles(&spans, theme)) };
         div().min_w_0().child(row)
@@ -64,13 +73,13 @@ pub(crate) fn code_block(index: usize, lang: Option<&str>, code: &str, theme: &T
         .line_height(relative(theme.line_height_body))
         .flex()
         .flex_col()
-        .child(header(index, lang, code, theme))
+        .child(header(index, lang, code, run, theme))
         .child(body)
         .into_any_element()
 }
 
-/// Language label on the left, copy button on the right.
-fn header(index: usize, lang: Option<&str>, code: &str, theme: &ThemeTokens) -> Div {
+/// Language label on the left; Run (when the block may run) and copy on the right.
+fn header(index: usize, lang: Option<&str>, code: &str, run: Option<RunButton>, theme: &ThemeTokens) -> Div {
     let code = code.to_string();
     let copy = Button::new((COPY_BUTTON_ID, index))
         .ghost()
@@ -92,5 +101,20 @@ fn header(index: usize, lang: Option<&str>, code: &str, theme: &ThemeTokens) -> 
         .items_center()
         .justify_between()
         .child(div().text_size(theme.font_size_xs).text_color(theme.text_muted).child(language_label(lang)))
-        .child(div().on_mouse_down(MouseButton::Left, |_, _, cx| cx.stop_propagation()).child(copy))
+        .child(div().flex().items_center().on_mouse_down(MouseButton::Left, |_, _, cx| cx.stop_propagation()).children(run.map(|run| run_control(index, run))).child(copy))
+}
+
+/// The Run button: hands the block's request to the shell (which asks first when it must).
+fn run_control(index: usize, run: RunButton) -> Button {
+    let RunButton { request, on_run } = run;
+    Button::new((RUN_BUTTON_ID, index))
+        .ghost()
+        .xsmall()
+        .icon(Icon::new(LucideIcon::Play))
+        .label(t!("code.run.button").to_string())
+        .tooltip(t!("code.run.tooltip", runtime = request.runtime.label()).to_string())
+        .on_click(move |_, window, cx| {
+            cx.stop_propagation();
+            on_run(request.clone(), window, cx);
+        })
 }

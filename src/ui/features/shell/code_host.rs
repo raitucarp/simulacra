@@ -7,7 +7,12 @@ use crate::domain::code::RuntimeCache;
 use crate::state::AppState;
 use crate::ui::features::settings::{RuntimeAction, RuntimesProps};
 use gpui_kit::*;
+use crate::domain::code::Runtime;
+use crate::ui::features::post::CodeActions;
+use std::collections::HashMap;
 use std::rc::Rc;
+use std::sync::atomic::AtomicBool;
+use std::sync::Arc;
 
 /// What Settings › Code shows.
 #[derive(Debug, Clone, Default)]
@@ -15,11 +20,13 @@ pub struct CodeHost {
     pub cache: RuntimeCache,
     /// A detection is running.
     pub detecting: bool,
+    /// P5: the runs under way, by post and block, with their cancel flags.
+    pub running: HashMap<(String, usize), Arc<AtomicBool>>,
 }
 
 impl CodeHost {
     pub(super) fn new(state: &AppState) -> Self {
-        Self { cache: state.runtime_cache(), detecting: false }
+        Self { cache: state.runtime_cache(), ..Self::default() }
     }
 }
 
@@ -52,10 +59,20 @@ impl AppView {
             let cache = task.await;
             let _ = this.update(cx, |this, cx| {
                 this.state.store_runtime_cache(&cache);
-                this.code = CodeHost { cache, detecting: false };
+                (this.code.cache, this.code.detecting) = (cache, false);
                 cx.notify();
             });
         })
         .detach();
+    }
+}
+
+impl AppView {
+    /// Run on code blocks (P5): the runtimes that are switched on and were found; `None` when
+    /// none is (code running off, nothing detected), so no block shows Run.
+    pub(super) fn code_actions(&self, bind: &Binder) -> Option<CodeActions> {
+        let prefs = &self.state.preferences().code;
+        let runnable: Vec<Runtime> = self.code.cache.found.iter().map(|found| found.runtime).filter(|runtime| prefs.allows(*runtime)).collect();
+        (!runnable.is_empty()).then(|| CodeActions { runnable: runnable.into(), on_run: Rc::new(bind.with(Self::on_run_code)) })
     }
 }

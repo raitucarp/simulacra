@@ -5,6 +5,7 @@
 //! wikilink pill dispatches to [`BodyLinks`] instead of selecting the surrounding card.
 
 mod code_block;
+mod code_run; // P5
 mod inline;
 mod layout;
 mod link;
@@ -23,7 +24,8 @@ use spoiler::{hidden_spoiler, is_revealed, revealed_spoiler, SpoilerKey};
 use std::rc::Rc;
 
 /// The code block card (B6), also the preview of a text or code file (L9).
-pub(crate) use code_block::code_block as render_code_block;
+pub(crate) use code_block::code_block_card as render_code_block;
+pub use code_run::{needs_confirm, CodeActions, RunCodeAction, RunRequest};
 
 /// Opens the hashtag or wikilink target named by the string.
 pub type OpenTextAction = Rc<dyn Fn(String, &mut Window, &mut App) + 'static>;
@@ -41,6 +43,8 @@ pub struct BodyLinks {
     pub on_media: Option<crate::ui::features::media::OpenMediaAction>,
     /// "Relink…" on a missing file (L11).
     pub on_relink: Option<crate::ui::features::media::RelinkAction>,
+    /// P5: Run on code blocks, when code may run (`None`: no Run button).
+    pub code: Option<CodeActions>,
     /// The post the body belongs to, which its spoilers' reveals are kept under.
     pub scope: String,
 }
@@ -106,7 +110,7 @@ fn render_item<L: PostLookup>(
         Item::Break if blank_line_after(items, index) => div().w_full().h(theme.paragraph_break_height).into_any_element(),
         Item::Break => div().w_full().into_any_element(),
         Item::Code(code) => marks::inline_code(code, theme),
-        Item::Block { lang, code } => code_block::code_block(index, *lang, code, theme),
+        Item::Block { lang, code } => code_block::code_block(index, *lang, code, theme, code_run::run_button(items, index, *lang, code, links)),
         Item::Wikilink { target, trailing } => {
             let pill = render_obsidian_pill(&lookup.resolve_wikilink(target), theme);
             with_trailing(clickable(pill, target, links.on_wikilink.as_ref()), trailing, theme)

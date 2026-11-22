@@ -108,8 +108,8 @@ fn code_block_colors_are_theme_tokens_and_the_label_names_the_language() {
 #[test]
 fn a_code_block_renders_highlighted_and_plain() {
     let theme = ThemeTokens::default();
-    let _rust = code_block(0, Some("rust"), "fn main() {\n\n    let x = 1; // one\n}", &theme);
-    let _plain = code_block(1, None, "", &theme);
+    let _rust = code_block(0, Some("rust"), "fn main() {\n\n    let x = 1; // one\n}", &theme, None);
+    let _plain = code_block(1, None, "", &theme, None);
 }
 
 #[test]
@@ -180,3 +180,4 @@ fn highlights_come_from_marks_and_theme_tokens() {
 }
 
 mod links;
+mod code_run; // P5

@@ -111,6 +111,8 @@ pub struct FeedParams<'a, C> {
     pub reactions: Option<crate::ui::features::reactions::ReactionSource>,
     /// X4: unlocking locked posts on every card.
     pub locks: Option<crate::ui::features::post::LockSource>,
+    /// P5: Run on code blocks (`None` while code running is off).
+    pub code: Option<crate::ui::features::post::CodeActions>,
     pub inspector: super::inspector_outline::InspectorView,
     pub on_inspector: super::inspector_outline::InspectorCallback,
     pub discovery: FeedDiscovery,

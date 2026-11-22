@@ -81,6 +81,7 @@ mod semantic_index;
 mod semantic_pump;
 mod semantic_search;
 mod post_search; // Q4
+mod code_run; mod code_confirm; // P5
 mod semantic_similar;
 mod settings;
 mod sidebar_nav;

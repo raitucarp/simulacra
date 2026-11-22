@@ -23,6 +23,8 @@ pub struct PostDraft {
     pub tint: Option<Tint>,
     /// Emoji for the answered post (R8; kept only while the agent may react).
     pub reactions: Vec<String>,
+    /// The feeling the answer gives (M5; kept only while the agent may post feelings).
+    pub feeling: Option<crate::domain::post::PostKind>,
 }
 
 impl PostDraft {
@@ -50,6 +52,7 @@ impl PostDraft {
             thread_parts,
             tint: text(&mapping.tint).as_deref().and_then(parse_tint),
             reactions: parse_reactions(&string_list(mapped(answer, &mapping.reactions), false)),
+            feeling: mapped(answer, &mapping.feeling).and_then(crate::domain::engine::parse_feeling), // M5
         })
     }
 

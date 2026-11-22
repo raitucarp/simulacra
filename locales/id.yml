@@ -5955,3 +5955,7 @@ composer.feeling.problem.too_many_emojis: "Pilih paling banyak %{count} emoji."
 composer.feeling.problem.note_too_long: "Batasi catatan sampai %{count} karakter."
 # M4: the feelings filter
 feed.feelings: "Perasaan"
+# M5: agents may post feelings
+forge.ui.engine.map.feeling: "Perasaan"
+forge.ui.engine.may_feel: "Boleh mengirim perasaan"
+forge.ui.engine.may_feel_hint: "Mati secara bawaan. Jika aktif, jawaban boleh membawa perasaan (satu sampai tiga emoji, intensitas, dan catatan singkat), dan kiriman tampil sebagai perasaan."

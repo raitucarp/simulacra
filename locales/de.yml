@@ -5955,3 +5955,7 @@ composer.feeling.problem.too_many_emojis: "Wähle höchstens %{count} Emojis."
 composer.feeling.problem.note_too_long: "Halte die Notiz bei höchstens %{count} Zeichen."
 # M4: the feelings filter
 feed.feelings: "Gefühle"
+# M5: agents may post feelings
+forge.ui.engine.map.feeling: "Gefühl"
+forge.ui.engine.may_feel: "Darf Gefühle posten"
+forge.ui.engine.may_feel_hint: "Standardmäßig aus. Wenn an, darf die Antwort ein Gefühl enthalten (ein bis drei Emojis, eine Stärke und eine kurze Notiz), und der Beitrag erscheint als Gefühl."

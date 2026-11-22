@@ -20,7 +20,7 @@ const MAPPING_ROOT: &str = "forge.ui.engine.map";
 type MappingSlot = (&'static str, fn(&mut OutputMapping) -> &mut String);
 
 /// The post fields an answer can fill, in display order.
-const MAPPING: [MappingSlot; 7] = [
+const MAPPING: [MappingSlot; 8] = [
     ("content", |m| &mut m.content),
     ("image_prompt", |m| &mut m.image_prompt),
     ("hashtags", |m| &mut m.hashtags),
@@ -28,6 +28,7 @@ const MAPPING: [MappingSlot; 7] = [
     ("thread_parts", |m| &mut m.thread_parts),
     ("tint", |m| &mut m.tint),
     ("reactions", |m| &mut m.reactions),
+    ("feeling", |m| &mut m.feeling), // M5
 ];
 /// sb C4: the switch letting the agent tint its posts (off by default).
 const MAY_TINT_ID: &str = "forge-engine-may-tint";
@@ -37,6 +38,10 @@ const MAY_TINT_HINT_KEY: &str = "forge.ui.engine.may_tint_hint";
 const MAY_REACT_ID: &str = "forge-engine-may-react";
 const MAY_REACT_KEY: &str = "forge.ui.engine.may_react";
 const MAY_REACT_HINT_KEY: &str = "forge.ui.engine.may_react_hint";
+/// M5: the switch letting the agent post feelings (off by default).
+const MAY_FEEL_ID: &str = "forge-engine-may-feel";
+const MAY_FEEL_KEY: &str = "forge.ui.engine.may_feel";
+const MAY_FEEL_HINT_KEY: &str = "forge.ui.engine.may_feel_hint";
 
 /// Mutable access to the structured output, when the agent answers in JSON.
 pub(super) fn structured(engine: &mut EngineConfig) -> Option<&mut StructuredOutput> {
@@ -64,6 +69,7 @@ impl ForgeView {
             .child(self.mapping_card(&structured.mapping, handle))
             .child(self.tint_card(structured.may_tint, handle))
             .child(self.react_card(structured.may_react, handle))
+            .child(self.feel_card(structured.may_feel, handle))
             .child(self.preview_card(structured, handle))
     }
 
@@ -79,6 +85,13 @@ impl ForgeView {
         let set = handle.with(|this: &mut ForgeView, on: bool, _, cx| this.edit_engine(None, |e| mutate::set_may_react(e, on), cx));
         let hint = rust_i18n::t!(MAY_REACT_HINT_KEY, limit = crate::domain::engine::AGENT_REACTIONS_PER_HOUR).to_string();
         let toggle = ToggleCard::custom(MAY_REACT_ID, tr(MAY_REACT_KEY), may_react, &self.theme, move |on, w, cx| set(on, w, cx)).hint(Some(hint));
+        card(&self.theme).child(toggle)
+    }
+
+    /// Whether the agent may post feelings (M5).
+    fn feel_card(&self, may_feel: bool, handle: &ForgeHandle) -> Div {
+        let set = handle.with(|this: &mut ForgeView, on: bool, _, cx| this.edit_engine(None, |e| mutate::set_may_feel(e, on), cx));
+        let toggle = ToggleCard::custom(MAY_FEEL_ID, tr(MAY_FEEL_KEY), may_feel, &self.theme, move |on, w, cx| set(on, w, cx)).hint(Some(tr(MAY_FEEL_HINT_KEY)));
         card(&self.theme).child(toggle)
     }
 

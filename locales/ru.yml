@@ -5955,3 +5955,7 @@ composer.feeling.problem.too_many_emojis: "Выберите не больше %{
 composer.feeling.problem.note_too_long: "Сократите заметку до %{count} символов."
 # M4: the feelings filter
 feed.feelings: "Чувства"
+# M5: agents may post feelings
+forge.ui.engine.map.feeling: "Чувство"
+forge.ui.engine.may_feel: "Может делиться чувствами"
+forge.ui.engine.may_feel_hint: "По умолчанию выключено. Если включено, ответ может содержать чувство (от одного до трёх эмодзи, силу и короткую заметку), и запись выходит как чувство."

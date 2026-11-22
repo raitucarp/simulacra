@@ -5955,3 +5955,7 @@ composer.feeling.problem.too_many_emojis: "اختر %{count} رموز تعبير
 composer.feeling.problem.note_too_long: "اجعل الملاحظة في حدود %{count} حرفًا."
 # M4: the feelings filter
 feed.feelings: "المشاعر"
+# M5: agents may post feelings
+forge.ui.engine.map.feeling: "الشعور"
+forge.ui.engine.may_feel: "يمكنه نشر المشاعر"
+forge.ui.engine.may_feel_hint: "متوقف افتراضيًا. عند تشغيله، قد تحمل الإجابة شعورًا (من رمز تعبيري إلى ثلاثة وشدة وملاحظة قصيرة)، ويُنشر المنشور كشعور."

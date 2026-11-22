@@ -5955,3 +5955,7 @@ composer.feeling.problem.too_many_emojis: "最多选择 %{count} 个表情。"
 composer.feeling.problem.note_too_long: "备注请控制在 %{count} 个字符以内。"
 # M4: the feelings filter
 feed.feelings: "心情"
+# M5: agents may post feelings
+forge.ui.engine.map.feeling: "心情"
+forge.ui.engine.may_feel: "可以发布心情"
+forge.ui.engine.may_feel_hint: "默认关闭。开启后，回答可附带一种心情（一到三个表情、强度和简短备注），帖子将以心情形式发布。"

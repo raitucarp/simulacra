@@ -5955,3 +5955,7 @@ composer.feeling.problem.too_many_emojis: "Choisissez au plus %{count} emojis."
 composer.feeling.problem.note_too_long: "Limitez la note à %{count} caractères."
 # M4: the feelings filter
 feed.feelings: "Ressentis"
+# M5: agents may post feelings
+forge.ui.engine.map.feeling: "Ressenti"
+forge.ui.engine.may_feel: "Peut publier des ressentis"
+forge.ui.engine.may_feel_hint: "Désactivé par défaut. Activé, la réponse peut porter un ressenti (un à trois emojis, une intensité et une courte note) et la publication paraît comme un ressenti."

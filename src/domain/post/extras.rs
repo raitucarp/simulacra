@@ -47,6 +47,9 @@ pub struct PostExtras {
     /// The sealed text of a locked post (X2); `content` then holds only the placeholder.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lock: Option<super::lock::PostLock>,
+    /// The latest run of each code block (P6); saving one never makes a new version.
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub code_runs: Vec<crate::domain::code::CodeRun>,
 }
 
 impl PostExtras {
@@ -56,9 +59,9 @@ impl PostExtras {
     }
 
     /// Whether there is anything to show behind the post (the origin, images, files, symbols, tint,
-    /// version, ticks and lock alone are not).
+    /// version, ticks, lock and code runs alone are not).
     pub fn has_details(&self) -> bool {
-        Self { origin: None, images: Vec::new(), files: Vec::new(), symbols: PostSymbols::default(), tint: None, head: None, replied_version: None, todo_state: Default::default(), lock: None, ..self.clone() } != Self::default()
+        Self { origin: None, images: Vec::new(), files: Vec::new(), symbols: PostSymbols::default(), tint: None, head: None, replied_version: None, todo_state: Default::default(), lock: None, code_runs: Vec::new(), ..self.clone() } != Self::default()
     }
 
     /// Adds `source` unless an identical reference is already listed.

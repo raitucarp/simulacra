@@ -4,6 +4,7 @@
 use crate::domain::post::highlight::{highlight_lines, CodeHighlight, CodeStyle};
 use crate::theme::ThemeTokens;
 use super::code_run::RunButton;
+use super::run_panel::{render_run_panel, RunPanel};
 use crate::ui::features::post::controls::copy_with_toast;
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::button::{Button, ButtonVariants};
@@ -49,12 +50,19 @@ fn line_styles(spans: &[CodeHighlight], theme: &ThemeTokens) -> Vec<(Range<usize
 
 /// A code block card without Run (file previews, L9).
 pub(crate) fn code_block_card(index: usize, lang: Option<&str>, code: &str, theme: &ThemeTokens) -> AnyElement {
-    code_block(index, lang, code, theme, None)
+    code_block(index, lang, code, theme, BlockExtras::default())
 }
 
-/// A fenced code block card; `index` keeps its buttons' ids unique within the body; `run` is
-/// its Run button, when the block may run (P5).
-pub(super) fn code_block(index: usize, lang: Option<&str>, code: &str, theme: &ThemeTokens, run: Option<RunButton>) -> AnyElement {
+/// What a block shows beyond its code: Run (P5) and its output panel (P6).
+#[derive(Default)]
+pub(super) struct BlockExtras {
+    pub run: Option<RunButton>,
+    pub panel: Option<RunPanel>,
+}
+
+/// A fenced code block card; `index` keeps its buttons' ids unique within the body; `extras` are
+/// its Run button and output panel, when it has them.
+pub(super) fn code_block(index: usize, lang: Option<&str>, code: &str, theme: &ThemeTokens, extras: BlockExtras) -> AnyElement {
     let lines = code.split(LINE_BREAK).zip(highlight_lines(lang, code)).map(|(line, spans)| {
         let row = if line.is_empty() { StyledText::new(EMPTY_CODE_LINE) } else { StyledText::new(line.to_string()).with_highlights(line_styles(&spans, theme)) };
         div().min_w_0().child(row)
@@ -73,8 +81,9 @@ pub(super) fn code_block(index: usize, lang: Option<&str>, code: &str, theme: &T
         .line_height(relative(theme.line_height_body))
         .flex()
         .flex_col()
-        .child(header(index, lang, code, run, theme))
+        .child(header(index, lang, code, extras.run, theme))
         .child(body)
+        .children(extras.panel.map(|panel| render_run_panel(index, panel, theme)))
         .into_any_element()
 }
 

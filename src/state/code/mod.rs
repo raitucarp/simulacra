@@ -1,4 +1,5 @@
-//! Running code blocks in the store (epic P): the cached runtime detection (P1).
+//! Running code blocks in the store (epic P): the cached runtime detection (P1) and the runs
+//! saved on posts (P6).
 
 use crate::domain::code::RuntimeCache;
 use crate::state::AppState;
@@ -19,17 +20,23 @@ impl AppState {
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use crate::domain::code::{DetectedRuntime, Runtime, RuntimeCache};
-    use crate::state::AppState;
-
-    #[test]
-    fn the_detection_is_cached_in_the_vault() {
-        let state = AppState::new_in_memory();
-        assert_eq!(state.runtime_cache(), RuntimeCache::default(), "never detected");
-        let cache = RuntimeCache { found: vec![DetectedRuntime { runtime: Runtime::Node, path: "node".into(), version: "20.1.0".into() }], probed_at: Some(jiff::Timestamp::now()) };
-        state.store_runtime_cache(&cache);
-        assert_eq!(state.runtime_cache(), cache);
+impl AppState {
+    /// Keeps `run` as the latest run of its block on post `id` (P6), saved with the post as it
+    /// is: never a new version. Refused for a locked post (its output could echo the sealed text).
+    pub fn save_code_run(&mut self, id: &crate::domain::PostId, run: crate::domain::code::CodeRun) -> crate::error::Result<()> {
+        let position = self.index.position(id.as_str()).filter(|at| self.posts.get(*at).is_some_and(|post| &post.id == id));
+        let position = position.ok_or_else(|| crate::error::AppError::DatabaseError(format!("post '{id}' not found")))?;
+        let post = &mut self.posts[position];
+        if post.is_locked() {
+            return Err(crate::error::AppError::PostLocked);
+        }
+        post.extras.code_runs = crate::domain::code::with_run(std::mem::take(&mut post.extras.code_runs), run);
+        if let Some(ref db) = self.db {
+            db.save_post(&self.posts[position])?;
+        }
+        Ok(())
     }
 }
+
+#[cfg(test)]
+mod tests;

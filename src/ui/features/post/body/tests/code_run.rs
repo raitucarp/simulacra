@@ -9,7 +9,7 @@ use crate::state::AppState;
 use std::rc::Rc;
 
 fn actions(runnable: &[Runtime]) -> CodeActions {
-    CodeActions { runnable: runnable.into(), on_run: Rc::new(|_, _, _| {}) }
+    CodeActions { runnable: runnable.into(), on_run: Rc::new(|_, _, _| {}), running: Rc::new([]), on_cancel: Rc::new(|_, _, _, _| {}) }
 }
 
 #[test]
@@ -49,4 +49,31 @@ fn code_the_user_did_not_type_is_confirmed_first() {
     assert!(needs_confirm(&imported, &me), "an imported passage is not the user's code");
     let agent = state.user_profiles.iter().find(|profile| profile.is_agent()).expect("a seeded agent").clone();
     assert!(needs_confirm(&post, &agent), "an agent's code is always shown first");
+}
+
+// P6: the output panel
+
+#[test]
+fn the_panel_shows_its_blocks_saved_run_and_cancel_while_it_runs() {
+    use super::super::run_panel::run_panel;
+    use super::super::run_line;
+    use crate::domain::code::{CodeRun, RunEnd};
+    let mut state = AppState::new_in_memory();
+    let id = state.submit_post("```py\nprint(1)\n```").expect("posted");
+    let saved = CodeRun { block: 0, runtime: "python".into(), version: "3.12.2".into(), end: RunEnd::Exited, exit_code: Some(0), duration_ms: 250, output: "1\n".into(), ..CodeRun::default() };
+    state.save_code_run(&id, saved.clone()).expect("saved");
+    let tokens = tokenize_post_body(&state.get_post(&id).expect("post").content);
+    let items = layout(&tokens);
+    let at = items.iter().position(|item| matches!(item, super::super::layout::Item::Block { .. })).expect("a block");
+    let links = BodyLinks::default().scoped(id.as_str());
+    let panel = run_panel(&items, at, &&state, &links).expect("the saved run shows while code running is off");
+    assert_eq!((panel.saved, panel.running.is_none()), (Some(saved.clone()), true));
+    let busy = CodeActions { running: Rc::new([(id.as_str().to_string(), 0)]), ..actions(&[Runtime::Python]) };
+    let running = BodyLinks { code: Some(busy), ..links.clone() };
+    assert!(run_panel(&items, at, &&state, &running).expect("panel").running.is_some());
+    assert!(run_button(&items, at, Some("py"), "print(1)", &running).is_none(), "a running block offers Cancel, not Run");
+    let line = run_line(&saved);
+    assert!(line.starts_with("Python 3.12.2 · ") && line.contains('0'), "{line}");
+    let other = BodyLinks::default().scoped("another_post");
+    assert!(run_panel(&items, at, &&state, &other).is_none());
 }

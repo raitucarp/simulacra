@@ -73,6 +73,9 @@ impl AppView {
     pub(super) fn code_actions(&self, bind: &Binder) -> Option<CodeActions> {
         let prefs = &self.state.preferences().code;
         let runnable: Vec<Runtime> = self.code.cache.found.iter().map(|found| found.runtime).filter(|runtime| prefs.allows(*runtime)).collect();
-        (!runnable.is_empty()).then(|| CodeActions { runnable: runnable.into(), on_run: Rc::new(bind.with(Self::on_run_code)) })
+        let running: Vec<(String, usize)> = self.code.running.keys().cloned().collect();
+        let cancel = bind.with(|this: &mut Self, (post, block): (String, usize), _: &mut Window, cx: &mut Context<Self>| this.cancel_code_run(post, block, cx));
+        let on_cancel: crate::ui::features::post::CancelRunAction = Rc::new(move |post, block, window, cx| cancel((post, block), window, cx));
+        (!runnable.is_empty()).then(|| CodeActions { runnable: runnable.into(), on_run: Rc::new(bind.with(Self::on_run_code)), running: running.into(), on_cancel })
     }
 }

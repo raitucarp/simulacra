@@ -21,6 +21,8 @@ pub struct RunRequest {
 }
 
 pub type RunCodeAction = Rc<dyn Fn(RunRequest, &mut Window, &mut App) + 'static>;
+/// P6: Cancel on a running block, with its post and its place.
+pub type CancelRunAction = Rc<dyn Fn(String, usize, &mut Window, &mut App) + 'static>;
 
 /// What code blocks may do: only blocks in a runtime that is switched on and found get Run.
 #[derive(Clone)]
@@ -28,6 +30,9 @@ pub struct CodeActions {
     /// Runtimes a block may run in now (Settings › Code allows them and they were found).
     pub runnable: Rc<[Runtime]>,
     pub on_run: RunCodeAction,
+    /// P6: the blocks running now, by post and place.
+    pub running: Rc<[(String, usize)]>,
+    pub on_cancel: CancelRunAction,
 }
 
 impl CodeActions {
@@ -49,6 +54,9 @@ pub(super) fn run_button(items: &[Item<'_>], index: usize, lang: Option<&str>, c
     let actions = links.code.as_ref()?;
     let runtime = actions.runtime_of(lang)?;
     let block = items[..index].iter().filter(|item| matches!(item, Item::Block { .. })).count();
+    if actions.running.iter().any(|(post, at)| *post == links.scope && *at == block) {
+        return None; // running: its panel offers Cancel instead
+    }
     let request = RunRequest { post: links.scope.clone(), block, runtime, code: code.to_string() };
     Some(RunButton { request, on_run: actions.on_run.clone() })
 }

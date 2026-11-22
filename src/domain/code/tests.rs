@@ -62,3 +62,27 @@ fn every_runtime_runs_its_file_with_a_fixed_command_line() {
     assert!(Runtime::Go.invocation().env.contains(&("GOPROXY".into(), "off".into())), "no module downloads");
     assert_eq!(Runtime::Php.invocation().args[0], "-n", "no php.ini");
 }
+
+// P6: saved runs
+
+#[test]
+fn saved_output_is_cut_and_each_block_keeps_its_latest_run() {
+    let long = "x".repeat(SAVED_OUTPUT_CHARS + 10);
+    let (kept, cut) = kept_output(&long);
+    assert_eq!((kept.chars().count(), cut), (SAVED_OUTPUT_CHARS, true));
+    assert_eq!(kept_output("ok\n"), ("ok\n".to_string(), false));
+    let run = |block: usize, output: &str| CodeRun { block, output: output.into(), ..CodeRun::default() };
+    let runs = with_run(with_run(with_run(Vec::new(), run(2, "b")), run(0, "a")), run(2, "c"));
+    assert_eq!(runs.iter().map(|r| (r.block, r.output.as_str())).collect::<Vec<_>>(), vec![(0, "a"), (2, "c")]);
+}
+
+#[test]
+fn a_run_reads_back_leniently() {
+    let run = CodeRun { block: 1, runtime: "go".into(), version: "1.22.0".into(), end: RunEnd::TimedOut, duration_ms: 10_000, ..CodeRun::default() };
+    let json = serde_json::to_string(&run).expect("json");
+    assert_eq!(serde_json::from_str::<CodeRun>(&json).expect("back"), run);
+    let newer: CodeRun = serde_json::from_str(r#"{"block":0,"end":"exploded","extra":1}"#).expect("lenient");
+    assert_eq!(newer.end, RunEnd::Failed, "an end this version does not know");
+    let extras = crate::domain::post::PostExtras::default();
+    assert!(!serde_json::to_string(&extras).expect("json").contains("code_runs"), "no runs, nothing stored");
+}

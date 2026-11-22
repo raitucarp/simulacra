@@ -1,6 +1,7 @@
 use super::*;
 
 mod head; // V3, V4
+mod lanes; // V5
 use jiff::Timestamp;
 
 fn at(hour: i8) -> Timestamp {
@@ -82,8 +83,8 @@ fn subjects_round_trip_their_stored_parts() {
 fn version_list_puts_current_first_and_marks_the_original() {
     let subject = RevisionSubject::Post(PostId::new("p"));
     let first = Revision { saved_at: at(9), ..Revision::of(subject.clone(), "draft one", at(9)) };
-    let second = Revision::of(subject, "draft two", at(11));
-    let list = version_list("", "final", &[first, second]);
+    let second = Revision { parent_id: Some(first.id.clone()), ..Revision::of(subject, "draft two", at(11)) };
+    let list = version_list("", "final", None, &[first, second]);
     let kinds: Vec<VersionKind> = list.iter().map(|v| v.kind).collect();
     assert_eq!(kinds, vec![VersionKind::Current, VersionKind::Earlier, VersionKind::Original]);
     let texts: Vec<&str> = list.iter().map(|v| v.content.as_str()).collect();

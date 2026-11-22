@@ -13,9 +13,9 @@ fn subject() -> RevisionSubject {
 #[test]
 fn history_opens_on_the_latest_earlier_version() {
     let revisions = vec![Revision::of(subject(), "before", Timestamp::now())];
-    let sheet = HistorySheet::new(subject(), "title".into(), version_list("", "after", &revisions));
+    let sheet = HistorySheet::new(subject(), "title".into(), version_list("", "after", None, &revisions));
     assert_eq!(sheet.selected, 1);
-    let alone = HistorySheet::new(subject(), "title".into(), version_list("", "only", &[]));
+    let alone = HistorySheet::new(subject(), "title".into(), version_list("", "only", None, &[]));
     assert_eq!(alone.selected, 0);
 }
 
@@ -44,4 +44,18 @@ fn card_controls_follow_the_shelf_and_edit_counts() {
 fn scope_keys_are_distinct() {
     let keys: HashSet<&str> = ScopeKind::ALL.iter().map(|k| k.key()).collect();
     assert_eq!(keys.len(), ScopeKind::ALL.len());
+}
+
+#[test]
+fn a_branched_history_draws_two_lanes_and_opens_beside_the_current_version() {
+    use crate::domain::data::history::{RevisionId, SemVer, VersionHead};
+    let at = |hour| crate::time::utc(2026, 11, 20, hour, 0, 0);
+    let root = Revision { id: RevisionId::new("a"), version: Some(SemVer::ORIGINAL), edited_at: Some(at(8)), ..Revision::of(subject(), "one", at(9)) };
+    let leaf = Revision { id: RevisionId::new("b"), parent_id: Some(RevisionId::new("a")), version: Some(SemVer::new(1, 1, 0)), edited_at: Some(at(9)), ..Revision::of(subject(), "two", at(10)) };
+    let head = VersionHead { id: RevisionId::new("h"), version: SemVer::new(1, 2, 0), parent: Some(RevisionId::new("a")), edited_at: Some(at(10)), ..VersionHead::default() };
+    let sheet = HistorySheet::new(subject(), "title".into(), version_list("", "three", Some(&head), &[root, leaf]));
+    assert_eq!((sheet.lane_count, sheet.lanes.len()), (2, 3));
+    assert_eq!(sheet.current().content, "three");
+    assert!(!sheet.chose_current(), "the sheet opens on the newest earlier version");
+    assert_eq!(sheet.lanes[2].forks, vec![1], "the older line joins the original");
 }

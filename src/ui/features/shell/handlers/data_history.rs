@@ -3,7 +3,7 @@
 //! the version it replaces is kept too.
 
 use super::super::view::AppView;
-use crate::domain::data::history::{version_list, RevisionSubject};
+use crate::domain::data::history::{current_index, version_list, RevisionSubject, VersionKind};
 use crate::domain::document::CatalogueRecord;
 use crate::domain::preferences::ToastKind;
 use crate::domain::PostId;
@@ -35,9 +35,9 @@ impl AppView {
     fn open_post_history(&mut self, id: PostId) {
         let Some(post) = self.state.get_post(&id) else { return };
         let (title, content) = (shortened(&post.content, TITLE_CHARS), post.content.clone());
+        let (revisions, head) = (self.state.post_revisions(&id), self.state.post_head(&id));
         let subject = RevisionSubject::Post(id);
-        let revisions = self.state.db.as_ref().and_then(|db| db.revisions_of(subject.clone()).ok()).unwrap_or_default();
-        self.data.history = Some(HistorySheet::new(subject, title, version_list("", &content, &revisions)));
+        self.data.history = Some(HistorySheet::new(subject, title, version_list("", &content, head.as_ref(), &revisions)));
     }
 
     fn open_document_history(&mut self, id: String) {
@@ -45,13 +45,13 @@ impl AppView {
         let (title, content) = (doc.title.clone(), doc.content.clone());
         let subject = RevisionSubject::Document(id);
         let revisions = self.state.db.as_ref().and_then(|db| db.revisions_of(subject.clone()).ok()).unwrap_or_default();
-        self.data.history = Some(HistorySheet::new(subject, title.clone(), version_list(&title, &content, &revisions)));
+        self.data.history = Some(HistorySheet::new(subject, title.clone(), version_list(&title, &content, None, &revisions)));
     }
 
     /// Makes version `index` current again.
     fn restore_version(&mut self, index: usize, window: &mut Window, cx: &mut Context<Self>) {
         let Some(sheet) = self.data.history.take() else { return };
-        let Some(version) = sheet.versions.get(index).filter(|_| index > 0).cloned() else { return };
+        let Some(version) = sheet.versions.get(index).filter(|v| v.kind != VersionKind::Current).cloned() else { return };
         let restored = match &sheet.subject {
             RevisionSubject::Post(id) => self.state.edit_post(id, &version.content).map(|revision| {
                 if revision.is_some() {
@@ -61,7 +61,7 @@ impl AppView {
             RevisionSubject::Document(id) => {
                 let current = self.state.documents.iter().find(|d| &d.id == id).map(|d| d.record.clone()).unwrap_or_default();
                 let record = serde_json::from_str::<CatalogueRecord>(&version.record_json).unwrap_or(current);
-                let title = if version.title.is_empty() { sheet.versions[0].title.clone() } else { version.title.clone() };
+                let title = if version.title.is_empty() { sheet.versions[current_index(&sheet.versions)].title.clone() } else { version.title.clone() };
                 let saved = self.state.update_document(id, &title, &version.content, record).map_err(|problems| format!("{problems:?}"));
                 self.push_vault_data(cx);
                 saved

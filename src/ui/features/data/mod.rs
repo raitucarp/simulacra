@@ -9,6 +9,7 @@ mod diff_view;
 mod events;
 mod export;
 mod history;
+mod history_compare; mod history_rows; mod version_tree; // V5: the version tree
 mod legend; // S9
 mod lifecycle_menu; // Y5, Y6
 mod post_menu;

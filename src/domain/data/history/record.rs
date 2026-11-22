@@ -55,13 +55,16 @@ pub struct PostRecord {
     /// `None` in records kept before attachments were (V11).
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attachments: Option<Attachments>,
+    /// The sealed text of a locked post's version (X5): each version keeps its own seal.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub lock: Option<crate::domain::post::lock::PostLock>,
 }
 
 impl PostRecord {
     /// What `post` shows beside its text.
     pub fn of(post: &Post) -> Self {
         let attachments = Attachments { link_url: post.link_url.clone(), image_path: post.image_path.clone(), images: post.extras.images.clone(), files: post.extras.files.clone() };
-        Self { symbols: post.extras.symbols.clone(), tint: post.extras.tint, attachments: Some(attachments) }
+        Self { symbols: post.extras.symbols.clone(), tint: post.extras.tint, attachments: Some(attachments), lock: post.extras.lock.clone() }
     }
 
     /// The record as stored.
@@ -76,6 +79,9 @@ impl PostRecord {
 
     /// `post` showing this record's symbols, tint and (when kept) attachments.
     pub fn apply(&self, post: &mut Post) {
+        if let Some(lock) = &self.lock {
+            post.extras.lock = Some(lock.clone()); // X5: a locked version brings its own seal back
+        }
         post.extras.symbols = self.symbols.clone();
         post.extras.tint = self.tint;
         if let Some(attachments) = &self.attachments {

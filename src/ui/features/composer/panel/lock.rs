@@ -48,6 +48,14 @@ impl ComposerModalPanel {
         cx.notify();
     }
 
+    /// Opens the row for an edit of a locked post (X5): saving seals the new text again, and
+    /// the footer offers no toggle while editing, so it stays open.
+    pub fn require_lock(&mut self, window: &mut Window, cx: &mut Context<Self>) {
+        self.lock.open = true;
+        self.lock.password.update(cx, |state, cx| state.focus(window, cx));
+        cx.notify();
+    }
+
     /// Closes the row and empties both fields.
     pub(super) fn reset_lock(&mut self, window: &mut Window, cx: &mut App) {
         (self.lock.open, self.lock.sealing) = (false, false);

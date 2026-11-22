@@ -90,6 +90,7 @@ impl AppView {
     fn switch_to_version(&mut self, index: usize, window: &mut Window, cx: &mut Context<Self>) {
         let Some(sheet) = self.data.history.take() else { return };
         let (RevisionSubject::Post(id), Some(to)) = (&sheet.subject, sheet.versions.get(index).and_then(|v| v.revision.clone())) else { return };
+        self.data.locks.unlocked.relock(id); // X5: the version switched to opens with its own password
         match self.state.switch_post_head(id, &to, jiff::Timestamp::now()) {
             Ok(head) => {
                 let text = rust_i18n::t!("data.history.switched", version = crate::ui::features::composer::version_label(head.version)).to_string();

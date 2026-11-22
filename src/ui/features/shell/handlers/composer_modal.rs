@@ -53,6 +53,9 @@ impl AppView {
         };
         if let ComposerModalMode::Edit(target) = &submission.mode {
             let text = submission.drafts.first().cloned().unwrap_or_default();
+            if let Some(password) = submission.lock.clone() {
+                return self.save_locked_edit(target.post.id.clone(), submission, password, window, cx); // X5: sealed again
+            }
             if target.post.lifecycle.is_scheduled() {
                 return self.save_scheduled_edit(target.post.id.clone(), (text, submission.tint), submission.publish_at, window, cx); // Y4
             }
@@ -127,5 +130,5 @@ pub(super) fn thread_from_submission(submission: ComposerSubmission, shorthand: 
 /// version (V10, V11, L12).
 fn edit_look(submission: &ComposerSubmission) -> crate::domain::data::history::PostRecord {
     let attachments = crate::domain::data::history::Attachments::new(submission.link.clone(), submission.images.clone()).with_files(submission.files.clone());
-    crate::domain::data::history::PostRecord { symbols: submission.symbols.clone(), tint: submission.tint, attachments: Some(attachments) }
+    crate::domain::data::history::PostRecord { symbols: submission.symbols.clone(), tint: submission.tint, attachments: Some(attachments), lock: None }
 }

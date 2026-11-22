@@ -38,7 +38,7 @@ mod reactions; // epic R
 mod reposts;
 mod revisions; // sb F2
 mod post_versions; mod post_heads; // V3, V4, V9
-mod scheduled; mod locked; // X2: locked threads
+mod scheduled; mod locked; mod locked_edit; // X2: locked threads; X5: editing them
 mod scheduled_queue; // Y4
 mod search;
 mod settings;

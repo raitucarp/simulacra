@@ -9,6 +9,7 @@ mod constructors;
 mod extras;
 mod kind;
 mod lifecycle;
+pub mod lock; // X2: password-locked posts
 mod parse;
 mod provenance;
 mod relations;

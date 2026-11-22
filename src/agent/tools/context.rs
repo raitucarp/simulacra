@@ -73,7 +73,7 @@ impl ToolContext {
     /// (members and global personas) and its documents.
     pub fn capture(network: &NetworkId, posts: &[Post], profiles: &[Profile], documents: &[GroundingDocument]) -> Self {
         let by_id: HashMap<&str, &Profile> = profiles.iter().map(|p| (p.id.as_str(), p)).collect();
-        let mut network_posts: Vec<&Post> = posts.iter().filter(|p| &p.network_id == network).collect();
+        let mut network_posts: Vec<&Post> = posts.iter().filter(|p| &p.network_id == network && !p.is_locked()).collect(); // X2: agents never see a locked post
         network_posts.sort_by_key(|a| std::cmp::Reverse(a.created_at));
         network_posts.truncate(MAX_CONTEXT_POSTS);
         Self {

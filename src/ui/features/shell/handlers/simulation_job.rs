@@ -14,7 +14,7 @@ impl AppView {
     /// network has no posts), or a new post from the seed with its vault document resolved.
     pub(super) fn trigger_job_kind(&self, mode: TriggerMode) -> Option<JobKind> {
         match mode {
-            TriggerMode::Reply => self.state.current_network_posts().next().map(|p| JobKind::Reply(self.state.authored(p))),
+            TriggerMode::Reply => self.state.current_network_posts().find(|p| !p.is_locked()).map(|p| JobKind::Reply(self.state.authored(p))),
             TriggerMode::NewPost { seed } => Some(JobKind::NewPost(seed.resolve(&self.state.documents))),
         }
     }

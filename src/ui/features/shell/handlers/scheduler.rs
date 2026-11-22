@@ -110,7 +110,7 @@ impl AppView {
         let model = self.embedding_config().model;
         let recommender = Recommender { state: &self.state, index: &self.semantic.index, model: &model, now: Timestamp::now() };
         let by_interest = recommender.agent_answer(agent, &network).and_then(|post| self.state.get_post(&post));
-        let newest = || self.state.posts.iter().filter(|post| post.network_id == network && post.author_id != agent.id).max_by_key(|post| post.created_at);
+        let newest = || self.state.posts.iter().filter(|post| post.network_id == network && post.author_id != agent.id && !post.is_locked()).max_by_key(|post| post.created_at);
         let parent = by_interest.or_else(newest)?;
         Some((agent.clone(), self.state.authored(parent), network))
     }

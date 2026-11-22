@@ -44,6 +44,9 @@ pub struct PostExtras {
     /// The boxes the reader ticked (D6): kept out of the text, so ticking makes no version.
     #[serde(skip_serializing_if = "crate::domain::todo::state::TodoState::is_empty")]
     pub todo_state: crate::domain::todo::state::TodoState,
+    /// The sealed text of a locked post (X2); `content` then holds only the placeholder.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lock: Option<super::lock::PostLock>,
 }
 
 impl PostExtras {
@@ -53,9 +56,9 @@ impl PostExtras {
     }
 
     /// Whether there is anything to show behind the post (the origin, images, files, symbols, tint,
-    /// version and ticks alone are not).
+    /// version, ticks and lock alone are not).
     pub fn has_details(&self) -> bool {
-        Self { origin: None, images: Vec::new(), files: Vec::new(), symbols: PostSymbols::default(), tint: None, head: None, replied_version: None, todo_state: Default::default(), ..self.clone() } != Self::default()
+        Self { origin: None, images: Vec::new(), files: Vec::new(), symbols: PostSymbols::default(), tint: None, head: None, replied_version: None, todo_state: Default::default(), lock: None, ..self.clone() } != Self::default()
     }
 
     /// Adds `source` unless an identical reference is already listed.

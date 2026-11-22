@@ -45,6 +45,18 @@ pub enum AppError {
     #[error("{0} sub-tasks are still open")]
     OpenSubtasks(usize),
 
+    /// A locked post carries text only (X2): no link, image or file.
+    #[error("a locked post carries text only")]
+    LockedWithAttachments,
+
+    /// A locked post could not be sealed, or was about to be stored unsealed (X2).
+    #[error("the post could not be locked")]
+    LockFailed,
+
+    /// A locked post was edited as plain text (X2): it must be re-sealed.
+    #[error("a locked post must be unlocked and sealed again to change")]
+    PostLocked,
+
     /// A document's title or catalogue record failed validation.
     #[error("invalid document: {0}")]
     InvalidDocument(String),

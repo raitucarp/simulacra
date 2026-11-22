@@ -34,7 +34,7 @@ pub fn lexical_hits(state: &AppState, query: &str, k: usize, spec: ChunkSpec) ->
 fn network_chunks(state: &AppState, spec: ChunkSpec) -> Vec<Chunk> {
     let posts = state
         .current_network_posts()
-        .filter(|post| !post.is_repost())
+        .filter(|post| !post.is_repost() && !post.is_locked()) // X2: only a placeholder to match
         .map(|post| (EmbeddingOwner::post(&post.id), String::new(), post.content.as_str()));
     let documents = state.current_documents().map(|doc| (EmbeddingOwner::document(doc.id.clone()), doc.title.clone(), doc.content.as_str()));
     posts

@@ -31,3 +31,21 @@ fn kit_default_icons_still_resolve_and_unknown_paths_do_not_panic() {
     assert!(template_text("illustrations/nope.svg").is_none());
     assert!(!matches!(AppAssets.load(""), Ok(Some(_))));
 }
+
+/// S14: `sym:<set>/<name>` loads the icon from the store the shell points at, and nothing
+/// else (missing icons, paths that climb out, a forgotten store) resolves.
+#[test]
+fn symbol_assets_resolve_from_the_icon_store() {
+    let root = std::env::temp_dir().join(format!("simulacra-symbol-assets-{}", std::process::id()));
+    let _ = std::fs::remove_dir_all(&root);
+    std::fs::create_dir_all(root.join("fi")).unwrap();
+    std::fs::write(root.join("fi").join("zap.svg"), br#"<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"/>"#).unwrap();
+    set_symbol_store(Some(root.clone()));
+    assert!(matches!(AppAssets.load("sym:fi/zap"), Ok(Some(bytes)) if bytes.starts_with(b"<svg")));
+    for path in ["sym:fi/missing", "sym:../fi/zap", "sym:fi", "sym:fi/../fi/zap"] {
+        assert!(!matches!(AppAssets.load(path), Ok(Some(_))), "{path}");
+    }
+    set_symbol_store(None);
+    assert!(!matches!(AppAssets.load("sym:fi/zap"), Ok(Some(_))), "no store, no symbols");
+    let _ = std::fs::remove_dir_all(&root);
+}

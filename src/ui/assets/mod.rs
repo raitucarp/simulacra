@@ -2,13 +2,16 @@
 //! 1. the app's own embedded assets (`assets/illustrations/**/*.svg` templates, plus the form
 //!    catalogs `illustrations/forms/<kind>/catalog.json` embedded by the portrait domain),
 //! 2. the Lucide icons the icon catalog uses ([`icons::CatalogIcons`]),
-//! 3. gpui-kit's default component icons.
+//! 3. gpui-kit's default component icons,
+//! 4. downloaded icon set icons (`sym:<set>/<name>`, S14), from the icon store.
 //!
 //! Illustration templates are also read directly (without a `cx`) through [`template_text`].
 
 mod icons;
+mod symbols; // S14
 
 pub use icons::CatalogIcons;
+pub use symbols::{load_symbol, set_symbol_store};
 
 use crate::domain::portrait::form::{FormCatalogFiles, FORM_ASSET_ROOT};
 
@@ -28,6 +31,9 @@ pub struct AppAssets;
 
 impl AssetSource for AppAssets {
     fn load(&self, path: &str) -> Result<Option<Cow<'static, [u8]>>> {
+        if let Some(icon) = load_symbol(path) {
+            return Ok(Some(icon)); // S14: a downloaded icon
+        }
         if let Some(file) = EmbeddedAssets::get(path) {
             return Ok(Some(file.data));
         }

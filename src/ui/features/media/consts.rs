@@ -25,3 +25,5 @@ pub(super) const FILE_CARD_ID: &str = "media-file-card";
 pub(super) const FILE_OPEN_ID: &str = "media-file-open";
 pub(super) const FILE_REVEAL_ID: &str = "media-file-reveal";
 pub(super) const FILE_PLAY_ID: &str = "media-file-play";
+pub(super) const FILE_RELINK_ID: &str = "media-file-relink";
+pub(super) const FILE_FOUND_ID: &str = "media-file-found";

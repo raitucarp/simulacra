@@ -1,4 +1,5 @@
-//! Scanning an attached file for its card, off the UI thread: whether it is still there, and
+//! Scanning an attached file for its card, off the UI thread: whether it is still there (L11:
+//! else where it went when it was only renamed), and
 //! the preview its type gets (L7: a video's poster frame from the OS and its length; L8: an audio
 //! file's length, both read from the container headers; L9: a text file's first lines;
 //! L10: a PDF's or EPUB's outline, read by the import parsers).
@@ -17,7 +18,7 @@ const MAX_DOCUMENT_BYTES: u64 = 64 * 1024 * 1024;
 /// What the card of `file` can show now.
 pub fn scan_file(file: &FileRef, media_dir: &Path) -> FileScan {
     let path = Path::new(&file.path);
-    let Some(mut bytes) = FileBytes::open(path) else { return FileScan::Missing };
+    let Some(mut bytes) = FileBytes::open(path) else { return FileScan::Missing { found: super::moved::find_renamed(file) } };
     let preview = match file_family(&file.mime) {
         FormatFamily::Video => FilePreview::Video { poster: super::poster::poster_for(file, media_dir), seconds: media_duration(&file.mime, &mut bytes) },
         FormatFamily::Audio => FilePreview::Audio { seconds: media_duration(&file.mime, &mut bytes) },

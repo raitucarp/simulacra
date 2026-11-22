@@ -3,9 +3,10 @@
 //! both (`crate::media::files`); the card never reads the file itself.
 
 use super::consts::{FILE_CARD_ID, FILE_OPEN_ID, FILE_REVEAL_ID, META_SEPARATOR};
-use crate::domain::media::files::file_family;
-use super::OpenMediaAction;
+use super::{OpenMediaAction, RelinkAction};
+use crate::domain::media::files::{file_family, FileScan};
 use crate::domain::media::{FileRef, MediaCatalog};
+use crate::domain::PostId;
 use crate::import::FormatFamily;
 use crate::theme::ThemeTokens;
 use crate::ui::features::import::{family_art, family_label, file_size};
@@ -21,10 +22,23 @@ use std::path::PathBuf;
 /// How a file's date is written on its card.
 const DATE_FORMAT: &str = "%Y-%m-%d";
 
-/// The card the `index`-th file of a post shows: an image is previewed (L5), a video gets
-/// its poster and length (L7), an audio file its length (L8), a text file its first lines
-/// (L9), a PDF or EPUB its outline (L10), anything else the plain file card.
-pub(super) fn render_file(index: usize, file: &FileRef, catalog: Option<&MediaCatalog>, on_media: Option<&OpenMediaAction>, theme: &ThemeTokens) -> AnyElement {
+/// What the file cards of one post share: the post, the media cache and the actions.
+pub(super) struct FileHost<'a> {
+    pub post_id: &'a PostId,
+    pub catalog: Option<&'a MediaCatalog>,
+    pub on_media: Option<&'a OpenMediaAction>,
+    pub on_relink: Option<&'a RelinkAction>,
+}
+
+/// The card the `index`-th file of a post shows: a missing file offers a relink (L11); an
+/// image is previewed (L5), a video gets its poster and length (L7), an audio file its length
+/// (L8), a text file its first lines (L9), a PDF or EPUB its outline (L10), anything else the
+/// plain file card.
+pub(super) fn render_file(index: usize, file: &FileRef, host: &FileHost<'_>, theme: &ThemeTokens) -> AnyElement {
+    let (catalog, on_media) = (host.catalog, host.on_media);
+    if let Some(FileScan::Missing { found }) = catalog.and_then(|catalog| catalog.file(&file.path)) {
+        return super::file_missing::missing_file(index, file, found.as_deref(), host, theme);
+    }
     match file_family(&file.mime) {
         FormatFamily::Image => super::file_image::image_file(index, file, catalog, on_media, theme),
         FormatFamily::Video => super::file_video::video_file(index, file, catalog, theme),

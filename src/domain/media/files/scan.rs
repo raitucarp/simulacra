@@ -4,8 +4,9 @@
 /// The outcome of scanning a file a post links to.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum FileScan {
-    /// Nothing readable at the path.
-    Missing,
+    /// Nothing readable at the path: the file was moved, renamed or deleted (L11). `found`
+    /// is a file with the same size and contents in the folder it was in (it was renamed).
+    Missing { found: Option<String> },
     /// The file is there.
     Present(FileFacts),
 }
@@ -40,7 +41,7 @@ impl FileScan {
     pub fn preview(&self) -> Option<&FilePreview> {
         match self {
             Self::Present(facts) => Some(&facts.preview),
-            Self::Missing => None,
+            Self::Missing { .. } => None,
         }
     }
 }

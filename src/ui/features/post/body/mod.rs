@@ -39,6 +39,8 @@ pub struct BodyLinks {
     pub on_source: Option<super::extras::OpenSourceAction>,
     /// Image click: opens the lightbox on that image of the post (sb C3).
     pub on_media: Option<crate::ui::features::media::OpenMediaAction>,
+    /// "Relink…" on a missing file (L11).
+    pub on_relink: Option<crate::ui::features::media::RelinkAction>,
     /// The post the body belongs to, which its spoilers' reveals are kept under.
     pub scope: String,
 }

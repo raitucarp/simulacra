@@ -53,4 +53,13 @@ impl MediaCatalog {
         self.revision += 1;
         self
     }
+
+    /// The catalog with the scan of `path` forgotten, so the file is scanned again (L11: after
+    /// a relink).
+    #[must_use]
+    pub fn without_file(mut self, path: &str) -> Self {
+        self.files.scans.remove(path);
+        self.revision += 1;
+        self
+    }
 }

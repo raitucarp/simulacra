@@ -67,7 +67,7 @@ fn a_video_file_scans_to_its_length_and_a_gone_one_to_missing() {
     let scan = crate::media::files::scan_file(&file, &dir);
     assert!(matches!(scan.preview(), Some(FilePreview::Video { seconds: Some(42), .. })), "{scan:?}");
     std::fs::remove_file(&path).expect("remove");
-    assert_eq!(crate::media::files::scan_file(&file, &dir), FileScan::Missing);
+    assert_eq!(crate::media::files::scan_file(&file, &dir), FileScan::Missing { found: None });
 }
 
 #[test]
@@ -111,4 +111,19 @@ fn a_pdf_and_an_epub_scan_to_their_outline() {
     assert_eq!((title.as_deref(), creators.len(), pages), (Some("A Tiny PDF"), 1, Some(2)));
     let Some(FilePreview::Document { title, chapters, .. }) = scan(&book) else { panic!("an epub outline") };
     assert_eq!((title.as_deref(), chapters), (Some("A Tiny Book"), Some(2)));
+}
+
+#[test]
+fn a_renamed_file_is_found_by_its_contents_and_a_deleted_one_is_missing() {
+    use crate::domain::media::files::FileScan;
+    let dir = scratch_media_dir("file-moved");
+    let path = dir.join("draft.txt");
+    std::fs::write(&path, b"the same words").expect("write");
+    std::fs::write(dir.join("other.txt"), b"other  words!!").expect("same size, other words");
+    let file = read_file_ref(&path).expect("read");
+    let renamed = dir.join("final.txt");
+    std::fs::rename(&path, &renamed).expect("rename");
+    assert_eq!(crate::media::files::scan_file(&file, &dir), FileScan::Missing { found: Some(renamed.display().to_string()) });
+    std::fs::remove_file(&renamed).expect("delete");
+    assert_eq!(crate::media::files::scan_file(&file, &dir), FileScan::Missing { found: None });
 }

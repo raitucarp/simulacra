@@ -45,7 +45,7 @@ mod settings;
 mod seed_catalogue;
 mod snapshot;
 mod symbols; // epic S
-mod todos; mod tasks; mod reminders; mod delegations; // D6: ticked boxes; D9: the Tasks view; D10: due reminders; D12: delegated items
+mod todos; mod tasks; mod reminders; mod delegations; mod files; // D6: ticked boxes; D9: the Tasks view; D10: due reminders; D12: delegated items; L11: relinked files
 mod threads;
 mod upgrade;
 mod wikilinks;

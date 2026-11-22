@@ -24,7 +24,7 @@ pub fn read_file_ref(path: &Path) -> Result<FileRef, String> {
 }
 
 /// The first [`SNIFF_BYTES`] of the file and the hex SHA-256 of all of it.
-fn sniff_and_hash(path: &Path) -> Result<(Vec<u8>, String), String> {
+pub(super) fn sniff_and_hash(path: &Path) -> Result<(Vec<u8>, String), String> {
     let mut file = std::fs::File::open(path).map_err(|err| err.to_string())?;
     let (mut hasher, mut head, mut buffer) = (Sha256::new(), Vec::new(), vec![0u8; READ_CHUNK]);
     loop {

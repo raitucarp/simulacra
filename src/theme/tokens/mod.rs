@@ -121,6 +121,7 @@ theme_tokens! {
         forge_disabled_opacity, forge_backdrop_opacity, post_failed_tool_opacity, settings_disabled_opacity,
         line_height_reading, vault_motion_duration_ms, vault_muted_opacity, // sb B1: reader leading, calm entry fade, read-state dimming
         symbol_glyph_scale, // epic S: a library icon's share of its symbol disc
+        file_missing_opacity, // L11: the dimmed art of a missing file
     ],
 }
 

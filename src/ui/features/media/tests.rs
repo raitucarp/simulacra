@@ -11,21 +11,21 @@ fn post(content: &str) -> Post {
 fn plain_posts_have_no_media_block() {
     let theme = minimalist_dark();
     let plain = post("just words");
-    assert!(render_post_media(&plain, &[] as &[Post], &theme, None).is_none());
+    assert!(render_post_media(&plain, &[] as &[Post], &theme, None, None).is_none());
 }
 
 #[test]
 fn links_videos_and_galleries_render_without_a_cache() {
     let theme = minimalist_dark();
     for content in ["https://a.org/page", "https://youtu.be/dQw4w9WgXcQ", "https://cdn.org/clip.webm"] {
-        assert!(render_post_media(&post(content), &[] as &[Post], &theme, None).is_some(), "{content}");
+        assert!(render_post_media(&post(content), &[] as &[Post], &theme, None, None).is_some(), "{content}");
     }
     let mut gallery = post("a gallery");
     gallery.extras.images = (0..5).map(|i| ImageAttachment::at(format!("missing-{i}.png"))).collect();
-    assert!(render_post_media(&gallery, &[] as &[Post], &theme, None).is_some());
+    assert!(render_post_media(&gallery, &[] as &[Post], &theme, None, None).is_some());
     let mut legacy = post("an agent image");
     legacy.image_path = Some("C:/nowhere/agent.png".into());
-    assert!(render_post_media(&legacy, &[] as &[Post], &theme, None).is_some());
+    assert!(render_post_media(&legacy, &[] as &[Post], &theme, None, None).is_some());
 }
 
 #[test]
@@ -35,7 +35,7 @@ fn attached_files_get_a_card_with_their_facts() {
     let mut with_file = post("the report");
     let file = FileRef { size: 1_300_000, modified: Some(crate::time::utc(2026, 11, 2, 12, 0, 0)), mime: "application/pdf".into(), ..FileRef::at("/home/ann/report.pdf") };
     with_file.extras.files.push(file.clone());
-    assert!(render_post_media(&with_file, &[] as &[Post], &theme, None).is_some());
+    assert!(render_post_media(&with_file, &[] as &[Post], &theme, None, None).is_some());
     let meta = super::file_card::file_meta(&file, "PDF", None);
     assert!(meta.starts_with("PDF · ") && meta.contains("1.2") && meta.ends_with("2026-11-02"), "{meta}");
     assert_eq!(super::file_card::file_meta(&FileRef::at("/a/b"), "Data", None).matches(" · ").count(), 1, "no date, no separator for it");
@@ -47,7 +47,7 @@ fn image_files_render_their_preview_and_row() {
     let theme = minimalist_dark();
     let mut with_image = post("a photo");
     with_image.extras.files.push(FileRef { mime: "image/png".into(), ..FileRef::at("/nowhere/photo.png") });
-    assert!(render_post_media(&with_image, &[] as &[Post], &theme, None).is_some());
+    assert!(render_post_media(&with_image, &[] as &[Post], &theme, None, None).is_some());
 }
 
 #[test]
@@ -76,7 +76,7 @@ fn audio_files_show_their_length_and_play() {
     let _scanned = super::file_audio::audio_file(0, &memo, Some(&catalog), &theme);
     let mut with_audio = post("a memo");
     with_audio.extras.files.push(memo);
-    assert!(render_post_media(&with_audio, &[] as &[Post], &theme, None).is_some());
+    assert!(render_post_media(&with_audio, &[] as &[Post], &theme, None, None).is_some());
 }
 
 #[test]
@@ -103,4 +103,19 @@ fn documents_show_their_title_and_extent_once_scanned() {
     let preview = FilePreview::Document { title: Some("A Tiny Book".into()), creators: vec!["Ada".into()], pages: None, chapters: Some(2) };
     let catalog = MediaCatalog::default().with_file(book.path.clone(), FileScan::Present(FileFacts { preview }));
     let _scanned = super::file_document::document_file(0, &book, FormatFamily::Book, Some(&catalog), &theme);
+}
+
+#[test]
+fn a_missing_file_offers_a_relink() {
+    use crate::domain::media::files::FileScan;
+    use crate::domain::media::{FileRef, MediaCatalog};
+    use std::rc::Rc;
+    let theme = minimalist_dark();
+    let gone = FileRef { mime: "application/pdf".into(), ..FileRef::at("/home/ann/gone.pdf") };
+    let catalog = MediaCatalog::default().with_file(gone.path.clone(), FileScan::Missing { found: Some("/home/ann/renamed.pdf".into()) });
+    let on_relink: super::RelinkAction = Rc::new(|_, _, _| {});
+    let post_id = crate::domain::PostId::from("p");
+    let host = super::file_card::FileHost { post_id: &post_id, catalog: Some(&catalog), on_media: None, on_relink: Some(&on_relink) };
+    let _card = super::file_card::render_file(0, &gone, &host, &theme);
+    let _without_action = super::file_card::render_file(0, &gone, &super::file_card::FileHost { on_relink: None, ..host }, &theme);
 }

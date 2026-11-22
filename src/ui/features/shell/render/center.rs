@@ -81,7 +81,7 @@ impl AppView {
             on_open_tag: Rc::new(bind.with(|this, tag: String, window, cx| this.search_topic(&tag, window, cx))),
             on_open_wikilink: Rc::new(bind.with(Self::open_wikilink)),
             on_open_source: Rc::new(bind.with(Self::open_source)),
-            on_open_media: Rc::new(bind.with(Self::open_lightbox)),
+            on_open_media: Rc::new(bind.with(Self::open_lightbox)), on_relink_file: Rc::new(bind.with(Self::relink_file)), // L11: relink a moved file
             on_cycle_profile: bind.boxed_act(Self::cycle_profile),
             on_run_command: Rc::new(bind.with(Self::run_command)),
             on_post_action: Self::post_action_callback(bind), credence: Some(self.credence_source(bind)), data: Some(self.data_source(bind)), reactions: Some(self.reaction_source(bind)),

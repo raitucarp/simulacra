@@ -9,6 +9,7 @@
 //! - `file_audio`: an audio file with its length and "Play" (L8).
 //! - `file_text`: a text or code file's first lines, highlighted (L9).
 //! - `file_document`: a PDF's or EPUB's title, authors and pages or chapters (L10).
+//! - `file_missing`: a file no longer where the post says, with "Relink…" (L11).
 //! - `gallery` / `image_tile`: one image at its aspect ratio, or a 2–4 tile grid.
 //! - `link_card` / `video_card`: preview cards, the loading skeleton and the fallback chip.
 //! - `lightbox`: the full-window viewer (Esc closes, arrows move, images fit the window).
@@ -18,6 +19,7 @@ mod file_audio;
 mod file_card;
 mod file_document;
 mod file_image;
+mod file_missing;
 mod file_text;
 mod file_video;
 mod gallery;
@@ -43,6 +45,18 @@ pub struct GalleryOpen {
 
 /// Opens the lightbox on an image of a post.
 pub type OpenMediaAction = Rc<dyn Fn(GalleryOpen, &mut Window, &mut App) + 'static>;
+
+/// Which file of which post to point somewhere else (L11): at `to` (a renamed copy the scan
+/// found), or at a file the user picks when `None`.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct RelinkFile {
+    pub post_id: crate::domain::PostId,
+    pub index: usize,
+    pub to: Option<String>,
+}
+
+/// Relinks a post's missing file.
+pub type RelinkAction = Rc<dyn Fn(RelinkFile, &mut Window, &mut App) + 'static>;
 
 #[cfg(test)]
 mod tests;

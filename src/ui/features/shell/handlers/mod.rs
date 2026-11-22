@@ -49,6 +49,7 @@ mod learning_tutor_run;
 mod media;
 mod media_pump;
 mod file_pump; // L7: scans of attached files
+mod relink; // L11: relinking a moved file
 mod navigation;
 mod networks;
 mod onboarding;

@@ -37,5 +37,5 @@ fn link_cards_still_render_for_posts_with_url_tokens() {
     assert_eq!(post_links(None, &post.content), vec!["https://a.org/page".to_string()]);
     assert_eq!(media_wants([(&post, true)], true).urls().collect::<Vec<_>>(), vec!["https://a.org/page"]);
     let theme = crate::theme::minimalist_dark();
-    assert!(crate::ui::features::media::render_post_media(&post, &[] as &[Post], &theme, None).is_some());
+    assert!(crate::ui::features::media::render_post_media(&post, &[] as &[Post], &theme, None, None).is_some());
 }

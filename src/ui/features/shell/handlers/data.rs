@@ -22,6 +22,7 @@ impl AppView {
             E::OpenExport | E::SetScope(_) | E::PickCollection(_) | E::PickPersona(_) | E::LastDays(_) | E::ToggleOriginals | E::ToggleJournal | E::RunExport | E::CloseExport => self.on_export_event(event, window, cx),
             E::OpenSnapshot | E::CreateSnapshot | E::CloseSnapshot => self.on_snapshot_event(event, window, cx),
             E::OpenRestore | E::PickSnapshotFile | E::VerifySnapshot | E::ConfirmRestore | E::CloseRestore => self.on_restore_event(event, window, cx),
+            E::OpenLegend | E::EditMeaning(_) | E::SaveMeaning | E::CancelMeaning | E::CloseLegend => self.on_legend_event(event, window, cx), // S9
             E::OpenScheduled | E::EditScheduled(_) | E::PublishScheduledNow(_) | E::CancelScheduled(_) | E::CloseScheduled => self.on_scheduled_event(event, window, cx),
             _ => self.on_saved_event(event, window, cx),
         }
@@ -30,7 +31,7 @@ impl AppView {
     }
 
     fn data_sheet_open(&self) -> bool {
-        self.data.history.is_some() || self.data.export.is_some() || self.data.snapshot.is_some() || self.data.restore.is_some() || self.data.scheduled_open
+        self.data.history.is_some() || self.data.export.is_some() || self.data.snapshot.is_some() || self.data.restore.is_some() || self.data.scheduled_open || self.data.legend_open
     }
 
     /// A sheet that just opened takes the keyboard (unless one of its fields already did), so
@@ -84,6 +85,7 @@ impl AppView {
             CommandId::ExportBundle => DataEvent::OpenExport,
             CommandId::EncryptedSnapshot => DataEvent::OpenSnapshot,
             CommandId::ScheduledPosts => DataEvent::OpenScheduled,
+            CommandId::SymbolKey => DataEvent::OpenLegend, // S9
             _ => DataEvent::OpenRestore,
         };
         self.on_data_event(event, window, cx);
@@ -113,6 +115,8 @@ impl AppView {
             (render_export_sheet(dialog, on_event.clone(), theme), DataEvent::CloseExport)
         } else if let Some(dialog) = &self.data.snapshot {
             (render_snapshot_sheet(dialog, on_event.clone(), theme), DataEvent::CloseSnapshot)
+        } else if self.data.legend_open {
+            (crate::ui::features::data::render_legend_sheet(&self.legend_view(), on_event.clone(), theme), DataEvent::CloseLegend)
         } else if self.data.scheduled_open {
             (render_scheduled_sheet(&self.scheduled_rows(), on_event.clone(), theme), DataEvent::CloseScheduled)
         } else {

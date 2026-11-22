@@ -113,4 +113,6 @@ command_ids! {
     InsightsReadability => "insights_readability",
     /// Y4: the scheduled queue.
     ScheduledPosts => "scheduled_posts",
+    /// S9: the legend page of the symbols.
+    SymbolKey => "symbol_key",
 }

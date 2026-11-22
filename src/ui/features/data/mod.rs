@@ -9,6 +9,7 @@ mod diff_view;
 mod events;
 mod export;
 mod history;
+mod legend; // S9
 mod lifecycle_menu; // Y5, Y6
 mod post_menu;
 mod saved;
@@ -20,6 +21,7 @@ mod text;
 
 pub use events::{DataAction, DataEvent, SavedTarget, ScopeKind};
 pub use export::{render_export_sheet, ExportDialog};
+pub use legend::{render_legend_sheet, LegendView};
 pub use history::{render_history_sheet, HistorySheet};
 pub use post_menu::{render_edited_mark, with_data_items, DataControls, DataSource};
 pub use saved::{render_knowledge_switch, render_saved_page, SavedItemView, SavedView, ShelfChip};

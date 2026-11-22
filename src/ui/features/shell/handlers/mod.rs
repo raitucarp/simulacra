@@ -20,6 +20,7 @@ mod credentials;
 mod data; // sb F2: history, export, snapshots, collections and bookmarks
 mod data_export;
 mod data_history;
+mod data_legend; // S9
 mod data_posts;
 mod data_restore;
 mod data_saved;

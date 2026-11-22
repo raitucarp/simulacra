@@ -12,6 +12,8 @@ use gpui_kit::{Context, Entity};
 #[derive(Default)]
 pub struct SymbolsHost {
     pub memory: SymbolMemory,
+    /// What each custom symbol means (S9).
+    pub key: crate::domain::symbols::SymbolKey,
 }
 
 impl SymbolsHost {
@@ -21,7 +23,7 @@ impl SymbolsHost {
         let memory = saved.and_then(|json| serde_json::from_str::<SymbolMemory>(&json).ok()).unwrap_or_default().validated();
         let given = memory.clone();
         composer.update(cx, |panel, _| panel.set_symbol_sources(given, std::rc::Rc::default()));
-        Self { memory }
+        Self { memory, key: load_symbol_key(state) }
     }
 }
 
@@ -37,4 +39,10 @@ impl AppView {
             eprintln!("simulacra: symbol picker memory not saved: {err}");
         }
     }
+}
+
+/// The symbol key saved in the vault's settings (empty when none or unreadable, S9).
+fn load_symbol_key(state: &AppState) -> crate::domain::symbols::SymbolKey {
+    let saved = state.db.as_ref().and_then(|db| db.get_setting(SettingKey::SymbolKey).ok().flatten());
+    saved.and_then(|json| serde_json::from_str::<crate::domain::symbols::SymbolKey>(&json).ok()).unwrap_or_default().validated()
 }

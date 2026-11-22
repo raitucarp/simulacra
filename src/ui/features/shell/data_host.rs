@@ -22,6 +22,8 @@ pub struct DataInputs {
     pub to: Entity<InputState>,
     pub collection_name: Entity<InputState>,
     pub note: Entity<InputState>,
+    /// The meaning of a custom symbol on the legend page (S9).
+    pub meaning: Entity<InputState>,
 }
 
 /// Everything data ownership keeps in the shell.
@@ -35,6 +37,9 @@ pub struct DataHost {
     pub restore: Option<RestoreDialog>,
     /// The scheduled queue sheet is open (Y4).
     pub scheduled_open: bool,
+    /// The legend page is open, and the custom symbol whose meaning is being edited (S9).
+    pub legend_open: bool,
+    pub editing_meaning: Option<crate::domain::symbols::SymbolRef>,
     /// The verified snapshot waiting for the go-ahead.
     pub staged: Option<StagedRestore>,
     /// The Knowledge page shows the Saved view instead of the library.
@@ -63,12 +68,13 @@ impl DataInputs {
             to: field(t!("data.export.date_placeholder").to_string(), false, window, cx),
             collection_name: field(t!("data.saved.name_placeholder").to_string(), false, window, cx),
             note: field(t!("data.saved.note_placeholder").to_string(), false, window, cx),
+            meaning: field(t!("symbols.legend.meaning_placeholder").to_string(), false, window, cx),
         }
     }
 
     /// Whether one of the fields has the keyboard.
     pub fn any_focused(&self, window: &Window, cx: &App) -> bool {
-        [&self.passphrase, &self.repeat, &self.restore_passphrase, &self.from, &self.to, &self.collection_name, &self.note].into_iter().any(|input| input.read(cx).focus_handle(cx).is_focused(window))
+        [&self.passphrase, &self.repeat, &self.restore_passphrase, &self.from, &self.to, &self.collection_name, &self.note, &self.meaning].into_iter().any(|input| input.read(cx).focus_handle(cx).is_focused(window))
     }
 
     /// Re-renders on edits of the live fields; Enter in the name and note fields submits.
@@ -101,7 +107,7 @@ impl DataHost {
             export: None,
             snapshot: None,
             restore: None,
-            scheduled_open: false,
+            scheduled_open: false, legend_open: false, editing_meaning: None,
             staged: None,
             showing_saved: false,
             target: SavedTarget::Bookmarks,

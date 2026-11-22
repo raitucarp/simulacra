@@ -1,4 +1,5 @@
 use super::*;
+mod legend;
 mod picker;
 mod shorthand;
 mod subtasks;

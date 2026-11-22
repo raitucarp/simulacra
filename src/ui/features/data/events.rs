@@ -101,6 +101,12 @@ pub enum DataEvent {
     PublishScheduledNow(PostId),
     CancelScheduled(PostId),
     CloseScheduled,
+    /// The legend page (S9).
+    OpenLegend,
+    EditMeaning(crate::domain::symbols::SymbolRef),
+    SaveMeaning,
+    CancelMeaning,
+    CloseLegend,
 }
 
 /// Sends a data event to the shell.

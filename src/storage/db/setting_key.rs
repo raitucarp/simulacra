@@ -77,6 +77,8 @@ setting_keys! {
     EmojiPicker => "emoji.picker",
     /// What the composer's symbol picker remembers: the recent symbols (JSON, S5).
     SymbolPicker => "symbols.picker",
+    /// The user's symbol key: what each custom symbol means (JSON, S9).
+    SymbolKey => "symbols.key",
     PrefsGeneral => "preferences.general",
     PrefsAppearance => "preferences.appearance",
     PrefsWriting => "preferences.writing",

@@ -34,7 +34,8 @@ fn installed_runtimes_run_a_trivial_snippet() {
             eprintln!("skipped: {} is not installed", runtime.label());
             continue;
         };
-        let ran = run_code(&spec_for(&found, snippet(*runtime), LIMITS), &AtomicBool::new(false)).expect("ran");
+        let spec = spec_for(&found, snippet(*runtime), LIMITS).expect("a runtime executable");
+        let ran = run_code(&spec, &AtomicBool::new(false)).expect("ran");
         assert_eq!((ran.end, ran.exit_code), (End::Exited, Some(0)), "{}: {}", runtime.label(), ran.output);
         assert!(ran.output.contains("hello from") && ran.output.contains("42"), "{}: {}", runtime.label(), ran.output);
     }

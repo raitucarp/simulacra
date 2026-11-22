@@ -47,14 +47,16 @@ impl AppView {
     /// Runs `request` in `found` (the confirm, if any, was accepted).
     pub(in crate::ui::features::shell) fn start_code_run(&mut self, request: RunRequest, found: DetectedRuntime, window: &mut Window, cx: &mut Context<Self>) {
         let key = (request.post.clone(), request.block);
-        if self.code.running.contains_key(&key) {
+        // P7: checked again, since code running may have been switched off while a confirm was open.
+        if self.code.running.contains_key(&key) || !self.state.preferences().code.allows(found.runtime) {
             return;
         }
         let timeout = Duration::from_secs(u64::from(self.state.preferences().code.timeout_seconds));
-        let spec = spec_for(&found, &request.code, Limits { timeout, output_cap: OUTPUT_CAP });
+        let (runtime, limits) = (found.clone(), Limits { timeout, output_cap: OUTPUT_CAP });
         let cancel = Arc::new(AtomicBool::new(false));
         self.code.running.insert(key.clone(), cancel.clone());
-        let task = cx.background_executor().spawn(async move { run_code(&spec, &cancel) });
+        // P7: the executable is checked and the cache prepared off the UI thread, then it runs.
+        let task = cx.background_executor().spawn(async move { spec_for(&runtime, &request.code, limits).and_then(|spec| run_code(&spec, &cancel)) });
         cx.spawn_in(window, async move |this, cx| {
             let outcome = task.await;
             let _ = this.update_in(cx, |this, window, cx| this.finish_code_run(key, &found, outcome, window, cx));

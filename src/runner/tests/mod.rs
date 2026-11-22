@@ -4,6 +4,7 @@
 mod fake; // P2: this binary as a fake runtime
 mod run; // P2
 mod runtimes; // P3
+mod trust; // P7
 
 use super::{detect, find_on_path};
 use crate::domain::code::Runtime;
@@ -28,14 +29,14 @@ impl Drop for Scratch {
 }
 
 #[cfg(windows)]
-fn executable(dir: &std::path::Path, name: &str) -> PathBuf {
+pub(super) fn executable(dir: &std::path::Path, name: &str) -> PathBuf {
     let file = dir.join(format!("{name}.exe"));
     std::fs::write(&file, b"not a real program").expect("file");
     file
 }
 
 #[cfg(not(windows))]
-fn executable(dir: &std::path::Path, name: &str) -> PathBuf {
+pub(super) fn executable(dir: &std::path::Path, name: &str) -> PathBuf {
     use std::os::unix::fs::PermissionsExt;
     let file = dir.join(name);
     std::fs::write(&file, b"not a real program").expect("file");

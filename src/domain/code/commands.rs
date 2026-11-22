@@ -53,11 +53,13 @@ impl Runtime {
             // -I: isolated (no user site, no PYTHON* variables), -B: no bytecode files.
             Self::Python => ("main.py", &["-I", "-B", "main.py"], vec![("PYTHONIOENCODING", "utf-8"), ("PYTHONUTF8", "1")]),
             Self::Node => ("main.js", &["main.js"], vec![]),
-            // Deno grants no permission unless asked; --no-prompt keeps it from asking.
-            Self::Deno => ("main.ts", &["run", "--no-prompt", "main.ts"], vec![("DENO_DIR", CACHE), ("DENO_NO_UPDATE_CHECK", "1")]),
+            // Deno grants no permission unless asked; --no-prompt keeps it from asking, --cached-only
+            // from fetching remote modules, --no-config from reading a config above the folder (P7).
+            Self::Deno => ("main.ts", &["run", "--no-prompt", "--cached-only", "--no-config", "main.ts"], vec![("DENO_DIR", CACHE), ("DENO_NO_UPDATE_CHECK", "1")]),
             Self::Lua => ("main.lua", &["main.lua"], vec![]),
-            // A single file outside any module; no toolchain or module downloads.
-            Self::Go => ("main.go", &["run", "main.go"], vec![("GOCACHE", CACHE), ("GOPATH", DIR), ("GOENV", "off"), ("GOTOOLCHAIN", "local"), ("GOPROXY", "off")]),
+            // A single file outside any module: GOPATH mode, so no go.mod or go.work above the folder
+            // is read (P7); no toolchain or module downloads.
+            Self::Go => ("main.go", &["run", "main.go"], vec![("GOCACHE", CACHE), ("GOPATH", DIR), ("GOENV", "off"), ("GOTOOLCHAIN", "local"), ("GOPROXY", "off"), ("GO111MODULE", "off"), ("GOWORK", "off")]),
             Self::Ruby => ("main.rb", &["--disable-gems", "main.rb"], vec![]),
             // -n: no php.ini.
             Self::Php => ("main.php", &["-n", "main.php"], vec![]),

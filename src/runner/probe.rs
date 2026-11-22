@@ -35,12 +35,12 @@ fn candidate(dir: &Path, name: &str) -> PathBuf {
 }
 
 #[cfg(windows)]
-fn is_executable(file: &Path) -> bool {
+pub(super) fn is_executable(file: &Path) -> bool {
     file.is_file()
 }
 
 #[cfg(not(windows))]
-fn is_executable(file: &Path) -> bool {
+pub(super) fn is_executable(file: &Path) -> bool {
     use std::os::unix::fs::PermissionsExt;
     std::fs::metadata(file).is_ok_and(|meta| meta.is_file() && meta.permissions().mode() & 0o111 != 0)
 }

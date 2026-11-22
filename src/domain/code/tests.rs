@@ -86,3 +86,15 @@ fn a_run_reads_back_leniently() {
     let extras = crate::domain::post::PostExtras::default();
     assert!(!serde_json::to_string(&extras).expect("json").contains("code_runs"), "no runs, nothing stored");
 }
+
+// P7: the command lines read nothing from above the run's folder and fetch nothing
+
+#[test]
+fn deno_and_go_read_nothing_above_the_folder_and_fetch_nothing() {
+    let deno = Runtime::Deno.invocation().args;
+    assert!(deno.contains(&"--cached-only".to_string()) && deno.contains(&"--no-config".to_string()) && deno.contains(&"--no-prompt".to_string()));
+    let go = Runtime::Go.invocation().env;
+    for wanted in [("GO111MODULE", "off"), ("GOWORK", "off"), ("GOTOOLCHAIN", "local"), ("GOPROXY", "off")] {
+        assert!(go.contains(&(wanted.0.to_string(), wanted.1.to_string())), "{wanted:?}");
+    }
+}

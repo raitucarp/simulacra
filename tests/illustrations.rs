@@ -25,7 +25,8 @@ const WIDE_KINDS: [&str; 4] = ["classes", "steps", "palettes", "vault"];
 const FORBIDDEN_TAGS: [&str; 4] = ["<style", "<image", "<text", "<script"];
 
 /// Expected `viewBox` per top-level folder; anything else is a trait option card.
-const CANVASES: [(&str, &str); 9] = [
+const CANVASES: [(&str, &str); 10] = [
+    ("symbols", "0 0 64 64"),
     ("steps", "0 0 320 120"),
     ("vault", "0 0 320 120"),
     ("classes", "0 0 200 240"),
@@ -194,4 +195,16 @@ fn illustrations_respect_canvas_and_size_budget() {
         }
     }
     assert!(failures.is_empty(), "budget violations:\n{}", failures.join("\n"));
+}
+
+#[test]
+fn every_core_symbol_has_its_art() {
+    use simulacra::domain::symbols::{EntrySymbol, Signifier, SymbolArt};
+    let art = SymbolArt::all();
+    assert_eq!(art.len(), 6 + 4 + 1 + Signifier::ALL.len(), "task states, event states, the note, signifiers");
+    assert!(art.contains(&SymbolArt::Entry(EntrySymbol::Note, None)));
+    let missing: Vec<String> = art.iter().map(|a| a.path()).filter(|path| !Path::new(ASSETS_DIR).join(path).is_file()).collect();
+    assert!(missing.is_empty(), "missing symbol art: {missing:?}");
+    let files = all_svgs().into_iter().filter(|(rel, _)| rel.starts_with("symbols/")).count();
+    assert_eq!(files, art.len(), "no symbol art without a variant");
 }

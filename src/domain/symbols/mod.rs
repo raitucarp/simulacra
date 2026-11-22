@@ -3,13 +3,16 @@
 //! shows the symbol in place of the avatar. Stored as `extras.symbols` on the post.
 //!
 //! - [`kinds`]: the value types ([`EntrySymbol`], [`EntryState`], [`Signifier`], [`SymbolRef`]).
+//! - [`art`]: the in-house drawing of each core symbol (S3).
 //! - [`transitions`]: which states an entry may carry and how it may move between them.
 
+pub mod art;
 pub mod kinds;
 pub mod transitions;
 #[cfg(test)]
 mod tests;
 
+pub use art::{entry_key, signifier_key, state_key, SymbolArt, SYMBOL_ART_DIR};
 pub use kinds::{EntryState, EntrySymbol, Signifier, SymbolRef};
 pub use transitions::{allowed_states, can_transition, initial_state, state_allowed};
 

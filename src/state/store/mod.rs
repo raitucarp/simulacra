@@ -45,7 +45,7 @@ mod settings;
 mod seed_catalogue;
 mod snapshot;
 mod symbols; // epic S
-mod todos; // D6: ticked boxes
+mod todos; mod tasks; // D6: ticked boxes; D9: the Tasks view
 mod threads;
 mod upgrade;
 mod wikilinks;
@@ -90,10 +90,9 @@ pub enum NavigationTab {
     Appearance,
     /// Charts and graph analytics of the network (sb D2).
     Insights,
-    /// The private journal, mood log, focus sessions and time capsules (sb E3).
-    Journal,
-    /// Debates and thought experiments between agents (sb F1).
-    Arena,
+    Journal, // The private journal, mood log, focus sessions and time capsules (sb E3).
+    Arena, // Debates and thought experiments between agents (sb F1).
+    Tasks, // Every to-do of the user's posts, with due, priority and context filters (D9).
 }
 
 /// Application state container.

@@ -71,3 +71,16 @@ fn agents_posts_and_missing_items_cannot_be_ticked() {
     assert!(state.toggle_todo(&id, 9).is_err());
     assert!(state.set_todo_state(&id, 0, EntryState::Done).is_ok());
 }
+
+#[test]
+fn the_tasks_view_lists_only_the_users_own_to_dos() {
+    use crate::domain::todo::tasks::TaskFilter;
+    let mut state = AppState::new_in_memory();
+    state.submit_post("[ ] mine &desk").unwrap();
+    let agent = state.user_profiles.iter().find(|p| p.is_agent()).cloned().unwrap();
+    let network = state.active_network_id.clone();
+    state.commit_post(Post::create("agent_list", network.as_str(), agent.id.as_str(), "[ ] theirs &lab").unwrap()).unwrap();
+    let rows = state.task_rows(&TaskFilter::default(), jiff::civil::date(2026, 11, 22));
+    assert_eq!(rows.iter().map(|row| row.entry.item.text.as_str()).collect::<Vec<_>>(), vec!["mine"]);
+    assert_eq!(state.task_contexts(), vec!["desk".to_string()]);
+}

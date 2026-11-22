@@ -11,7 +11,7 @@ mod tests;
 use super::body::{render_body_tokens, BodyLinks};
 use super::lookup::PostLookup;
 use crate::domain::post::tokenize_post_body;
-use crate::domain::todo::entries::{body_parts, todo_entries, BodyPart};
+use crate::domain::todo::entries::{body_parts, todo_entries, BodyPart, TodoEntry};
 use crate::domain::Post;
 use crate::theme::ThemeTokens;
 use crate::domain::todo::state::TodoState;
@@ -68,4 +68,10 @@ pub(crate) fn render_checklist<L: PostLookup>(source: &ChecklistSource<'_>, look
 pub fn render_post_content<L: PostLookup>(post: &Post, lookup: L, theme: &ThemeTokens, links: &BodyLinks, toggle: Option<TodoToggle>) -> AnyElement {
     let source = ChecklistSource { content: &post.content, post_id: post.id.as_str(), written: crate::time::local_date(post.created_at), ticks: &post.extras.todo_state, toggle };
     render_checklist(&source, lookup, theme, links).unwrap_or_else(|| render_body_tokens(&lookup.body_tokens(post), lookup, theme, links))
+}
+
+/// One to-do outside its post (the Tasks page, D9): its row unindented, with its chips.
+pub fn render_task_row<L: PostLookup>(entry: &TodoEntry, post_id: &str, written: Date, lookup: L, theme: &ThemeTokens, links: &BodyLinks, toggle: Option<TodoToggle>) -> AnyElement {
+    let context = RowContext { post_id: post_id.to_string(), written, today: crate::time::local_now().date(), theme, toggle };
+    todo_row(&TodoEntry { depth: 0, ..entry.clone() }, lookup, links, &context)
 }

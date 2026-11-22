@@ -86,6 +86,8 @@ pub struct AppView {
     pub data: DataHost,
     /// sb P16: what "Ask before spending" allowed this session.
     pub spend: super::spend_host::SpendHost,
+    /// D9: what the Tasks page is narrowed to.
+    pub tasks: super::tasks_host::TasksHost,
     /// Cached views of the sidebars and the center column.
     pub(super) panels: ShellPanels,
     pub(super) _subscriptions: Vec<Subscription>,

@@ -22,7 +22,7 @@ mod threadline;
 
 pub use actions::ActionClickCallback;
 pub use body::{render_body_tokens, render_post_body, BodyLinks, OpenTextAction};
-pub use checklist::{render_post_content, todo_due_label};
+pub use checklist::{render_post_content, render_task_row, todo_due_label, TodoToggle};
 pub use controls::{post_permalink, share_text, LearnAction, LearnControls, LearnRequestKind, LearnStatus, OpenPostAction, PickPostAction, PostAction, PostCardHandlers};
 pub use excerpt::resolve_wikilink_excerpt;
 pub use extras::{mood_chip, source_chip, tool_chip, OpenSourceAction};

@@ -7,4 +7,4 @@ mod labels;
 mod tests;
 
 pub use face::{render_glyph, render_symbol_art, render_symbol_face};
-pub use labels::{art_label, entry_label, glyph_label, signifier_label, state_label};
+pub use labels::{art_label, entry_label, glyph_label, set_symbol_meanings, signifier_label, state_label};

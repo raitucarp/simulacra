@@ -32,6 +32,7 @@ impl AppView {
         let Some(symbol) = self.data.editing_meaning.take() else { return };
         let meaning = self.data.inputs.meaning.read(cx).value().to_string();
         if self.symbols.key.set(symbol, &meaning) {
+            crate::ui::features::symbols::set_symbol_meanings(&self.symbols.key);
             let (Some(db), Ok(json)) = (self.state.db.as_ref(), serde_json::to_string(&self.symbols.key)) else { return };
             if let Err(err) = db.set_setting(SettingKey::SymbolKey, &json) {
                 eprintln!("simulacra: symbol key not saved: {err}");

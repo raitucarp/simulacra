@@ -6,7 +6,7 @@ use super::sheet::{footer, heading, hint, sheet_frame, SheetParts};
 use super::text::tr;
 use crate::domain::symbols::{entry_key, signifier_key, SymbolArt, SymbolGlyph, SymbolRef};
 use crate::theme::ThemeTokens;
-use crate::ui::features::symbols::{art_label, glyph_label, render_glyph, render_symbol_art};
+use crate::ui::features::symbols::{art_label, render_glyph, render_symbol_art};
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::input::{Input, InputState};
@@ -53,7 +53,7 @@ fn line(glyph: AnyElement, name: String, meaning: Div, theme: &ThemeTokens) -> D
 
 fn custom_row(index: usize, (symbol, meaning): &(SymbolRef, String), view: &LegendView, on_event: &DataAction, theme: &ThemeTokens) -> Div {
     let glyph = render_glyph(&SymbolGlyph::Custom(symbol.clone()), theme.icon_size_md, theme);
-    let name = glyph_label(&SymbolGlyph::Custom(symbol.clone()));
+    let name = symbol.name.replace('-', " ");
     if view.editing.as_ref() == Some(symbol) {
         let (save, cancel) = (on_event.clone(), on_event.clone());
         let editor = div().flex().gap(theme.spacing_xs).child(div().flex_1().child(Input::new(&view.meaning).small()))

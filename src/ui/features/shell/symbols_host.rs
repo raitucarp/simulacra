@@ -31,7 +31,9 @@ impl SymbolsHost {
         let index = std::rc::Rc::new(symbol_index(&store));
         let library = index.clone();
         composer.update(cx, |panel, _| panel.set_symbol_sources(given, library));
-        Self { memory, key: load_symbol_key(state), download: None, error: None, installed: store.index(), index }
+        let key = load_symbol_key(state);
+        crate::ui::features::symbols::set_symbol_meanings(&key); // S9: tooltips show the meanings
+        Self { memory, key, download: None, error: None, installed: store.index(), index }
     }
 }
 

@@ -20,3 +20,15 @@ fn a_face_renders_with_core_and_custom_symbols() {
     let custom = PostSymbols { custom: vec![SymbolRef::new("fi", "zap")], ..PostSymbols::default() };
     let _custom = render_symbol_face("p2", &custom.face().unwrap(), theme.avatar_size_lg, &theme);
 }
+
+#[test]
+fn a_custom_symbol_is_named_by_its_meaning_once_the_key_gives_one() {
+    use crate::domain::symbols::SymbolKey;
+    let flask = SymbolRef::new("fi", "flask-round");
+    assert_eq!(glyph_label(&SymbolGlyph::Custom(flask.clone())), "flask round");
+    let mut key = SymbolKey::default();
+    key.set(flask.clone(), "an experiment");
+    set_symbol_meanings(&key);
+    assert_eq!(glyph_label(&SymbolGlyph::Custom(flask)), "an experiment");
+    set_symbol_meanings(&SymbolKey::default());
+}

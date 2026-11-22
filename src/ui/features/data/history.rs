@@ -4,10 +4,11 @@
 
 use super::events::{DataAction, DataEvent};
 use super::history_compare::comparison;
+use super::history_log::render_edit_log;
 use super::history_rows::version_list_column;
 use super::sheet::{footer, sheet_frame, SheetParts};
 use super::text::tr;
-use crate::domain::data::history::{compare_versions, current_index, DiffOp, lane_count, lane_rows, LaneRow, RevisionId, RevisionSubject, TreeNode, Version};
+use crate::domain::data::history::{compare_versions, current_index, edit_log, DiffOp, LogEntry, lane_count, lane_rows, LaneRow, RevisionId, RevisionSubject, TreeNode, Version};
 use crate::theme::ThemeTokens;
 use crate::ui::icons::LucideIcon;
 use gpui_kit::base::Disableable;
@@ -35,6 +36,8 @@ pub struct HistorySheet {
     /// The graph lanes of each version, and how many lanes the tree uses (V5).
     pub lanes: Vec<LaneRow>,
     pub lane_count: usize,
+    /// The edit log of a post (V7; empty for documents).
+    pub log: Vec<LogEntry>,
 }
 
 impl HistorySheet {
@@ -45,7 +48,8 @@ impl HistorySheet {
         let nodes: Vec<TreeNode<'_>> = versions.iter().map(|v| TreeNode { id: v.id.as_ref().map_or("", RevisionId::as_str), parent: v.parent.as_ref().map(RevisionId::as_str) }).collect();
         let lanes = lane_rows(&nodes);
         let lane_count = lane_count(&lanes);
-        Self { subject, title, versions, selected, compare: current, lanes, lane_count }
+        let log = if matches!(subject, RevisionSubject::Post(_)) { edit_log(&versions) } else { Vec::new() };
+        Self { subject, title, versions, selected, compare: current, lanes, lane_count, log }
     }
 
     /// The version shown.
@@ -83,7 +87,7 @@ fn buttons(sheet: &HistorySheet, on_event: DataAction, theme: &ThemeTokens) -> D
 /// The overlay.
 pub fn render_history_sheet(sheet: &HistorySheet, on_event: DataAction, theme: &ThemeTokens) -> Stateful<Div> {
     let list = version_list_column(sheet, &on_event, theme);
-    let body = div().child(div().flex().flex_wrap().items_start().gap(theme.section_gap).child(list).child(div().flex_1().min_w(theme.history_list_width).child(comparison(sheet, theme))));
+    let body = div().child(div().flex().flex_wrap().items_start().gap(theme.section_gap).child(list).child(div().flex_1().min_w(theme.history_list_width).child(comparison(sheet, theme)))).children(render_edit_log(&sheet.log, theme));
     let closing = on_event.clone();
     let parts = SheetParts {
         id: SHEET_ID,

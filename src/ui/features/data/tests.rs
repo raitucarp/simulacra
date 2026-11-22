@@ -74,3 +74,16 @@ fn any_two_versions_are_compared_a_to_b() {
     sheet.pick(99, true);
     assert_eq!(sheet.compare, 2, "out-of-range picks clamp to the last version");
 }
+
+#[test]
+fn a_post_sheet_carries_its_edit_log_and_a_document_sheet_none() {
+    use crate::domain::data::history::{Bump, SemVer, VersionHead};
+    let original = Revision { version: Some(SemVer::ORIGINAL), ..Revision::of(subject(), "one", Timestamp::now()) };
+    let head = VersionHead { version: SemVer::new(2, 0, 0), parent: Some(original.id.clone()), bump: Some(Bump::Major), note: "rewrote it".into(), ..VersionHead::default() };
+    let sheet = HistorySheet::new(subject(), "title".into(), version_list("", "two", Some(&head), std::slice::from_ref(&original)));
+    let notes: Vec<&str> = sheet.log.iter().map(|e| e.note.as_str()).collect();
+    assert_eq!(notes, vec!["rewrote it", ""]);
+    assert_eq!(super::history_log::bump_text(&sheet.log[0]), rust_i18n::t!("data.bump.major"));
+    let document = RevisionSubject::Document("doc".into());
+    assert!(HistorySheet::new(document.clone(), "t".into(), version_list("t", "b", None, &[Revision { subject: document, ..original }])).log.is_empty());
+}

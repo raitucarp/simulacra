@@ -70,3 +70,18 @@ fn any_two_versions_compare_in_either_direction() {
     assert_eq!(compare_versions(&list, 1, 1), None, "a version against itself");
     assert_eq!(compare_versions(&list, 0, 9), None);
 }
+
+#[test]
+fn the_edit_log_lists_numbered_versions_newest_edit_first() {
+    let at = |hour| crate::time::utc(2026, 11, 20, hour, 0, 0);
+    let subject = RevisionSubject::Post(crate::domain::PostId::new("p"));
+    let original = Revision { id: RevisionId::new("a"), version: Some(SemVer::ORIGINAL), edited_at: Some(at(8)), ..Revision::of(subject.clone(), "one", at(9)) };
+    let fix = Revision { id: RevisionId::new("b"), parent_id: Some(RevisionId::new("a")), version: Some(SemVer::new(1, 0, 1)), bump: Bump::Patch, note: "typo".into(), edited_at: Some(at(9)), ..Revision::of(subject, "two", at(10)) };
+    let head = VersionHead { id: RevisionId::new("h"), version: SemVer::new(1, 1, 0), parent: Some(RevisionId::new("b")), bump: Some(Bump::Minor), note: "added a line".into(), edited_at: Some(at(10)) };
+    let log = edit_log(&version_list("", "three", Some(&head), &[original, fix]));
+    let lines: Vec<(String, Option<Bump>, &str, bool)> = log.iter().map(|e| (e.version.to_string(), e.bump, e.note.as_str(), e.current)).collect();
+    assert_eq!(lines, vec![("1.1.0".into(), Some(Bump::Minor), "added a line", true), ("1.0.1".into(), Some(Bump::Patch), "typo", false), ("1.0.0".into(), None, "", false)]);
+    assert_eq!(log[0].edited_at, Some(at(10)));
+    let document = version_list("Title", "body", None, &[Revision::of(RevisionSubject::Document("d".into()), "old", at(9))]);
+    assert!(edit_log(&document).is_empty(), "documents keep no numbered log");
+}

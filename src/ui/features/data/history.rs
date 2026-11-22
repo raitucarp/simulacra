@@ -74,6 +74,12 @@ impl HistorySheet {
     }
 }
 
+/// Posts switch the version they show (V9); documents restore an old version as a new edit.
+fn primary_button(is_post: bool, selected: usize, disabled: bool, on_event: DataAction) -> Button {
+    let (label, icon, event) = if is_post { ("data.history.switch", LucideIcon::Check, DataEvent::SwitchToVersion(selected)) } else { ("data.history.restore", LucideIcon::RotateCcw, DataEvent::RestoreVersion(selected)) };
+    Button::new(RESTORE_ID).primary().small().icon(Icon::new(icon)).label(tr(label)).disabled(disabled).on_click(move |_, w, cx| on_event(event.clone(), w, cx))
+}
+
 fn buttons(sheet: &HistorySheet, on_event: DataAction, theme: &ThemeTokens) -> Div {
     let (restore, close, branch) = (on_event.clone(), on_event.clone(), on_event);
     let (selected, current) = (sheet.selected, sheet.chose_current());
@@ -81,7 +87,7 @@ fn buttons(sheet: &HistorySheet, on_event: DataAction, theme: &ThemeTokens) -> D
     footer(theme)
         .child(Button::new(CLOSE_ID).ghost().small().label(tr("data.close")).on_click(move |_, w, cx| close(DataEvent::CloseHistory, w, cx)))
         .when(is_post, |row| row.child(Button::new(EDIT_FROM_ID).ghost().small().icon(Icon::new(LucideIcon::GitBranch)).label(tr("data.history.edit_from")).disabled(current).on_click(move |_, w, cx| branch(DataEvent::EditFromVersion(selected), w, cx)))) // V4
-        .child(Button::new(RESTORE_ID).primary().small().icon(Icon::new(LucideIcon::RotateCcw)).label(tr("data.history.restore")).disabled(current).on_click(move |_, w, cx| restore(DataEvent::RestoreVersion(selected), w, cx)))
+        .child(primary_button(is_post, selected, current, restore))
 }
 
 /// The overlay.

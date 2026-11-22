@@ -67,6 +67,8 @@ pub enum DataEvent {
     RestoreVersion(usize),
     /// Opens the composer on this older version of a post: saving starts a branch (V4).
     EditFromVersion(usize),
+    /// Makes this version of a post the one it shows, keeping every other (V9).
+    SwitchToVersion(usize),
     CloseHistory,
     /// Export dialog.
     OpenExport,

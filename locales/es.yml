@@ -5839,3 +5839,6 @@ data.history.same_version: "Elige dos versiones distintas: A haciendo clic en un
 data.history.log: "REGISTRO DE EDICIONES"
 data.history.log_unknown_time: "hora desconocida"
 data.history.log_no_note: "Sin nota"
+data.history.switch: "Mostrar esta versión"
+data.history.switched: "Ahora se muestra %{version}. Todas las demás versiones se conservan."
+data.history.switch_failed: "No se pudo mostrar esta versión: %{reason}"

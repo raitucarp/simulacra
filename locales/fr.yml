@@ -5839,3 +5839,6 @@ data.history.same_version: "Choisissez deux versions différentes : A en cliquan
 data.history.log: "JOURNAL DES MODIFICATIONS"
 data.history.log_unknown_time: "heure inconnue"
 data.history.log_no_note: "Aucune note"
+data.history.switch: "Afficher cette version"
+data.history.switched: "%{version} est maintenant affichée. Toutes les autres versions sont conservées."
+data.history.switch_failed: "Impossible d’afficher cette version : %{reason}"

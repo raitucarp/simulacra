@@ -1,6 +1,6 @@
 //! The history sheet in the shell (sb F2): opened on a post (its "…" menu or "edited" mark)
 //! or a vault document (its entry), and "Restore this version", which is itself an edit, so
-//! the version it replaces is kept too.
+//! the version it replaces is kept too. Posts switch the version they show instead (V9).
 
 use super::super::view::AppView;
 use crate::domain::data::history::{current_index, version_list, RevisionSubject, VersionKind};
@@ -25,6 +25,7 @@ impl AppView {
             DataEvent::CompareWith(index) => { self.data.history.iter_mut().for_each(|sheet| sheet.pick(index, true)); } // V6
             DataEvent::RestoreVersion(index) => self.restore_version(index, window, cx),
             DataEvent::EditFromVersion(index) => self.edit_from_version(index, window, cx), // V4
+            DataEvent::SwitchToVersion(index) => self.switch_to_version(index, window, cx), // V9
             _ => self.data.history = None,
         }
     }
@@ -78,5 +79,20 @@ impl AppView {
         let Some(sheet) = self.data.history.take() else { return };
         let (RevisionSubject::Post(id), Some(from)) = (&sheet.subject, sheet.versions.get(index).and_then(|v| v.revision.clone())) else { return };
         self.open_post_editor_from(id, Some(&from), window, cx);
+    }
+}
+
+impl AppView {
+    /// Closes the sheet and makes version `index` the one its post shows (V9).
+    fn switch_to_version(&mut self, index: usize, window: &mut Window, cx: &mut Context<Self>) {
+        let Some(sheet) = self.data.history.take() else { return };
+        let (RevisionSubject::Post(id), Some(to)) = (&sheet.subject, sheet.versions.get(index).and_then(|v| v.revision.clone())) else { return };
+        match self.state.switch_post_head(id, &to, jiff::Timestamp::now()) {
+            Ok(head) => {
+                let text = rust_i18n::t!("data.history.switched", version = crate::ui::features::composer::version_label(head.version)).to_string();
+                self.toast(ToastKind::Confirmation, Notification::success(text), window, cx);
+            }
+            Err(err) => window.push_notification(Notification::error(rust_i18n::t!("data.history.switch_failed", reason = err.to_string()).to_string()), cx),
+        }
     }
 }

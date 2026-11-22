@@ -82,3 +82,25 @@ fn editing_an_older_version_starts_a_branch_and_moves_the_head() {
     let unknown = PostEdit { base: Some(crate::domain::data::history::RevisionId::new("nope")), ..PostEdit::text("x") };
     assert!(state.edit_post_version(&id, &unknown, at(11)).is_err());
 }
+
+#[test]
+fn switching_the_head_shows_any_version_and_loses_none() {
+    let mut state = AppState::new_in_memory();
+    let id = own_post(&mut state, "Habits compound.");
+    state.edit_post_version(&id, &PostEdit::text("Habits compound, slowly, over years of small practice."), at(9)).unwrap();
+    state.edit_post_version(&id, &PostEdit::text("Attention is the rarest form of generosity."), at(10)).unwrap();
+    let left = state.post_head(&id).unwrap();
+    let original = state.post_revisions(&id).into_iter().find(|r| r.parent_id.is_none()).expect("the original");
+    let shown = state.switch_post_head(&id, &original.id, at(11)).expect("switched");
+    assert_eq!((shown.id.clone(), shown.version), (original.id.clone(), SemVer::ORIGINAL));
+    assert_eq!(state.get_post(&id).unwrap().content, "Habits compound.");
+    let kept = state.post_revisions(&id);
+    assert_eq!(kept.len(), 2, "one version in, one out");
+    let left_kept = kept.iter().find(|r| r.id == left.id).expect("the version left is kept under its id");
+    assert_eq!((left_kept.version, left_kept.content.as_str()), (Some(SemVer::new(2, 0, 0)), "Attention is the rarest form of generosity."));
+    assert!(kept.iter().all(|r| r.id != original.id), "the version shown is not also kept");
+    state.switch_post_head(&id, &left.id, at(12)).expect("and back");
+    assert_eq!(head_version(&state, &id), SemVer::new(2, 0, 0));
+    assert_eq!(state.post_revisions(&id).len(), 2);
+    assert!(state.switch_post_head(&id, &crate::domain::data::history::RevisionId::new("nope"), at(13)).is_err());
+}

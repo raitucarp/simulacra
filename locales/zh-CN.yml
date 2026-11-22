@@ -5839,3 +5839,6 @@ data.history.same_version: "请选择两个不同的版本：点击一行选 A�
 data.history.log: "编辑日志"
 data.history.log_unknown_time: "时间未知"
 data.history.log_no_note: "无说明"
+data.history.switch: "显示此版本"
+data.history.switched: "现在显示 %{version}。其他所有版本均已保留。"
+data.history.switch_failed: "无法显示此版本：%{reason}"

@@ -5839,3 +5839,6 @@ data.history.same_version: "Выберите две разные версии: A
 data.history.log: "ЖУРНАЛ ПРАВОК"
 data.history.log_unknown_time: "время неизвестно"
 data.history.log_no_note: "Без заметки"
+data.history.switch: "Показывать эту версию"
+data.history.switched: "Теперь показывается %{version}. Все остальные версии сохранены."
+data.history.switch_failed: "Не удалось показать эту версию: %{reason}"

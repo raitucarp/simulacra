@@ -5839,3 +5839,6 @@ data.history.same_version: "Pick two different versions: A by clicking a row, B 
 data.history.log: "EDIT LOG"
 data.history.log_unknown_time: "time unknown"
 data.history.log_no_note: "No note"
+data.history.switch: "Show this version"
+data.history.switched: "Now showing %{version}. Every other version is kept."
+data.history.switch_failed: "Could not show this version: %{reason}"

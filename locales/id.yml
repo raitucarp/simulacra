@@ -5839,3 +5839,6 @@ data.history.same_version: "Pilih dua versi yang berbeda: A dengan mengeklik bar
 data.history.log: "LOG SUNTINGAN"
 data.history.log_unknown_time: "waktu tidak diketahui"
 data.history.log_no_note: "Tanpa catatan"
+data.history.switch: "Tampilkan versi ini"
+data.history.switched: "Sekarang menampilkan %{version}. Semua versi lain tetap disimpan."
+data.history.switch_failed: "Tidak dapat menampilkan versi ini: %{reason}"

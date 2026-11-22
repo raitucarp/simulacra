@@ -5839,3 +5839,6 @@ data.history.same_version: "異なる2つのバージョンを選んでくださ
 data.history.log: "編集ログ"
 data.history.log_unknown_time: "時刻不明"
 data.history.log_no_note: "メモなし"
+data.history.switch: "このバージョンを表示"
+data.history.switched: "%{version} を表示中です。ほかのバージョンもすべて残っています。"
+data.history.switch_failed: "このバージョンを表示できませんでした: %{reason}"

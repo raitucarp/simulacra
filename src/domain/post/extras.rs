@@ -26,6 +26,9 @@ pub struct PostExtras {
     /// Images attached in the composer, with alt text (sb C3); `image_path` holds the first.
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub images: Vec<crate::domain::media::ImageAttachment>,
+    /// Local files attached in the composer (L2), linked where they are.
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub files: Vec<crate::domain::media::FileRef>,
     /// Entry kind, state, signifiers and custom icons (shown in place of the avatar).
     #[serde(skip_serializing_if = "PostSymbols::is_empty")]
     pub symbols: PostSymbols,
@@ -49,10 +52,10 @@ impl PostExtras {
         self == &Self::default()
     }
 
-    /// Whether there is anything to show behind the post (the origin, images, symbols, tint,
+    /// Whether there is anything to show behind the post (the origin, images, files, symbols, tint,
     /// version and ticks alone are not).
     pub fn has_details(&self) -> bool {
-        Self { origin: None, images: Vec::new(), symbols: PostSymbols::default(), tint: None, head: None, replied_version: None, todo_state: Default::default(), ..self.clone() } != Self::default()
+        Self { origin: None, images: Vec::new(), files: Vec::new(), symbols: PostSymbols::default(), tint: None, head: None, replied_version: None, todo_state: Default::default(), ..self.clone() } != Self::default()
     }
 
     /// Adds `source` unless an identical reference is already listed.

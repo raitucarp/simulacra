@@ -4,13 +4,13 @@
 //! (S7) reads the same. A post revision without a record (a text edit before V10) keeps
 //! nothing to restore, and one without attachments (before V11) leaves them as they are.
 
-use crate::domain::media::ImageAttachment;
+use crate::domain::media::{FileRef, ImageAttachment};
 use crate::domain::post::Tint;
 use crate::domain::symbols::PostSymbols;
 use crate::domain::Post;
 use serde::{Deserialize, Serialize};
 
-/// The link and images of one version of a post (V11).
+/// The link, images and files of one version of a post (V11, L12).
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default)]
 #[serde(default)]
 pub struct Attachments {
@@ -21,17 +21,26 @@ pub struct Attachments {
     pub image_path: Option<String>,
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub images: Vec<ImageAttachment>,
+    /// Local files linked to the version (L12); empty in records kept before files were.
+    #[serde(skip_serializing_if = "Vec::is_empty")]
+    pub files: Vec<FileRef>,
 }
 
 impl Attachments {
     /// A link and images as the composer sends them (the first image is the post's image).
     pub fn new(link_url: Option<String>, images: Vec<ImageAttachment>) -> Self {
-        Self { link_url, image_path: images.first().map(|image| image.path.clone()), images }
+        Self { link_url, image_path: images.first().map(|image| image.path.clone()), images, files: Vec::new() }
+    }
+
+    /// The attachments with `files` linked too (L12).
+    #[must_use]
+    pub fn with_files(self, files: Vec<FileRef>) -> Self {
+        Self { files, ..self }
     }
 
     /// Whether the version carries anything (a post may then have no text).
     pub fn any(&self) -> bool {
-        self.link_url.is_some() || self.image_path.is_some() || !self.images.is_empty()
+        self.link_url.is_some() || self.image_path.is_some() || !self.images.is_empty() || !self.files.is_empty()
     }
 }
 
@@ -51,7 +60,7 @@ pub struct PostRecord {
 impl PostRecord {
     /// What `post` shows beside its text.
     pub fn of(post: &Post) -> Self {
-        let attachments = Attachments { link_url: post.link_url.clone(), image_path: post.image_path.clone(), images: post.extras.images.clone() };
+        let attachments = Attachments { link_url: post.link_url.clone(), image_path: post.image_path.clone(), images: post.extras.images.clone(), files: post.extras.files.clone() };
         Self { symbols: post.extras.symbols.clone(), tint: post.extras.tint, attachments: Some(attachments) }
     }
 
@@ -71,6 +80,7 @@ impl PostRecord {
         post.extras.tint = self.tint;
         if let Some(attachments) = &self.attachments {
             (post.link_url, post.image_path, post.extras.images) = (attachments.link_url.clone(), attachments.image_path.clone(), attachments.images.clone());
+            post.extras.files = attachments.files.clone();
         }
     }
 }

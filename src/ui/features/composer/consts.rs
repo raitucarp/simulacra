@@ -52,3 +52,5 @@ pub(super) const MODAL_REMOVE_DRAFT_BTN_ID: &str = "modal-remove-draft-btn";
 pub(super) const MODAL_COMPOSER_ROWS: (usize, usize) = (2, 8);
 /// Placeholder of the modal link input.
 pub(super) const MODAL_LINK_PLACEHOLDER: &str = "https://...";
+/// Element id of a file chip's remove button in the composer (L12), keyed by its index.
+pub(super) const MODAL_FILE_CHIP_ID: &str = "modal-file-chip";

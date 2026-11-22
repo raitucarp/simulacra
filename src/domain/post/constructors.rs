@@ -40,10 +40,28 @@ impl Post {
         quote_id: Option<PostId>,
         repost_id: Option<PostId>,
     ) -> Result<Self> {
+        Self::create_with_files(id, network_id, author, raw_content, link_url, image_path, reply_to_id, quote_id, repost_id, false)
+    }
+
+    /// [`Self::create_with_attachments`] for a post that will carry local files (L12) when
+    /// `has_files`: they count as media, so the post may have no text.
+    #[allow(clippy::too_many_arguments)]
+    pub fn create_with_files(
+        id: impl Into<PostId>,
+        network_id: impl Into<NetworkId>,
+        author: impl Into<ProfileId>,
+        raw_content: &str,
+        link_url: Option<String>,
+        image_path: Option<String>,
+        reply_to_id: Option<PostId>,
+        quote_id: Option<PostId>,
+        repost_id: Option<PostId>,
+        has_files: bool,
+    ) -> Result<Self> {
         let trimmed = raw_content.trim();
         let clean_link = clean_attachment(link_url);
         let clean_image = clean_attachment(image_path);
-        let has_media = clean_link.is_some() || clean_image.is_some();
+        let has_media = clean_link.is_some() || clean_image.is_some() || has_files;
         validate_content(trimmed, has_media, repost_id.is_some())?;
 
         let linked_posts = collect_linked_posts(trimmed, [&quote_id, &reply_to_id, &repost_id]);

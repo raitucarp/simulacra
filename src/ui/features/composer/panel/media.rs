@@ -1,5 +1,6 @@
 //! Images attached in the composer (sb C3): picked, pasted or dropped files are copied into
 //! the media folder by content hash off the UI thread, each with a field for its description.
+//! Other dropped or pasted files become file chips (L12, `files`).
 
 use super::{ComposerImage, ComposerModalEvent, ComposerModalPanel};
 use crate::domain::media::{ImageAttachment, MAX_GALLERY_IMAGES};
@@ -9,13 +10,18 @@ use gpui_kit::*;
 use rust_i18n::t;
 use std::path::{Path, PathBuf};
 
-/// File extensions attached as images (others dropped or pasted are ignored).
+/// File extensions attached as images (any other file becomes a file chip, L12).
 const IMAGE_EXTENSIONS: [&str; 6] = ["png", "jpg", "jpeg", "webp", "gif", "bmp"];
 
 /// Whether `path` names an image file the composer attaches.
 pub(crate) fn is_image_path(path: &Path) -> bool {
     let extension = path.extension().and_then(|ext| ext.to_str()).map(str::to_ascii_lowercase);
     extension.is_some_and(|ext| IMAGE_EXTENSIONS.contains(&ext.as_str()))
+}
+
+/// `paths` split into the images (the image tray) and the other files (file chips, L12).
+pub(crate) fn split_media(paths: Vec<PathBuf>) -> (Vec<PathBuf>, Vec<PathBuf>) {
+    paths.into_iter().partition(|path| is_image_path(path))
 }
 
 /// What a paste into a draft carries besides text.
@@ -27,10 +33,7 @@ enum PastedMedia {
 fn pasted_media(item: &ClipboardItem) -> Option<PastedMedia> {
     item.entries().iter().find_map(|entry| match entry {
         ClipboardEntry::Image(image) => Some(PastedMedia::Image(image.bytes.clone())),
-        ClipboardEntry::ExternalPaths(paths) => {
-            let images: Vec<PathBuf> = paths.paths().iter().filter(|path| is_image_path(path)).cloned().collect();
-            (!images.is_empty()).then_some(PastedMedia::Files(images))
-        }
+        ClipboardEntry::ExternalPaths(paths) => (!paths.paths().is_empty()).then(|| PastedMedia::Files(paths.paths().to_vec())),
         ClipboardEntry::String(_) => None,
     })
 }
@@ -41,16 +44,20 @@ impl ComposerModalPanel {
         self.media_dir = media_dir;
     }
 
-    /// Attaches the image files among `paths`, up to a gallery's worth.
+    /// Attaches the image files among `paths`, up to a gallery's worth, and any other files as
+    /// file chips (L12).
     pub fn attach_paths(&mut self, paths: Vec<PathBuf>, window: &mut Window, cx: &mut Context<Self>) {
-        let images: Vec<PathBuf> = paths.into_iter().filter(|path| is_image_path(path)).collect();
+        let (images, others) = split_media(paths);
+        if !others.is_empty() {
+            self.attach_files(others, window, cx);
+        }
         for path in self.within_limit(images, cx) {
             let media_dir = self.media_dir.clone();
             self.store_in_background(move || store_attachment_file(&path, &media_dir), window, cx);
         }
     }
 
-    /// A paste into a draft: an image or image files are attached (`true`); text goes through.
+    /// A paste into a draft: an image or files are attached (`true`); text goes through.
     pub(super) fn paste_media(&mut self, item: &ClipboardItem, window: &mut Window, cx: &mut Context<Self>) -> bool {
         match pasted_media(item) {
             Some(PastedMedia::Image(bytes)) => {

@@ -38,6 +38,7 @@ impl ComposerModalPanel {
         (self.preview, self.free.on) = (false, false);
         self.tint = None;
         self.images.clear();
+        self.files.attached.clear(); // L12
         self.error = None;
         for input in [&self.link_input, &self.image_input] {
             input.update(cx, |state, cx| state.set_value("", window, cx));
@@ -65,7 +66,7 @@ impl ComposerModalPanel {
         let images = self.image_attachments(cx);
         let drafts = self.draft_texts(cx);
         let mode = self.mode.clone();
-        cx.emit(ComposerModalEvent::Submit(ComposerSubmission { mode, drafts, link, images, tint: self.tint, publish_at, symbols: self.symbols.chosen.clone(), edit: self.version_edit(cx), replies_to: self.free_parents(cx) }));
+        cx.emit(ComposerModalEvent::Submit(ComposerSubmission { mode, drafts, link, images, files: self.files.attached.clone(), tint: self.tint, publish_at, symbols: self.symbols.chosen.clone(), edit: self.version_edit(cx), replies_to: self.free_parents(cx) }));
     }
 
     /// A typed image path that points to an existing file.

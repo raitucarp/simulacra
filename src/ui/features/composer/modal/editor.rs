@@ -50,6 +50,7 @@ impl ComposerModalView {
             .when(self.is_link_input_open, |this| this.child(self.link_input_row()))
             .when(self.is_image_input_open, |this| this.child(self.image_input_row()))
             .children(self.media_tray())
+            .children(self.file_tray()) // L12: the other files, as chips
             .child(self.attachment_bar())
     }
 

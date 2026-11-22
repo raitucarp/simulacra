@@ -21,6 +21,8 @@ use std::rc::Rc;
 use jiff::civil::Date;
 use row::{todo_row, RowContext};
 
+pub use chips::due_label as todo_due_label;
+
 /// The text a checklist is drawn from.
 pub(crate) struct ChecklistSource<'a> {
     pub content: &'a str,

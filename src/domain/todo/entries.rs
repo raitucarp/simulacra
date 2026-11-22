@@ -32,12 +32,17 @@ pub struct TodoEntry {
     pub children: Vec<usize>,
     /// How many of those are done or dropped (D7: the item may be done once all are).
     pub settled_children: usize,
+    /// The day a repeating item comes round next, once it was completed (D8).
+    pub next_due: Option<Date>,
+    /// How many times a repeating item was completed (D8).
+    pub completions: u32,
 }
 
 impl TodoEntry {
-    /// The day it is due, reading its phrase from the day the post was written.
+    /// The day it is due: its next round once a repeating item was completed (D8), else its
+    /// phrase read from the day the post was written.
     pub fn due(&self, written: Date) -> Option<Date> {
-        resolve_due(self.item.meta.due.as_deref()?, written)
+        self.next_due.or_else(|| resolve_due(self.item.meta.due.as_deref()?, written))
     }
 
     /// Whether it is past its due day on `today` and still to do.
@@ -54,6 +59,9 @@ pub fn todo_entries(content: &str, ticks: &TodoState) -> Vec<TodoEntry> {
     }
     for entry in &mut entries {
         entry.state = ticks.state_of(entry.index, &entry.item);
+        if let Some(tick) = ticks.tick(entry.index, &entry.item.text) {
+            (entry.next_due, entry.completions) = (tick.due, tick.completions);
+        }
     }
     let settled: Vec<usize> = entries.iter().map(|entry| entry.children.iter().filter(|child| entries[**child].state.is_closed()).count()).collect();
     for (entry, count) in entries.iter_mut().zip(settled) {
@@ -68,7 +76,7 @@ fn push_entry(item: &TodoItem, depth: usize, parent: Option<usize>, entries: &mu
         entries[parent].children.push(index);
     }
     let flat = TodoItem { children: Vec::new(), ..item.clone() };
-    entries.push(TodoEntry { index, depth, parent, state: item.state, item: flat, children: Vec::new(), settled_children: 0 });
+    entries.push(TodoEntry { index, depth, parent, state: item.state, item: flat, children: Vec::new(), settled_children: 0, next_due: None, completions: 0 });
     for child in &item.children {
         push_entry(child, depth + 1, Some(index), entries);
     }

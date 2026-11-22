@@ -5,7 +5,7 @@ use super::super::state::{TodoState, TodoTick};
 use super::super::*;
 
 fn tick(index: usize, text: &str, state: EntryState) -> TodoTick {
-    TodoTick { index, text: text.into(), state: Some(state) }
+    TodoTick { index, text: text.into(), state: Some(state), ..TodoTick::default() }
 }
 
 #[test]

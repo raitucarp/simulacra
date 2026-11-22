@@ -9,7 +9,12 @@
 
 use super::{flatten_todos, parse_todos, TodoItem};
 use crate::domain::symbols::EntryState;
+use jiff::civil::Date;
 use serde::{Deserialize, Serialize};
+
+fn is_zero(count: &u32) -> bool {
+    *count == 0
+}
 
 /// What the reader has done to the to-dos of one post.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Default)]
@@ -30,6 +35,12 @@ pub struct TodoTick {
     /// The state the item is in now; `None` keeps the written box.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<EntryState>,
+    /// The day a repeating item is next due, once it was completed (D8).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub due: Option<Date>,
+    /// How many times a repeating item was completed (D8).
+    #[serde(skip_serializing_if = "is_zero")]
+    pub completions: u32,
 }
 
 impl TodoTick {

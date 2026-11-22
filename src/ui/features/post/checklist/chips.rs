@@ -33,7 +33,7 @@ pub(super) fn due_tone(due: Date, today: Date, closed: bool) -> DueTone {
 }
 
 /// "Today", "Tomorrow", "Yesterday", else the weekday and date.
-pub(super) fn due_label(due: Date, today: Date) -> String {
+pub fn due_label(due: Date, today: Date) -> String {
     if due == today {
         t!("todo.due.today").to_string()
     } else if today.checked_add(1.day()).ok() == Some(due) {
@@ -105,6 +105,9 @@ pub(super) fn todo_chips(entry: &TodoEntry, context: &RowContext<'_>) -> Vec<Any
         chips.push(chip(Some(LucideIcon::Calendar), due_label(due, context.today), colour, theme));
     }
     chips.extend(meta.repeat.iter().map(|rule| chip(Some(LucideIcon::Repeat), rule.clone(), muted, theme)));
+    if entry.completions > 0 {
+        chips.push(chip(Some(LucideIcon::CircleCheck), crate::i18n::t_count("todo.repeat.done", entry.completions as usize), theme.accent_success, theme)); // D8
+    }
     chips.extend(meta.contexts.iter().map(|name| chip(Some(LucideIcon::MapPin), name.clone(), muted, theme)));
     chips.extend(meta.estimate_minutes.map(|minutes| chip(Some(LucideIcon::Timer), estimate_label(minutes), muted, theme)));
     chips.extend(meta.delegate.iter().map(|name| chip(Some(LucideIcon::UserCheck), name.clone(), theme.accent_agent, theme)));

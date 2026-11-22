@@ -37,6 +37,8 @@ pub struct ComposerSubmission {
     pub symbols: crate::domain::symbols::PostSymbols,
     /// The version the edit of a published post makes (V3); `None` for new posts.
     pub edit: Option<crate::state::PostEdit>,
+    /// The draft each post replies to when composing freely (T4: a tree); empty for a chain.
+    pub replies_to: Vec<Option<usize>>,
 }
 
 /// Events emitted by [`ComposerModalPanel`].

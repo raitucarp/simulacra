@@ -91,8 +91,9 @@ impl AppView {
 /// Store drafts (attachments and symbols on the first post, the tint on every post) and the anchor
 /// implied by the modal mode; with `shorthand`, each post's leading markers become symbols.
 fn thread_from_submission(submission: ComposerSubmission, shorthand: bool) -> (Vec<ThreadDraft>, ThreadAnchor) {
-    let ComposerSubmission { mode, drafts, link, images, tint, publish_at: _, symbols, edit: _ } = submission;
-    let mut thread: Vec<ThreadDraft> = drafts.into_iter().map(|text| ThreadDraft { tint, ..ThreadDraft::text(text) }).collect();
+    let ComposerSubmission { mode, drafts, link, images, tint, publish_at: _, symbols, edit: _, replies_to } = submission;
+    let parents = replies_to.into_iter().chain(std::iter::repeat(None));
+    let mut thread: Vec<ThreadDraft> = drafts.into_iter().zip(parents).map(|(text, reply_to)| ThreadDraft { tint, reply_to, ..ThreadDraft::text(text) }).collect(); // T4: free compose replies nest
     if let Some(first) = thread.first_mut() {
         first.link = link;
         first.image = images.first().map(|image| image.path.clone());

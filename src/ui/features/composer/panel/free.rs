@@ -39,6 +39,12 @@ impl ComposerModalPanel {
         compose_lines(&text).into_iter().map(|line| line.text).collect()
     }
 
+    /// The draft each post of the free text replies to (T4); empty unless composing freely.
+    pub(super) fn free_parents(&self, cx: &App) -> Vec<Option<usize>> {
+        let text = self.drafts.first().filter(|_| self.free).map(|slot| slot.input.read(cx).value().to_string()).unwrap_or_default();
+        compose_lines(&text).into_iter().map(|line| line.parent).collect()
+    }
+
     /// The preview of the split while composing freely.
     pub(super) fn free_view(&self, cx: &mut Context<Self>) -> Option<FreeComposeView> {
         let text = self.drafts.first().map(|slot| slot.input.read(cx).value().to_string())?;

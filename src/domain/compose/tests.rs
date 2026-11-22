@@ -159,3 +159,9 @@ fn splitting_a_long_line_keeps_its_indent_bullet_and_neighbours() {
     assert_eq!(split_line("alpha beta gamma\r\nnext", 0, 11), "alpha beta\r\ngamma\r\nnext");
     assert_eq!(split_line("\tplain words here", 0, 11), "\tplain words\n\there");
 }
+
+#[test]
+fn each_post_names_the_post_it_replies_to() {
+    let parents: Vec<Option<usize>> = compose_lines("A\n  - a1\n    - a1x\n  - a2\nB\nC\n  - c1").iter().map(|l| l.parent).collect();
+    assert_eq!(parents, vec![None, Some(0), Some(1), Some(0), Some(0), Some(4), Some(5)], "main-thread posts chain; indented ones reply to the line above them");
+}

@@ -65,7 +65,7 @@ impl ComposerModalPanel {
         let images = self.image_attachments(cx);
         let drafts = self.draft_texts(cx);
         let mode = self.mode.clone();
-        cx.emit(ComposerModalEvent::Submit(ComposerSubmission { mode, drafts, link, images, tint: self.tint, publish_at, symbols: self.symbols.chosen.clone(), edit: self.version_edit(cx) }));
+        cx.emit(ComposerModalEvent::Submit(ComposerSubmission { mode, drafts, link, images, tint: self.tint, publish_at, symbols: self.symbols.chosen.clone(), edit: self.version_edit(cx), replies_to: self.free_parents(cx) }));
     }
 
     /// A typed image path that points to an existing file.

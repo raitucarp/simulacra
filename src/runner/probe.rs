@@ -4,7 +4,6 @@
 
 use super::env::program_env;
 use super::process::{run, Captured, End, Limits};
-use super::stop_child;
 use crate::domain::code::{parse_version, DetectedRuntime, Runtime, RuntimeCache};
 use std::ffi::OsStr;
 use std::path::{Path, PathBuf};
@@ -53,7 +52,7 @@ pub fn version_of(program: &Path, args: &[&str]) -> Option<String> {
     command.args(args).env_clear().envs(program_env(program, &home)).current_dir(&home);
     super::hide_window(&mut command);
     let limits = Limits { timeout: PROBE_TIMEOUT, output_cap: PROBE_OUTPUT };
-    let Captured { output, end, .. } = run(command, limits, &AtomicBool::new(false), stop_child).ok()?;
+    let Captured { output, end, .. } = run(command, limits, &AtomicBool::new(false)).ok()?;
     (end == End::Exited).then(|| parse_version(&output)).flatten()
 }
 

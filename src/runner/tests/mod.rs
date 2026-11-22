@@ -1,6 +1,9 @@
 //! Finding runtimes (P1). Nothing here needs a runtime installed: the lookups run against
 //! scratch folders, and the one probe of real runtimes skips those that are absent.
 
+mod fake; // P2: this binary as a fake runtime
+mod run; // P2
+
 use super::{detect, find_on_path};
 use crate::domain::code::Runtime;
 use std::ffi::OsString;

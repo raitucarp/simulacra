@@ -3,6 +3,7 @@
 //! cancels. Programs start with their arguments as a list, never through a shell.
 
 use std::io::Read;
+use super::tree::ProcessTree;
 use std::process::{Child, Command, Stdio};
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{mpsc, Arc, Mutex};
@@ -12,7 +13,7 @@ use std::time::{Duration, Instant};
 const POLL: Duration = Duration::from_millis(10);
 /// How long the output readers get after the child ends (a pipe held open by something else
 /// is given up on, not waited for).
-const READ_GRACE: Duration = Duration::from_secs(2);
+pub(super) const READ_GRACE: Duration = Duration::from_secs(2);
 /// Bytes read at a time.
 const CHUNK: usize = 8 * 1024;
 
@@ -52,10 +53,19 @@ struct Sink {
 }
 
 /// Runs `command` within `limits` (stdin is empty, stdout and stderr are captured); `cancel`
-/// stops it early. `stop` ends the child and everything it started.
-pub fn run(mut command: Command, limits: Limits, cancel: &AtomicBool, stop: impl Fn(&mut Child)) -> std::io::Result<Captured> {
+/// stops it early. The program and everything it starts form one [`ProcessTree`]: when the
+/// program exits, is timed out, cancelled or prints past the cap, the whole tree is ended, so
+/// nothing it started outlives the run.
+pub fn run(mut command: Command, limits: Limits, cancel: &AtomicBool) -> std::io::Result<Captured> {
     let started = Instant::now();
+    let tree = ProcessTree::new()?;
+    tree.prepare(&mut command);
     let mut child = command.stdin(Stdio::null()).stdout(Stdio::piped()).stderr(Stdio::piped()).spawn()?;
+    if let Err(err) = tree.adopt(&child) {
+        tree.kill(&mut child); // fail closed: never run outside a tree that can be ended
+        let _ = child.wait();
+        return Err(err);
+    }
     let sink = Arc::new(Mutex::new(Sink::default()));
     let (done_tx, done_rx) = mpsc::channel();
     let readers = [child.stdout.take().map(|out| Box::new(out) as Box<dyn Read + Send>), child.stderr.take().map(|err| Box::new(err) as Box<dyn Read + Send>)];
@@ -67,7 +77,7 @@ pub fn run(mut command: Command, limits: Limits, cancel: &AtomicBool, stop: impl
             let _ = done.send(());
         });
     }
-    let (end, status) = watch(&mut child, limits, cancel, &sink, &stop);
+    let (end, status) = watch(&mut child, limits, cancel, &sink, &tree);
     let grace = Instant::now() + READ_GRACE;
     for _ in 0..count {
         let _ = done_rx.recv_timeout(grace.saturating_duration_since(Instant::now()));
@@ -77,25 +87,25 @@ pub fn run(mut command: Command, limits: Limits, cancel: &AtomicBool, stop: impl
     Ok(Captured { output, exit_code, end, duration: started.elapsed() })
 }
 
-/// Waits for the child, stopping it on time-out, cancel or a full sink. Returns how it ended
-/// and its exit code, when it had one.
-fn watch(child: &mut Child, limits: Limits, cancel: &AtomicBool, sink: &Mutex<Sink>, stop: &impl Fn(&mut Child)) -> (End, Option<i32>) {
+/// Waits for the child, ending the tree on time-out, cancel or a full sink, and once the
+/// child exits (whatever it left running). Returns how it ended and its exit code.
+fn watch(child: &mut Child, limits: Limits, cancel: &AtomicBool, sink: &Mutex<Sink>, tree: &ProcessTree) -> (End, Option<i32>) {
     let deadline = Instant::now() + limits.timeout;
     loop {
         if let Ok(Some(status)) = child.try_wait() {
+            tree.kill(child);
             return (End::Exited, status.code());
         }
         let capped = sink.lock().is_ok_and(|sink| sink.capped);
         let end = if capped { Some(End::OutputCapped) } else if cancel.load(Ordering::Relaxed) { Some(End::Cancelled) } else { (Instant::now() >= deadline).then_some(End::TimedOut) };
         if let Some(end) = end {
-            stop(child);
+            tree.kill(child);
             let _ = child.wait();
             return (end, None);
         }
         std::thread::sleep(POLL);
     }
 }
-
 /// Reads `reader` into `sink` until it closes; past `cap` bytes it marks the sink and stops.
 fn drain(mut reader: Box<dyn Read + Send>, sink: &Mutex<Sink>, cap: usize) {
     let mut chunk = vec![0; CHUNK];

@@ -58,10 +58,14 @@ zeroize = "1.8"
 # cache is named by an MD5 of the file URI (md-5 is already in the graph through lopdf).
 md-5 = "0.11"
 
-# The Windows Shell's thumbnail of a video (L6): the toolkit's own `windows` version, with
-# features it already enables, so nothing new is built.
+# The Windows Shell's thumbnail of a video (L6) and the job object a code run is held in (P2):
+# the toolkit's own `windows` version, so no new crate is built.
 [target.'cfg(target_os = "windows")'.dependencies]
-windows = { version = "0.62", features = ["Win32_Foundation", "Win32_Graphics_Gdi", "Win32_System_Com", "Win32_UI_Shell"] }
+windows = { version = "0.62", features = ["Win32_Foundation", "Win32_Graphics_Gdi", "Win32_Security", "Win32_System_Com", "Win32_System_JobObjects", "Win32_System_Threading", "Win32_UI_Shell"] }
+
+# Ending a code run's process group on Unix (P2): already in the graph (MIT OR Apache-2.0).
+[target.'cfg(unix)'.dependencies]
+libc = "0.2"
 
 [dev-dependencies]
 resvg = "0.46.0"

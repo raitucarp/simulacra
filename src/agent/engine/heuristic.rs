@@ -52,7 +52,7 @@ impl DialecticEngine {
 }
 
 /// `raw` in the agent's capitalization style.
-fn styled(agent_profile: &Profile, raw: String) -> String {
+pub(super) fn styled(agent_profile: &Profile, raw: String) -> String {
     match agent_profile.config.capitalization {
         CapitalizationStyle::AllLowercase => raw.to_lowercase(),
         _ => raw,

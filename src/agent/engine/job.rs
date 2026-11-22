@@ -75,7 +75,7 @@ impl DialecticEngine {
             followup.extras.tint = reply.extras.tint; // sb C4: a tinted thread is tinted throughout
             thread.push(followup);
         }
-        let reactions = if matches!(job.kind, JobKind::Reply(_)) { result.draft.reactions.clone() } else { Vec::new() };
+        let reactions = if matches!(job.kind, JobKind::Reply(_) | JobKind::Progress { .. }) { result.draft.reactions.clone() } else { Vec::new() };
         SimulationOutcome { reply, thread, llm_error: None, gate_key: job.plan.gate_key, image_error: result.image_error, reactions }
     }
 }

@@ -12,6 +12,10 @@ use crate::domain::symbols::EntryState;
 use jiff::civil::Date;
 use serde::{Deserialize, Serialize};
 
+fn is_false(flag: &bool) -> bool {
+    !*flag
+}
+
 fn is_zero(count: &u32) -> bool {
     *count == 0
 }
@@ -44,6 +48,9 @@ pub struct TodoTick {
     /// The due day the user was last reminded of (D10), so each day is reminded of once.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reminded: Option<Date>,
+    /// The delegate's progress reply was asked for (D12).
+    #[serde(skip_serializing_if = "is_false")]
+    pub progress_asked: bool,
 }
 
 impl TodoTick {

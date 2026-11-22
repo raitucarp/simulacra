@@ -34,3 +34,4 @@ mod todos; // D6
 mod todo_tree; // D7
 mod todo_repeat; // D8
 mod reminders; // D10
+mod delegations; // D12

@@ -11,11 +11,13 @@
 //! - [`heuristic`]: offline canned posts used as the LLM fallback.
 //! - [`reply`]: the reply, root-post and follow-up constructors shared by every path.
 //! - [`outcome`]: a post plus the LLM failure (if any) that forced the fallback.
+//! - [`progress`]: progress replies on to-dos delegated to the agent (D12).
 
 mod heuristic;
 mod job;
 mod kind;
 mod outcome;
+mod progress; // D12: progress replies on delegated to-dos
 mod prompts;
 mod reply;
 mod run;
@@ -25,6 +27,8 @@ mod voices;
 mod tests;
 #[cfg(test)]
 mod tests_root;
+#[cfg(test)]
+mod tests_progress;
 
 pub use job::EngineJob;
 pub use kind::JobKind;

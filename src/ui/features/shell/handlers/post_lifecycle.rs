@@ -21,6 +21,7 @@ impl AppView {
             Ok(_) => {}
             Err(err) => eprintln!("simulacra: post lifecycle tick failed: {err}"),
         }
+        self.dispatch_delegations(window, cx); // D12: a scheduled post may have just handed out to-dos
     }
 
     /// Forgets deleted posts, toasts what a tick changed and re-renders.

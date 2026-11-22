@@ -1,8 +1,10 @@
 //! To-dos in the shell (D6): clicking a box of one of the user's own posts ticks it, kept
 //! with the post without a new version; completing a repeating item says when it comes
-//! round next (D8).
+//! round next (D8); the composer is handed what completion offers (D11); agents handed a
+//! to-do are asked for a progress reply (D12).
 
 use super::super::view::AppView;
+use crate::agent::JobKind;
 use crate::domain::preferences::ToastKind;
 use crate::domain::PostId;
 use crate::ui::features::composer::publish_error_message;
@@ -41,5 +43,30 @@ impl AppView {
         let agents = self.state.current_network_agents().iter().map(|agent| agent.handle.trim_start_matches('@').to_string()).collect();
         let sources = crate::domain::todo::complete::CompletionSources { contexts: self.state.task_contexts(), agents };
         self.composer_modal.update(cx, |panel, _| panel.set_completion_sources(sources));
+    }
+}
+
+impl AppView {
+    /// Asks each agent handed a to-do (D12) for a progress reply to its post, once per item;
+    /// an agent already busy is asked on a later heartbeat.
+    pub(in crate::ui::features::shell) fn dispatch_delegations(&mut self, window: &mut Window, cx: &mut Context<Self>) {
+        for job in self.state.pending_delegations() {
+            if !self.scheduler.queue.start_now(&job.agent.id) {
+                continue;
+            }
+            let parent = self.state.get_post(&job.post_id).map(|post| self.state.authored(post));
+            match (parent, self.state.mark_progress_asked(&job.post_id, job.index)) {
+                (Some(parent), Ok(())) => {
+                    let network = parent.network_id.clone();
+                    self.spawn_generation(job.agent, JobKind::Progress { parent, item: job.item }, network, window, cx);
+                }
+                (_, result) => {
+                    self.scheduler.queue.complete(&job.agent.id);
+                    if let Err(err) = result {
+                        self.report_storage_failure(&err, window, cx);
+                    }
+                }
+            }
+        }
     }
 }

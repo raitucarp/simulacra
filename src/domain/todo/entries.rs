@@ -36,6 +36,8 @@ pub struct TodoEntry {
     pub next_due: Option<Date>,
     /// How many times a repeating item was completed (D8).
     pub completions: u32,
+    /// Its delegate was asked for a progress reply (D12).
+    pub progress_asked: bool,
 }
 
 impl TodoEntry {
@@ -60,7 +62,7 @@ pub fn todo_entries(content: &str, ticks: &TodoState) -> Vec<TodoEntry> {
     for entry in &mut entries {
         entry.state = ticks.state_of(entry.index, &entry.item);
         if let Some(tick) = ticks.tick(entry.index, &entry.item.text) {
-            (entry.next_due, entry.completions) = (tick.due, tick.completions);
+            (entry.next_due, entry.completions, entry.progress_asked) = (tick.due, tick.completions, tick.progress_asked);
         }
     }
     let settled: Vec<usize> = entries.iter().map(|entry| entry.children.iter().filter(|child| entries[**child].state.is_closed()).count()).collect();
@@ -76,7 +78,7 @@ fn push_entry(item: &TodoItem, depth: usize, parent: Option<usize>, entries: &mu
         entries[parent].children.push(index);
     }
     let flat = TodoItem { children: Vec::new(), ..item.clone() };
-    entries.push(TodoEntry { index, depth, parent, state: item.state, item: flat, children: Vec::new(), settled_children: 0, next_due: None, completions: 0 });
+    entries.push(TodoEntry { index, depth, parent, state: item.state, item: flat, children: Vec::new(), settled_children: 0, next_due: None, completions: 0, progress_asked: false });
     for child in &item.children {
         push_entry(child, depth + 1, Some(index), entries);
     }

@@ -25,6 +25,7 @@
 
 mod line;
 pub mod due; // D3: due phrases as days
+pub mod repeat; // D4: repeat rules and their next occurrence
 pub mod syntax; // D1: the help card rows
 mod tokens;
 #[cfg(test)]

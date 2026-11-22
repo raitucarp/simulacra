@@ -192,3 +192,4 @@ fn whitespace_between_words_is_collapsed() {
 
 mod syntax;
 mod due;
+mod repeat;

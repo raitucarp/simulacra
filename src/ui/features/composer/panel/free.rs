@@ -2,10 +2,12 @@
 //! when the thread is posted. Turning it on joins the thread's posts into lines; turning it
 //! off splits the lines back into one editor per post.
 
-use super::super::free_compose::FreeComposeView;
+use super::super::free_compose::{FreeComposeView, SplitLine};
 use super::super::modal::ComposerModalMode;
 use super::ComposerModalPanel;
-use crate::domain::compose::compose_lines;
+use crate::domain::compose::{compose_lines, split_line};
+use crate::domain::MAX_POST_CHARS;
+use std::rc::Rc;
 use gpui_kit::*;
 
 impl ComposerModalPanel {
@@ -38,8 +40,18 @@ impl ComposerModalPanel {
     }
 
     /// The preview of the split while composing freely.
-    pub(super) fn free_view(&self, cx: &App) -> Option<FreeComposeView> {
+    pub(super) fn free_view(&self, cx: &mut Context<Self>) -> Option<FreeComposeView> {
         let text = self.drafts.first().map(|slot| slot.input.read(cx).value().to_string())?;
-        self.free.then(|| FreeComposeView { lines: compose_lines(&text) })
+        let entity = cx.entity();
+        let on_split: SplitLine = Rc::new(move |line, window, cx| entity.update(cx, |this, cx| this.split_free_line(line, window, cx)));
+        self.free.then(|| FreeComposeView { lines: compose_lines(&text), on_split })
+    }
+
+    /// Cuts the free compose line `line` into lines that each fit a post (T3).
+    pub(super) fn split_free_line(&mut self, line: usize, window: &mut Window, cx: &mut Context<Self>) {
+        let Some(input) = self.drafts.first().map(|slot| slot.input.clone()) else { return };
+        let text = split_line(input.read(cx).value().as_ref(), line, MAX_POST_CHARS);
+        input.update(cx, |state, cx| state.set_value(text, window, cx));
+        cx.notify();
     }
 }

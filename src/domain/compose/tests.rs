@@ -146,3 +146,16 @@ fn a_post_over_the_limit_is_flagged_by_visible_length() {
     assert!(lines[0].is_over(10) && !lines[0].is_over(12));
     assert!(!lines[1].is_over(10));
 }
+
+#[test]
+fn splitting_a_long_line_keeps_its_indent_bullet_and_neighbours() {
+    let text = "Intro\n  - One two three. Four five six.\nOutro";
+    let split = split_line(text, 1, 16);
+    assert_eq!(split, "Intro\n  - One two three.\n  - Four five six.\nOutro");
+    let depths: Vec<usize> = compose_lines(&split).iter().map(|l| l.depth).collect();
+    assert_eq!(depths, vec![0, 1, 1, 0], "both pieces reply where the line did");
+    assert_eq!(split_line("Short", 0, 16), "Short", "a line that fits is left alone");
+    assert_eq!(split_line("Short", 7, 16), "Short", "no such line");
+    assert_eq!(split_line("alpha beta gamma\r\nnext", 0, 11), "alpha beta\r\ngamma\r\nnext");
+    assert_eq!(split_line("\tplain words here", 0, 11), "\tplain words\n\there");
+}

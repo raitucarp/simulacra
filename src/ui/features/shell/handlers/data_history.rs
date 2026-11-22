@@ -3,7 +3,7 @@
 //! the version it replaces is kept too. Posts switch the version they show instead (V9).
 
 use super::super::view::AppView;
-use crate::domain::data::history::{current_index, version_list, RevisionSubject, VersionKind};
+use crate::domain::data::history::{current_index, version_list, PostRecord, RevisionSubject, VersionKind};
 use crate::domain::document::CatalogueRecord;
 use crate::domain::preferences::ToastKind;
 use crate::domain::PostId;
@@ -32,10 +32,13 @@ impl AppView {
 
     fn open_post_history(&mut self, id: PostId) {
         let Some(post) = self.state.get_post(&id) else { return };
-        let (title, content) = (shortened(&post.content, TITLE_CHARS), post.content.clone());
+        let (title, content, record) = (shortened(&post.content, TITLE_CHARS), post.content.clone(), PostRecord::of(post).to_json());
         let (revisions, head) = (self.state.post_revisions(&id), self.state.post_head(&id));
         let subject = RevisionSubject::Post(id);
-        self.data.history = Some(HistorySheet::new(subject, title, version_list("", &content, head.as_ref(), &revisions)));
+        let mut versions = version_list("", &content, head.as_ref(), &revisions);
+        let current = current_index(&versions);
+        versions[current].record_json = record; // V10: the look the post shows
+        self.data.history = Some(HistorySheet::new(subject, title, versions));
     }
 
     fn open_document_history(&mut self, id: String) {

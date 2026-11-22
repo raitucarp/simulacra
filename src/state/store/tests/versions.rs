@@ -40,7 +40,7 @@ fn each_edit_is_numbered_by_the_bump_its_changes_suggest() {
 fn a_picked_bump_and_a_note_are_kept_with_the_version() {
     let mut state = AppState::new_in_memory();
     let id = own_post(&mut state, "Habits compound.");
-    let edit = PostEdit { content: "Habits compound!".into(), bump: Some(Bump::Major), note: "  reworded the claim ".into(), base: None };
+    let edit = PostEdit { content: "Habits compound!".into(), bump: Some(Bump::Major), note: "  reworded the claim ".into(), base: None, look: None };
     state.edit_post_version(&id, &edit, at(9)).unwrap();
     let head = state.post_head(&id).unwrap();
     assert_eq!((head.version, head.bump, head.note.as_str(), head.edited_at), (SemVer::new(2, 0, 0), Some(Bump::Major), "reworded the claim", Some(at(9))));
@@ -70,7 +70,7 @@ fn editing_an_older_version_starts_a_branch_and_moves_the_head() {
     let base = state.edit_base(&id, Some(&original.id)).expect("the original as a base");
     assert_eq!((base.text.as_str(), base.version, base.revision.as_ref()), (original.content.as_str(), SemVer::ORIGINAL, Some(&original.id)));
     assert_eq!(base.next(Bump::Minor), SemVer::new(1, 2, 0), "1.1.0 is taken by the main line");
-    let branch = PostEdit { content: "Reading slowly is a form of respect for the reader too.".into(), bump: Some(Bump::Minor), note: "another take".into(), base: Some(original.id.clone()) };
+    let branch = PostEdit { content: "Reading slowly is a form of respect for the reader too.".into(), bump: Some(Bump::Minor), note: "another take".into(), base: Some(original.id.clone()), look: None };
     state.edit_post_version(&id, &branch, at(10)).unwrap().expect("a branch");
     let head = state.post_head(&id).unwrap();
     assert_eq!((head.version, head.parent.as_ref()), (SemVer::new(1, 2, 0), Some(&original.id)), "the head points at the branch, edited from the original");

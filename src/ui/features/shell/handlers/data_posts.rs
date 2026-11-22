@@ -9,6 +9,7 @@ use crate::domain::preferences::ToastKind;
 use crate::domain::post::Tint;
 use crate::domain::symbols::PostSymbols;
 use crate::domain::PostId;
+use crate::domain::data::history::PostRecord;
 use crate::state::PostEdit;
 use crate::ui::features::composer::{publish_error_message, version_label};
 use crate::ui::features::data::{tr, DataEvent, SavedTarget};
@@ -47,11 +48,11 @@ impl AppView {
         self.composer_modal.update(cx, |panel, cx| panel.open_edit_version(target, base, window, cx));
     }
 
-    /// Saves the composer's edit of `id` as a new version (V3: its bump and note), then its
-    /// tint (sb C3) and symbols (S5).
+    /// Saves the composer's edit of `id` as a new version (V3: its bump and note) with its
+    /// tint (sb C3) and symbols (S5), which are part of the version (V10).
     pub(crate) fn save_post_edit(&mut self, id: PostId, edit: PostEdit, (tint, symbols): (Option<Tint>, PostSymbols), window: &mut Window, cx: &mut Context<Self>) {
-        let saved = self.state.edit_post_version(&id, &edit, Timestamp::now()).and_then(|revision| self.state.set_post_tint(&id, tint).map(|_| revision));
-        let saved = saved.and_then(|revision| self.state.set_post_symbols(&id, symbols).map(|_| revision));
+        let edit = PostEdit { look: Some(PostRecord { symbols, tint }), ..edit }; // V10: the look is part of the version
+        let saved = self.state.edit_post_version(&id, &edit, Timestamp::now());
         match saved {
             Ok(revision) => {
                 if revision.is_some() {

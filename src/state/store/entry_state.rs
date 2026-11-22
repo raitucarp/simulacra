@@ -27,10 +27,9 @@ impl AppState {
         if before.entry == Some(EntrySymbol::Task) && !may_settle(to, self.replies_for_post(id).into_iter().map(|reply| &reply.extras.symbols)) {
             return Err(AppError::OpenSubtasks(open)); // S8
         }
-        let record_json = serde_json::to_string(&before).unwrap_or_default();
         let mut edited = self.posts[position].clone();
         edited.extras.symbols = after;
         let revisions = self.post_revisions(id);
-        self.commit_version(edited, VersionStep { bump: Bump::Patch, note: String::new(), base: None, record_json }, &revisions, now)
+        self.commit_version(edited, VersionStep { bump: Bump::Patch, note: String::new(), base: None }, &revisions, now)
     }
 }

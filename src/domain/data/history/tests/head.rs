@@ -68,7 +68,7 @@ fn heads_and_bumps_are_stored_as_text_and_old_extras_read_without_one() {
 
 #[test]
 fn an_edit_base_suggests_a_bump_and_names_the_next_free_version() {
-    let base = EditBase { text: "The mind is a mirror.".into(), version: v(1, 2, 0), revision: None, taken: vec![v(1, 3, 0)] };
+    let base = EditBase { text: "The mind is a mirror.".into(), version: v(1, 2, 0), revision: None, taken: vec![v(1, 3, 0)], record: None };
     assert_eq!(base.suggested("The mind is a mirror!"), Bump::Patch);
     assert_eq!(base.suggested("Attention is the rarest form of generosity."), Bump::Major);
     assert_eq!(base.next(Bump::Minor), v(1, 4, 0));

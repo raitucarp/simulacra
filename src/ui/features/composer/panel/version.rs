@@ -32,6 +32,9 @@ impl ComposerModalPanel {
     pub fn open_edit_version(&mut self, target: AuthoredPost, base: EditBase, window: &mut Window, cx: &mut Context<Self>) {
         let text = base.text.clone();
         self.open_edit(target, window, cx);
+        if let Some(record) = base.record.clone() {
+            (self.tint, self.symbols.chosen) = (record.tint, record.symbols); // V10: the version's own look
+        }
         self.version.base = Some(base);
         if let Some(input) = self.drafts.first().map(|slot| slot.input.clone()) {
             input.update(cx, |state, cx| state.set_value(text, window, cx));
@@ -76,6 +79,6 @@ impl ComposerModalPanel {
     pub(super) fn version_edit(&self, cx: &App) -> Option<PostEdit> {
         let base = self.version.base.as_ref()?;
         let note = self.version.note.read(cx).value().trim().to_string();
-        Some(PostEdit { content: self.first_text(cx), bump: self.version.chosen, note, base: base.revision.clone() })
+        Some(PostEdit { content: self.first_text(cx), bump: self.version.chosen, note, base: base.revision.clone(), look: None })
     }
 }

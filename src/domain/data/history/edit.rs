@@ -25,6 +25,8 @@ pub struct EditBase {
     /// The older version edited from (`None`: the version shown), V4.
     pub revision: Option<super::RevisionId>,
     pub taken: Vec<super::SemVer>,
+    /// The symbols and tint of the version edited from, when it kept them (V10).
+    pub record: Option<super::PostRecord>,
 }
 
 impl EditBase {

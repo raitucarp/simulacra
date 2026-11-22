@@ -7,6 +7,7 @@ mod edit;
 mod head; // V3, V4: the version a post shows
 mod lanes; // V5: the version tree
 mod log; // V7: the edit log
+mod record; // V10: symbols and tint of a version
 mod semver;
 mod versions;
 
@@ -15,6 +16,7 @@ pub use head::{free_version, step_bump, VersionHead};
 pub use semver::{Bump, ParseSemVerError, SemVer, MAJOR_REMOVED_PERCENT, PATCH_MAX_WORDS};
 pub use diff::{diff_stats, tokens, word_diff, DiffOp, DiffStats, MAX_DIFF_CELLS};
 pub use log::{edit_log, LogEntry};
+pub use record::{record_changes, PostRecord, RecordChanges};
 pub use lanes::{lane_cell, lane_count, lane_rows, LaneCell, LaneRow, TreeNode};
 pub use versions::{compare_versions, current_index, version_list, Version, VersionKind};
 

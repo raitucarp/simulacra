@@ -5,7 +5,9 @@ use super::diff_view::{render_diff, render_stats};
 use super::history::HistorySheet;
 use super::sheet::{heading, hint};
 use super::text::tr;
-use crate::domain::data::history::{word_diff, Version, VersionKind};
+use crate::domain::data::history::{record_changes, RevisionSubject, word_diff, Version, VersionKind};
+use crate::domain::post::Tint;
+use crate::ui::features::composer::tint_label_key;
 use crate::theme::ThemeTokens;
 use crate::ui::features::composer::version_label;
 use gpui_kit::*;
@@ -37,5 +39,21 @@ pub(super) fn comparison(sheet: &HistorySheet, theme: &ThemeTokens) -> Div {
         .gap(theme.stack_gap)
         .child(div().flex().flex_wrap().items_center().justify_between().gap(theme.control_gap).child(heading(title, theme)).child(render_stats(&ops, theme)))
         .children(title_change)
+        .children(look_changes(sheet, (a, b), theme))
         .child(render_diff(&ops, theme))
+}
+
+fn tint_name(tint: Option<Tint>) -> String {
+    t!(tint_label_key(tint)).to_string()
+}
+
+/// What changed beside the text of a post from A to B: its tint and its symbols (V10).
+fn look_changes(sheet: &HistorySheet, (a, b): (&Version, &Version), theme: &ThemeTokens) -> Vec<Div> {
+    if !matches!(sheet.subject, RevisionSubject::Post(_)) {
+        return Vec::new();
+    }
+    let changes = record_changes(&a.record_json, &b.record_json);
+    let tint = changes.tint.map(|(before, after)| hint(t!("data.history.tint_changed", before = tint_name(before), after = tint_name(after)).to_string(), theme));
+    let symbols = changes.symbols.then(|| hint(tr("data.history.symbols_changed"), theme));
+    tint.into_iter().chain(symbols).collect()
 }

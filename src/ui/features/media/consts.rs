@@ -20,3 +20,7 @@ pub(super) const DESCRIPTION_LINES: usize = 2;
 pub(super) const META_SEPARATOR: &str = " · ";
 /// Scheme prefixes dropped from a chip's text.
 pub(super) const SHOWN_SCHEMES: [&str; 2] = ["https://", "http://"];
+/// Element ids of a file card and its buttons (L4), keyed by the file's index in the post.
+pub(super) const FILE_CARD_ID: &str = "media-file-card";
+pub(super) const FILE_OPEN_ID: &str = "media-file-open";
+pub(super) const FILE_REVEAL_ID: &str = "media-file-reveal";

@@ -27,3 +27,16 @@ fn links_videos_and_galleries_render_without_a_cache() {
     legacy.image_path = Some("C:/nowhere/agent.png".into());
     assert!(render_post_media(&legacy, &[] as &[Post], &theme, None).is_some());
 }
+
+#[test]
+fn attached_files_get_a_card_with_their_facts() {
+    use crate::domain::media::FileRef;
+    let theme = minimalist_dark();
+    let mut with_file = post("the report");
+    let file = FileRef { size: 1_300_000, modified: Some(crate::time::utc(2026, 11, 2, 12, 0, 0)), mime: "application/pdf".into(), ..FileRef::at("/home/ann/report.pdf") };
+    with_file.extras.files.push(file.clone());
+    assert!(render_post_media(&with_file, &[] as &[Post], &theme, None).is_some());
+    let meta = super::file_card::file_meta(&file, "PDF");
+    assert!(meta.starts_with("PDF · ") && meta.contains("1.2") && meta.ends_with("2026-11-02"), "{meta}");
+    assert_eq!(super::file_card::file_meta(&FileRef::at("/a/b"), "Data").matches(" · ").count(), 1, "no date, no separator for it");
+}

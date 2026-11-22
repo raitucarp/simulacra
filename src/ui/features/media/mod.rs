@@ -2,12 +2,14 @@
 //! chips and the lightbox. Cards only read what the background work cached; they never wait
 //! on the network or decode on the UI thread (thumbnails come from the media scan).
 //!
-//! - `post_media`: what a post shows under its body (gallery, then its first link).
+//! - `post_media`: what a post shows under its body (gallery, file cards, then its first link).
+//! - `file_card`: a local file attached to the post (L4): type art, name, facts, Open, Show in folder.
 //! - `gallery` / `image_tile`: one image at its aspect ratio, or a 2–4 tile grid.
 //! - `link_card` / `video_card`: preview cards, the loading skeleton and the fallback chip.
 //! - `lightbox`: the full-window viewer (Esc closes, arrows move, images fit the window).
 
 mod consts;
+mod file_card;
 mod gallery;
 mod image_tile;
 mod lightbox;

@@ -34,3 +34,11 @@ fn missing_files_and_folders_are_refused() {
     assert!(read_file_ref(&dir.join("gone.pdf")).is_err());
     assert!(read_file_ref(&dir).is_err());
 }
+
+#[test]
+fn files_that_are_not_there_are_never_handed_to_the_system() {
+    let dir = scratch_media_dir("file-open-missing");
+    let gone = dir.join("moved-away.pdf");
+    assert!(crate::media::files::open_file(&gone).is_err());
+    assert!(crate::media::files::show_in_folder(&gone).is_err());
+}

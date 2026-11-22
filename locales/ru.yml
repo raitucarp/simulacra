@@ -5831,3 +5831,4 @@ data.edit.saved_version: "Сохранено как %{version}. Прежняя �
 data.bump.patch: "Исправление"
 data.bump.minor: "Минорная"
 data.bump.major: "Мажорная"
+data.history.edit_from: "Править от этой версии"

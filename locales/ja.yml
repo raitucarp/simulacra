@@ -5831,3 +5831,4 @@ data.edit.saved_version: "%{version} として保存しました。以前のバ�
 data.bump.patch: "パッチ"
 data.bump.minor: "マイナー"
 data.bump.major: "メジャー"
+data.history.edit_from: "このバージョンから編集"

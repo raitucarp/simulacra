@@ -20,6 +20,7 @@ const SHEET_ID: &str = "data-history";
 const ROW_ID_PREFIX: &str = "data-history-version-";
 const RESTORE_ID: &str = "data-history-restore";
 const CLOSE_ID: &str = "data-history-close";
+const EDIT_FROM_ID: &str = "data-history-edit-from";
 
 /// What the sheet shows.
 #[derive(Debug, Clone, PartialEq)]
@@ -90,10 +91,12 @@ pub fn render_history_sheet(sheet: &HistorySheet, on_event: DataAction, theme: &
     let rows = sheet.versions.iter().enumerate().map(|(i, v)| version_row(i, v, i == sheet.selected, &on_event, theme));
     let list = div().w(theme.history_list_width).flex_none().flex().flex_col().gap(theme.spacing_2xs).child(heading(tr("data.history.versions"), theme)).children(rows);
     let body = div().child(div().flex().flex_wrap().items_start().gap(theme.section_gap).child(list).child(div().flex_1().min_w(theme.history_list_width).child(comparison(sheet, theme))));
-    let (restore, close, closing) = (on_event.clone(), on_event.clone(), on_event);
+    let (restore, close, closing, branch) = (on_event.clone(), on_event.clone(), on_event.clone(), on_event);
     let selected = sheet.selected;
+    let is_post = matches!(sheet.subject, RevisionSubject::Post(_));
     let buttons = footer(theme)
         .child(Button::new(CLOSE_ID).ghost().small().label(tr("data.close")).on_click(move |_, w, cx| close(DataEvent::CloseHistory, w, cx)))
+        .when(is_post, |row| row.child(Button::new(EDIT_FROM_ID).ghost().small().icon(Icon::new(LucideIcon::GitBranch)).label(tr("data.history.edit_from")).disabled(selected == 0).on_click(move |_, w, cx| branch(DataEvent::EditFromVersion(selected), w, cx)))) // V4
         .child(Button::new(RESTORE_ID).primary().small().icon(Icon::new(LucideIcon::RotateCcw)).label(tr("data.history.restore")).disabled(selected == 0).on_click(move |_, w, cx| restore(DataEvent::RestoreVersion(selected), w, cx)));
     let parts = SheetParts {
         id: SHEET_ID,

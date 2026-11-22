@@ -59,3 +59,26 @@ fn unchanged_text_makes_no_version_and_the_edit_base_is_the_version_shown() {
     assert_eq!((base.text.as_str(), base.version, base.revision, base.taken), ("Habits compound.", SemVer::ORIGINAL, None, vec![SemVer::ORIGINAL]));
     assert!(state.edit_base(&PostId::new("missing"), None).is_none());
 }
+
+#[test]
+fn editing_an_older_version_starts_a_branch_and_moves_the_head() {
+    let mut state = AppState::new_in_memory();
+    let id = own_post(&mut state, "Reading slowly is a form of respect.");
+    state.edit_post_version(&id, &PostEdit::text("Reading slowly, with a pencil in hand, is a form of respect for the author."), at(9)).unwrap();
+    let main_line = state.post_head(&id).unwrap();
+    let original = state.post_revisions(&id).remove(0);
+    let base = state.edit_base(&id, Some(&original.id)).expect("the original as a base");
+    assert_eq!((base.text.as_str(), base.version, base.revision.as_ref()), (original.content.as_str(), SemVer::ORIGINAL, Some(&original.id)));
+    assert_eq!(base.next(Bump::Minor), SemVer::new(1, 2, 0), "1.1.0 is taken by the main line");
+    let branch = PostEdit { content: "Reading slowly is a form of respect for the reader too.".into(), bump: Some(Bump::Minor), note: "another take".into(), base: Some(original.id.clone()) };
+    state.edit_post_version(&id, &branch, at(10)).unwrap().expect("a branch");
+    let head = state.post_head(&id).unwrap();
+    assert_eq!((head.version, head.parent.as_ref()), (SemVer::new(1, 2, 0), Some(&original.id)), "the head points at the branch, edited from the original");
+    assert_eq!(state.get_post(&id).unwrap().content, "Reading slowly is a form of respect for the reader too.");
+    let kept = state.post_revisions(&id);
+    let leaf = kept.iter().find(|r| r.id == main_line.id).expect("the main line is kept under its own id");
+    assert_eq!((leaf.version, leaf.parent_id.as_ref()), (Some(SemVer::new(1, 1, 0)), Some(&original.id)));
+    assert_eq!(kept.len(), 2);
+    let unknown = PostEdit { base: Some(crate::domain::data::history::RevisionId::new("nope")), ..PostEdit::text("x") };
+    assert!(state.edit_post_version(&id, &unknown, at(11)).is_err());
+}

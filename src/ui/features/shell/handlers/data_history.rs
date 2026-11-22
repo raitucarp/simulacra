@@ -27,6 +27,7 @@ impl AppView {
                 }
             }
             DataEvent::RestoreVersion(index) => self.restore_version(index, window, cx),
+            DataEvent::EditFromVersion(index) => self.edit_from_version(index, window, cx), // V4
             _ => self.data.history = None,
         }
     }
@@ -70,5 +71,15 @@ impl AppView {
             Ok(()) => self.toast(ToastKind::Confirmation, Notification::success(tr("data.history.restored")), window, cx),
             Err(reason) => window.push_notification(Notification::error(rust_i18n::t!("data.history.restore_failed", reason = reason).to_string()), cx),
         }
+    }
+}
+
+impl AppView {
+    /// Closes the sheet and opens the composer on version `index` of its post: saving starts
+    /// a branch from it (V4).
+    fn edit_from_version(&mut self, index: usize, window: &mut Window, cx: &mut Context<Self>) {
+        let Some(sheet) = self.data.history.take() else { return };
+        let (RevisionSubject::Post(id), Some(from)) = (&sheet.subject, sheet.versions.get(index).and_then(|v| v.revision.clone())) else { return };
+        self.open_post_editor_from(id, Some(&from), window, cx);
     }
 }

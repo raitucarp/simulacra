@@ -5831,3 +5831,4 @@ data.edit.saved_version: "Als %{version} gespeichert. Die frühere Version bleib
 data.bump.patch: "Patch"
 data.bump.minor: "Neben"
 data.bump.major: "Haupt"
+data.history.edit_from: "Ab dieser Version bearbeiten"

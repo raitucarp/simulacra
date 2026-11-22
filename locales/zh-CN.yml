@@ -5831,3 +5831,4 @@ data.edit.saved_version: "已保存为 %{version}。之前的版本保留在历�
 data.bump.patch: "补丁"
 data.bump.minor: "次要"
 data.bump.major: "主要"
+data.history.edit_from: "从此版本编辑"

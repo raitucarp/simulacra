@@ -62,6 +62,8 @@ pub enum DataEvent {
     OpenDocumentHistory(String),
     SelectVersion(usize),
     RestoreVersion(usize),
+    /// Opens the composer on this older version of a post: saving starts a branch (V4).
+    EditFromVersion(usize),
     CloseHistory,
     /// Export dialog.
     OpenExport,

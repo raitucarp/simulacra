@@ -5831,3 +5831,4 @@ data.edit.saved_version: "Enregistré en %{version}. La version précédente res
 data.bump.patch: "Correctif"
 data.bump.minor: "Mineure"
 data.bump.major: "Majeure"
+data.history.edit_from: "Modifier à partir de cette version"

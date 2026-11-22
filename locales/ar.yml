@@ -5831,3 +5831,4 @@ data.edit.saved_version: "حُفظ بوصفه %{version}. يبقى الإصدا�
 data.bump.patch: "تصحيح"
 data.bump.minor: "فرعي"
 data.bump.major: "رئيسي"
+data.history.edit_from: "التعديل انطلاقًا من هذا الإصدار"

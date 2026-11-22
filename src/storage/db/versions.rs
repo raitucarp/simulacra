@@ -10,6 +10,7 @@ use super::posts_fts::POSTS_FTS_VERSION;
 use super::reactions::REACTIONS_VERSION;
 use super::revision_chain::REVISION_CHAIN_VERSION;
 use super::revision_heads::REVISION_HEADS_VERSION;
+use super::revisions_fts::REVISIONS_FTS_VERSION;
 use super::{collect_rows, db_err, Database, EMPTY_AUTHOR_SNAPSHOT};
 use crate::domain::{Profile, ProfileId};
 use crate::error::Result;
@@ -24,7 +25,7 @@ pub(super) const CATALOGUE_VERSION: i64 = 2;
 type MigrationStep = fn(&Database) -> Result<()>;
 
 /// Every versioned migration, in ascending version order.
-const MIGRATIONS: [(i64, MigrationStep); 8] = [
+const MIGRATIONS: [(i64, MigrationStep); 9] = [
     (AUTHOR_ID_VERSION, Database::migrate_author_ids),
     (CATALOGUE_VERSION, Database::migrate_catalogue_records),
     (EMBEDDING_MODEL_VERSION, Database::migrate_embedding_model),
@@ -33,6 +34,7 @@ const MIGRATIONS: [(i64, MigrationStep); 8] = [
     (POSTS_FTS_VERSION, Database::migrate_posts_index),
     (REACTIONS_VERSION, Database::migrate_reactions_table),
     (REVISION_HEADS_VERSION, Database::migrate_revision_heads),
+    (REVISIONS_FTS_VERSION, Database::migrate_revisions_index), // Q6
 ];
 
 /// The version a fully migrated vault is at.

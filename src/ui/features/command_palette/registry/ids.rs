@@ -99,6 +99,8 @@ command_ids! {
     GoArena => "go_arena",
     /// D9: the Tasks page.
     GoTasks => "go_tasks",
+    /// Q4: the Search page.
+    GoSearch => "go_search",
     NewDebate => "new_debate",
     NewThoughtExperiment => "new_thought_experiment",
     DebateOpenThought => "debate_open_thought",

@@ -109,3 +109,12 @@ fn posts_stored_before_the_index_are_backfilled() {
     db.init_schema().expect("a second run is a no-op");
     assert_eq!(index_rows(&db), 1);
 }
+
+#[test]
+fn a_query_reads_its_words_whole_but_the_last_and_its_phrases_in_order() {
+    use crate::storage::db::query_match_expression;
+    let words = |list: &[&str]| list.iter().map(|w| w.to_string()).collect::<Vec<_>>();
+    assert_eq!(query_match_expression(&words(&["Spinoza,", "ethi"]), &[]).as_deref(), Some("\"spinoza\" \"ethi\"*"));
+    assert_eq!(query_match_expression(&words(&["rye"]), &words(&["starter  Recipe!"])).as_deref(), Some("\"rye\"* \"starter recipe\""));
+    assert_eq!(query_match_expression(&words(&["a", "-"]), &words(&["\"\""])), None);
+}

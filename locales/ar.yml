@@ -5963,3 +5963,23 @@ forge.ui.engine.may_feel_hint: "متوقف افتراضيًا. عند تشغيل
 prefs.row.writing.feeling_checkins.title: "سجّل مشاعري في اليوميات"
 prefs.row.writing.feeling_checkins.description: "عندما تنشر إحدى شخصياتك شعورًا، يُضاف تسجيل للمزاج مع ملاحظته إلى يومياتك الخاصة. لا يعود شيء من اليوميات إلى الخلاصة."
 prefs.row.writing.feeling_checkins.keywords: "شعور، مزاج، تسجيل، يوميات، عاطفة"
+# Q4: the Search page
+nav.search: "بحث"
+palette.cmd.go_search: "البحث في المنشورات"
+palette.cmd.go_search_keywords: "بحث, إيجاد, استعلام, مرشح, كلمات, معنى"
+search.page.title: "بحث"
+search.page.placeholder: "كلمات، \"عبارات\"، from: kind: symbol: tint: has: is: before: after:"
+search.page.count_one: "%{count} نتيجة"
+search.page.count_other: "%{count} نتائج"
+search.page.filters: "المرشحات"
+search.page.by_meaning: "حسب المعنى"
+search.page.prompt_title: "ابحث في منشوراتك"
+search.page.prompt_hint: "تجد الكلمات المنشورات التي تحتويها، وتضيّق المرشحات القائمة، وتستبعد علامة الطرح ما لا تريده. استخدم مفاتيح الأسهم للتنقل وEnter للفتح."
+search.page.empty_title: "لم يُعثر على شيء"
+search.page.empty_hint: "جرّب كلمات أقل أو أزل مرشحًا."
+# Q5: saved searches
+search.page.saved: "المحفوظة"
+search.page.save: "احفظ البحث"
+# Q6: old versions
+search.page.include_versions: "تضمين النسخ القديمة"
+search.page.earlier_version: "في نسخة سابقة"

@@ -5963,3 +5963,23 @@ forge.ui.engine.may_feel_hint: "Off by default. When on, the answer may carry a 
 prefs.row.writing.feeling_checkins.title: "Log my feelings in the journal"
 prefs.row.writing.feeling_checkins.description: "When one of your personas posts a feeling, a mood check-in with its note is added to your private journal. Nothing from the journal goes back to the feed."
 prefs.row.writing.feeling_checkins.keywords: "feeling, mood, check-in, journal, emotion"
+# Q4: the Search page
+nav.search: "Search"
+palette.cmd.go_search: "Search posts"
+palette.cmd.go_search_keywords: "search, find, query, filter, words, meaning"
+search.page.title: "Search"
+search.page.placeholder: "Words, \"phrases\", from: kind: symbol: tint: has: is: before: after:"
+search.page.count_one: "%{count} result"
+search.page.count_other: "%{count} results"
+search.page.filters: "Filters"
+search.page.by_meaning: "by meaning"
+search.page.prompt_title: "Search your posts"
+search.page.prompt_hint: "Words find the posts that hold them, filters narrow the list, and a minus sign leaves things out. Use the arrow keys to move and Enter to open."
+search.page.empty_title: "Nothing found"
+search.page.empty_hint: "Try fewer words or remove a filter."
+# Q5: saved searches
+search.page.saved: "Saved"
+search.page.save: "Save search"
+# Q6: old versions
+search.page.include_versions: "Include old versions"
+search.page.earlier_version: "in an earlier version"

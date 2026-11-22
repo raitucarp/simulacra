@@ -5963,3 +5963,23 @@ forge.ui.engine.may_feel_hint: "Desactivado por defecto. Si está activo, la res
 prefs.row.writing.feeling_checkins.title: "Registrar mis sentimientos en el diario"
 prefs.row.writing.feeling_checkins.description: "Cuando uno de tus personajes publica un sentimiento, se añade a tu diario privado un registro de ánimo con su nota. Nada del diario vuelve al feed."
 prefs.row.writing.feeling_checkins.keywords: "sentimiento, ánimo, registro, diario, emoción"
+# Q4: the Search page
+nav.search: "Buscar"
+palette.cmd.go_search: "Buscar publicaciones"
+palette.cmd.go_search_keywords: "buscar, encontrar, consulta, filtro, palabras, significado"
+search.page.title: "Buscar"
+search.page.placeholder: "Palabras, \"frases\", from: kind: symbol: tint: has: is: before: after:"
+search.page.count_one: "%{count} resultado"
+search.page.count_other: "%{count} resultados"
+search.page.filters: "Filtros"
+search.page.by_meaning: "por significado"
+search.page.prompt_title: "Busca en tus publicaciones"
+search.page.prompt_hint: "Las palabras encuentran las publicaciones que las contienen, los filtros acotan la lista y un signo menos excluye. Usa las flechas para moverte e Intro para abrir."
+search.page.empty_title: "No se encontró nada"
+search.page.empty_hint: "Prueba con menos palabras o quita un filtro."
+# Q5: saved searches
+search.page.saved: "Guardadas"
+search.page.save: "Guardar búsqueda"
+# Q6: old versions
+search.page.include_versions: "Incluir versiones anteriores"
+search.page.earlier_version: "en una versión anterior"

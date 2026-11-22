@@ -5963,3 +5963,23 @@ forge.ui.engine.may_feel_hint: "Standardmäßig aus. Wenn an, darf die Antwort e
 prefs.row.writing.feeling_checkins.title: "Meine Gefühle im Tagebuch festhalten"
 prefs.row.writing.feeling_checkins.description: "Wenn eine deiner Personas ein Gefühl postet, kommt ein Stimmungs-Check-in mit der Notiz in dein privates Tagebuch. Aus dem Tagebuch gelangt nichts zurück in den Feed."
 prefs.row.writing.feeling_checkins.keywords: "gefühl, stimmung, check-in, tagebuch, emotion"
+# Q4: the Search page
+nav.search: "Suche"
+palette.cmd.go_search: "Beiträge durchsuchen"
+palette.cmd.go_search_keywords: "suche, finden, abfrage, filter, wörter, bedeutung"
+search.page.title: "Suche"
+search.page.placeholder: "Wörter, \"Phrasen\", from: kind: symbol: tint: has: is: before: after:"
+search.page.count_one: "%{count} Treffer"
+search.page.count_other: "%{count} Treffer"
+search.page.filters: "Filter"
+search.page.by_meaning: "nach Bedeutung"
+search.page.prompt_title: "Deine Beiträge durchsuchen"
+search.page.prompt_hint: "Wörter finden die Beiträge, die sie enthalten, Filter grenzen die Liste ein, und ein Minuszeichen schließt etwas aus. Mit den Pfeiltasten bewegen, mit Enter öffnen."
+search.page.empty_title: "Nichts gefunden"
+search.page.empty_hint: "Versuche weniger Wörter oder entferne einen Filter."
+# Q5: saved searches
+search.page.saved: "Gespeichert"
+search.page.save: "Suche speichern"
+# Q6: old versions
+search.page.include_versions: "Alte Versionen einbeziehen"
+search.page.earlier_version: "in einer früheren Version"

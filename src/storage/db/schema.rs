@@ -108,6 +108,7 @@ impl Database {
         self.conn.execute_batch(super::data_schema::CREATE_DATA_TABLES).map_err(db_err)?; // sb F2
         self.migrate_posts_schema()?;
         self.create_posts_index()?; // Q1, once posts has every column
+        self.create_revisions_index()?; // Q6
         self.conn
             .execute_batch(CREATE_MIGRATED_INDEXES)
             .map_err(db_err)?;

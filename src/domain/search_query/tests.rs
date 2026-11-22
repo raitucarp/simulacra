@@ -145,3 +145,72 @@ fn unicode_text_and_values_are_kept() {
 fn parse_matches_the_free_function() {
     assert_eq!(PostQuery::parse("a from:b"), q("a from:b"));
 }
+
+#[test]
+fn a_query_written_back_parses_to_the_same_query() {
+    for input in ["sourdough \"starter recipe\" from:\"Sam Lee\" has:image -burnt -\"too dark\" -is:archived", "before:2026-01-02 after:last-week tint:amber", "-", ""] {
+        let parsed = q(input);
+        assert_eq!(q(&parsed.to_text()), parsed, "{input}");
+    }
+    assert_eq!(q("rye from:sam has:image").to_text(), "rye from:sam has:image");
+}
+
+#[test]
+fn filters_are_removed_and_toggled() {
+    let query = q("rye has:image -from:bot");
+    assert_eq!(query.without_filter(&F::Has(HasFilter::Image), false).to_text(), "rye -from:bot");
+    assert_eq!(query.without_filter(&F::From("bot".into()), true).to_text(), "rye has:image");
+    assert_eq!(query.toggled_filter(F::Is(IsFilter::Open)).to_text(), "rye has:image is:open -from:bot");
+    assert_eq!(query.toggled_filter(F::Has(HasFilter::Image)).to_text(), "rye -from:bot");
+    assert!(HasFilter::ALL.iter().all(|has| HasFilter::parse(has.key()) == Some(*has)));
+    assert!(IsFilter::ALL.iter().all(|is| IsFilter::parse(is.key()) == Some(*is)));
+}
+
+// Q5: saved searches
+
+use super::saved::{SavedSearches, MAX_SAVED_NAME_CHARS, MAX_SAVED_SEARCHES};
+
+#[test]
+fn saving_keeps_each_query_once_newest_first() {
+    let mut saved = SavedSearches::default();
+    assert!(saved.save("rye  has:image"));
+    assert!(saved.save("from:sam"));
+    assert!(!saved.save("from:sam"), "already the newest");
+    assert!(saved.save(" rye has:image "), "moves to the front");
+    let queries: Vec<&str> = saved.items.iter().map(|item| item.query.as_str()).collect();
+    assert_eq!(queries, vec!["rye has:image", "from:sam"]);
+    assert_eq!(saved.items[0].name, "rye has:image");
+    assert!(!saved.save("   "), "a blank query is not saved");
+    assert!(saved.contains("rye   has:image"));
+}
+
+#[test]
+fn the_oldest_falls_off_and_names_are_clipped() {
+    let mut saved = SavedSearches::default();
+    for n in 0..=MAX_SAVED_SEARCHES {
+        saved.save(&format!("query{n}"));
+    }
+    assert_eq!(saved.items.len(), MAX_SAVED_SEARCHES);
+    assert!(!saved.contains("query0"));
+    saved.save(&"x".repeat(MAX_SAVED_NAME_CHARS * 2));
+    assert_eq!(saved.items[0].name.chars().count(), MAX_SAVED_NAME_CHARS);
+    assert_eq!(saved.items[0].query.len(), MAX_SAVED_NAME_CHARS * 2, "the query itself is kept whole");
+}
+
+#[test]
+fn renaming_forgetting_and_storing() {
+    let mut saved = SavedSearches::default();
+    saved.save("is:open has:todo");
+    assert!(saved.rename("is:open has:todo", "  Open to-dos "));
+    assert_eq!(saved.items[0].name, "Open to-dos");
+    assert!(saved.rename("is:open has:todo", " "));
+    assert_eq!(saved.items[0].name, "is:open has:todo", "a blank name falls back to the query");
+    assert!(!saved.rename("missing", "x"));
+    let restored = SavedSearches::from_json(&saved.to_json());
+    assert_eq!(restored, saved);
+    assert_eq!(SavedSearches::from_json("not json"), SavedSearches::default());
+    assert_eq!(SavedSearches::from_json(r#"{"items":[{"query":"a"}],"future":1}"#).items[0].query, "a");
+    assert!(saved.remove("is:open  has:todo"));
+    assert!(!saved.remove("is:open has:todo"));
+    assert!(saved.items.is_empty());
+}

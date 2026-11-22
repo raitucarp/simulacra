@@ -17,10 +17,13 @@
 
 mod lex;
 mod parse;
+mod write; // Q4: back to text for filter chips
+pub mod saved; // Q5: saved searches
 #[cfg(test)]
 mod tests;
 
 pub use parse::parse_query;
+pub use saved::{SavedSearch, SavedSearches};
 
 use jiff::civil::Date;
 

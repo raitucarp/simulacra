@@ -30,7 +30,7 @@ mod post_delete;
 mod post_row;
 mod post_updates;
 mod posts;
-mod posts_fts;
+mod posts_fts; mod revisions_fts; // Q1, Q6
 mod preferences;
 mod profiles;
 mod reactions; // R1
@@ -52,7 +52,7 @@ mod tests;
 pub use catalogue::{build_catalogue_search, fts_match_expression, CatalogueSearch, DocumentText};
 pub use arena::ArenaRecord;
 pub use journal::StoredRecord;
-pub use posts_fts::post_match_expression;
+pub use posts_fts::{post_match_expression, query_match_expression, search_terms, word_terms};
 pub use restore::{verify_database_file, DatabaseSummary};
 pub use preferences::{preference_rows, PREFERENCE_KEYS};
 pub use setting_key::SettingKey;

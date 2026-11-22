@@ -37,6 +37,7 @@ mod scheduler_state;
 mod reactions_host; // epic R
 mod symbols_host; // epic S
 mod tasks_host; // D9
+mod search_host; // Q4
 mod recommend_host;
 mod semantic_state;
 mod spend_host; // sb P16

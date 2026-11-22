@@ -93,6 +93,7 @@ pub enum NavigationTab {
     Journal, // The private journal, mood log, focus sessions and time capsules (sb E3).
     Arena, // Debates and thought experiments between agents (sb F1).
     Tasks, // Every to-do of the user's posts, with due, priority and context filters (D9).
+    Search, // Posts by words, filters and meaning in one ranked list (Q4).
 }
 
 /// Application state container.

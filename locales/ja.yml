@@ -5963,3 +5963,23 @@ forge.ui.engine.may_feel_hint: "既定ではオフです。オンにすると、
 prefs.row.writing.feeling_checkins.title: "気持ちを日記に記録する"
 prefs.row.writing.feeling_checkins.description: "ペルソナが気持ちを投稿すると、そのメモ付きの気分チェックインが非公開の日記に追加されます。日記の内容がフィードに戻ることはありません。"
 prefs.row.writing.feeling_checkins.keywords: "気持ち, 気分, チェックイン, 日記, 感情"
+# Q4: the Search page
+nav.search: "検索"
+palette.cmd.go_search: "投稿を検索"
+palette.cmd.go_search_keywords: "検索, 探す, クエリ, フィルター, 単語, 意味"
+search.page.title: "検索"
+search.page.placeholder: "単語、\"フレーズ\"、from: kind: symbol: tint: has: is: before: after:"
+search.page.count_one: "%{count} 件"
+search.page.count_other: "%{count} 件"
+search.page.filters: "フィルター"
+search.page.by_meaning: "意味で一致"
+search.page.prompt_title: "投稿を検索"
+search.page.prompt_hint: "単語はそれを含む投稿を見つけ、フィルターは一覧を絞り込み、マイナス記号は除外します。矢印キーで移動し、Enter で開きます。"
+search.page.empty_title: "見つかりませんでした"
+search.page.empty_hint: "単語を減らすか、フィルターを外してみてください。"
+# Q5: saved searches
+search.page.saved: "保存済み"
+search.page.save: "検索を保存"
+# Q6: old versions
+search.page.include_versions: "古いバージョンも含める"
+search.page.earlier_version: "以前のバージョンで一致"

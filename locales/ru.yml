@@ -5963,3 +5963,23 @@ forge.ui.engine.may_feel_hint: "По умолчанию выключено. Ес
 prefs.row.writing.feeling_checkins.title: "Записывать мои чувства в дневник"
 prefs.row.writing.feeling_checkins.description: "Когда одна из ваших персон делится чувством, в личный дневник добавляется отметка настроения с заметкой. Из дневника ничего не попадает обратно в ленту."
 prefs.row.writing.feeling_checkins.keywords: "чувство, настроение, отметка, дневник, эмоция"
+# Q4: the Search page
+nav.search: "Поиск"
+palette.cmd.go_search: "Искать в записях"
+palette.cmd.go_search_keywords: "поиск, найти, запрос, фильтр, слова, смысл"
+search.page.title: "Поиск"
+search.page.placeholder: "Слова, \"фразы\", from: kind: symbol: tint: has: is: before: after:"
+search.page.count_one: "%{count} результат"
+search.page.count_other: "%{count} результатов"
+search.page.filters: "Фильтры"
+search.page.by_meaning: "по смыслу"
+search.page.prompt_title: "Поиск по вашим записям"
+search.page.prompt_hint: "Слова находят записи, в которых они есть, фильтры сужают список, а знак минус исключает. Стрелки перемещают выбор, Enter открывает."
+search.page.empty_title: "Ничего не найдено"
+search.page.empty_hint: "Попробуйте меньше слов или уберите фильтр."
+# Q5: saved searches
+search.page.saved: "Сохранённые"
+search.page.save: "Сохранить поиск"
+# Q6: old versions
+search.page.include_versions: "Искать в старых версиях"
+search.page.earlier_version: "в более ранней версии"

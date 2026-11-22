@@ -1,7 +1,7 @@
 //! Comprehensive Threads-style post item composition.
 
 use super::actions::render_action_bar;
-use super::body::render_body_tokens;
+use super::checklist::render_post_content;
 use super::consts::POST_ITEM_ID_PREFIX;
 use super::controls::{collect_references, PostCardHandlers};
 use super::extras::render_post_extras;
@@ -86,7 +86,7 @@ fn render_content_column<L: PostLookup>(
                 .w_full()
                 .min_w_0()
                 .py(theme.spacing_2xs)
-                .child(render_body_tokens(&lookup.body_tokens(effective), lookup, theme, &handlers.links.scoped(effective.id.to_string()))),
+                .child(render_post_content(effective, lookup, theme, &handlers.links.scoped(effective.id.to_string()))), // D5: its checklist
         )
         .children(render_post_extras(&effective.extras, theme, handlers.links.on_source.as_ref()))
         .children(render_post_media(effective, lookup, theme, handlers.links.on_media.as_ref()))

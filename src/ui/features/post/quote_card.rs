@@ -1,6 +1,7 @@
 //! Quoted thought card embed (or an unavailable notice when the quote is missing).
 
-use super::body::{render_body_tokens, BodyLinks};
+use super::body::BodyLinks;
+use super::checklist::render_post_content;
 use super::consts::{META_SEPARATOR, QUOTE_CARD_ID_PREFIX, TIME_FORMAT};
 use super::controls::OpenPostAction;
 use super::lookup::PostLookup;
@@ -58,7 +59,7 @@ fn render_quoted_card<L: PostLookup>(
                 .font_family(theme.font_family_body.clone())
                 .text_size(theme.font_size_xs)
                 .text_color(theme.text_secondary)
-                .child(render_body_tokens(&lookup.body_tokens(quoted), lookup, theme, &links.scoped(quoted.id.to_string()))),
+                .child(render_post_content(quoted, lookup, theme, &links.scoped(quoted.id.to_string()))), // D5: its checklist
         )
 }
 

@@ -46,10 +46,15 @@ impl BodyLinks {
     }
 }
 
-/// Tokenizes `content` and renders it with inert links (previews, tests, the spark feed).
+/// Tokenizes `content` and renders it with inert links (previews, tests, the spark feed); its
+/// to-dos as a checklist written today (D5).
 pub fn render_post_body<L: PostLookup>(content: &str, lookup: L, theme: &ThemeTokens) -> impl IntoElement {
-    render_body_tokens(&tokenize_post_body(content), lookup, theme, &BodyLinks::default())
+    let source = super::checklist::ChecklistSource { content, post_id: PREVIEW_SCOPE, written: crate::time::local_now().date() };
+    super::checklist::render_checklist(&source, lookup, theme, &BodyLinks::default()).unwrap_or_else(|| render_body_tokens(&tokenize_post_body(content), lookup, theme, &BodyLinks::default()))
 }
+
+/// The element id scope of a checklist that belongs to no post.
+const PREVIEW_SCOPE: &str = "preview";
 
 /// Renders pre-tokenized body content with clickable hashtags and wikilinks.
 pub fn render_body_tokens<L: PostLookup>(

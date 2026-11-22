@@ -5942,3 +5942,5 @@ posts.lock.password_placeholder: "此帖子的密码"
 posts.lock.unlocking: "正在解锁…"
 posts.lock.wrong_password: "该密码无法打开此帖子。"
 posts.lock.damaged: "此帖子的锁已损坏，无法打开。"
+# X7: wrong-password backoff
+posts.lock.wait: "密码错误次数过多。请在 %{seconds} 秒后重试。"

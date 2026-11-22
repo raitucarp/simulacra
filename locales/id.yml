@@ -5942,3 +5942,5 @@ posts.lock.password_placeholder: "Kata sandi kiriman ini"
 posts.lock.unlocking: "Membuka kunci…"
 posts.lock.wrong_password: "Kata sandi itu tidak membuka kiriman ini."
 posts.lock.damaged: "Kunci kiriman ini rusak dan tidak dapat dibuka."
+# X7: wrong-password backoff
+posts.lock.wait: "Terlalu banyak kata sandi salah. Coba lagi dalam %{seconds} dtk."

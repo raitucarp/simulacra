@@ -5942,3 +5942,5 @@ posts.lock.password_placeholder: "この投稿のパスワード"
 posts.lock.unlocking: "解除中…"
 posts.lock.wrong_password: "そのパスワードではこの投稿を開けません。"
 posts.lock.damaged: "この投稿のロックは壊れていて開けません。"
+# X7: wrong-password backoff
+posts.lock.wait: "パスワードの誤りが多すぎます。%{seconds} 秒後にもう一度お試しください。"

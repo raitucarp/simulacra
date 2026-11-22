@@ -102,7 +102,7 @@ pub fn render_locked_body<L: PostLookup>(controls: &LockControls, lookup: L, the
 mod tests {
     #[test]
     fn every_unlock_text_is_translated() {
-        let keys = ["locked", "unlock", "relock", "unlocked", "title", "subtitle", "explain", "password", "password_placeholder", "unlocking", "wrong_password", "damaged"];
+        let keys = ["locked", "unlock", "relock", "unlocked", "title", "subtitle", "explain", "password", "password_placeholder", "unlocking", "wrong_password", "damaged", "wait"];
         for key in keys.map(|key| format!("posts.lock.{key}")) {
             assert_ne!(rust_i18n::t!(&key, locale = "en"), key);
         }

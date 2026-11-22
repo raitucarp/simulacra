@@ -5942,3 +5942,5 @@ posts.lock.password_placeholder: "Senha desta publicação"
 posts.lock.unlocking: "Desbloqueando…"
 posts.lock.wrong_password: "Essa senha não abre esta publicação."
 posts.lock.damaged: "O bloqueio desta publicação está danificado e não pode ser aberto."
+# X7: wrong-password backoff
+posts.lock.wait: "Muitas senhas erradas. Tente de novo em %{seconds} s."

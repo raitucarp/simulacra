@@ -62,3 +62,33 @@ fn unlocking_never_reaches_the_store_the_indexes_or_the_agents() {
     assert!(context.posts.iter().all(|post| !post.content.contains("Zeppelin")), "the agents' context");
     assert!(crate::state::semantic::index_sources(&state).iter().all(|source| !source.text.contains("Zeppelin")), "the meaning index");
 }
+
+#[test]
+fn a_few_wrong_passwords_are_free_then_the_wait_doubles_to_a_cap() {
+    use super::backoff::{wait_after, FIRST_WAIT, FREE_ATTEMPTS, MAX_WAIT};
+    assert!((0..FREE_ATTEMPTS).all(|failures| wait_after(failures).is_none()));
+    assert_eq!(wait_after(FREE_ATTEMPTS), Some(FIRST_WAIT));
+    assert_eq!(wait_after(FREE_ATTEMPTS + 1), Some(FIRST_WAIT * 2));
+    assert_eq!(wait_after(FREE_ATTEMPTS + 2), Some(FIRST_WAIT * 4));
+    assert_eq!(wait_after(FREE_ATTEMPTS + 30), Some(MAX_WAIT));
+    assert_eq!(wait_after(u32::MAX), Some(MAX_WAIT));
+}
+
+#[test]
+fn attempts_wait_per_post_and_the_right_password_clears_it() {
+    use super::backoff::{UnlockAttempts, FIRST_WAIT, FREE_ATTEMPTS};
+    let (start, post, other) = (Instant::now(), PostId::new("p1"), PostId::new("p2"));
+    let mut attempts = UnlockAttempts::default();
+    for _ in 1..FREE_ATTEMPTS {
+        assert_eq!(attempts.failed(&post, start), None);
+    }
+    assert_eq!(attempts.wait(&post, start), None, "still free");
+    assert_eq!(attempts.failed(&post, start), Some(FIRST_WAIT));
+    assert_eq!(attempts.wait(&post, start + Duration::from_secs(2)), Some(FIRST_WAIT - Duration::from_secs(2)));
+    assert_eq!(attempts.wait(&post, start + FIRST_WAIT), None, "the wait is over");
+    assert_eq!(attempts.wait(&other, start), None, "other posts are not held back");
+    assert_eq!(attempts.failed(&post, start + FIRST_WAIT), Some(FIRST_WAIT * 2), "the next wrong one waits longer");
+    attempts.succeeded(&post);
+    assert_eq!(attempts.wait(&post, start + FIRST_WAIT), None);
+    assert_eq!(attempts.failed(&post, start), None, "free again after the right password");
+}

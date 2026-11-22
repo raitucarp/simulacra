@@ -42,11 +42,13 @@ pub struct UnlockDialog {
     pub busy: bool,
     /// Why the last attempt failed.
     pub problem: Option<String>,
+    /// How long the next attempt still waits after wrong passwords (X7); `None` while it may go.
+    pub wait: Option<String>,
 }
 
 impl UnlockDialog {
     pub fn new(post_id: PostId, password: Entity<InputState>) -> Self {
-        Self { post_id, password, busy: false, problem: None }
+        Self { post_id, password, busy: false, problem: None, wait: None }
     }
 }
 
@@ -60,11 +62,12 @@ pub fn render_unlock_sheet(dialog: &UnlockDialog, on_event: UnlockAction, theme:
     let problem = dialog.problem.clone().map(|text| notice(LucideIcon::CircleAlert, text, theme.accent_danger, theme));
     let label = div().text_size(theme.font_size_xs).text_color(theme.text_secondary).child(tr("posts.lock.password"));
     let field = div().flex().flex_col().gap(theme.spacing_xs).child(label).child(Input::new(&dialog.password).mask_toggle());
-    let body = div().flex().flex_col().gap(theme.stack_gap).child(hint(tr("posts.lock.explain"), theme)).child(field).children(problem);
+    let wait = dialog.wait.clone().map(|text| notice(LucideIcon::Timer, text, theme.warning, theme)); // X7
+    let body = div().flex().flex_col().gap(theme.stack_gap).child(hint(tr("posts.lock.explain"), theme)).child(field).children(problem).children(wait);
     let action = if dialog.busy { tr("posts.lock.unlocking") } else { tr("posts.lock.unlock") };
     let buttons = footer(theme)
         .child(Button::new(CANCEL_ID).ghost().small().label(tr("data.cancel")).on_click(send(&on_event, UnlockEvent::Close)))
-        .child(Button::new(UNLOCK_ID).primary().small().icon(Icon::new(LucideIcon::LockOpen)).label(action).disabled(dialog.busy).on_click(send(&on_event, UnlockEvent::Submit)));
+        .child(Button::new(UNLOCK_ID).primary().small().icon(Icon::new(LucideIcon::LockOpen)).label(action).disabled(dialog.busy || dialog.wait.is_some()).on_click(send(&on_event, UnlockEvent::Submit)));
     let closing = on_event.clone();
     let parts = SheetParts {
         id: SHEET_ID,

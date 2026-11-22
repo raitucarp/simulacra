@@ -5942,3 +5942,5 @@ posts.lock.password_placeholder: "Password of this post"
 posts.lock.unlocking: "Unlocking…"
 posts.lock.wrong_password: "That password does not open this post."
 posts.lock.damaged: "This post's lock is damaged and cannot be opened."
+# X7: wrong-password backoff
+posts.lock.wait: "Too many wrong passwords. Try again in %{seconds} s."

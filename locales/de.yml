@@ -5942,3 +5942,5 @@ posts.lock.password_placeholder: "Passwort dieses Beitrags"
 posts.lock.unlocking: "Wird entsperrt…"
 posts.lock.wrong_password: "Dieses Passwort öffnet den Beitrag nicht."
 posts.lock.damaged: "Die Sperre dieses Beitrags ist beschädigt und lässt sich nicht öffnen."
+# X7: wrong-password backoff
+posts.lock.wait: "Zu viele falsche Passwörter. Versuche es in %{seconds} s erneut."

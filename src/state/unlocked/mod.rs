@@ -3,6 +3,10 @@
 //! dropped. Everything locks again after [`RELOCK_AFTER`] without user activity, when the
 //! user locks a post again, and when the app quits.
 
+pub mod backoff; // X7: wrong-password backoff
+
+pub use backoff::UnlockAttempts;
+
 use crate::domain::PostId;
 use std::collections::HashMap;
 use std::rc::Rc;

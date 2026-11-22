@@ -5942,3 +5942,5 @@ posts.lock.password_placeholder: "Пароль этой записи"
 posts.lock.unlocking: "Открываем…"
 posts.lock.wrong_password: "Этот пароль не открывает запись."
 posts.lock.damaged: "Замок этой записи повреждён, её нельзя открыть."
+# X7: wrong-password backoff
+posts.lock.wait: "Слишком много неверных паролей. Повторите через %{seconds} с."

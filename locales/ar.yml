@@ -5942,3 +5942,5 @@ posts.lock.password_placeholder: "كلمة مرور هذا المنشور"
 posts.lock.unlocking: "جارٍ فتح القفل…"
 posts.lock.wrong_password: "كلمة المرور هذه لا تفتح هذا المنشور."
 posts.lock.damaged: "قفل هذا المنشور تالف ولا يمكن فتحه."
+# X7: wrong-password backoff
+posts.lock.wait: "كلمات مرور خاطئة كثيرة. حاول مجددًا بعد %{seconds} ث."

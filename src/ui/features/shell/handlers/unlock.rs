@@ -34,8 +34,10 @@ impl AppView {
         }
         let password = self.data.locks.password.clone();
         password.update(cx, |input, cx| input.set_value("", window, cx));
+        let wait = self.unlock_wait(&id); // X7: a wait left from earlier wrong passwords
         self.data.locks.dialog = Some(UnlockDialog::new(id, password.clone()));
         password.update(cx, |input, cx| input.focus(window, cx));
+        self.show_unlock_wait(wait, window, cx);
     }
 
     fn close_unlock(&mut self, window: &mut Window, cx: &mut Context<Self>) {
@@ -46,7 +48,8 @@ impl AppView {
 
     /// Reads the password once, empties the field and opens the lock off the UI thread.
     fn submit_unlock(&mut self, window: &mut Window, cx: &mut Context<Self>) {
-        let Some(dialog) = self.data.locks.dialog.as_mut().filter(|dialog| !dialog.busy) else { return };
+        let waiting = self.data.locks.dialog.as_ref().is_some_and(|dialog| self.unlock_wait(&dialog.post_id).is_some());
+        let Some(dialog) = self.data.locks.dialog.as_mut().filter(|dialog| !dialog.busy && !waiting) else { return }; // X7: no attempt while it waits
         let id = dialog.post_id.clone();
         let Some(lock) = self.state.get_post(&id).or_else(|| self.state.scheduled_post(&id)).and_then(|post| post.extras.lock.clone()) else { return };
         let password = LockPassword::new(dialog.password.read(cx).value().to_string());
@@ -63,6 +66,7 @@ impl AppView {
         let Some(dialog) = self.data.locks.dialog.as_mut().filter(|dialog| dialog.post_id == id) else { return };
         match opened {
             Ok(text) => {
+                self.data.locks.attempts.succeeded(&id); // X7
                 self.data.locks.unlocked.insert(id, text, Instant::now());
                 self.close_unlock(window, cx);
                 self.feed.stream.remeasure();
@@ -70,6 +74,9 @@ impl AppView {
             Err(error) => {
                 dialog.busy = false;
                 dialog.problem = Some(tr(unlock_problem_key(error)));
+                if error == UnlockError::WrongPassword {
+                    self.note_wrong_password(&id, window, cx); // X7: the next attempt may have to wait
+                }
             }
         }
         cx.notify();

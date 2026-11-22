@@ -2,7 +2,7 @@
 //!
 //! ```text
 //! [ ] open   [x] done   [>] migrated   [<] scheduled   [~] dropped   [/] delegated
-//! ^fri  ^2026-12-01  ^+3d     due (raw phrase)
+//! ^fri  ^2026-12-01  ^+3d     due (raw phrase; `^next month` is one token, see [`due`])
 //! ^^daily  ^^mon,wed  ^^15th  repeat (raw rule)
 //! !  !!  !!!                  priority 1..3
 //! &home                       context
@@ -24,6 +24,7 @@
 //! the post body tokens.
 
 mod line;
+pub mod due; // D3: due phrases as days
 pub mod syntax; // D1: the help card rows
 mod tokens;
 #[cfg(test)]
@@ -81,6 +82,15 @@ pub struct TodoItem {
     pub tokens: Vec<TodoToken>,
     pub meta: TodoMeta,
     pub children: Vec<TodoItem>,
+}
+
+impl TodoItem {
+    /// The day the item is due, reading its phrase from `written`, the day the post was
+    /// written in the user's time zone (D3); `None` without a due phrase or with one that is
+    /// not a date.
+    pub fn due_date(&self, written: jiff::civil::Date) -> Option<jiff::civil::Date> {
+        due::resolve_due(self.meta.due.as_deref()?, written)
+    }
 }
 
 /// Parses every to-do line of `text` into a tree (see the module rules).

@@ -20,6 +20,7 @@ mod free_compose; // T2
 mod todo_help; // D1
 mod todo_suggest; // D11
 mod lock_picker; // X3
+mod feeling_bar; // M2
 
 pub use inline::{PostComposerView, SubmitPostCallback};
 pub use format::format_label_key;

@@ -5944,3 +5944,12 @@ posts.lock.wrong_password: "そのパスワードではこの投稿を開けま�
 posts.lock.damaged: "この投稿のロックは壊れていて開けません。"
 # X7: wrong-password backoff
 posts.lock.wait: "パスワードの誤りが多すぎます。%{seconds} 秒後にもう一度お試しください。"
+# M2: the composer feeling bar
+composer.feeling.button: "気持ちを投稿"
+composer.feeling.label: "気持ち"
+composer.feeling.intensity: "強さ"
+composer.feeling.note_placeholder: "ひとこと（任意）"
+composer.feeling.search_placeholder: "絵文字を検索"
+composer.feeling.problem.no_emoji: "絵文字を 1 つ以上選んでください。"
+composer.feeling.problem.too_many_emojis: "絵文字は %{count} 個まで選べます。"
+composer.feeling.problem.note_too_long: "メモは %{count} 文字以内にしてください。"

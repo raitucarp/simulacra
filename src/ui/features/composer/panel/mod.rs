@@ -8,7 +8,7 @@ mod actions;
 mod atomic;
 mod drafts;
 mod edit; // sb F2: edit mode
-mod files; mod format; mod host; mod media; mod preview; mod readability; pub mod readability_meter; mod render; mod schedule; mod symbols; mod version; mod free; mod todo; mod lock; #[cfg(test)] mod tests; // T2: free compose; sb F3: the readability meter; posts B: formatting; D1: to-do help; L12: file chips
+mod files; mod format; mod host; mod media; mod preview; mod readability; pub mod readability_meter; mod render; mod schedule; mod symbols; mod version; mod free; mod todo; mod lock; mod feeling; #[cfg(test)] mod tests; // T2: free compose; sb F3: the readability meter; posts B: formatting; D1: to-do help; L12: file chips
 
 use super::consts::MODAL_LINK_PLACEHOLDER;
 use super::modal::ComposerModalMode;
@@ -39,7 +39,7 @@ pub struct ComposerSubmission {
     pub edit: Option<crate::state::PostEdit>,
     /// The draft each post replies to when composing freely (T4: a tree); empty for a chain.
     pub replies_to: Vec<Option<usize>>,
-    pub lock: Option<crate::domain::post::lock::LockPassword>, // X3: every post of the thread is locked with it
+    pub lock: Option<crate::domain::post::lock::LockPassword>, pub feeling: Option<crate::domain::post::PostKind>, // X3: every post of the thread is locked with it; M2: one feeling instead of the thread
 }
 
 /// Events emitted by [`ComposerModalPanel`].
@@ -87,7 +87,7 @@ pub struct ComposerModalPanel {
     tint: Option<Tint>, // sb C3: the picked container tint
     schedule: schedule::SchedulePicker, // Y3: the "Schedule…" picker
     symbols: symbols::SymbolPicker, // S5: the symbol picker
-    version: version::VersionPicker, todo: todo::TodoAssist, files: files::ComposerFiles, lock: lock::LockPicker, // V3: the bump and note of an edit; D1: to-do help; L12: attached files; X3: "Lock with password"
+    version: version::VersionPicker, todo: todo::TodoAssist, files: files::ComposerFiles, lock: lock::LockPicker, feeling: feeling::FeelingPicker, // M2; V3: the bump and note of an edit; D1: to-do help; L12: attached files; X3: "Lock with password"
     _subscriptions: Vec<Subscription>,
 }
 
@@ -105,7 +105,7 @@ impl ComposerModalPanel {
         let image_input = cx.new(|cx| InputState::new(window, cx).placeholder(image_placeholder));
         let schedule = schedule::SchedulePicker::new(window, cx);
         let symbols = symbols::SymbolPicker::new(window, cx);
-        let version = version::VersionPicker::new(window, cx); let lock = lock::LockPicker::new(window, cx);
+        let version = version::VersionPicker::new(window, cx); let lock = lock::LockPicker::new(window, cx); let feeling = feeling::FeelingPicker::new(window, cx);
         let mut panel = Self {
             is_open: false,
             mode: ComposerModalMode::NewThread,
@@ -121,7 +121,7 @@ impl ComposerModalPanel {
             error: None,
             theme,
             profile,
-            atomic: Default::default(), readability: Default::default(), preview: false, free: Default::default(), tint: None, schedule, symbols, version, todo: Default::default(), files: Default::default(), lock, _subscriptions: Vec::new(),
+            atomic: Default::default(), readability: Default::default(), preview: false, free: Default::default(), tint: None, schedule, symbols, version, todo: Default::default(), files: Default::default(), lock, feeling, _subscriptions: Vec::new(),
         };
         panel._subscriptions = panel.subscribe(window, cx);
         panel.drafts.push(panel.new_draft_slot(window, cx));

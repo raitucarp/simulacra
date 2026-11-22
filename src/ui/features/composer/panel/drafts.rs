@@ -142,6 +142,6 @@ impl ComposerModalPanel {
     /// The first post that blocks publishing (quotes always need commentary text).
     pub(super) fn submit_problem(&self, cx: &App) -> Option<ThreadProblem> {
         let is_quote = matches!(self.mode, ComposerModalMode::Quote(_));
-        first_thread_problem(&self.draft_texts(cx), self.has_media(cx) && !is_quote)
+        first_thread_problem(&self.draft_texts(cx), self.has_media(cx) && !is_quote).filter(|_| !self.feeling.open) // M2: a feeling leaves the drafts aside
     }
 }

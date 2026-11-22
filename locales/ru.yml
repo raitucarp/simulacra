@@ -5944,3 +5944,12 @@ posts.lock.wrong_password: "Этот пароль не открывает зап
 posts.lock.damaged: "Замок этой записи повреждён, её нельзя открыть."
 # X7: wrong-password backoff
 posts.lock.wait: "Слишком много неверных паролей. Повторите через %{seconds} с."
+# M2: the composer feeling bar
+composer.feeling.button: "Поделиться чувством"
+composer.feeling.label: "Чувство"
+composer.feeling.intensity: "Сила"
+composer.feeling.note_placeholder: "Пара слов (необязательно)"
+composer.feeling.search_placeholder: "Поиск эмодзи"
+composer.feeling.problem.no_emoji: "Выберите хотя бы один эмодзи."
+composer.feeling.problem.too_many_emojis: "Выберите не больше %{count} эмодзи."
+composer.feeling.problem.note_too_long: "Сократите заметку до %{count} символов."

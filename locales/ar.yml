@@ -5944,3 +5944,12 @@ posts.lock.wrong_password: "كلمة المرور هذه لا تفتح هذا ا
 posts.lock.damaged: "قفل هذا المنشور تالف ولا يمكن فتحه."
 # X7: wrong-password backoff
 posts.lock.wait: "كلمات مرور خاطئة كثيرة. حاول مجددًا بعد %{seconds} ث."
+# M2: the composer feeling bar
+composer.feeling.button: "انشر شعورًا"
+composer.feeling.label: "الشعور"
+composer.feeling.intensity: "الشدة"
+composer.feeling.note_placeholder: "بضع كلمات (اختياري)"
+composer.feeling.search_placeholder: "ابحث عن رمز تعبيري"
+composer.feeling.problem.no_emoji: "اختر رمزًا تعبيريًا واحدًا على الأقل."
+composer.feeling.problem.too_many_emojis: "اختر %{count} رموز تعبيرية على الأكثر."
+composer.feeling.problem.note_too_long: "اجعل الملاحظة في حدود %{count} حرفًا."

@@ -5944,3 +5944,12 @@ posts.lock.wrong_password: "Dieses Passwort öffnet den Beitrag nicht."
 posts.lock.damaged: "Die Sperre dieses Beitrags ist beschädigt und lässt sich nicht öffnen."
 # X7: wrong-password backoff
 posts.lock.wait: "Zu viele falsche Passwörter. Versuche es in %{seconds} s erneut."
+# M2: the composer feeling bar
+composer.feeling.button: "Gefühl posten"
+composer.feeling.label: "Gefühl"
+composer.feeling.intensity: "Stärke"
+composer.feeling.note_placeholder: "Ein paar Worte (optional)"
+composer.feeling.search_placeholder: "Emoji suchen"
+composer.feeling.problem.no_emoji: "Wähle mindestens ein Emoji."
+composer.feeling.problem.too_many_emojis: "Wähle höchstens %{count} Emojis."
+composer.feeling.problem.note_too_long: "Halte die Notiz bei höchstens %{count} Zeichen."

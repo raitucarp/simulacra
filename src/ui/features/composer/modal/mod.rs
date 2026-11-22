@@ -85,6 +85,10 @@ pub struct ModalCallbacks {
     pub on_toggle_todo_help: ModalActionCallback,
     /// Opens or closes "Lock with password" (X3).
     pub on_toggle_lock: ModalActionCallback,
+    /// Opens or closes the feeling bar, picks an emoji and an intensity (M2).
+    pub on_toggle_feeling: ModalActionCallback,
+    pub on_pick_feeling: super::feeling_bar::EmojiCallback,
+    pub on_feeling_step: super::feeling_bar::IntensityCallback,
 }
 
 /// Stateless dialog rendering a composer snapshot.
@@ -116,6 +120,8 @@ pub struct ComposerModalView {
     pub schedule: Option<super::schedule_picker::ScheduleView>,
     /// The open "Lock with password" row (X3); `None` while closed.
     pub lock: Option<super::lock_picker::LockView>,
+    /// The open feeling bar (M2): the composer then posts one feeling, not the thread.
+    pub feeling: Option<super::feeling_bar::FeelingView>,
     /// The symbol picker (S5).
     pub symbols: super::symbol_picker::SymbolPickerView,
     /// The version row while a published post is edited (V3).

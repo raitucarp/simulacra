@@ -5,6 +5,7 @@ use super::super::consts::MODAL_SUBMIT_POST_BTN_ID;
 use super::super::format::format_buttons;
 use super::super::free_compose::free_button;
 use super::super::preview::preview_button;
+use super::super::feeling_bar::feeling_button;
 use super::super::lock_picker::lock_button;
 use super::super::schedule_picker::schedule_button;
 use super::super::symbol_picker::symbol_picker;
@@ -93,6 +94,7 @@ impl ComposerModalView {
             .when(!self.preview, |row| row.child(format_buttons(MODAL_FORMAT_SCOPE, self.callbacks.on_format.clone(), theme)))
             .when(self.can_schedule(), |row| row.child(schedule_button(self.schedule.is_some(), self.callbacks.on_toggle_schedule.clone())))
             .when(!self.is_editing(), |row| row.child(lock_button(self.lock.is_some(), self.callbacks.on_toggle_lock.clone()))) // X3
+            .when(!self.is_editing(), |row| row.child(feeling_button(self.feeling.is_some(), self.callbacks.on_toggle_feeling.clone()))) // M2
             .when(!self.is_editing(), |row| row.child(free_button(self.free.is_some(), self.callbacks.on_toggle_free.clone()))) // T2
             .child(todo_help_button(self.todo_help, self.callbacks.on_toggle_todo_help.clone())) // D1
             .child(hint)

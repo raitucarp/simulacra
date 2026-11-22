@@ -5944,3 +5944,12 @@ posts.lock.wrong_password: "Esa contraseña no abre esta publicación."
 posts.lock.damaged: "El bloqueo de esta publicación está dañado y no se puede abrir."
 # X7: wrong-password backoff
 posts.lock.wait: "Demasiadas contraseñas incorrectas. Vuelve a intentarlo en %{seconds} s."
+# M2: the composer feeling bar
+composer.feeling.button: "Publicar un sentimiento"
+composer.feeling.label: "Sentimiento"
+composer.feeling.intensity: "Intensidad"
+composer.feeling.note_placeholder: "Unas palabras (opcional)"
+composer.feeling.search_placeholder: "Buscar emoji"
+composer.feeling.problem.no_emoji: "Elige al menos un emoji."
+composer.feeling.problem.too_many_emojis: "Elige como máximo %{count} emojis."
+composer.feeling.problem.note_too_long: "Limita la nota a %{count} caracteres."

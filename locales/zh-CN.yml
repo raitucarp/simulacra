@@ -5944,3 +5944,12 @@ posts.lock.wrong_password: "该密码无法打开此帖子。"
 posts.lock.damaged: "此帖子的锁已损坏，无法打开。"
 # X7: wrong-password backoff
 posts.lock.wait: "密码错误次数过多。请在 %{seconds} 秒后重试。"
+# M2: the composer feeling bar
+composer.feeling.button: "发布心情"
+composer.feeling.label: "心情"
+composer.feeling.intensity: "强度"
+composer.feeling.note_placeholder: "说几句（可选）"
+composer.feeling.search_placeholder: "搜索表情"
+composer.feeling.problem.no_emoji: "请至少选择一个表情。"
+composer.feeling.problem.too_many_emojis: "最多选择 %{count} 个表情。"
+composer.feeling.problem.note_too_long: "备注请控制在 %{count} 个字符以内。"

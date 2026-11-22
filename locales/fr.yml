@@ -5944,3 +5944,12 @@ posts.lock.wrong_password: "Ce mot de passe n’ouvre pas cette publication."
 posts.lock.damaged: "Le verrou de cette publication est endommagé et ne peut pas être ouvert."
 # X7: wrong-password backoff
 posts.lock.wait: "Trop de mots de passe erronés. Réessayez dans %{seconds} s."
+# M2: the composer feeling bar
+composer.feeling.button: "Publier un ressenti"
+composer.feeling.label: "Ressenti"
+composer.feeling.intensity: "Intensité"
+composer.feeling.note_placeholder: "Quelques mots (facultatif)"
+composer.feeling.search_placeholder: "Rechercher un emoji"
+composer.feeling.problem.no_emoji: "Choisissez au moins un emoji."
+composer.feeling.problem.too_many_emojis: "Choisissez au plus %{count} emojis."
+composer.feeling.problem.note_too_long: "Limitez la note à %{count} caractères."

@@ -57,7 +57,22 @@ fn callbacks(entity: &Entity<ComposerModalPanel>) -> ModalCallbacks {
         on_toggle_free: act(entity, P::toggle_free),
         on_toggle_todo_help: act(entity, P::toggle_todo_help),
         on_toggle_lock: act(entity, P::toggle_lock), // X3
+        on_toggle_feeling: act(entity, P::toggle_feeling), // M2
+        on_pick_feeling: pick_feeling(entity),
+        on_feeling_step: feeling_step(entity),
     }
+}
+
+/// Routes a picked (or dropped) feeling emoji to the panel (M2).
+fn pick_feeling(entity: &Entity<ComposerModalPanel>) -> super::super::feeling_bar::EmojiCallback {
+    let entity = entity.clone();
+    Rc::new(move |emoji, _, cx| entity.update(cx, |this, cx| this.pick_feeling_emoji(emoji, cx)))
+}
+
+/// Routes a picked intensity to the panel (M2).
+fn feeling_step(entity: &Entity<ComposerModalPanel>) -> super::super::feeling_bar::IntensityCallback {
+    let entity = entity.clone();
+    Rc::new(move |step, _, cx| entity.update(cx, |this, cx| this.set_feeling_intensity(step, cx)))
 }
 
 /// Routes a toolbar mark to the last focused draft.
@@ -106,10 +121,10 @@ impl Render for ComposerModalPanel {
             is_link_input_open: self.is_link_input_open,
             is_image_input_open: self.is_image_input_open,
             notice,
-            can_post: problem.is_none() && !matches!(self.schedule_choice(cx), Some(Err(_))) && !self.lock_blocks(cx),
+            can_post: problem.is_none() && !matches!(self.schedule_choice(cx), Some(Err(_))) && !self.lock_blocks(cx) && !matches!(self.feeling_choice(cx), Some(Err(_))),
             preview: self.preview,
             tint: self.tint,
-            schedule: self.schedule_view(cx), lock: self.lock_view(cx), // X3
+            schedule: self.schedule_view(cx), lock: self.lock_view(cx), feeling: self.feeling_view(cx), // X3; M2
             symbols: self.symbol_view(cx),
             version: self.version_view(cx),
             free: self.free_view(cx),

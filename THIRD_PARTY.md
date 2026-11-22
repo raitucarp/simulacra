@@ -94,3 +94,11 @@ The data is © 2025 Unicode, Inc. and is used under the Unicode License v3:
 > Software without prior written authorization of the copyright holder.
 >
 > SPDX-License-Identifier: Unicode-3.0
+
+## Icon sets (downloaded on demand, not bundled)
+
+Settings › Symbols can download icon sets from one pinned npm package tarball
+(`react-icons` 5.7.0, verified against its published SHA-512). Nothing of it ships with the
+app. A downloaded set is stored under the app data folder with its project's licence entry,
+and the Licences screen in Settings names each downloaded set's project, site and licence
+(MIT, ISC, Apache-2.0, MPL-2.0, OFL-1.1, CC0-1.0, CC BY 3.0/4.0, CC BY-SA 3.0).

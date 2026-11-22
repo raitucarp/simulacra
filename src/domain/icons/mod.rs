@@ -6,15 +6,23 @@
 //! - [`archive`]: the wanted files out of the gzip-compressed tarball (S10).
 //! - [`module`] and [`tree`]: one set's module read as text into icon trees, and each tree
 //!   converted to a standalone, sanitised SVG (S11).
+//! - [`catalog`], [`index`] and [`licence`]: the pinned package's sets, what the store
+//!   holds, and the licence text stored with each set (S12).
 
 pub mod archive;
+pub mod catalog;
+pub mod index;
 pub mod integrity;
+pub mod licence;
 pub mod module;
 pub mod tree;
 #[cfg(test)]
 mod tests;
 
 pub use archive::{read_files, ArchiveError, MAX_ENTRY_BYTES};
+pub use catalog::{icon_set, set_number, IconSet, SetStyle, ICON_SETS};
+pub use index::{StoreIndex, StoredSet};
+pub use licence::set_attribution;
 pub use integrity::{matches_integrity, sha512_integrity};
 pub use module::{icon_name, parse_module, ModuleIcon};
 pub use tree::{svg_attr_name, to_svg, ConvertError, IconNode};

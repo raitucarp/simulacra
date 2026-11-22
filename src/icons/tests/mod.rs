@@ -2,9 +2,11 @@
 //! from tiny hand-written fixtures. No test touches the network or the real app data folder.
 
 mod fetch;
+mod store;
 
 use flate2::write::GzEncoder;
 use std::io::Write;
+use std::path::PathBuf;
 
 /// The fixture module of the line set `fi`, and the package licence.
 pub(super) const LINE_SET_MODULE: &str = include_str!("fixtures/line_set.mjs");
@@ -51,3 +53,11 @@ pub(super) fn fixture_package() -> Vec<u8> {
     ])
 }
 
+
+/// A fresh, empty folder under the system temp dir.
+pub(super) fn scratch_dir(name: &str) -> PathBuf {
+    let dir = std::env::temp_dir().join(format!("simulacra-icons-test-{name}-{}", std::process::id()));
+    let _ = std::fs::remove_dir_all(&dir);
+    std::fs::create_dir_all(&dir).expect("scratch dir");
+    dir
+}

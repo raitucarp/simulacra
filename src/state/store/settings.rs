@@ -43,6 +43,11 @@ impl AppState {
         self.credentials = credentials;
     }
 
+    /// Folder of the downloaded icon sets (next to the vault, S12).
+    pub fn symbols_dir(&self) -> std::path::PathBuf {
+        crate::icons::symbols_dir_for(&self.db.as_ref().map(|db| db.path()).unwrap_or_default())
+    }
+
     /// Folder where generated agent images are saved (next to the vault).
     pub fn media_dir(&self) -> std::path::PathBuf {
         crate::storage::media::media_dir_for(&self.db.as_ref().map(|db| db.path()).unwrap_or_default())

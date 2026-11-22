@@ -47,6 +47,7 @@ impl ComposerModalPanel {
         self.reset_readability();
         self.reset_schedule(window, cx);
         self.reset_symbols(window, cx);
+        self.reset_version(window, cx);
         if let Some(first) = self.drafts.first() {
             first.input.update(cx, |state, cx| state.set_value("", window, cx));
         }
@@ -64,7 +65,7 @@ impl ComposerModalPanel {
         let images = self.image_attachments(cx);
         let drafts = self.draft_texts(cx);
         let mode = self.mode.clone();
-        cx.emit(ComposerModalEvent::Submit(ComposerSubmission { mode, drafts, link, images, tint: self.tint, publish_at, symbols: self.symbols.chosen.clone() }));
+        cx.emit(ComposerModalEvent::Submit(ComposerSubmission { mode, drafts, link, images, tint: self.tint, publish_at, symbols: self.symbols.chosen.clone(), edit: self.version_edit(cx) }));
     }
 
     /// A typed image path that points to an existing file.

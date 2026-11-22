@@ -2,6 +2,7 @@
 
 use super::super::consts::{MODAL_BACKDROP_ID, MODAL_DIALOG_ID};
 use super::super::schedule_picker::schedule_row;
+use super::super::version_picker::version_row;
 use super::reply_context::render_reply_context;
 use super::ComposerModalView;
 use crate::ui::atoms::ElevationExt;
@@ -62,6 +63,7 @@ impl ComposerModalView {
             .child(self.tint_row())
             // 5b. The symbols of the first post (S5)
             .child(self.symbol_row())
+            .when_some(self.version.as_ref(), |this, view| this.child(version_row(view, theme))) // 5c. The version an edit makes (V3)
             // 6. When the thread goes out, while the picker is open (Y3)
             .when_some(self.schedule.as_ref(), |this, view| this.child(schedule_row(view, theme)))
             // 7. Modal Footer: Privacy indicator & Post button

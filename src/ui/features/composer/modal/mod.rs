@@ -104,6 +104,8 @@ pub struct ComposerModalView {
     pub schedule: Option<super::schedule_picker::ScheduleView>,
     /// The symbol picker (S5).
     pub symbols: super::symbol_picker::SymbolPickerView,
+    /// The version row while a published post is edited (V3).
+    pub version: Option<super::version_picker::VersionView>,
     pub callbacks: ModalCallbacks,
     /// sb E1: the atomic-note hint under one draft.
     pub atomic_hint: Option<AtomicHintView>,

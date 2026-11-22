@@ -10,7 +10,7 @@ pub mod store;
 pub mod threads;
 
 pub use store::{
-    AppState, NavigationTab, NetworkNameError, ThreadAnchor, ThreadDraft, WikilinkTarget,
+    AppState, NavigationTab, NetworkNameError, PostEdit, ThreadAnchor, ThreadDraft, WikilinkTarget,
     MAX_NETWORK_NAME_CHARS,
 };
 pub use threads::{

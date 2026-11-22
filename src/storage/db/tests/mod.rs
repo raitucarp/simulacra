@@ -15,6 +15,7 @@ mod preferences;
 mod reactions;
 mod review;
 mod revision_chain;
+mod revision_heads; // V3
 mod schema;
 mod settings;
 mod thinking;

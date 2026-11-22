@@ -4,10 +4,12 @@
 
 mod diff;
 mod edit;
+mod head; // V3, V4: the version a post shows
 mod semver;
 mod versions;
 
-pub use edit::edited_post;
+pub use edit::{edited_post, EditBase};
+pub use head::{free_version, step_bump, VersionHead};
 pub use semver::{Bump, ParseSemVerError, SemVer, MAJOR_REMOVED_PERCENT, PATCH_MAX_WORDS};
 pub use diff::{diff_stats, tokens, word_diff, DiffOp, DiffStats, MAX_DIFF_CELLS};
 pub use versions::{version_list, Version, VersionKind};
@@ -24,7 +26,7 @@ pub const POST_SUBJECT: &str = "post";
 pub const DOCUMENT_SUBJECT: &str = "document";
 
 /// A revision's identifier (the `revisions.id` column).
-#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Default, Serialize, Deserialize)]
 #[serde(transparent)]
 pub struct RevisionId(String);
 
@@ -93,15 +95,19 @@ pub struct Revision {
     /// The version this revision holds; `None` until stored, when the vault numbers it as
     /// the next one of the subject's chain (see [`SemVer`]).
     pub version: Option<SemVer>,
-    /// The part of the version this revision bumps when it is numbered (a minor version for
-    /// text edits; a patch for an entry state move, S7). Not stored.
+    /// The part of the version the edit making this version bumped (V3; unused for the
+    /// original). A revision stored without a version is numbered by it.
     pub bump: Bump,
+    /// What the edit making this version was about, as the user wrote it (V3; may be empty).
+    pub note: String,
+    /// When the edit making this version was saved (V3; `None` when unknown).
+    pub edited_at: Option<Timestamp>,
 }
 
 impl Revision {
     /// The version of `subject` replaced at `saved_at`.
     pub fn of(subject: RevisionSubject, content: &str, saved_at: Timestamp) -> Self {
-        Self { id: RevisionId::generate(), subject, saved_at, title: String::new(), content: content.to_string(), record_json: String::new(), parent_id: None, version: None, bump: Bump::Minor }
+        Self { id: RevisionId::generate(), subject, saved_at, title: String::new(), content: content.to_string(), record_json: String::new(), parent_id: None, version: None, bump: Bump::Minor, note: String::new(), edited_at: None }
     }
 
     /// The same revision, bumping `bump` when it is numbered.

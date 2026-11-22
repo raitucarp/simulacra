@@ -9,7 +9,8 @@ use crate::domain::preferences::ToastKind;
 use crate::domain::post::Tint;
 use crate::domain::symbols::PostSymbols;
 use crate::domain::PostId;
-use crate::ui::features::composer::publish_error_message;
+use crate::state::PostEdit;
+use crate::ui::features::composer::{publish_error_message, version_label};
 use crate::ui::features::data::{tr, DataEvent, SavedTarget};
 use jiff::Timestamp;
 use gpui_kit::component::notification::Notification;
@@ -18,7 +19,7 @@ use gpui_kit::*;
 impl AppView {
     pub(in crate::ui::features::shell) fn on_post_data_event(&mut self, event: DataEvent, window: &mut Window, cx: &mut Context<Self>) {
         match event {
-            DataEvent::EditPost(id) => self.open_post_editor(&id, window, cx),
+            DataEvent::EditPost(id) => self.open_post_editor_from(&id, None, window, cx),
             DataEvent::SetArchived(id, archived) => self.set_archived(&id, archived, window, cx),
             DataEvent::SetAutoArchive(id, after) => {
                 let set = self.state.set_auto_archive(&id, after);
@@ -37,18 +38,19 @@ impl AppView {
             _ => {}
         }
     }
-
-    /// The composer on one of the user's own posts.
-    fn open_post_editor(&mut self, id: &PostId, window: &mut Window, cx: &mut Context<Self>) {
+    /// The composer on one of the user's own posts, the edit starting from the version shown
+    /// (or from the older version `from`, V4).
+    pub(in crate::ui::features::shell) fn open_post_editor_from(&mut self, id: &PostId, from: Option<&crate::domain::data::history::RevisionId>, window: &mut Window, cx: &mut Context<Self>) {
         let Some(post) = self.state.get_post(id).filter(|p| self.state.author_of(p).is_human_persona()) else { return };
         let target = self.state.authored(post);
-        self.composer_modal.update(cx, |panel, cx| panel.open_edit(target, window, cx));
+        let Some(base) = self.state.edit_base(id, from) else { return };
+        self.composer_modal.update(cx, |panel, cx| panel.open_edit_version(target, base, window, cx));
     }
 
-    /// Saves the composer's edit of `id`: its text (the previous one becomes a revision),
-    /// then its tint (sb C3) and symbols (S5), which keep no revision.
-    pub(crate) fn save_post_edit(&mut self, id: PostId, (text, tint, symbols): (String, Option<Tint>, PostSymbols), window: &mut Window, cx: &mut Context<Self>) {
-        let saved = self.state.edit_post(&id, &text).and_then(|revision| self.state.set_post_tint(&id, tint).map(|_| revision));
+    /// Saves the composer's edit of `id` as a new version (V3: its bump and note), then its
+    /// tint (sb C3) and symbols (S5).
+    pub(crate) fn save_post_edit(&mut self, id: PostId, edit: PostEdit, (tint, symbols): (Option<Tint>, PostSymbols), window: &mut Window, cx: &mut Context<Self>) {
+        let saved = self.state.edit_post_version(&id, &edit, Timestamp::now()).and_then(|revision| self.state.set_post_tint(&id, tint).map(|_| revision));
         let saved = saved.and_then(|revision| self.state.set_post_symbols(&id, symbols).map(|_| revision));
         match saved {
             Ok(revision) => {
@@ -56,7 +58,9 @@ impl AppView {
                     *self.data.revision_counts.entry(id.as_str().to_string()).or_default() += 1;
                 }
                 self.close_composer_modal(window, cx);
-                self.toast(ToastKind::Confirmation, Notification::success(tr("data.edit.saved")), window, cx);
+                let version = self.state.get_post(&id).and_then(|post| post.extras.head.as_ref()).map(|head| version_label(head.version));
+                let text = version.filter(|_| revision.is_some()).map_or_else(|| tr("data.edit.saved"), |version| rust_i18n::t!("data.edit.saved_version", version = version).to_string());
+                self.toast(ToastKind::Confirmation, Notification::success(text), window, cx);
             }
             Err(err) => {
                 let message = publish_error_message(&err);

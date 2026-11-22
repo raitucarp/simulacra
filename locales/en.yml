@@ -5977,3 +5977,6 @@ search.page.prompt_title: "Search your posts"
 search.page.prompt_hint: "Words find the posts that hold them, filters narrow the list, and a minus sign leaves things out. Use the arrow keys to move and Enter to open."
 search.page.empty_title: "Nothing found"
 search.page.empty_hint: "Try fewer words or remove a filter."
+# Q5: saved searches
+search.page.saved: "Saved"
+search.page.save: "Save search"

@@ -5977,3 +5977,6 @@ search.page.prompt_title: "Deine Beiträge durchsuchen"
 search.page.prompt_hint: "Wörter finden die Beiträge, die sie enthalten, Filter grenzen die Liste ein, und ein Minuszeichen schließt etwas aus. Mit den Pfeiltasten bewegen, mit Enter öffnen."
 search.page.empty_title: "Nichts gefunden"
 search.page.empty_hint: "Versuche weniger Wörter oder entferne einen Filter."
+# Q5: saved searches
+search.page.saved: "Gespeichert"
+search.page.save: "Suche speichern"

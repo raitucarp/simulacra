@@ -5977,3 +5977,6 @@ search.page.prompt_title: "Cari postingan Anda"
 search.page.prompt_hint: "Kata menemukan postingan yang memuatnya, filter mempersempit daftar, dan tanda minus mengecualikan sesuatu. Gunakan tombol panah untuk berpindah dan Enter untuk membuka."
 search.page.empty_title: "Tidak ada yang ditemukan"
 search.page.empty_hint: "Coba lebih sedikit kata atau hapus sebuah filter."
+# Q5: saved searches
+search.page.saved: "Tersimpan"
+search.page.save: "Simpan pencarian"

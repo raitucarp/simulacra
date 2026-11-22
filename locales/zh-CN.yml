@@ -5977,3 +5977,6 @@ search.page.prompt_title: "搜索你的帖子"
 search.page.prompt_hint: "词语会找到包含它们的帖子，筛选条件会缩小列表，减号可排除内容。用方向键移动，按 Enter 打开。"
 search.page.empty_title: "未找到任何内容"
 search.page.empty_hint: "试试减少词语或移除一个筛选条件。"
+# Q5: saved searches
+search.page.saved: "已保存"
+search.page.save: "保存搜索"

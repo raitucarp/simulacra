@@ -4,11 +4,12 @@
 //!
 //! - [`snippet`]: the passage a result shows and its marks.
 //! - [`chips`]: the filter chips and quick filters, and moving the selection.
-//! - [`render`]: the page itself.
+//! - [`render`]: the page itself; `saved_row` the saved searches (Q5).
 
 pub mod chips;
 mod render;
 mod rows;
+mod saved_row; // Q5
 pub mod snippet;
 #[cfg(test)]
 mod tests;
@@ -17,7 +18,7 @@ pub use chips::{active_chips, stepped, FilterChip, QUICK_FILTERS};
 pub use render::render_search_page;
 pub use snippet::{snippet, Snippet};
 
-use crate::domain::search_query::{PostQuery, QueryFilter};
+use crate::domain::search_query::{PostQuery, QueryFilter, SavedSearches};
 use crate::domain::PostId;
 use gpui_kit::component::input::InputState;
 use gpui_kit::*;
@@ -35,6 +36,12 @@ pub enum SearchEvent {
     /// Opens the selected result.
     Confirm,
     Open(PostId),
+    /// Q5: saves the query as it stands.
+    SaveQuery,
+    /// Q5: runs a saved query.
+    OpenSaved(String),
+    /// Q5: forgets a saved query.
+    ForgetSaved(String),
 }
 
 pub type SearchAction = Rc<dyn Fn(SearchEvent, &mut Window, &mut App) + 'static>;
@@ -60,5 +67,7 @@ pub struct SearchView<'a> {
     pub selected: Option<usize>,
     /// Why meaning did not help this search, when it could not.
     pub note: Option<&'a str>,
+    /// Q5: the saved searches.
+    pub saved: &'a SavedSearches,
     pub on_event: SearchAction,
 }

@@ -3,6 +3,7 @@
 
 use super::chips::{active_chips, QUICK_FILTERS};
 use super::rows::result_row;
+use super::saved_row::saved_row;
 use super::{SearchAction, SearchEvent, SearchView};
 use crate::theme::ThemeTokens;
 use crate::ui::components::chip::{choice_chip, chip_row};
@@ -72,7 +73,7 @@ fn results(view: &SearchView<'_>, theme: &ThemeTokens) -> Div {
 /// The page.
 pub fn render_search_page(view: SearchView<'_>, theme: &ThemeTokens) -> AnyElement {
     let note = view.note.map(|note| div().text_size(theme.font_size_xs).text_color(theme.text_muted).child(note.to_string()));
-    let column = div().w_full().max_w(theme.search_page_max_width).flex().flex_col().gap(theme.section_gap).child(header(&view, theme)).child(field(&view, theme)).child(chips(&view, theme)).children(note).child(results(&view, theme));
+    let column = div().w_full().max_w(theme.search_page_max_width).flex().flex_col().gap(theme.section_gap).child(header(&view, theme)).child(field(&view, theme)).child(chips(&view, theme)).children(saved_row(&view, theme)).children(note).child(results(&view, theme));
     let on_event = view.on_event.clone();
     div()
         .id(ROOT_ID)

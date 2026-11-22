@@ -90,11 +90,28 @@ impl AppView {
                 return;
             }
             SearchEvent::Open(id) => return self.open_search_hit(id, window, cx),
+            saved @ (SearchEvent::SaveQuery | SearchEvent::OpenSaved(_) | SearchEvent::ForgetSaved(_)) => return self.on_saved_search(saved, window, cx),
         };
         if let Some(query) = rewrite {
             host.input.update(cx, |input, cx| input.set_value(query.to_text(), window, cx));
             self.on_search_changed(window, cx);
         }
+        cx.notify();
+    }
+
+    /// Q5: saves the query, runs a saved one, or forgets one; the list is stored at once.
+    fn on_saved_search(&mut self, event: SearchEvent, window: &mut Window, cx: &mut Context<Self>) {
+        let Some(host) = self.search.as_mut() else { return };
+        match event {
+            SearchEvent::SaveQuery => host.saved.save(&host.query.to_text()),
+            SearchEvent::ForgetSaved(query) => host.saved.remove(&query),
+            SearchEvent::OpenSaved(query) => {
+                host.input.update(cx, |input, cx| input.set_value(query, window, cx));
+                return self.on_search_changed(window, cx);
+            }
+            _ => return,
+        };
+        self.state.store_saved_searches(&host.saved);
         cx.notify();
     }
 

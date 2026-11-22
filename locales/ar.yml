@@ -5977,3 +5977,6 @@ search.page.prompt_title: "ابحث في منشوراتك"
 search.page.prompt_hint: "تجد الكلمات المنشورات التي تحتويها، وتضيّق المرشحات القائمة، وتستبعد علامة الطرح ما لا تريده. استخدم مفاتيح الأسهم للتنقل وEnter للفتح."
 search.page.empty_title: "لم يُعثر على شيء"
 search.page.empty_hint: "جرّب كلمات أقل أو أزل مرشحًا."
+# Q5: saved searches
+search.page.saved: "المحفوظة"
+search.page.save: "احفظ البحث"

@@ -146,3 +146,17 @@ fn locked_and_scheduled_posts_never_surface_by_text_or_meaning() {
         assert!(run(state, "-quetzalcoatl", &meant(&[&locked])).is_empty());
     });
 }
+
+#[test]
+fn saved_searches_survive_a_reload_of_the_vault() {
+    use crate::domain::search_query::SavedSearches;
+    let state = AppState::new_in_memory();
+    assert!(state.saved_searches().items.is_empty());
+    let mut saved = SavedSearches::default();
+    saved.save("rye has:image");
+    state.store_saved_searches(&saved);
+    assert_eq!(state.saved_searches(), saved);
+    let mut bare = AppState::new_in_memory();
+    bare.db = None;
+    assert!(bare.saved_searches().items.is_empty(), "nothing without a vault");
+}

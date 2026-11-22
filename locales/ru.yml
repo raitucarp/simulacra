@@ -5977,3 +5977,6 @@ search.page.prompt_title: "Поиск по вашим записям"
 search.page.prompt_hint: "Слова находят записи, в которых они есть, фильтры сужают список, а знак минус исключает. Стрелки перемещают выбор, Enter открывает."
 search.page.empty_title: "Ничего не найдено"
 search.page.empty_hint: "Попробуйте меньше слов или уберите фильтр."
+# Q5: saved searches
+search.page.saved: "Сохранённые"
+search.page.save: "Сохранить поиск"

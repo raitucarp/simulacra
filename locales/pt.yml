@@ -5977,3 +5977,6 @@ search.page.prompt_title: "Pesquise suas publicações"
 search.page.prompt_hint: "As palavras encontram as publicações que as contêm, os filtros restringem a lista e um sinal de menos exclui. Use as setas para mover e Enter para abrir."
 search.page.empty_title: "Nada encontrado"
 search.page.empty_hint: "Tente menos palavras ou remova um filtro."
+# Q5: saved searches
+search.page.saved: "Salvas"
+search.page.save: "Salvar pesquisa"

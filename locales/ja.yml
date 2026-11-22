@@ -5977,3 +5977,6 @@ search.page.prompt_title: "投稿を検索"
 search.page.prompt_hint: "単語はそれを含む投稿を見つけ、フィルターは一覧を絞り込み、マイナス記号は除外します。矢印キーで移動し、Enter で開きます。"
 search.page.empty_title: "見つかりませんでした"
 search.page.empty_hint: "単語を減らすか、フィルターを外してみてください。"
+# Q5: saved searches
+search.page.saved: "保存済み"
+search.page.save: "検索を保存"

@@ -88,7 +88,7 @@ impl AppView {
             Err(Failure::Fetch(other)) => self.symbol_failure(format!("{other:?}")),
             Err(Failure::Install(reason)) => self.symbol_failure(reason),
         };
-        self.refresh_symbol_library();
+        self.refresh_symbol_library(cx);
         if let Some(text) = toast {
             self.toast(ToastKind::Confirmation, Notification::success(text), window, cx);
         }
@@ -106,6 +106,6 @@ impl AppView {
             Ok(_) => self.toast(ToastKind::Confirmation, Notification::success(t!("symbols.sets.removed").to_string()), window, cx),
             Err(err) => self.symbols.error = Some(t!("symbols.sets.failed", reason = err.to_string()).to_string()),
         }
-        self.refresh_symbol_library();
+        self.refresh_symbol_library(cx);
     }
 }

@@ -18,6 +18,8 @@ pub struct SymbolsHost {
     pub error: Option<String>,
     /// What the icon store holds (S13).
     pub installed: crate::domain::icons::StoreIndex,
+    /// The installed icons by name (S15).
+    pub index: std::rc::Rc<crate::domain::icons::SymbolIndex>,
 }
 
 impl SymbolsHost {
@@ -25,10 +27,11 @@ impl SymbolsHost {
     pub(super) fn new(state: &AppState, composer: &Entity<ComposerModalPanel>, cx: &mut Context<AppView>) -> Self {
         let saved = state.db.as_ref().and_then(|db| db.get_setting(SettingKey::SymbolPicker).ok().flatten());
         let memory = saved.and_then(|json| serde_json::from_str::<SymbolMemory>(&json).ok()).unwrap_or_default().validated();
-        let given = memory.clone();
-        composer.update(cx, |panel, _| panel.set_symbol_sources(given, std::rc::Rc::default()));
-        let installed = crate::icons::IconStore::new(state.symbols_dir()).index();
-        Self { memory, key: load_symbol_key(state), download: None, error: None, installed }
+        let (store, given) = (crate::icons::IconStore::new(state.symbols_dir()), memory.clone());
+        let index = std::rc::Rc::new(symbol_index(&store));
+        let library = index.clone();
+        composer.update(cx, |panel, _| panel.set_symbol_sources(given, library));
+        Self { memory, key: load_symbol_key(state), download: None, error: None, installed: store.index(), index }
     }
 }
 
@@ -54,8 +57,11 @@ fn load_symbol_key(state: &AppState) -> crate::domain::symbols::SymbolKey {
 
 impl AppView {
     /// Reads what the icon store holds again (after a download or a removal, S13).
-    pub(super) fn refresh_symbol_library(&mut self) {
-        self.symbols.installed = crate::icons::IconStore::new(self.state.symbols_dir()).index();
+    pub(super) fn refresh_symbol_library(&mut self, cx: &mut Context<Self>) {
+        let store = crate::icons::IconStore::new(self.state.symbols_dir());
+        (self.symbols.installed, self.symbols.index) = (store.index(), std::rc::Rc::new(symbol_index(&store)));
+        let (memory, library) = (self.symbols.memory.clone(), self.symbols.index.clone());
+        self.composer_modal.update(cx, |panel, _| panel.set_symbol_sources(memory, library));
     }
 
     /// What Settings › Symbols shows (S13).
@@ -74,4 +80,10 @@ impl AppView {
         let sets = self.symbols.installed.sets.iter().filter_map(|stored| crate::domain::icons::icon_set(&stored.id));
         sets.map(|set| crate::ui::features::settings::LicenceView { set, text: store.licence(set.id).unwrap_or_default() }).collect()
     }
+}
+
+/// The name index of every installed icon (S15).
+fn symbol_index(store: &crate::icons::IconStore) -> crate::domain::icons::SymbolIndex {
+    let index = store.index();
+    crate::domain::icons::SymbolIndex::build(index.sets.iter().map(|set| (set.id.as_str(), store.icon_names(&set.id))))
 }

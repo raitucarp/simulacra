@@ -4,7 +4,8 @@
 
 use super::super::symbol_picker::{choice_label, SymbolPickerView};
 use super::ComposerModalPanel;
-use crate::domain::symbols::{core_choices, search_symbols, PostSymbols, SymbolChoice, SymbolMemory, SymbolRef};
+use crate::domain::icons::SymbolIndex;
+use crate::domain::symbols::{core_choices, search_symbols, PostSymbols, SymbolChoice, SymbolMemory};
 use gpui_kit::component::input::InputState;
 use gpui_kit::*;
 use rust_i18n::t;
@@ -16,8 +17,8 @@ pub(super) struct SymbolPicker {
     pub memory: SymbolMemory,
     pub search: Entity<InputState>,
     pub searching: bool,
-    /// The downloaded library's icons, searched by name.
-    pub library: Rc<Vec<SymbolRef>>,
+    /// The downloaded icons, searched by name (S15).
+    pub library: Rc<SymbolIndex>,
 }
 
 impl SymbolPicker {
@@ -47,7 +48,7 @@ impl ComposerModalPanel {
     }
 
     /// What the picker remembers and the library it searches (from the shell).
-    pub fn set_symbol_sources(&mut self, memory: SymbolMemory, library: Rc<Vec<SymbolRef>>) {
+    pub fn set_symbol_sources(&mut self, memory: SymbolMemory, library: Rc<SymbolIndex>) {
         self.symbols.memory = memory;
         self.symbols.library = library;
     }
@@ -69,7 +70,7 @@ impl ComposerModalPanel {
         let core = core_choices();
         let recent = self.symbols.memory.recent.iter().filter(|choice| !core.contains(choice)).cloned().collect();
         let query = self.symbols.search.read(cx).value().to_string();
-        let results = if self.symbols.searching { search_symbols(&query, choice_label, &self.symbols.library) } else { Vec::new() };
+        let results = if self.symbols.searching { search_symbols(&query, choice_label, &self.symbols.library.search(&query, None)) } else { Vec::new() };
         SymbolPickerView { chosen: self.symbols.chosen.clone(), recent, search: self.symbols.search.clone(), searching: self.symbols.searching, results }
     }
 }

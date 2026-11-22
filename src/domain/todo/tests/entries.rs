@@ -13,6 +13,7 @@ fn entries_are_flat_with_depth_parent_and_children() {
     let shape: Vec<_> = entries.iter().map(|e| (e.item.text.as_str(), e.depth, e.parent)).collect();
     assert_eq!(shape, vec![("clean", 0, None), ("kitchen", 1, Some(0)), ("garage", 1, Some(0)), ("call mum", 0, None)]);
     assert_eq!(entries[0].children, vec![1, 2]);
+    assert_eq!(entries[0].settled_children, 1, "the kitchen is done, the garage is not");
     assert!(entries.iter().all(|e| e.item.children.is_empty()));
     assert_eq!(entries[1].state, EntryState::Done);
 }

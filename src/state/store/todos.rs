@@ -1,10 +1,12 @@
-//! Ticking the to-dos of a post (D6): the user's own posts only. A tick is kept in
+//! Ticking the to-dos of a post (D6): the user's own posts only; a parent is done only once
+//! its children are done or dropped (D7, [`crate::domain::todo::tick`]). A tick is kept in
 //! `extras.todo_state` and saved with the post as it is, so it never makes a new version; an
 //! edit of the text carries the ticks over to the items they belong to (see
 //! [`crate::domain::todo::state`]).
 
 use super::{require_persona, AppState};
 use crate::domain::todo::entries::{todo_entries, TodoEntry};
+use crate::domain::todo::tick::{apply_tick, TickRefusal};
 use crate::domain::symbols::{can_transition, EntryState, EntrySymbol};
 use crate::domain::PostId;
 use crate::error::{AppError, Result};
@@ -38,10 +40,9 @@ impl AppState {
         let position = self.post_position(id).ok_or_else(|| missing(id))?;
         require_persona(self.author_of(&self.posts[position]))?;
         let entries = self.post_todos(id);
-        let entry = entries.get(index).ok_or_else(|| missing(id))?;
+        entries.get(index).ok_or_else(|| missing(id))?;
         let post = &mut self.posts[position];
-        let mut state = post.extras.todo_state.clone();
-        state.tick_mut(index, &entry.item).state = Some(to);
+        let mut state = apply_tick(&entries, &post.extras.todo_state, index, to).map_err(|TickRefusal::OpenChildren(open)| AppError::OpenSubtasks(open))?; // D7
         state.tidy(&post.content);
         if state == post.extras.todo_state {
             return Ok(());

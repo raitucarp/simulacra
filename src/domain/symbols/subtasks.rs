@@ -19,3 +19,9 @@ pub fn is_unsettled(symbols: &PostSymbols) -> bool {
 pub fn may_settle<'a>(to: EntryState, children: impl IntoIterator<Item = &'a PostSymbols>) -> bool {
     to != EntryState::Done || unsettled_children(children) == 0
 }
+
+/// How many of `states` still hold a parent back from `Done`: every state but done and dropped.
+/// The same rule holds the to-dos inside a post (D7).
+pub fn unsettled_states(states: impl IntoIterator<Item = EntryState>) -> usize {
+    states.into_iter().filter(|state| !state.is_closed()).count()
+}

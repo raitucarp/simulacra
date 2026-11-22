@@ -92,6 +92,11 @@ pub(super) fn due_colour(tone: DueTone, theme: &ThemeTokens) -> Rgba {
 pub(super) fn todo_chips(entry: &TodoEntry, context: &RowContext<'_>) -> Vec<AnyElement> {
     let (theme, meta, muted) = (context.theme, &entry.item.meta, context.theme.text_secondary);
     let mut chips = Vec::new();
+    if !entry.children.is_empty() {
+        let progress = t!("todo.progress", done = entry.settled_children, total = entry.children.len()).to_string(); // D7: done once every child is
+        let colour = if entry.settled_children == entry.children.len() { theme.accent_success } else { muted };
+        chips.push(chip(Some(LucideIcon::ListChecks), progress, colour, theme));
+    }
     if let Some(level) = meta.priority {
         chips.push(chip(None, PRIORITY_MARK.repeat(usize::from(level)), priority_colour(level, theme), theme));
     }

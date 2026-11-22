@@ -30,6 +30,8 @@ pub struct TodoEntry {
     pub state: EntryState,
     /// The indices of the items nested right under it.
     pub children: Vec<usize>,
+    /// How many of those are done or dropped (D7: the item may be done once all are).
+    pub settled_children: usize,
 }
 
 impl TodoEntry {
@@ -53,6 +55,10 @@ pub fn todo_entries(content: &str, ticks: &TodoState) -> Vec<TodoEntry> {
     for entry in &mut entries {
         entry.state = ticks.state_of(entry.index, &entry.item);
     }
+    let settled: Vec<usize> = entries.iter().map(|entry| entry.children.iter().filter(|child| entries[**child].state.is_closed()).count()).collect();
+    for (entry, count) in entries.iter_mut().zip(settled) {
+        entry.settled_children = count;
+    }
     entries
 }
 
@@ -62,7 +68,7 @@ fn push_entry(item: &TodoItem, depth: usize, parent: Option<usize>, entries: &mu
         entries[parent].children.push(index);
     }
     let flat = TodoItem { children: Vec::new(), ..item.clone() };
-    entries.push(TodoEntry { index, depth, parent, state: item.state, item: flat, children: Vec::new() });
+    entries.push(TodoEntry { index, depth, parent, state: item.state, item: flat, children: Vec::new(), settled_children: 0 });
     for child in &item.children {
         push_entry(child, depth + 1, Some(index), entries);
     }

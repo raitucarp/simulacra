@@ -28,7 +28,7 @@ pub use art::{entry_key, signifier_key, state_key, SymbolArt, SYMBOL_ART_DIR};
 pub use face::{SymbolFace, SymbolGlyph, MAX_BADGES};
 pub use picker::{core_choices, search_symbols, words_match, SymbolChoice, SymbolMemory, RECENT_SYMBOLS, SYMBOL_RESULTS};
 pub use shorthand::{parse_shorthand, Shorthand};
-pub use subtasks::{is_unsettled, may_settle, unsettled_children};
+pub use subtasks::{is_unsettled, may_settle, unsettled_children, unsettled_states};
 pub use legend::{clean_meaning, KeyEntry, SymbolKey, MAX_KEY_ENTRIES, MAX_MEANING_CHARS};
 pub use migration::{needs_review, review_due, MigrationReview, ReviewChoice};
 pub use kinds::{EntryState, EntrySymbol, Signifier, SymbolRef, SYMBOL_ASSET_SCHEME};

@@ -29,6 +29,7 @@ pub mod entries; // D5: the body as the checklist renders it
 pub mod repeat; // D4: repeat rules and their next occurrence
 pub mod state; // D6: ticked boxes, kept out of the text
 pub mod syntax; // D1: the help card rows
+pub mod tick; // D7: what a tick does to the other to-dos
 mod tokens;
 #[cfg(test)]
 mod tests;

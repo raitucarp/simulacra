@@ -23,18 +23,29 @@ pub(super) struct RowContext<'a> {
     pub written: Date,
     pub today: Date,
     pub theme: &'a ThemeTokens,
+    /// Ticks a box (D6); `None` leaves them inert.
+    pub toggle: Option<super::TodoToggle>,
 }
 
-/// The box of `entry`: the task symbol of its state, named in its tooltip.
+/// The box of `entry`: the task symbol of its state, named in its tooltip; a click ticks it
+/// when the checklist can be ticked (D6), without selecting the card.
 pub(super) fn todo_box(entry: &TodoEntry, context: &RowContext<'_>) -> Stateful<Div> {
     let theme = context.theme;
     let label = state_label(entry.state);
-    div()
+    let hover = theme.hover_bg;
+    let tickable = div()
         .id(SharedString::from(format!("{BOX_ID_PREFIX}{}-{}", context.post_id, entry.index)))
         .flex_none()
         .mt(theme.spacing_3xs)
+        .rounded(theme.radius_full)
         .child(render_symbol_art(SymbolArt::Entry(EntrySymbol::Task, Some(entry.state)), theme.todo_box_size))
-        .tooltip(move |window, cx| Tooltip::new(label.clone()).build(window, cx))
+        .tooltip(move |window, cx| Tooltip::new(label.clone()).build(window, cx));
+    let Some(toggle) = context.toggle.clone() else { return tickable };
+    let index = entry.index;
+    tickable.cursor_pointer().hover(move |style| style.bg(hover)).on_mouse_down(MouseButton::Left, move |_, window, cx| {
+        cx.stop_propagation();
+        toggle(index, window, cx);
+    })
 }
 
 fn todo_text<L: PostLookup>(entry: &TodoEntry, lookup: L, links: &BodyLinks, theme: &ThemeTokens) -> AnyElement {

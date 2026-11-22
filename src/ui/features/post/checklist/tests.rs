@@ -43,6 +43,6 @@ fn a_checklist_and_a_plain_body_both_render() {
         .map(|(n, text)| Post::create(format!("p{n}"), "net", "me", text).expect("post"))
         .collect();
     for post in &posts {
-        let _body = render_post_content(post, &posts, &theme, &BodyLinks::default());
+        let _body = render_post_content(post, &posts, &theme, &BodyLinks::default(), None);
     }
 }

@@ -49,7 +49,8 @@ impl BodyLinks {
 /// Tokenizes `content` and renders it with inert links (previews, tests, the spark feed); its
 /// to-dos as a checklist written today (D5).
 pub fn render_post_body<L: PostLookup>(content: &str, lookup: L, theme: &ThemeTokens) -> impl IntoElement {
-    let source = super::checklist::ChecklistSource { content, post_id: PREVIEW_SCOPE, written: crate::time::local_now().date() };
+    let ticks = crate::domain::todo::state::TodoState::default();
+    let source = super::checklist::ChecklistSource { content, post_id: PREVIEW_SCOPE, written: crate::time::local_now().date(), ticks: &ticks, toggle: None };
     super::checklist::render_checklist(&source, lookup, theme, &BodyLinks::default()).unwrap_or_else(|| render_body_tokens(&tokenize_post_body(content), lookup, theme, &BodyLinks::default()))
 }
 

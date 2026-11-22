@@ -45,6 +45,7 @@ mod settings;
 mod seed_catalogue;
 mod snapshot;
 mod symbols; // epic S
+mod todos; // D6: ticked boxes
 mod threads;
 mod upgrade;
 mod wikilinks;
@@ -62,6 +63,7 @@ pub use post_meta::PostMeta;
 pub use post_versions::PostEdit;
 pub use network_create::{network_slug, validate_network_name, NetworkNameError, MAX_NETWORK_NAME_CHARS};
 pub use threads::{ThreadAnchor, ThreadDraft};
+pub use todos::toggled;
 pub use wikilinks::WikilinkTarget;
 
 use crate::domain::{GroundingDocument, Network, NetworkId, Post, Profile, ProfileId, TrendingTopic};

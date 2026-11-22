@@ -38,6 +38,7 @@ impl AppState {
             record.apply(&mut switched);
         }
         switched.extras.head = Some(shown.clone());
+        switched.extras.todo_state = post.extras.todo_state.carried(&post.content, &switched.content); // D6
         if let Some(ref db) = self.db {
             db.commit_post_version(switched.clone(), kept, Some(target.id.clone()))?;
         }

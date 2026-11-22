@@ -2,6 +2,7 @@
 //! lines, and every to-do in reading order with its depth, its parent and its due day.
 
 use super::due::resolve_due;
+use super::state::TodoState;
 use super::{flatten_todos, parse_todos, TodoItem};
 use crate::domain::symbols::EntryState;
 use jiff::civil::Date;
@@ -43,11 +44,14 @@ impl TodoEntry {
     }
 }
 
-/// Every to-do of `content`, flat in reading order.
-pub fn todo_entries(content: &str) -> Vec<TodoEntry> {
+/// Every to-do of `content`, flat in reading order, in the states `ticks` put them in (D6).
+pub fn todo_entries(content: &str, ticks: &TodoState) -> Vec<TodoEntry> {
     let mut entries = Vec::new();
     for item in parse_todos(content) {
         push_entry(&item, 0, None, &mut entries);
+    }
+    for entry in &mut entries {
+        entry.state = ticks.state_of(entry.index, &entry.item);
     }
     entries
 }

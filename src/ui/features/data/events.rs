@@ -52,6 +52,8 @@ pub enum DataEvent {
     SetAutoDelete(PostId, Option<DeleteAfter>),
     /// Moves the post's entry to this state (S7).
     SetEntryState(PostId, crate::domain::symbols::EntryState),
+    /// Clicks the box of the to-do at this index of the post (D6).
+    ToggleTodo(PostId, usize),
     OpenPostHistory(PostId),
     ToggleBookmark(PostId),
     AddToCollection(PostId, CollectionId),

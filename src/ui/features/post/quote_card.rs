@@ -59,7 +59,7 @@ fn render_quoted_card<L: PostLookup>(
                 .font_family(theme.font_family_body.clone())
                 .text_size(theme.font_size_xs)
                 .text_color(theme.text_secondary)
-                .child(render_post_content(quoted, lookup, theme, &links.scoped(quoted.id.to_string()))), // D5: its checklist
+                .child(render_post_content(quoted, lookup, theme, &links.scoped(quoted.id.to_string()), None)), // D5: its checklist
         )
 }
 

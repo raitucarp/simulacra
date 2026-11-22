@@ -98,6 +98,7 @@ impl AppState {
         let next = VersionHead { id: RevisionId::generate(), version: from.next(step.bump, &taken), parent: Some(from.id), bump: Some(step.bump), note: step.note.trim().to_string(), edited_at: Some(now) };
         let kept = Revision { record_json: PostRecord::of(current).to_json(), ..head.into_revision(RevisionSubject::Post(edited.id.clone()), &current.content, now) };
         edited.extras.head = Some(next);
+        edited.extras.todo_state = current.extras.todo_state.carried(&current.content, &edited.content); // D6: ticks follow their items
         if let Some(ref db) = self.db {
             db.commit_post_version(edited.clone(), kept.clone(), None)?;
         }

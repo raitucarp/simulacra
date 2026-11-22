@@ -27,6 +27,7 @@ mod line;
 pub mod due; // D3: due phrases as days
 pub mod entries; // D5: the body as the checklist renders it
 pub mod repeat; // D4: repeat rules and their next occurrence
+pub mod state; // D6: ticked boxes, kept out of the text
 pub mod syntax; // D1: the help card rows
 mod tokens;
 #[cfg(test)]

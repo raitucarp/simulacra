@@ -19,7 +19,7 @@ fn colour(strength: Strength, theme: &ThemeTokens) -> Rgba {
 }
 
 /// The meter and its label.
-pub(super) fn strength_meter(strength: Strength, theme: &ThemeTokens) -> Div {
+pub(crate) fn strength_meter(strength: Strength, theme: &ThemeTokens) -> Div {
     let fill = colour(strength, theme);
     let segments = (1..=SEGMENTS).map(|level| div().flex_1().h(theme.strength_meter_height).rounded(theme.radius_full).bg(if level <= strength.level() { fill } else { theme.border_subtle }));
     let label = tr(&format!("data.snapshot.strength.{}", strength.key()));

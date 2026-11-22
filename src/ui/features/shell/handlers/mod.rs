@@ -16,6 +16,7 @@ mod capture;
 mod chrome;
 mod commands;
 mod composer_modal;
+mod composer_locked; // X3
 mod credentials;
 mod data; // sb F2: history, export, snapshots, collections and bookmarks
 mod data_export;

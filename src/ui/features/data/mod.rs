@@ -33,6 +33,7 @@ pub use saved::{render_knowledge_switch, render_saved_page, SavedItemView, Saved
 pub use scheduled::{render_scheduled_sheet, ScheduledRow};
 pub use sheet::closes_on_escape;
 pub use snapshot::{render_restore_sheet, render_snapshot_sheet, RestoreDialog, RestoreStep, SnapshotDialog};
+pub(crate) use snapshot::strength_meter;
 pub use text::{format_time, tr};
 
 #[cfg(test)]

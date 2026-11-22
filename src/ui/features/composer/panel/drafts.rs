@@ -135,7 +135,7 @@ impl ComposerModalPanel {
     }
 
     /// Whether a link, an image or a file is attached (they belong to the first post).
-    fn has_media(&self, cx: &App) -> bool {
+    pub(super) fn has_media(&self, cx: &App) -> bool {
         !self.link_input.read(cx).value().trim().is_empty() || !self.images.is_empty() || !self.files.attached.is_empty() || self.typed_image(cx).is_some()
     }
 

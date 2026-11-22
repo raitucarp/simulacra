@@ -40,6 +40,9 @@ pub fn publish_error_message(error: &AppError) -> String {
         }
         AppError::InvalidSymbols => t!("symbols.error.not_allowed").to_string(), // S7
         AppError::OpenSubtasks(open) => crate::i18n::t_count("symbols.error.open_children", *open), // S8
+        AppError::LockedWithAttachments => t!("composer.lock.problem.attachments").to_string(), // X3
+        AppError::LockFailed => t!("composer.lock.failed").to_string(),
+        AppError::PostLocked => t!("composer.lock.edit_locked").to_string(),
         other => t!("composer.error_publish", reason = other.to_string()).to_string(),
     }
 }

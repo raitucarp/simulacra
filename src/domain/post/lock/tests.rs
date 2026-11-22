@@ -86,3 +86,13 @@ fn a_version_text_seals_and_opens_on_its_own() {
     let lock = seal_text("an older wording", &password(), FAST).expect("sealed");
     assert_eq!(open_text(&lock, &password()).expect("opens").as_str(), "an older wording");
 }
+
+#[test]
+fn the_composer_locks_only_text_with_a_long_enough_password_typed_twice() {
+    assert_eq!(lock_problem("seven tidy lanterns", "seven tidy lanterns", false), None);
+    assert_eq!(lock_problem("seven tidy lanterns", "seven tidy lanterns", true), Some(LockProblem::Attachments));
+    assert_eq!(lock_problem("short", "short", false), Some(LockProblem::TooShort));
+    assert_eq!(lock_problem("", "", false), Some(LockProblem::TooShort));
+    assert_eq!(lock_problem("seven tidy lanterns", "seven tidy lantern", false), Some(LockProblem::Mismatch));
+    assert_eq!(LockProblem::TooShort.key(), "too_short");
+}

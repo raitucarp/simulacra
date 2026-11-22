@@ -83,6 +83,8 @@ pub struct ModalCallbacks {
     pub on_toggle_free: ModalActionCallback,
     /// Opens or closes the to-do syntax help card (D1).
     pub on_toggle_todo_help: ModalActionCallback,
+    /// Opens or closes "Lock with password" (X3).
+    pub on_toggle_lock: ModalActionCallback,
 }
 
 /// Stateless dialog rendering a composer snapshot.
@@ -112,6 +114,8 @@ pub struct ComposerModalView {
     pub tint: Option<crate::domain::post::Tint>,
     /// The open "Schedule…" picker (Y3); `None` while closed.
     pub schedule: Option<super::schedule_picker::ScheduleView>,
+    /// The open "Lock with password" row (X3); `None` while closed.
+    pub lock: Option<super::lock_picker::LockView>,
     /// The symbol picker (S5).
     pub symbols: super::symbol_picker::SymbolPickerView,
     /// The version row while a published post is edited (V3).

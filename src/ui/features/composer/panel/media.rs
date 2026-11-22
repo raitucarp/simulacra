@@ -133,6 +133,9 @@ impl ComposerModalPanel {
 
     /// sb D3: asks the host for image ideas about the active draft's text.
     pub(super) fn image_ideas(&mut self, _: &mut Window, cx: &mut Context<Self>) {
+        if self.lock.open {
+            return; // X3: a draft about to be locked is never sent to a model
+        }
         let text = self.drafts.get(self.active_draft).or(self.drafts.first()).map(|slot| slot.input.read(cx).value().to_string()).unwrap_or_default();
         cx.emit(ComposerModalEvent::ImageIdeas(text));
     }

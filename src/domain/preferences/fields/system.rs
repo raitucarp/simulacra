@@ -38,7 +38,7 @@ impl PrivacyField {
 category_fields! {
     /// A Notifications preference.
     NotificationField {
-        Toasts => "toasts", Confirmations => "confirmations", AiFailures => "ai_failures", AgentActivity => "agent_activity",
+        Toasts => "toasts", Confirmations => "confirmations", AiFailures => "ai_failures", AgentActivity => "agent_activity", DueReminders => "due_reminders",
     }
 }
 
@@ -53,6 +53,7 @@ impl NotificationField {
             Self::Confirmations => prefs.confirmations,
             Self::AiFailures => prefs.ai_failures,
             Self::AgentActivity => prefs.agent_activity,
+            Self::DueReminders => prefs.due_reminders,
         })
     }
 
@@ -62,6 +63,7 @@ impl NotificationField {
             Self::Confirmations => NotificationPrefs { confirmations: toggle(value, prefs.confirmations), ..prefs },
             Self::AiFailures => NotificationPrefs { ai_failures: toggle(value, prefs.ai_failures), ..prefs },
             Self::AgentActivity => NotificationPrefs { agent_activity: toggle(value, prefs.agent_activity), ..prefs },
+            Self::DueReminders => NotificationPrefs { due_reminders: toggle(value, prefs.due_reminders), ..prefs },
         }
     }
 }

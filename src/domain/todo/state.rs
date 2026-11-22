@@ -41,6 +41,9 @@ pub struct TodoTick {
     /// How many times a repeating item was completed (D8).
     #[serde(skip_serializing_if = "is_zero")]
     pub completions: u32,
+    /// The due day the user was last reminded of (D10), so each day is reminded of once.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reminded: Option<Date>,
 }
 
 impl TodoTick {

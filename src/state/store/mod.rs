@@ -45,7 +45,7 @@ mod settings;
 mod seed_catalogue;
 mod snapshot;
 mod symbols; // epic S
-mod todos; mod tasks; // D6: ticked boxes; D9: the Tasks view
+mod todos; mod tasks; mod reminders; // D6: ticked boxes; D9: the Tasks view; D10: due reminders
 mod threads;
 mod upgrade;
 mod wikilinks;
@@ -63,7 +63,7 @@ pub use post_meta::PostMeta;
 pub use post_versions::PostEdit;
 pub use network_create::{network_slug, validate_network_name, NetworkNameError, MAX_NETWORK_NAME_CHARS};
 pub use threads::{ThreadAnchor, ThreadDraft};
-pub use todos::toggled;
+pub use todos::toggled; pub use reminders::DueReminder;
 pub use wikilinks::WikilinkTarget;
 
 use crate::domain::{GroundingDocument, Network, NetworkId, Post, Profile, ProfileId, TrendingTopic};

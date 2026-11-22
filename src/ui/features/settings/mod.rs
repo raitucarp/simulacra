@@ -30,7 +30,7 @@ pub use callbacks::{
 pub use catalog::{settings_sections, SettingRow, SettingsCommand, SettingsSectionEntry, ThemeScale};
 pub use credentials::{CredentialEditorView, CredentialRowView, CredentialsPaneProps};
 pub use modal::SettingsModal;
-pub use panes::{AppearanceEvent, AppearancePanel};
+pub use panes::{action_set, set_label, AppearanceEvent, AppearancePanel, LicenceView, SetDownload, SymbolSetAction, SymbolSetCallback, SymbolSetsProps};
 pub use props::{AiPaneProps, PersonaOption, SchedulerStatus, SettingsData, SettingsInputs};
 pub use tabs::SettingsTab;
 

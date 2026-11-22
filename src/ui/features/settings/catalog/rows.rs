@@ -42,6 +42,10 @@ pub enum EmbeddedPane {
     SchedulerStatus,
     /// The theme gallery, palette editor and layout scales.
     Themes,
+    /// The icon sets of Settings › Symbols (S13).
+    SymbolSets,
+    /// Who made the downloaded icon sets (decision #19: the only place naming them).
+    Licences,
 }
 
 /// One row of the settings window.
@@ -86,5 +90,7 @@ const fn pane_key(pane: EmbeddedPane) -> &'static str {
         EmbeddedPane::Credentials => "credentials",
         EmbeddedPane::SchedulerStatus => "scheduler_status",
         EmbeddedPane::Themes => "themes",
+        EmbeddedPane::SymbolSets => "symbol_sets",
+        EmbeddedPane::Licences => "licences",
     }
 }

@@ -25,15 +25,17 @@ pub enum SettingsTab {
     PrivacyData,
     Notifications,
     Shortcuts,
+    Symbols,
+    Licences,
     Advanced,
 }
 
 impl SettingsTab {
     /// Every category, in rail order.
-    pub const ALL: [SettingsTab; 13] = [
+    pub const ALL: [SettingsTab; 15] = [
         Self::General, Self::Appearance, Self::ReadingWriting, Self::AiIntelligence, Self::Embeddings,
         Self::Images, Self::Agents, Self::Learning, Self::Import, Self::PrivacyData, Self::Notifications,
-        Self::Shortcuts, Self::Advanced,
+        Self::Shortcuts, Self::Symbols, Self::Licences, Self::Advanced,
     ];
 
     /// Stable id (element ids, i18n keys, art file and the command palette).
@@ -51,6 +53,8 @@ impl SettingsTab {
             Self::PrivacyData => "privacy_data",
             Self::Notifications => "notifications",
             Self::Shortcuts => "shortcuts",
+            Self::Symbols => "symbols",
+            Self::Licences => "licences",
             Self::Advanced => "advanced",
         }
     }
@@ -74,6 +78,8 @@ impl SettingsTab {
             Self::PrivacyData => LucideIcon::Lock,
             Self::Notifications => LucideIcon::Volume2,
             Self::Shortcuts => LucideIcon::Keyboard,
+            Self::Symbols => LucideIcon::Sparkles,
+            Self::Licences => LucideIcon::Scale,
             Self::Advanced => LucideIcon::Terminal,
         }
     }

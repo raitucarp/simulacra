@@ -68,6 +68,8 @@ mod review_quiz;
 mod review_sheet;
 mod settings_commands;
 mod scheduler;
+mod symbol_downloads; // S13
+pub(in crate::ui::features::shell) use symbol_downloads::DownloadJob;
 mod semantic_index;
 mod semantic_pump;
 mod semantic_search;

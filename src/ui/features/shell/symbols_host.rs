@@ -9,11 +9,15 @@ use crate::ui::features::composer::ComposerModalPanel;
 use gpui_kit::{Context, Entity};
 
 /// Everything the symbols keep in the shell.
-#[derive(Default)]
 pub struct SymbolsHost {
     pub memory: SymbolMemory,
     /// What each custom symbol means (S9).
     pub key: crate::domain::symbols::SymbolKey,
+    /// The icon set download under way, and the last failure (S13).
+    pub download: Option<super::handlers::DownloadJob>,
+    pub error: Option<String>,
+    /// What the icon store holds (S13).
+    pub installed: crate::domain::icons::StoreIndex,
 }
 
 impl SymbolsHost {
@@ -23,7 +27,8 @@ impl SymbolsHost {
         let memory = saved.and_then(|json| serde_json::from_str::<SymbolMemory>(&json).ok()).unwrap_or_default().validated();
         let given = memory.clone();
         composer.update(cx, |panel, _| panel.set_symbol_sources(given, std::rc::Rc::default()));
-        Self { memory, key: load_symbol_key(state) }
+        let installed = crate::icons::IconStore::new(state.symbols_dir()).index();
+        Self { memory, key: load_symbol_key(state), download: None, error: None, installed }
     }
 }
 
@@ -45,4 +50,28 @@ impl AppView {
 fn load_symbol_key(state: &AppState) -> crate::domain::symbols::SymbolKey {
     let saved = state.db.as_ref().and_then(|db| db.get_setting(SettingKey::SymbolKey).ok().flatten());
     saved.and_then(|json| serde_json::from_str::<crate::domain::symbols::SymbolKey>(&json).ok()).unwrap_or_default().validated()
+}
+
+impl AppView {
+    /// Reads what the icon store holds again (after a download or a removal, S13).
+    pub(super) fn refresh_symbol_library(&mut self) {
+        self.symbols.installed = crate::icons::IconStore::new(self.state.symbols_dir()).index();
+    }
+
+    /// What Settings › Symbols shows (S13).
+    pub(super) fn symbol_sets_props(&self, bind: &super::binder::Binder) -> crate::ui::features::settings::SymbolSetsProps {
+        crate::ui::features::settings::SymbolSetsProps {
+            installed: self.symbols.installed.sets.iter().map(|set| (set.id.clone(), set.bytes)).collect(),
+            download: self.symbols.download.as_ref().map(|job| job.view()),
+            error: self.symbols.error.clone(),
+            on_action: std::rc::Rc::new(bind.with(Self::on_symbol_set_action)),
+        }
+    }
+
+    /// The Licences screen: every downloaded set with the licence text stored with it.
+    pub(super) fn licence_views(&self) -> Vec<crate::ui::features::settings::LicenceView> {
+        let store = crate::icons::IconStore::new(self.state.symbols_dir());
+        let sets = self.symbols.installed.sets.iter().filter_map(|stored| crate::domain::icons::icon_set(&stored.id));
+        sets.map(|set| crate::ui::features::settings::LicenceView { set, text: store.licence(set.id).unwrap_or_default() }).collect()
+    }
 }

@@ -24,6 +24,7 @@
 //! the post body tokens.
 
 mod line;
+pub mod syntax; // D1: the help card rows
 mod tokens;
 #[cfg(test)]
 mod tests;

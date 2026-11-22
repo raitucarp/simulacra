@@ -2,6 +2,7 @@
 
 use super::super::consts::{MODAL_BACKDROP_ID, MODAL_DIALOG_ID};
 use super::super::schedule_picker::schedule_row;
+use super::super::todo_help::todo_help_card;
 use super::super::version_picker::version_row;
 use super::reply_context::render_reply_context;
 use super::ComposerModalView;
@@ -64,8 +65,8 @@ impl ComposerModalView {
             // 5b. The symbols of the first post (S5)
             .child(self.symbol_row())
             .when_some(self.version.as_ref(), |this, view| this.child(version_row(view, theme))) // 5c. The version an edit makes (V3)
-            // 6. When the thread goes out, while the picker is open (Y3)
-            .when_some(self.schedule.as_ref(), |this, view| this.child(schedule_row(view, theme)))
+            .when_some(self.schedule.as_ref(), |this, view| this.child(schedule_row(view, theme))) // 6. When the thread goes out, while the picker is open (Y3)
+            .when(self.todo_help, |this| this.child(todo_help_card(theme))) // 6b. The to-do syntax help (D1)
             // 7. Modal Footer: Privacy indicator & Post button
             .child(self.footer(self.can_post))
     }

@@ -2,6 +2,7 @@
 
 use super::super::view::AppView;
 use crate::domain::PostId;
+use crate::state::{ThreadAnchor, ThreadDraft};
 use crate::ui::features::sidebar_left::NavRef;
 use crate::ui::features::composer::{publish_error_message, ComposerModalMode};
 use crate::ui::features::feed::FEED_WINDOW_INCREMENT;
@@ -16,7 +17,11 @@ impl AppView {
         window: &mut Window,
         cx: &mut Context<Self>,
     ) -> Result<(), String> {
-        let post_id = self.state.submit_post(content).map_err(|err| publish_error_message(&err))?;
+        let published = match self.state.preferences().writing.symbol_shorthand {
+            true => self.state.submit_thread(&[ThreadDraft::text(content).with_shorthand()], &ThreadAnchor::default()).map(|ids| ids[0].clone()), // S6
+            false => self.state.submit_post(content),
+        };
+        let post_id = published.map_err(|err| publish_error_message(&err))?;
         self.reveal_post(post_id, window, cx);
         Ok(())
     }

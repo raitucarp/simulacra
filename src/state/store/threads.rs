@@ -23,6 +23,22 @@ impl ThreadDraft {
     pub fn text(content: impl Into<String>) -> Self {
         Self { content: content.into(), ..Self::default() }
     }
+
+    /// The draft with its bullet-journal shorthand read off its start (S6): the markers'
+    /// symbols, joined with those already picked (a picked entry wins), and the text after
+    /// them. Unchanged when it starts with no marker.
+    #[must_use]
+    pub fn with_shorthand(self) -> Self {
+        let Some(short) = crate::domain::symbols::parse_shorthand(&self.content) else { return self };
+        let mut symbols = short.symbols;
+        if self.symbols.entry.is_some() {
+            (symbols.entry, symbols.state) = (self.symbols.entry, self.symbols.state);
+        }
+        self.symbols.signifiers.iter().for_each(|signifier| symbols.add_signifier(*signifier));
+        self.symbols.custom.iter().cloned().for_each(|custom| symbols.add_custom(custom));
+        Self { content: short.text, symbols, ..self }
+    }
+
 }
 
 /// Where a published thread attaches: a reply target for its first post and/or a quoted post.

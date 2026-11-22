@@ -58,7 +58,7 @@ impl AppView {
             return self.save_post_edit(target.post.id.clone(), (text, submission.tint, submission.symbols.clone()), window, cx); // sb F2, C3, S5
         }
         let publish_at = submission.publish_at;
-        let (thread, anchor) = thread_from_submission(submission.clone());
+        let (thread, anchor) = thread_from_submission(submission.clone(), self.state.preferences().writing.symbol_shorthand);
         let published = match publish_at {
             Some(at) => self.state.schedule_thread(&thread, &anchor, at, Timestamp::now()).map(|_| None),
             None => self.state.submit_thread(&thread, &anchor).map(|ids| ids.last().cloned()),
@@ -89,8 +89,8 @@ impl AppView {
 }
 
 /// Store drafts (attachments and symbols on the first post, the tint on every post) and the anchor
-/// implied by the modal mode.
-fn thread_from_submission(submission: ComposerSubmission) -> (Vec<ThreadDraft>, ThreadAnchor) {
+/// implied by the modal mode; with `shorthand`, each post's leading markers become symbols.
+fn thread_from_submission(submission: ComposerSubmission, shorthand: bool) -> (Vec<ThreadDraft>, ThreadAnchor) {
     let ComposerSubmission { mode, drafts, link, images, tint, publish_at: _, symbols } = submission;
     let mut thread: Vec<ThreadDraft> = drafts.into_iter().map(|text| ThreadDraft { tint, ..ThreadDraft::text(text) }).collect();
     if let Some(first) = thread.first_mut() {
@@ -98,6 +98,9 @@ fn thread_from_submission(submission: ComposerSubmission) -> (Vec<ThreadDraft>, 
         first.image = images.first().map(|image| image.path.clone());
         first.images = images;
         first.symbols = symbols; // S5: the picked symbols go on the first post
+    }
+    if shorthand {
+        thread = thread.into_iter().map(ThreadDraft::with_shorthand).collect(); // S6: markers at the start of each post
     }
     let anchor = match mode {
         ComposerModalMode::NewThread => ThreadAnchor::default(),

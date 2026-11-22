@@ -63,3 +63,21 @@ fn an_agent_reply_is_stored_without_symbols() {
     state.insert_reply_after_parent(reply).unwrap();
     assert!(state.get_post(&PostId::new("agent_reply")).unwrap().extras.symbols.is_empty());
 }
+
+#[test]
+fn shorthand_reads_markers_off_a_draft_and_keeps_picked_symbols() {
+    use crate::domain::symbols::{EntrySymbol, Signifier, SymbolRef};
+    let plain = ThreadDraft::text("Nothing to read");
+    assert_eq!(plain.clone().with_shorthand(), plain);
+    let short = ThreadDraft::text("* . Call the bakery").with_shorthand();
+    assert_eq!(short.content, "Call the bakery");
+    assert_eq!((short.symbols.entry, short.symbols.signifiers.clone()), (Some(EntrySymbol::Task), vec![Signifier::Priority]));
+    let picked = PostSymbols { custom: vec![SymbolRef::new("fi", "zap")], ..PostSymbols::entry(EntrySymbol::Event) };
+    let merged = ThreadDraft { symbols: picked, ..ThreadDraft::text("! . Launch") }.with_shorthand();
+    assert_eq!(merged.symbols.entry, Some(EntrySymbol::Event), "the picked entry wins");
+    assert_eq!((merged.symbols.signifiers.clone(), merged.symbols.custom.len()), (vec![Signifier::Inspiration], 1));
+    let mut state = AppState::new_in_memory();
+    let ids = state.submit_thread(&[ThreadDraft::text("o Dentist at nine").with_shorthand()], &ThreadAnchor::default()).unwrap();
+    let post = state.get_post(&ids[0]).unwrap();
+    assert_eq!((post.content.as_str(), post.extras.symbols.entry), ("Dentist at nine", Some(EntrySymbol::Event)));
+}

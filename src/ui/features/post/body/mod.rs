@@ -1,4 +1,4 @@
-//! Post body renderer: word-level flex wrapping of marked text, wikilink pills, hashtags,
+//! Post body renderer: word-level flex wrapping of marked text, web links, wikilink pills, hashtags,
 //! inline code, spoilers and fenced code blocks.
 //!
 //! Feed cards render the tokens the store cached at insert time; clicking a hashtag or a
@@ -7,6 +7,7 @@
 mod code_block;
 mod inline;
 mod layout;
+mod link;
 mod marks;
 mod spoiler;
 
@@ -20,6 +21,9 @@ use inline::{body_text, clickable, with_trailing};
 use layout::{blank_line_after, layout, Item};
 use spoiler::{hidden_spoiler, is_revealed, revealed_spoiler, SpoilerKey};
 use std::rc::Rc;
+
+/// The code block card (B6), also the preview of a text or code file (L9).
+pub(crate) use code_block::code_block as render_code_block;
 
 /// Opens the hashtag or wikilink target named by the string.
 pub type OpenTextAction = Rc<dyn Fn(String, &mut Window, &mut App) + 'static>;
@@ -35,6 +39,8 @@ pub struct BodyLinks {
     pub on_source: Option<super::extras::OpenSourceAction>,
     /// Image click: opens the lightbox on that image of the post (sb C3).
     pub on_media: Option<crate::ui::features::media::OpenMediaAction>,
+    /// "Relink…" on a missing file (L11).
+    pub on_relink: Option<crate::ui::features::media::RelinkAction>,
     /// The post the body belongs to, which its spoilers' reveals are kept under.
     pub scope: String,
 }
@@ -105,6 +111,7 @@ fn render_item<L: PostLookup>(
             let pill = render_obsidian_pill(&lookup.resolve_wikilink(target), theme);
             with_trailing(clickable(pill, target, links.on_wikilink.as_ref()), trailing, theme)
         }
+        Item::Url { url, trailing } => with_trailing(link::link_span(index, url, theme), trailing, theme),
         Item::Hashtag { tag, trailing } => {
             let span = clickable(render_hashtag_span(tag, theme), tag, links.on_tag.as_ref());
             with_trailing(span, trailing, theme)

@@ -1,16 +1,20 @@
 //! What the shown posts need from the background: the links whose previews they show and
-//! the images they draw. Pure; the shell feeds it the posts on screen.
+//! the images they draw (attached images and image files). Pure; the shell feeds it the posts on screen.
 
+use super::files::{file_family, FileRef};
 use super::image::post_images;
 use super::links::post_links;
 use super::video::{recognise_video, VideoSource};
 use crate::domain::Post;
+use crate::import::FormatFamily;
 
-/// Links to preview (with whether a private address is allowed) and images to scan.
+/// Links to preview (with whether a private address is allowed), images and files to scan.
 #[derive(Debug, Clone, Default, PartialEq, Eq)]
 pub struct MediaWants {
     pub links: Vec<WantedLink>,
     pub images: Vec<String>,
+    /// The local files attached to the posts (L7), one per path.
+    pub files: Vec<FileRef>,
 }
 
 /// A link to preview.
@@ -27,9 +31,14 @@ pub struct WantedLink {
 pub fn media_wants<'a>(posts: impl IntoIterator<Item = (&'a Post, bool)>, previews_enabled: bool) -> MediaWants {
     let mut wants = MediaWants::default();
     for (post, by_user) in posts {
-        for path in post_images(post).into_iter().map(|image| image.path) {
+        for path in post_images(post).into_iter().map(|image| image.path).chain(image_files(post)) {
             if !wants.images.contains(&path) {
                 wants.images.push(path);
+            }
+        }
+        for file in &post.extras.files {
+            if !wants.files.iter().any(|known| known.path == file.path) {
+                wants.files.push(file.clone());
             }
         }
         let first_link = post_links(post.link_url.as_deref(), &post.content).into_iter().next();
@@ -43,6 +52,11 @@ pub fn media_wants<'a>(posts: impl IntoIterator<Item = (&'a Post, bool)>, previe
         }
     }
     wants
+}
+
+/// The paths of the image files attached to `post` (L5: previewed through the image scan).
+fn image_files(post: &Post) -> impl Iterator<Item = String> + '_ {
+    post.extras.files.iter().filter(|file| file_family(&file.mime) == FormatFamily::Image).map(|file| file.path.clone())
 }
 
 impl MediaWants {

@@ -1,10 +1,10 @@
-//! Inline lexer: escapes, code spans, mark delimiters, wikilinks and hashtags.
+//! Inline lexer: escapes, code spans, mark delimiters, web links, wikilinks and hashtags.
 //!
 //! Delimiters follow "flanking" rules: an opener must be followed by a non-space and a closer
 //! preceded by one, so `2 * 3 * 4` and a `* ` list bullet at a line start stay literal.
 //! Underscores also refuse to open or close inside a word (`snake__case__name`).
 
-use super::atoms::{scan_hashtag, scan_wikilink};
+use super::atoms::{scan_hashtag, scan_url, scan_wikilink};
 use super::builder::Builder;
 use super::{BodyToken, Mark};
 
@@ -42,7 +42,7 @@ fn step(chars: &[char], i: usize, builder: &mut Builder) -> usize {
         }
         BACKTICK => code_span(chars, i, builder),
         STAR | UNDERSCORE | PIPE => delimiter_run(chars, i, builder),
-        c => match scan_wikilink(chars, i).or_else(|| scan_hashtag(chars, i)) {
+        c => match scan_url(chars, i).or_else(|| scan_wikilink(chars, i)).or_else(|| scan_hashtag(chars, i)) {
             Some((token, next)) => {
                 builder.atom(token);
                 next

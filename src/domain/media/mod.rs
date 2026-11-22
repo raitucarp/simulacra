@@ -6,12 +6,14 @@
 //! - [`opengraph`]: a tolerant OpenGraph / Twitter-card / `<title>` reader over fetched HTML.
 //! - [`image`]: image attachments of a post and what is known about an image file.
 //! - [`gallery`]: tile layout of a 2–4 image gallery, aspect clamping and lightbox stepping.
+//! - [`files`]: local files attached to a post (epic L), linked where they are.
 //! - [`catalog`]: the in-memory cache of previews and image facts, and what to fetch next.
 //! - [`plan`]: what the posts on screen need fetched or scanned.
 //!
 //! Fetching, decoding and storage happen at the edges (`crate::media`, `crate::storage`).
 
 pub mod catalog;
+pub mod files;
 pub mod gallery;
 pub mod image;
 pub mod links;
@@ -23,10 +25,11 @@ pub mod video;
 #[cfg(test)]
 mod tests;
 
+pub use files::{FileRef, MAX_FILES_PER_POST};
 pub use catalog::{ImageScan, MediaCatalog, PreviewLookup};
 pub use gallery::{clamp_aspect, fit_within, Corners, gallery_layout, is_portrait, media_aspect, step_index, GalleryLayout, Step, Tile, MAX_GALLERY_IMAGES};
 pub use image::{post_images, ImageAttachment, ImageFacts, ImageSize};
-pub use links::{detect_urls, display_domain, link_file_name, post_links};
+pub use links::{detect_urls, display_domain, link_file_name, post_links, written_url};
 pub use opengraph::{decode_html, parse_link_preview};
 pub use plan::{media_wants, MediaWants, WantedLink};
 pub use preview::{LinkPreview, PreviewEntry};

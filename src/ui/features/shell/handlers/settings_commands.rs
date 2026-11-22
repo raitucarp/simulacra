@@ -15,14 +15,6 @@ const BACKUP_DIR: &str = "backups";
 /// `simulacra-20261117-210455.db`
 const BACKUP_FILE_FORMAT: &str = "simulacra-%Y%m%d-%H%M%S.db";
 
-/// The system file manager command for a folder.
-#[cfg(target_os = "windows")]
-const FILE_MANAGER: &str = "explorer";
-#[cfg(target_os = "macos")]
-const FILE_MANAGER: &str = "open";
-#[cfg(not(any(target_os = "windows", target_os = "macos")))]
-const FILE_MANAGER: &str = "xdg-open";
-
 impl AppView {
     /// Runs one settings command.
     pub(crate) fn run_settings_command(&mut self, command: SettingsCommand, window: &mut Window, cx: &mut Context<Self>) {
@@ -46,12 +38,9 @@ impl AppView {
         cx.notify();
     }
 
-    /// Opens `folder` (created when missing) in the system file manager.
+    /// Opens `folder` (created when missing) in the system file manager (`crate::media::files`).
     fn open_folder(&self, folder: Option<PathBuf>, window: &mut Window, cx: &mut App) {
-        let opened = folder.ok_or_else(|| t!("prefs.ui.no_vault").to_string()).and_then(|folder| {
-            std::fs::create_dir_all(&folder).map_err(|err| err.to_string())?;
-            std::process::Command::new(FILE_MANAGER).arg(&folder).spawn().map(|_| ()).map_err(|err| err.to_string())
-        });
+        let opened = folder.ok_or_else(|| t!("prefs.ui.no_vault").to_string()).and_then(|folder| crate::media::files::open_folder(&folder));
         if let Err(reason) = opened {
             window.push_notification(Notification::error(t!("prefs.ui.open_failed", reason = reason).to_string()), cx);
         }

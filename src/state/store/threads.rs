@@ -12,6 +12,8 @@ pub struct ThreadDraft {
     pub image: Option<String>,
     /// Images attached in the composer with their alt text (sb C3); `image` is the first.
     pub images: Vec<crate::domain::media::ImageAttachment>,
+    /// Local files attached in the composer (L12), linked where they are.
+    pub files: Vec<crate::domain::media::FileRef>,
     /// The container tint picked in the composer (sb C3).
     pub tint: Option<crate::domain::post::Tint>,
     /// The symbol set picked in the composer (S2: personas only).
@@ -89,7 +91,7 @@ impl AppState {
         let mut posts: Vec<Post> = Vec::with_capacity(drafts.len());
         for (index, draft) in drafts.iter().enumerate() {
             let parent = parent_of(index, draft, &posts, anchor)?;
-            let mut post = Post::create_with_attachments(
+            let mut post = Post::create_with_files(
                 Self::new_post_id(),
                 self.active_network_id.clone(),
                 author.clone(),
@@ -99,8 +101,10 @@ impl AppState {
                 parent,
                 if index == 0 { anchor.quote_of.clone() } else { None },
                 None,
+                !draft.files.is_empty(), // L12: files alone make a post
             )?;
             post.extras.images = draft.images.clone();
+            post.extras.files = draft.files.clone();
             post.extras.tint = draft.tint;
             post.extras.symbols = draft.symbols.clone();
             posts.push(post);

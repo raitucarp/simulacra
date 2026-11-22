@@ -4,6 +4,7 @@
 mod attachments;
 mod draft_row;
 mod editor;
+mod file_tray;
 mod footer;
 mod header;
 mod media_tray;
@@ -64,6 +65,8 @@ pub struct ModalCallbacks {
     pub on_split_draft: DraftActionCallback,
     /// Removes the attached image at an index (sb C3).
     pub on_remove_image: DraftActionCallback,
+    /// Removes the attached file at an index (L12).
+    pub on_remove_file: DraftActionCallback,
     pub on_paste: PasteCallback,
     /// Toggles a mark on the selection of the last focused draft.
     pub on_format: super::format::FormatCallback,
@@ -95,6 +98,9 @@ pub struct ComposerModalView {
     pub images: Vec<(String, Entity<InputState>)>,
     /// Images still being copied into the media folder.
     pub pending_images: usize,
+    /// The other files attached (L12), and how many are still being read.
+    pub files: Vec<crate::domain::media::FileRef>,
+    pub pending_files: usize,
     pub is_link_input_open: bool,
     pub is_image_input_open: bool,
     /// Publish error or the reason the thread cannot be posted yet.

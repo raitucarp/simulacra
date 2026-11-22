@@ -1,4 +1,4 @@
-//! Atomic inline tokens: `[[wikilinks]]` and `#hashtags`, each with trailing punctuation.
+//! Atomic inline tokens: `[[wikilinks]]`, `#hashtags` and web links, each with trailing punctuation.
 
 use super::BodyToken;
 use crate::domain::post::parse::HASHTAG_SIGIL as HASHTAG_MARKER;
@@ -61,6 +61,19 @@ pub(super) fn scan_hashtag(chars: &[char], i: usize) -> Option<(BodyToken, usize
     let tag: String = chars[i..end].iter().collect();
     let (trailing, next) = scan_trailing(chars, end);
     Some((BodyToken::Hashtag { tag, trailing }, next))
+}
+
+/// Scans an `http(s)` URL that starts a word at `i` (L1), as written; returns the token and
+/// the index after its trailing punctuation.
+pub(super) fn scan_url(chars: &[char], i: usize) -> Option<(BodyToken, usize)> {
+    let starts_word = i == 0 || !chars[i - 1].is_alphanumeric();
+    if !starts_word || !matches!(chars[i], 'h' | 'H') {
+        return None;
+    }
+    let tail: String = chars[i..].iter().take_while(|c| !c.is_whitespace()).collect();
+    let url = crate::domain::media::written_url(&tail)?;
+    let (trailing, next) = scan_trailing(chars, i + url.chars().count());
+    Some((BodyToken::Url { url: url.to_string(), trailing }, next))
 }
 
 fn is_mark_char(c: char) -> bool {

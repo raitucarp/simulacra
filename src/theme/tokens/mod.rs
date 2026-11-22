@@ -21,6 +21,7 @@ theme_tokens! {
         border, border_subtle, border_strong, border_focus, // Border Colors
         focus_ring, // Keyboard focus ring (focus-visible outline of custom controls and kit widgets)
         text_primary, text_secondary, text_muted, // Text & Content Colors
+        link_text, // L1: web addresses in post bodies, readable on every surface
         accent_user, accent_alt, accent_agent, accent_brand, accent_dialectic, accent_success, // Accents & Semantic Indicators
         accent_danger, warning, info, selection,
         on_accent, on_danger, on_overlay, // Readable foregrounds on filled accent, danger and scrim surfaces
@@ -94,7 +95,7 @@ theme_tokens! {
         vault_facet_rail_width, vault_facet_drawer_width, vault_cover_width, vault_cover_height, vault_cover_thumb_width, vault_entry_cover_width, reader_measure_width, reader_measure_narrow_width, reader_measure_wide_width, vault_entry_side_width, vault_search_width, vault_editor_width, vault_meta_label_width, vault_column_creator_width, vault_column_kind_width, vault_column_year_width, vault_column_added_width, vault_column_links_width, vault_progress_height, vault_empty_art_width, vault_banner_width, vault_kind_art_width, vault_letter_cell_size, vault_tree_indent, // sb B1: Knowledge Vault catalogue
         import_sheet_width, import_sheet_max_height, import_preview_height, import_preview_row_height, import_art_width, import_meta_label_width, capture_box_width, capture_box_top, drop_art_width, similarity_bar_width, similarity_bar_height, similarity_readout_width, indexing_indicator_width, similar_sheet_width, similar_sheet_max_height, // sb B2: import sheet and preview, quick capture, drop hint; sb B3: semantic search
         post_actions_sheet_width, post_actions_sheet_max_height, post_actions_rail_width, post_actions_score_bar_width, post_actions_hits_max_height, outline_indent, outline_chevron_slot, outline_author_max_width, // sb C2: post actions sheet, outline view
-        link_card_thumb_size, link_card_icon_size, media_gallery_gap, video_play_badge_size, lightbox_inset, lightbox_button_size, lightbox_caption_width, composer_attachment_thumb_size, media_skeleton_line_width, media_single_max_height, // sb C3: link and video cards, galleries, lightbox, composer attachments
+        link_card_thumb_size, link_card_icon_size, media_gallery_gap, video_play_badge_size, lightbox_inset, lightbox_button_size, lightbox_caption_width, composer_attachment_thumb_size, media_skeleton_line_width, media_single_max_height, file_card_art_width, // sb C3: link and video cards, galleries, lightbox, composer attachments; L4: the file card art
         review_page_max_width, review_card_max_width, review_card_min_height, review_progress_height, review_grade_button_height, review_chart_height, review_bar_min_height, review_bar_max_width, review_heatmap_cell_min, review_heatmap_cell_max, review_heatmap_gap, review_swatch_size, review_empty_art_width, review_maker_max_height, review_sentence_list_height, review_count_tile_width, review_stat_label_width, // sb C1: review page, item card, grade buttons, charts, sheet height
         review_learn_sheet_width, review_map_height, review_map_point_width, review_map_point_height, review_map_label_width, review_map_edge_width, // sb C1b: learn sheet, connection map canvas, point chips, relation labels, strokes
         insights_page_max_width, insights_tile_width, insights_chart_height, insights_spark_height, insights_axis_width, insights_bar_gap, insights_bar_max_width, insights_bar_min_height, insights_swatch_size, insights_tooltip_width, insights_radial_min, insights_radial_max, insights_canvas_height, insights_canvas_min_height, insights_side_width, insights_rank_label_width, insights_rank_value_width, insights_rank_bar_height, insights_node_radius_min, insights_node_radius_max, insights_point_radius, insights_edge_width, insights_label_max_width, insights_upset_cell, insights_upset_dot, insights_upset_label_width, insights_tree_height, insights_venn_height, insights_diagram_height, insights_filter_width, // sb D2: Insights page charts, canvases, ranked lists, UpSet matrix
@@ -120,6 +121,7 @@ theme_tokens! {
         forge_disabled_opacity, forge_backdrop_opacity, post_failed_tool_opacity, settings_disabled_opacity,
         line_height_reading, vault_motion_duration_ms, vault_muted_opacity, // sb B1: reader leading, calm entry fade, read-state dimming
         symbol_glyph_scale, // epic S: a library icon's share of its symbol disc
+        file_missing_opacity, // L11: the dimmed art of a missing file
     ],
 }
 

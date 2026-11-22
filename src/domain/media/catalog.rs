@@ -32,7 +32,9 @@ pub struct MediaCatalog {
     images: HashMap<String, ImageScan>,
     fetching: HashSet<String>,
     scanning: HashSet<String>,
-    revision: u64,
+    pub(in crate::domain::media) revision: u64,
+    /// Scans of the local files attached to posts (epic L).
+    pub(in crate::domain::media) files: crate::domain::media::files::FileShelf,
 }
 
 impl MediaCatalog {

@@ -33,6 +33,7 @@ impl AppView {
         }
         self.media.watched = Some(watch);
         let wants = self.media_wants();
+        self.start_file_scans(&wants.files, window, cx); // L7: the files attached to the shown posts
         let (fetching, scanning) = self.state.media.in_flight();
         let urls = self.state.media.previews_due(wants.urls(), unix_now(), MAX_FETCHES.saturating_sub(fetching));
         let paths = self.state.media.images_due(wants.images.iter().map(String::as_str), MAX_SCANS.saturating_sub(scanning));

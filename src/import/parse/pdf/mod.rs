@@ -33,6 +33,15 @@ pub fn parse(bytes: &[u8]) -> ParseResult {
     Ok(Content { metadata: info(&doc), sections: pages.into_iter().filter(|p| !p.blocks.is_empty()).collect(), notes })
 }
 
+/// The metadata and page count of a PDF, without reading its text layer (L10).
+pub fn outline(bytes: &[u8]) -> Result<(DocumentMetadata, usize), ParseError> {
+    let mut doc = Document::load_mem(bytes).map_err(|err| ParseError::Unreadable(err.to_string()))?;
+    if doc.is_encrypted() && doc.decrypt("").is_err() {
+        return Err(ParseError::Encrypted);
+    }
+    Ok((info(&doc), doc.get_pages().len()))
+}
+
 /// The `/Info` dictionary's title, author, subject and creation date.
 fn info(doc: &Document) -> DocumentMetadata {
     let dictionary = doc

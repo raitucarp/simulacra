@@ -63,3 +63,17 @@ fn images_are_scanned_once_and_cleared_on_request() {
     assert_eq!(cleared.image("a.png"), None);
     assert_eq!(cleared.images_due(["a.png"], 8), vec!["a.png"]);
 }
+
+#[test]
+fn file_scans_are_due_once_and_bump_the_revision() {
+    use crate::domain::media::files::{FileFacts, FileScan};
+    let catalog = MediaCatalog::default();
+    assert_eq!(catalog.files_due(["/a.mp4", "/b.mp4", "/a.mp4"], 4), vec!["/a.mp4", "/b.mp4"]);
+    let catalog = catalog.files_started(&["/a.mp4".to_string()]);
+    assert_eq!((catalog.files_in_flight(), catalog.files_due(["/a.mp4"], 4)), (1, Vec::<String>::new()));
+    let before = catalog.revision();
+    let catalog = catalog.with_file("/a.mp4".into(), FileScan::Present(FileFacts::default()));
+    assert!(catalog.revision() > before && catalog.files_in_flight() == 0);
+    assert_eq!(catalog.file("/a.mp4"), Some(&FileScan::Present(FileFacts::default())));
+    assert!(catalog.files_due(["/a.mp4"], 4).is_empty(), "scanned once per session");
+}

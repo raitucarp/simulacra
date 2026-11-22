@@ -6,6 +6,7 @@ mod fences;
 mod inline;
 mod legacy;
 mod props;
+mod urls;
 mod visible_length;
 
 fn text(value: &str) -> BodyToken {

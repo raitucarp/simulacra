@@ -45,7 +45,7 @@ fn line_styles(spans: &[CodeHighlight], theme: &ThemeTokens) -> Vec<(Range<usize
 }
 
 /// A fenced code block card; `index` keeps its copy button's id unique within the body.
-pub(super) fn code_block(index: usize, lang: Option<&str>, code: &str, theme: &ThemeTokens) -> AnyElement {
+pub(crate) fn code_block(index: usize, lang: Option<&str>, code: &str, theme: &ThemeTokens) -> AnyElement {
     let lines = code.split(LINE_BREAK).zip(highlight_lines(lang, code)).map(|(line, spans)| {
         let row = if line.is_empty() { StyledText::new(EMPTY_CODE_LINE) } else { StyledText::new(line.to_string()).with_highlights(line_styles(&spans, theme)) };
         div().min_w_0().child(row)

@@ -14,6 +14,6 @@ mod tests;
 
 pub use capture_box::{CaptureAction, CaptureBox};
 pub use drop_overlay::render_drop_overlay;
-pub use labels::{family_art, file_size};
+pub use labels::{family_art, family_label, file_size};
 pub use session::{ImportSession, ImportStage};
 pub use sheet::{ImportInputs, ImportSheet, ImportSheetActions, SheetAction, SheetHandler};

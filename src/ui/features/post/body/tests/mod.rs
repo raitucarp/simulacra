@@ -178,3 +178,5 @@ fn highlights_come_from_marks_and_theme_tokens() {
     let underline = mark_highlight(MarkSet { underline: true, ..MarkSet::default() }, &theme).expect("underline draws");
     assert_eq!(underline.underline.map(|u| u.thickness), Some(theme.border_width_hairline));
 }
+
+mod links;

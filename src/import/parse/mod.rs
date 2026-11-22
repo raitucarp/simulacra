@@ -10,11 +10,13 @@ mod epub;
 mod html;
 mod mobi;
 mod office;
+mod outline;
 mod pdf;
 mod sections;
 mod text;
 
 pub use binary::sha256_hex;
+pub use outline::{document_outline, DocumentOutline};
 pub use sections::{normalize_whitespace, sections_from_blocks};
 
 use super::detect::{Format, FormatFamily};

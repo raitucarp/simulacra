@@ -46,6 +46,7 @@ fn callbacks(entity: &Entity<ComposerModalPanel>) -> ModalCallbacks {
         on_remove_draft: act_at(entity, P::remove_draft),
         on_split_draft: act_at(entity, P::split_draft),
         on_remove_image: act_at(entity, P::remove_image),
+        on_remove_file: act_at(entity, P::remove_file),
         on_paste: paste(entity),
         on_format: format_draft(entity),
         on_toggle_preview: act(entity, P::toggle_preview),
@@ -100,7 +101,7 @@ impl Render for ComposerModalPanel {
             link_input: self.link_input.clone(),
             image_input: self.image_input.clone(),
             images: self.image_views(),
-            pending_images: self.pending_images(),
+            pending_images: self.pending_images(), files: self.files.attached.clone(), pending_files: self.files.pending, // L12: file chips
             is_link_input_open: self.is_link_input_open,
             is_image_input_open: self.is_image_input_open,
             notice,

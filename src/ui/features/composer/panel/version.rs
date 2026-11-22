@@ -92,6 +92,7 @@ impl ComposerModalPanel {
             self.link_input.update(cx, |state, cx| state.set_value(link, window, cx));
             self.is_link_input_open = true;
         }
+        self.files.attached = attachments.files.clone(); // L12: the version's files
         let images = if attachments.images.is_empty() { attachments.image_path.map(ImageAttachment::at).into_iter().collect() } else { attachments.images };
         for attachment in images {
             let (placeholder, text) = (t!("composer.media_alt_placeholder").to_string(), attachment.alt.clone());

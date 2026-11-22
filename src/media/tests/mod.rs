@@ -2,6 +2,7 @@
 //! storage, scanning and thumbnails in a scratch media folder.
 
 mod fetch;
+mod files;
 mod images;
 
 use std::path::PathBuf;

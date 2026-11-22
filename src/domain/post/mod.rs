@@ -118,10 +118,10 @@ impl Post {
         self.quote_id.is_some()
     }
 
-    /// Whether this thought has any media attachment (link or local image).
+    /// Whether this thought has any media attachment (link, local image or local file).
     #[inline]
     pub fn has_attachments(&self) -> bool {
-        self.link_url.is_some() || self.image_path.is_some()
+        self.link_url.is_some() || self.image_path.is_some() || !self.extras.files.is_empty()
     }
 }
 

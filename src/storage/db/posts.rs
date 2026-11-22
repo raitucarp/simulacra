@@ -13,10 +13,10 @@ const UPSERT_POST: &str = r#"
                     likes, is_liked, replies_count, mentions_json, linked_posts_json,
                     reply_to_id, quote_id, repost_id, link_url, image_path,
                     reposts_count, is_reposted, extras_json,
-                    kind, status, publish_at, archive_at, delete_at
+                    kind, status, publish_at, archive_at, delete_at, kind_json
                 )
                 VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12, ?13, ?14, ?15, ?16, ?17, ?18, ?19,
-                        ?20, ?21, ?22, ?23, ?24)
+                        ?20, ?21, ?22, ?23, ?24, ?25)
                 ON CONFLICT(id) DO UPDATE SET
                     network_id = excluded.network_id,
                     author_id = excluded.author_id,
@@ -39,7 +39,8 @@ const UPSERT_POST: &str = r#"
                     status = excluded.status,
                     publish_at = excluded.publish_at,
                     archive_at = excluded.archive_at,
-                    delete_at = excluded.delete_at;
+                    delete_at = excluded.delete_at,
+                    kind_json = excluded.kind_json;
                 "#;
 
 impl Database {
@@ -77,6 +78,7 @@ impl Database {
                     post.kind.key(),
                     life.status.key(),
                     stored_moment(life.publish_at), stored_moment(life.archive_at), stored_moment(life.delete_at),
+                    post.kind.payload_json(), // M1
                 ],
             )
             .map_err(db_err)?;

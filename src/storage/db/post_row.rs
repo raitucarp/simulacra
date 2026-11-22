@@ -13,13 +13,15 @@ pub(super) const SELECT_POSTS: &str = r#"
                     likes, is_liked, replies_count, mentions_json, linked_posts_json,
                     reply_to_id, quote_id, repost_id, link_url, image_path,
                     reposts_count, is_reposted, extras_json,
-                    kind, status, publish_at, archive_at, delete_at
+                    kind, status, publish_at, archive_at, delete_at, kind_json
                 FROM posts
                 ORDER BY created_at DESC
                 "#;
 
 /// Column of `kind`; the lifecycle columns follow it.
 const KIND_COLUMN: usize = 18;
+/// Column of `kind_json` (after the four lifecycle columns).
+const KIND_JSON_COLUMN: usize = KIND_COLUMN + 5;
 
 /// Maps a `posts` row into a [`Post`], tolerating malformed JSON columns.
 pub(super) fn post_from_row(row: &Row<'_>) -> rusqlite::Result<Post> {
@@ -50,9 +52,16 @@ pub(super) fn post_from_row(row: &Row<'_>) -> rusqlite::Result<Post> {
         reposts_count: reposts_count as usize,
         is_reposted: is_reposted != 0,
         extras: extras_json.and_then(|json| serde_json::from_str(&json).ok()).unwrap_or_default(),
-        kind: row.get::<_, Option<String>>(KIND_COLUMN)?.map_or_else(PostKind::default, |key| PostKind::from_stored(&key)),
+        kind: kind_from_row(row)?,
         lifecycle: lifecycle_from_row(row, KIND_COLUMN + 1)?,
     })
+}
+
+/// The kind stored in `kind`, with a feeling's payload from `kind_json` (M1).
+fn kind_from_row(row: &Row<'_>) -> rusqlite::Result<PostKind> {
+    let key: Option<String> = row.get(KIND_COLUMN)?;
+    let payload: Option<String> = row.get(KIND_JSON_COLUMN)?;
+    Ok(key.map_or_else(PostKind::default, |key| PostKind::from_stored(&key, payload.as_deref().unwrap_or_default())))
 }
 
 /// The status and the three due moments stored from column `first` on (unknown statuses

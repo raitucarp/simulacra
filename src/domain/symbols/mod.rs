@@ -7,6 +7,7 @@
 //! - [`face`]: what replaces the avatar: the primary symbol and its badges (S4).
 //! - [`picker`]: what the composer's symbol picker offers: core set, recent, search (S5).
 //! - [`shorthand`]: `. ` task, `o ` event, `- ` note, `* ` priority, `! ` inspiration (S6).
+//! - [`subtasks`]: a parent task is done only once its sub-tasks are settled (S8).
 //! - [`transitions`]: which states an entry may carry and how it may move between them.
 
 pub mod art;
@@ -14,6 +15,7 @@ pub mod face;
 pub mod kinds;
 pub mod picker;
 pub mod shorthand;
+pub mod subtasks;
 pub mod transitions;
 #[cfg(test)]
 mod tests;
@@ -22,6 +24,7 @@ pub use art::{entry_key, signifier_key, state_key, SymbolArt, SYMBOL_ART_DIR};
 pub use face::{SymbolFace, SymbolGlyph, MAX_BADGES};
 pub use picker::{core_choices, search_symbols, words_match, SymbolChoice, SymbolMemory, RECENT_SYMBOLS, SYMBOL_RESULTS};
 pub use shorthand::{parse_shorthand, Shorthand};
+pub use subtasks::{is_unsettled, may_settle, unsettled_children};
 pub use kinds::{EntryState, EntrySymbol, Signifier, SymbolRef, SYMBOL_ASSET_SCHEME};
 pub use transitions::{allowed_states, can_transition, initial_state, state_allowed};
 

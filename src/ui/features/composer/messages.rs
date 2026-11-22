@@ -39,6 +39,7 @@ pub fn publish_error_message(error: &AppError) -> String {
             thread_problem_message(&ThreadProblem { index: 0, issue })
         }
         AppError::InvalidSymbols => t!("symbols.error.not_allowed").to_string(), // S7
+        AppError::OpenSubtasks(open) => crate::i18n::t_count("symbols.error.open_children", *open), // S8
         other => t!("composer.error_publish", reason = other.to_string()).to_string(),
     }
 }

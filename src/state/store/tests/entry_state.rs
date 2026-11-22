@@ -50,3 +50,20 @@ fn moves_the_rules_forbid_and_posts_without_entries_are_refused() {
     state.commit_post(theirs).unwrap();
     assert_eq!(state.set_entry_state(&PostId::new("agent_task"), EntryState::Done, now()), Err(AppError::NotAPersona(agent.id.to_string())));
 }
+
+#[test]
+fn a_parent_task_is_done_only_once_every_sub_task_is_done_or_dropped() {
+    let mut state = AppState::new_in_memory();
+    let parent = task(&mut state, "Move house", None);
+    let boxes = task(&mut state, "Pack the boxes", Some(&parent));
+    let van = task(&mut state, "Book the van", Some(&parent));
+    let note = ThreadDraft { symbols: PostSymbols::entry(EntrySymbol::Note), ..ThreadDraft::text("Ask about the piano") };
+    state.submit_thread(&[note], &ThreadAnchor { reply_to: Some(parent.clone()), quote_of: None }).unwrap();
+    assert_eq!(state.set_entry_state(&parent, EntryState::Done, now()), Err(AppError::OpenSubtasks(2)));
+    state.set_entry_state(&boxes, EntryState::Done, now()).unwrap();
+    state.set_entry_state(&van, EntryState::Delegated, now()).unwrap();
+    assert_eq!(state.set_entry_state(&parent, EntryState::Done, now()), Err(AppError::OpenSubtasks(1)), "delegated is still pending");
+    state.set_entry_state(&van, EntryState::Dropped, now()).unwrap();
+    state.set_entry_state(&parent, EntryState::Done, now()).expect("every sub-task settled; notes do not count");
+    assert_eq!(state_of(&state, &parent), Some(EntryState::Done));
+}

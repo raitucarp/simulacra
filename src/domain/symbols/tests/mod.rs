@@ -1,6 +1,7 @@
 use super::*;
 mod picker;
 mod shorthand;
+mod subtasks;
 use crate::domain::post::PostExtras;
 use EntryState::*;
 

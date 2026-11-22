@@ -95,6 +95,7 @@ impl AppView {
         self.import_command_line_files(window, cx);
         self.start_scheduler_heartbeat(window, cx);
         self.watch_vault_failures(window, cx);
+        self.nudge_migration_review(window, cx); // S16
     }
 }
 

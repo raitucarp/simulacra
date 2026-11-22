@@ -9,12 +9,14 @@
 //! - [`shorthand`]: `. ` task, `o ` event, `- ` note, `* ` priority, `! ` inspiration (S6).
 //! - [`subtasks`]: a parent task is done only once its sub-tasks are settled (S8).
 //! - [`legend`]: the user's key of what each custom symbol means (S9).
+//! - [`migration`]: the monthly walk through open tasks (S16).
 //! - [`transitions`]: which states an entry may carry and how it may move between them.
 
 pub mod art;
 pub mod face;
 pub mod kinds;
 pub mod legend;
+pub mod migration;
 pub mod picker;
 pub mod shorthand;
 pub mod subtasks;
@@ -28,6 +30,7 @@ pub use picker::{core_choices, search_symbols, words_match, SymbolChoice, Symbol
 pub use shorthand::{parse_shorthand, Shorthand};
 pub use subtasks::{is_unsettled, may_settle, unsettled_children};
 pub use legend::{clean_meaning, KeyEntry, SymbolKey, MAX_KEY_ENTRIES, MAX_MEANING_CHARS};
+pub use migration::{needs_review, review_due, MigrationReview, ReviewChoice};
 pub use kinds::{EntryState, EntrySymbol, Signifier, SymbolRef, SYMBOL_ASSET_SCHEME};
 pub use transitions::{allowed_states, can_transition, initial_state, state_allowed};
 

@@ -40,6 +40,8 @@ pub struct DataHost {
     /// The legend page is open, and the custom symbol whose meaning is being edited (S9).
     pub legend_open: bool,
     pub editing_meaning: Option<crate::domain::symbols::SymbolRef>,
+    /// The monthly migration review under way (S16).
+    pub review: Option<crate::domain::symbols::MigrationReview<PostId>>,
     /// The verified snapshot waiting for the go-ahead.
     pub staged: Option<StagedRestore>,
     /// The Knowledge page shows the Saved view instead of the library.
@@ -107,7 +109,7 @@ impl DataHost {
             export: None,
             snapshot: None,
             restore: None,
-            scheduled_open: false, legend_open: false, editing_meaning: None,
+            scheduled_open: false, legend_open: false, editing_meaning: None, review: None,
             staged: None,
             showing_saved: false,
             target: SavedTarget::Bookmarks,

@@ -107,6 +107,11 @@ pub enum DataEvent {
     SaveMeaning,
     CancelMeaning,
     CloseLegend,
+    /// The monthly migration review (S16).
+    OpenReview,
+    ReviewDecide(crate::domain::symbols::ReviewChoice),
+    ReviewSummary,
+    CloseReview,
 }
 
 /// Sends a data event to the shell.

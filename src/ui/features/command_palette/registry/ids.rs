@@ -115,4 +115,6 @@ command_ids! {
     ScheduledPosts => "scheduled_posts",
     /// S9: the legend page of the symbols.
     SymbolKey => "symbol_key",
+    /// S16: the monthly review of open tasks.
+    MigrationReview => "migration_review",
 }

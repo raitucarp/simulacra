@@ -79,6 +79,8 @@ setting_keys! {
     SymbolPicker => "symbols.picker",
     /// The user's symbol key: what each custom symbol means (JSON, S9).
     SymbolKey => "symbols.key",
+    /// The day the monthly migration review was last finished (`YYYY-MM-DD`, S16).
+    MigrationReviewed => "symbols.review_last",
     PrefsGeneral => "preferences.general",
     PrefsAppearance => "preferences.appearance",
     PrefsWriting => "preferences.writing",

@@ -97,3 +97,4 @@ mod thinking_credence;
 mod thinking_insights;
 mod thinking_tensions;
 mod thinking_tensions_scan;
+mod unlock; // X4: unlocking locked posts

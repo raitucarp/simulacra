@@ -22,6 +22,7 @@ impl AppView {
                 cx.background_executor().timer(HEARTBEAT_INTERVAL).await;
                 let ticked = entity.update_in(cx, |this, window, cx| {
                     this.post_lifecycle_tick(&SystemClock, window, cx);
+                    this.relock_idle_posts(cx); // X4
                     this.scheduler_tick(window, cx);
                 });
                 if ticked.is_err() {

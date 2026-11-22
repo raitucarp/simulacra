@@ -44,7 +44,7 @@ impl Render for AppView {
             .on_action(cx.listener(Self::on_run_command))
             .flex()
             .flex_col();
-        self.with_import_listeners(root, cx)
+        self.with_import_listeners(self.with_activity_listeners(root, cx), cx) // X4: activity keeps unlocked posts open
             .child(self.title_bar(&bind))
             // Fully Resizable Multi-Column Layout Container
             .child(div().w_full().flex_1().min_h_0().overflow_hidden().child(columns))
@@ -64,7 +64,7 @@ impl Render for AppView {
             .children(self.capture_box(&bind))
             .children(self.learn_sheet(cx))
             .children(self.drop_hint(cx))
-            .children(self.lightbox(&bind)).children(self.data_overlay(&bind)) // sb F2
+            .children(self.lightbox(&bind)).children(self.data_overlay(&bind)).children(self.unlock_overlay(&bind)) // sb F2; X4
     }
 }
 

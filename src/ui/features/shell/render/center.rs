@@ -84,7 +84,7 @@ impl AppView {
             on_open_media: Rc::new(bind.with(Self::open_lightbox)), on_relink_file: Rc::new(bind.with(Self::relink_file)), // L11: relink a moved file
             on_cycle_profile: bind.boxed_act(Self::cycle_profile),
             on_run_command: Rc::new(bind.with(Self::run_command)),
-            on_post_action: Self::post_action_callback(bind), credence: Some(self.credence_source(bind)), data: Some(self.data_source(bind)), reactions: Some(self.reaction_source(bind)),
+            on_post_action: Self::post_action_callback(bind), credence: Some(self.credence_source(bind)), data: Some(self.data_source(bind)), reactions: Some(self.reaction_source(bind)), locks: Some(self.lock_source(bind)), // X4
             inspector: InspectorView { argument: Some(self.thinking.argument.clone()), ..self.inspector.view() },
             on_inspector: Rc::new(bind.with(Self::run_inspector_command)), discovery: self.feed_discovery(bind),
         })

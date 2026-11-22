@@ -53,6 +53,8 @@ pub struct DataHost {
     pub inputs: DataInputs,
     /// The open sheet's keyboard focus (Escape closes it), sb P16.
     pub focus: FocusHandle,
+    /// Locked posts: the session's unlocked texts and the unlock sheet (X4).
+    pub locks: super::lock_host::LockHost,
     _subscriptions: Vec<Subscription>,
 }
 
@@ -117,6 +119,7 @@ impl DataHost {
             pending_add: None,
             inputs,
             focus: cx.focus_handle(),
+            locks: super::lock_host::LockHost::new(window, cx),
             _subscriptions: subscriptions,
         }
     }

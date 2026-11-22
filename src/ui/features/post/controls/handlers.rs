@@ -39,4 +39,6 @@ pub struct PostCardHandlers {
     pub data: Option<crate::ui::features::data::DataControls>,
     /// Epic R: the reaction picker; `None` hides it.
     pub reactions: Option<crate::ui::features::reactions::ReactionControls>,
+    /// X4: a locked post's unlock state and actions; `None` on posts that are not locked.
+    pub lock: Option<super::super::locked::LockControls>,
 }

@@ -37,6 +37,8 @@ pub(crate) struct PostCallbacks {
     pub data: Option<crate::ui::features::data::DataSource>,
     /// Epic R: reactions.
     pub reactions: Option<crate::ui::features::reactions::ReactionSource>,
+    /// X4: unlocking locked posts.
+    pub locks: Option<crate::ui::features::post::LockSource>,
 }
 
 /// Visual and interaction mode of a rendered card.
@@ -80,7 +82,8 @@ impl PostCallbacks {
             on_open_post: Rc::new(move |id, window, cx| select(id, window, cx)),
             on_delete: author.is_human_persona().then(|| bind(&self.on_delete, &post.id)),
             links: self.links.clone(),
-            on_post_action: Some(bind_action(&self.on_post_action, &target_id)),
+            on_post_action: (!target.locked).then(|| bind_action(&self.on_post_action, &target_id)), // X4: a locked post is never sent to a model
+            lock: self.locks.as_ref().filter(|_| target.locked).map(|source| source.controls(&target_id)),
             credence: self.credence.as_ref().filter(|_| target.human).map(|source| source.controls(&target_id)),
             data: self.data.as_ref().map(|source| DataControls { lifecycle: target.lifecycle, auto_archive: target.auto_archive, symbols: target.symbols.clone(), version: target.version, replied_to: target.replied_to, ..source.controls(&target_id, target.human) }),
             reactions: self.reactions.as_ref().map(|source| source.controls(&target_id, state)),
@@ -124,6 +127,8 @@ struct CardTarget {
     version: Option<crate::domain::data::history::SemVer>,
     /// The older major version it answered, once its parent moved on (V12).
     replied_to: Option<crate::domain::data::history::SemVer>,
+    /// Its text is sealed (X4).
+    locked: bool,
 }
 
 impl CardTarget {
@@ -132,7 +137,7 @@ impl CardTarget {
         let author = state.get_post(&id).map_or_else(|| state.author_of(post), |p| state.author_of(p));
         let target = state.get_post(&id).unwrap_or(post);
         let (lifecycle, auto_archive) = (target.lifecycle, ArchiveAfter::of(target.created_at, target.lifecycle.archive_at));
-        Self { id, handle: author.handle.clone(), human: author.is_human_persona(), lifecycle, auto_archive, symbols: target.extras.symbols.clone(), version: target.extras.head.as_ref().map(|head| head.version), replied_to: replied_to(target, state) }
+        Self { id, handle: author.handle.clone(), human: author.is_human_persona(), lifecycle, auto_archive, symbols: target.extras.symbols.clone(), version: target.extras.head.as_ref().map(|head| head.version), replied_to: replied_to(target, state), locked: target.is_locked() }
     }
 }
 

@@ -42,6 +42,7 @@ mod search;
 mod settings;
 mod seed_catalogue;
 mod snapshot;
+mod symbols; // epic S
 mod threads;
 mod upgrade;
 mod wikilinks;

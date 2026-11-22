@@ -14,6 +14,8 @@ pub struct ThreadDraft {
     pub images: Vec<crate::domain::media::ImageAttachment>,
     /// The container tint picked in the composer (sb C3).
     pub tint: Option<crate::domain::post::Tint>,
+    /// The symbol set picked in the composer (S2: personas only).
+    pub symbols: crate::domain::symbols::PostSymbols,
 }
 
 impl ThreadDraft {
@@ -56,6 +58,9 @@ impl AppState {
             return Err(AppError::EmptyContent);
         }
         let author = self.current_profile_or_err()?;
+        for draft in drafts {
+            super::symbols::check_symbols(&author, &draft.symbols)?;
+        }
         for (kind, id) in [("Parent", &anchor.reply_to), ("Target", &anchor.quote_of)] {
             if let Some(id) = id.as_ref().filter(|id| !self.post_exists(id)) {
                 return Err(missing(kind, id));
@@ -77,6 +82,7 @@ impl AppState {
             )?;
             post.extras.images = draft.images.clone();
             post.extras.tint = draft.tint;
+            post.extras.symbols = draft.symbols.clone();
             parent = Some(post.id.clone());
             posts.push(post);
         }

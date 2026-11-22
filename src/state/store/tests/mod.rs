@@ -22,4 +22,5 @@ mod profiles;
 mod reactions;
 mod scheduled;
 mod scheduled_queue;
+mod symbols;
 mod threads;

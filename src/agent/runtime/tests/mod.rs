@@ -4,6 +4,7 @@ mod native;
 mod requests;
 mod react;
 mod root_job;
+mod symbols;
 mod tint;
 
 use crate::agent::credentials::{Credential, CredentialKind, CredentialStore};

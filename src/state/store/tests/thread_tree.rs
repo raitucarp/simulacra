@@ -45,3 +45,15 @@ fn free_compose_text_publishes_as_the_tree_it_previews() {
     let parents: Vec<Option<PostId>> = ids.iter().map(|id| parent_of(&state, id)).collect();
     assert_eq!(parents, vec![Some(anchor_post), Some(ids[0].clone()), Some(ids[0].clone()), Some(ids[2].clone())]);
 }
+
+#[test]
+fn each_free_compose_line_gets_its_own_shorthand_symbols() {
+    use crate::domain::symbols::EntrySymbol;
+    let mut state = AppState::new_in_memory();
+    let lines = compose_lines("Errands\n  - . Call the bakery\n  - o Market at nine");
+    let drafts: Vec<ThreadDraft> = lines.iter().map(|line| ThreadDraft { reply_to: line.parent, ..ThreadDraft::text(line.text.clone()) }.with_shorthand()).collect();
+    let ids = state.submit_thread(&drafts, &ThreadAnchor::default()).unwrap();
+    let posts: Vec<(String, Option<EntrySymbol>)> = ids.iter().map(|id| state.get_post(id).unwrap()).map(|p| (p.content.clone(), p.extras.symbols.entry)).collect();
+    assert_eq!(posts, vec![("Errands".into(), None), ("Call the bakery".into(), Some(EntrySymbol::Task)), ("Market at nine".into(), Some(EntrySymbol::Event))]);
+    assert_eq!(parent_of(&state, &ids[2]).as_ref(), Some(&ids[0]));
+}

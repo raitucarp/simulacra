@@ -17,7 +17,7 @@ mod split_line; // T3: "split this line"
 mod tests;
 
 pub use lines::{indent_level, strip_bullet};
-pub use outline::{compose_lines, ComposeLine};
+pub use outline::{compose_lines, read_shorthand, ComposeLine};
 pub use split_line::split_line;
 
 /// One post draft and the drafts that reply to it.

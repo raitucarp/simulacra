@@ -128,7 +128,7 @@ impl ComposerModalPanel {
 
     /// Raw text of every post, in thread order.
     pub(super) fn draft_texts(&self, cx: &App) -> Vec<String> {
-        if self.free {
+        if self.free.on {
             return self.free_texts(cx); // T2: one post per line
         }
         self.drafts.iter().map(|slot| slot.input.read(cx).value().to_string()).collect()

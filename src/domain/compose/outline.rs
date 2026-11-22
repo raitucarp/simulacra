@@ -18,6 +18,8 @@ pub struct ComposeLine {
     pub text: String,
     /// Visible characters (markup excluded), as the per-post limit counts them.
     pub chars: usize,
+    /// The symbols its leading shorthand markers stand for (T5; empty until read).
+    pub symbols: crate::domain::symbols::PostSymbols,
 }
 
 impl ComposeLine {
@@ -40,8 +42,21 @@ pub fn compose_lines(text: &str) -> Vec<ComposeLine> {
         if open.is_empty() {
             last_root = Some(out.len());
         }
-        out.push(ComposeLine { line, depth: open.len(), parent, text: body.to_string(), chars: visible_text_len(body) });
+        out.push(ComposeLine { line, depth: open.len(), parent, text: body.to_string(), chars: visible_text_len(body), symbols: Default::default() });
         open.push((level, out.len() - 1));
     }
     out
+}
+
+/// `lines` with each post's leading symbol shorthand read off (T5): the markers after a
+/// line's bullet become that post's symbols, and its text and length are what follows them.
+/// A line with no marker (or nothing after its markers) is unchanged.
+pub fn read_shorthand(lines: Vec<ComposeLine>) -> Vec<ComposeLine> {
+    lines
+        .into_iter()
+        .map(|line| match crate::domain::symbols::parse_shorthand(&line.text) {
+            Some(short) => ComposeLine { chars: visible_text_len(&short.text), text: short.text, symbols: short.symbols, ..line },
+            None => line,
+        })
+        .collect()
 }

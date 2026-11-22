@@ -7,6 +7,7 @@ use crate::domain::compose::ComposeLine;
 use crate::domain::MAX_POST_CHARS;
 use crate::theme::ThemeTokens;
 use crate::ui::icons::LucideIcon;
+use crate::ui::features::symbols::render_symbol_face;
 use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::{Icon, Selectable, Sizable};
 use gpui_kit::{div, App, Div, ParentElement, SharedString, Styled, Window};
@@ -15,6 +16,7 @@ use std::rc::Rc;
 
 const TOGGLE_ID: &str = "composer-free-compose";
 const SPLIT_ID: &str = "composer-free-split";
+const FACE_ID: &str = "composer-free-face";
 
 /// Switches the composer in or out of free compose.
 pub type FreeToggle = Rc<dyn Fn(&mut Window, &mut App) + 'static>;
@@ -77,6 +79,7 @@ fn line_row(line: &ComposeLine, on_split: &SplitLine, theme: &ThemeTokens) -> Di
         .py(theme.spacing_3xs)
         .border_l(theme.border_width_threadline)
         .border_color(if over { theme.accent_danger } else { theme.border_subtle })
+        .children(line.symbols.face().map(|face| div().pl(theme.spacing_xs).child(render_symbol_face(&format!("{FACE_ID}-{}", line.line), &face, theme.icon_size_sm, theme)))) // T5: the line's own symbols
         .child(text)
         .child(count)
         .children(over.then(|| split_button(line.line, on_split.clone()))) // T3: the line is flagged with its fix

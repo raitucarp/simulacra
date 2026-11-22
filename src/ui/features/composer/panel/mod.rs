@@ -83,7 +83,7 @@ pub struct ComposerModalPanel {
     atomic: atomic::AtomicHintState, // sb E1: the atomic-note hint
     readability: readability::ReadabilityState, // sb F3: the readability meter
     /// Drafts shown through the post body renderer instead of their editors.
-    preview: bool, free: bool, // T2: the first editor is free compose text, one post per line
+    preview: bool, free: free::FreeCompose, // T2: the first editor is free compose text, one post per line
     tint: Option<Tint>, // sb C3: the picked container tint
     schedule: schedule::SchedulePicker, // Y3: the "Schedule…" picker
     symbols: symbols::SymbolPicker, // S5: the symbol picker
@@ -121,7 +121,7 @@ impl ComposerModalPanel {
             error: None,
             theme,
             profile,
-            atomic: Default::default(), readability: Default::default(), preview: false, free: false, tint: None, schedule, symbols, version, _subscriptions: Vec::new(),
+            atomic: Default::default(), readability: Default::default(), preview: false, free: Default::default(), tint: None, schedule, symbols, version, _subscriptions: Vec::new(),
         };
         panel._subscriptions = panel.subscribe(window, cx);
         panel.drafts.push(panel.new_draft_slot(window, cx));

@@ -165,3 +165,16 @@ fn each_post_names_the_post_it_replies_to() {
     let parents: Vec<Option<usize>> = compose_lines("A\n  - a1\n    - a1x\n  - a2\nB\nC\n  - c1").iter().map(|l| l.parent).collect();
     assert_eq!(parents, vec![None, Some(0), Some(1), Some(0), Some(0), Some(4), Some(5)], "main-thread posts chain; indented ones reply to the line above them");
 }
+
+#[test]
+fn shorthand_is_read_per_line_after_the_bullet() {
+    use crate::domain::symbols::{EntrySymbol, Signifier};
+    let lines = read_shorthand(compose_lines("Plans\n  - . Call the bakery\n  - * o Market at nine\n  - just a thought\n.\n"));
+    let entries: Vec<Option<EntrySymbol>> = lines.iter().map(|l| l.symbols.entry).collect();
+    assert_eq!(entries, vec![None, Some(EntrySymbol::Task), Some(EntrySymbol::Event), None, None]);
+    assert_eq!(lines[1].text, "Call the bakery");
+    assert_eq!(lines[1].chars, "Call the bakery".chars().count(), "the length counts the text after the markers");
+    assert_eq!(lines[2].symbols.signifiers, vec![Signifier::Priority]);
+    assert_eq!(lines[4].text, ".", "a marker with nothing after it stays text");
+    assert_eq!(lines.iter().map(|l| l.parent).collect::<Vec<_>>(), vec![None, Some(0), Some(0), Some(0), Some(0)], "reading markers keeps the tree");
+}

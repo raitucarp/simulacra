@@ -53,3 +53,19 @@ fn an_image_file_goes_through_the_thumbnail_pipeline() {
     let ImageScan::Known(facts) = crate::media::scan_image(&file.path, &dir) else { panic!("an image file scans") };
     assert!(facts.thumb_path.is_some_and(|thumb| std::path::Path::new(&thumb).is_file()), "a large image file gets a feed thumbnail");
 }
+
+#[test]
+fn a_video_file_scans_to_its_length_and_a_gone_one_to_missing() {
+    use crate::domain::media::files::{FilePreview, FileScan};
+    let dir = scratch_media_dir("file-scan-video");
+    let boxed = |kind: &[u8], body: &[u8]| [&(body.len() as u32 + 8).to_be_bytes()[..], kind, body].concat();
+    let mvhd = boxed(b"mvhd", &[&[0u8; 12][..], &1000u32.to_be_bytes(), &42_000u32.to_be_bytes(), &[0u8; 80]].concat());
+    let path = dir.join("talk.mp4");
+    std::fs::write(&path, [boxed(b"ftyp", b"isom\0\0\0\0"), boxed(b"mdat", &[1u8; 4096]), boxed(b"moov", &mvhd)].concat()).expect("write");
+    let file = read_file_ref(&path).expect("read");
+    assert_eq!(file.mime, "video/mp4");
+    let scan = crate::media::files::scan_file(&file, &dir);
+    assert!(matches!(scan.preview(), Some(FilePreview::Video { seconds: Some(42), .. })), "{scan:?}");
+    std::fs::remove_file(&path).expect("remove");
+    assert_eq!(crate::media::files::scan_file(&file, &dir), FileScan::Missing);
+}

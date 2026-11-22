@@ -24,6 +24,6 @@ pub(super) fn image_file(index: usize, file: &FileRef, catalog: Option<&MediaCat
         .items_start()
         .gap(theme.stack_gap)
         .child(preview)
-        .child(card_frame(index, theme).child(file_text(index, file, FormatFamily::Image, theme)))
+        .child(card_frame(index, theme).child(file_text(index, file, FormatFamily::Image, None, theme)))
         .into_any_element()
 }

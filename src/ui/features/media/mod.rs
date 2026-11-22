@@ -5,6 +5,7 @@
 //! - `post_media`: what a post shows under its body (gallery, file cards, then its first link).
 //! - `file_card`: a local file attached to the post (L4): type art, name, facts, Open, Show in folder.
 //! - `file_image`: an image file previewed through the image pipeline (L5).
+//! - `file_video`: a video file with its OS poster frame and length (L7), else the file card.
 //! - `gallery` / `image_tile`: one image at its aspect ratio, or a 2–4 tile grid.
 //! - `link_card` / `video_card`: preview cards, the loading skeleton and the fallback chip.
 //! - `lightbox`: the full-window viewer (Esc closes, arrows move, images fit the window).
@@ -12,6 +13,7 @@
 mod consts;
 mod file_card;
 mod file_image;
+mod file_video;
 mod gallery;
 mod image_tile;
 mod lightbox;

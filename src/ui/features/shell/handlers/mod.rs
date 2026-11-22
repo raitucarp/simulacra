@@ -48,6 +48,7 @@ mod learning_tutor;
 mod learning_tutor_run;
 mod media;
 mod media_pump;
+mod file_pump; // L7: scans of attached files
 mod navigation;
 mod networks;
 mod onboarding;

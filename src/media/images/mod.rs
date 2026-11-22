@@ -4,6 +4,7 @@
 //! - `attachments/<hash>.<ext>`: images attached in the composer (bytes as given).
 //! - `previews/<hash>.<jpg|png>`: link preview images, at most [`PREVIEW_MAX_EDGE`] px.
 //! - `thumbs/<key>.<jpg|png>`: feed thumbnails of large images, at most [`THUMB_MAX_EDGE`] px.
+//! - `posters/<key>.<jpg|png>`: video poster frames the OS made (L6), at most [`PREVIEW_MAX_EDGE`] px.
 
 mod decode;
 mod scan;
@@ -16,6 +17,9 @@ use std::path::Path;
 
 const ATTACHMENTS_DIR: &str = "attachments";
 const PREVIEWS_DIR: &str = "previews";
+const POSTERS_DIR: &str = "posters";
+/// The extensions a saved poster is written with (PNG keeps transparency, JPEG otherwise).
+const POSTER_EXTENSIONS: [&str; 2] = ["jpg", "png"];
 /// Longest edge of a saved preview image and of a saved site icon.
 pub const PREVIEW_MAX_EDGE: u32 = 720;
 const ICON_MAX_EDGE: u32 = 64;
@@ -75,4 +79,20 @@ fn save_scaled(bytes: &[u8], media_dir: &Path, max_edge: u32) -> Result<String, 
         decode::write(&image, &path)?;
     }
     Ok(path.display().to_string())
+}
+
+/// A poster frame the OS made of a video (L6), fitted to [`PREVIEW_MAX_EDGE`] and saved as
+/// `posters/<key>`; returns the path.
+pub fn save_poster(image: image::DynamicImage, key: &str, media_dir: &Path) -> Result<String, String> {
+    let image = decode::fit(image, PREVIEW_MAX_EDGE);
+    let path = media_dir.join(POSTERS_DIR).join(format!("{key}.{}", decode::encoded_extension(&image)));
+    if !path.exists() {
+        decode::write(&image, &path)?;
+    }
+    Ok(path.display().to_string())
+}
+
+/// The poster saved as `posters/<key>`, if there is one.
+pub fn saved_poster(key: &str, media_dir: &Path) -> Option<String> {
+    POSTER_EXTENSIONS.iter().map(|ext| media_dir.join(POSTERS_DIR).join(format!("{key}.{ext}"))).find(|path| path.is_file()).map(|path| path.display().to_string())
 }

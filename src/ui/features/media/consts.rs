@@ -24,3 +24,4 @@ pub(super) const SHOWN_SCHEMES: [&str; 2] = ["https://", "http://"];
 pub(super) const FILE_CARD_ID: &str = "media-file-card";
 pub(super) const FILE_OPEN_ID: &str = "media-file-open";
 pub(super) const FILE_REVEAL_ID: &str = "media-file-reveal";
+pub(super) const FILE_PLAY_ID: &str = "media-file-play";

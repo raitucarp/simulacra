@@ -38,7 +38,7 @@ pub(super) fn video_card(url: &str, entry: Option<&PreviewEntry>, theme: &ThemeT
 }
 
 /// The 16:9 still (or an empty frame) with the play badge and the duration pill.
-fn frame(still: Option<String>, duration: Option<u32>, theme: &ThemeTokens) -> Div {
+pub(super) fn frame(still: Option<String>, duration: Option<u32>, theme: &ThemeTokens) -> Div {
     let badge = div()
         .size(theme.video_play_badge_size)
         .rounded(theme.radius_full)

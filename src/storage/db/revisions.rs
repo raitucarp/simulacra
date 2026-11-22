@@ -1,15 +1,16 @@
-//! Version history rows (sb F2) and the one write that edits a post's text.
+//! Version history rows (sb F2) and the writes that change which version a post shows.
 
 use super::{collect_rows, db_err, parse_timestamp, Database};
-use crate::domain::data::history::{Revision, RevisionId, RevisionSubject, SemVer};
+use crate::domain::data::history::{Bump, Revision, RevisionId, RevisionSubject, SemVer};
 use crate::domain::Post;
 use crate::error::Result;
 use rusqlite::{params, Row};
 
-const INSERT_REVISION: &str = "INSERT OR REPLACE INTO revisions (id, subject_kind, subject_id, saved_at, title, content, record_json, parent_id, version) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9)";
-const SELECT_REVISIONS: &str = "SELECT id, subject_kind, subject_id, saved_at, title, content, record_json, parent_id, version FROM revisions WHERE subject_kind = ?1 AND subject_id = ?2 ORDER BY saved_at DESC, id DESC";
+const INSERT_REVISION: &str = "INSERT OR REPLACE INTO revisions (id, subject_kind, subject_id, saved_at, title, content, record_json, parent_id, version, note, bump, edited_at) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12)";
+const SELECT_REVISIONS: &str = "SELECT id, subject_kind, subject_id, saved_at, title, content, record_json, parent_id, version, note, bump, edited_at FROM revisions WHERE subject_kind = ?1 AND subject_id = ?2 ORDER BY saved_at DESC, id DESC";
 const COUNT_REVISIONS: &str = "SELECT subject_id, COUNT(*) FROM revisions WHERE subject_kind = ?1 GROUP BY subject_id";
 const UPDATE_POST_BODY: &str = "UPDATE posts SET content = ?1, mentions_json = ?2, linked_posts_json = ?3 WHERE id = ?4";
+const DELETE_REVISION: &str = "DELETE FROM revisions WHERE id = ?1";
 
 fn revision_from_row(row: &Row<'_>) -> rusqlite::Result<Option<Revision>> {
     let (kind, id): (String, String) = (row.get(1)?, row.get(2)?);
@@ -23,7 +24,9 @@ fn revision_from_row(row: &Row<'_>) -> rusqlite::Result<Option<Revision>> {
         record_json: row.get(6)?,
         parent_id: row.get::<_, Option<String>>(7)?.map(RevisionId::new),
         version: SemVer::parse(&row.get::<_, String>(8)?),
-        bump: crate::domain::data::history::Bump::Minor,
+        note: row.get(9)?,
+        bump: Bump::from_key(&row.get::<_, String>(10)?).unwrap_or(Bump::Minor),
+        edited_at: row.get::<_, Option<String>>(11)?.and_then(|at| crate::time::parse_timestamp(&at)),
     }))
 }
 
@@ -34,7 +37,9 @@ impl Database {
         let revision = self.chained(revision)?;
         let (subject, parent) = (&revision.subject, revision.parent_id.as_ref().map(RevisionId::as_str));
         let version = revision.version.map(|v| v.to_string()).unwrap_or_default();
-        let values = params![revision.id.as_str(), subject.kind(), subject.id(), crate::time::rfc3339(revision.saved_at), revision.title, revision.content, revision.record_json, parent, version];
+        let bump = if parent.is_some() { revision.bump.key() } else { "" };
+        let edited_at = revision.edited_at.map(crate::time::rfc3339);
+        let values = params![revision.id.as_str(), subject.kind(), subject.id(), crate::time::rfc3339(revision.saved_at), revision.title, revision.content, revision.record_json, parent, version, revision.note, bump, edited_at];
         self.conn.execute(INSERT_REVISION, values).map_err(db_err)?;
         Ok(())
     }
@@ -61,6 +66,18 @@ impl Database {
         let transaction = self.conn.unchecked_transaction().map_err(db_err)?;
         self.save_revision(revision)?;
         self.conn.execute(UPDATE_POST_BODY, params![post.content, mentions, linked, post.id.as_str()]).map_err(db_err)?;
+        transaction.commit().map_err(db_err)
+    }
+
+    /// Stores `post` showing a new version and `kept` (the version it showed), together; the
+    /// revision `current` is dropped when it became the version shown (V9).
+    pub fn commit_post_version(&self, post: &Post, kept: &Revision, current: Option<&RevisionId>) -> Result<()> {
+        let transaction = self.conn.unchecked_transaction().map_err(db_err)?;
+        self.save_revision(kept)?;
+        if let Some(id) = current {
+            self.conn.execute(DELETE_REVISION, [id.as_str()]).map_err(db_err)?;
+        }
+        self.save_post(post)?;
         transaction.commit().map_err(db_err)
     }
 }

@@ -10,7 +10,7 @@ mod beliefs;
 mod catalogue;
 mod data_schema;
 mod restore;
-mod revision_chain;
+mod revision_chain; mod revision_heads; // V3: version heads
 mod revisions;
 mod saved; // sb F2: history, bookmarks, collection items, restore
 mod dismissed_seeds;

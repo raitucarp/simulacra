@@ -55,7 +55,7 @@ impl AppView {
             if target.post.lifecycle.is_scheduled() {
                 return self.save_scheduled_edit(target.post.id.clone(), (text, submission.tint), submission.publish_at, window, cx); // Y4
             }
-            return self.save_post_edit(target.post.id.clone(), (text, submission.tint, submission.symbols.clone()), window, cx); // sb F2, C3, S5
+            return self.save_post_edit(target.post.id.clone(), submission.edit.clone().unwrap_or_else(|| crate::state::PostEdit::text(text)), edit_look(submission), window, cx); // sb F2, C3, S5, V3, V10, V11
         }
         let publish_at = submission.publish_at;
         let (thread, anchor) = thread_from_submission(submission.clone(), self.state.preferences().writing.symbol_shorthand);
@@ -91,7 +91,7 @@ impl AppView {
 /// Store drafts (attachments and symbols on the first post, the tint on every post) and the anchor
 /// implied by the modal mode; with `shorthand`, each post's leading markers become symbols.
 fn thread_from_submission(submission: ComposerSubmission, shorthand: bool) -> (Vec<ThreadDraft>, ThreadAnchor) {
-    let ComposerSubmission { mode, drafts, link, images, tint, publish_at: _, symbols } = submission;
+    let ComposerSubmission { mode, drafts, link, images, tint, publish_at: _, symbols, edit: _ } = submission;
     let mut thread: Vec<ThreadDraft> = drafts.into_iter().map(|text| ThreadDraft { tint, ..ThreadDraft::text(text) }).collect();
     if let Some(first) = thread.first_mut() {
         first.link = link;
@@ -109,4 +109,11 @@ fn thread_from_submission(submission: ComposerSubmission, shorthand: bool) -> (V
         ComposerModalMode::Edit(_) => ThreadAnchor::default(),
     };
     (thread, anchor)
+}
+
+/// The symbols, tint, link and images an edit of a published post gives its new version
+/// (V10, V11).
+fn edit_look(submission: &ComposerSubmission) -> crate::domain::data::history::PostRecord {
+    let attachments = crate::domain::data::history::Attachments::new(submission.link.clone(), submission.images.clone());
+    crate::domain::data::history::PostRecord { symbols: submission.symbols.clone(), tint: submission.tint, attachments: Some(attachments) }
 }

@@ -26,7 +26,7 @@ fn each_state_action_is_a_patch_revision_keeping_the_old_symbols() {
     let mut state = AppState::new_in_memory();
     let id = task(&mut state, "Call the bakery", None);
     let revision = state.set_entry_state(&id, EntryState::Migrated, now()).expect("moved");
-    assert_eq!(revision.bump, Bump::Patch);
+    assert_eq!(state.post_head(&id).unwrap().bump, Some(Bump::Patch), "the move is a patch version");
     assert_eq!(revision.content, "Call the bakery", "the text is unchanged");
     assert_eq!(serde_json::from_str::<PostSymbols>(&revision.record_json).unwrap(), PostSymbols::entry(EntrySymbol::Task));
     assert_eq!(state_of(&state, &id), Some(EntryState::Migrated));

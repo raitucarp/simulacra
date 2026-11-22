@@ -17,7 +17,10 @@ pub(super) const CREATE_DATA_TABLES: &str = r#"
                     content TEXT NOT NULL,
                     record_json TEXT NOT NULL DEFAULT '',
                     parent_id TEXT,
-                    version TEXT NOT NULL DEFAULT ''
+                    version TEXT NOT NULL DEFAULT '',
+                    note TEXT NOT NULL DEFAULT '',
+                    bump TEXT NOT NULL DEFAULT '',
+                    edited_at TEXT
                 );
                 CREATE INDEX IF NOT EXISTS idx_revisions_subject ON revisions(subject_kind, subject_id, saved_at);
 

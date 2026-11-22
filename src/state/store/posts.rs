@@ -38,7 +38,7 @@ impl AppState {
     /// Persists a validated post (with the user's default auto-archive moment, Y6), bumps its
     /// parent's reply counter and prepends it.
     pub(super) fn commit_post(&mut self, post: Post) -> Result<()> {
-        let post = self.with_default_archive(post);
+        let post = self.with_replied_version(self.with_default_archive(post)); // V12
         if let Some(ref db) = self.db {
             db.save_post(&post)?;
         }
@@ -79,7 +79,7 @@ impl AppState {
     /// Persists an agent reply, bumps its parent's reply counter and inserts it right after
     /// the parent (or at the head when the parent is unknown).
     pub fn insert_reply_after_parent(&mut self, reply: Post) -> Result<()> {
-        let reply = self.without_agent_symbols(reply); // S2: agents never carry symbols
+        let reply = self.with_replied_version(self.without_agent_symbols(reply)); // S2: agents never carry symbols; V12
         if let Some(ref db) = self.db {
             db.save_post(&reply)?;
         }

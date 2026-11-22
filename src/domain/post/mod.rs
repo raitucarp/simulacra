@@ -18,7 +18,7 @@ pub mod seed;
 mod tint;
 mod tokens;
 
-pub use tint::Tint;
+pub use tint::{lenient as lenient_tint, Tint};
 
 pub use authored::AuthoredPost;
 pub use extras::{PostExtras, SourceKind, SourceRef, ToolUse};

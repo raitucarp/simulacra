@@ -37,6 +37,7 @@ mod profiles;
 mod reactions; // epic R
 mod reposts;
 mod revisions; // sb F2
+mod post_versions; mod post_heads; // V3, V4, V9
 mod scheduled;
 mod scheduled_queue; // Y4
 mod search;
@@ -58,6 +59,7 @@ pub use post_index::PostIndex;
 pub use posts_by::Page;
 pub use scheduled_queue::ScheduledEdit;
 pub use post_meta::PostMeta;
+pub use post_versions::PostEdit;
 pub use network_create::{network_slug, validate_network_name, NetworkNameError, MAX_NETWORK_NAME_CHARS};
 pub use threads::{ThreadAnchor, ThreadDraft};
 pub use wikilinks::WikilinkTarget;

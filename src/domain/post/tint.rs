@@ -19,7 +19,7 @@ keyed_enum! {
 
 /// Reads `extras.tint` leniently: a tint this version does not know (written by a newer
 /// one) or a malformed value reads as no tint instead of failing the whole extras column.
-pub(super) fn lenient<'de, D: Deserializer<'de>>(deserializer: D) -> Result<Option<Tint>, D::Error> {
+pub fn lenient<'de, D: Deserializer<'de>>(deserializer: D) -> Result<Option<Tint>, D::Error> {
     let value = Option::<serde_json::Value>::deserialize(deserializer)?;
     Ok(value.as_ref().and_then(serde_json::Value::as_str).and_then(Tint::from_key))
 }

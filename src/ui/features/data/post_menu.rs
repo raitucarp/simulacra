@@ -49,6 +49,8 @@ impl DataSource {
             lifecycle: PostLifecycle::default(),
             auto_archive: None,
             symbols: Default::default(),
+            version: None,
+            replied_to: None,
             on_event: self.on_event.clone(),
         }
     }
@@ -70,6 +72,10 @@ pub struct DataControls {
     pub auto_archive: Option<ArchiveAfter>,
     /// The post's symbols (S7: its entry's state moves); set by the feed.
     pub symbols: crate::domain::symbols::PostSymbols,
+    /// The version the post shows once edited (V8); set by the feed.
+    pub version: Option<crate::domain::data::history::SemVer>,
+    /// The older major version this reply answered, once its parent moved on (V12).
+    pub replied_to: Option<crate::domain::data::history::SemVer>,
     pub on_event: DataAction,
 }
 
@@ -78,6 +84,12 @@ impl DataControls {
     /// tooltip that was pending when the mark was clicked never shows over the sheet.
     pub fn edited_tooltip(&self) -> bool {
         !self.history_open
+    }
+
+    /// The card's edited mark: the version it shows (`v1.2.0`, V8), or "edited" when the
+    /// number is unknown; `None` before any edit.
+    pub fn edited_mark(&self) -> Option<String> {
+        (self.revisions > 0).then(|| self.version.map_or_else(|| tr("data.edited"), crate::ui::features::composer::version_label))
     }
 }
 
@@ -118,11 +130,9 @@ pub fn with_data_items(menu: PopupMenu, controls: Option<&DataControls>, window:
     menu.submenu_with_icon(icon, tr("data.menu.add_to_collection"), window, cx, move |submenu, _, _| collections_submenu(submenu, &controls))
 }
 
-/// The quiet "edited" mark of an edited post, opening its history; `None` before any edit.
+/// The quiet version badge of an edited post (V8), opening its history; `None` before any edit.
 pub fn render_edited_mark(controls: &DataControls, theme: &ThemeTokens) -> Option<AnyElement> {
-    if controls.revisions == 0 {
-        return None;
-    }
+    let text = controls.edited_mark()?;
     let (on_event, post) = (controls.on_event.clone(), controls.post_id.clone());
     let hover = theme.text_secondary;
     let mark = div()
@@ -135,6 +145,6 @@ pub fn render_edited_mark(controls: &DataControls, theme: &ThemeTokens) -> Optio
         .hover(move |style| style.text_color(hover))
         .when(controls.edited_tooltip(), |mark| mark.tooltip(move |window, cx| gpui_kit::component::tooltip::Tooltip::new(tr("data.edited_tooltip")).build(window, cx)))
         .on_click(move |_, window, cx| on_event(DataEvent::OpenPostHistory(post.clone()), window, cx))
-        .child(tr("data.edited"));
+        .child(text);
     Some(mark.into_any_element())
 }

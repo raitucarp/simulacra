@@ -107,6 +107,7 @@ impl Render for ComposerModalPanel {
             tint: self.tint,
             schedule: self.schedule_view(cx),
             symbols: self.symbol_view(cx),
+            version: self.version_view(cx),
             atomic_hint: self.atomic_hint_view(cx),
             readability: self.readability_view(cx),
             callbacks: callbacks(&cx.entity()),

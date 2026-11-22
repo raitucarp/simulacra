@@ -35,6 +35,12 @@ impl Vault {
         self.write(move |db| db.edit_post_content(&post, &revision))
     }
 
+    /// Queues `post` showing a new version with `kept`, the version it showed; `current` is
+    /// the revision that became the version shown, if one did (V9).
+    pub fn commit_post_version(&self, post: crate::domain::Post, kept: Revision, current: Option<crate::domain::data::history::RevisionId>) -> Result<()> {
+        self.write(move |db| db.commit_post_version(&post, &kept, current.as_ref()))
+    }
+
     pub fn save_bookmark(&self, bookmark: Bookmark) -> Result<()> {
         self.write(move |db| db.save_bookmark(&bookmark))
     }

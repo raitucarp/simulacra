@@ -2,6 +2,7 @@
 //! `revisions.version`, and the rule picking which part an edit bumps ([`Bump::between`]).
 
 mod bump;
+mod wire; // V3: stored as text
 
 pub use bump::{Bump, MAJOR_REMOVED_PERCENT, PATCH_MAX_WORDS};
 

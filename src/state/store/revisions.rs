@@ -1,34 +1,15 @@
-//! Version history in the store (sb F2): editing one of the user's own posts, and keeping a
-//! vault document's previous text, title and record whenever it is edited.
+//! Version history in the store (sb F2): the tint of the user's own posts, and keeping a
+//! vault document's previous text, title and record whenever it is edited. Post edits are
+//! versions (`post_versions`).
 
 use super::{require_persona, AppState};
-use crate::domain::data::history::{edited_post, is_real_edit, Revision, RevisionSubject};
+use crate::domain::data::history::{is_real_edit, Revision, RevisionSubject};
 use crate::domain::post::Tint;
-use crate::domain::{first_thread_problem, GroundingDocument, PostId};
+use crate::domain::{GroundingDocument, PostId};
 use crate::error::{AppError, Result};
 use jiff::Timestamp;
 
 impl AppState {
-    /// Replaces the text of the user's own post `id` (agents' posts are never edited),
-    /// keeping the previous text as a revision. `Ok(None)` when nothing changed.
-    pub fn edit_post(&mut self, id: &PostId, content: &str) -> Result<Option<Revision>> {
-        let post = self.get_post(id).cloned().ok_or_else(|| AppError::DatabaseError(format!("post '{id}' not found")))?;
-        require_persona(self.author_of(&post))?;
-        if let Some(problem) = first_thread_problem(&[content], post.has_attachments() || !post.extras.images.is_empty()) {
-            return Err(AppError::DatabaseError(format!("{:?}", problem.issue)));
-        }
-        if !is_real_edit(&post.content, content) {
-            return Ok(None);
-        }
-        let revision = Revision::of(RevisionSubject::Post(id.clone()), &post.content, Timestamp::now());
-        let edited = edited_post(&post, content);
-        if let Some(ref db) = self.db {
-            db.edit_post_content(edited.clone(), revision.clone())?;
-        }
-        self.replace_post_body(edited);
-        Ok(Some(revision))
-    }
-
     /// Sets the container tint of the user's own post `id` (sb C3; agents' posts are never
     /// edited). A tint is not text, so no revision is kept. `Ok(false)` when it was already set.
     pub fn set_post_tint(&mut self, id: &PostId, tint: Option<Tint>) -> Result<bool> {
@@ -45,7 +26,7 @@ impl AppState {
     }
 
     /// Swaps in `edited` (same id) and refreshes what the index derived from its body.
-    fn replace_post_body(&mut self, edited: crate::domain::Post) {
+    pub(super) fn replace_post_body(&mut self, edited: crate::domain::Post) {
         let Some(position) = self.post_position(&edited.id) else { return };
         self.index.content_changed(&edited);
         self.posts[position] = edited;

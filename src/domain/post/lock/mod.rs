@@ -9,9 +9,11 @@
 //! - **Secrets:** the password lives in a [`LockPassword`] (zeroized when dropped, redacted in
 //!   `Debug`); opened text is zeroized when dropped. Neither is ever stored or logged.
 
+mod block; // X6
 mod check; // X3
 mod envelope;
 
+pub use block::{lock_block, read_lock_block, LOCK_FENCE_TAG};
 pub use check::{lock_problem, LockProblem};
 pub use envelope::{PostLock, LOCK_FORMAT};
 

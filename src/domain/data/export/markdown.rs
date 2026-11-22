@@ -48,7 +48,8 @@ fn post_block(post: &Post, source: &ExportSource, image_path: &dyn Fn(&str) -> S
     let images: String = super::bundle::post_images(post).iter().map(|(path, alt)| format!("![{alt}]({})\n\n", image_path(path))).collect();
     let link = post.link_url.as_ref().map(|url| format!("<{url}>\n\n")).unwrap_or_default();
     let quote = post.quote_id.as_ref().map(|id| format!("> Quotes [[{id}]]\n\n")).unwrap_or_default();
-    format!("{}{}\n\n{images}{link}{quote}", author_line(post, source), post.content.trim())
+    let body = post.extras.lock.as_ref().map_or_else(|| post.content.trim().to_string(), crate::domain::post::lock::lock_block); // X6: a locked post travels as its seal only
+    format!("{}{body}\n\n{images}{link}{quote}", author_line(post, source))
 }
 
 /// `items` without repeats, in first-seen order.

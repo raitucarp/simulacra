@@ -7,7 +7,7 @@ use crate::error::{AppError, Result};
 const DUPLICATE_COLUMN_MARKER: &str = "duplicate column";
 
 /// Column additions applied to existing user vaults, in order.
-const MIGRATION_STATEMENTS: [&str; 22] = [
+const MIGRATION_STATEMENTS: [&str; 23] = [
     "ALTER TABLE posts ADD COLUMN reply_to_id TEXT;",
     "ALTER TABLE posts ADD COLUMN quote_id TEXT;",
     "ALTER TABLE posts ADD COLUMN repost_id TEXT;",
@@ -33,6 +33,8 @@ const MIGRATION_STATEMENTS: [&str; 22] = [
     "ALTER TABLE revisions ADD COLUMN note TEXT NOT NULL DEFAULT '';",
     "ALTER TABLE revisions ADD COLUMN bump TEXT NOT NULL DEFAULT '';",
     "ALTER TABLE revisions ADD COLUMN edited_at TEXT;",
+    // A feeling's emojis, intensity and note (M1); rows stored before it carry none.
+    "ALTER TABLE posts ADD COLUMN kind_json TEXT NOT NULL DEFAULT '';",
 ];
 
 impl Database {

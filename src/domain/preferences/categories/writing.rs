@@ -38,6 +38,8 @@ pub struct WritingPrefs {
     pub auto_archive: ArchiveAfter,
     /// S6: bullet-journal shorthand at the start of a post sets its symbols (off by default).
     pub symbol_shorthand: bool,
+    /// M6: a persona's feeling also logs a mood check-in in the private journal (off by default).
+    pub feeling_checkins: bool,
 }
 
 impl Default for WritingPrefs {
@@ -54,6 +56,7 @@ impl Default for WritingPrefs {
             readability_meter: true,
             auto_archive: ArchiveAfter::default(),
             symbol_shorthand: false,
+            feeling_checkins: false,
         }
     }
 }

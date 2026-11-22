@@ -57,7 +57,8 @@ const CREATE_TABLES: &str = r#"
                     status TEXT NOT NULL DEFAULT 'published',
                     publish_at TEXT,
                     archive_at TEXT,
-                    delete_at TEXT
+                    delete_at TEXT,
+                    kind_json TEXT NOT NULL DEFAULT ''
                 );
 
                 CREATE TABLE IF NOT EXISTS trending (

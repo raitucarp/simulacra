@@ -4,6 +4,7 @@
 
 pub mod affect;
 pub mod correlate;
+pub mod from_feeling; // M6
 pub mod summary;
 
 pub use affect::{Affect, AffectRegion};

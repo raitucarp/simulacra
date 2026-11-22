@@ -5944,3 +5944,22 @@ posts.lock.wrong_password: "Kata sandi itu tidak membuka kiriman ini."
 posts.lock.damaged: "Kunci kiriman ini rusak dan tidak dapat dibuka."
 # X7: wrong-password backoff
 posts.lock.wait: "Terlalu banyak kata sandi salah. Coba lagi dalam %{seconds} dtk."
+# M2: the composer feeling bar
+composer.feeling.button: "Kirim perasaan"
+composer.feeling.label: "Perasaan"
+composer.feeling.intensity: "Intensitas"
+composer.feeling.note_placeholder: "Beberapa kata (opsional)"
+composer.feeling.search_placeholder: "Cari emoji"
+composer.feeling.problem.no_emoji: "Pilih sedikitnya satu emoji."
+composer.feeling.problem.too_many_emojis: "Pilih paling banyak %{count} emoji."
+composer.feeling.problem.note_too_long: "Batasi catatan sampai %{count} karakter."
+# M4: the feelings filter
+feed.feelings: "Perasaan"
+# M5: agents may post feelings
+forge.ui.engine.map.feeling: "Perasaan"
+forge.ui.engine.may_feel: "Boleh mengirim perasaan"
+forge.ui.engine.may_feel_hint: "Mati secara bawaan. Jika aktif, jawaban boleh membawa perasaan (satu sampai tiga emoji, intensitas, dan catatan singkat), dan kiriman tampil sebagai perasaan."
+# M6: a feeling also logs a mood check-in
+prefs.row.writing.feeling_checkins.title: "Catat perasaan saya di jurnal"
+prefs.row.writing.feeling_checkins.description: "Saat salah satu persona Anda mengirim perasaan, check-in suasana hati beserta catatannya ditambahkan ke jurnal pribadi Anda. Tidak ada isi jurnal yang kembali ke linimasa."
+prefs.row.writing.feeling_checkins.keywords: "perasaan, suasana hati, check-in, jurnal, emosi"

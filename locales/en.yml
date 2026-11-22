@@ -5944,3 +5944,22 @@ posts.lock.wrong_password: "That password does not open this post."
 posts.lock.damaged: "This post's lock is damaged and cannot be opened."
 # X7: wrong-password backoff
 posts.lock.wait: "Too many wrong passwords. Try again in %{seconds} s."
+# M2: the composer feeling bar
+composer.feeling.button: "Post a feeling"
+composer.feeling.label: "Feeling"
+composer.feeling.intensity: "Intensity"
+composer.feeling.note_placeholder: "A few words (optional)"
+composer.feeling.search_placeholder: "Search emoji"
+composer.feeling.problem.no_emoji: "Pick at least one emoji."
+composer.feeling.problem.too_many_emojis: "Pick at most %{count} emojis."
+composer.feeling.problem.note_too_long: "Keep the note to %{count} characters."
+# M4: the feelings filter
+feed.feelings: "Feelings"
+# M5: agents may post feelings
+forge.ui.engine.map.feeling: "Feeling"
+forge.ui.engine.may_feel: "May post feelings"
+forge.ui.engine.may_feel_hint: "Off by default. When on, the answer may carry a feeling (one to three emoji, an intensity and a short note), and the post goes out as a feeling."
+# M6: a feeling also logs a mood check-in
+prefs.row.writing.feeling_checkins.title: "Log my feelings in the journal"
+prefs.row.writing.feeling_checkins.description: "When one of your personas posts a feeling, a mood check-in with its note is added to your private journal. Nothing from the journal goes back to the feed."
+prefs.row.writing.feeling_checkins.keywords: "feeling, mood, check-in, journal, emotion"

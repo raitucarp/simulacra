@@ -23,7 +23,7 @@ pub use tint::{lenient as lenient_tint, Tint};
 
 pub use authored::AuthoredPost;
 pub use extras::{PostExtras, SourceKind, SourceRef, ToolUse};
-pub use kind::PostKind;
+pub use kind::{FeelingProblem, Intensity, KindKey, PostKind, MAX_FEELING_EMOJIS, MAX_FEELING_NOTE_CHARS}; // M1: feelings
 pub use lifecycle::{PostLifecycle, PostStatus};
 pub use parse::{HASHTAG_SIGIL, WIKILINK_CLOSE, WIKILINK_OPEN};
 pub use provenance::{PostOrigin, SourceLocator};

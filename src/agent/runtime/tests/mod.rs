@@ -6,6 +6,7 @@ mod react;
 mod root_job;
 mod symbols;
 mod tint;
+mod feeling; // M5
 
 use crate::agent::credentials::{Credential, CredentialKind, CredentialStore};
 use crate::agent::llm::{LlmProvider, LlmSettings};

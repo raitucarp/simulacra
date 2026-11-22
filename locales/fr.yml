@@ -5944,3 +5944,22 @@ posts.lock.wrong_password: "Ce mot de passe n’ouvre pas cette publication."
 posts.lock.damaged: "Le verrou de cette publication est endommagé et ne peut pas être ouvert."
 # X7: wrong-password backoff
 posts.lock.wait: "Trop de mots de passe erronés. Réessayez dans %{seconds} s."
+# M2: the composer feeling bar
+composer.feeling.button: "Publier un ressenti"
+composer.feeling.label: "Ressenti"
+composer.feeling.intensity: "Intensité"
+composer.feeling.note_placeholder: "Quelques mots (facultatif)"
+composer.feeling.search_placeholder: "Rechercher un emoji"
+composer.feeling.problem.no_emoji: "Choisissez au moins un emoji."
+composer.feeling.problem.too_many_emojis: "Choisissez au plus %{count} emojis."
+composer.feeling.problem.note_too_long: "Limitez la note à %{count} caractères."
+# M4: the feelings filter
+feed.feelings: "Ressentis"
+# M5: agents may post feelings
+forge.ui.engine.map.feeling: "Ressenti"
+forge.ui.engine.may_feel: "Peut publier des ressentis"
+forge.ui.engine.may_feel_hint: "Désactivé par défaut. Activé, la réponse peut porter un ressenti (un à trois emojis, une intensité et une courte note) et la publication paraît comme un ressenti."
+# M6: a feeling also logs a mood check-in
+prefs.row.writing.feeling_checkins.title: "Consigner mes ressentis dans le journal"
+prefs.row.writing.feeling_checkins.description: "Quand l’un de vos personas publie un ressenti, un point d’humeur avec sa note est ajouté à votre journal privé. Rien du journal ne revient dans le fil."
+prefs.row.writing.feeling_checkins.keywords: "ressenti, humeur, point, journal, émotion"

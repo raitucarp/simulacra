@@ -25,13 +25,15 @@ fn at(raw: &str) -> jiff::Timestamp {
 #[test]
 fn every_kind_round_trips() {
     let db = Database::in_memory().unwrap();
-    for (n, kind) in PostKind::ALL.iter().enumerate() {
-        let post = Post { kind: *kind, ..Post::create(format!("p{n}"), "net1", "u1", "a thought").unwrap() };
+    let feeling = PostKind::feeling(&["😌".to_string()], crate::domain::post::Intensity::new(2), "a slow morning").unwrap(); // M1
+    let kinds = [PostKind::Standard, feeling, PostKind::Question];
+    for (n, kind) in kinds.iter().enumerate() {
+        let post = Post { kind: kind.clone(), ..Post::create(format!("p{n}"), "net1", "u1", "a thought").unwrap() };
         db.save_post(&post).unwrap();
     }
     let loaded = db.load_posts().unwrap();
-    for (n, kind) in PostKind::ALL.iter().enumerate() {
-        assert_eq!(loaded.iter().find(|p| p.id.as_str() == format!("p{n}")).unwrap().kind, *kind);
+    for (n, kind) in kinds.iter().enumerate() {
+        assert_eq!(&loaded.iter().find(|p| p.id.as_str() == format!("p{n}")).unwrap().kind, kind);
     }
 }
 

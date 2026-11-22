@@ -39,6 +39,9 @@ pub struct StructuredOutput {
     /// written while off.
     #[serde(skip_serializing_if = "std::ops::Not::not")]
     pub may_react: bool,
+    /// Whether the agent may post feelings (M5); off by default, and not written while off.
+    #[serde(skip_serializing_if = "std::ops::Not::not")]
+    pub may_feel: bool,
 }
 
 impl Default for StructuredOutput {
@@ -50,7 +53,7 @@ impl Default for StructuredOutput {
 impl StructuredOutput {
     /// The built-in schema and mapping of `preset`.
     pub fn from_preset(preset: SchemaPreset) -> Self {
-        Self { preset, schema: preset.schema().to_string(), mapping: preset.mapping(), may_tint: false, may_react: false }
+        Self { preset, schema: preset.schema().to_string(), mapping: preset.mapping(), may_tint: false, may_react: false, may_feel: false }
     }
 
     /// The parsed schema, when it is a JSON object.
@@ -80,6 +83,10 @@ pub struct OutputMapping {
     /// may react).
     #[serde(skip_serializing_if = "String::is_empty")]
     pub reactions: String,
+    /// A feeling: emojis, intensity and note (an object; M5, read only while the agent may
+    /// post feelings).
+    #[serde(skip_serializing_if = "String::is_empty")]
+    pub feeling: String,
 }
 
 impl OutputMapping {
@@ -94,6 +101,7 @@ impl OutputMapping {
             thread_parts: "thread_parts".into(),
             tint: String::new(),
             reactions: String::new(),
+            feeling: String::new(),
         }
     }
 }

@@ -12,6 +12,7 @@ mod countdown; // Y7
 mod excerpt;
 mod extras;
 mod extras_detail;
+mod feeling_row; // M3
 mod header;
 mod host;
 mod item;

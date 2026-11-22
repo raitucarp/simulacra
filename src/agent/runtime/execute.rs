@@ -59,6 +59,7 @@ pub async fn run_engine(plan: &EnginePlan, system: &str, user: &str, tool_ctx: O
     }
     draft.tint = allowed_tint(plan.structured.as_ref(), draft.tint);
     draft.reactions = allowed_reactions(plan.structured.as_ref(), std::mem::take(&mut draft.reactions));
+    draft.feeling = allowed_feeling(plan.structured.as_ref(), draft.feeling.take()); // M5
     let mut result = EngineResult { draft, tools: outcome.tools, sources: outcome.sources, ..EngineResult::default() };
     illustrate(plan, &mut result, roll).await;
     Ok(result)
@@ -74,6 +75,12 @@ pub fn allowed_tint(structured: Option<&StructuredOutput>, tint: Option<Tint>) -
 /// text never reacts).
 pub fn allowed_reactions(structured: Option<&StructuredOutput>, reactions: Vec<String>) -> Vec<String> {
     if structured.is_some_and(|output| output.may_react) { reactions } else { Vec::new() }
+}
+
+/// The answer's feeling, kept only when the agent may post feelings (M5: off by default;
+/// free text never posts one).
+pub fn allowed_feeling(structured: Option<&StructuredOutput>, feeling: Option<crate::domain::post::PostKind>) -> Option<crate::domain::post::PostKind> {
+    feeling.filter(|_| structured.is_some_and(|output| output.may_feel))
 }
 
 /// The first request (tools, native search, structured-output wiring) and the strategy used.

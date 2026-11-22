@@ -68,6 +68,9 @@ impl DialecticEngine {
         let author = job.agent.id.clone();
         let mut reply = job.kind.post(job.agent, job.network, result.draft.body(), result.extras());
         reply.image_path = result.image_path.clone();
+        if let Some(feeling) = result.draft.feeling.clone() {
+            reply.kind = feeling; // M5: an agent allowed to post feelings gave one
+        }
         let mut thread = Vec::new();
         for part in result.draft.thread_parts.iter().filter(|part| !part.trim().is_empty()) {
             let previous = thread.last().unwrap_or(&reply);

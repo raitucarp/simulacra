@@ -40,7 +40,7 @@ const APPEARANCE: &[SettingsGroup] = &[
     group("themes", &[Embedded(Pane::Themes)]),
 ];
 const WRITING: &[SettingsGroup] = &[
-    group("posts", &[Field(F::Writing(Wrt::PostLengthLimit)), Field(F::Writing(Wrt::AutoSplitThreads)), Field(F::Writing(Wrt::DefaultIdentity)), Field(F::Writing(Wrt::AutoArchive)), Field(F::Writing(Wrt::SymbolShorthand))]),
+    group("posts", &[Field(F::Writing(Wrt::PostLengthLimit)), Field(F::Writing(Wrt::AutoSplitThreads)), Field(F::Writing(Wrt::DefaultIdentity)), Field(F::Writing(Wrt::AutoArchive)), Field(F::Writing(Wrt::SymbolShorthand)), Field(F::Writing(Wrt::FeelingCheckins))]),
     group("drafts", &[Field(F::Writing(Wrt::AutosaveSeconds)), Field(F::Writing(Wrt::Spellcheck)), Field(F::Writing(Wrt::AtomicHints)), Field(F::Writing(Wrt::ReadabilityMeter))]),
     group("links", &[Field(F::Writing(Wrt::WikilinkClick)), Field(F::Writing(Wrt::HashtagClick))]),
 ];

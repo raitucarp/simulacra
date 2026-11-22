@@ -61,6 +61,13 @@ impl AppView {
             }
             return self.save_post_edit(target.post.id.clone(), submission.edit.clone().unwrap_or_else(|| crate::state::PostEdit::text(text)), edit_look(submission), window, cx); // sb F2, C3, S5, V3, V10, V11
         }
+        if let Some(feeling) = submission.feeling.clone() {
+            let posted = self.state.submit_feeling(feeling.clone(), &thread_from_submission(submission.clone(), false).1).map(Some);
+            if posted.is_ok() {
+                self.log_feeling_checkin(&feeling, cx); // M6: opt-in, into the private journal only
+            }
+            return self.after_publish(posted, submission, window, cx); // M2: one feeling
+        }
         if let Some(password) = submission.lock.clone() {
             return self.publish_locked_submission(submission, password, window, cx); // X3: sealed in the background
         }
@@ -104,7 +111,7 @@ impl AppView {
 /// Store drafts (attachments and symbols on the first post, the tint on every post) and the anchor
 /// implied by the modal mode; with `shorthand`, each post's leading markers become symbols.
 pub(super) fn thread_from_submission(submission: ComposerSubmission, shorthand: bool) -> (Vec<ThreadDraft>, ThreadAnchor) {
-    let ComposerSubmission { mode, drafts, link, images, files, tint, publish_at: _, symbols, edit: _, replies_to, lock: _ } = submission;
+    let ComposerSubmission { mode, drafts, link, images, files, tint, publish_at: _, symbols, edit: _, replies_to, lock: _, feeling: _ } = submission;
     let parents = replies_to.into_iter().chain(std::iter::repeat(None));
     let mut thread: Vec<ThreadDraft> = drafts.into_iter().zip(parents).map(|(text, reply_to)| ThreadDraft { tint, reply_to, ..ThreadDraft::text(text) }).collect(); // T4: free compose replies nest
     if let Some(first) = thread.first_mut() {

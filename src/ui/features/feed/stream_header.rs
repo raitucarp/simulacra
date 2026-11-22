@@ -76,6 +76,7 @@ fn tab_label_text(tab: FeedTab) -> String {
         FeedTab::ForYou => t!("feed.for_you"),
         FeedTab::Dialectic => t!("feed.dialectic"),
         FeedTab::Inbox => t!("feed.inbox"),
+        FeedTab::Feelings => t!("feed.feelings"), // M4
     }
     .to_string()
 }

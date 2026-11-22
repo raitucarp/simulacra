@@ -14,7 +14,7 @@ use crate::domain::Post;
 use crate::theme::ThemeTokens;
 use crate::ui::features::media::render_post_media;
 use gpui_kit::prelude::FluentBuilder;
-use gpui_kit::{div, Div, InteractiveElement, IntoElement, MouseButton, ParentElement, Styled};
+use gpui_kit::{div, AnyElement, Div, InteractiveElement, IntoElement, MouseButton, ParentElement, Styled};
 
 /// Comprehensive Threads-style Post Molecule with tokenized layout, context-aware threadline,
 /// attachment embeds (image & link), quote cards, repost header, click-to-focus inspection,
@@ -26,8 +26,11 @@ pub fn render_post_item<L: PostLookup>(
     is_focused: bool,
     threadline_style: ThreadlineStyle,
     handlers: PostCardHandlers,
-) -> impl IntoElement {
+) -> AnyElement {
     let (effective_post, is_instant_repost) = resolve_effective_post(post, &lookup);
+    if let Some(row) = super::feeling_row::render_feeling_row(effective_post, lookup.author_of(effective_post), theme, is_focused, &handlers) {
+        return row.into_any_element(); // M3: a feeling is one distinct line
+    }
     let surface = card_surface(effective_post.extras.tint, is_focused, theme);
     let hover_bg = surface.hover;
     let has_repost_header = post.repost_id.is_some();
@@ -49,6 +52,7 @@ pub fn render_post_item<L: PostLookup>(
         .gap(theme.spacing_md)
         .child(render_avatar_column(effective_post, lookup.author_of(effective_post), threadline_style, has_repost_header, theme))
         .child(render_content_column(post, effective_post, is_instant_repost, lookup, theme, handlers))
+        .into_any_element()
 }
 
 /// Resolves the original thought an instant repost wraps (same rule as the action target).

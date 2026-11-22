@@ -5944,3 +5944,22 @@ posts.lock.wrong_password: "Esa contraseña no abre esta publicación."
 posts.lock.damaged: "El bloqueo de esta publicación está dañado y no se puede abrir."
 # X7: wrong-password backoff
 posts.lock.wait: "Demasiadas contraseñas incorrectas. Vuelve a intentarlo en %{seconds} s."
+# M2: the composer feeling bar
+composer.feeling.button: "Publicar un sentimiento"
+composer.feeling.label: "Sentimiento"
+composer.feeling.intensity: "Intensidad"
+composer.feeling.note_placeholder: "Unas palabras (opcional)"
+composer.feeling.search_placeholder: "Buscar emoji"
+composer.feeling.problem.no_emoji: "Elige al menos un emoji."
+composer.feeling.problem.too_many_emojis: "Elige como máximo %{count} emojis."
+composer.feeling.problem.note_too_long: "Limita la nota a %{count} caracteres."
+# M4: the feelings filter
+feed.feelings: "Sentimientos"
+# M5: agents may post feelings
+forge.ui.engine.map.feeling: "Sentimiento"
+forge.ui.engine.may_feel: "Puede publicar sentimientos"
+forge.ui.engine.may_feel_hint: "Desactivado por defecto. Si está activo, la respuesta puede llevar un sentimiento (de uno a tres emojis, una intensidad y una nota breve) y la publicación sale como sentimiento."
+# M6: a feeling also logs a mood check-in
+prefs.row.writing.feeling_checkins.title: "Registrar mis sentimientos en el diario"
+prefs.row.writing.feeling_checkins.description: "Cuando uno de tus personajes publica un sentimiento, se añade a tu diario privado un registro de ánimo con su nota. Nada del diario vuelve al feed."
+prefs.row.writing.feeling_checkins.keywords: "sentimiento, ánimo, registro, diario, emoción"

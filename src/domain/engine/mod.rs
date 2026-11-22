@@ -22,6 +22,7 @@ mod path;
 mod picker;
 mod picker_options;
 mod presets;
+mod feeling; // M5
 mod react; // R8
 mod request;
 mod text;
@@ -36,6 +37,7 @@ pub use output::{OutputMapping, OutputMode, StructuredOutput};
 pub use path::{value_at, value_text};
 pub use picker::{ImageSize, OutputKind, RequestKind, TextSource, TriggerKind, DEFAULT_IMAGE_CHANCE};
 pub use presets::SchemaPreset;
+pub use feeling::{parse_feeling, FEELING_FIELD};
 pub use react::{parse_reactions, reactions_left, AGENT_REACTIONS_PER_HOUR, MAX_REACTIONS_PER_ANSWER, REACTIONS_FIELD};
 pub use request::{CustomRequest, HeaderPair, HttpMethod, RequestMode, API_KEY_PLACEHOLDER, REQUEST_PLACEHOLDERS};
 pub use text::{OwnModel, TextModel};

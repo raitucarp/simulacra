@@ -59,3 +59,18 @@ fn a_branched_history_draws_two_lanes_and_opens_beside_the_current_version() {
     assert!(!sheet.chose_current(), "the sheet opens on the newest earlier version");
     assert_eq!(sheet.lanes[2].forks, vec![1], "the older line joins the original");
 }
+
+#[test]
+fn any_two_versions_are_compared_a_to_b() {
+    let at = |hour| crate::time::utc(2026, 11, 20, hour, 0, 0);
+    let first = Revision::of(subject(), "a mirror", at(9));
+    let second = Revision { parent_id: Some(first.id.clone()), ..Revision::of(subject(), "a lamp", at(10)) };
+    let mut sheet = HistorySheet::new(subject(), "title".into(), version_list("", "a lamp, not a mirror", None, &[first, second]));
+    assert_eq!((sheet.selected, sheet.compare), (1, 0), "A is the newest earlier version, B the current one");
+    sheet.pick(2, true);
+    assert_eq!(sheet.diff(), Some(crate::domain::data::history::word_diff("a lamp", "a mirror")));
+    sheet.pick(2, false);
+    assert_eq!(sheet.diff(), None, "a version against itself shows no diff");
+    sheet.pick(99, true);
+    assert_eq!(sheet.compare, 2, "out-of-range picks clamp to the last version");
+}

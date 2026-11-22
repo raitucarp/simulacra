@@ -60,7 +60,10 @@ pub enum DataEvent {
     NewCollectionFor(PostId),
     /// History sheet.
     OpenDocumentHistory(String),
+    /// Picks version A of the comparison (and the version Restore acts on).
     SelectVersion(usize),
+    /// Picks version B of the comparison (V6).
+    CompareWith(usize),
     RestoreVersion(usize),
     /// Opens the composer on this older version of a post: saving starts a branch (V4).
     EditFromVersion(usize),

@@ -74,3 +74,10 @@ pub fn version_list(current_title: &str, current: &str, head: Option<&VersionHea
 pub fn current_index(versions: &[Version]) -> usize {
     versions.iter().position(|v| v.kind == VersionKind::Current).unwrap_or(0)
 }
+
+/// The word diff from version `a` to version `b` of `versions` (V6); `None` when they are
+/// the same version or either is not listed.
+pub fn compare_versions(versions: &[Version], a: usize, b: usize) -> Option<Vec<super::DiffOp>> {
+    let (from, to) = (versions.get(a)?, versions.get(b)?);
+    (a != b).then(|| super::word_diff(&from.content, &to.content))
+}

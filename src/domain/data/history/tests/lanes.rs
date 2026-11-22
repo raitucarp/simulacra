@@ -54,3 +54,19 @@ fn the_list_is_drawn_newest_edit_first_with_the_head_wherever_it_sits() {
     assert_eq!((list[0].kind, list[0].note.as_str(), list[0].bump), (VersionKind::Earlier, "more", Some(Bump::Minor)));
     assert_eq!((list[2].kind, list[2].bump, list[1].number), (VersionKind::Original, None, Some(SemVer::new(1, 2, 0))));
 }
+
+#[test]
+fn any_two_versions_compare_in_either_direction() {
+    let at = |hour| crate::time::utc(2026, 11, 20, hour, 0, 0);
+    let subject = RevisionSubject::Post(crate::domain::PostId::new("p"));
+    let a = Revision { id: RevisionId::new("a"), edited_at: Some(at(8)), ..Revision::of(subject.clone(), "The mind is a mirror.", at(9)) };
+    let b = Revision { id: RevisionId::new("b"), parent_id: Some(RevisionId::new("a")), edited_at: Some(at(9)), ..Revision::of(subject, "The mind is a lamp.", at(10)) };
+    let list = version_list("", "The mind is a lamp, not a mirror.", None, &[a, b]);
+    let texts: Vec<&str> = list.iter().map(|v| v.content.as_str()).collect();
+    assert_eq!(texts, vec!["The mind is a lamp, not a mirror.", "The mind is a lamp.", "The mind is a mirror."]);
+    let older_to_newer = compare_versions(&list, 2, 1).expect("two versions");
+    assert_eq!(older_to_newer, word_diff("The mind is a mirror.", "The mind is a lamp."));
+    assert_eq!(compare_versions(&list, 1, 2), Some(word_diff("The mind is a lamp.", "The mind is a mirror.")));
+    assert_eq!(compare_versions(&list, 1, 1), None, "a version against itself");
+    assert_eq!(compare_versions(&list, 0, 9), None);
+}

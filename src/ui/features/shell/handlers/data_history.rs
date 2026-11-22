@@ -21,11 +21,8 @@ impl AppView {
         match event {
             DataEvent::OpenPostHistory(id) => self.open_post_history(id),
             DataEvent::OpenDocumentHistory(id) => self.open_document_history(id),
-            DataEvent::SelectVersion(index) => {
-                if let Some(sheet) = self.data.history.as_mut() {
-                    sheet.selected = index.min(sheet.versions.len().saturating_sub(1));
-                }
-            }
+            DataEvent::SelectVersion(index) => { self.data.history.iter_mut().for_each(|sheet| sheet.pick(index, false)); }
+            DataEvent::CompareWith(index) => { self.data.history.iter_mut().for_each(|sheet| sheet.pick(index, true)); } // V6
             DataEvent::RestoreVersion(index) => self.restore_version(index, window, cx),
             DataEvent::EditFromVersion(index) => self.edit_from_version(index, window, cx), // V4
             _ => self.data.history = None,

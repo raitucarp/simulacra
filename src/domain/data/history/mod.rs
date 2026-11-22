@@ -14,7 +14,7 @@ pub use head::{free_version, step_bump, VersionHead};
 pub use semver::{Bump, ParseSemVerError, SemVer, MAJOR_REMOVED_PERCENT, PATCH_MAX_WORDS};
 pub use diff::{diff_stats, tokens, word_diff, DiffOp, DiffStats, MAX_DIFF_CELLS};
 pub use lanes::{lane_cell, lane_count, lane_rows, LaneCell, LaneRow, TreeNode};
-pub use versions::{current_index, version_list, Version, VersionKind};
+pub use versions::{compare_versions, current_index, version_list, Version, VersionKind};
 
 use crate::domain::PostId;
 use jiff::Timestamp;

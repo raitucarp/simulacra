@@ -10,11 +10,14 @@ use super::version_tree::render_lanes;
 use crate::domain::data::history::{LaneRow, Version, VersionKind};
 use crate::theme::ThemeTokens;
 use crate::ui::features::composer::version_label;
+use gpui_kit::component::button::{Button, ButtonVariants};
+use gpui_kit::component::{Selectable, Sizable};
 use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::*;
 use rust_i18n::t;
 
 const ROW_ID_PREFIX: &str = "data-history-version-";
+const B_ID_PREFIX: &str = "data-history-compare-";
 
 fn kind_label(version: &Version) -> String {
     match version.kind {
@@ -31,28 +34,48 @@ fn title_line(version: &Version, theme: &ThemeTokens) -> Div {
     div().flex().flex_wrap().items_center().gap(theme.inline_gap).text_size(theme.font_size_xs).child(kind).children(number)
 }
 
-fn version_row(index: usize, version: &Version, lanes: (&LaneRow, usize), selected: bool, on_event: &DataAction, theme: &ThemeTokens) -> Stateful<Div> {
+/// The "B" button picking a row as the other side of the comparison (V6), lit on version B.
+fn b_button(index: usize, compared: bool, on_event: &DataAction) -> Button {
     let on_event = on_event.clone();
+    Button::new(SharedString::from(format!("{B_ID_PREFIX}{index}")))
+        .ghost()
+        .xsmall()
+        .selected(compared)
+        .label(tr("data.history.side_b"))
+        .tooltip(tr("data.history.compare_with"))
+        .on_click(move |_, window, cx| on_event(DataEvent::CompareWith(index), window, cx))
+}
+
+fn version_row(index: usize, version: &Version, lanes: (&LaneRow, usize), (selected, compared): (bool, bool), on_event: &DataAction, theme: &ThemeTokens) -> Div {
+    let pick = on_event.clone();
     let when = version.replaced_at.map_or_else(|| tr("data.history.now"), |at| t!("data.history.until", time = format_time(at)).to_string());
     let hover = theme.hover_bg;
     let time = div().font_family(theme.font_family_mono.clone()).text_size(theme.font_size_2xs).text_color(theme.text_muted).child(when);
     let text = div().flex_1().min_w_0().flex().flex_col().gap(theme.spacing_3xs).py(theme.spacing_xs).child(title_line(version, theme)).child(time);
-    div()
+    let main = div()
         .id(SharedString::from(format!("{ROW_ID_PREFIX}{index}")))
+        .flex_1()
+        .min_w_0()
         .flex()
         .gap(theme.inline_gap)
+        .cursor_pointer()
+        .on_click(move |_, window, cx| pick(DataEvent::SelectVersion(index), window, cx))
+        .child(render_lanes(lanes.0, lanes.1, version.kind == VersionKind::Current, theme))
+        .child(text);
+    div()
+        .flex()
+        .items_center()
+        .gap(theme.spacing_2xs)
         .px(theme.spacing_sm)
         .rounded(theme.radius_md)
-        .cursor_pointer()
         .when(selected, |row| row.bg(theme.accent_brand_subtle))
         .when(!selected, |row| row.hover(move |s| s.bg(hover)))
-        .on_click(move |_, window, cx| on_event(DataEvent::SelectVersion(index), window, cx))
-        .child(render_lanes(lanes.0, lanes.1, version.kind == VersionKind::Current, theme))
-        .child(text)
+        .child(main)
+        .child(b_button(index, compared, on_event))
 }
 
 /// The list column: its heading and every row.
 pub(super) fn version_list_column(sheet: &HistorySheet, on_event: &DataAction, theme: &ThemeTokens) -> Div {
-    let rows = sheet.versions.iter().zip(&sheet.lanes).enumerate().map(|(i, (v, lanes))| version_row(i, v, (lanes, sheet.lane_count), i == sheet.selected, on_event, theme));
+    let rows = sheet.versions.iter().zip(&sheet.lanes).enumerate().map(|(i, (v, lanes))| version_row(i, v, (lanes, sheet.lane_count), (i == sheet.selected, i == sheet.compare), on_event, theme));
     div().w(theme.history_list_width).flex_none().flex().flex_col().child(heading(tr("data.history.versions"), theme)).children(rows)
 }

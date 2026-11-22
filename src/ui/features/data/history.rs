@@ -7,7 +7,7 @@ use super::history_compare::comparison;
 use super::history_rows::version_list_column;
 use super::sheet::{footer, sheet_frame, SheetParts};
 use super::text::tr;
-use crate::domain::data::history::{current_index, lane_count, lane_rows, LaneRow, RevisionId, RevisionSubject, TreeNode, Version};
+use crate::domain::data::history::{compare_versions, current_index, DiffOp, lane_count, lane_rows, LaneRow, RevisionId, RevisionSubject, TreeNode, Version};
 use crate::theme::ThemeTokens;
 use crate::ui::icons::LucideIcon;
 use gpui_kit::base::Disableable;
@@ -29,7 +29,9 @@ pub struct HistorySheet {
     /// The post's opening words or the document's title.
     pub title: String,
     pub versions: Vec<Version>,
+    /// Version A of the comparison (the one Restore acts on) and version B (V6).
     pub selected: usize,
+    pub compare: usize,
     /// The graph lanes of each version, and how many lanes the tree uses (V5).
     pub lanes: Vec<LaneRow>,
     pub lane_count: usize,
@@ -43,7 +45,7 @@ impl HistorySheet {
         let nodes: Vec<TreeNode<'_>> = versions.iter().map(|v| TreeNode { id: v.id.as_ref().map_or("", RevisionId::as_str), parent: v.parent.as_ref().map(RevisionId::as_str) }).collect();
         let lanes = lane_rows(&nodes);
         let lane_count = lane_count(&lanes);
-        Self { subject, title, versions, selected, lanes, lane_count }
+        Self { subject, title, versions, selected, compare: current, lanes, lane_count }
     }
 
     /// The version shown.
@@ -54,6 +56,17 @@ impl HistorySheet {
     /// Whether the chosen version is the one shown (nothing to restore or edit from).
     pub fn chose_current(&self) -> bool {
         self.selected == current_index(&self.versions)
+    }
+
+    /// Picks version `index` as A, or as B with `b` (V6); out-of-range picks the last.
+    pub fn pick(&mut self, index: usize, b: bool) {
+        let index = index.min(self.versions.len().saturating_sub(1));
+        if b { self.compare = index } else { self.selected = index }
+    }
+
+    /// The diff from A to B; `None` while they are the same version (V6).
+    pub fn diff(&self) -> Option<Vec<DiffOp>> {
+        compare_versions(&self.versions, self.selected, self.compare)
     }
 }
 

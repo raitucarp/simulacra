@@ -28,6 +28,7 @@ mod semantic;
 mod spacing;
 mod suggestions;
 mod surfaces;
+mod symbols; // epic S
 mod text;
 mod thinking;
 mod tints;
@@ -71,7 +72,7 @@ pub fn derive_tokens(
     actions::apply_actions_layout(&mut t);
     suggestions::apply_suggestions_layout(&mut t);
     image_prompt::apply_image_prompt_layout(&mut t);
-    thinking::apply_thinking_layout(&mut t); data::apply_data_layout(&mut t); reactions::apply_reactions_layout(&mut t); // sb F2; epic R
+    thinking::apply_thinking_layout(&mut t); data::apply_data_layout(&mut t); reactions::apply_reactions_layout(&mut t); symbols::apply_symbols_layout(&mut t); // sb F2; epic R, S
     surfaces::apply_surfaces(&mut t, palette);
     text::apply_text(&mut t, palette);
     accents::apply_accents(&mut t, palette); accents::apply_shades(&mut t, palette);

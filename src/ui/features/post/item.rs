@@ -47,7 +47,7 @@ pub fn render_post_item<L: PostLookup>(
         .flex()
         .items_start()
         .gap(theme.spacing_md)
-        .child(render_avatar_column(lookup.author_of(effective_post), threadline_style, has_repost_header, theme))
+        .child(render_avatar_column(effective_post, lookup.author_of(effective_post), threadline_style, has_repost_header, theme))
         .child(render_content_column(post, effective_post, is_instant_repost, lookup, theme, handlers))
 }
 

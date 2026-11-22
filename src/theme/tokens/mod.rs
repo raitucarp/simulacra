@@ -107,6 +107,7 @@ theme_tokens! {
         data_sheet_width, data_sheet_max_height, history_list_width, history_diff_min_height, data_label_width, data_count_width, data_date_field_width, export_pick_max_height, strength_meter_height, knowledge_switch_width, saved_page_max_width, saved_chip_max_width, saved_grip_width, saved_note_min_height, // sb F2: data sheets, version list and diff, strength meter, Library / Saved switch, Saved view
         insight_lane_height, insight_lane_label_width, insight_axis_height, insight_brush_min_width, insight_cell_gap, insight_list_max_height, insight_meter_width, insight_meter_height, insight_peak_ring_width, // sb F3: concept timeline lanes and brush, detail lists, composer readability meter
         emoji_picker_width, emoji_picker_grid_height, emoji_cell_size, // epic R: emoji picker (width, scrolling grid, one cell)
+        symbol_badge_size, symbol_badge_offset, symbol_outline_size, // epic S: signifier badges on a symbol face, the symbol of an outline bullet
     ],
     // Typography Hierarchy & Line Height; heatmap level opacities; graph dimming & curvature
     floats: [
@@ -117,6 +118,7 @@ theme_tokens! {
         // Forge disabled option cards and stage backdrop art; feed failed tools; settings rows switched off
         forge_disabled_opacity, forge_backdrop_opacity, post_failed_tool_opacity, settings_disabled_opacity,
         line_height_reading, vault_motion_duration_ms, vault_muted_opacity, // sb B1: reader leading, calm entry fade, read-state dimming
+        symbol_glyph_scale, // epic S: a library icon's share of its symbol disc
     ],
 }
 

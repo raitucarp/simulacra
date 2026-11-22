@@ -82,7 +82,7 @@ impl PostCallbacks {
             links: self.links.clone(),
             on_post_action: Some(bind_action(&self.on_post_action, &target_id)),
             credence: self.credence.as_ref().filter(|_| target.human).map(|source| source.controls(&target_id)),
-            data: self.data.as_ref().map(|source| DataControls { lifecycle: target.lifecycle, auto_archive: target.auto_archive, symbols: target.symbols.clone(), ..source.controls(&target_id, target.human) }),
+            data: self.data.as_ref().map(|source| DataControls { lifecycle: target.lifecycle, auto_archive: target.auto_archive, symbols: target.symbols.clone(), version: target.version, ..source.controls(&target_id, target.human) }),
             reactions: self.reactions.as_ref().map(|source| source.controls(&target_id, state)),
         }
     }
@@ -120,6 +120,8 @@ struct CardTarget {
     auto_archive: Option<ArchiveAfter>,
     /// Its symbols (S7).
     symbols: crate::domain::symbols::PostSymbols,
+    /// The version it shows once edited (V8).
+    version: Option<crate::domain::data::history::SemVer>,
 }
 
 impl CardTarget {
@@ -128,6 +130,6 @@ impl CardTarget {
         let author = state.get_post(&id).map_or_else(|| state.author_of(post), |p| state.author_of(p));
         let target = state.get_post(&id).unwrap_or(post);
         let (lifecycle, auto_archive) = (target.lifecycle, ArchiveAfter::of(target.created_at, target.lifecycle.archive_at));
-        Self { id, handle: author.handle.clone(), human: author.is_human_persona(), lifecycle, auto_archive, symbols: target.extras.symbols.clone() }
+        Self { id, handle: author.handle.clone(), human: author.is_human_persona(), lifecycle, auto_archive, symbols: target.extras.symbols.clone(), version: target.extras.head.as_ref().map(|head| head.version) }
     }
 }

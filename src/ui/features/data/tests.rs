@@ -87,3 +87,21 @@ fn a_post_sheet_carries_its_edit_log_and_a_document_sheet_none() {
     let document = RevisionSubject::Document("doc".into());
     assert!(HistorySheet::new(document.clone(), "t".into(), version_list("t", "b", None, &[Revision { subject: document, ..original }])).log.is_empty());
 }
+
+#[test]
+fn an_edited_post_wears_its_version_badge() {
+    let source = DataSource {
+        revisions: Rc::new(HashMap::from([("p1".to_string(), 2)])),
+        bookmarks: Rc::new(HashSet::new()),
+        collections: Rc::new(Vec::new()),
+        memberships: Rc::new(HashMap::new()),
+        history_open: false,
+        on_event: Rc::new(|_, _, _| {}),
+    };
+    let edited = DataControls { version: Some(crate::domain::data::history::SemVer::new(1, 2, 0)), ..source.controls(&PostId::new("p1"), true) };
+    assert_eq!(edited.edited_mark().as_deref(), Some("v1.2.0"));
+    let unnumbered = source.controls(&PostId::new("p1"), true);
+    assert_eq!(unnumbered.edited_mark(), Some(tr("data.edited")), "an edit without a number still shows");
+    let fresh = DataControls { version: Some(crate::domain::data::history::SemVer::ORIGINAL), ..source.controls(&PostId::new("p2"), true) };
+    assert_eq!(fresh.edited_mark(), None, "a post never edited wears no badge");
+}

@@ -16,7 +16,7 @@ pub mod catalogue_record;
 pub mod detect;
 pub mod document;
 #[cfg(test)]
-mod fixtures;
+pub(crate) mod fixtures;
 pub mod load;
 pub mod markup;
 pub mod parse;

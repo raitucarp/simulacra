@@ -91,3 +91,16 @@ fn text_files_show_their_first_lines_once_scanned() {
     let catalog = MediaCatalog::default().with_file(script.path.clone(), FileScan::Present(FileFacts { preview }));
     let _scanned = super::file_text::text_file(0, &script, FormatFamily::Text, Some(&catalog), &theme);
 }
+
+#[test]
+fn documents_show_their_title_and_extent_once_scanned() {
+    use crate::domain::media::files::{FileFacts, FilePreview, FileScan};
+    use crate::domain::media::{FileRef, MediaCatalog};
+    use crate::import::FormatFamily;
+    let theme = minimalist_dark();
+    let book = FileRef { mime: "application/epub+zip".into(), ..FileRef::at("/home/ann/book.epub") };
+    let _unscanned = super::file_document::document_file(0, &book, FormatFamily::Book, None, &theme);
+    let preview = FilePreview::Document { title: Some("A Tiny Book".into()), creators: vec!["Ada".into()], pages: None, chapters: Some(2) };
+    let catalog = MediaCatalog::default().with_file(book.path.clone(), FileScan::Present(FileFacts { preview }));
+    let _scanned = super::file_document::document_file(0, &book, FormatFamily::Book, Some(&catalog), &theme);
+}

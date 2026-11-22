@@ -97,3 +97,18 @@ fn a_code_file_scans_to_its_first_lines_in_its_language() {
     assert_eq!((lines.lines().count(), lang.as_deref(), more), (TEXT_PREVIEW_LINES, Some("rs"), true));
     assert!(lines.starts_with("pub const N0: u32 = 0;"));
 }
+
+#[test]
+fn a_pdf_and_an_epub_scan_to_their_outline() {
+    use crate::domain::media::files::FilePreview;
+    use crate::import::fixtures::{epub, tiny_pdf};
+    let dir = scratch_media_dir("file-scan-documents");
+    let (pdf, book) = (dir.join("paper.pdf"), dir.join("book.epub"));
+    std::fs::write(&pdf, tiny_pdf(&[&["page one"], &["page two"]])).expect("write pdf");
+    std::fs::write(&book, epub()).expect("write epub");
+    let scan = |path: &std::path::Path| crate::media::files::scan_file(&read_file_ref(path).expect("read"), &dir).preview().cloned();
+    let Some(FilePreview::Document { title, creators, pages, .. }) = scan(&pdf) else { panic!("a pdf outline") };
+    assert_eq!((title.as_deref(), creators.len(), pages), (Some("A Tiny PDF"), 1, Some(2)));
+    let Some(FilePreview::Document { title, chapters, .. }) = scan(&book) else { panic!("an epub outline") };
+    assert_eq!((title.as_deref(), chapters), (Some("A Tiny Book"), Some(2)));
+}

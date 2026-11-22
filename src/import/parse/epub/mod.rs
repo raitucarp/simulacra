@@ -22,13 +22,7 @@ const RIGHTS_PATH: &str = "META-INF/rights.xml";
 /// Parses an EPUB container.
 pub fn parse(bytes: &[u8]) -> ParseResult {
     let mut zip = ZipBundle::open(bytes)?;
-    if zip.read(RIGHTS_PATH).is_some() {
-        return Err(ParseError::Encrypted);
-    }
-    let container = zip.read_text(CONTAINER_PATH).ok_or_else(|| missing(CONTAINER_PATH))?;
-    let opf_path = opf::rootfile_path(&container).ok_or_else(|| missing("rootfile"))?;
-    let opf_src = zip.read_text(&opf_path).ok_or_else(|| missing(&opf_path))?;
-    let package = opf::parse_package(&opf_src, &opf_path);
+    let package = read_package(&mut zip)?;
     let titles = chapter_titles(&mut zip, &package);
     let mut language = None;
     let sections: Vec<Section> = package
@@ -43,6 +37,24 @@ pub fn parse(bytes: &[u8]) -> ParseResult {
     let mut metadata = package.metadata;
     metadata.language = metadata.language.or(language);
     Ok(Content { metadata, sections, notes: Vec::new() })
+}
+
+/// The metadata and chapter count (spine documents) of an EPUB, without reading its
+/// chapters (L10).
+pub fn outline(bytes: &[u8]) -> Result<(crate::import::document::DocumentMetadata, usize), ParseError> {
+    let package = read_package(&mut ZipBundle::open(bytes)?)?;
+    Ok((package.metadata, package.spine.len()))
+}
+
+/// The OPF package the container points at; DRM-protected books are refused.
+fn read_package(zip: &mut ZipBundle) -> Result<Package, ParseError> {
+    if zip.read(RIGHTS_PATH).is_some() {
+        return Err(ParseError::Encrypted);
+    }
+    let container = zip.read_text(CONTAINER_PATH).ok_or_else(|| missing(CONTAINER_PATH))?;
+    let opf_path = opf::rootfile_path(&container).ok_or_else(|| missing("rootfile"))?;
+    let opf_src = zip.read_text(&opf_path).ok_or_else(|| missing(&opf_path))?;
+    Ok(opf::parse_package(&opf_src, &opf_path))
 }
 
 /// The sections of one spine document: one per top-level heading when it holds several

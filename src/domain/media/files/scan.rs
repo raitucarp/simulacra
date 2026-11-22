@@ -30,6 +30,9 @@ pub enum FilePreview {
     /// The first lines of a text or code file and the language that colours them (L9);
     /// `more` when the file goes on.
     Text { lines: String, lang: Option<String>, more: bool },
+    /// A PDF or an EPUB as the import parsers read it (L10): its title and authors, and its
+    /// pages (PDF) or chapters (EPUB).
+    Document { title: Option<String>, creators: Vec<String>, pages: Option<usize>, chapters: Option<usize> },
 }
 
 impl FileScan {

@@ -54,3 +54,16 @@ fn titles_from_file_names_are_readable() {
     assert_eq!(title_from_file_name("README"), "README");
     assert_eq!(title_from_file_name(".bashrc"), ".bashrc");
 }
+
+#[test]
+fn outlines_read_metadata_and_extent_without_the_text() {
+    use crate::import::fixtures::{epub, tiny_pdf};
+    let pdf = document_outline(Format::Pdf, &tiny_pdf(&[&["one"], &["two"], &[]])).expect("pdf outline");
+    assert_eq!((pdf.metadata.title.as_deref(), pdf.pages, pdf.chapters), (Some("A Tiny PDF"), Some(3), None));
+    assert_eq!(pdf.metadata.creators, ["Grace Hopper"]);
+    let book = document_outline(Format::Epub, &epub()).expect("epub outline");
+    assert_eq!((book.metadata.title.as_deref(), book.pages, book.chapters), (Some("A Tiny Book"), None, Some(2)));
+    assert_eq!(book.metadata.creators, ["Ada Lovelace", "Charles Babbage"]);
+    assert_eq!(document_outline(Format::Pdf, b"%PDF-broken"), None);
+    assert_eq!(document_outline(Format::Docx, &epub()), None);
+}

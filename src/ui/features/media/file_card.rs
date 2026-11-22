@@ -23,13 +23,14 @@ const DATE_FORMAT: &str = "%Y-%m-%d";
 
 /// The card the `index`-th file of a post shows: an image is previewed (L5), a video gets
 /// its poster and length (L7), an audio file its length (L8), a text file its first lines
-/// (L9), anything else the plain file card.
+/// (L9), a PDF or EPUB its outline (L10), anything else the plain file card.
 pub(super) fn render_file(index: usize, file: &FileRef, catalog: Option<&MediaCatalog>, on_media: Option<&OpenMediaAction>, theme: &ThemeTokens) -> AnyElement {
     match file_family(&file.mime) {
         FormatFamily::Image => super::file_image::image_file(index, file, catalog, on_media, theme),
         FormatFamily::Video => super::file_video::video_file(index, file, catalog, theme),
         FormatFamily::Audio => super::file_audio::audio_file(index, file, catalog, theme),
         family @ (FormatFamily::Text | FormatFamily::Data | FormatFamily::Web) => super::file_text::text_file(index, file, family, catalog, theme),
+        family @ (FormatFamily::Pdf | FormatFamily::Book) => super::file_document::document_file(index, file, family, catalog, theme),
         _ => file_card(index, file, theme).into_any_element(),
     }
 }

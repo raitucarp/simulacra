@@ -21,6 +21,7 @@ theme_tokens! {
         border, border_subtle, border_strong, border_focus, // Border Colors
         focus_ring, // Keyboard focus ring (focus-visible outline of custom controls and kit widgets)
         text_primary, text_secondary, text_muted, // Text & Content Colors
+        link_text, // L1: web addresses in post bodies, readable on every surface
         accent_user, accent_alt, accent_agent, accent_brand, accent_dialectic, accent_success, // Accents & Semantic Indicators
         accent_danger, warning, info, selection,
         on_accent, on_danger, on_overlay, // Readable foregrounds on filled accent, danger and scrim surfaces

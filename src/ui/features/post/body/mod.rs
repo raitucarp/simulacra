@@ -1,4 +1,4 @@
-//! Post body renderer: word-level flex wrapping of marked text, wikilink pills, hashtags,
+//! Post body renderer: word-level flex wrapping of marked text, web links, wikilink pills, hashtags,
 //! inline code, spoilers and fenced code blocks.
 //!
 //! Feed cards render the tokens the store cached at insert time; clicking a hashtag or a
@@ -7,6 +7,7 @@
 mod code_block;
 mod inline;
 mod layout;
+mod link;
 mod marks;
 mod spoiler;
 
@@ -105,6 +106,7 @@ fn render_item<L: PostLookup>(
             let pill = render_obsidian_pill(&lookup.resolve_wikilink(target), theme);
             with_trailing(clickable(pill, target, links.on_wikilink.as_ref()), trailing, theme)
         }
+        Item::Url { url, trailing } => with_trailing(link::link_span(index, url, theme), trailing, theme),
         Item::Hashtag { tag, trailing } => {
             let span = clickable(render_hashtag_span(tag, theme), tag, links.on_tag.as_ref());
             with_trailing(span, trailing, theme)

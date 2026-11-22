@@ -26,7 +26,7 @@ mod tests;
 pub use catalog::{ImageScan, MediaCatalog, PreviewLookup};
 pub use gallery::{clamp_aspect, fit_within, Corners, gallery_layout, is_portrait, media_aspect, step_index, GalleryLayout, Step, Tile, MAX_GALLERY_IMAGES};
 pub use image::{post_images, ImageAttachment, ImageFacts, ImageSize};
-pub use links::{detect_urls, display_domain, link_file_name, post_links};
+pub use links::{detect_urls, display_domain, link_file_name, post_links, written_url};
 pub use opengraph::{decode_html, parse_link_preview};
 pub use plan::{media_wants, MediaWants, WantedLink};
 pub use preview::{LinkPreview, PreviewEntry};

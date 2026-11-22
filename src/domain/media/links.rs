@@ -11,6 +11,8 @@ const URL_STOPPERS: [char; 6] = ['<', '>', '"', '`', '\u{a0}', '|'];
 const TRAILING_PUNCTUATION: [char; 20] = [
     '.', ',', ';', ':', '!', '?', '\'', '"', '…', '»', '«', '”', '’', '。', '、', '，', '！', '？', '」', '』',
 ];
+/// Mark delimiters trimmed off the end of a URL (`**https://a.org**`, `__https://a.org__`).
+const MARK_DELIMITERS: [char; 2] = ['*', '_'];
 /// Closing brackets kept only when the URL also opens them (`/wiki/Rust_(language)`).
 const BRACKET_PAIRS: [(char, char); 3] = [('(', ')'), ('[', ']'), ('{', '}')];
 /// Links taken from one post at most.
@@ -38,6 +40,15 @@ pub fn detect_urls(text: &str) -> Vec<String> {
     found
 }
 
+/// The `http(s)` URL written at the start of `tail`, as written (trailing punctuation and
+/// mark delimiters left out), when one starts there (L1: the body's link tokens).
+pub fn written_url(tail: &str) -> Option<&str> {
+    let starts = WEB_SCHEMES.iter().any(|scheme| tail.get(..scheme.len()).is_some_and(|head| head.eq_ignore_ascii_case(scheme)));
+    let end = tail.find(|c: char| c.is_whitespace() || URL_STOPPERS.contains(&c)).unwrap_or(tail.len());
+    let candidate = trim_url(&tail[..end]);
+    (starts && valid_web_url(candidate).is_some()).then_some(candidate)
+}
+
 /// The byte offset and length of the next scheme at or after `from` that starts a word.
 fn next_scheme(lower: &str, from: usize) -> Option<(usize, usize)> {
     WEB_SCHEMES
@@ -62,7 +73,7 @@ fn trim_url(raw: &str) -> &str {
     let mut url = raw;
     loop {
         let before = url.len();
-        url = url.trim_end_matches(TRAILING_PUNCTUATION);
+        url = url.trim_end_matches(TRAILING_PUNCTUATION).trim_end_matches(MARK_DELIMITERS);
         for (open, close) in BRACKET_PAIRS {
             if url.ends_with(close) && url.matches(close).count() > url.matches(open).count() {
                 url = &url[..url.len() - close.len_utf8()];

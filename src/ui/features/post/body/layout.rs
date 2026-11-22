@@ -1,5 +1,5 @@
 //! Lays a token tree out as the inline items the body renders: whole words (with the byte
-//! ranges each mark covers), line breaks, links, tags, code spans and code blocks.
+//! ranges each mark covers), line breaks, web links, wikilinks, tags, code spans and code blocks.
 //!
 //! Words are whitespace-separated, so a word can mix marks (`un**believ**able`) and still
 //! wrap as one unit.
@@ -40,6 +40,8 @@ pub(crate) enum Item<'a> {
     Code(&'a str),
     Wikilink { target: &'a str, trailing: &'a str },
     Hashtag { tag: &'a str, trailing: &'a str },
+    /// A web address as written (L1).
+    Url { url: &'a str, trailing: &'a str },
     /// A fenced block; it fills the width, so it sits on its own line.
     Block { lang: Option<&'a str>, code: &'a str },
     /// A spoiler: the `ordinal`-th of the body, its visible `text` and its own items (a
@@ -79,7 +81,8 @@ impl<'a> Builder<'a> {
     fn token(&mut self, token: &'a BodyToken, marks: MarkSet) {
         match token {
             BodyToken::Text(text) => self.text(text, marks),
-            BodyToken::Mention { handle: text, trailing } | BodyToken::Url { url: text, trailing } => {
+            BodyToken::Url { url, trailing } => self.item(Item::Url { url, trailing }),
+            BodyToken::Mention { handle: text, trailing } => {
                 self.text(text, marks);
                 self.text(trailing, marks);
             }

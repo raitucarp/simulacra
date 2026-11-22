@@ -17,6 +17,8 @@ use super::parse::{HASHTAG_SIGIL, WIKILINK_OPEN};
 
 /// Characters that may start markup: line breaks, mark delimiters and escapes.
 const MARKUP_CHARS: [char; 6] = ['\n', '*', '_', '`', '|', '\\'];
+/// Separator every web address contains (L1: URLs are tokens too).
+const URL_SEPARATOR: &str = "://";
 
 /// One token of a post body.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -29,7 +31,7 @@ pub enum BodyToken {
     Hashtag { tag: String, trailing: String },
     /// `@handle` mention followed by optional trailing punctuation (not produced yet).
     Mention { handle: String, trailing: String },
-    /// Web address followed by optional trailing punctuation (not produced yet).
+    /// `http(s)` address as written, followed by optional trailing punctuation (L1).
     Url { url: String, trailing: String },
     /// `**bold**` run.
     Bold(Vec<BodyToken>),
@@ -91,7 +93,7 @@ impl BodyToken {
 
 /// True when the content needs tokenized rendering (links, hashtags, marks or line breaks).
 pub fn has_rich_markup(content: &str) -> bool {
-    content.contains(WIKILINK_OPEN) || content.contains(HASHTAG_SIGIL) || content.contains(MARKUP_CHARS)
+    content.contains(WIKILINK_OPEN) || content.contains(HASHTAG_SIGIL) || content.contains(MARKUP_CHARS) || content.contains(URL_SEPARATOR)
 }
 
 /// Splits post content into ordered tokens: fenced code blocks first, then inline marks,

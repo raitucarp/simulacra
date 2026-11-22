@@ -32,6 +32,8 @@ impl AppView {
             self.arena.panel.clone().into_any_element()
         } else if self.state.active_tab == NavigationTab::Tasks {
             self.tasks_page(bind) // D9
+        } else if self.state.active_tab == NavigationTab::Search {
+            self.search_page(bind) // Q4
         } else {
             self.filtered_feed(bind, class).into_any_element()
         }

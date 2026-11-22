@@ -67,6 +67,7 @@ pub const COMMANDS: &[CommandSpec] = &[
     screen(C::GoJournal, I::NotebookPen),
     screen(C::GoArena, I::Swords),
     screen(C::GoTasks, I::ListChecks), // D9
+    screen(C::GoSearch, I::Search), // Q4
     action(C::NewThread, I::MessageSquarePlus, Ready),
     action(C::NewNote, I::StickyNote, Ready),
     action(C::ImportFile, I::FileUp, Ready),

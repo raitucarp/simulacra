@@ -17,6 +17,7 @@
 
 mod lex;
 mod parse;
+mod write; // Q4: back to text for filter chips
 #[cfg(test)]
 mod tests;
 

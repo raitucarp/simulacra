@@ -145,3 +145,23 @@ fn unicode_text_and_values_are_kept() {
 fn parse_matches_the_free_function() {
     assert_eq!(PostQuery::parse("a from:b"), q("a from:b"));
 }
+
+#[test]
+fn a_query_written_back_parses_to_the_same_query() {
+    for input in ["sourdough \"starter recipe\" from:\"Sam Lee\" has:image -burnt -\"too dark\" -is:archived", "before:2026-01-02 after:last-week tint:amber", "-", ""] {
+        let parsed = q(input);
+        assert_eq!(q(&parsed.to_text()), parsed, "{input}");
+    }
+    assert_eq!(q("rye from:sam has:image").to_text(), "rye from:sam has:image");
+}
+
+#[test]
+fn filters_are_removed_and_toggled() {
+    let query = q("rye has:image -from:bot");
+    assert_eq!(query.without_filter(&F::Has(HasFilter::Image), false).to_text(), "rye -from:bot");
+    assert_eq!(query.without_filter(&F::From("bot".into()), true).to_text(), "rye has:image");
+    assert_eq!(query.toggled_filter(F::Is(IsFilter::Open)).to_text(), "rye has:image is:open -from:bot");
+    assert_eq!(query.toggled_filter(F::Has(HasFilter::Image)).to_text(), "rye -from:bot");
+    assert!(HasFilter::ALL.iter().all(|has| HasFilter::parse(has.key()) == Some(*has)));
+    assert!(IsFilter::ALL.iter().all(|is| IsFilter::parse(is.key()) == Some(*is)));
+}

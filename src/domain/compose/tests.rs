@@ -126,3 +126,23 @@ fn strip_bullet_reports_markers() {
     assert_eq!(strip_bullet("+ a"), None);
     assert_eq!(strip_bullet(""), None);
 }
+
+#[test]
+fn the_preview_lists_posts_in_thread_order_with_depth_and_line() {
+    let text = "First\n\n  - a reply\n        - jumped in\n* second root\n";
+    let lines = compose_lines(text);
+    let got: Vec<(usize, usize, &str)> = lines.iter().map(|l| (l.line, l.depth, l.text.as_str())).collect();
+    assert_eq!(got, vec![(0, 0, "First"), (2, 1, "a reply"), (3, 2, "jumped in"), (4, 0, "second root")]);
+    assert_eq!(lines.len(), draft_count(&split_compose(text)), "the preview counts what the splitter makes");
+    assert_eq!(lines[0].chars, 5);
+    assert!(compose_lines("  \n-\n").is_empty());
+}
+
+#[test]
+fn a_post_over_the_limit_is_flagged_by_visible_length() {
+    let long = "x".repeat(12);
+    let lines = compose_lines(&format!("**{long}**\nshort"));
+    assert_eq!(lines[0].chars, 12, "markup does not count");
+    assert!(lines[0].is_over(10) && !lines[0].is_over(12));
+    assert!(!lines[1].is_over(10));
+}

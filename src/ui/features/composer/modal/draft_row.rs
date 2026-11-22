@@ -35,7 +35,7 @@ impl ComposerModalView {
             .flex()
             .gap(theme.spacing_md)
             .child(self.avatar_with_threadline(theme.avatar_size_md))
-            .child(column.child(self.meter_row(index, draft.length)))
+            .child(if self.free.is_some() { column } else { column.child(self.meter_row(index, draft.length)) }) // T2: the preview counts each post
     }
 
     /// Author avatar with the threadline leading down to the next post of the thread.

@@ -76,6 +76,8 @@ pub struct ModalCallbacks {
     /// Toggles a symbol, and opens or closes the symbol search (S5).
     pub on_pick_symbol: super::symbol_picker::SymbolCallback,
     pub on_toggle_symbol_search: ModalActionCallback,
+    /// Switches free compose on or off (T2).
+    pub on_toggle_free: ModalActionCallback,
 }
 
 /// Stateless dialog rendering a composer snapshot.
@@ -106,6 +108,8 @@ pub struct ComposerModalView {
     pub symbols: super::symbol_picker::SymbolPickerView,
     /// The version row while a published post is edited (V3).
     pub version: Option<super::version_picker::VersionView>,
+    /// The preview of the split while composing freely (T2).
+    pub free: Option<super::free_compose::FreeComposeView>,
     pub callbacks: ModalCallbacks,
     /// sb E1: the atomic-note hint under one draft.
     pub atomic_hint: Option<AtomicHintView>,

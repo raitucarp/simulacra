@@ -35,7 +35,7 @@ impl ComposerModalPanel {
     pub(super) fn clear(&mut self, window: &mut Window, cx: &mut App) {
         self.is_link_input_open = false;
         self.is_image_input_open = false;
-        self.preview = false;
+        (self.preview, self.free) = (false, false);
         self.tint = None;
         self.images.clear();
         self.error = None;

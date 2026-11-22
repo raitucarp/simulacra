@@ -82,7 +82,7 @@ impl PostCallbacks {
             links: self.links.clone(),
             on_post_action: Some(bind_action(&self.on_post_action, &target_id)),
             credence: self.credence.as_ref().filter(|_| target.human).map(|source| source.controls(&target_id)),
-            data: self.data.as_ref().map(|source| DataControls { lifecycle: target.lifecycle, auto_archive: target.auto_archive, symbols: target.symbols.clone(), version: target.version, ..source.controls(&target_id, target.human) }),
+            data: self.data.as_ref().map(|source| DataControls { lifecycle: target.lifecycle, auto_archive: target.auto_archive, symbols: target.symbols.clone(), version: target.version, replied_to: target.replied_to, ..source.controls(&target_id, target.human) }),
             reactions: self.reactions.as_ref().map(|source| source.controls(&target_id, state)),
         }
     }
@@ -122,6 +122,8 @@ struct CardTarget {
     symbols: crate::domain::symbols::PostSymbols,
     /// The version it shows once edited (V8).
     version: Option<crate::domain::data::history::SemVer>,
+    /// The older major version it answered, once its parent moved on (V12).
+    replied_to: Option<crate::domain::data::history::SemVer>,
 }
 
 impl CardTarget {
@@ -130,6 +132,13 @@ impl CardTarget {
         let author = state.get_post(&id).map_or_else(|| state.author_of(post), |p| state.author_of(p));
         let target = state.get_post(&id).unwrap_or(post);
         let (lifecycle, auto_archive) = (target.lifecycle, ArchiveAfter::of(target.created_at, target.lifecycle.archive_at));
-        Self { id, handle: author.handle.clone(), human: author.is_human_persona(), lifecycle, auto_archive, symbols: target.extras.symbols.clone(), version: target.extras.head.as_ref().map(|head| head.version) }
+        Self { id, handle: author.handle.clone(), human: author.is_human_persona(), lifecycle, auto_archive, symbols: target.extras.symbols.clone(), version: target.extras.head.as_ref().map(|head| head.version), replied_to: replied_to(target, state) }
     }
+}
+
+/// The version `reply` answered, when its parent has had a major edit since (V12).
+fn replied_to(reply: &Post, state: &AppState) -> Option<crate::domain::data::history::SemVer> {
+    let parent = state.get_post(reply.reply_to_id.as_ref()?)?;
+    let now = parent.extras.head.as_ref().map_or_else(Default::default, |head| head.version);
+    crate::domain::data::history::replied_to_older(reply.extras.replied_version, now)
 }

@@ -12,7 +12,7 @@ mod semver;
 mod versions;
 
 pub use edit::{edited_post, EditBase};
-pub use head::{free_version, step_bump, VersionHead};
+pub use head::{free_version, replied_to_older, step_bump, VersionHead};
 pub use semver::{Bump, ParseSemVerError, SemVer, MAJOR_REMOVED_PERCENT, PATCH_MAX_WORDS};
 pub use diff::{diff_stats, tokens, word_diff, DiffOp, DiffStats, MAX_DIFF_CELLS};
 pub use log::{edit_log, LogEntry};

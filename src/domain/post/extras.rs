@@ -35,6 +35,9 @@ pub struct PostExtras {
     /// The version the post shows (V3, V4); `None` until its first edit.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub head: Option<crate::domain::data::history::VersionHead>,
+    /// The version of the post it replies to when it was written (V12).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replied_version: Option<crate::domain::data::history::SemVer>,
 }
 
 impl PostExtras {
@@ -46,7 +49,7 @@ impl PostExtras {
     /// Whether there is anything to show behind the post (the origin, images, symbols, tint and
     /// version alone are not).
     pub fn has_details(&self) -> bool {
-        Self { origin: None, images: Vec::new(), symbols: PostSymbols::default(), tint: None, head: None, ..self.clone() } != Self::default()
+        Self { origin: None, images: Vec::new(), symbols: PostSymbols::default(), tint: None, head: None, replied_version: None, ..self.clone() } != Self::default()
     }
 
     /// Adds `source` unless an identical reference is already listed.

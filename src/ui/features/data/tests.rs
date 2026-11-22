@@ -105,3 +105,10 @@ fn an_edited_post_wears_its_version_badge() {
     let fresh = DataControls { version: Some(crate::domain::data::history::SemVer::ORIGINAL), ..source.controls(&PostId::new("p2"), true) };
     assert_eq!(fresh.edited_mark(), None, "a post never edited wears no badge");
 }
+
+#[test]
+fn a_reply_to_an_older_major_version_says_so() {
+    let text = crate::ui::features::data::replied_text(crate::domain::data::history::SemVer::new(1, 4, 2));
+    assert!(text.contains("v1.x"), "{text}");
+    assert_eq!(rust_i18n::t!("data.replied_to", locale = "en", version = "v1.x"), "replied to v1.x");
+}

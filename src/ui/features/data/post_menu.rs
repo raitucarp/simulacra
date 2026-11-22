@@ -50,6 +50,7 @@ impl DataSource {
             auto_archive: None,
             symbols: Default::default(),
             version: None,
+            replied_to: None,
             on_event: self.on_event.clone(),
         }
     }
@@ -73,6 +74,8 @@ pub struct DataControls {
     pub symbols: crate::domain::symbols::PostSymbols,
     /// The version the post shows once edited (V8); set by the feed.
     pub version: Option<crate::domain::data::history::SemVer>,
+    /// The older major version this reply answered, once its parent moved on (V12).
+    pub replied_to: Option<crate::domain::data::history::SemVer>,
     pub on_event: DataAction,
 }
 

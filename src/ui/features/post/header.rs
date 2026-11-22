@@ -51,6 +51,7 @@ pub(crate) fn render_author_row(
         .gap(theme.spacing_xs)
         .child(render_author_meta(post, author, is_instant_repost, theme))
         .children(handlers.data.as_ref().and_then(|data| crate::ui::features::data::render_edited_mark(data, theme))) // sb F2
+        .children(handlers.data.as_ref().and_then(|data| crate::ui::features::data::render_replied_hint(data, theme))) // V12
         .children(super::countdown::render_countdown_chip(post, theme)) // Y7
         .children(handlers.learn.status.map(|status| render_learn_badge(status, theme)))
         .child(div().flex_none().child(render_overflow_menu(post, handlers)))

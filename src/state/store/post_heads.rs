@@ -44,4 +44,15 @@ impl AppState {
         self.replace_post_body(switched);
         Ok(shown)
     }
+
+    /// `post` noting the version of the post it replies to (V12): the version that post shows
+    /// now, `1.0.0` for one never edited. Unchanged when it is no reply, already notes one, or
+    /// its parent is unknown.
+    pub(super) fn with_replied_version(&self, mut post: crate::domain::Post) -> crate::domain::Post {
+        let parent = post.reply_to_id.as_ref().and_then(|id| self.get_post(id));
+        if let (None, Some(parent)) = (post.extras.replied_version, parent) {
+            post.extras.replied_version = Some(parent.extras.head.as_ref().map_or_else(Default::default, |head| head.version));
+        }
+        post
+    }
 }

@@ -5845,3 +5845,5 @@ data.history.switch_failed: "Diese Version konnte nicht gezeigt werden: %{reason
 data.history.tint_changed: "Tönung: %{before} → %{after}"
 data.history.symbols_changed: "Die Symbole haben sich geändert."
 data.history.attachments_changed: "Der Link oder die Bilder haben sich geändert."
+data.version_major: "v%{major}.x"
+data.replied_to: "Antwort auf %{version}"

@@ -91,3 +91,9 @@ pub fn step_bump(from: SemVer, to: SemVer) -> Bump {
         Bump::Patch
     }
 }
+
+/// The version a reply answered, when the post it replies to has since had a major edit
+/// (V12: "replied to v1.x"); `None` while the reply still answers the same major version.
+pub fn replied_to_older(replied: Option<SemVer>, parent_now: SemVer) -> Option<SemVer> {
+    replied.filter(|replied| parent_now.major > replied.major)
+}

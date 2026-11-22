@@ -5844,3 +5844,4 @@ data.history.switched: "يُعرض الآن %{version}. تبقى جميع الإ
 data.history.switch_failed: "تعذّر عرض هذا الإصدار: %{reason}"
 data.history.tint_changed: "اللون: %{before} → %{after}"
 data.history.symbols_changed: "تغيّرت الرموز."
+data.history.attachments_changed: "تغيّر الرابط أو الصور."

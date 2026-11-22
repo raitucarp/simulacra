@@ -55,5 +55,6 @@ fn look_changes(sheet: &HistorySheet, (a, b): (&Version, &Version), theme: &Them
     let changes = record_changes(&a.record_json, &b.record_json);
     let tint = changes.tint.map(|(before, after)| hint(t!("data.history.tint_changed", before = tint_name(before), after = tint_name(after)).to_string(), theme));
     let symbols = changes.symbols.then(|| hint(tr("data.history.symbols_changed"), theme));
-    tint.into_iter().chain(symbols).collect()
+    let attachments = changes.attachments.then(|| hint(tr("data.history.attachments_changed"), theme)); // V11
+    tint.into_iter().chain(symbols).chain(attachments).collect()
 }

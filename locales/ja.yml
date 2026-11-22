@@ -5844,3 +5844,4 @@ data.history.switched: "%{version} を表示中です。ほかのバージョン
 data.history.switch_failed: "このバージョンを表示できませんでした: %{reason}"
 data.history.tint_changed: "色合い: %{before} → %{after}"
 data.history.symbols_changed: "記号が変わりました。"
+data.history.attachments_changed: "リンクまたは画像が変わりました。"

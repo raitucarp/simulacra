@@ -5844,3 +5844,4 @@ data.history.switched: "Теперь показывается %{version}. Все
 data.history.switch_failed: "Не удалось показать эту версию: %{reason}"
 data.history.tint_changed: "Оттенок: %{before} → %{after}"
 data.history.symbols_changed: "Символы изменились."
+data.history.attachments_changed: "Ссылка или изображения изменились."

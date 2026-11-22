@@ -4,7 +4,7 @@
 //! Each kept version keeps the symbols and tint it showed (V10).
 
 use super::{require_persona, AppState};
-use crate::domain::data::history::{edited_post, is_real_edit, Bump, PostRecord, Revision, RevisionId, RevisionSubject, SemVer, VersionHead};
+use crate::domain::data::history::{edited_post, is_real_edit, Attachments, Bump, PostRecord, Revision, RevisionId, RevisionSubject, SemVer, VersionHead};
 use crate::domain::{first_thread_problem, Post, PostId};
 use crate::error::{AppError, Result};
 use jiff::Timestamp;
@@ -60,7 +60,11 @@ impl AppState {
     pub fn edit_post_version(&mut self, id: &PostId, edit: &PostEdit, now: Timestamp) -> Result<Option<Revision>> {
         let post = self.get_post(id).cloned().ok_or_else(|| missing(id))?;
         require_persona(self.author_of(&post))?;
-        if let Some(problem) = first_thread_problem(&[&edit.content], post.has_attachments() || !post.extras.images.is_empty()) {
+        let shown = PostRecord::of(&post);
+        let mut look = edit.look.clone().unwrap_or_else(|| shown.clone());
+        look.attachments = look.attachments.or_else(|| shown.attachments.clone()); // V11: kept unless the edit sends them
+        super::symbols::check_symbols(self.author_of(&post), &look.symbols)?;
+        if let Some(problem) = first_thread_problem(&[&edit.content], look.attachments.as_ref().is_some_and(Attachments::any)) {
             return Err(AppError::DatabaseError(format!("{:?}", problem.issue)));
         }
         let revisions = self.post_revisions(id);
@@ -68,9 +72,7 @@ impl AppState {
             Some(base) => Some(revisions.iter().find(|r| &r.id == base).ok_or_else(|| AppError::DatabaseError(format!("version '{}' not found", base.as_str())))?),
             None => None,
         };
-        let look = edit.look.clone().unwrap_or_else(|| PostRecord::of(&post));
-        super::symbols::check_symbols(self.author_of(&post), &look.symbols)?;
-        if base.is_none() && !is_real_edit(&post.content, &edit.content) && look == PostRecord::of(&post) {
+        if base.is_none() && !is_real_edit(&post.content, &edit.content) && look == shown {
             return Ok(None);
         }
         let from = base.map_or(post.content.as_str(), |base| base.content.as_str());

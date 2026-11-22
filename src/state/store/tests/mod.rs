@@ -27,3 +27,4 @@ mod symbols;
 mod threads;
 mod versions; // V3
 mod version_looks; // V10
+mod version_attachments; // V11

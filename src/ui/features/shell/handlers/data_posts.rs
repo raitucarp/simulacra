@@ -6,8 +6,6 @@ use super::super::view::AppView;
 use crate::domain::data::saved::{next_position, toggled_bookmark, CollectionEntry, ItemRef};
 use crate::domain::document::CollectionId;
 use crate::domain::preferences::ToastKind;
-use crate::domain::post::Tint;
-use crate::domain::symbols::PostSymbols;
 use crate::domain::PostId;
 use crate::domain::data::history::PostRecord;
 use crate::state::PostEdit;
@@ -49,9 +47,9 @@ impl AppView {
     }
 
     /// Saves the composer's edit of `id` as a new version (V3: its bump and note) with its
-    /// tint (sb C3) and symbols (S5), which are part of the version (V10).
-    pub(crate) fn save_post_edit(&mut self, id: PostId, edit: PostEdit, (tint, symbols): (Option<Tint>, PostSymbols), window: &mut Window, cx: &mut Context<Self>) {
-        let edit = PostEdit { look: Some(PostRecord { symbols, tint }), ..edit }; // V10: the look is part of the version
+    /// tint (sb C3), symbols (S5) and attachments, which are part of the version (V10, V11).
+    pub(crate) fn save_post_edit(&mut self, id: PostId, edit: PostEdit, look: PostRecord, window: &mut Window, cx: &mut Context<Self>) {
+        let edit = PostEdit { look: Some(look), ..edit }; // V10, V11: the look and attachments are part of the version
         let saved = self.state.edit_post_version(&id, &edit, Timestamp::now());
         match saved {
             Ok(revision) => {

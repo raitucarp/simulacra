@@ -5844,3 +5844,4 @@ data.history.switched: "Sekarang menampilkan %{version}. Semua versi lain tetap 
 data.history.switch_failed: "Tidak dapat menampilkan versi ini: %{reason}"
 data.history.tint_changed: "Warna: %{before} → %{after}"
 data.history.symbols_changed: "Simbolnya berubah."
+data.history.attachments_changed: "Tautan atau gambarnya berubah."

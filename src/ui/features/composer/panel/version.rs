@@ -4,7 +4,8 @@
 
 use super::super::version_picker::VersionView;
 use super::ComposerModalPanel;
-use crate::domain::data::history::{Bump, EditBase};
+use crate::domain::data::history::{Attachments, Bump, EditBase, PostRecord};
+use crate::domain::media::ImageAttachment;
 use crate::domain::AuthoredPost;
 use crate::state::PostEdit;
 use gpui_kit::component::input::InputState;
@@ -30,11 +31,11 @@ impl VersionPicker {
 impl ComposerModalPanel {
     /// Opens the composer on `target` (a published post), the edit starting from `base`.
     pub fn open_edit_version(&mut self, target: AuthoredPost, base: EditBase, window: &mut Window, cx: &mut Context<Self>) {
-        let text = base.text.clone();
+        let (text, target_post) = (base.text.clone(), target.post.clone());
         self.open_edit(target, window, cx);
-        if let Some(record) = base.record.clone() {
-            (self.tint, self.symbols.chosen) = (record.tint, record.symbols); // V10: the version's own look
-        }
+        let record = base.record.clone().unwrap_or_else(|| PostRecord::of(&target_post));
+        (self.tint, self.symbols.chosen) = (record.tint, record.symbols); // V10: the version's own look
+        self.prefill_attachments(record.attachments.unwrap_or_else(|| PostRecord::of(&target_post).attachments.unwrap_or_default()), window, cx); // V11
         self.version.base = Some(base);
         if let Some(input) = self.drafts.first().map(|slot| slot.input.clone()) {
             input.update(cx, |state, cx| state.set_value(text, window, cx));
@@ -80,5 +81,23 @@ impl ComposerModalPanel {
         let base = self.version.base.as_ref()?;
         let note = self.version.note.read(cx).value().trim().to_string();
         Some(PostEdit { content: self.first_text(cx), bump: self.version.chosen, note, base: base.revision.clone(), look: None })
+    }
+}
+
+impl ComposerModalPanel {
+    /// Fills the link field and the image tray with the attachments of the version edited
+    /// (V11), each image with its description.
+    fn prefill_attachments(&mut self, attachments: Attachments, window: &mut Window, cx: &mut Context<Self>) {
+        if let Some(link) = attachments.link_url.clone() {
+            self.link_input.update(cx, |state, cx| state.set_value(link, window, cx));
+            self.is_link_input_open = true;
+        }
+        let images = if attachments.images.is_empty() { attachments.image_path.map(ImageAttachment::at).into_iter().collect() } else { attachments.images };
+        for attachment in images {
+            let (placeholder, text) = (t!("composer.media_alt_placeholder").to_string(), attachment.alt.clone());
+            let alt = cx.new(|cx| InputState::new(window, cx).placeholder(placeholder));
+            alt.update(cx, |state, cx| state.set_value(text, window, cx));
+            self.images.push(super::ComposerImage { attachment, alt });
+        }
     }
 }

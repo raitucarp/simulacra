@@ -5844,3 +5844,4 @@ data.history.switched: "Ahora se muestra %{version}. Todas las demás versiones 
 data.history.switch_failed: "No se pudo mostrar esta versión: %{reason}"
 data.history.tint_changed: "Tinte: %{before} → %{after}"
 data.history.symbols_changed: "Los símbolos cambiaron."
+data.history.attachments_changed: "El enlace o las imágenes cambiaron."

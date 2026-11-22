@@ -55,7 +55,7 @@ impl AppView {
             if target.post.lifecycle.is_scheduled() {
                 return self.save_scheduled_edit(target.post.id.clone(), (text, submission.tint), submission.publish_at, window, cx); // Y4
             }
-            return self.save_post_edit(target.post.id.clone(), submission.edit.clone().unwrap_or_else(|| crate::state::PostEdit::text(text)), (submission.tint, submission.symbols.clone()), window, cx); // sb F2, C3, S5, V3
+            return self.save_post_edit(target.post.id.clone(), submission.edit.clone().unwrap_or_else(|| crate::state::PostEdit::text(text)), edit_look(submission), window, cx); // sb F2, C3, S5, V3, V10, V11
         }
         let publish_at = submission.publish_at;
         let (thread, anchor) = thread_from_submission(submission.clone(), self.state.preferences().writing.symbol_shorthand);
@@ -109,4 +109,11 @@ fn thread_from_submission(submission: ComposerSubmission, shorthand: bool) -> (V
         ComposerModalMode::Edit(_) => ThreadAnchor::default(),
     };
     (thread, anchor)
+}
+
+/// The symbols, tint, link and images an edit of a published post gives its new version
+/// (V10, V11).
+fn edit_look(submission: &ComposerSubmission) -> crate::domain::data::history::PostRecord {
+    let attachments = crate::domain::data::history::Attachments::new(submission.link.clone(), submission.images.clone());
+    crate::domain::data::history::PostRecord { symbols: submission.symbols.clone(), tint: submission.tint, attachments: Some(attachments) }
 }

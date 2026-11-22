@@ -1,8 +1,8 @@
 //! Edit mode (sb F2): the composer opened on one of the user's own posts, its text in the
 //! single editor, its tint in the picker (sb C3) and its symbols in theirs (S5). Submitting emits the usual
 //! [`super::ComposerModalEvent::Submit`] in [`ComposerModalMode::Edit`]; the host saves the
-//! new text, keeping the old one as a revision, and the tint. Attachments and added posts
-//! are not offered while editing.
+//! new version, keeping the old one. A published post's link and images can be edited too
+//! (V11); added posts are not offered while editing.
 
 use super::super::modal::ComposerModalMode;
 use super::ComposerModalPanel;

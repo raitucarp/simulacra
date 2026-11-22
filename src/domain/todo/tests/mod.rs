@@ -196,3 +196,4 @@ mod repeat;
 mod entries;
 mod state;
 mod tasks;
+mod complete;

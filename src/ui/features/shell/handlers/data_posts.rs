@@ -44,6 +44,7 @@ impl AppView {
         let Some(post) = self.state.get_post(id).filter(|p| self.state.author_of(p).is_human_persona()) else { return };
         let target = self.state.authored(post);
         let Some(base) = self.state.edit_base(id, from) else { return };
+        self.hand_completion_sources(cx); // D11
         self.composer_modal.update(cx, |panel, cx| panel.open_edit_version(target, base, window, cx));
     }
 

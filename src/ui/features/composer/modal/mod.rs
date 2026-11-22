@@ -114,6 +114,8 @@ pub struct ComposerModalView {
     pub free: Option<super::free_compose::FreeComposeView>,
     /// The to-do syntax help card is open (D1).
     pub todo_help: bool,
+    /// What the to-do word at the cursor could be (D11); `None` while there is nothing to offer.
+    pub todo_suggest: Option<super::todo_suggest::TodoSuggestView>,
     pub callbacks: ModalCallbacks,
     /// sb E1: the atomic-note hint under one draft.
     pub atomic_hint: Option<AtomicHintView>,

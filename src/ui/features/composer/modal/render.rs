@@ -3,6 +3,7 @@
 use super::super::consts::{MODAL_BACKDROP_ID, MODAL_DIALOG_ID};
 use super::super::schedule_picker::schedule_row;
 use super::super::todo_help::todo_help_card;
+use super::super::todo_suggest::todo_suggest_row;
 use super::super::version_picker::version_row;
 use super::reply_context::render_reply_context;
 use super::ComposerModalView;
@@ -56,10 +57,9 @@ impl ComposerModalView {
             .when_some(self.reply_parent(), |this, parent| {
                 this.child(render_reply_context(parent, theme))
             })
-            // 3. Thread: one editor per post, then "Add to thread"
-            .child(self.thread_body())
-            // 4. Why the thread cannot be posted (or why publishing failed)
-            .when_some(self.notice.clone(), |this, notice| this.child(self.notice_row(notice)))
+            .child(self.thread_body()) // 3. Thread: one editor per post, then "Add to thread"
+            .when_some(self.todo_suggest.as_ref(), |this, view| this.child(todo_suggest_row(view, theme))) // 3b. Completing the to-do word at the cursor (D11)
+            .when_some(self.notice.clone(), |this, notice| this.child(self.notice_row(notice))) // 4. Why the thread cannot be posted (or why publishing failed)
             // 5. The container tint of the thread (sb C3)
             .child(self.tint_row())
             // 5b. The symbols of the first post (S5)

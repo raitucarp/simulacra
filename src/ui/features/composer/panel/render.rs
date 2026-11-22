@@ -111,7 +111,7 @@ impl Render for ComposerModalPanel {
             symbols: self.symbol_view(cx),
             version: self.version_view(cx),
             free: self.free_view(cx),
-            todo_help: self.todo_help_open(),
+            todo_help: self.todo_help_open(), todo_suggest: self.todo_suggest_view(cx), // D1, D11
             atomic_hint: self.atomic_hint_view(cx),
             readability: self.readability_view(cx),
             callbacks: callbacks(&cx.entity()),

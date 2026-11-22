@@ -22,6 +22,7 @@ impl AppView {
         window: &mut Window,
         cx: &mut Context<Self>,
     ) {
+        self.hand_completion_sources(cx); // D11
         self.composer_modal.update(cx, |panel, cx| panel.open(mode, window, cx));
         cx.notify();
     }

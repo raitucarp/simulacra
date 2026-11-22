@@ -46,6 +46,7 @@ impl AppView {
         let Some(post) = self.state.scheduled_post(id) else { return };
         let target = self.state.authored(post);
         self.data.scheduled_open = false;
+        self.hand_completion_sources(cx); // D11
         self.composer_modal.update(cx, |panel, cx| panel.open_edit(target, window, cx));
     }
 

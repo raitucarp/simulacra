@@ -33,3 +33,13 @@ impl AppView {
         self.toast(ToastKind::Confirmation, Notification::success(text), window, cx);
     }
 }
+
+impl AppView {
+    /// Hands the composer what to-do completion may offer (D11): the contexts the user's to-dos
+    /// use and the active network's agents.
+    pub(in crate::ui::features::shell) fn hand_completion_sources(&self, cx: &mut Context<Self>) {
+        let agents = self.state.current_network_agents().iter().map(|agent| agent.handle.trim_start_matches('@').to_string()).collect();
+        let sources = crate::domain::todo::complete::CompletionSources { contexts: self.state.task_contexts(), agents };
+        self.composer_modal.update(cx, |panel, _| panel.set_completion_sources(sources));
+    }
+}

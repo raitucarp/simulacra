@@ -23,6 +23,7 @@
 //! Spans are byte ranges into the parsed text, so items and tokens can later be mapped onto
 //! the post body tokens.
 
+pub mod complete; // D11: completing tokens as they are typed
 mod line;
 pub mod due; // D3: due phrases as days
 pub mod entries; // D5: the body as the checklist renders it

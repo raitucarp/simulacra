@@ -123,3 +123,8 @@ fn set_once<T>(slot: &mut Option<T>, value: T) -> bool {
     *slot = Some(value);
     true
 }
+
+/// Whether `line` (without its line ending) is a to-do line.
+pub(super) fn is_todo_line(line: &str) -> bool {
+    parse_line(line, 0).is_some()
+}

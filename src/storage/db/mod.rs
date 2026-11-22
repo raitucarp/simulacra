@@ -52,7 +52,7 @@ mod tests;
 pub use catalogue::{build_catalogue_search, fts_match_expression, CatalogueSearch, DocumentText};
 pub use arena::ArenaRecord;
 pub use journal::StoredRecord;
-pub use posts_fts::post_match_expression;
+pub use posts_fts::{post_match_expression, query_match_expression, search_terms};
 pub use restore::{verify_database_file, DatabaseSummary};
 pub use preferences::{preference_rows, PREFERENCE_KEYS};
 pub use setting_key::SettingKey;

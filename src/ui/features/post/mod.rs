@@ -22,6 +22,7 @@ mod threadline;
 
 pub use actions::ActionClickCallback;
 pub use body::{render_body_tokens, render_post_body, BodyLinks, OpenTextAction};
+pub(crate) use body::render_code_block;
 pub use checklist::{render_post_content, render_task_row, todo_due_label, TodoToggle};
 pub use controls::{post_permalink, share_text, LearnAction, LearnControls, LearnRequestKind, LearnStatus, OpenPostAction, PickPostAction, PostAction, PostCardHandlers};
 pub use excerpt::resolve_wikilink_excerpt;

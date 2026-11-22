@@ -84,3 +84,16 @@ fn an_audio_file_scans_to_its_length() {
     let scan = crate::media::files::scan_file(&file, &dir);
     assert_eq!(scan.preview(), Some(&FilePreview::Audio { seconds: Some(4) }));
 }
+
+#[test]
+fn a_code_file_scans_to_its_first_lines_in_its_language() {
+    use crate::domain::media::files::{FilePreview, TEXT_PREVIEW_LINES};
+    let dir = scratch_media_dir("file-scan-text");
+    let path = dir.join("lib.rs");
+    let source: String = (0..40).map(|n| format!("pub const N{n}: u32 = {n};\n")).collect();
+    std::fs::write(&path, &source).expect("write");
+    let file = read_file_ref(&path).expect("read");
+    let Some(FilePreview::Text { lines, lang, more }) = crate::media::files::scan_file(&file, &dir).preview().cloned() else { panic!("a text preview") };
+    assert_eq!((lines.lines().count(), lang.as_deref(), more), (TEXT_PREVIEW_LINES, Some("rs"), true));
+    assert!(lines.starts_with("pub const N0: u32 = 0;"));
+}

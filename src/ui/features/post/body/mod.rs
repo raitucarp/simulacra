@@ -22,6 +22,9 @@ use layout::{blank_line_after, layout, Item};
 use spoiler::{hidden_spoiler, is_revealed, revealed_spoiler, SpoilerKey};
 use std::rc::Rc;
 
+/// The code block card (B6), also the preview of a text or code file (L9).
+pub(crate) use code_block::code_block as render_code_block;
+
 /// Opens the hashtag or wikilink target named by the string.
 pub type OpenTextAction = Rc<dyn Fn(String, &mut Window, &mut App) + 'static>;
 

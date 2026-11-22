@@ -27,6 +27,9 @@ pub enum FilePreview {
     Video { poster: Option<String>, seconds: Option<u32> },
     /// An audio file and how long it plays (L8).
     Audio { seconds: Option<u32> },
+    /// The first lines of a text or code file and the language that colours them (L9);
+    /// `more` when the file goes on.
+    Text { lines: String, lang: Option<String>, more: bool },
 }
 
 impl FileScan {

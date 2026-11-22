@@ -78,3 +78,16 @@ fn audio_files_show_their_length_and_play() {
     with_audio.extras.files.push(memo);
     assert!(render_post_media(&with_audio, &[] as &[Post], &theme, None).is_some());
 }
+
+#[test]
+fn text_files_show_their_first_lines_once_scanned() {
+    use crate::domain::media::files::{FileFacts, FilePreview, FileScan};
+    use crate::domain::media::{FileRef, MediaCatalog};
+    use crate::import::FormatFamily;
+    let theme = minimalist_dark();
+    let script = FileRef { mime: "text/plain".into(), ..FileRef::at("/home/ann/build.sh") };
+    let _unscanned = super::file_text::text_file(0, &script, FormatFamily::Text, None, &theme);
+    let preview = FilePreview::Text { lines: "#!/bin/sh\necho hi".into(), lang: Some("sh".into()), more: true };
+    let catalog = MediaCatalog::default().with_file(script.path.clone(), FileScan::Present(FileFacts { preview }));
+    let _scanned = super::file_text::text_file(0, &script, FormatFamily::Text, Some(&catalog), &theme);
+}

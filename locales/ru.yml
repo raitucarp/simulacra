@@ -5980,3 +5980,6 @@ search.page.empty_hint: "Попробуйте меньше слов или уб�
 # Q5: saved searches
 search.page.saved: "Сохранённые"
 search.page.save: "Сохранить поиск"
+# Q6: old versions
+search.page.include_versions: "Искать в старых версиях"
+search.page.earlier_version: "в более ранней версии"

@@ -13,7 +13,8 @@ fn byline(row: &SearchRow, theme: &ThemeTokens) -> Div {
     let muted = |text: String| div().flex_none().text_size(theme.font_size_xs).text_color(theme.text_muted).child(text);
     let author = div().min_w_0().truncate().text_size(theme.font_size_sm).font_weight(FontWeight::SEMIBOLD).text_color(theme.text_primary).child(row.author.clone());
     let meaning = row.by_meaning.then(|| muted(t!("search.page.by_meaning").to_string()));
-    div().flex().items_baseline().gap(theme.control_gap).child(author).child(muted(row.handle.clone())).child(muted(row.day.clone())).children(meaning)
+    let earlier = row.earlier.then(|| muted(t!("search.page.earlier_version").to_string())); // Q6
+    div().flex().items_baseline().gap(theme.control_gap).child(author).child(muted(row.handle.clone())).child(muted(row.day.clone())).children(meaning).children(earlier)
 }
 
 fn passage(row: &SearchRow, theme: &ThemeTokens) -> Div {

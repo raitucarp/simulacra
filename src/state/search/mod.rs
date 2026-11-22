@@ -2,6 +2,8 @@
 //!
 //! - **Text** — words (as prefixes) and phrases matched by the full-text index (bm25), or in
 //!   memory when there is no vault.
+//! - **Old versions** (Q6, on request) — posts whose earlier versions match, after the posts
+//!   whose current text does; sealed versions of locked posts are never indexed.
 //! - **Meaning** — posts ranked by the embedded query, when the caller has them.
 //! - **Fusion** — both rankings merge by reciprocal rank, so a post found both ways rises.
 //! - **Filters** — `from:` `kind:` `symbol:` `tint:` `has:` `is:` `before:` `after:` and every
@@ -28,6 +30,7 @@ use crate::domain::PostId;
 use crate::state::AppState;
 use jiff::civil::Date;
 use jiff::tz::TimeZone;
+use std::collections::HashMap;
 
 /// Text matches read before filters narrow them.
 pub const TEXT_CANDIDATES: usize = 5_000;
@@ -44,6 +47,8 @@ pub struct SearchRequest<'a> {
     pub today: Date,
     /// The zone a post's day is read in.
     pub tz: TimeZone,
+    /// Q6: also match the earlier versions of posts (sealed versions are never indexed).
+    pub include_versions: bool,
 }
 
 /// One result.
@@ -56,6 +61,8 @@ pub struct SearchHit {
     pub by_text: bool,
     /// Found by its meaning.
     pub by_meaning: bool,
+    /// Q6: the earlier version's text it was found in, when only an earlier version matched.
+    pub earlier: Option<String>,
 }
 
 impl AppState {
@@ -65,7 +72,10 @@ impl AppState {
         if query.is_empty() {
             return Vec::new();
         }
-        let text = text::ranked(self, query);
+        let mut text = text::ranked(self, query);
+        let earlier = if request.include_versions { text::earlier(self, query, &text) } else { Vec::new() };
+        text.extend(earlier.iter().map(|(id, _)| id.clone()));
+        let mut earlier: HashMap<PostId, String> = earlier.into_iter().collect();
         let meaning = meaning_ranked(request.meaning);
         let fused = if query.words.is_empty() && query.phrases.is_empty() && meaning.is_empty() {
             fuse::listed(self.current_network_posts().map(|post| post.id.clone()))
@@ -75,6 +85,7 @@ impl AppState {
         let when = filters::When { today: request.today, tz: request.tz.clone() };
         fused
             .into_iter()
+            .map(|hit| SearchHit { earlier: earlier.remove(&hit.post_id), ..hit })
             .filter(|hit| self.get_post(&hit.post_id).is_some_and(|post| filters::admits(self, post, hit, query, &when)))
             .take(request.limit)
             .collect()

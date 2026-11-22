@@ -30,7 +30,7 @@ mod post_delete;
 mod post_row;
 mod post_updates;
 mod posts;
-mod posts_fts;
+mod posts_fts; mod revisions_fts; // Q1, Q6
 mod preferences;
 mod profiles;
 mod reactions; // R1

@@ -5980,3 +5980,6 @@ search.page.empty_hint: "试试减少词语或移除一个筛选条件。"
 # Q5: saved searches
 search.page.saved: "已保存"
 search.page.save: "保存搜索"
+# Q6: old versions
+search.page.include_versions: "包含旧版本"
+search.page.earlier_version: "在较早的版本中"

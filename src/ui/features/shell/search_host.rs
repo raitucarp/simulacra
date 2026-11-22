@@ -22,6 +22,8 @@ pub struct SearchHost {
     pub generation: u64,
     /// Q5: the saved searches.
     pub saved: SavedSearches,
+    /// Q6: earlier versions are searched too.
+    pub include_versions: bool,
     _subscription: Subscription,
 }
 
@@ -34,7 +36,7 @@ impl SearchHost {
                 this.on_search_changed(window, cx);
             }
         });
-        Self { input, query: PostQuery::default(), rows: Vec::new(), selected: None, note: None, generation: 0, saved, _subscription: subscription }
+        Self { input, query: PostQuery::default(), rows: Vec::new(), selected: None, note: None, generation: 0, saved, include_versions: false, _subscription: subscription }
     }
 }
 
@@ -52,7 +54,7 @@ impl AppView {
     pub(super) fn search_page(&self, bind: &Binder) -> AnyElement {
         let Some(host) = &self.search else { return div().into_any_element() };
         let on_event = Rc::new(bind.with(Self::on_search_event));
-        let view = SearchView { input: &host.input, query: &host.query, rows: &host.rows, selected: host.selected, note: host.note.as_deref(), saved: &host.saved, on_event };
+        let view = SearchView { input: &host.input, query: &host.query, rows: &host.rows, selected: host.selected, note: host.note.as_deref(), saved: &host.saved, include_versions: host.include_versions, on_event };
         render_search_page(view, &self.theme)
     }
 }

@@ -17,7 +17,7 @@ const FAST: KdfParams = KdfParams { memory_kib: 8, iterations: 1, lanes: 1 };
 
 pub(crate) fn run(state: &AppState, query: &str, meaning: &[ScoredOwner]) -> Vec<PostId> {
     let query = PostQuery::parse(query);
-    let request = SearchRequest { query: &query, meaning, limit: 50, today: date(2026, 11, 23), tz: TimeZone::UTC };
+    let request = SearchRequest { query: &query, meaning, limit: 50, today: date(2026, 11, 23), tz: TimeZone::UTC, include_versions: false };
     state.search(&request).into_iter().map(|hit| hit.post_id).collect()
 }
 
@@ -159,4 +159,41 @@ fn saved_searches_survive_a_reload_of_the_vault() {
     let mut bare = AppState::new_in_memory();
     bare.db = None;
     assert!(bare.saved_searches().items.is_empty(), "nothing without a vault");
+}
+
+// Q6: old versions
+
+fn with_versions(state: &AppState, query: &str) -> Vec<(PostId, Option<String>)> {
+    let query = PostQuery::parse(query);
+    let request = SearchRequest { query: &query, meaning: &[], limit: 50, today: date(2026, 11, 23), tz: TimeZone::UTC, include_versions: true };
+    state.search(&request).into_iter().map(|hit| (hit.post_id, hit.earlier)).collect()
+}
+
+#[test]
+fn old_versions_are_searched_only_when_asked_and_rank_after_current_text() {
+    let mut state = AppState::new_in_memory();
+    let edited = text(&mut state, "a zeppelin at dawn");
+    state.edit_post(&edited, "a dirigible at dusk").expect("edited");
+    let current = text(&mut state, "the zeppelin keeper");
+    assert_eq!(run(&state, "zeppelin", &[]), vec![current.clone()], "off by default");
+    assert_eq!(with_versions(&state, "zeppelin"), vec![(current, None), (edited.clone(), Some("a zeppelin at dawn".to_string()))]);
+    assert_eq!(with_versions(&state, "dirigible"), vec![(edited.clone(), None)], "its current text matches first");
+    assert_eq!(with_versions(&state, "zeppelin dawn -dirigible"), Vec::new(), "exclusions read the post as it is now");
+}
+
+#[test]
+fn sealed_versions_of_a_locked_post_are_never_searched() {
+    use crate::domain::post::lock::seal_text;
+    use crate::state::PostEdit;
+    let mut state = AppState::new_in_memory();
+    let (secret, password) = ("Quetzalcoatl orchard confession", LockPassword::new("seven tidy lanterns"));
+    let locked = state.submit_locked_thread(&[ThreadDraft::text(secret)], &ThreadAnchor::default(), &password, FAST).expect("locked").remove(0);
+    let reworded = "Quetzalcoatl orchard, reworded";
+    let sealed = seal_text(reworded, &password, FAST).expect("sealed");
+    state.edit_locked_post(&locked, &PostEdit::text(reworded), sealed, secret, Timestamp::now()).expect("edited");
+    for query in ["quetzalcoatl", "orchard", "confession", "reworded"] {
+        assert!(with_versions(&state, query).is_empty(), "{query}");
+        let expression = crate::storage::db::query_match_expression(&[query.to_string()], &[]).expect("terms");
+        assert!(state.db.as_ref().expect("vault").score_revisions(&expression, 10).expect("read").is_empty(), "{query} is not indexed");
+    }
 }

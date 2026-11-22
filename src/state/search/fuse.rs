@@ -20,7 +20,7 @@ pub(super) fn fuse(text: &[PostId], meaning: &[PostId]) -> Vec<SearchHit> {
     for (by_meaning, ranking) in [(false, text), (true, meaning)] {
         for (rank, id) in ranking.iter().enumerate() {
             let slot = *at.entry(id).or_insert_with(|| {
-                hits.push(SearchHit { post_id: id.clone(), score: 0.0, by_text: false, by_meaning: false });
+                hits.push(SearchHit { post_id: id.clone(), score: 0.0, by_text: false, by_meaning: false, earlier: None });
                 hits.len() - 1
             });
             let hit = &mut hits[slot];
@@ -38,5 +38,5 @@ pub(super) fn fuse(text: &[PostId], meaning: &[PostId]) -> Vec<SearchHit> {
 
 /// Posts in the given order (a filter-only query), scored by their place.
 pub(super) fn listed(ids: impl Iterator<Item = PostId>) -> Vec<SearchHit> {
-    ids.enumerate().map(|(rank, post_id)| SearchHit { post_id, score: share(rank), by_text: false, by_meaning: false }).collect()
+    ids.enumerate().map(|(rank, post_id)| SearchHit { post_id, score: share(rank), by_text: false, by_meaning: false, earlier: None }).collect()
 }

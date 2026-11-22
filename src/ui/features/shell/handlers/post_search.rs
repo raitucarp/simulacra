@@ -66,7 +66,7 @@ impl AppView {
 
     fn show_search_results(&mut self, meaning: &[ScoredOwner], note: Option<String>, cx: &mut Context<Self>) {
         let Some(host) = self.search.as_ref() else { return };
-        let request = SearchRequest { query: &host.query, meaning, limit: PAGE_RESULTS, today: crate::time::local_now().date(), tz: TimeZone::system() };
+        let request = SearchRequest { query: &host.query, meaning, limit: PAGE_RESULTS, today: crate::time::local_now().date(), tz: TimeZone::system(), include_versions: host.include_versions };
         let rows: Vec<SearchRow> = self.state.search(&request).iter().filter_map(|hit| search_row(&self.state, hit, &host.query)).collect();
         let host = self.search.as_mut().expect("checked above");
         host.selected = (!rows.is_empty()).then_some(0);
@@ -90,6 +90,10 @@ impl AppView {
                 return;
             }
             SearchEvent::Open(id) => return self.open_search_hit(id, window, cx),
+            SearchEvent::ToggleVersions => {
+                host.include_versions = !host.include_versions;
+                return self.on_search_changed(window, cx);
+            }
             saved @ (SearchEvent::SaveQuery | SearchEvent::OpenSaved(_) | SearchEvent::ForgetSaved(_)) => return self.on_saved_search(saved, window, cx),
         };
         if let Some(query) = rewrite {
@@ -127,5 +131,6 @@ fn search_row(state: &AppState, hit: &SearchHit, query: &PostQuery) -> Option<Se
     let author = state.author_of(post);
     let day = crate::time::local_date(post.created_at).to_string();
     let by_meaning = hit.by_meaning && !hit.by_text;
-    Some(SearchRow { post_id: post.id.clone(), author: author.name.clone(), handle: author.display_handle(), day, snippet: snippet(&post.content, query), by_meaning })
+    let shown = hit.earlier.as_deref().unwrap_or(&post.content); // Q6: the version that matched
+    Some(SearchRow { post_id: post.id.clone(), author: author.name.clone(), handle: author.display_handle(), day, snippet: snippet(shown, query), by_meaning, earlier: hit.earlier.is_some() })
 }

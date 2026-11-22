@@ -5980,3 +5980,6 @@ search.page.empty_hint: "Coba lebih sedikit kata atau hapus sebuah filter."
 # Q5: saved searches
 search.page.saved: "Tersimpan"
 search.page.save: "Simpan pencarian"
+# Q6: old versions
+search.page.include_versions: "Sertakan versi lama"
+search.page.earlier_version: "di versi sebelumnya"

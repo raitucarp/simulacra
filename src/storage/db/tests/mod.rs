@@ -11,6 +11,7 @@ mod media;
 mod post_shape;
 mod posts;
 mod posts_fts;
+mod revisions_fts; // Q6
 mod preferences;
 mod reactions;
 mod review;

@@ -17,6 +17,7 @@ use rust_i18n::t;
 const ROOT_ID: &str = "search-page";
 const ACTIVE_ID: &str = "search-filter";
 const QUICK_ID: &str = "search-quick";
+const VERSIONS_ID: &str = "search-versions";
 /// The mark a removable chip ends with.
 const REMOVE_MARK: &str = "×";
 
@@ -44,7 +45,8 @@ fn chips(view: &SearchView<'_>, theme: &ThemeTokens) -> Div {
         chip(format!("{QUICK_ID}-{n}"), &filter.to_text(), false, SearchEvent::ToggleFilter(filter.clone()), &view.on_event, theme)
     });
     let label = div().flex_none().text_size(theme.font_size_xs).text_color(theme.text_muted).child(t!("search.page.filters").to_string());
-    div().flex().items_center().flex_wrap().gap(theme.control_gap).child(label).child(chip_row(theme).children(active).children(quick))
+    let versions = chip(VERSIONS_ID.to_string(), &t!("search.page.include_versions"), view.include_versions, SearchEvent::ToggleVersions, &view.on_event, theme); // Q6
+    div().flex().items_center().flex_wrap().gap(theme.control_gap).child(label).child(chip_row(theme).children(active).children(quick).child(versions))
 }
 
 fn header(view: &SearchView<'_>, theme: &ThemeTokens) -> Div {

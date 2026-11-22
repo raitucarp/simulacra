@@ -79,3 +79,18 @@ impl Haystack {
         self.joined.matches(&format!(" {} ", terms.join(" "))).count()
     }
 }
+
+/// Q6: posts not in `found` whose earlier versions match every word and phrase of `query`,
+/// best first, each with the text of its best matching version (none without a vault).
+/// Locked posts never match: their versions are sealed, and a post locked later is skipped.
+pub(super) fn earlier(state: &AppState, query: &PostQuery, found: &[PostId]) -> Vec<(PostId, String)> {
+    let Some(expression) = query_match_expression(&query.words, &query.phrases) else { return Vec::new() };
+    let versions = state.db.as_ref().and_then(|db| db.score_revisions(&expression, TEXT_CANDIDATES).ok()).unwrap_or_default();
+    let mut seen: std::collections::HashSet<PostId> = found.iter().cloned().collect();
+    versions
+        .into_iter()
+        .filter(|(id, _, _)| state.get_post(id).is_some_and(|post| post.network_id == state.active_network_id && !post.is_locked()))
+        .filter(|(id, _, _)| seen.insert(id.clone()))
+        .map(|(id, text, _)| (id, text))
+        .collect()
+}

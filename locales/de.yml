@@ -5980,3 +5980,6 @@ search.page.empty_hint: "Versuche weniger Wörter oder entferne einen Filter."
 # Q5: saved searches
 search.page.saved: "Gespeichert"
 search.page.save: "Suche speichern"
+# Q6: old versions
+search.page.include_versions: "Alte Versionen einbeziehen"
+search.page.earlier_version: "in einer früheren Version"

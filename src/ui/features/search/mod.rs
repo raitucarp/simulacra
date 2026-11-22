@@ -42,6 +42,8 @@ pub enum SearchEvent {
     OpenSaved(String),
     /// Q5: forgets a saved query.
     ForgetSaved(String),
+    /// Q6: includes earlier versions of posts, or stops including them.
+    ToggleVersions,
 }
 
 pub type SearchAction = Rc<dyn Fn(SearchEvent, &mut Window, &mut App) + 'static>;
@@ -57,6 +59,8 @@ pub struct SearchRow {
     pub snippet: Snippet,
     /// Found by its meaning.
     pub by_meaning: bool,
+    /// Q6: found in an earlier version (the snippet is from that version).
+    pub earlier: bool,
 }
 
 /// What the page shows.
@@ -69,5 +73,7 @@ pub struct SearchView<'a> {
     pub note: Option<&'a str>,
     /// Q5: the saved searches.
     pub saved: &'a SavedSearches,
+    /// Q6: earlier versions are searched too.
+    pub include_versions: bool,
     pub on_event: SearchAction,
 }

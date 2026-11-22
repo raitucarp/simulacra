@@ -5953,3 +5953,5 @@ composer.feeling.search_placeholder: "Buscar emoji"
 composer.feeling.problem.no_emoji: "Escolha pelo menos um emoji."
 composer.feeling.problem.too_many_emojis: "Escolha no máximo %{count} emojis."
 composer.feeling.problem.note_too_long: "Limite a nota a %{count} caracteres."
+# M4: the feelings filter
+feed.feelings: "Sentimentos"

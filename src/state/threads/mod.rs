@@ -24,11 +24,13 @@ pub enum FeedTab {
     Dialectic,
     /// Captured posts (quick capture, paste, drop): the second brain's inbox.
     Inbox,
+    /// Conversations with a feeling in them (M4).
+    Feelings,
 }
 
 impl FeedTab {
     /// Every tab, in display order.
-    pub const ALL: [Self; 3] = [Self::ForYou, Self::Dialectic, Self::Inbox];
+    pub const ALL: [Self; 4] = [Self::ForYou, Self::Dialectic, Self::Inbox, Self::Feelings];
 
     /// Whether a grouped conversation belongs to this tab.
     pub fn includes(self, conversation: &[&Post]) -> bool {
@@ -36,6 +38,7 @@ impl FeedTab {
             Self::ForYou => true,
             Self::Dialectic => conversation.len() > 1 || conversation.iter().any(|p| p.is_quote()),
             Self::Inbox => conversation.iter().any(|p| crate::state::AppState::is_capture(p)),
+            Self::Feelings => conversation.iter().any(|p| p.kind.is_feeling()),
         }
     }
 }

@@ -32,7 +32,17 @@ impl AppState {
     /// reposts included, scheduled ones too), newest first (ties by id), on `page`. Empty
     /// past the last page.
     pub fn posts_by(&self, profile: &ProfileId, page: Page) -> Vec<&Post> {
-        let mut written: Vec<&Post> = self.posts.iter().chain(&self.scheduled).filter(|post| &post.author_id == profile).collect();
+        self.written_by(profile, page, |_| true)
+    }
+
+    /// The feelings `profile` posted (M4: a profile's feelings filter), newest first, on
+    /// `page`.
+    pub fn feelings_by(&self, profile: &ProfileId, page: Page) -> Vec<&Post> {
+        self.written_by(profile, page, |post| post.kind.is_feeling())
+    }
+
+    fn written_by(&self, profile: &ProfileId, page: Page, keep: impl Fn(&Post) -> bool) -> Vec<&Post> {
+        let mut written: Vec<&Post> = self.posts.iter().chain(&self.scheduled).filter(|post| &post.author_id == profile && keep(post)).collect();
         written.sort_by(|a, b| b.created_at.cmp(&a.created_at).then_with(|| b.id.as_str().cmp(a.id.as_str())));
         written.into_iter().skip(page.offset()).take(page.size).collect()
     }

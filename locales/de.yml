@@ -5959,3 +5959,7 @@ feed.feelings: "Gefühle"
 forge.ui.engine.map.feeling: "Gefühl"
 forge.ui.engine.may_feel: "Darf Gefühle posten"
 forge.ui.engine.may_feel_hint: "Standardmäßig aus. Wenn an, darf die Antwort ein Gefühl enthalten (ein bis drei Emojis, eine Stärke und eine kurze Notiz), und der Beitrag erscheint als Gefühl."
+# M6: a feeling also logs a mood check-in
+prefs.row.writing.feeling_checkins.title: "Meine Gefühle im Tagebuch festhalten"
+prefs.row.writing.feeling_checkins.description: "Wenn eine deiner Personas ein Gefühl postet, kommt ein Stimmungs-Check-in mit der Notiz in dein privates Tagebuch. Aus dem Tagebuch gelangt nichts zurück in den Feed."
+prefs.row.writing.feeling_checkins.keywords: "gefühl, stimmung, check-in, tagebuch, emotion"

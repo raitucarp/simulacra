@@ -4,6 +4,7 @@ mod capsule;
 mod entries;
 mod focus;
 mod mood;
+mod feeling_checkin; // M6
 mod privacy;
 mod prompts;
 

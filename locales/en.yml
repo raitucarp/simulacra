@@ -5959,3 +5959,7 @@ feed.feelings: "Feelings"
 forge.ui.engine.map.feeling: "Feeling"
 forge.ui.engine.may_feel: "May post feelings"
 forge.ui.engine.may_feel_hint: "Off by default. When on, the answer may carry a feeling (one to three emoji, an intensity and a short note), and the post goes out as a feeling."
+# M6: a feeling also logs a mood check-in
+prefs.row.writing.feeling_checkins.title: "Log my feelings in the journal"
+prefs.row.writing.feeling_checkins.description: "When one of your personas posts a feeling, a mood check-in with its note is added to your private journal. Nothing from the journal goes back to the feed."
+prefs.row.writing.feeling_checkins.keywords: "feeling, mood, check-in, journal, emotion"

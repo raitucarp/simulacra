@@ -62,7 +62,10 @@ impl AppView {
             return self.save_post_edit(target.post.id.clone(), submission.edit.clone().unwrap_or_else(|| crate::state::PostEdit::text(text)), edit_look(submission), window, cx); // sb F2, C3, S5, V3, V10, V11
         }
         if let Some(feeling) = submission.feeling.clone() {
-            let posted = self.state.submit_feeling(feeling, &thread_from_submission(submission.clone(), false).1).map(Some);
+            let posted = self.state.submit_feeling(feeling.clone(), &thread_from_submission(submission.clone(), false).1).map(Some);
+            if posted.is_ok() {
+                self.log_feeling_checkin(&feeling, cx); // M6: opt-in, into the private journal only
+            }
             return self.after_publish(posted, submission, window, cx); // M2: one feeling
         }
         if let Some(password) = submission.lock.clone() {

@@ -5959,3 +5959,7 @@ feed.feelings: "Ressentis"
 forge.ui.engine.map.feeling: "Ressenti"
 forge.ui.engine.may_feel: "Peut publier des ressentis"
 forge.ui.engine.may_feel_hint: "Désactivé par défaut. Activé, la réponse peut porter un ressenti (un à trois emojis, une intensité et une courte note) et la publication paraît comme un ressenti."
+# M6: a feeling also logs a mood check-in
+prefs.row.writing.feeling_checkins.title: "Consigner mes ressentis dans le journal"
+prefs.row.writing.feeling_checkins.description: "Quand l’un de vos personas publie un ressenti, un point d’humeur avec sa note est ajouté à votre journal privé. Rien du journal ne revient dans le fil."
+prefs.row.writing.feeling_checkins.keywords: "ressenti, humeur, point, journal, émotion"

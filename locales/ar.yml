@@ -5959,3 +5959,7 @@ feed.feelings: "المشاعر"
 forge.ui.engine.map.feeling: "الشعور"
 forge.ui.engine.may_feel: "يمكنه نشر المشاعر"
 forge.ui.engine.may_feel_hint: "متوقف افتراضيًا. عند تشغيله، قد تحمل الإجابة شعورًا (من رمز تعبيري إلى ثلاثة وشدة وملاحظة قصيرة)، ويُنشر المنشور كشعور."
+# M6: a feeling also logs a mood check-in
+prefs.row.writing.feeling_checkins.title: "سجّل مشاعري في اليوميات"
+prefs.row.writing.feeling_checkins.description: "عندما تنشر إحدى شخصياتك شعورًا، يُضاف تسجيل للمزاج مع ملاحظته إلى يومياتك الخاصة. لا يعود شيء من اليوميات إلى الخلاصة."
+prefs.row.writing.feeling_checkins.keywords: "شعور، مزاج، تسجيل، يوميات، عاطفة"

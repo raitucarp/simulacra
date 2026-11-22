@@ -5959,3 +5959,7 @@ feed.feelings: "Sentimentos"
 forge.ui.engine.map.feeling: "Sentimento"
 forge.ui.engine.may_feel: "Pode publicar sentimentos"
 forge.ui.engine.may_feel_hint: "Desligado por padrão. Quando ligado, a resposta pode trazer um sentimento (de um a três emojis, uma intensidade e uma nota curta) e a publicação sai como sentimento."
+# M6: a feeling also logs a mood check-in
+prefs.row.writing.feeling_checkins.title: "Registrar meus sentimentos no diário"
+prefs.row.writing.feeling_checkins.description: "Quando uma das suas personas publica um sentimento, um registro de humor com a nota é adicionado ao seu diário privado. Nada do diário volta para o feed."
+prefs.row.writing.feeling_checkins.keywords: "sentimento, humor, registro, diário, emoção"

@@ -5959,3 +5959,7 @@ feed.feelings: "心情"
 forge.ui.engine.map.feeling: "心情"
 forge.ui.engine.may_feel: "可以发布心情"
 forge.ui.engine.may_feel_hint: "默认关闭。开启后，回答可附带一种心情（一到三个表情、强度和简短备注），帖子将以心情形式发布。"
+# M6: a feeling also logs a mood check-in
+prefs.row.writing.feeling_checkins.title: "将我的心情记入日记"
+prefs.row.writing.feeling_checkins.description: "你的某个角色发布心情时，会在私人日记中添加一条带备注的心情打卡。日记中的内容不会回到信息流。"
+prefs.row.writing.feeling_checkins.keywords: "心情, 情绪, 打卡, 日记, 感受"

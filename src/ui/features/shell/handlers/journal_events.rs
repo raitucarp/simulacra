@@ -57,7 +57,7 @@ impl AppView {
 }
 
 /// Queues saving `record` and hands it back.
-fn store<T: StoredRecord + Clone>(vault: Option<&crate::storage::Vault>, record: T) -> T {
+pub(super) fn store<T: StoredRecord + Clone>(vault: Option<&crate::storage::Vault>, record: T) -> T {
     if let Some(vault) = vault {
         if let Err(err) = vault.save_journal_record(record.clone()) {
             eprintln!("simulacra: journal record not saved: {err}");

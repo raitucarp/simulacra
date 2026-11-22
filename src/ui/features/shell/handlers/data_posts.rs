@@ -25,6 +25,7 @@ impl AppView {
                 self.report_data_error(set, window, cx);
             }
             DataEvent::SetAutoDelete(id, after) => self.request_auto_delete(id, after, window, cx),
+            DataEvent::SetEntryState(id, to) => self.set_entry_state(&id, to, window, cx), // S7
             DataEvent::ToggleBookmark(id) => self.toggle_bookmark(&id, window, cx),
             DataEvent::AddToCollection(id, collection) => self.file_post(&id, &collection, window, cx),
             DataEvent::RemoveFromCollection(id, collection) => self.remove_entry(&collection, ItemRef::Post(id), cx),

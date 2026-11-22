@@ -50,6 +50,8 @@ pub enum DataEvent {
     SetAutoArchive(PostId, ArchiveAfter),
     /// Deletes the post this long from now (`None` keeps it, Y7).
     SetAutoDelete(PostId, Option<DeleteAfter>),
+    /// Moves the post's entry to this state (S7).
+    SetEntryState(PostId, crate::domain::symbols::EntryState),
     OpenPostHistory(PostId),
     ToggleBookmark(PostId),
     AddToCollection(PostId, CollectionId),

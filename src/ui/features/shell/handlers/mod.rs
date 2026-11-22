@@ -26,6 +26,7 @@ mod data_saved;
 mod data_scheduled; // Y4
 mod data_shelf;
 mod data_snapshot;
+mod entry_state; // S7
 mod image_ideas;
 mod image_ideas_apply;
 mod image_ideas_open;

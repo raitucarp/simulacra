@@ -11,6 +11,7 @@ mod captures;
 mod controls;
 mod data_fixes;
 mod day_filter;
+mod entry_state;
 mod forge;
 mod heartbeat;
 mod index;

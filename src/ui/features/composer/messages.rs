@@ -38,6 +38,7 @@ pub fn publish_error_message(error: &AppError) -> String {
             let issue = DraftIssue::TooLong { actual: *actual, max: *max };
             thread_problem_message(&ThreadProblem { index: 0, issue })
         }
+        AppError::InvalidSymbols => t!("symbols.error.not_allowed").to_string(), // S7
         other => t!("composer.error_publish", reason = other.to_string()).to_string(),
     }
 }

@@ -48,6 +48,7 @@ impl DataSource {
             history_open: self.history_open,
             lifecycle: PostLifecycle::default(),
             auto_archive: None,
+            symbols: Default::default(),
             on_event: self.on_event.clone(),
         }
     }
@@ -67,6 +68,8 @@ pub struct DataControls {
     pub lifecycle: PostLifecycle,
     /// The "Archive automatically" choice the post follows, if any (Y6).
     pub auto_archive: Option<ArchiveAfter>,
+    /// The post's symbols (S7: its entry's state moves); set by the feed.
+    pub symbols: crate::domain::symbols::PostSymbols,
     pub on_event: DataAction,
 }
 
@@ -103,6 +106,7 @@ pub fn with_data_items(menu: PopupMenu, controls: Option<&DataControls>, window:
     if controls.own {
         menu = menu.item(item(tr("data.menu.edit"), LucideIcon::Pencil, DataEvent::EditPost(post.clone()), &controls.on_event));
         menu = super::lifecycle_menu::with_lifecycle_items(menu, &controls, window, cx); // Y5, Y6
+        menu = super::state_menu::with_state_items(menu, &controls, window, cx); // S7
     }
     if controls.revisions > 0 {
         let label = t!("data.menu.history", count = controls.revisions).to_string();

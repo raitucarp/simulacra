@@ -3,6 +3,7 @@
 
 use super::super::consts::MODAL_SUBMIT_POST_BTN_ID;
 use super::super::format::format_buttons;
+use super::super::free_compose::free_button;
 use super::super::preview::preview_button;
 use super::super::schedule_picker::schedule_button;
 use super::super::symbol_picker::symbol_picker;
@@ -89,6 +90,7 @@ impl ComposerModalView {
             .child(toggle)
             .when(!self.preview, |row| row.child(format_buttons(MODAL_FORMAT_SCOPE, self.callbacks.on_format.clone(), theme)))
             .when(self.can_schedule(), |row| row.child(schedule_button(self.schedule.is_some(), self.callbacks.on_toggle_schedule.clone())))
+            .when(!self.is_editing(), |row| row.child(free_button(self.free.is_some(), self.callbacks.on_toggle_free.clone()))) // T2
             .child(hint)
     }
 }

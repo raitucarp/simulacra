@@ -16,6 +16,9 @@ pub struct ThreadDraft {
     pub tint: Option<crate::domain::post::Tint>,
     /// The symbol set picked in the composer (S2: personas only).
     pub symbols: crate::domain::symbols::PostSymbols,
+    /// The earlier draft of the thread this one replies to (T4: a tree); `None` replies to
+    /// the draft before it (the anchor's target for the first), a chain.
+    pub reply_to: Option<usize>,
 }
 
 impl ThreadDraft {
@@ -54,7 +57,8 @@ fn missing(kind: &str, id: &PostId) -> AppError {
 
 impl AppState {
     /// Publishes `drafts` as a thread: the first post replies to `anchor.reply_to` (or is a new
-    /// root) and quotes `anchor.quote_of`; each later post replies to the one before it.
+    /// root) and quotes `anchor.quote_of`; each later post replies to the draft it names, or to
+    /// the one before it (T4: a tree, not only a chain).
     ///
     /// All drafts are validated up front, so an invalid draft stores nothing. Returns the new
     /// post ids in thread order.
@@ -68,7 +72,7 @@ impl AppState {
         Ok(ids)
     }
 
-    /// Validates the anchor and every draft, returning the chained (not yet stored) posts.
+    /// Validates the anchor and every draft, returning the linked (not yet stored) posts.
     pub(super) fn build_thread(&self, drafts: &[ThreadDraft], anchor: &ThreadAnchor) -> Result<Vec<Post>> {
         if drafts.is_empty() {
             return Err(AppError::EmptyContent);
@@ -82,9 +86,9 @@ impl AppState {
                 return Err(missing(kind, id));
             }
         }
-        let mut parent = anchor.reply_to.clone();
-        let mut posts = Vec::with_capacity(drafts.len());
+        let mut posts: Vec<Post> = Vec::with_capacity(drafts.len());
         for (index, draft) in drafts.iter().enumerate() {
+            let parent = parent_of(index, draft, &posts, anchor)?;
             let mut post = Post::create_with_attachments(
                 Self::new_post_id(),
                 self.active_network_id.clone(),
@@ -92,16 +96,25 @@ impl AppState {
                 &draft.content,
                 draft.link.clone(),
                 draft.image.clone(),
-                parent.take(),
+                parent,
                 if index == 0 { anchor.quote_of.clone() } else { None },
                 None,
             )?;
             post.extras.images = draft.images.clone();
             post.extras.tint = draft.tint;
             post.extras.symbols = draft.symbols.clone();
-            parent = Some(post.id.clone());
             posts.push(post);
         }
         Ok(posts)
+    }
+}
+
+/// The post draft `index` replies to (T4): the earlier draft it names, else the one before
+/// it (the anchor's reply target for the first).
+fn parent_of(index: usize, draft: &ThreadDraft, posts: &[Post], anchor: &ThreadAnchor) -> Result<Option<PostId>> {
+    match draft.reply_to {
+        Some(at) if at < index => Ok(Some(posts[at].id.clone())),
+        Some(at) => Err(AppError::DatabaseError(format!("draft {index} replies to draft {at}, which does not come before it"))),
+        None => Ok(posts.last().map(|post| post.id.clone()).or_else(|| anchor.reply_to.clone())),
     }
 }

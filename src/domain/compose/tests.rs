@@ -126,3 +126,55 @@ fn strip_bullet_reports_markers() {
     assert_eq!(strip_bullet("+ a"), None);
     assert_eq!(strip_bullet(""), None);
 }
+
+#[test]
+fn the_preview_lists_posts_in_thread_order_with_depth_and_line() {
+    let text = "First\n\n  - a reply\n        - jumped in\n* second root\n";
+    let lines = compose_lines(text);
+    let got: Vec<(usize, usize, &str)> = lines.iter().map(|l| (l.line, l.depth, l.text.as_str())).collect();
+    assert_eq!(got, vec![(0, 0, "First"), (2, 1, "a reply"), (3, 2, "jumped in"), (4, 0, "second root")]);
+    assert_eq!(lines.len(), draft_count(&split_compose(text)), "the preview counts what the splitter makes");
+    assert_eq!(lines[0].chars, 5);
+    assert!(compose_lines("  \n-\n").is_empty());
+}
+
+#[test]
+fn a_post_over_the_limit_is_flagged_by_visible_length() {
+    let long = "x".repeat(12);
+    let lines = compose_lines(&format!("**{long}**\nshort"));
+    assert_eq!(lines[0].chars, 12, "markup does not count");
+    assert!(lines[0].is_over(10) && !lines[0].is_over(12));
+    assert!(!lines[1].is_over(10));
+}
+
+#[test]
+fn splitting_a_long_line_keeps_its_indent_bullet_and_neighbours() {
+    let text = "Intro\n  - One two three. Four five six.\nOutro";
+    let split = split_line(text, 1, 16);
+    assert_eq!(split, "Intro\n  - One two three.\n  - Four five six.\nOutro");
+    let depths: Vec<usize> = compose_lines(&split).iter().map(|l| l.depth).collect();
+    assert_eq!(depths, vec![0, 1, 1, 0], "both pieces reply where the line did");
+    assert_eq!(split_line("Short", 0, 16), "Short", "a line that fits is left alone");
+    assert_eq!(split_line("Short", 7, 16), "Short", "no such line");
+    assert_eq!(split_line("alpha beta gamma\r\nnext", 0, 11), "alpha beta\r\ngamma\r\nnext");
+    assert_eq!(split_line("\tplain words here", 0, 11), "\tplain words\n\there");
+}
+
+#[test]
+fn each_post_names_the_post_it_replies_to() {
+    let parents: Vec<Option<usize>> = compose_lines("A\n  - a1\n    - a1x\n  - a2\nB\nC\n  - c1").iter().map(|l| l.parent).collect();
+    assert_eq!(parents, vec![None, Some(0), Some(1), Some(0), Some(0), Some(4), Some(5)], "main-thread posts chain; indented ones reply to the line above them");
+}
+
+#[test]
+fn shorthand_is_read_per_line_after_the_bullet() {
+    use crate::domain::symbols::{EntrySymbol, Signifier};
+    let lines = read_shorthand(compose_lines("Plans\n  - . Call the bakery\n  - * o Market at nine\n  - just a thought\n.\n"));
+    let entries: Vec<Option<EntrySymbol>> = lines.iter().map(|l| l.symbols.entry).collect();
+    assert_eq!(entries, vec![None, Some(EntrySymbol::Task), Some(EntrySymbol::Event), None, None]);
+    assert_eq!(lines[1].text, "Call the bakery");
+    assert_eq!(lines[1].chars, "Call the bakery".chars().count(), "the length counts the text after the markers");
+    assert_eq!(lines[2].symbols.signifiers, vec![Signifier::Priority]);
+    assert_eq!(lines[4].text, ".", "a marker with nothing after it stays text");
+    assert_eq!(lines.iter().map(|l| l.parent).collect::<Vec<_>>(), vec![None, Some(0), Some(0), Some(0), Some(0)], "reading markers keeps the tree");
+}

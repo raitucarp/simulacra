@@ -96,6 +96,7 @@ impl AppView {
     fn sync_composer_view(&self, cx: &mut Context<Self>) {
         let current_profile = self.state.current_profile();
         let current_theme = &self.theme;
+        let shorthand = self.state.preferences().writing.symbol_shorthand;
         self.feed.composer_view.update(cx, |composer, cx| {
             composer.set_profile(current_profile, cx);
             composer.set_theme(current_theme, cx);
@@ -103,6 +104,7 @@ impl AppView {
         self.composer_modal.update(cx, |panel, cx| {
             panel.set_profile(current_profile, cx);
             panel.set_theme(current_theme, cx);
+            panel.set_shorthand(shorthand, cx); // T5
         });
         let media_dir = self.state.media_dir();
         self.composer_modal.update(cx, |panel, _| panel.set_media_dir(media_dir));

@@ -11,10 +11,14 @@
 //! - `\r\n` line endings are handled; text is trimmed of surrounding whitespace.
 
 mod lines;
+mod outline; // T2: the preview of the split
+mod split_line; // T3: "split this line"
 #[cfg(test)]
 mod tests;
 
 pub use lines::{indent_level, strip_bullet};
+pub use outline::{compose_lines, read_shorthand, ComposeLine};
+pub use split_line::split_line;
 
 /// One post draft and the drafts that reply to it.
 #[derive(Debug, Clone, PartialEq, Eq, Default)]

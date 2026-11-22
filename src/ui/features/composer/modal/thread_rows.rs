@@ -3,6 +3,7 @@
 use super::super::avatar::composer_avatar;
 use super::super::consts::{MODAL_ADD_DRAFT_BTN_ID, MODAL_FALLBACK_INITIAL, MODAL_THREAD_SCROLL_ID};
 use super::super::messages::render_notice;
+use super::super::free_compose::free_preview;
 use super::ComposerModalView;
 use crate::ui::icons::LucideIcon;
 use gpui_kit::base::Disableable;
@@ -29,7 +30,8 @@ impl ComposerModalView {
             .flex_col()
             .overflow_y_scroll()
             .children(rows)
-            .children((!self.is_editing()).then(|| self.add_row()))
+            .children(self.free.as_ref().map(|view| free_preview(view, &self.theme))) // T2: the split, live
+            .children((!self.is_editing() && self.free.is_none()).then(|| self.add_row()))
     }
 
     /// Small avatar and "Add to thread" (disabled until the last post has text).

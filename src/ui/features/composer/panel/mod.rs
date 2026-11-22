@@ -8,7 +8,7 @@ mod actions;
 mod atomic;
 mod drafts;
 mod edit; // sb F2: edit mode
-mod format; mod host; mod media; mod preview; mod readability; pub mod readability_meter; mod render; mod schedule; mod symbols; mod version; // sb F3: the readability meter; posts B: formatting
+mod format; mod host; mod media; mod preview; mod readability; pub mod readability_meter; mod render; mod schedule; mod symbols; mod version; mod free; // T2: free compose; sb F3: the readability meter; posts B: formatting
 
 use super::consts::MODAL_LINK_PLACEHOLDER;
 use super::modal::ComposerModalMode;
@@ -37,6 +37,8 @@ pub struct ComposerSubmission {
     pub symbols: crate::domain::symbols::PostSymbols,
     /// The version the edit of a published post makes (V3); `None` for new posts.
     pub edit: Option<crate::state::PostEdit>,
+    /// The draft each post replies to when composing freely (T4: a tree); empty for a chain.
+    pub replies_to: Vec<Option<usize>>,
 }
 
 /// Events emitted by [`ComposerModalPanel`].
@@ -81,7 +83,7 @@ pub struct ComposerModalPanel {
     atomic: atomic::AtomicHintState, // sb E1: the atomic-note hint
     readability: readability::ReadabilityState, // sb F3: the readability meter
     /// Drafts shown through the post body renderer instead of their editors.
-    preview: bool,
+    preview: bool, free: free::FreeCompose, // T2: the first editor is free compose text, one post per line
     tint: Option<Tint>, // sb C3: the picked container tint
     schedule: schedule::SchedulePicker, // Y3: the "Schedule…" picker
     symbols: symbols::SymbolPicker, // S5: the symbol picker
@@ -119,7 +121,7 @@ impl ComposerModalPanel {
             error: None,
             theme,
             profile,
-            atomic: Default::default(), readability: Default::default(), preview: false, tint: None, schedule, symbols, version, _subscriptions: Vec::new(),
+            atomic: Default::default(), readability: Default::default(), preview: false, free: Default::default(), tint: None, schedule, symbols, version, _subscriptions: Vec::new(),
         };
         panel._subscriptions = panel.subscribe(window, cx);
         panel.drafts.push(panel.new_draft_slot(window, cx));

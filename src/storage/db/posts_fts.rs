@@ -35,6 +35,8 @@ const CREATE_POSTS_FTS: &str = r#"
     WHEN old.content != '' BEGIN
         DELETE FROM posts_fts WHERE post_id = old.id;
     END;
+    -- Q7: leaving scheduled posts out reads only them, not every post.
+    CREATE INDEX IF NOT EXISTS idx_posts_status ON posts(status);
 "#;
 
 /// Rebuilds the index from `posts`.
@@ -53,23 +55,27 @@ pub fn search_terms(text: &str) -> impl Iterator<Item = String> + '_ {
     text.split(|c: char| !c.is_alphanumeric()).filter(|term| !term.is_empty()).map(str::to_lowercase)
 }
 
-/// Words as quoted prefixes (each at least [`MIN_TERM_CHARS`] long).
-fn word_terms(text: &str) -> impl Iterator<Item = String> + '_ {
-    search_terms(text).filter(|term| term.chars().count() >= MIN_TERM_CHARS).map(|term| format!("\"{term}\"*"))
+/// The searchable words of `words` (terms at least [`MIN_TERM_CHARS`] long), in order.
+pub fn word_terms(words: &[String]) -> Vec<String> {
+    words.iter().flat_map(|word| search_terms(word).filter(|term| term.chars().count() >= MIN_TERM_CHARS).collect::<Vec<_>>()).collect()
 }
 
 /// The FTS5 expression for `text`: every term (letters and digits, at least
 /// [`MIN_TERM_CHARS`] long) required, each as a quoted prefix, so user text can never inject
 /// FTS syntax. `None` without terms.
 pub fn post_match_expression(text: &str) -> Option<String> {
-    query_match_expression(&[text.to_string()], &[])
+    let terms: Vec<String> = word_terms(&[text.to_string()]).into_iter().map(|term| format!("\"{term}\"*")).collect();
+    (!terms.is_empty()).then(|| terms.join(" "))
 }
 
-/// The FTS5 expression for a query (Q3): every word required as a prefix and every phrase
-/// as consecutive terms, all quoted so nothing typed is read as FTS syntax. `None` without
-/// terms.
+/// The FTS5 expression for a query (Q3): every word required, whole except the last, which
+/// is a prefix (the one still being typed; a prefix of every word made common prefixes cost
+/// most of a search at 100 000 posts, Q7), and every phrase as consecutive terms. All quoted,
+/// so nothing typed is read as FTS syntax. `None` without terms.
 pub fn query_match_expression(words: &[String], phrases: &[String]) -> Option<String> {
-    let words = words.iter().flat_map(|word| word_terms(word));
+    let terms = word_terms(words);
+    let last = terms.len().saturating_sub(1);
+    let words = terms.iter().enumerate().map(|(n, term)| if n == last { format!("\"{term}\"*") } else { format!("\"{term}\"") });
     let phrases = phrases.iter().filter_map(|phrase| {
         let terms: Vec<String> = search_terms(phrase).collect();
         (!terms.is_empty()).then(|| format!("\"{}\"", terms.join(" ")))

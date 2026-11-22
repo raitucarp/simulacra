@@ -7,7 +7,7 @@ use crate::domain::document::query::MIN_TERM_CHARS;
 use crate::domain::search_query::PostQuery;
 use crate::domain::{Post, PostId};
 use crate::state::AppState;
-use crate::storage::db::{query_match_expression, search_terms};
+use crate::storage::db::{query_match_expression, search_terms, word_terms as all_word_terms};
 
 /// The active network's posts matching every word and phrase of `query`, best first (none
 /// without words or phrases). Locked posts never match: only their placeholder is stored.
@@ -22,13 +22,16 @@ pub(super) fn ranked(state: &AppState, query: &PostQuery) -> Vec<PostId> {
     found.into_iter().filter(wanted).collect()
 }
 
-/// Word and phrase matching over the posts held in memory, most occurrences first.
+/// Word and phrase matching over the posts held in memory, most occurrences first: every
+/// word whole but the last, which may be a prefix (as the index reads them).
 fn in_memory(state: &AppState, query: &PostQuery) -> Vec<PostId> {
+    let terms = all_word_terms(&query.words);
+    let last = terms.len().saturating_sub(1);
     let mut scored: Vec<(usize, &Post)> = state
         .current_network_posts()
         .filter_map(|post| {
             let text = Haystack::of(&post.content);
-            let words: Option<usize> = query.words.iter().flat_map(|word| word_terms(word)).map(|term| text.prefixed(&term)).map(|n| (n > 0).then_some(n)).sum();
+            let words: Option<usize> = terms.iter().enumerate().map(|(n, term)| if n == last { text.prefixed(term) } else { text.whole(term) }).map(|n| (n > 0).then_some(n)).sum();
             let phrases: Option<usize> = query.phrases.iter().map(|phrase| text.phrase(phrase)).map(|n| (n > 0).then_some(n)).sum();
             Some((words? + phrases?, post))
         })
@@ -63,6 +66,11 @@ impl Haystack {
         let terms: Vec<String> = search_terms(text).collect();
         let joined = format!(" {} ", terms.join(" "));
         Self { terms, joined }
+    }
+
+    /// How many terms are `term`.
+    fn whole(&self, term: &str) -> usize {
+        self.terms.iter().filter(|t| *t == term).count()
     }
 
     /// How many terms start with `term`.

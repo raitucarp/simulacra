@@ -1,6 +1,6 @@
 //! The search executor (Q3): one ranked list of posts for a parsed [`PostQuery`].
 //!
-//! - **Text** — words (as prefixes) and phrases matched by the full-text index (bm25), or in
+//! - **Text** — words (whole, the last as a prefix) and phrases matched by the full-text index (bm25), or in
 //!   memory when there is no vault.
 //! - **Old versions** (Q6, on request) — posts whose earlier versions match, after the posts
 //!   whose current text does; sealed versions of locked posts are never indexed.
@@ -13,6 +13,8 @@
 //! out until due. A locked post (X2) is never found by its text or meaning (its text is sealed,
 //! only the placeholder is stored); it is found only by filters such as `is:locked`.
 
+#[cfg(test)]
+mod bench; // Q7: 100 000 posts, run with --ignored
 mod dates;
 mod filters;
 mod fuse;

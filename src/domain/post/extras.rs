@@ -38,6 +38,9 @@ pub struct PostExtras {
     /// The version of the post it replies to when it was written (V12).
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replied_version: Option<crate::domain::data::history::SemVer>,
+    /// The boxes the reader ticked (D6): kept out of the text, so ticking makes no version.
+    #[serde(skip_serializing_if = "crate::domain::todo::state::TodoState::is_empty")]
+    pub todo_state: crate::domain::todo::state::TodoState,
 }
 
 impl PostExtras {
@@ -46,10 +49,10 @@ impl PostExtras {
         self == &Self::default()
     }
 
-    /// Whether there is anything to show behind the post (the origin, images, symbols, tint and
-    /// version alone are not).
+    /// Whether there is anything to show behind the post (the origin, images, symbols, tint,
+    /// version and ticks alone are not).
     pub fn has_details(&self) -> bool {
-        Self { origin: None, images: Vec::new(), symbols: PostSymbols::default(), tint: None, head: None, replied_version: None, ..self.clone() } != Self::default()
+        Self { origin: None, images: Vec::new(), symbols: PostSymbols::default(), tint: None, head: None, replied_version: None, todo_state: Default::default(), ..self.clone() } != Self::default()
     }
 
     /// Adds `source` unless an identical reference is already listed.

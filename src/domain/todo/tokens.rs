@@ -78,7 +78,7 @@ fn number_with_unit(text: &str, unit: char) -> (Option<u32>, &str) {
 }
 
 fn raw(text: &str) -> Option<&str> {
-    let valid = text.chars().all(|c| c.is_alphanumeric() || RAW_EXTRA.contains(&c));
+    let valid = text.chars().all(|c| c.is_alphanumeric() || c.is_whitespace() || RAW_EXTRA.contains(&c)); // whitespace only inside a joined `^next month`
     (valid && !text.is_empty()).then_some(text)
 }
 

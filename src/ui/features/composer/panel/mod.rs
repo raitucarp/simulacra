@@ -8,7 +8,7 @@ mod actions;
 mod atomic;
 mod drafts;
 mod edit; // sb F2: edit mode
-mod format; mod host; mod media; mod preview; mod readability; pub mod readability_meter; mod render; mod schedule; mod symbols; mod version; mod free; // T2: free compose; sb F3: the readability meter; posts B: formatting
+mod format; mod host; mod media; mod preview; mod readability; pub mod readability_meter; mod render; mod schedule; mod symbols; mod version; mod free; mod todo; // T2: free compose; sb F3: the readability meter; posts B: formatting; D1: to-do help
 
 use super::consts::MODAL_LINK_PLACEHOLDER;
 use super::modal::ComposerModalMode;
@@ -87,7 +87,7 @@ pub struct ComposerModalPanel {
     tint: Option<Tint>, // sb C3: the picked container tint
     schedule: schedule::SchedulePicker, // Y3: the "Schedule…" picker
     symbols: symbols::SymbolPicker, // S5: the symbol picker
-    version: version::VersionPicker, // V3: the bump and note of an edit
+    version: version::VersionPicker, todo: todo::TodoAssist, // V3: the bump and note of an edit; D1: to-do help
     _subscriptions: Vec<Subscription>,
 }
 
@@ -121,7 +121,7 @@ impl ComposerModalPanel {
             error: None,
             theme,
             profile,
-            atomic: Default::default(), readability: Default::default(), preview: false, free: Default::default(), tint: None, schedule, symbols, version, _subscriptions: Vec::new(),
+            atomic: Default::default(), readability: Default::default(), preview: false, free: Default::default(), tint: None, schedule, symbols, version, todo: Default::default(), _subscriptions: Vec::new(),
         };
         panel._subscriptions = panel.subscribe(window, cx);
         panel.drafts.push(panel.new_draft_slot(window, cx));

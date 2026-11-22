@@ -8,6 +8,7 @@ use super::super::preview::preview_button;
 use super::super::schedule_picker::schedule_button;
 use super::super::symbol_picker::symbol_picker;
 use super::super::tint_picker::tint_picker;
+use super::super::todo_help::todo_help_button;
 use gpui_kit::prelude::FluentBuilder;
 use super::ComposerModalView;
 use gpui_kit::base::Disableable;
@@ -91,6 +92,7 @@ impl ComposerModalView {
             .when(!self.preview, |row| row.child(format_buttons(MODAL_FORMAT_SCOPE, self.callbacks.on_format.clone(), theme)))
             .when(self.can_schedule(), |row| row.child(schedule_button(self.schedule.is_some(), self.callbacks.on_toggle_schedule.clone())))
             .when(!self.is_editing(), |row| row.child(free_button(self.free.is_some(), self.callbacks.on_toggle_free.clone()))) // T2
+            .child(todo_help_button(self.todo_help, self.callbacks.on_toggle_todo_help.clone())) // D1
             .child(hint)
     }
 }

@@ -28,6 +28,7 @@ pub mod shell;
 pub mod sidebar_left;
 pub mod sidebar_right;
 pub mod symbols; // epic S
+pub mod tasks; // D9: the Tasks page
 pub mod splash;
 pub mod thinking;
 pub mod title_bar;

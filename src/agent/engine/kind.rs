@@ -1,4 +1,5 @@
-//! What an engine job generates: a reply to a post, or a new top-level post from a seed.
+//! What an engine job generates: a reply to a post, a new top-level post from a seed, or a
+//! progress reply on a to-do the post's author delegated to the agent (D12).
 
 use super::reply::{build_reply, build_root_post};
 use super::DialecticEngine;
@@ -12,6 +13,8 @@ pub enum JobKind {
     Reply(AuthoredPost),
     /// Start a new conversation, seeded by an optional topic and/or vault document.
     NewPost(ResolvedSeed),
+    /// Reply to `parent` with progress on its to-do `item`, handed to the agent (D12).
+    Progress { parent: AuthoredPost, item: String },
 }
 
 impl JobKind {
@@ -20,6 +23,7 @@ impl JobKind {
         match self {
             Self::Reply(parent) => DialecticEngine::persona_user_prompt(parent, agent),
             Self::NewPost(seed) => DialecticEngine::root_user_prompt(agent, seed),
+            Self::Progress { parent, item } => DialecticEngine::progress_user_prompt(parent, agent, item),
         }
     }
 
@@ -28,13 +32,14 @@ impl JobKind {
         match self {
             Self::Reply(parent) => DialecticEngine::generate_heuristic_text(parent, agent),
             Self::NewPost(seed) => DialecticEngine::generate_heuristic_root_text(agent, seed),
+            Self::Progress { item, .. } => DialecticEngine::generate_progress_text(agent, item),
         }
     }
 
     /// The post carrying `content` and `extras`; a new post also cites its seed document.
     pub(super) fn post(&self, agent: Profile, network: NetworkId, content: String, extras: PostExtras) -> Post {
         let mut post = match self {
-            Self::Reply(parent) => build_reply(parent, agent, network, content),
+            Self::Reply(parent) | Self::Progress { parent, .. } => build_reply(parent, agent, network, content),
             Self::NewPost(_) => build_root_post(agent, network, content),
         };
         post.extras = extras;

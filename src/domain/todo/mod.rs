@@ -2,7 +2,7 @@
 //!
 //! ```text
 //! [ ] open   [x] done   [>] migrated   [<] scheduled   [~] dropped   [/] delegated
-//! ^fri  ^2026-12-01  ^+3d     due (raw phrase)
+//! ^fri  ^2026-12-01  ^+3d     due (raw phrase; `^next month` is one token, see [`due`])
 //! ^^daily  ^^mon,wed  ^^15th  repeat (raw rule)
 //! !  !!  !!!                  priority 1..3
 //! &home                       context
@@ -23,7 +23,16 @@
 //! Spans are byte ranges into the parsed text, so items and tokens can later be mapped onto
 //! the post body tokens.
 
+pub mod complete; // D11: completing tokens as they are typed
 mod line;
+pub mod delegate; // D12: items handed to agents
+pub mod due; // D3: due phrases as days
+pub mod entries; // D5: the body as the checklist renders it
+pub mod repeat; // D4: repeat rules and their next occurrence
+pub mod state; // D6: ticked boxes, kept out of the text
+pub mod syntax; // D1: the help card rows
+pub mod tasks; // D9: the Tasks view across posts
+pub mod tick; // D7: what a tick does to the other to-dos
 mod tokens;
 #[cfg(test)]
 mod tests;
@@ -80,6 +89,15 @@ pub struct TodoItem {
     pub tokens: Vec<TodoToken>,
     pub meta: TodoMeta,
     pub children: Vec<TodoItem>,
+}
+
+impl TodoItem {
+    /// The day the item is due, reading its phrase from `written`, the day the post was
+    /// written in the user's time zone (D3); `None` without a due phrase or with one that is
+    /// not a date.
+    pub fn due_date(&self, written: jiff::civil::Date) -> Option<jiff::civil::Date> {
+        due::resolve_due(self.meta.due.as_deref()?, written)
+    }
 }
 
 /// Parses every to-do line of `text` into a tree (see the module rules).

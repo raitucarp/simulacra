@@ -17,6 +17,8 @@ mod symbol_picker; // S5
 mod tint_picker;
 mod version_picker; // V3
 mod free_compose; // T2
+mod todo_help; // D1
+mod todo_suggest; // D11
 
 pub use inline::{PostComposerView, SubmitPostCallback};
 pub use format::format_label_key;

@@ -22,6 +22,7 @@ impl AppView {
             false => self.state.submit_post(content),
         };
         let post_id = published.map_err(|err| publish_error_message(&err))?;
+        self.dispatch_delegations(window, cx); // D12
         self.reveal_post(post_id, window, cx);
         Ok(())
     }

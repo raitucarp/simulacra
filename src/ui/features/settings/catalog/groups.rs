@@ -82,7 +82,7 @@ const PRIVACY: &[SettingsGroup] = &[
 ];
 const NOTIFICATIONS: &[SettingsGroup] = &[group(
     "toasts",
-    &[Field(F::Notifications(Ntf::Toasts)), Field(F::Notifications(Ntf::Confirmations)), Field(F::Notifications(Ntf::AiFailures)), Field(F::Notifications(Ntf::AgentActivity))],
+    &[Field(F::Notifications(Ntf::Toasts)), Field(F::Notifications(Ntf::Confirmations)), Field(F::Notifications(Ntf::AiFailures)), Field(F::Notifications(Ntf::AgentActivity)), Field(F::Notifications(Ntf::DueReminders))],
 )];
 const SHORTCUTS: &[SettingsGroup] = &[group("keymap", &[Action(Cmd::OpenKeymap)])];
 const ADVANCED: &[SettingsGroup] = &[

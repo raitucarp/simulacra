@@ -97,6 +97,8 @@ command_ids! {
     ShowArgumentMap => "show_argument_map",
     /// sb F1: the Arena page, a new debate or experiment, and either on the open thought.
     GoArena => "go_arena",
+    /// D9: the Tasks page.
+    GoTasks => "go_tasks",
     NewDebate => "new_debate",
     NewThoughtExperiment => "new_thought_experiment",
     DebateOpenThought => "debate_open_thought",

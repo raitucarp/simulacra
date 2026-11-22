@@ -54,6 +54,7 @@ fn callbacks(entity: &Entity<ComposerModalPanel>) -> ModalCallbacks {
         on_pick_symbol: pick_symbol(entity),
         on_toggle_symbol_search: act(entity, P::toggle_symbol_search),
         on_toggle_free: act(entity, P::toggle_free),
+        on_toggle_todo_help: act(entity, P::toggle_todo_help),
     }
 }
 
@@ -110,6 +111,7 @@ impl Render for ComposerModalPanel {
             symbols: self.symbol_view(cx),
             version: self.version_view(cx),
             free: self.free_view(cx),
+            todo_help: self.todo_help_open(), todo_suggest: self.todo_suggest_view(cx), // D1, D11
             atomic_hint: self.atomic_hint_view(cx),
             readability: self.readability_view(cx),
             callbacks: callbacks(&cx.entity()),

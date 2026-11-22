@@ -108,6 +108,7 @@ theme_tokens! {
         insight_lane_height, insight_lane_label_width, insight_axis_height, insight_brush_min_width, insight_cell_gap, insight_list_max_height, insight_meter_width, insight_meter_height, insight_peak_ring_width, // sb F3: concept timeline lanes and brush, detail lists, composer readability meter
         emoji_picker_width, emoji_picker_grid_height, emoji_cell_size, // epic R: emoji picker (width, scrolling grid, one cell)
         symbol_badge_size, symbol_badge_offset, symbol_outline_size, symbol_progress_width, symbol_progress_height, // epic S: signifier badges on a symbol face, the symbol of an outline bullet, an icon set download bar
+        todo_help_sample_width, todo_indent, todo_box_size, tasks_page_max_width, tasks_filter_label_width, // epic D: to-dos (the syntax help card, the indent of a nested item, a box, the Tasks page and its filter labels)
     ],
     // Typography Hierarchy & Line Height; heatmap level opacities; graph dimming & curvature
     floats: [

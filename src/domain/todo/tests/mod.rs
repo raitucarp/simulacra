@@ -189,3 +189,11 @@ fn lines_inside_code_fences_are_not_items() {
 fn whitespace_between_words_is_collapsed() {
     assert_eq!(one("[ ]   lots \t of   space  ").text, "lots of space");
 }
+
+mod syntax;
+mod due;
+mod repeat;
+mod entries;
+mod state;
+mod tasks;
+mod complete;

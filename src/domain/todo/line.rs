@@ -52,7 +52,7 @@ fn scan(text: &str, base: usize) -> (String, Vec<TodoToken>, TodoMeta) {
     let mut words = Vec::new();
     let mut tokens = Vec::new();
     let mut meta = TodoMeta::default();
-    for (start, word) in words_with_offsets(text) {
+    for (start, word) in joined_due_words(text, words_with_offsets(text)) {
         match TokenValue::parse(word) {
             Some(value) if meta.accept(value) => {
                 let span: Span = base + start..base + start + word.len();
@@ -77,6 +77,22 @@ fn words_with_offsets(text: &str) -> Vec<(usize, &str)> {
     }
     if let Some(begin) = start {
         out.push((begin, &text[begin..]));
+    }
+    out
+}
+
+/// `words` with `^next` and the word completing it (`^next month`) joined into one (D3).
+fn joined_due_words<'a>(text: &'a str, words: Vec<(usize, &'a str)>) -> Vec<(usize, &'a str)> {
+    let mut out: Vec<(usize, &'a str)> = Vec::with_capacity(words.len());
+    for (start, word) in words {
+        let joins = out.last().is_some_and(|(_, last)| {
+            let phrase = last.strip_prefix('^').filter(|p| !p.starts_with('^') && super::due::takes_next_word(p));
+            phrase.is_some_and(|p| super::due::resolve_due(&format!("{p} {word}"), jiff::civil::date(2000, 1, 1)).is_some())
+        });
+        match out.last_mut() {
+            Some((first, joined)) if joins => *joined = &text[*first..start + word.len()],
+            _ => out.push((start, word)),
+        }
     }
     out
 }
@@ -106,4 +122,9 @@ fn set_once<T>(slot: &mut Option<T>, value: T) -> bool {
     }
     *slot = Some(value);
     true
+}
+
+/// Whether `line` (without its line ending) is a to-do line.
+pub(super) fn is_todo_line(line: &str) -> bool {
+    parse_line(line, 0).is_some()
 }

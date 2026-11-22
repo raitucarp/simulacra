@@ -26,6 +26,7 @@ impl AppView {
             }
             DataEvent::SetAutoDelete(id, after) => self.request_auto_delete(id, after, window, cx),
             DataEvent::SetEntryState(id, to) => self.set_entry_state(&id, to, window, cx), // S7
+            DataEvent::ToggleTodo(id, index) => self.toggle_todo(&id, index, window, cx), // D6
             DataEvent::ToggleBookmark(id) => self.toggle_bookmark(&id, window, cx),
             DataEvent::AddToCollection(id, collection) => self.file_post(&id, &collection, window, cx),
             DataEvent::RemoveFromCollection(id, collection) => self.remove_entry(&collection, ItemRef::Post(id), cx),
@@ -43,6 +44,7 @@ impl AppView {
         let Some(post) = self.state.get_post(id).filter(|p| self.state.author_of(p).is_human_persona()) else { return };
         let target = self.state.authored(post);
         let Some(base) = self.state.edit_base(id, from) else { return };
+        self.hand_completion_sources(cx); // D11
         self.composer_modal.update(cx, |panel, cx| panel.open_edit_version(target, base, window, cx));
     }
 

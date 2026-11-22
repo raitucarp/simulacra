@@ -22,6 +22,7 @@ impl AppView {
         window: &mut Window,
         cx: &mut Context<Self>,
     ) {
+        self.hand_completion_sources(cx); // D11
         self.composer_modal.update(cx, |panel, cx| panel.open(mode, window, cx));
         cx.notify();
     }
@@ -65,7 +66,7 @@ impl AppView {
         };
         match published {
             Ok(last) => {
-                self.remember_symbols(&submission.symbols, cx); // S5
+                self.remember_symbols(&submission.symbols, cx); self.dispatch_delegations(window, cx); // S5; D12: agents handed a to-do reply
                 self.close_composer_modal(window, cx);
                 match (last, publish_at) {
                     (Some(last), _) => self.reveal_post(last, window, cx),

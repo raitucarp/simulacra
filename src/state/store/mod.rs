@@ -45,6 +45,7 @@ mod settings;
 mod seed_catalogue;
 mod snapshot;
 mod symbols; // epic S
+mod todos; mod tasks; mod reminders; mod delegations; // D6: ticked boxes; D9: the Tasks view; D10: due reminders; D12: delegated items
 mod threads;
 mod upgrade;
 mod wikilinks;
@@ -62,6 +63,7 @@ pub use post_meta::PostMeta;
 pub use post_versions::PostEdit;
 pub use network_create::{network_slug, validate_network_name, NetworkNameError, MAX_NETWORK_NAME_CHARS};
 pub use threads::{ThreadAnchor, ThreadDraft};
+pub use todos::toggled; pub use reminders::DueReminder; pub use delegations::DelegationJob;
 pub use wikilinks::WikilinkTarget;
 
 use crate::domain::{GroundingDocument, Network, NetworkId, Post, Profile, ProfileId, TrendingTopic};
@@ -88,10 +90,9 @@ pub enum NavigationTab {
     Appearance,
     /// Charts and graph analytics of the network (sb D2).
     Insights,
-    /// The private journal, mood log, focus sessions and time capsules (sb E3).
-    Journal,
-    /// Debates and thought experiments between agents (sb F1).
-    Arena,
+    Journal, // The private journal, mood log, focus sessions and time capsules (sb E3).
+    Arena, // Debates and thought experiments between agents (sb F1).
+    Tasks, // Every to-do of the user's posts, with due, priority and context filters (D9).
 }
 
 /// Application state container.

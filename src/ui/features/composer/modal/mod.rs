@@ -78,6 +78,8 @@ pub struct ModalCallbacks {
     pub on_toggle_symbol_search: ModalActionCallback,
     /// Switches free compose on or off (T2).
     pub on_toggle_free: ModalActionCallback,
+    /// Opens or closes the to-do syntax help card (D1).
+    pub on_toggle_todo_help: ModalActionCallback,
 }
 
 /// Stateless dialog rendering a composer snapshot.
@@ -110,6 +112,10 @@ pub struct ComposerModalView {
     pub version: Option<super::version_picker::VersionView>,
     /// The preview of the split while composing freely (T2).
     pub free: Option<super::free_compose::FreeComposeView>,
+    /// The to-do syntax help card is open (D1).
+    pub todo_help: bool,
+    /// What the to-do word at the cursor could be (D11); `None` while there is nothing to offer.
+    pub todo_suggest: Option<super::todo_suggest::TodoSuggestView>,
     pub callbacks: ModalCallbacks,
     /// sb E1: the atomic-note hint under one draft.
     pub atomic_hint: Option<AtomicHintView>,

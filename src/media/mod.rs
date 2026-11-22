@@ -6,8 +6,10 @@
 //! - [`fetch`]: one link preview (page, then its image), capped in size, time and redirects,
 //!   `http(s)` only, without cookies, referrers or anything about the user.
 //! - [`images`]: attachments stored by content hash, image scans and cached thumbnails.
+//! - [`files`]: local files linked to posts (epic L): their references.
 
 pub mod fetch;
+pub mod files;
 pub mod images;
 
 #[cfg(test)]

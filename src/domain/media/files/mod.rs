@@ -3,8 +3,10 @@
 //! open it, show it in its folder and notice when it has moved or changed.
 
 mod file_ref;
+mod kind;
 
 pub use file_ref::{FileRef, MAX_FILES_PER_POST};
+pub use kind::{detect_mime, file_family, SNIFF_BYTES, UNKNOWN_MIME};
 
 #[cfg(test)]
 mod tests;

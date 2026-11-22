@@ -9,7 +9,7 @@ mod name;
 mod tests;
 
 pub use format::{Format, FormatFamily};
-pub use name::extension_of;
+pub use name::{extension_of, format_of_mime};
 
 /// Formats that live inside a zip container.
 const ZIP_BASED: [Format; 3] = [Format::Epub, Format::Docx, Format::Odt];

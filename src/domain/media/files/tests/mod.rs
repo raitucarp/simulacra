@@ -55,3 +55,5 @@ fn a_post_with_a_file_has_an_attachment() {
     post.extras.files.push(report());
     assert!(post.has_attachments());
 }
+
+mod kind;

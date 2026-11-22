@@ -3,6 +3,7 @@
 
 mod fake; // P2: this binary as a fake runtime
 mod run; // P2
+mod runtimes; // P3
 
 use super::{detect, find_on_path};
 use crate::domain::code::Runtime;

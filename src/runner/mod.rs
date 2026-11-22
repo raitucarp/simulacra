@@ -19,7 +19,7 @@ pub mod tree;
 #[cfg(test)]
 mod tests;
 
-pub use code::{run_code, RunSpec, DIR_PLACEHOLDER};
+pub use code::{run_code, runtime_cache_dir, spec_for, RunSpec, CACHE_PLACEHOLDER, DIR_PLACEHOLDER};
 pub use probe::{detect, detect_all, find_on_path, version_of};
 pub use process::{Captured, End, Limits};
 

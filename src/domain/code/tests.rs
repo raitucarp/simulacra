@@ -34,3 +34,31 @@ fn the_cache_round_trips_and_reads_unknown_rows_as_never_detected() {
     assert!(restored.get(Runtime::Go).is_none());
     assert_eq!(RuntimeCache::from_json(r#"{"found":[{"runtime":"cobol","path":"x","version":"1"}]}"#), RuntimeCache::default());
 }
+
+// P3: the language → command table
+
+#[test]
+fn language_tags_pick_their_runtime() {
+    let cases = [("python", Runtime::Python), ("Py", Runtime::Python), ("js", Runtime::Node), ("javascript", Runtime::Node), ("ts", Runtime::Deno), ("lua", Runtime::Lua), ("go", Runtime::Go), ("rb", Runtime::Ruby), ("php", Runtime::Php)];
+    for (tag, runtime) in cases {
+        assert_eq!(runtime_for(tag), Some(runtime), "{tag}");
+    }
+    for tag in ["", "rust", "sh", "bash", "powershell", "cmd", "text"] {
+        assert_eq!(runtime_for(tag), None, "{tag} never runs");
+    }
+}
+
+#[test]
+fn every_runtime_runs_its_file_with_a_fixed_command_line() {
+    for runtime in Runtime::ALL {
+        let run = runtime.invocation();
+        assert_eq!(run.args.last().map(String::as_str), Some(run.file_name), "{runtime:?} runs the code file last");
+        assert!(run.file_name.starts_with("main.") && crate::runner::folder::is_plain_name(run.file_name));
+        assert!(run.env.iter().any(|(name, value)| name == "NO_COLOR" && value == "1"));
+        assert!(run.env.iter().all(|(_, value)| !value.contains('{') || value == "{dir}" || value == "{cache}"), "{runtime:?}");
+    }
+    assert_eq!(&Runtime::Python.invocation().args[..2], ["-I", "-B"], "isolated, no bytecode files");
+    assert_eq!(Runtime::Go.invocation().args, ["run", "main.go"]);
+    assert!(Runtime::Go.invocation().env.contains(&("GOPROXY".into(), "off".into())), "no module downloads");
+    assert_eq!(Runtime::Php.invocation().args[0], "-n", "no php.ini");
+}

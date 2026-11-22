@@ -23,7 +23,7 @@ fn fake_args() -> Vec<String> {
 /// A spec running the fake runtime in `mode` on `code`.
 pub(super) fn spec(mode: &str, code: &str, limits: Limits) -> RunSpec {
     let program = std::env::current_exe().expect("test binary");
-    RunSpec { program, args: fake_args(), file_name: CODE_FILE.into(), code: code.into(), env: vec![(MODE.into(), mode.into())], limits }
+    RunSpec { program, args: fake_args(), file_name: CODE_FILE.into(), code: code.into(), env: vec![(MODE.into(), mode.into())], cache: None, limits }
 }
 
 /// Runs the fake runtime.

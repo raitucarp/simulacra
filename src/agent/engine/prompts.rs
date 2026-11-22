@@ -64,7 +64,7 @@ impl DialecticEngine {
             &parent_post.author.name,
             &parent_post.author.handle,
             parent_post.id.as_str(),
-            &parent_post.content,
+            &crate::domain::media::files::with_files_note(&parent_post.content, &parent_post.extras.files), // L13: file names and facts, never contents
             is_mentioned,
         )
     }

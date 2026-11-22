@@ -29,6 +29,8 @@ mod tests;
 mod tests_root;
 #[cfg(test)]
 mod tests_progress;
+#[cfg(test)]
+mod tests_files; // L13
 
 pub use job::EngineJob;
 pub use kind::JobKind;

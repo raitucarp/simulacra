@@ -26,7 +26,7 @@ impl AppView {
         let conversation = build_conversation(&self.state, post, ReplyLimits::UNLIMITED);
         let line = |post: &Post, depth: usize| {
             let author = self.state.author_of(post);
-            ThreadLine::new(&author.name, &author.handle, &post.content, depth)
+            ThreadLine::new(&author.name, &author.handle, &crate::domain::media::files::with_files_note(&post.content, &post.extras.files), depth) // L13
         };
         let replies = conversation.branches.iter().flat_map(|branch| {
             std::iter::once(line(branch.reply, DIRECT_DEPTH)).chain(branch.nested.iter().map(|nested| line(nested, NESTED_DEPTH)))

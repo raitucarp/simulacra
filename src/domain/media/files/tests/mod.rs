@@ -58,3 +58,14 @@ fn a_post_with_a_file_has_an_attachment() {
 
 mod kind;
 mod text;
+
+#[test]
+fn the_agent_note_lists_names_and_facts_only() {
+    let note = files_note(&[report(), FileRef { mime: "text/plain".into(), size: 2_048, ..FileRef::at("/home/ann/notes.txt") }]);
+    assert!(note.starts_with("Attached files (names and facts only"), "{note}");
+    assert!(note.contains("- Q3 summary.PDF (pdf, application/pdf, 1.2 MB, modified 2026-11-02)"), "{note}");
+    assert!(note.contains("- notes.txt (text, text/plain, 2 KB)"), "{note}");
+    assert!(!note.contains("Users") && !note.contains(&"ab".repeat(32)), "no folders and no hashes: {note}");
+    assert_eq!(files_note(&[]), "");
+    assert_eq!(with_files_note("just text", &[]), "just text");
+}

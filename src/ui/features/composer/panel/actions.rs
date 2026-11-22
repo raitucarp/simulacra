@@ -17,7 +17,8 @@ impl ComposerModalPanel {
         let enter = cx.subscribe_in(&self.image_input, window, Self::on_image_path_event);
         let schedule = cx.subscribe(&self.schedule.input, notify_on_change);
         let symbols = cx.subscribe(&self.symbols.search, notify_on_change);
-        vec![link, image, enter, schedule, symbols]
+        let [password, repeat] = [&self.lock.password, &self.lock.repeat].map(|input| cx.subscribe(input, notify_on_change)); // X3: the strength meter
+        vec![link, image, enter, schedule, symbols, password, repeat]
     }
 
     /// Attaches the typed image path on Enter and empties the field.
@@ -49,6 +50,7 @@ impl ComposerModalPanel {
         self.reset_schedule(window, cx);
         self.reset_symbols(window, cx);
         self.reset_version(window, cx);
+        self.reset_lock(window, cx); // X3
         if let Some(first) = self.drafts.first() {
             first.input.update(cx, |state, cx| state.set_value("", window, cx));
         }
@@ -56,8 +58,8 @@ impl ComposerModalPanel {
 
     /// Emits the thread for publishing (or scheduling, Y3), or re-renders to explain why it
     /// cannot be posted.
-    pub fn submit(&mut self, _: &mut Window, cx: &mut Context<Self>) {
-        let (Ok(publish_at), None) = (self.schedule_choice(cx).transpose(), self.submit_problem(cx)) else {
+    pub fn submit(&mut self, window: &mut Window, cx: &mut Context<Self>) {
+        let (Ok(publish_at), None, false) = (self.schedule_choice(cx).transpose(), self.submit_problem(cx), self.lock_blocks(cx)) else {
             cx.notify();
             return;
         };
@@ -65,8 +67,8 @@ impl ComposerModalPanel {
         let link = (!link_val.trim().is_empty()).then(|| link_val.trim().to_string());
         let images = self.image_attachments(cx);
         let drafts = self.draft_texts(cx);
-        let mode = self.mode.clone();
-        cx.emit(ComposerModalEvent::Submit(ComposerSubmission { mode, drafts, link, images, files: self.files.attached.clone(), tint: self.tint, publish_at, symbols: self.symbols.chosen.clone(), edit: self.version_edit(cx), replies_to: self.free_parents(cx) }));
+        let (mode, lock) = (self.mode.clone(), self.take_lock_password(window, cx)); // X3: read once, the fields emptied
+        cx.emit(ComposerModalEvent::Submit(ComposerSubmission { mode, drafts, link, images, files: self.files.attached.clone(), tint: self.tint, publish_at, symbols: self.symbols.chosen.clone(), edit: self.version_edit(cx), replies_to: self.free_parents(cx), lock }));
     }
 
     /// A typed image path that points to an existing file.

@@ -3,6 +3,7 @@
 //! origin, and creation times rise in reading order.
 
 use super::ImportPlan;
+use crate::domain::post::lock::{read_lock_block, LOCKED_PLACEHOLDER};
 use crate::domain::post::{PostExtras, PostOrigin};
 use crate::domain::{NetworkId, Post, PostId, ProfileId};
 use crate::error::Result;
@@ -26,9 +27,11 @@ pub fn build_posts(
         let mut parent: Option<PostId> = None;
         for text in &draft.thread {
             let id = next_id();
-            let mut post = Post::create_with_attachments(id.clone(), network.clone(), author.clone(), text, None, None, parent.clone(), None, None)?;
+            let lock = read_lock_block(text); // X6: an exported locked post comes back locked, its seal unchanged
+            let body = if lock.is_some() { LOCKED_PLACEHOLDER } else { text.as_str() };
+            let mut post = Post::create_with_attachments(id.clone(), network.clone(), author.clone(), body, None, None, parent.clone(), None, None)?;
             post.created_at = start + jiff::SignedDuration::from_millis(posts.len() as i64 * IMPORT_POST_SPACING_MS);
-            post.extras = PostExtras { sources: vec![draft.source.clone()], origin: Some(origin), ..PostExtras::default() };
+            post.extras = PostExtras { sources: vec![draft.source.clone()], origin: Some(origin), lock, ..PostExtras::default() };
             if parent.is_some() {
                 if let Some(previous) = posts.last_mut() {
                     previous.replies_count = 1;

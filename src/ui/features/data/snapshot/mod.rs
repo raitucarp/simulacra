@@ -8,6 +8,7 @@ mod restore;
 
 pub use create::render_snapshot_sheet;
 pub use restore::render_restore_sheet;
+pub(crate) use meter::strength_meter; // X3: the composer's lock row
 
 use crate::domain::data::snapshot::Strength;
 use gpui_kit::component::input::InputState;

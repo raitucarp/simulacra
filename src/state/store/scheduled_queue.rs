@@ -82,6 +82,9 @@ impl AppState {
     pub fn edit_scheduled(&mut self, id: &PostId, edit: ScheduledEdit, now: Timestamp) -> Result<()> {
         let post = self.scheduled_post(id).cloned().ok_or_else(|| not_scheduled(id))?;
         require_persona(self.author_of(&post))?;
+        if post.is_locked() {
+            return Err(AppError::PostLocked); // X2: plain text never replaces a sealed one
+        }
         if let Some(problem) = first_thread_problem(&[edit.content.as_str()], post.has_attachments() || !post.extras.images.is_empty()) {
             return Err(AppError::DatabaseError(format!("{:?}", problem.issue)));
         }

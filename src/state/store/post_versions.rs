@@ -60,6 +60,9 @@ impl AppState {
     pub fn edit_post_version(&mut self, id: &PostId, edit: &PostEdit, now: Timestamp) -> Result<Option<Revision>> {
         let post = self.get_post(id).cloned().ok_or_else(|| missing(id))?;
         require_persona(self.author_of(&post))?;
+        if post.is_locked() {
+            return Err(AppError::PostLocked); // X2: plain text never replaces a sealed one
+        }
         let shown = PostRecord::of(&post);
         let mut look = edit.look.clone().unwrap_or_else(|| shown.clone());
         look.attachments = look.attachments.or_else(|| shown.attachments.clone()); // V11: kept unless the edit sends them

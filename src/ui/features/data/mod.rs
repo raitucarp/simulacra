@@ -21,6 +21,7 @@ mod sheet;
 mod state_menu; // S7
 mod snapshot;
 mod text;
+mod unlock; // X4
 
 pub use events::{DataAction, DataEvent, SavedTarget, ScopeKind};
 pub use export::{render_export_sheet, ExportDialog};
@@ -33,7 +34,9 @@ pub use saved::{render_knowledge_switch, render_saved_page, SavedItemView, Saved
 pub use scheduled::{render_scheduled_sheet, ScheduledRow};
 pub use sheet::closes_on_escape;
 pub use snapshot::{render_restore_sheet, render_snapshot_sheet, RestoreDialog, RestoreStep, SnapshotDialog};
+pub(crate) use snapshot::strength_meter;
 pub use text::{format_time, tr};
+pub use unlock::{render_unlock_sheet, UnlockAction, UnlockDialog, UnlockEvent};
 
 #[cfg(test)]
 mod tests;

@@ -8,6 +8,7 @@ pub mod seed;
 pub mod semantic;
 pub mod store;
 pub mod threads;
+pub mod unlocked; // X4: the session's unlocked posts
 
 pub use store::{
     AppState, NavigationTab, NetworkNameError, PostEdit, ThreadAnchor, ThreadDraft, WikilinkTarget,

@@ -38,7 +38,7 @@ mod reactions; // epic R
 mod reposts;
 mod revisions; // sb F2
 mod post_versions; mod post_heads; // V3, V4, V9
-mod scheduled;
+mod scheduled; mod locked; mod locked_edit; // X2: locked threads; X5: editing them
 mod scheduled_queue; // Y4
 mod search;
 mod settings;
@@ -62,7 +62,7 @@ pub use scheduled_queue::ScheduledEdit;
 pub use post_meta::PostMeta;
 pub use post_versions::PostEdit;
 pub use network_create::{network_slug, validate_network_name, NetworkNameError, MAX_NETWORK_NAME_CHARS};
-pub use threads::{ThreadAnchor, ThreadDraft};
+pub use threads::{ThreadAnchor, ThreadDraft}; pub use locked::seal_thread;
 pub use todos::toggled; pub use reminders::DueReminder; pub use delegations::DelegationJob;
 pub use wikilinks::WikilinkTarget;
 

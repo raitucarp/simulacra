@@ -16,6 +16,8 @@ mod capture;
 mod chrome;
 mod commands;
 mod composer_modal;
+mod composer_locked; // X3
+mod composer_locked_edit; // X5
 mod credentials;
 mod data; // sb F2: history, export, snapshots, collections and bookmarks
 mod data_export;
@@ -96,3 +98,5 @@ mod thinking_credence;
 mod thinking_insights;
 mod thinking_tensions;
 mod thinking_tensions_scan;
+mod unlock; // X4: unlocking locked posts
+mod unlock_backoff; // X7

@@ -11,7 +11,7 @@ fn at(hour: i8) -> jiff::Timestamp {
 }
 
 fn look(tint: Option<Tint>, symbols: PostSymbols) -> Option<PostRecord> {
-    Some(PostRecord { symbols, tint, attachments: None })
+    Some(PostRecord { symbols, tint, attachments: None, lock: None })
 }
 
 #[test]

@@ -53,17 +53,29 @@ impl AppView {
         };
         if let ComposerModalMode::Edit(target) = &submission.mode {
             let text = submission.drafts.first().cloned().unwrap_or_default();
+            if let Some(password) = submission.lock.clone() {
+                return self.save_locked_edit(target.post.id.clone(), submission, password, window, cx); // X5: sealed again
+            }
             if target.post.lifecycle.is_scheduled() {
                 return self.save_scheduled_edit(target.post.id.clone(), (text, submission.tint), submission.publish_at, window, cx); // Y4
             }
             return self.save_post_edit(target.post.id.clone(), submission.edit.clone().unwrap_or_else(|| crate::state::PostEdit::text(text)), edit_look(submission), window, cx); // sb F2, C3, S5, V3, V10, V11
         }
-        let publish_at = submission.publish_at;
+        if let Some(password) = submission.lock.clone() {
+            return self.publish_locked_submission(submission, password, window, cx); // X3: sealed in the background
+        }
         let (thread, anchor) = thread_from_submission(submission.clone(), self.state.preferences().writing.symbol_shorthand);
-        let published = match publish_at {
+        let published = match submission.publish_at {
             Some(at) => self.state.schedule_thread(&thread, &anchor, at, Timestamp::now()).map(|_| None),
             None => self.state.submit_thread(&thread, &anchor).map(|ids| ids.last().cloned()),
         };
+        self.after_publish(published, submission, window, cx);
+    }
+
+    /// Closes the composer and reveals the last post (or says when a scheduled thread goes
+    /// out) once `published`, otherwise shows the store's rejection inside the composer.
+    pub(super) fn after_publish(&mut self, published: crate::error::Result<Option<crate::domain::PostId>>, submission: &ComposerSubmission, window: &mut Window, cx: &mut Context<Self>) {
+        let publish_at = submission.publish_at;
         match published {
             Ok(last) => {
                 self.remember_symbols(&submission.symbols, cx); self.dispatch_delegations(window, cx); // S5; D12: agents handed a to-do reply
@@ -91,8 +103,8 @@ impl AppView {
 
 /// Store drafts (attachments and symbols on the first post, the tint on every post) and the anchor
 /// implied by the modal mode; with `shorthand`, each post's leading markers become symbols.
-fn thread_from_submission(submission: ComposerSubmission, shorthand: bool) -> (Vec<ThreadDraft>, ThreadAnchor) {
-    let ComposerSubmission { mode, drafts, link, images, files, tint, publish_at: _, symbols, edit: _, replies_to } = submission;
+pub(super) fn thread_from_submission(submission: ComposerSubmission, shorthand: bool) -> (Vec<ThreadDraft>, ThreadAnchor) {
+    let ComposerSubmission { mode, drafts, link, images, files, tint, publish_at: _, symbols, edit: _, replies_to, lock: _ } = submission;
     let parents = replies_to.into_iter().chain(std::iter::repeat(None));
     let mut thread: Vec<ThreadDraft> = drafts.into_iter().zip(parents).map(|(text, reply_to)| ThreadDraft { tint, reply_to, ..ThreadDraft::text(text) }).collect(); // T4: free compose replies nest
     if let Some(first) = thread.first_mut() {
@@ -118,5 +130,5 @@ fn thread_from_submission(submission: ComposerSubmission, shorthand: bool) -> (V
 /// version (V10, V11, L12).
 fn edit_look(submission: &ComposerSubmission) -> crate::domain::data::history::PostRecord {
     let attachments = crate::domain::data::history::Attachments::new(submission.link.clone(), submission.images.clone()).with_files(submission.files.clone());
-    crate::domain::data::history::PostRecord { symbols: submission.symbols.clone(), tint: submission.tint, attachments: Some(attachments) }
+    crate::domain::data::history::PostRecord { symbols: submission.symbols.clone(), tint: submission.tint, attachments: Some(attachments), lock: None }
 }

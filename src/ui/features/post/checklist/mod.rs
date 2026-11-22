@@ -66,6 +66,9 @@ pub(crate) fn render_checklist<L: PostLookup>(source: &ChecklistSource<'_>, look
 /// The body of `post`: its checklist (ticked by `toggle`) when it has to-dos, else its cached
 /// body tokens.
 pub fn render_post_content<L: PostLookup>(post: &Post, lookup: L, theme: &ThemeTokens, links: &BodyLinks, toggle: Option<TodoToggle>) -> AnyElement {
+    if post.is_locked() {
+        return super::locked::render_locked_placeholder(None, theme); // X4: quotes and previews never open it
+    }
     let source = ChecklistSource { content: &post.content, post_id: post.id.as_str(), written: crate::time::local_date(post.created_at), ticks: &post.extras.todo_state, toggle };
     render_checklist(&source, lookup, theme, links).unwrap_or_else(|| render_body_tokens(&lookup.body_tokens(post), lookup, theme, links))
 }

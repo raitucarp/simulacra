@@ -86,7 +86,10 @@ fn render_content_column<L: PostLookup>(
                 .w_full()
                 .min_w_0()
                 .py(theme.spacing_2xs)
-                .child(render_post_content(effective, lookup, theme, &handlers.links.scoped(effective.id.to_string()), super::checklist::todo_toggle(handlers.data.as_ref()))), // D5, D6: its checklist, ticked on the user's own posts
+                .child(match handlers.lock.as_ref().filter(|_| effective.is_locked()) {
+                    Some(lock) => super::locked::render_locked_body(lock, lookup, theme, &handlers.links.scoped(effective.id.to_string())), // X4: the placeholder, or the text unlocked this session
+                    None => render_post_content(effective, lookup, theme, &handlers.links.scoped(effective.id.to_string()), super::checklist::todo_toggle(handlers.data.as_ref())), // D5, D6: its checklist, ticked on the user's own posts
+                }),
         )
         .children(render_post_extras(&effective.extras, theme, handlers.links.on_source.as_ref()))
         .children(render_post_media(effective, lookup, theme, handlers.links.on_media.as_ref(), handlers.links.on_relink.as_ref()))

@@ -56,6 +56,7 @@ fn callbacks(entity: &Entity<ComposerModalPanel>) -> ModalCallbacks {
         on_toggle_symbol_search: act(entity, P::toggle_symbol_search),
         on_toggle_free: act(entity, P::toggle_free),
         on_toggle_todo_help: act(entity, P::toggle_todo_help),
+        on_toggle_lock: act(entity, P::toggle_lock), // X3
     }
 }
 
@@ -105,10 +106,10 @@ impl Render for ComposerModalPanel {
             is_link_input_open: self.is_link_input_open,
             is_image_input_open: self.is_image_input_open,
             notice,
-            can_post: problem.is_none() && !matches!(self.schedule_choice(cx), Some(Err(_))),
+            can_post: problem.is_none() && !matches!(self.schedule_choice(cx), Some(Err(_))) && !self.lock_blocks(cx),
             preview: self.preview,
             tint: self.tint,
-            schedule: self.schedule_view(cx),
+            schedule: self.schedule_view(cx), lock: self.lock_view(cx), // X3
             symbols: self.symbol_view(cx),
             version: self.version_view(cx),
             free: self.free_view(cx),

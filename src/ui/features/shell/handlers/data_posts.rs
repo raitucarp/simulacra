@@ -6,8 +6,7 @@ use super::super::view::AppView;
 use crate::domain::data::saved::{next_position, toggled_bookmark, CollectionEntry, ItemRef};
 use crate::domain::document::CollectionId;
 use crate::domain::preferences::ToastKind;
-use crate::domain::PostId;
-use crate::domain::data::history::PostRecord;
+use crate::domain::{data::history::PostRecord, PostId};
 use crate::state::PostEdit;
 use crate::ui::features::composer::{publish_error_message, version_label};
 use crate::ui::features::data::{tr, DataEvent, SavedTarget};
@@ -42,7 +41,7 @@ impl AppView {
     /// (or from the older version `from`, V4).
     pub(in crate::ui::features::shell) fn open_post_editor_from(&mut self, id: &PostId, from: Option<&crate::domain::data::history::RevisionId>, window: &mut Window, cx: &mut Context<Self>) {
         let Some(post) = self.state.get_post(id).filter(|p| self.state.author_of(p).is_human_persona()) else { return };
-        let target = self.state.authored(post);
+        let target = if post.is_locked() { return self.open_locked_editor(id, window, cx) } else { self.state.authored(post) }; // X5: on its unlocked text, sealed again on save
         let Some(base) = self.state.edit_base(id, from) else { return };
         self.hand_completion_sources(cx); // D11
         self.composer_modal.update(cx, |panel, cx| panel.open_edit_version(target, base, window, cx));

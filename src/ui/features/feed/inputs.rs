@@ -42,7 +42,7 @@ pub(crate) fn split_params<C>(params: FeedParams<'_, C>) -> (PostCallbacks, Time
         on_post_action: Rc::new(params.on_post_action),
         credence: params.credence,
         data: params.data,
-        reactions: params.reactions,
+        reactions: params.reactions, locks: params.locks, // X4
         links: BodyLinks {
             on_tag: Some(params.on_open_tag),
             on_wikilink: Some(params.on_open_wikilink),

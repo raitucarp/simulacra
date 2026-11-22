@@ -109,6 +109,8 @@ pub struct FeedParams<'a, C> {
     pub data: Option<crate::ui::features::data::DataSource>,
     /// Epic R: reactions on every card.
     pub reactions: Option<crate::ui::features::reactions::ReactionSource>,
+    /// X4: unlocking locked posts on every card.
+    pub locks: Option<crate::ui::features::post::LockSource>,
     pub inspector: super::inspector_outline::InspectorView,
     pub on_inspector: super::inspector_outline::InspectorCallback,
     pub discovery: FeedDiscovery,

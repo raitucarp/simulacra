@@ -230,3 +230,35 @@ fn reactions_of_exported_posts_round_trip_through_the_bundle() {
     assert!(read_reactions("{}").is_err());
     assert_eq!(read_reactions(r#"[{"post_id":"p1","profile_id":"u","emoji":"lol","count":1,"updated_at":"2026-11-07T12:00:00Z"}]"#), Ok(Vec::new()), "text that is not an emoji is left out");
 }
+
+/// X6: a locked post leaves only its seal in the bundle, and the exported thread imports back
+/// as a locked post that opens with the same password.
+#[test]
+fn a_locked_post_travels_as_ciphertext_and_imports_locked() {
+    use crate::domain::post::lock::{LockPassword, LOCKED_PLACEHOLDER};
+    use crate::import::plan::{build_posts, plan_posts, SourceInfo};
+    use crate::import::{parse_document, segment_document, Format, Granularity};
+    let password = LockPassword::new("seven tidy lanterns");
+    let mut locked = post("p5", "user_main", "Tamarind lighthouse ledger", 6, Some("p4"));
+    locked.lock_with(&password, crate::domain::crypto::KdfParams { memory_kib: 8, iterations: 1, lanes: 1 }).expect("locked");
+    let mut source = source();
+    source.posts.push(locked.clone());
+    let files = bundle_files(&plan_export(&source, &options(ExportScope::Everything)), &source);
+    let texts: Vec<&str> = files.iter().filter_map(|f| match &f.body { FileBody::Text(t) => Some(t.as_str()), FileBody::Copy(_) => None }).collect();
+    assert!(texts.iter().all(|text| !text.contains("Tamarind") && !text.contains("lighthouse")), "no plaintext in any file");
+    let thread = texts.iter().find(|text| text.contains("post-lock")).expect("the thread with the seal");
+    let doc = parse_document(Format::Markdown, thread.as_bytes(), "thread.md");
+    let units = segment_document(&doc, Granularity::Paragraph);
+    let info = SourceInfo { document_id: "doc".into(), title: "Thread".into(), chapter_titles: Vec::new() };
+    let mut next = 0;
+    let posts = build_posts(&plan_posts(&units, &info, crate::domain::MAX_POST_CHARS), &ProfileId::new("user_main"), &NetworkId::new(NET), at(12), crate::domain::post::PostOrigin::Import, || {
+        next += 1;
+        PostId::new(format!("imported_{next}"))
+    })
+    .expect("imported");
+    let back: Vec<&Post> = posts.iter().filter(|p| p.is_locked()).collect();
+    assert_eq!(back.len(), 1, "{posts:#?}");
+    assert_eq!((back[0].content.as_str(), &back[0].extras.lock), (LOCKED_PLACEHOLDER, &locked.extras.lock));
+    assert_eq!(back[0].unlock(&password).expect("opens after the round trip").as_str(), "Tamarind lighthouse ledger");
+    assert!(posts.iter().any(|p| p.content == "Unrelated musing, with \"quotes\"."), "the open posts import as before");
+}

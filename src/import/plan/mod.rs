@@ -81,10 +81,19 @@ pub fn cite(unit: &Unit, source: &SourceInfo) -> SourceRef {
 pub fn plan_posts<'a>(units: impl IntoIterator<Item = &'a Unit>, source: &SourceInfo, post_limit: usize) -> ImportPlan {
     let drafts = units
         .into_iter()
-        .map(|unit| PostDraft { thread: split_into_thread(&unit.text, post_limit), source: cite(unit, source) })
+        .map(|unit| PostDraft { thread: unit_thread(&unit.text, post_limit), source: cite(unit, source) })
         .filter(|draft| !draft.thread.is_empty())
         .collect();
     ImportPlan { drafts }
+}
+
+/// The posts of one unit: an exported locked post's seal stays whole (X6), anything else is
+/// split at `post_limit` characters.
+fn unit_thread(text: &str, post_limit: usize) -> Vec<String> {
+    match crate::domain::post::lock::read_lock_block(text) {
+        Some(_) => vec![text.trim().to_string()],
+        None => split_into_thread(text, post_limit),
+    }
 }
 
 /// Counts of `plan`.

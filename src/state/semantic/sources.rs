@@ -1,4 +1,5 @@
-//! What the index covers: every non-empty post (instant reposts carry no text of their own)
+//! What the index covers: every non-empty post (instant reposts carry no text of their own;
+//! a locked post, X2, only a placeholder, so it is left out)
 //! and every vault document, across all networks.
 
 use super::SourceText;
@@ -10,7 +11,7 @@ pub fn index_sources(state: &AppState) -> Vec<SourceText> {
     let posts = state
         .posts
         .iter()
-        .filter(|post| !post.is_repost() && !post.content.trim().is_empty())
+        .filter(|post| !post.is_repost() && !post.is_locked() && !post.content.trim().is_empty())
         .map(|post| SourceText { owner: EmbeddingOwner::post(&post.id), title: String::new(), text: post.content.clone() });
     let documents = state
         .documents

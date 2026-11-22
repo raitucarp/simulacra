@@ -13,6 +13,7 @@ mod consts;
 mod construct;
 mod credential_state;
 mod data_host; // sb F2
+mod lock_host; // X4
 mod forge_host;
 mod forge_suggest;
 mod lab_selection;

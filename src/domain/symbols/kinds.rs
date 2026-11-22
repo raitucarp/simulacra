@@ -61,6 +61,9 @@ impl Signifier {
     pub const ALL: [Self; 3] = [Self::Priority, Self::Inspiration, Self::Explore];
 }
 
+/// Prefix of a custom symbol's asset path.
+pub const SYMBOL_ASSET_SCHEME: &str = "sym:";
+
 /// A custom symbol from the icon library: the icon set and the icon's name inside it.
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize, Default)]
 #[serde(default)]
@@ -72,5 +75,10 @@ pub struct SymbolRef {
 impl SymbolRef {
     pub fn new(set: impl Into<String>, name: impl Into<String>) -> Self {
         Self { set: set.into(), name: name.into() }
+    }
+
+    /// The icon's asset path, resolved from the downloaded icon store (`sym:<set>/<name>`).
+    pub fn asset_path(&self) -> String {
+        format!("{SYMBOL_ASSET_SCHEME}{}/{}", self.set, self.name)
     }
 }

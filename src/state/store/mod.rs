@@ -29,6 +29,7 @@ mod post_heartbeat;
 mod posts;
 mod posts_by;
 mod preferences;
+mod entry_state; // S7
 mod forge_autosave;
 mod identities;
 mod profile_create;
@@ -42,6 +43,7 @@ mod search;
 mod settings;
 mod seed_catalogue;
 mod snapshot;
+mod symbols; // epic S
 mod threads;
 mod upgrade;
 mod wikilinks;

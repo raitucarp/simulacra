@@ -13,6 +13,8 @@ pub(in crate::ui::features::settings) struct EmbeddedPanes {
     pub credentials: Option<CredentialsPaneProps>,
     pub appearance: Option<Entity<AppearancePanel>>,
     pub scheduler: SchedulerStatus,
+    pub symbols: Option<super::super::panes::SymbolSetsProps>,
+    pub licences: Option<Vec<super::super::panes::LicenceView>>,
 }
 
 impl EmbeddedPanes {
@@ -27,6 +29,8 @@ impl EmbeddedPanes {
             EmbeddedPane::AiProvider => self.ai.take().map(|ai| render_ai_pane(theme, ai).into_any_element()),
             EmbeddedPane::Credentials => self.credentials.take().map(|props| render_credentials_section(theme, props).into_any_element()),
             EmbeddedPane::Themes => self.appearance.take().map(IntoElement::into_any_element),
+            EmbeddedPane::SymbolSets => self.symbols.take().map(|props| super::super::panes::render_symbol_sets(theme, props).into_any_element()),
+            EmbeddedPane::Licences => self.licences.take().map(|licences| super::super::panes::render_licences(theme, &licences).into_any_element()),
             EmbeddedPane::SchedulerStatus => Some(render_scheduler_status(theme, &self.scheduler).into_any_element()),
         }
     }

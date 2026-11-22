@@ -11,7 +11,7 @@ category_fields! {
         PostLengthLimit => "post_length_limit", AutoSplitThreads => "auto_split_threads",
         AutosaveSeconds => "autosave_seconds", Spellcheck => "spellcheck", DefaultIdentity => "default_identity",
         WikilinkClick => "wikilink_click", HashtagClick => "hashtag_click", AtomicHints => "atomic_hints",
-        ReadabilityMeter => "readability_meter", AutoArchive => "auto_archive",
+        ReadabilityMeter => "readability_meter", AutoArchive => "auto_archive", SymbolShorthand => "symbol_shorthand",
     }
 }
 
@@ -19,7 +19,7 @@ impl WritingField {
     pub fn kind(self) -> FieldKind {
         match self {
             Self::PostLengthLimit => number(POST_LENGTH, NumberUnit::Characters),
-            Self::AutoSplitThreads | Self::Spellcheck | Self::AtomicHints | Self::ReadabilityMeter => FieldKind::Toggle,
+            Self::AutoSplitThreads | Self::Spellcheck | Self::AtomicHints | Self::ReadabilityMeter | Self::SymbolShorthand => FieldKind::Toggle,
             Self::AutosaveSeconds => number(AUTOSAVE_SECONDS, NumberUnit::Seconds),
             Self::DefaultIdentity => choices::<PostIdentity>(),
             Self::WikilinkClick => choices::<WikilinkClick>(),
@@ -40,6 +40,7 @@ impl WritingField {
             Self::AtomicHints => SettingValue::Toggle(prefs.atomic_hints),
             Self::ReadabilityMeter => SettingValue::Toggle(prefs.readability_meter),
             Self::AutoArchive => choice_value(prefs.auto_archive),
+            Self::SymbolShorthand => SettingValue::Toggle(prefs.symbol_shorthand),
         }
     }
 
@@ -55,6 +56,7 @@ impl WritingField {
             Self::AtomicHints => WritingPrefs { atomic_hints: toggle(value, prefs.atomic_hints), ..prefs },
             Self::ReadabilityMeter => WritingPrefs { readability_meter: toggle(value, prefs.readability_meter), ..prefs },
             Self::AutoArchive => WritingPrefs { auto_archive: choice(value, prefs.auto_archive), ..prefs },
+            Self::SymbolShorthand => WritingPrefs { symbol_shorthand: toggle(value, prefs.symbol_shorthand), ..prefs },
         }
     }
 }

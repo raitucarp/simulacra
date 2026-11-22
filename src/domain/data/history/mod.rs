@@ -93,12 +93,20 @@ pub struct Revision {
     /// The version this revision holds; `None` until stored, when the vault numbers it as
     /// the next one of the subject's chain (see [`SemVer`]).
     pub version: Option<SemVer>,
+    /// The part of the version this revision bumps when it is numbered (a minor version for
+    /// text edits; a patch for an entry state move, S7). Not stored.
+    pub bump: Bump,
 }
 
 impl Revision {
     /// The version of `subject` replaced at `saved_at`.
     pub fn of(subject: RevisionSubject, content: &str, saved_at: Timestamp) -> Self {
-        Self { id: RevisionId::generate(), subject, saved_at, title: String::new(), content: content.to_string(), record_json: String::new(), parent_id: None, version: None }
+        Self { id: RevisionId::generate(), subject, saved_at, title: String::new(), content: content.to_string(), record_json: String::new(), parent_id: None, version: None, bump: Bump::Minor }
+    }
+
+    /// The same revision, bumping `bump` when it is numbered.
+    pub fn with_bump(self, bump: Bump) -> Self {
+        Self { bump, ..self }
     }
 
     /// The same revision with a document's title and record.

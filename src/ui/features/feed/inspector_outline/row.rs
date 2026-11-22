@@ -1,12 +1,14 @@
 //! One outline bullet: a chevron (or a dot for a leaf), the author's short name, dimmed, and
 //! the post's text. The cursor row is shaded; the inspected post is marked with the accent;
-//! a tinted post's bullet takes its tint's fill and edge (sb C2).
+//! a tinted post's bullet takes its tint's fill and edge (sb C2), and a post with symbols
+//! shows its primary symbol before the author (S4).
 
 use super::memory::OutlineCommand;
 use super::tree::OutlineRow;
 use crate::theme::color::composite;
 use crate::theme::ThemeTokens;
 use crate::ui::features::post::row_tint;
+use crate::ui::features::symbols::render_glyph;
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::Icon;
 use gpui_kit::prelude::FluentBuilder;
@@ -100,6 +102,7 @@ fn render_text(row: &OutlineRow, marks: RowMarks, theme: &ThemeTokens) -> Div {
         .flex()
         .items_start()
         .gap(theme.inline_gap)
+        .children(row.symbol.as_ref().map(|glyph| div().flex_none().h(line).flex().items_center().child(render_glyph(glyph, theme.symbol_outline_size, theme))))
         .child(author)
         .child(
             div()

@@ -16,7 +16,8 @@ impl ComposerModalPanel {
         let image = cx.subscribe(&self.image_input, notify_on_change);
         let enter = cx.subscribe_in(&self.image_input, window, Self::on_image_path_event);
         let schedule = cx.subscribe(&self.schedule.input, notify_on_change);
-        vec![link, image, enter, schedule]
+        let symbols = cx.subscribe(&self.symbols.search, notify_on_change);
+        vec![link, image, enter, schedule, symbols]
     }
 
     /// Attaches the typed image path on Enter and empties the field.
@@ -45,6 +46,7 @@ impl ComposerModalPanel {
         self.reset_atomic_hint();
         self.reset_readability();
         self.reset_schedule(window, cx);
+        self.reset_symbols(window, cx);
         if let Some(first) = self.drafts.first() {
             first.input.update(cx, |state, cx| state.set_value("", window, cx));
         }
@@ -62,7 +64,7 @@ impl ComposerModalPanel {
         let images = self.image_attachments(cx);
         let drafts = self.draft_texts(cx);
         let mode = self.mode.clone();
-        cx.emit(ComposerModalEvent::Submit(ComposerSubmission { mode, drafts, link, images, tint: self.tint, publish_at }));
+        cx.emit(ComposerModalEvent::Submit(ComposerSubmission { mode, drafts, link, images, tint: self.tint, publish_at, symbols: self.symbols.chosen.clone() }));
     }
 
     /// A typed image path that points to an existing file.

@@ -27,6 +27,7 @@ pub mod settings;
 pub mod shell;
 pub mod sidebar_left;
 pub mod sidebar_right;
+pub mod symbols; // epic S
 pub mod splash;
 pub mod thinking;
 pub mod title_bar;

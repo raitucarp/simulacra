@@ -60,6 +60,8 @@ impl ComposerModalView {
             .when_some(self.notice.clone(), |this, notice| this.child(self.notice_row(notice)))
             // 5. The container tint of the thread (sb C3)
             .child(self.tint_row())
+            // 5b. The symbols of the first post (S5)
+            .child(self.symbol_row())
             // 6. When the thread goes out, while the picker is open (Y3)
             .when_some(self.schedule.as_ref(), |this, view| this.child(schedule_row(view, theme)))
             // 7. Modal Footer: Privacy indicator & Post button

@@ -12,6 +12,7 @@ pub mod agent;
 pub mod domain;
 pub mod error;
 pub mod i18n;
+pub mod icons;
 pub mod import;
 pub mod media;
 pub mod prelude;

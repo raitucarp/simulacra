@@ -15,6 +15,8 @@ pub enum IllustrationKind {
     Guide,
     Empty,
     Portrait,
+    /// A post symbol (S3).
+    Symbol,
 }
 
 impl IllustrationKind {
@@ -27,6 +29,7 @@ impl IllustrationKind {
             Self::Guide => (128.0, 128.0),
             Self::Empty => (240.0, 160.0),
             Self::Portrait => (256.0, 256.0),
+            Self::Symbol => (64.0, 64.0),
         }
     }
 }

@@ -12,6 +12,7 @@ pub mod crypto; // sb X1: password-based seal shared by snapshots and encrypted 
 pub mod data; // sb F2: history, collections and bookmarks, export, snapshots
 pub mod document;
 pub mod emoji; // R3: emoji names, groups and skin tones
+pub mod icons; // epic S: the downloadable icon library
 pub mod embedding;
 pub mod engine;
 pub mod graph;

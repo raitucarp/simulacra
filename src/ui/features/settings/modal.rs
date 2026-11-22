@@ -35,7 +35,7 @@ impl SettingsModal {
         actions: SettingsActions,
         appearance: Entity<AppearancePanel>,
     ) -> Self {
-        let panes = EmbeddedPanes { ai: None, credentials: None, appearance: Some(appearance), scheduler: data.scheduler.clone() };
+        let panes = EmbeddedPanes { ai: None, credentials: None, appearance: Some(appearance), scheduler: data.scheduler.clone(), symbols: None, licences: None };
         Self { theme, active_tab, data, inputs, actions, panes }
     }
 
@@ -48,6 +48,12 @@ impl SettingsModal {
     /// Supplies the credentials list, editor and callbacks.
     pub fn credentials(mut self, credentials: CredentialsPaneProps) -> Self {
         self.panes.credentials = Some(credentials);
+        self
+    }
+
+    /// Supplies Settings › Symbols and the Licences screen (S13).
+    pub fn symbols(mut self, sets: super::panes::SymbolSetsProps, licences: Vec<super::panes::LicenceView>) -> Self {
+        (self.panes.symbols, self.panes.licences) = (Some(sets), Some(licences));
         self
     }
 

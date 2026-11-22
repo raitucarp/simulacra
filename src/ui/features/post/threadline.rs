@@ -1,9 +1,10 @@
 //! Context-aware dialectic threadline style and the avatar column it decorates.
 
-use crate::domain::Profile;
+use crate::domain::{Post, Profile};
 use crate::theme::ThemeTokens;
 use crate::ui::atoms::render_profile_avatar;
-use gpui_kit::{div, Div, ParentElement, Rgba, Styled};
+use crate::ui::features::symbols::render_symbol_face;
+use gpui_kit::{div, Div, IntoElement, ParentElement, Rgba, Styled};
 
 /// Context-aware dialectic threadline rendering style.
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
@@ -40,8 +41,10 @@ fn line_color(connected: bool, theme: &ThemeTokens) -> Rgba {
     }
 }
 
-/// Left column: author avatar with continuous threadline segments (zero-gap card boundary connection).
+/// Left column: author avatar (or, for a post with symbols, its symbol face, S4) with
+/// continuous threadline segments (zero-gap card boundary connection).
 pub(crate) fn render_avatar_column(
+    post: &Post,
     author: &Profile,
     style: ThreadlineStyle,
     has_repost_header: bool,
@@ -67,7 +70,7 @@ pub(crate) fn render_avatar_column(
                 .h(top_height)
                 .bg(line_color(style.has_top_line(), theme)),
         )
-        .child(render_profile_avatar(author, theme.avatar_size_lg, theme))
+        .child(render_face(post, author, theme))
         // Bottom line segment extending to card bottom boundary
         .child(
             div()
@@ -77,4 +80,12 @@ pub(crate) fn render_avatar_column(
                 .mt(theme.spacing_xs)
                 .bg(line_color(style.has_bottom_line(), theme)),
         )
+}
+
+/// The post's symbol face (S4), or its author's avatar when it has no symbols.
+fn render_face(post: &Post, author: &Profile, theme: &ThemeTokens) -> gpui_kit::AnyElement {
+    match post.extras.symbols.face() {
+        Some(face) => render_symbol_face(post.id.as_str(), &face, theme.avatar_size_lg, theme).into_any_element(),
+        None => render_profile_avatar(author, theme.avatar_size_lg, theme).into_any_element(),
+    }
 }

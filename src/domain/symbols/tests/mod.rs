@@ -1,4 +1,9 @@
 use super::*;
+mod legend;
+mod migration;
+mod picker;
+mod shorthand;
+mod subtasks;
 use crate::domain::post::PostExtras;
 use EntryState::*;
 
@@ -155,4 +160,30 @@ fn signifiers_and_custom_symbols_do_not_duplicate() {
     set.add_custom(SymbolRef::new("core", "star"));
     assert_eq!(set.custom.len(), 1);
     assert!(EntryState::Done.is_closed() && !EntryState::Delegated.is_closed());
+}
+
+#[test]
+fn the_face_shows_the_entry_first_then_a_custom_symbol_then_a_signifier() {
+    assert_eq!(PostSymbols::default().face(), None, "no symbols: the avatar");
+    let face = full_set().face().expect("a face");
+    assert_eq!(face.primary, SymbolGlyph::Core(SymbolArt::Entry(EntrySymbol::Task, Some(Delegated))));
+    assert_eq!(face.badges, [SymbolArt::Signifier(Signifier::Priority), SymbolArt::Signifier(Signifier::Explore)]);
+    let custom = PostSymbols { custom: vec![SymbolRef::new("fi", "zap")], signifiers: vec![Signifier::Inspiration], ..PostSymbols::default() };
+    let face = custom.face().unwrap();
+    assert_eq!(face.primary, SymbolGlyph::Custom(SymbolRef::new("fi", "zap")));
+    assert_eq!(face.badges, [SymbolArt::Signifier(Signifier::Inspiration)]);
+}
+
+#[test]
+fn a_signifier_alone_is_the_primary_symbol_and_badges_stop_at_two() {
+    let only = PostSymbols { signifiers: Signifier::ALL.to_vec(), ..PostSymbols::default() };
+    let face = only.face().unwrap();
+    assert_eq!(face.primary, SymbolGlyph::Core(SymbolArt::Signifier(Signifier::Priority)));
+    assert_eq!(face.badges, [SymbolArt::Signifier(Signifier::Inspiration), SymbolArt::Signifier(Signifier::Explore)]);
+    let mut many = PostSymbols { signifiers: Signifier::ALL.to_vec(), ..PostSymbols::entry(EntrySymbol::Note) };
+    many.add_signifier(Signifier::Priority);
+    let face = many.face().unwrap();
+    assert_eq!(face.primary, SymbolGlyph::Core(SymbolArt::Entry(EntrySymbol::Note, None)));
+    assert_eq!(face.badges.len(), MAX_BADGES);
+    assert_eq!(SymbolRef::new("fi", "zap").asset_path(), "sym:fi/zap");
 }

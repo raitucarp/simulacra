@@ -9,18 +9,23 @@ mod diff_view;
 mod events;
 mod export;
 mod history;
+mod legend; // S9
 mod lifecycle_menu; // Y5, Y6
 mod post_menu;
+mod review; // S16
 mod saved;
 mod scheduled; // Y4
 mod sheet;
+mod state_menu; // S7
 mod snapshot;
 mod text;
 
 pub use events::{DataAction, DataEvent, SavedTarget, ScopeKind};
 pub use export::{render_export_sheet, ExportDialog};
+pub use legend::{render_legend_sheet, LegendView};
 pub use history::{render_history_sheet, HistorySheet};
 pub use post_menu::{render_edited_mark, with_data_items, DataControls, DataSource};
+pub use review::{render_review_sheet, tally_text, ReviewView};
 pub use saved::{render_knowledge_switch, render_saved_page, SavedItemView, SavedView, ShelfChip};
 pub use scheduled::{render_scheduled_sheet, ScheduledRow};
 pub use sheet::closes_on_escape;

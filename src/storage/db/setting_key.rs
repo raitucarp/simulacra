@@ -75,6 +75,12 @@ setting_keys! {
     InsightsState => "insights.state",
     /// What the emoji picker remembers: recent emoji and the skin tone (JSON, epic R).
     EmojiPicker => "emoji.picker",
+    /// What the composer's symbol picker remembers: the recent symbols (JSON, S5).
+    SymbolPicker => "symbols.picker",
+    /// The user's symbol key: what each custom symbol means (JSON, S9).
+    SymbolKey => "symbols.key",
+    /// The day the monthly migration review was last finished (`YYYY-MM-DD`, S16).
+    MigrationReviewed => "symbols.review_last",
     PrefsGeneral => "preferences.general",
     PrefsAppearance => "preferences.appearance",
     PrefsWriting => "preferences.writing",

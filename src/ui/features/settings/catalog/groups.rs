@@ -40,7 +40,7 @@ const APPEARANCE: &[SettingsGroup] = &[
     group("themes", &[Embedded(Pane::Themes)]),
 ];
 const WRITING: &[SettingsGroup] = &[
-    group("posts", &[Field(F::Writing(Wrt::PostLengthLimit)), Field(F::Writing(Wrt::AutoSplitThreads)), Field(F::Writing(Wrt::DefaultIdentity)), Field(F::Writing(Wrt::AutoArchive))]),
+    group("posts", &[Field(F::Writing(Wrt::PostLengthLimit)), Field(F::Writing(Wrt::AutoSplitThreads)), Field(F::Writing(Wrt::DefaultIdentity)), Field(F::Writing(Wrt::AutoArchive)), Field(F::Writing(Wrt::SymbolShorthand))]),
     group("drafts", &[Field(F::Writing(Wrt::AutosaveSeconds)), Field(F::Writing(Wrt::Spellcheck)), Field(F::Writing(Wrt::AtomicHints)), Field(F::Writing(Wrt::ReadabilityMeter))]),
     group("links", &[Field(F::Writing(Wrt::WikilinkClick)), Field(F::Writing(Wrt::HashtagClick))]),
 ];
@@ -64,6 +64,8 @@ const AGENTS: &[SettingsGroup] = &[
     group("quiet", &[Field(F::Agents(Agt::QuietHours)), Field(F::Agents(Agt::QuietStart)), Field(F::Agents(Agt::QuietEnd))]),
     group("replies", &[Field(F::Agents(Agt::ReplyDepthLimit))]),
 ];
+const SYMBOLS: &[SettingsGroup] = &[group("sets", &[Embedded(Pane::SymbolSets)])]; // S13
+const LICENCES: &[SettingsGroup] = &[group("icons", &[Embedded(Pane::Licences)])];
 const LEARNING: &[SettingsGroup] = &[
     group("reviews", &[Field(F::Learning(Lrn::DailyReviewLimit)), Field(F::Learning(Lrn::NewCardsPerDay)), Field(F::Learning(Lrn::DesiredRetention))]),
     group("reminder", &[Field(F::Learning(Lrn::ReviewReminder)), Field(F::Learning(Lrn::ReminderHour))]),
@@ -103,6 +105,8 @@ pub fn groups(tab: SettingsTab) -> &'static [SettingsGroup] {
         SettingsTab::PrivacyData => PRIVACY,
         SettingsTab::Notifications => NOTIFICATIONS,
         SettingsTab::Shortcuts => SHORTCUTS,
+        SettingsTab::Symbols => SYMBOLS,
+        SettingsTab::Licences => LICENCES,
         SettingsTab::Advanced => ADVANCED,
     }
 }

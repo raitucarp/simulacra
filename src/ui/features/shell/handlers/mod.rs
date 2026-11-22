@@ -20,12 +20,15 @@ mod credentials;
 mod data; // sb F2: history, export, snapshots, collections and bookmarks
 mod data_export;
 mod data_history;
+mod data_legend; // S9
 mod data_posts;
 mod data_restore;
+mod data_review; // S16
 mod data_saved;
 mod data_scheduled; // Y4
 mod data_shelf;
 mod data_snapshot;
+mod entry_state; // S7
 mod image_ideas;
 mod image_ideas_apply;
 mod image_ideas_open;
@@ -66,6 +69,8 @@ mod review_quiz;
 mod review_sheet;
 mod settings_commands;
 mod scheduler;
+mod symbol_downloads; // S13
+pub(in crate::ui::features::shell) use symbol_downloads::DownloadJob;
 mod semantic_index;
 mod semantic_pump;
 mod semantic_search;

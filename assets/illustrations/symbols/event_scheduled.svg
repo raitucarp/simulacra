@@ -1,0 +1,3 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><circle cx="32" cy="32" r="29" fill="{{elevated}}" stroke="{{warning}}" stroke-width="2" stroke-opacity="0.5"/>
+<circle cx="38" cy="32" r="12" fill="{{info}}"/><circle cx="38" cy="32" r="7" fill="{{elevated}}"/>
+<path d="M21 23L13 32L21 41" stroke="{{warning}}" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>

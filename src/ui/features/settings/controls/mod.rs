@@ -43,5 +43,7 @@ const fn home_tab(pane: EmbeddedPane) -> SettingsTab {
         EmbeddedPane::AiProvider | EmbeddedPane::Credentials => SettingsTab::AiIntelligence,
         EmbeddedPane::SchedulerStatus => SettingsTab::Agents,
         EmbeddedPane::Themes => SettingsTab::Appearance,
+        EmbeddedPane::SymbolSets => SettingsTab::Symbols,
+        EmbeddedPane::Licences => SettingsTab::Licences,
     }
 }

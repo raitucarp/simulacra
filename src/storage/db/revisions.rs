@@ -23,6 +23,7 @@ fn revision_from_row(row: &Row<'_>) -> rusqlite::Result<Option<Revision>> {
         record_json: row.get(6)?,
         parent_id: row.get::<_, Option<String>>(7)?.map(RevisionId::new),
         version: SemVer::parse(&row.get::<_, String>(8)?),
+        bump: crate::domain::data::history::Bump::Minor,
     }))
 }
 

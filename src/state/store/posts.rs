@@ -79,6 +79,7 @@ impl AppState {
     /// Persists an agent reply, bumps its parent's reply counter and inserts it right after
     /// the parent (or at the head when the parent is unknown).
     pub fn insert_reply_after_parent(&mut self, reply: Post) -> Result<()> {
+        let reply = self.without_agent_symbols(reply); // S2: agents never carry symbols
         if let Some(ref db) = self.db {
             db.save_post(&reply)?;
         }

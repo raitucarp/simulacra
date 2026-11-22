@@ -37,6 +37,9 @@ rust-embed = { version = "8.7", features = ["include-exclude"] }
 # the PDF text layer, file checksums and legacy MOBI code pages (markup is read by our own
 # tolerant tokenizer, which XHTML, MOBI HTML, OPF, NCX, DOCX and ODT all share).
 zip = { version = "9", default-features = false, features = ["deflate-flate2"] }
+# The icon library (S10): the pinned package is a gzip-compressed tarball (flate2 is already in
+# the graph through zip, with the same backend).
+flate2 = "1"
 lopdf = { version = "0.47", default-features = false }
 sha2 = "0.11"
 encoding_rs = "0.8"

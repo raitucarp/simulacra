@@ -47,7 +47,7 @@ impl Database {
         let (parent_id, version) = match tail {
             None => (None, SemVer::ORIGINAL),
             Some((id, version, count)) => {
-                let after = SemVer::parse(&version).map_or(SemVer::after_edits(count as u32), SemVer::next_edit);
+                let after = SemVer::parse(&version).map_or(SemVer::after_edits(count as u32), |tail| tail.bumped(revision.bump));
                 (Some(RevisionId::new(id)), after)
             }
         };

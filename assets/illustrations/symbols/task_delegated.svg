@@ -1,0 +1,2 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><circle cx="32" cy="32" r="29" fill="{{elevated}}" stroke="{{agent}}" stroke-width="2" stroke-opacity="0.5"/>
+<circle cx="19" cy="32" r="6" fill="{{agent}}"/><path d="M27 32H46M38 24L46 32L38 40" stroke="{{agent}}" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>

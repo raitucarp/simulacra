@@ -37,6 +37,14 @@ pub enum AppError {
     #[error("database error: {0}")]
     DatabaseError(String),
 
+    /// A post's symbol state does not fit its entry kind (S2).
+    #[error("the symbol state does not fit the entry")]
+    InvalidSymbols,
+
+    /// A task cannot be done while this many of its sub-tasks are still open (S8).
+    #[error("{0} sub-tasks are still open")]
+    OpenSubtasks(usize),
+
     /// A document's title or catalogue record failed validation.
     #[error("invalid document: {0}")]
     InvalidDocument(String),

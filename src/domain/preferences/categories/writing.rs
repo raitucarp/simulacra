@@ -36,6 +36,8 @@ pub struct WritingPrefs {
     pub readability_meter: bool,
     /// Y6: how long after they go out the user's posts move to the archive.
     pub auto_archive: ArchiveAfter,
+    /// S6: bullet-journal shorthand at the start of a post sets its symbols (off by default).
+    pub symbol_shorthand: bool,
 }
 
 impl Default for WritingPrefs {
@@ -51,6 +53,7 @@ impl Default for WritingPrefs {
             atomic_hints: true,
             readability_meter: true,
             auto_archive: ArchiveAfter::default(),
+            symbol_shorthand: false,
         }
     }
 }

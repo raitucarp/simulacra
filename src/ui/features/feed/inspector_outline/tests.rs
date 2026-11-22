@@ -120,3 +120,13 @@ fn a_tinted_post_carries_its_tint_to_its_bullet() {
     let rows = visible_rows(&tree_of(&posts), &BTreeSet::new());
     assert_eq!(rows.iter().map(|row| row.tint).collect::<Vec<_>>(), [None, Some(Tint::Mint), None, None]);
 }
+
+#[test]
+fn a_post_with_symbols_shows_its_primary_symbol_on_its_bullet() {
+    use crate::domain::symbols::{EntrySymbol, PostSymbols, SymbolArt, SymbolGlyph};
+    let mut posts = posts();
+    posts[2].extras.symbols = PostSymbols::entry(EntrySymbol::Task);
+    let rows = visible_rows(&tree_of(&posts), &BTreeSet::new());
+    let task = SymbolGlyph::Core(SymbolArt::Entry(EntrySymbol::Task, Some(crate::domain::symbols::EntryState::Open)));
+    assert_eq!(rows.iter().map(|row| row.symbol.clone()).collect::<Vec<_>>(), [None, None, Some(task), None]);
+}

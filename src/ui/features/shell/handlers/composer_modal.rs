@@ -55,7 +55,7 @@ impl AppView {
             if target.post.lifecycle.is_scheduled() {
                 return self.save_scheduled_edit(target.post.id.clone(), (text, submission.tint), submission.publish_at, window, cx); // Y4
             }
-            return self.save_post_edit(target.post.id.clone(), (text, submission.tint), window, cx); // sb F2, C3
+            return self.save_post_edit(target.post.id.clone(), (text, submission.tint, submission.symbols.clone()), window, cx); // sb F2, C3, S5
         }
         let publish_at = submission.publish_at;
         let (thread, anchor) = thread_from_submission(submission.clone());
@@ -65,6 +65,7 @@ impl AppView {
         };
         match published {
             Ok(last) => {
+                self.remember_symbols(&submission.symbols, cx); // S5
                 self.close_composer_modal(window, cx);
                 match (last, publish_at) {
                     (Some(last), _) => self.reveal_post(last, window, cx),
@@ -87,15 +88,16 @@ impl AppView {
     }
 }
 
-/// Store drafts (attachments on the first post, the tint on every post) and the anchor
+/// Store drafts (attachments and symbols on the first post, the tint on every post) and the anchor
 /// implied by the modal mode.
 fn thread_from_submission(submission: ComposerSubmission) -> (Vec<ThreadDraft>, ThreadAnchor) {
-    let ComposerSubmission { mode, drafts, link, images, tint, publish_at: _ } = submission;
+    let ComposerSubmission { mode, drafts, link, images, tint, publish_at: _, symbols } = submission;
     let mut thread: Vec<ThreadDraft> = drafts.into_iter().map(|text| ThreadDraft { tint, ..ThreadDraft::text(text) }).collect();
     if let Some(first) = thread.first_mut() {
         first.link = link;
         first.image = images.first().map(|image| image.path.clone());
         first.images = images;
+        first.symbols = symbols; // S5: the picked symbols go on the first post
     }
     let anchor = match mode {
         ComposerModalMode::NewThread => ThreadAnchor::default(),

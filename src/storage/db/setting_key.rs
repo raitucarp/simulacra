@@ -75,6 +75,8 @@ setting_keys! {
     InsightsState => "insights.state",
     /// What the emoji picker remembers: recent emoji and the skin tone (JSON, epic R).
     EmojiPicker => "emoji.picker",
+    /// What the composer's symbol picker remembers: the recent symbols (JSON, S5).
+    SymbolPicker => "symbols.picker",
     PrefsGeneral => "preferences.general",
     PrefsAppearance => "preferences.appearance",
     PrefsWriting => "preferences.writing",

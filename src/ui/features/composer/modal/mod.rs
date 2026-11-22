@@ -73,6 +73,9 @@ pub struct ModalCallbacks {
     pub on_pick_tint: super::tint_picker::TintCallback,
     /// Opens or closes the "Schedule…" picker (Y3).
     pub on_toggle_schedule: ModalActionCallback,
+    /// Toggles a symbol, and opens or closes the symbol search (S5).
+    pub on_pick_symbol: super::symbol_picker::SymbolCallback,
+    pub on_toggle_symbol_search: ModalActionCallback,
 }
 
 /// Stateless dialog rendering a composer snapshot.
@@ -99,6 +102,8 @@ pub struct ComposerModalView {
     pub tint: Option<crate::domain::post::Tint>,
     /// The open "Schedule…" picker (Y3); `None` while closed.
     pub schedule: Option<super::schedule_picker::ScheduleView>,
+    /// The symbol picker (S5).
+    pub symbols: super::symbol_picker::SymbolPickerView,
     pub callbacks: ModalCallbacks,
     /// sb E1: the atomic-note hint under one draft.
     pub atomic_hint: Option<AtomicHintView>,

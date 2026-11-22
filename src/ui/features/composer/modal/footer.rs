@@ -5,6 +5,7 @@ use super::super::consts::MODAL_SUBMIT_POST_BTN_ID;
 use super::super::format::format_buttons;
 use super::super::preview::preview_button;
 use super::super::schedule_picker::schedule_button;
+use super::super::symbol_picker::symbol_picker;
 use super::super::tint_picker::tint_picker;
 use gpui_kit::prelude::FluentBuilder;
 use super::ComposerModalView;
@@ -66,6 +67,13 @@ impl ComposerModalView {
             .border_t(theme.border_width_hairline)
             .border_color(theme.border_subtle)
             .child(tint_picker(self.tint, self.callbacks.on_pick_tint.clone(), theme))
+    }
+
+    /// The symbol picker of the first post (S5), under the tint row.
+    pub(super) fn symbol_row(&self) -> Div {
+        let theme = &self.theme;
+        let picker = symbol_picker(&self.symbols, self.callbacks.on_pick_symbol.clone(), self.callbacks.on_toggle_symbol_search.clone(), theme);
+        div().w_full().px(theme.panel_padding).py(theme.spacing_xs).border_t(theme.border_width_hairline).border_color(theme.border_subtle).child(picker)
     }
 
     /// The preview toggle, the format toolbar (acting on the last focused draft; hidden while

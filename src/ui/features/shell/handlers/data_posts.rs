@@ -7,6 +7,7 @@ use crate::domain::data::saved::{next_position, toggled_bookmark, CollectionEntr
 use crate::domain::document::CollectionId;
 use crate::domain::preferences::ToastKind;
 use crate::domain::post::Tint;
+use crate::domain::symbols::PostSymbols;
 use crate::domain::PostId;
 use crate::ui::features::composer::publish_error_message;
 use crate::ui::features::data::{tr, DataEvent, SavedTarget};
@@ -44,9 +45,10 @@ impl AppView {
     }
 
     /// Saves the composer's edit of `id`: its text (the previous one becomes a revision),
-    /// then its tint (sb C3), which keeps no revision.
-    pub(crate) fn save_post_edit(&mut self, id: PostId, (text, tint): (String, Option<Tint>), window: &mut Window, cx: &mut Context<Self>) {
+    /// then its tint (sb C3) and symbols (S5), which keep no revision.
+    pub(crate) fn save_post_edit(&mut self, id: PostId, (text, tint, symbols): (String, Option<Tint>, PostSymbols), window: &mut Window, cx: &mut Context<Self>) {
         let saved = self.state.edit_post(&id, &text).and_then(|revision| self.state.set_post_tint(&id, tint).map(|_| revision));
+        let saved = saved.and_then(|revision| self.state.set_post_symbols(&id, symbols).map(|_| revision));
         match saved {
             Ok(revision) => {
                 if revision.is_some() {

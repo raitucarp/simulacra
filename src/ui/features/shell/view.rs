@@ -80,6 +80,8 @@ pub struct AppView {
     pub thinking: ThinkingHost,
     /// Epic R: the emoji picker and what it remembers.
     pub reactions: super::reactions_host::ReactionsHost,
+    /// Epic S: what the symbol picker remembers.
+    pub symbols: super::symbols_host::SymbolsHost,
     /// sb F2: history, export, snapshots, collections and bookmarks.
     pub data: DataHost,
     /// sb P16: what "Ask before spending" allowed this session.

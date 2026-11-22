@@ -2,6 +2,7 @@
 
 use super::super::format::FormatCallback;
 use super::super::messages::visible_problem_message;
+use super::super::symbol_picker::SymbolCallback;
 use super::super::tint_picker::TintCallback;
 use super::super::modal::{ComposerModalView, DraftActionCallback, DraftEditor, ModalCallbacks, PasteCallback};
 use super::ComposerModalPanel;
@@ -50,6 +51,8 @@ fn callbacks(entity: &Entity<ComposerModalPanel>) -> ModalCallbacks {
         on_toggle_preview: act(entity, P::toggle_preview),
         on_pick_tint: pick_tint(entity),
         on_toggle_schedule: act(entity, P::toggle_schedule),
+        on_pick_symbol: pick_symbol(entity),
+        on_toggle_symbol_search: act(entity, P::toggle_symbol_search),
     }
 }
 
@@ -57,6 +60,12 @@ fn callbacks(entity: &Entity<ComposerModalPanel>) -> ModalCallbacks {
 fn format_draft(entity: &Entity<ComposerModalPanel>) -> FormatCallback {
     let entity = entity.clone();
     Rc::new(move |mark, window, cx| entity.update(cx, |this, cx| this.format_active(mark, window, cx)))
+}
+
+/// Routes a picked symbol to the panel (S5).
+fn pick_symbol(entity: &Entity<ComposerModalPanel>) -> SymbolCallback {
+    let entity = entity.clone();
+    Rc::new(move |choice, _, cx| entity.update(cx, |this, cx| this.pick_symbol(choice, cx)))
 }
 
 /// Routes a picked tint to the panel (sb C3).
@@ -97,6 +106,7 @@ impl Render for ComposerModalPanel {
             preview: self.preview,
             tint: self.tint,
             schedule: self.schedule_view(cx),
+            symbols: self.symbol_view(cx),
             atomic_hint: self.atomic_hint_view(cx),
             readability: self.readability_view(cx),
             callbacks: callbacks(&cx.entity()),

@@ -1,10 +1,12 @@
 //! What the shown posts need from the background: the links whose previews they show and
-//! the images they draw. Pure; the shell feeds it the posts on screen.
+//! the images they draw (attached images and image files). Pure; the shell feeds it the posts on screen.
 
+use super::files::file_family;
 use super::image::post_images;
 use super::links::post_links;
 use super::video::{recognise_video, VideoSource};
 use crate::domain::Post;
+use crate::import::FormatFamily;
 
 /// Links to preview (with whether a private address is allowed) and images to scan.
 #[derive(Debug, Clone, Default, PartialEq, Eq)]
@@ -27,7 +29,7 @@ pub struct WantedLink {
 pub fn media_wants<'a>(posts: impl IntoIterator<Item = (&'a Post, bool)>, previews_enabled: bool) -> MediaWants {
     let mut wants = MediaWants::default();
     for (post, by_user) in posts {
-        for path in post_images(post).into_iter().map(|image| image.path) {
+        for path in post_images(post).into_iter().map(|image| image.path).chain(image_files(post)) {
             if !wants.images.contains(&path) {
                 wants.images.push(path);
             }
@@ -43,6 +45,11 @@ pub fn media_wants<'a>(posts: impl IntoIterator<Item = (&'a Post, bool)>, previe
         }
     }
     wants
+}
+
+/// The paths of the image files attached to `post` (L5: previewed through the image scan).
+fn image_files(post: &Post) -> impl Iterator<Item = String> + '_ {
+    post.extras.files.iter().filter(|file| file_family(&file.mime) == FormatFamily::Image).map(|file| file.path.clone())
 }
 
 impl MediaWants {

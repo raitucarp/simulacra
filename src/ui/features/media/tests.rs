@@ -40,3 +40,12 @@ fn attached_files_get_a_card_with_their_facts() {
     assert!(meta.starts_with("PDF · ") && meta.contains("1.2") && meta.ends_with("2026-11-02"), "{meta}");
     assert_eq!(super::file_card::file_meta(&FileRef::at("/a/b"), "Data").matches(" · ").count(), 1, "no date, no separator for it");
 }
+
+#[test]
+fn image_files_render_their_preview_and_row() {
+    use crate::domain::media::FileRef;
+    let theme = minimalist_dark();
+    let mut with_image = post("a photo");
+    with_image.extras.files.push(FileRef { mime: "image/png".into(), ..FileRef::at("/nowhere/photo.png") });
+    assert!(render_post_media(&with_image, &[] as &[Post], &theme, None).is_some());
+}

@@ -17,7 +17,7 @@ use gpui_kit::{div, AnyElement, Div, IntoElement, ParentElement, Styled};
 pub fn render_post_media<L: PostLookup>(post: &Post, lookup: L, theme: &ThemeTokens, on_media: Option<&OpenMediaAction>) -> Option<Div> {
     let images = post_images(post);
     let gallery = (!images.is_empty()).then(|| render_gallery(images, lookup.media_catalog(), theme, on_media.cloned()));
-    let files: Vec<AnyElement> = post.extras.files.iter().enumerate().map(|(index, file)| render_file(index, file, theme)).collect();
+    let files: Vec<AnyElement> = post.extras.files.iter().enumerate().map(|(index, file)| render_file(index, file, lookup.media_catalog(), on_media, theme)).collect();
     let link = post_links(post.link_url.as_deref(), &post.content).into_iter().next().map(|url| render_link(&url, lookup, theme));
     if gallery.is_none() && files.is_empty() && link.is_none() {
         return None;

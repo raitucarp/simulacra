@@ -42,3 +42,14 @@ fn files_that_are_not_there_are_never_handed_to_the_system() {
     assert!(crate::media::files::open_file(&gone).is_err());
     assert!(crate::media::files::show_in_folder(&gone).is_err());
 }
+
+#[test]
+fn an_image_file_goes_through_the_thumbnail_pipeline() {
+    use crate::domain::media::catalog::ImageScan;
+    let dir = scratch_media_dir("file-image");
+    let path = dir.join("wide.png");
+    std::fs::write(&path, png_bytes(crate::media::images::THUMB_MAX_EDGE * 2, 64)).expect("write");
+    let file = read_file_ref(&path).expect("read");
+    let ImageScan::Known(facts) = crate::media::scan_image(&file.path, &dir) else { panic!("an image file scans") };
+    assert!(facts.thumb_path.is_some_and(|thumb| std::path::Path::new(&thumb).is_file()), "a large image file gets a feed thumbnail");
+}

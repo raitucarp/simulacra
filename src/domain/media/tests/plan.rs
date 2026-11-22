@@ -35,3 +35,14 @@ fn previews_off_and_video_files_fetch_nothing() {
     assert!(wants.links.is_empty());
     assert_eq!(wants.images, vec!["still.png"], "images are local and scanned regardless");
 }
+
+#[test]
+fn image_files_are_scanned_like_attached_images() {
+    use crate::domain::media::FileRef;
+    let mut a = post("a", "two files");
+    a.extras.images = vec![ImageAttachment::at("one.png")];
+    let photo = FileRef { mime: "image/jpeg".into(), ..FileRef::at("/home/ann/photo.jpg") };
+    let report = FileRef { mime: "application/pdf".into(), ..FileRef::at("/home/ann/report.pdf") };
+    a.extras.files = vec![photo, report, FileRef { mime: "image/png".into(), ..FileRef::at("one.png") }];
+    assert_eq!(media_wants([(&a, true)], false).images, vec!["one.png", "/home/ann/photo.jpg"]);
+}

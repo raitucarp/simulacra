@@ -46,6 +46,8 @@ pub struct Preferences {
     pub import: ImportPrefs,
     pub privacy: PrivacyPrefs,
     pub notifications: NotificationPrefs,
+    /// Running code blocks (P4): off until switched on.
+    pub code: CodePrefs,
     pub advanced: AdvancedPrefs,
 }
 
@@ -64,6 +66,7 @@ impl Preferences {
             import: self.import.validated(),
             privacy: self.privacy.validated(),
             notifications: self.notifications.validated(),
+            code: self.code.validated(),
             advanced: self.advanced.validated(),
         }
     }

@@ -5,12 +5,14 @@
 mod macros;
 mod value;
 
+mod code; // P4
 mod content;
 mod general;
 mod models;
 mod simulation;
 mod system;
 
+pub use code::CodeField;
 pub use content::{ImportField, WritingField};
 pub use general::{AppearanceField, GeneralField};
 pub use models::{AiField, EmbeddingField, ImageField};
@@ -33,6 +35,7 @@ setting_fields! {
     Import(ImportField) in import => "import",
     Privacy(PrivacyField) in privacy => "privacy",
     Notifications(NotificationField) in notifications => "notifications",
+    Code(CodeField) in code => "code", // P4
     Advanced(AdvancedField) in advanced => "advanced",
 }
 

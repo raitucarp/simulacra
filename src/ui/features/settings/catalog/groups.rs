@@ -3,7 +3,7 @@
 use super::commands::SettingsCommand as Cmd;
 use super::rows::{DataFolder, EmbeddedPane as Pane, SettingRow, SettingRow::*, ThemeScale};
 use crate::domain::preferences::{
-    AdvancedField as Adv, AgentField as Agt, AiField as Ai, AppearanceField as App, EmbeddingField as Emb,
+    AdvancedField as Adv, AgentField as Agt, CodeField, AiField as Ai, AppearanceField as App, EmbeddingField as Emb,
     GeneralField as Gen, ImageField as Img, ImportField as Imp, LearningField as Lrn, NotificationField as Ntf,
     PrivacyField, SettingField as F, WritingField as Wrt,
 };
@@ -66,7 +66,10 @@ const AGENTS: &[SettingsGroup] = &[
 ];
 const SYMBOLS: &[SettingsGroup] = &[group("sets", &[Embedded(Pane::SymbolSets)])]; // S13
 const LICENCES: &[SettingsGroup] = &[group("icons", &[Embedded(Pane::Licences)])];
-const CODE: &[SettingsGroup] = &[group("runtimes", &[Embedded(Pane::Runtimes)])]; // P1
+const CODE: &[SettingsGroup] = &[
+    group("runner", &[Field(F::Code(CodeField::Enabled)), Field(F::Code(CodeField::Timeout))]), // P4
+    group("runtimes", &[Embedded(Pane::Runtimes)]), // P1
+];
 const LEARNING: &[SettingsGroup] = &[
     group("reviews", &[Field(F::Learning(Lrn::DailyReviewLimit)), Field(F::Learning(Lrn::NewCardsPerDay)), Field(F::Learning(Lrn::DesiredRetention))]),
     group("reminder", &[Field(F::Learning(Lrn::ReviewReminder)), Field(F::Learning(Lrn::ReminderHour))]),

@@ -1,5 +1,5 @@
-//! Settings › Code in the shell (P1): the cached runtime detection, and Refresh, which probes
-//! every runtime on the background executor and stores what it found.
+//! Settings › Code in the shell (P1, P4): the cached runtime detection, Refresh, which probes
+//! every runtime on the background executor and stores what it found, and the runtime switches.
 
 use super::binder::Binder;
 use super::view::AppView;
@@ -25,12 +25,18 @@ impl CodeHost {
 
 impl AppView {
     pub(super) fn runtimes_props(&self, bind: &Binder) -> RuntimesProps {
-        RuntimesProps { cache: self.code.cache.clone(), detecting: self.code.detecting, on_action: Rc::new(bind.with(Self::on_runtime_action)) }
+        let prefs = self.state.preferences().code.clone();
+        RuntimesProps { cache: self.code.cache.clone(), prefs, detecting: self.code.detecting, on_action: Rc::new(bind.with(Self::on_runtime_action)) }
     }
 
     fn on_runtime_action(&mut self, action: RuntimeAction, window: &mut Window, cx: &mut Context<Self>) {
         match action {
             RuntimeAction::Refresh => self.refresh_runtimes(window, cx),
+            RuntimeAction::Switch(runtime, on) => {
+                let prefs = self.state.preferences().clone();
+                let code = prefs.code.clone().with_runtime(runtime, on);
+                self.apply_preferences(crate::domain::preferences::Preferences { code, ..prefs }, window, cx);
+            }
         }
     }
 

@@ -92,6 +92,8 @@ setting_keys! {
     PrefsImport => "preferences.import",
     PrefsPrivacy => "preferences.privacy",
     PrefsNotifications => "preferences.notifications",
+    /// P4: Settings › Code (off by default; never carried by an export).
+    PrefsCode => "preferences.code",
     PrefsAdvanced => "preferences.advanced",
     /// Pre-palette serialized `ThemeTokens`; migrated on load, then removed.
     LegacyThemeTokens => "theme_tokens",

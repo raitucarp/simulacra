@@ -35,6 +35,10 @@ pub(super) fn le_u32(bytes: &[u8], at: usize) -> Option<u32> {
     Some(u32::from_le_bytes(bytes.get(at..at + 4)?.try_into().ok()?))
 }
 
+pub(super) fn le_u64(bytes: &[u8], at: usize) -> Option<u64> {
+    Some(u64::from_le_bytes(bytes.get(at..at + 8)?.try_into().ok()?))
+}
+
 /// The offset of the first `needle` in `bytes` at or after `from`.
 pub(super) fn find(bytes: &[u8], needle: &[u8], from: usize) -> Option<usize> {
     bytes.get(from..)?.windows(needle.len()).position(|window| window == needle).map(|at| at + from)

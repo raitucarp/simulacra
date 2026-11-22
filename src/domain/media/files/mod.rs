@@ -3,7 +3,7 @@
 //! open it, show it in its folder and notice when it has moved or changed.
 //!
 //! - `kind`: a file's type from its bytes, then its extension.
-//! - [`duration`]: how long a video plays, from its container headers.
+//! - [`duration`]: how long a video or audio file plays, from its container headers.
 //! - [`scan`] and `catalog`: what the background scan of a file found, cached by path.
 
 mod catalog;

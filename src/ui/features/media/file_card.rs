@@ -22,11 +22,12 @@ use std::path::PathBuf;
 const DATE_FORMAT: &str = "%Y-%m-%d";
 
 /// The card the `index`-th file of a post shows: an image is previewed (L5), a video gets
-/// its poster and length (L7), anything else the plain file card.
+/// its poster and length (L7), an audio file its length (L8), anything else the plain file card.
 pub(super) fn render_file(index: usize, file: &FileRef, catalog: Option<&MediaCatalog>, on_media: Option<&OpenMediaAction>, theme: &ThemeTokens) -> AnyElement {
     match file_family(&file.mime) {
         FormatFamily::Image => super::file_image::image_file(index, file, catalog, on_media, theme),
         FormatFamily::Video => super::file_video::video_file(index, file, catalog, theme),
+        FormatFamily::Audio => super::file_audio::audio_file(index, file, catalog, theme),
         _ => file_card(index, file, theme).into_any_element(),
     }
 }
@@ -52,7 +53,7 @@ pub(super) fn file_text(index: usize, file: &FileRef, family: FormatFamily, deta
         .gap(theme.spacing_2xs)
         .child(div().text_size(theme.font_size_sm).font_weight(FontWeight::SEMIBOLD).text_color(theme.text_primary).truncate().child(file.name().to_string()))
         .child(div().text_size(theme.font_size_xs).text_color(theme.text_muted).truncate().child(file_meta(file, &family_label(family), detail)))
-        .child(file_actions(index, &file.path, theme))
+        .child(file_actions(index, &file.path, family, theme))
 }
 
 /// The bordered surface every file card shares.
@@ -77,10 +78,13 @@ pub(super) fn file_meta(file: &FileRef, kind: &str, detail: Option<String>) -> S
     [Some(kind.to_string()), Some(file_size(file.size)), date, detail].into_iter().flatten().collect::<Vec<_>>().join(META_SEPARATOR)
 }
 
-/// "Open" and "Show in folder"; pressing them never selects the post.
-pub(super) fn file_actions(index: usize, path: &str, theme: &ThemeTokens) -> Div {
+/// "Open" ("Play" for video and audio, L8: the system player) and "Show in folder"; pressing
+/// them never selects the post.
+pub(super) fn file_actions(index: usize, path: &str, family: FormatFamily, theme: &ThemeTokens) -> Div {
     let (open_path, reveal_path) = (PathBuf::from(path), PathBuf::from(path));
-    let open = Button::new((FILE_OPEN_ID, index)).ghost().xsmall().icon(Icon::new(LucideIcon::ExternalLink)).label(t!("media.file.open").to_string())
+    let playable = matches!(family, FormatFamily::Audio | FormatFamily::Video);
+    let (icon, label) = if playable { (LucideIcon::Play, t!("media.file.play")) } else { (LucideIcon::ExternalLink, t!("media.file.open")) };
+    let open = Button::new((FILE_OPEN_ID, index)).ghost().xsmall().icon(Icon::new(icon)).label(label.to_string())
         .on_click(move |_, window, cx| report(crate::media::files::open_file(&open_path), window, cx));
     let reveal = Button::new((FILE_REVEAL_ID, index)).ghost().xsmall().icon(Icon::new(LucideIcon::Folder)).label(t!("media.file.show_in_folder").to_string())
         .on_click(move |_, window, cx| report(crate::media::files::show_in_folder(&reveal_path), window, cx));

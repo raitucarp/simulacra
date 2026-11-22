@@ -25,6 +25,8 @@ pub enum FilePreview {
     None,
     /// A video: the OS's poster frame when it has one (L6), and how long it plays (L7).
     Video { poster: Option<String>, seconds: Option<u32> },
+    /// An audio file and how long it plays (L8).
+    Audio { seconds: Option<u32> },
 }
 
 impl FileScan {

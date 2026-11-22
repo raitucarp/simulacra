@@ -69,3 +69,18 @@ fn a_video_file_scans_to_its_length_and_a_gone_one_to_missing() {
     std::fs::remove_file(&path).expect("remove");
     assert_eq!(crate::media::files::scan_file(&file, &dir), FileScan::Missing);
 }
+
+#[test]
+fn an_audio_file_scans_to_its_length() {
+    use crate::domain::media::files::FilePreview;
+    let dir = scratch_media_dir("file-scan-audio");
+    let fmt = [&b"fmt "[..], &16u32.to_le_bytes(), &[1, 0, 1, 0], &8_000u32.to_le_bytes(), &16_000u32.to_le_bytes(), &[2, 0, 16, 0]].concat();
+    let samples = vec![0u8; 16_000 * 4];
+    let data = [&b"data"[..], &(samples.len() as u32).to_le_bytes(), &samples].concat();
+    let path = dir.join("memo.wav");
+    std::fs::write(&path, [&b"RIFF"[..], &((4 + fmt.len() + data.len()) as u32).to_le_bytes(), b"WAVE", &fmt, &data].concat()).expect("write");
+    let file = read_file_ref(&path).expect("read");
+    assert_eq!(file.mime, "audio/wav");
+    let scan = crate::media::files::scan_file(&file, &dir);
+    assert_eq!(scan.preview(), Some(&FilePreview::Audio { seconds: Some(4) }));
+}

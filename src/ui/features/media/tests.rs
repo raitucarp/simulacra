@@ -63,3 +63,18 @@ fn video_files_show_their_poster_or_fall_back_to_the_file_card() {
     let meta = super::file_card::file_meta(&clip, "Video", Some("1:35".into()));
     assert!(meta.starts_with("Video · ") && meta.ends_with(" · 1:35"), "{meta}");
 }
+
+#[test]
+fn audio_files_show_their_length_and_play() {
+    use crate::domain::media::files::{FileFacts, FilePreview, FileScan};
+    use crate::domain::media::{FileRef, MediaCatalog};
+    let theme = minimalist_dark();
+    let memo = FileRef { mime: "audio/mpeg".into(), ..FileRef::at("/home/ann/memo.mp3") };
+    let _unscanned = super::file_audio::audio_file(0, &memo, None, &theme);
+    let preview = FilePreview::Audio { seconds: Some(3_725) };
+    let catalog = MediaCatalog::default().with_file(memo.path.clone(), FileScan::Present(FileFacts { preview }));
+    let _scanned = super::file_audio::audio_file(0, &memo, Some(&catalog), &theme);
+    let mut with_audio = post("a memo");
+    with_audio.extras.files.push(memo);
+    assert!(render_post_media(&with_audio, &[] as &[Post], &theme, None).is_some());
+}

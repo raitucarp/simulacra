@@ -15,6 +15,7 @@ mod lifecycle_menu; // Y5, Y6
 mod garden_menu; // N3
 mod depth_dial; // N5
 mod margin; // N2
+mod branch_sheet; // N6
 mod post_menu;
 mod edited_mark; // V8
 mod replied; // V12
@@ -31,6 +32,7 @@ pub use events::{DataAction, DataEvent, SavedTarget, ScopeKind};
 pub use export::{render_export_sheet, ExportDialog};
 pub use legend::{render_legend_sheet, LegendView};
 pub use margin::{render_margin_sheet, MarginDialog};
+pub use branch_sheet::{render_branch_sheet, BranchDialog, BranchEvent};
 pub use depth_dial::{depth_label, render_depth_dial, DepthView};
 pub use history::{render_history_sheet, HistorySheet};
 pub use edited_mark::render_edited_mark;

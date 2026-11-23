@@ -1,5 +1,5 @@
 //! A post's data controls: in the "…" menu, "Edit" (the user's own posts), "History" (once
-//! edited), "Reply in the margin…" (N2, never on a locked post), "Bookmark" and the "Add to
+//! edited), "Reply in the margin…" (N2) and "Fork a what-if…" (N6), never on a locked post,, "Bookmark" and the "Add to
 //! collection" submenu. The card's "edited" mark is `edited_mark`.
 
 use super::events::{DataAction, DataEvent};
@@ -131,6 +131,7 @@ pub fn with_data_items(menu: PopupMenu, controls: Option<&DataControls>, window:
     }
     if !controls.locked {
         menu = menu.item(item(tr("post.margin.menu"), LucideIcon::MessageSquareReply, DataEvent::ReplyInMargin(post.clone()), &controls.on_event)); // N2
+        menu = menu.item(item(tr("posts.branch.menu"), LucideIcon::GitBranch, DataEvent::Branch(super::branch_sheet::BranchEvent::Fork(post.clone())), &controls.on_event)); // N6
     }
     let (label, icon) = if controls.bookmarked { (tr("data.menu.unbookmark"), LucideIcon::BookmarkCheck) } else { (tr("data.menu.bookmark"), LucideIcon::Bookmark) };
     let menu = menu.item(item(label, icon, DataEvent::ToggleBookmark(post), &controls.on_event));

@@ -126,6 +126,8 @@ pub enum DataEvent {
     /// N5: reads the post at this depth (`None`: as written), or asks an agent for that rendering.
     ShowDepth(PostId, Option<crate::domain::post::depth::Depth>),
     RenderDepth(PostId, crate::domain::post::depth::Depth),
+    /// N6: the what-if branch sheet.
+    Branch(super::branch_sheet::BranchEvent),
     /// The monthly migration review (S16).
     OpenReview,
     ReviewDecide(crate::domain::symbols::ReviewChoice),

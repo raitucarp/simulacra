@@ -27,6 +27,7 @@ impl AppView {
             E::ReplyInMargin(_) | E::PickPassage(_) | E::SubmitMargin | E::CloseMargin => self.on_margin_event(event, window, cx), // N2
             E::SetGarden(id, maturity) => self.set_garden(&id, maturity, window, cx), // N3
             E::ShowDepth(..) | E::RenderDepth(..) => self.on_depth_event(event, window, cx), // N5
+            E::Branch(event) => self.on_branch_event(event, window, cx), // N6
             E::OpenScheduled | E::EditScheduled(_) | E::PublishScheduledNow(_) | E::CancelScheduled(_) | E::CloseScheduled => self.on_scheduled_event(event, window, cx),
             _ => self.on_saved_event(event, window, cx),
         }
@@ -35,7 +36,7 @@ impl AppView {
     }
 
     fn data_sheet_open(&self) -> bool {
-        self.data.history.is_some() || self.data.export.is_some() || self.data.snapshot.is_some() || self.data.restore.is_some() || self.data.scheduled_open || self.data.legend_open || self.data.review.is_some() || self.data.margin.is_some()
+        self.data.history.is_some() || self.data.export.is_some() || self.data.snapshot.is_some() || self.data.restore.is_some() || self.data.scheduled_open || self.data.legend_open || self.data.review.is_some() || self.data.margin.is_some() || self.data.branch.is_some()
     }
 
     /// A sheet that just opened takes the keyboard (unless one of its fields already did), so
@@ -119,6 +120,8 @@ impl AppView {
             (render_history_sheet(sheet, on_event.clone(), theme), DataEvent::CloseHistory)
         } else if let Some(dialog) = &self.data.margin {
             (crate::ui::features::data::render_margin_sheet(dialog, on_event.clone(), theme), DataEvent::CloseMargin) // N2
+        } else if let Some(dialog) = &self.data.branch {
+            (crate::ui::features::data::render_branch_sheet(dialog, on_event.clone(), theme), DataEvent::Branch(crate::ui::features::data::BranchEvent::Close)) // N6
         } else if let Some(dialog) = &self.data.export {
             (render_export_sheet(dialog, on_event.clone(), theme), DataEvent::CloseExport)
         } else if let Some(dialog) = &self.data.snapshot {

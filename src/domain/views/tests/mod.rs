@@ -4,6 +4,7 @@ mod board;
 mod calendar;
 mod future;
 mod garden; // N3
+mod series; // N10
 mod memory;
 mod rapid_log;
 mod raw;

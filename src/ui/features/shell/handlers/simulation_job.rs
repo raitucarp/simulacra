@@ -14,7 +14,7 @@ impl AppView {
     /// network has no posts), or a new post from the seed with its vault document resolved.
     pub(super) fn trigger_job_kind(&self, mode: TriggerMode) -> Option<JobKind> {
         match mode {
-            TriggerMode::Reply => self.state.current_network_posts().find(|p| !p.is_locked()).map(|p| JobKind::Reply(self.state.authored(p))),
+            TriggerMode::Reply => self.state.current_network_posts().find(|p| !p.is_locked() && p.extras.audience.is_none()).map(|p| JobKind::Reply(self.state.authored(p))),
             TriggerMode::NewPost { seed } => Some(JobKind::NewPost(seed.resolve(&self.state.documents))),
         }
     }
@@ -43,7 +43,7 @@ impl AppView {
         let engine = &agent.config.engine;
         let plan = EnginePlan::resolve(engine, &self.state.llm_settings, &self.state.credentials, self.state.media_dir());
         let tools = (!engine.tools.is_empty())
-            .then(|| ToolContext::capture(&network, &self.state.posts, &self.state.user_profiles, &self.state.documents));
+            .then(|| ToolContext::capture_for(&agent.id, &network, &self.state.posts, &self.state.user_profiles, &self.state.documents));
         let roll = roll_percent(self.scheduler.seed, agent.id.as_str(), self.scheduler.tick ^ self.state.posts.len() as u64);
         let context = PromptContext { beliefs: self.belief_dossier(&agent.id), ..self.prompt_context(&network) }; // sb F1
         EngineJob { kind, agent, network, context, plan, tools, roll }

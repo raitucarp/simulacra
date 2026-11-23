@@ -1,9 +1,11 @@
 //! Thought post entity, parsing logic, and character limit rules.
 
 pub mod anchor; // N2: margin replies
+pub mod audience; // N8: audience scopes
 mod author_ref;
 pub mod auto_delete; // Y7
 mod authored;
+pub mod branch; // N6: what-if branches
 pub mod depth; // N5
 pub mod format;
 pub mod garden; // N3
@@ -13,11 +15,14 @@ mod extras;
 mod kind;
 mod lifecycle;
 pub mod lock; // X2: password-locked posts
+pub mod pinned; // N7: pinned quotes
+pub mod question; // N9: ask the room
 mod parse;
 mod provenance;
 pub mod refs; // N1: embeds, quotes and wikilinks, and backlinks
 mod relations;
 pub mod schedule;
+pub mod series; // N10: series
 pub mod sanitize;
 pub mod seed;
 mod tint;

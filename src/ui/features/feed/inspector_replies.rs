@@ -40,6 +40,7 @@ pub(crate) fn conversation_children(ctx: &InspectorContext<'_>, conversation: &C
     children.push(focused_card(ctx, conversation));
     children.extend(super::inspector_backlinks::render_backlinks(ctx, conversation.focused).map(IntoElement::into_any_element)); // N1
     children.extend(super::inspector_margin::render_margin_notes(ctx, conversation.focused).map(IntoElement::into_any_element)); // N2
+    children.extend(super::inspector_answers::render_question_answers(ctx, conversation.focused).map(IntoElement::into_any_element)); // N9
     if conversation.branches.is_empty() {
         children.push(render_grounding_callout(ctx.theme).into_any_element());
     }

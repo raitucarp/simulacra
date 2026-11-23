@@ -56,6 +56,21 @@ pub struct PostExtras {
     /// N3: the post is a garden note, out of the stream, at this stage.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub garden: Option<super::garden::GardenNote>,
+    /// N6: the reply starts a what-if branch of the thread.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub branch: Option<super::branch::BranchPoint>,
+    /// N7: a vault passage the post quotes verbatim, pinned to its document (boxed: posts stay small).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pinned: Option<Box<super::pinned::PinnedQuote>>,
+    /// N8: who besides the author may read it (`None`: everyone; boxed).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub audience: Option<Box<super::audience::Audience>>,
+    /// N9: the post was asked of the room: who was asked, and the accepted answer (boxed).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub question: Option<Box<super::question::Question>>,
+    /// N10: its place in a series (boxed).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub series: Option<Box<super::series::SeriesEntry>>,
 }
 
 impl PostExtras {
@@ -65,9 +80,9 @@ impl PostExtras {
     }
 
     /// Whether there is anything to show behind the post (the origin, images, files, symbols, tint,
-    /// version, ticks, lock, code runs, margin anchor and garden note alone are not).
+    /// version, ticks, lock, code runs, margin anchor, garden note, branch pointer, pinned quote, audience, question and series alone are not).
     pub fn has_details(&self) -> bool {
-        Self { origin: None, images: Vec::new(), files: Vec::new(), symbols: PostSymbols::default(), tint: None, head: None, replied_version: None, todo_state: Default::default(), lock: None, code_runs: Vec::new(), anchor: None, garden: None, ..self.clone() } != Self::default()
+        Self { origin: None, images: Vec::new(), files: Vec::new(), symbols: PostSymbols::default(), tint: None, head: None, replied_version: None, todo_state: Default::default(), lock: None, code_runs: Vec::new(), anchor: None, garden: None, branch: None, pinned: None, audience: None, question: None, series: None, ..self.clone() } != Self::default()
     }
 
     /// Adds `source` unless an identical reference is already listed.

@@ -1,7 +1,8 @@
 //! The `Send` snapshot tools read on the generation thread: the agent's network posts,
 //! profiles and vault documents, plus the web-fetch policy.
 
-use crate::domain::{GroundingDocument, NetworkId, Post, Profile};
+use crate::domain::post::audience::readable_by;
+use crate::domain::{GroundingDocument, NetworkId, Post, Profile, ProfileId};
 use jiff::Timestamp;
 use std::collections::HashMap;
 use std::time::Duration;
@@ -90,6 +91,12 @@ impl ToolContext {
                 .collect(),
             fetch: FetchPolicy::default(),
         }
+    }
+
+    /// N8: the snapshot `reader` may see: posts outside their scope (and locked ones) are left out.
+    pub fn capture_for(reader: &ProfileId, network: &NetworkId, posts: &[Post], profiles: &[Profile], documents: &[GroundingDocument]) -> Self {
+        let readable: Vec<Post> = posts.iter().filter(|post| &post.network_id == network && readable_by(post, reader)).cloned().collect();
+        Self::capture(network, &readable, profiles, documents)
     }
 }
 

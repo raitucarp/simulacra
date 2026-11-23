@@ -32,4 +32,6 @@ pub enum VaultEvent {
     LearnConnections(String),
     /// sb F2: the document's earlier versions (text, title and record).
     History(String),
+    /// N7: quote a passage of the document in a post.
+    Quote(String),
 }

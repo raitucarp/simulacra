@@ -13,6 +13,7 @@ mod consts;
 mod construct;
 mod credential_state;
 mod data_host; // sb F2
+mod idea_host; // N6–N10
 mod lock_host; // X4
 mod forge_host;
 mod forge_suggest;

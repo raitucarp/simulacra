@@ -126,6 +126,16 @@ pub enum DataEvent {
     /// N5: reads the post at this depth (`None`: as written), or asks an agent for that rendering.
     ShowDepth(PostId, Option<crate::domain::post::depth::Depth>),
     RenderDepth(PostId, crate::domain::post::depth::Depth),
+    /// N6: the what-if branch sheet.
+    Branch(super::branch_sheet::BranchEvent),
+    /// N7: the quote sheet, and re-pinning a quote.
+    Quote(super::quote_sheet::QuoteEvent),
+    /// N8: who may read the post (`None`: everyone).
+    SetAudience(PostId, Option<crate::domain::post::audience::Audience>),
+    /// N9: asking the room, and accepting an answer.
+    Question(super::question::QuestionEvent),
+    /// N10: series.
+    Series(super::series_sheet::SeriesEvent),
     /// The monthly migration review (S16).
     OpenReview,
     ReviewDecide(crate::domain::symbols::ReviewChoice),

@@ -1,5 +1,5 @@
 //! A post's data controls: in the "…" menu, "Edit" (the user's own posts), "History" (once
-//! edited), "Reply in the margin…" (N2, never on a locked post), "Bookmark" and the "Add to
+//! edited), "Reply in the margin…" (N2) and "Fork a what-if…" (N6), never on a locked post,, "Bookmark" and the "Add to
 //! collection" submenu. The card's "edited" mark is `edited_mark`.
 
 use super::events::{DataAction, DataEvent};
@@ -30,6 +30,8 @@ pub struct DataSource {
     pub history_open: bool,
     /// N5: the depth dial of every post.
     pub depth: Rc<super::depth_dial::DepthView>,
+    /// N6–N10: what every card's menu shares.
+    pub ideas: Rc<super::post_facts::IdeaSource>,
     pub on_event: DataAction,
 }
 
@@ -50,7 +52,8 @@ impl DataSource {
             version: None,
             replied_to: None,
             locked: false,
-            garden: None,
+            facts: Default::default(),
+            ideas: self.ideas.clone(),
             on_event: self.on_event.clone(),
         }
     }
@@ -78,8 +81,9 @@ pub struct DataControls {
     pub replied_to: Option<crate::domain::data::history::SemVer>,
     /// Its text is sealed (X4): nothing quotes it (N2); set by the feed.
     pub locked: bool,
-    /// The garden stage of a planted post (N3); set by the feed.
-    pub garden: Option<crate::domain::post::garden::Maturity>,
+    /// What the menu offers beyond the data (N3 garden stage, N6–N10); set by the feed.
+    pub facts: super::post_facts::PostFacts,
+    pub ideas: Rc<super::post_facts::IdeaSource>,
     pub on_event: DataAction,
 }
 
@@ -124,6 +128,7 @@ pub fn with_data_items(menu: PopupMenu, controls: Option<&DataControls>, window:
         menu = super::lifecycle_menu::with_lifecycle_items(menu, &controls, window, cx); // Y5, Y6
         menu = super::state_menu::with_state_items(menu, &controls, window, cx); // S7
         menu = super::garden_menu::with_garden_items(menu, &controls, window, cx); // N3
+        menu = super::idea_menu::with_idea_items(menu, &controls, window, cx); // N7–N10
     }
     if controls.revisions > 0 {
         let label = t!("data.menu.history", count = controls.revisions).to_string();
@@ -131,6 +136,7 @@ pub fn with_data_items(menu: PopupMenu, controls: Option<&DataControls>, window:
     }
     if !controls.locked {
         menu = menu.item(item(tr("post.margin.menu"), LucideIcon::MessageSquareReply, DataEvent::ReplyInMargin(post.clone()), &controls.on_event)); // N2
+        menu = menu.item(item(tr("posts.branch.menu"), LucideIcon::GitBranch, DataEvent::Branch(super::branch_sheet::BranchEvent::Fork(post.clone())), &controls.on_event)); // N6
     }
     let (label, icon) = if controls.bookmarked { (tr("data.menu.unbookmark"), LucideIcon::BookmarkCheck) } else { (tr("data.menu.bookmark"), LucideIcon::Bookmark) };
     let menu = menu.item(item(label, icon, DataEvent::ToggleBookmark(post), &controls.on_event));

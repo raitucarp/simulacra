@@ -5,6 +5,12 @@
 mod actions;
 mod anchor_line; // N2
 mod garden_badge; // N3
+mod branch_chip; // N6
+mod pinned_card; // N7
+mod audience_badge; // N8
+mod question_chip; // N9
+mod series_strip; // N10
+mod idea_lines; // N3, N6–N10
 mod attachments;
 mod body;
 mod checklist; // D5
@@ -43,3 +49,6 @@ pub use threadline::ThreadlineStyle;
 
 #[cfg(test)]
 mod tests;
+#[cfg(test)]
+#[path = "tests/ideas.rs"]
+mod ideas_tests; // N6–N10

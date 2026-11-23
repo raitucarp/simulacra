@@ -26,6 +26,8 @@ pub struct DataInputs {
     pub meaning: Entity<InputState>,
     /// N2: the reply in the margin sheet.
     pub margin_reply: Entity<InputState>,
+    /// N6–N10: the fields of the idea sheets.
+    pub ideas: super::idea_host::IdeaInputs,
 }
 
 /// Everything data ownership keeps in the shell.
@@ -59,6 +61,8 @@ pub struct DataHost {
     pub locks: super::lock_host::LockHost,
     /// N2: the open margin sheet.
     pub margin: Option<crate::ui::features::data::MarginDialog>,
+    /// N6–N10: the open idea sheets.
+    pub ideas: super::idea_host::IdeaSheets,
     /// N5: the depth dial, and the ticket of the newest rendering request.
     pub depth: crate::ui::features::data::DepthView,
     pub depth_ticket: u64,
@@ -81,12 +85,13 @@ impl DataInputs {
             note: field(t!("data.saved.note_placeholder").to_string(), false, window, cx),
             meaning: field(t!("symbols.legend.meaning_placeholder").to_string(), false, window, cx),
             margin_reply: field(t!("post.margin.reply_placeholder").to_string(), false, window, cx),
+            ideas: super::idea_host::IdeaInputs::new(window, cx),
         }
     }
 
     /// Whether one of the fields has the keyboard.
     pub fn any_focused(&self, window: &Window, cx: &App) -> bool {
-        [&self.passphrase, &self.repeat, &self.restore_passphrase, &self.from, &self.to, &self.collection_name, &self.note, &self.meaning, &self.margin_reply].into_iter().any(|input| input.read(cx).focus_handle(cx).is_focused(window))
+        [&self.passphrase, &self.repeat, &self.restore_passphrase, &self.from, &self.to, &self.collection_name, &self.note, &self.meaning, &self.margin_reply].into_iter().chain(self.ideas.all()).any(|input| input.read(cx).focus_handle(cx).is_focused(window))
     }
 
     /// Re-renders on edits of the live fields; Enter in the name and note fields submits.
@@ -100,7 +105,7 @@ impl DataInputs {
                 }
             })
         });
-        changes.into_iter().chain(enter).collect()
+        changes.into_iter().chain(enter).chain(self.ideas.subscribe(window, cx)).collect()
     }
 }
 
@@ -129,6 +134,7 @@ impl DataHost {
             focus: cx.focus_handle(),
             locks: super::lock_host::LockHost::new(window, cx),
             margin: None,
+            ideas: Default::default(),
             depth: Default::default(),
             depth_ticket: 0,
             _subscriptions: subscriptions,

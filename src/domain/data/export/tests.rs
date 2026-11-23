@@ -262,3 +262,23 @@ fn a_locked_post_travels_as_ciphertext_and_imports_locked() {
     assert_eq!(back[0].unlock(&password).expect("opens after the round trip").as_str(), "Tamarind lighthouse ledger");
     assert!(posts.iter().any(|p| p.content == "Unrelated musing, with \"quotes\"."), "the open posts import as before");
 }
+
+/// N7, N10: a pinned quote and a series part travel with the post, never with a locked one.
+#[test]
+fn pinned_quotes_and_series_travel_but_never_past_a_lock() {
+    use crate::domain::post::lock::LockPassword;
+    use crate::domain::post::pinned::PinnedQuote;
+    use crate::domain::post::series::{series_id, SeriesEntry};
+    let mut source = source();
+    source.posts[0].extras.pinned = PinnedQuote::of("doc_ethics", "Ethics", "Deus sive natura.", 0..17).map(Box::new);
+    source.posts[0].extras.series = Some(Box::new(SeriesEntry { id: series_id("Notes"), title: "Notes".into(), number: 3, goal: None }));
+    let mut locked = post("p6", "user_main", "Tamarind lighthouse ledger", 7, None);
+    locked.extras.pinned = PinnedQuote::of("doc_x", "Quetzal source", "Orchard confession.", 0..19).map(Box::new);
+    locked.extras.series = Some(Box::new(SeriesEntry { id: series_id("Hidden"), title: "Quetzal diary".into(), number: 1, goal: None }));
+    locked.lock_with(&LockPassword::new("seven tidy lanterns"), crate::domain::crypto::KdfParams { memory_kib: 8, iterations: 1, lanes: 1 }).expect("locked");
+    source.posts.push(locked);
+    let files = bundle_files(&plan_export(&source, &options(ExportScope::Everything)), &source);
+    let all: String = files.iter().filter_map(|f| match &f.body { FileBody::Text(t) => Some(t.as_str()), FileBody::Copy(_) => None }).collect();
+    assert!(all.contains("> Deus sive natura.") && all.contains("Ethics") && all.contains("Notes #3"), "the open post keeps them");
+    assert!(!all.contains("Quetzal") && !all.contains("Orchard"), "a locked post travels as its seal only");
+}

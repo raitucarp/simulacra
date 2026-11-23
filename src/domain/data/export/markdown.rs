@@ -44,12 +44,23 @@ fn author_line(post: &Post, source: &ExportSource) -> String {
     format!("### {who} · {}\n\n", post.created_at.strftime(TIME_FORMAT))
 }
 
+/// N7, N10: a post's place in a series and its pinned quote, as Markdown; nothing for a locked
+/// post, which travels as its seal only.
+fn idea_block(post: &Post) -> String {
+    if post.is_locked() {
+        return String::new();
+    }
+    let series = post.extras.series.as_ref().map(|entry| format!("*{} #{}*\n\n", entry.title, entry.number)).unwrap_or_default();
+    let pinned = post.extras.pinned.as_ref().map(|quote| format!("> {}\n>\n> — {}\n\n", quote.passage.replace('\n', "\n> "), quote.title)).unwrap_or_default();
+    format!("{series}{pinned}")
+}
+
 fn post_block(post: &Post, source: &ExportSource, image_path: &dyn Fn(&str) -> String) -> String {
     let images: String = super::bundle::post_images(post).iter().map(|(path, alt)| format!("![{alt}]({})\n\n", image_path(path))).collect();
     let link = post.link_url.as_ref().map(|url| format!("<{url}>\n\n")).unwrap_or_default();
     let quote = post.quote_id.as_ref().map(|id| format!("> Quotes [[{id}]]\n\n")).unwrap_or_default();
     let body = post.extras.lock.as_ref().map_or_else(|| post.content.trim().to_string(), crate::domain::post::lock::lock_block); // X6: a locked post travels as its seal only
-    format!("{}{body}\n\n{images}{link}{quote}", author_line(post, source))
+    format!("{}{body}\n\n{}{images}{link}{quote}", author_line(post, source), idea_block(post))
 }
 
 /// `items` without repeats, in first-seen order.

@@ -1,4 +1,4 @@
-//! N3, N6–N10, N14: the lines under a post's author, in order: its retraction or correction (N14), its garden stage (N3), the
+//! N3, N6–N10, N14: the lines under a post's author, in order: its retraction or correction (N14), "Still true?" on a due claim (N13), its garden stage (N3), the
 //! what-if branch it starts (N6) who may read it (N8) who it was asked of (N9) and its place in a series (N10). Each says nothing past a lock that
 //! the placeholder would not.
 
@@ -12,6 +12,7 @@ use gpui_kit::Div;
 pub(super) fn idea_lines<L: PostLookup>(post: &Post, lookup: L, theme: &ThemeTokens, handlers: &PostCardHandlers) -> Vec<Div> {
     let lines = [
         super::correction_banner::render_correction_banner(post, theme), // N14
+        super::still_true_strip::render_still_true_strip(post, theme, handlers), // N13
         super::garden_badge::render_garden_badge(post, theme),
         super::branch_chip::render_branch_chip(post, theme),
         super::audience_badge::render_audience_badge(post, lookup, theme),

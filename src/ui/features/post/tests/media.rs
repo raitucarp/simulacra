@@ -59,3 +59,15 @@ fn a_retraction_wears_its_banner_but_never_past_a_lock() {
     let sealed = forged(|post| post.extras.correction = Some(Box::new(mark.clone())));
     assert!(super::correction_banner::render_correction_banner(&sealed, &theme).is_none(), "a locked post shows only its placeholder");
 }
+
+#[test]
+fn only_the_users_due_claims_ask_still_true_and_never_a_locked_one() {
+    use crate::domain::post::still_true::FIRST_WAIT_DAYS;
+    let later = jiff::Timestamp::now().checked_add(jiff::SignedDuration::from_hours(24 * (FIRST_WAIT_DAYS + 1))).expect("time");
+    let post = Post::create_with_attachments("p", "n1", "u1", "Tea is best at 80 degrees.", None, None, None, None, None).expect("post");
+    assert!(super::still_true_strip::asks_still_true(&post, true, later));
+    assert!(!super::still_true_strip::asks_still_true(&post, false, later), "never on someone else's post");
+    assert!(!super::still_true_strip::asks_still_true(&post, true, jiff::Timestamp::now()), "not before it is due");
+    let sealed = forged(|_| {});
+    assert!(!super::still_true_strip::asks_still_true(&sealed, true, later), "a locked post shows only its placeholder");
+}

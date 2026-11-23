@@ -27,3 +27,16 @@ fn the_series_view_renders_and_never_shows_a_locked_part() {
         assert_ne!(rust_i18n::t!(&key, locale = "en"), key);
     }
 }
+
+#[test]
+fn the_still_true_view_renders_and_lists_no_locked_claim() {
+    let mut state = AppState::new_in_memory();
+    state.submit_post("Fresh claim.").expect("posted");
+    let theme = ThemeTokens::default();
+    let view = input(&state, &theme, ViewScope::Profile);
+    assert!(render_list_view(PostView::StillTrue, &view).is_some(), "the empty view renders");
+    assert!(PostView::StillTrue.offered_in(ViewScope::Profile));
+    for key in ["show", "empty", "due"].map(|key| format!("views.still_true.{key}")) {
+        assert_ne!(rust_i18n::t!(&key, locale = "en"), key);
+    }
+}

@@ -22,6 +22,7 @@ mod series_sheet; // N10
 mod voice_sheet; // N11
 mod ink_pad; mod ink_sheet; // N12
 mod correction_sheet; // N14
+mod check; // N13
 mod post_facts; mod idea_menu; // N3, N6–N10
 mod care_menu; // N11–N15
 mod post_menu;
@@ -49,6 +50,7 @@ pub use voice_sheet::{render_voice_sheet, VoiceDialog, VoiceEvent};
 pub use ink_pad::InkPad;
 pub use ink_sheet::{render_ink_sheet, InkDialog, InkEvent};
 pub use correction_sheet::{render_correction_sheet, CorrectionDialog, CorrectionEvent};
+pub use check::CheckEvent;
 pub use depth_dial::{depth_label, render_depth_dial, DepthView};
 pub use history::{render_history_sheet, HistorySheet};
 pub use edited_mark::render_edited_mark;

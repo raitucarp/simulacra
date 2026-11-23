@@ -32,6 +32,7 @@ mod data_series; // N10
 mod data_voice; mod data_voice_play; mod data_voice_transcribe; // N11
 mod data_ink; // N12
 mod data_correction; // N14
+mod data_check; // N13
 mod data_garden; // N3
 mod feed_answer; // N4
 mod data_depth; // N5

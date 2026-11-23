@@ -9,7 +9,7 @@ mod authors;
 mod auto_archive; // Y6
 mod auto_delete; // Y7
 mod catalogue;
-mod avatar; mod backrefs; mod embedded; // N1: backlinks, embedded versions
+mod avatar; mod backrefs; mod embedded; mod margin; // N1: backlinks, embedded versions; N2: margin replies
 mod bootstrap;
 mod bulk_posts;
 mod captures;
@@ -59,7 +59,7 @@ pub use post_heartbeat::LifecycleReport;
 pub use post_index::PostIndex;
 pub use posts_by::Page;
 pub use scheduled_queue::ScheduledEdit;
-pub use post_meta::PostMeta;
+pub use post_meta::PostMeta; pub use margin::MarginNote;
 pub use post_versions::PostEdit;
 pub use network_create::{network_slug, validate_network_name, NetworkNameError, MAX_NETWORK_NAME_CHARS};
 pub use threads::{ThreadAnchor, ThreadDraft}; pub use locked::seal_thread;

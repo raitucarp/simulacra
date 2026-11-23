@@ -33,6 +33,6 @@ pub(crate) fn render_thread_view(ctx: &InspectorContext<'_>, focused: &Post) -> 
     let (send, thread) = (ctx.on_inspector.clone(), root.clone());
     let on_month: PickMonth = Rc::new(move |month, window, cx| send(InspectorCommand::Month { root: thread.clone(), month }, window, cx));
     let month = ctx.view.month.as_ref().filter(|(owner, _)| *owner == root).map(|(_, month)| *month);
-    let input = ViewInput { state: ctx.state, theme: ctx.theme, posts: thread_posts(ctx.state, focused), scope: ViewScope::Thread, on_open, month, on_month };
+    let input = ViewInput { state: ctx.state, theme: ctx.theme, posts: thread_posts(ctx.state, focused), scheduled: Vec::new(), scope: ViewScope::Thread, on_open, month, on_month };
     render_list_view(ctx.view.mode, &input)
 }

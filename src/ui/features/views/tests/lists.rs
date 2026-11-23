@@ -26,7 +26,7 @@ pub(super) fn thread() -> (AppState, Vec<PostId>) {
 
 pub(super) fn input<'a>(state: &'a AppState, theme: &'a ThemeTokens, scope: ViewScope) -> ViewInput<'a> {
     let root = state.get_post(&state.posts.iter().find(|post| post.reply_to_id.is_none()).expect("root").id).expect("root");
-    ViewInput { state, theme, posts: thread_posts(state, root), scope, on_open: Rc::new(|_, _, _| {}), month: None, on_month: Rc::new(|_, _, _| {}) }
+    ViewInput { state, theme, posts: thread_posts(state, root), scheduled: Vec::new(), scope, on_open: Rc::new(|_, _, _| {}), month: None, on_month: Rc::new(|_, _, _| {}) }
 }
 
 #[test]
@@ -54,7 +54,7 @@ fn every_list_view_renders_in_both_scopes_and_the_inspector_draws_the_rest() {
 fn an_empty_list_renders_its_empty_note() {
     let state = AppState::new_in_memory();
     let theme = ThemeTokens::default();
-    let input = ViewInput { state: &state, theme: &theme, posts: Vec::new(), scope: ViewScope::Profile, on_open: Rc::new(|_, _, _| {}), month: None, on_month: Rc::new(|_, _, _| {}) };
+    let input = ViewInput { state: &state, theme: &theme, posts: Vec::new(), scheduled: Vec::new(), scope: ViewScope::Profile, on_open: Rc::new(|_, _, _| {}), month: None, on_month: Rc::new(|_, _, _| {}) };
     for view in PostView::ALL {
         let _ = render_list_view(*view, &input);
     }
@@ -90,4 +90,23 @@ fn the_calendar_opens_on_the_newest_post_or_the_chosen_month() {
     for key in ["views.calendar.previous", "views.calendar.next", "views.calendar.today", "views.calendar.month_title", "views.calendar.more"] {
         assert_ne!(rust_i18n::t!(key, locale = "en"), key);
     }
+}
+
+#[test]
+fn the_future_log_reads_the_thread_todos_and_the_scheduled_posts() {
+    use crate::domain::post::PostLifecycle;
+    use crate::domain::views::future::{future_log, FutureItem};
+    let (state, _) = thread();
+    let theme = ThemeTokens::default();
+    let mut waiting = crate::domain::Post::create("waiting", "net", "author", "Out on Friday").expect("post");
+    waiting.lifecycle = PostLifecycle::scheduled("2099-02-01T09:00:00Z".parse().expect("timestamp"));
+    let mut input = input(&state, &theme, ViewScope::Profile);
+    input.scheduled.push(&waiting);
+    let today = "2026-11-23".parse().expect("date");
+    let months = future_log(input.posts.iter().chain(&input.scheduled).copied(), today, crate::time::local_date);
+    let items: Vec<_> = months.iter().flat_map(|month| &month.entries).map(|entry| (entry.text.as_str(), entry.item.clone())).collect();
+    assert_eq!(items.len(), 2, "{items:?}");
+    assert_eq!(items[0].0, "write the plan");
+    assert!(matches!(items[1].1, FutureItem::Post { locked: false }));
+    assert!(render_list_view(PostView::Future, &input).is_some());
 }

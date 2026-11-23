@@ -6042,3 +6042,6 @@ views.calendar.next: "次の月"
 views.calendar.today: "今月"
 views.calendar.month_title: "%{year}年 %{month}"
 views.calendar.more: "ほか %{count} 件"
+# W5: the future log
+views.future.show: "フューチャーログを表示"
+views.future.empty: "今日以降に予定や期限のあるものはありません。"

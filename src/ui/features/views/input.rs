@@ -20,6 +20,8 @@ pub struct ViewInput<'a> {
     pub theme: &'a ThemeTokens,
     /// The posts shown (published ones; the scope picks them and their order).
     pub posts: Vec<&'a Post>,
+    /// W5: posts waiting to be published, shown only by the future log.
+    pub scheduled: Vec<&'a Post>,
     pub scope: ViewScope,
     pub on_open: OpenPost,
     /// The month the calendar was moved to (`None`: the month of the newest post).

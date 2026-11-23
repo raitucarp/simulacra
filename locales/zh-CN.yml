@@ -6042,3 +6042,6 @@ views.calendar.next: "下个月"
 views.calendar.today: "本月"
 views.calendar.month_title: "%{year}年 %{month}"
 views.calendar.more: "另外 %{count} 条"
+# W5: the future log
+views.future.show: "显示未来记录"
+views.future.empty: "从今天起没有已排期或到期的内容。"

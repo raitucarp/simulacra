@@ -6042,3 +6042,6 @@ views.calendar.next: "Nächster Monat"
 views.calendar.today: "Dieser Monat"
 views.calendar.month_title: "%{month} %{year}"
 views.calendar.more: "+%{count} weitere"
+# W5: the future log
+views.future.show: "Zukunftsprotokoll anzeigen"
+views.future.empty: "Ab heute ist nichts geplant oder fällig."

@@ -6,6 +6,7 @@
 //! same list.
 
 pub mod calendar; // W4
+pub mod future; // W5
 pub mod rapid_log; // W2
 pub mod raw; // W3
 #[cfg(test)]
@@ -29,6 +30,8 @@ keyed_enum! {
         Raw => "raw",
         /// W4: a month of days, each with its posts.
         Calendar => "calendar",
+        /// W5: scheduled posts and dated to-dos ahead, by month.
+        Future => "future",
     }
 }
 
@@ -54,7 +57,7 @@ impl PostView {
     /// Where this view is offered.
     pub const fn scopes(self) -> &'static [ViewScope] {
         match self {
-            Self::Cards | Self::RapidLog | Self::Raw | Self::Calendar => EVERYWHERE,
+            Self::Cards | Self::RapidLog | Self::Raw | Self::Calendar | Self::Future => EVERYWHERE,
             Self::Outline | Self::Argument => THREAD_ONLY,
         }
     }

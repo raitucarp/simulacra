@@ -6042,3 +6042,6 @@ views.calendar.next: "Следующий месяц"
 views.calendar.today: "Этот месяц"
 views.calendar.month_title: "%{month} %{year}"
 views.calendar.more: "Ещё: %{count}"
+# W5: the future log
+views.future.show: "Показать журнал будущего"
+views.future.empty: "С сегодняшнего дня ничего не запланировано и не назначено."

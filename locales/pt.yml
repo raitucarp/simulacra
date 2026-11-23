@@ -6042,3 +6042,6 @@ views.calendar.next: "Mês seguinte"
 views.calendar.today: "Este mês"
 views.calendar.month_title: "%{month} de %{year}"
 views.calendar.more: "+%{count} mais"
+# W5: the future log
+views.future.show: "Mostrar o registo futuro"
+views.future.empty: "Nada agendado nem com prazo a partir de hoje."

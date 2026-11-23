@@ -3,12 +3,13 @@
 //!
 //! - [`registry`]: the icon and translated name of every [`PostView`].
 //! - [`switcher`]: the row of view buttons for one scope.
-//! - [`body`]: the list views over a [`ViewInput`] (rapid log W2, raw W3, calendar W4).
+//! - [`body`]: the list views over a [`ViewInput`] (rapid log W2, raw W3, calendar W4, future W5).
 
 pub mod body;
 pub mod common;
 pub mod input;
 pub(crate) mod calendar;
+mod future;
 mod rapid_log;
 mod raw;
 pub mod registry;

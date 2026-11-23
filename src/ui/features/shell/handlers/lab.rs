@@ -1,7 +1,6 @@
 //! Personas & Agents roster handlers: selection, mode switch and profile actions.
 
 use super::super::view::AppView;
-use crate::domain::post::TriggerMode;
 use crate::domain::ProfileId;
 use crate::state::NavigationTab;
 use crate::ui::features::roster::LabMode;
@@ -39,8 +38,8 @@ impl AppView {
         cx.notify();
     }
 
-    /// Runs one simulation turn for `profile_id`.
+    /// A4: "Write a post…" opens the trigger dialog for `profile_id` (nothing runs yet).
     pub(crate) fn lab_trigger_agent(&mut self, profile_id: ProfileId, window: &mut Window, cx: &mut Context<Self>) {
-        self.trigger_simulation_for_agent(Some(profile_id), TriggerMode::Reply, window, cx);
+        self.open_trigger_dialog(profile_id, window, cx);
     }
 }

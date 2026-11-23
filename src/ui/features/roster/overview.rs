@@ -51,7 +51,7 @@ fn actions(profile: &Profile, callbacks: &RosterCallbacks) -> Div {
     let (edit_id, delete_id, action_id) = (id.clone(), id.clone(), id);
     let primary = if profile.is_agent() {
         let run = callbacks.trigger_agent.clone();
-        Button::new(PRIMARY_ACTION_ID).outline().icon(LucideIcon::Zap).label(t!("lab.synthesize_post").to_string()).on_click(move |_, w, cx| run(action_id.clone(), w, cx))
+        Button::new(PRIMARY_ACTION_ID).outline().icon(LucideIcon::Zap).label(t!("trigger.open").to_string()).on_click(move |_, w, cx| run(action_id.clone(), w, cx))
     } else {
         let activate = callbacks.activate_persona.clone();
         Button::new(PRIMARY_ACTION_ID).outline().icon(LucideIcon::UserCheck).label(t!("lab.use_persona").to_string()).on_click(move |_, w, cx| activate(action_id.clone(), w, cx))
@@ -84,12 +84,14 @@ pub(super) fn render_overview(profile: &Profile, params: &RosterParams<'_>, call
         .border_color(theme.border_subtle)
         .child(identity(profile, active_persona, theme))
         .children(bio)
-        .child(actions(profile, callbacks).gap(theme.control_gap));
-    // sb F1: the overview switches between the profile card, an agent's beliefs, and the
-    // posts recommended to the profile.
+        .child(actions(profile, callbacks).gap(theme.control_gap))
+        .children(params.run_status.as_ref().filter(|_| profile.is_agent()).map(|status| super::run_status::render_run_status(profile, status, &callbacks.run, &callbacks.open_post, theme))); // A5
+    // sb F1, A2: the overview switches between the profile card, its posts, its beliefs (a
+    // persona's stated credences), and the posts recommended to it.
     let tabs = profile_tabs(params.profile_tab, profile.is_agent(), theme, callbacks.switch_profile_tab.clone());
     let body = match (&params.beliefs, params.profile_tab, profile.is_agent()) {
         (Some(view), ProfileTab::Beliefs, true) => beliefs_column(view.clone(), theme),
+        (_, ProfileTab::Beliefs, false) => super::persona_beliefs::persona_beliefs_column(profile, &params.persona_credences, &callbacks.open_post, theme), // A2
         (_, ProfileTab::Recommended, _) => recommended_column(profile, &params.recommended, &callbacks.open_post, theme),
         (_, ProfileTab::Posts, _) => super::posts_tab::posts_column(profile, params, callbacks),
         _ => card,

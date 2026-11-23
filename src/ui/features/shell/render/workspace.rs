@@ -6,7 +6,7 @@ use crate::domain::views::memory::ViewOwner;
 use crate::domain::views::PostView;
 use crate::domain::ProfileId;
 use crate::state::semantic::SemanticHit;
-use crate::ui::features::roster::{render_roster_view, LabMode, ProfilePosts, ProfileTab, RosterCallbacks, RosterParams};
+use crate::ui::features::roster::{persona_credences, render_roster_view, LabMode, PersonaCredence, ProfilePosts, ProfileTab, RosterCallbacks, RosterParams};
 use gpui_kit::*;
 use std::rc::Rc;
 
@@ -22,6 +22,8 @@ impl AppView {
             beliefs: Some(self.arena.beliefs_panel.clone().into()),
             recommended: self.roster_recommendations(),
             posts: ProfilePosts { view: self.profile_view(), ..self.lab.posts }, // W7, W8
+            persona_credences: self.shown_persona_credences(), // A2
+            run_status: self.shown_lab_profile().and_then(|id| self.lab.runs.status(&id).cloned()), // A5
         };
         let callbacks = RosterCallbacks {
             select: Rc::new(bind.with(Self::lab_select_profile)),
@@ -34,6 +36,7 @@ impl AppView {
             switch_profile_tab: Rc::new(bind.with(Self::switch_profile_tab)),
             open_post: Rc::new(bind.with(Self::open_profile_post)),
             posts: Rc::new(bind.with(Self::profile_posts_event)), // W7
+            run: Rc::new(bind.with(Self::run_status_event)), // A5
         };
         render_roster_view(params, callbacks)
     }
@@ -55,6 +58,13 @@ impl AppView {
         };
         let selected = self.lab.selected_profile_id.as_ref().filter(|id| contacts.iter().any(|p| &p.id == *id));
         selected.cloned().or_else(|| contacts.first().map(|p| p.id.clone()))
+    }
+
+    /// A2: the credences on the shown persona's posts while its Beliefs tab is open.
+    fn shown_persona_credences(&self) -> Rc<[PersonaCredence]> {
+        let shown = self.shown_lab_profile().filter(|_| self.arena.profile_tab == ProfileTab::Beliefs);
+        let Some(persona) = shown.filter(|id| self.state.user_profiles.iter().any(|p| &p.id == id && !p.is_agent())) else { return Rc::from([]) };
+        Rc::from(persona_credences(&self.state, self.thinking.credences.values(), &persona, crate::time::local_now().date()))
     }
 
     /// W8: the view chosen for the shown profile's Posts tab (cards until one is chosen).

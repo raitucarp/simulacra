@@ -15,7 +15,7 @@ fn callbacks() -> RosterCallbacks {
     let profile = || -> super::params::ProfileCallback { Rc::new(|_, _, _| {}) };
     RosterCallbacks {
         select: profile(), switch_mode: Rc::new(|_, _, _| {}), create: Rc::new(|_, _| {}), edit: profile(), delete: profile(), activate_persona: profile(), trigger_agent: profile(),
-        switch_profile_tab: Rc::new(|_, _, _| {}), open_post: Rc::new(|_, _, _| {}), posts: Rc::new(|_, _, _| {}),
+        switch_profile_tab: Rc::new(|_, _, _| {}), open_post: Rc::new(|_, _, _| {}), posts: Rc::new(|_, _, _| {}), run: Rc::new(|_, _, _| {}),
     }
 }
 
@@ -63,11 +63,83 @@ fn the_posts_tab_renders_in_every_profile_view() {
     for view in PostView::in_scope(crate::domain::views::ViewScope::Profile) {
         let params = RosterParams {
             state: &state, mode: LabMode::PersonaLab, selected_profile_id: Some(&author), theme: &theme, profile_tab: ProfileTab::Posts, beliefs: None,
-            recommended: Rc::from([]), posts: ProfilePosts { view, ..ProfilePosts::default() },
+            recommended: Rc::from([]), posts: ProfilePosts { view, ..ProfilePosts::default() }, persona_credences: Rc::from([]), run_status: None,
         };
         let _view = super::render_roster_view(params, callbacks());
     }
     for key in ["roster.posts.tab", "roster.posts.empty", "roster.posts.more", "roster.posts.feelings_only", "roster.posts.count_one", "roster.posts.count_other"] {
         assert_ne!(rust_i18n::t!(key, locale = "en"), key);
     }
+}
+
+#[test]
+fn a_persona_s_beliefs_are_its_stated_credences_newest_first() {
+    use super::persona_beliefs::persona_credences;
+    use crate::domain::thinking::credence::Credence;
+    let (mut state, author) = written(2);
+    let ids: Vec<_> = state.posts.iter().filter(|post| post.author_id == author && !post.kind.is_feeling()).map(|post| post.id.clone()).take(2).collect();
+    let at = |second: i64| jiff::Timestamp::from_second(second).expect("timestamp");
+    let credences = [Credence::new(ids[0].clone(), 70, at(100)), Credence::new(ids[1].clone(), 20, at(200)), Credence::new(crate::domain::PostId::new("elsewhere"), 50, at(300))];
+    let today = "2026-11-23".parse().expect("date");
+    let listed = persona_credences(&state, &credences, &author, today);
+    assert_eq!(listed.iter().map(|row| row.post_id.clone()).collect::<Vec<_>>(), [ids[1].clone(), ids[0].clone()]);
+    assert!(listed[0].summary.contains("20"), "{}", listed[0].summary);
+    let at_post = state.post_position(&ids[0]).expect("stored");
+    state.posts[at_post].lock_with(&crate::domain::post::lock::LockPassword::new("seven tidy lanterns"), crate::domain::crypto::KdfParams { memory_kib: 8, iterations: 1, lanes: 1 }).expect("locks");
+    let listed = persona_credences(&state, &credences, &author, today);
+    assert_eq!(listed[1].excerpt, rust_i18n::t!("posts.lock.locked").to_string(), "a locked post shows only its placeholder");
+}
+
+#[test]
+fn personas_and_agents_share_one_tab_row_and_a_persona_s_beliefs_tab_renders() {
+    let (state, author) = written(1);
+    let theme = ThemeTokens::default();
+    for credences in [Vec::new(), vec![super::PersonaCredence { post_id: crate::domain::PostId::new("p"), summary: "70%".into(), excerpt: "a claim".into() }]] {
+        let params = RosterParams {
+            state: &state, mode: LabMode::PersonaLab, selected_profile_id: Some(&author), theme: &theme, profile_tab: ProfileTab::Beliefs, beliefs: None,
+            recommended: Rc::from([]), posts: ProfilePosts::default(), persona_credences: Rc::from(credences), run_status: Some(crate::agent::schedule::RunStatus::Writing),
+        };
+        let _view = super::render_roster_view(params, callbacks());
+    }
+    for key in ["title", "hint", "empty_title", "empty_hint"].map(|key| format!("roster.persona_beliefs.{key}")) {
+        assert_ne!(rust_i18n::t!(&key, locale = "en"), key);
+    }
+}
+
+#[test]
+fn the_trigger_dialog_asks_for_a_new_post_or_a_reply_and_says_its_cost_is_an_estimate() {
+    use super::{estimate_text, TriggerChoice};
+    use crate::domain::document::DocumentId;
+    use crate::domain::post::{PostSeed, TriggerMode};
+    use crate::domain::spend::trigger_estimate;
+    let choice = TriggerChoice { reply: false, document: Some(DocumentId::new("doc")) };
+    assert_eq!(choice.mode("  tides  "), TriggerMode::NewPost { seed: PostSeed { topic: "tides".into(), document: Some(DocumentId::new("doc")) } });
+    assert_eq!(TriggerChoice { reply: true, ..choice }.mode("ignored"), TriggerMode::Reply);
+    rust_i18n::set_locale("en");
+    let sent = estimate_text(Some(trigger_estimate(&["a prompt"], 300, 0, true)));
+    assert!(sent.contains("Estimated") && sent.contains("300") && sent.contains("1 request"), "{sent}");
+    assert!(estimate_text(Some(trigger_estimate(&["a prompt"], 300, 0, false))).contains("nothing is sent"));
+    assert_ne!(estimate_text(None), "trigger.nothing_to_answer");
+    for key in ["open", "title", "new_post", "reply", "topic", "topic_placeholder", "document", "no_document", "write", "estimate.note"].map(|key| format!("trigger.{key}")) {
+        assert_ne!(rust_i18n::t!(&key, locale = "en"), key);
+    }
+}
+
+#[test]
+fn an_agent_s_run_status_reads_for_every_state_and_renders_with_its_actions() {
+    use crate::agent::schedule::RunStatus;
+    let state = AppState::new_in_memory();
+    let theme = ThemeTokens::default();
+    let agent = state.current_network_agents().first().map(|agent| agent.id.clone());
+    let statuses = [RunStatus::Queued, RunStatus::Writing, RunStatus::Done { post: Some(crate::domain::PostId::new("p")) }, RunStatus::Done { post: None }, RunStatus::Failed, RunStatus::Cancelled];
+    for status in statuses {
+        let (_, text) = super::status_line(&status, "Ada");
+        assert!(!text.starts_with("trigger."), "{status:?}: {text}");
+        let params = RosterParams {
+            state: &state, mode: LabMode::NetworkAgents, selected_profile_id: agent.as_ref(), theme: &theme, profile_tab: ProfileTab::Profile, beliefs: None,
+            recommended: Rc::from([]), posts: ProfilePosts::default(), persona_credences: Rc::from([]), run_status: Some(status),
+        };
+        let _view = super::render_roster_view(params, callbacks());
+    }
+    assert!(super::status_line(&RunStatus::Queued, "Ada").1.contains("Ada"));
 }

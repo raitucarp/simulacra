@@ -6199,3 +6199,11 @@ posts.pinned.drift.missing: "La source n'est plus dans le coffre de connaissance
 posts.pinned.repin: "Épingler de nouveau la citation à sa source"
 posts.pinned.repinned: "La citation correspond de nouveau à sa source."
 posts.pinned.repin_failed: "La citation n'a pas pu être épinglée de nouveau : ses mots ne figurent plus dans la source."
+# N8: audience scopes
+posts.audience.menu: "Qui peut lire ceci"
+posts.audience.everyone: "Tout le monde"
+posts.audience.only_me: "Moi seul"
+posts.audience.shared_with: "Seulement %{names}"
+posts.audience.set_everyone: "Tout le monde peut de nouveau lire cette publication, agents compris."
+posts.audience.set_only_me: "Vous seul pouvez désormais lire cette publication : aucun agent ne la reçoit."
+posts.audience.set_agents: "Seuls les agents choisis peuvent désormais lire cette publication."

@@ -51,3 +51,19 @@ fn the_quote_sheet_lists_matching_passages_only() {
     let at = |query: &str| listed_passages(&passages, query).into_iter().map(|(at, _)| at).collect::<Vec<_>>();
     assert_eq!((at(""), at("gamma"), at("zeta")), (vec![0, 1], vec![1], vec![]));
 }
+
+#[test]
+fn a_scoped_post_says_who_may_read_it() {
+    use crate::domain::post::audience::Audience;
+    use crate::domain::ProfileId;
+    let name_of = |id: &ProfileId| if id.as_str() == "ada" { "Ada".to_string() } else { id.to_string() };
+    let mut post = Post::create("s", "n1", "u1", "For a few readers.").expect("valid");
+    assert_eq!(super::audience_badge::audience_text(&post, name_of), None, "everyone: no badge");
+    post.extras.audience = Some(Box::new(Audience::Agents { agents: vec![ProfileId::new("ada")] }));
+    assert!(super::audience_badge::audience_text(&post, name_of).is_some_and(|text| text.contains("Ada")));
+    post.extras.audience = Some(Box::new(Audience::OnlyMe));
+    assert!(super::audience_badge::audience_text(&post, name_of).is_some());
+    for key in ["menu", "everyone", "only_me", "shared_with", "set_everyone", "set_only_me", "set_agents"].map(|key| format!("posts.audience.{key}")) {
+        assert_ne!(rust_i18n::t!(&key, locale = "en"), key);
+    }
+}

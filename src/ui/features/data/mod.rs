@@ -36,7 +36,7 @@ pub use legend::{render_legend_sheet, LegendView};
 pub use margin::{render_margin_sheet, MarginDialog};
 pub use branch_sheet::{render_branch_sheet, BranchDialog, BranchEvent};
 pub use quote_sheet::{listed_passages, render_quote_sheet, QuoteDialog, QuoteEvent};
-pub use post_facts::PostFacts;
+pub use post_facts::{IdeaSource, PostFacts};
 pub use depth_dial::{depth_label, render_depth_dial, DepthView};
 pub use history::{render_history_sheet, HistorySheet};
 pub use edited_mark::render_edited_mark;

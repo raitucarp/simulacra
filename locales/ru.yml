@@ -6199,3 +6199,11 @@ posts.pinned.drift.missing: "Источника больше нет в хран�
 posts.pinned.repin: "Заново закрепить цитату за источником"
 posts.pinned.repinned: "Цитата снова совпадает с источником."
 posts.pinned.repin_failed: "Не удалось заново закрепить цитату: её слов больше нет в источнике."
+# N8: audience scopes
+posts.audience.menu: "Кто может это читать"
+posts.audience.everyone: "Все"
+posts.audience.only_me: "Только я"
+posts.audience.shared_with: "Только %{names}"
+posts.audience.set_everyone: "Этот пост снова могут читать все, включая агентов."
+posts.audience.set_only_me: "Теперь этот пост можете читать только вы: ни один агент его не получит."
+posts.audience.set_agents: "Теперь этот пост могут читать только выбранные агенты."

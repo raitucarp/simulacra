@@ -7,6 +7,8 @@ mod anchor_line; // N2
 mod garden_badge; // N3
 mod branch_chip; // N6
 mod pinned_card; // N7
+mod audience_badge; // N8
+mod idea_lines; // N3, N6–N10
 mod attachments;
 mod body;
 mod checklist; // D5

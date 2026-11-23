@@ -6199,3 +6199,11 @@ posts.pinned.drift.missing: "出典はもうナレッジボルトにありませ
 posts.pinned.repin: "引用を出典に固定し直す"
 posts.pinned.repinned: "引用が再び出典と一致しました。"
 posts.pinned.repin_failed: "引用を固定し直せませんでした。その言葉はもう出典にありません。"
+# N8: audience scopes
+posts.audience.menu: "読める相手"
+posts.audience.everyone: "全員"
+posts.audience.only_me: "自分だけ"
+posts.audience.shared_with: "%{names} のみ"
+posts.audience.set_everyone: "この投稿は再びエージェントを含む全員が読めます。"
+posts.audience.set_only_me: "この投稿は今後あなただけが読めます。どのエージェントにも渡りません。"
+posts.audience.set_agents: "この投稿は今後、選んだエージェントだけが読めます。"

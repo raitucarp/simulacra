@@ -130,6 +130,8 @@ pub enum DataEvent {
     Branch(super::branch_sheet::BranchEvent),
     /// N7: the quote sheet, and re-pinning a quote.
     Quote(super::quote_sheet::QuoteEvent),
+    /// N8: who may read the post (`None`: everyone).
+    SetAudience(PostId, Option<crate::domain::post::audience::Audience>),
     /// The monthly migration review (S16).
     OpenReview,
     ReviewDecide(crate::domain::symbols::ReviewChoice),

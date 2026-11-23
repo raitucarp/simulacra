@@ -29,6 +29,7 @@ impl AppView {
             E::ShowDepth(..) | E::RenderDepth(..) => self.on_depth_event(event, window, cx), // N5
             E::Branch(event) => self.on_branch_event(event, window, cx), // N6
             E::Quote(event) => self.on_quote_event(event, window, cx), // N7
+            E::SetAudience(id, audience) => self.set_audience(&id, audience, window, cx), // N8
             E::OpenScheduled | E::EditScheduled(_) | E::PublishScheduledNow(_) | E::CancelScheduled(_) | E::CloseScheduled => self.on_scheduled_event(event, window, cx),
             _ => self.on_saved_event(event, window, cx),
         }
@@ -70,6 +71,7 @@ impl AppView {
             memberships: Rc::new(memberships),
             history_open: self.data.history.is_some(),
             depth: Rc::new(self.data.depth.clone()), // N5
+            ideas: Rc::new(self.idea_source()), // N6–N10
             on_event: self.data_action(bind),
         }
     }

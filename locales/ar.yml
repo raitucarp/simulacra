@@ -6199,3 +6199,11 @@ posts.pinned.drift.missing: "لم يعد المصدر موجودًا في خزن
 posts.pinned.repin: "أعد تثبيت الاقتباس على مصدره"
 posts.pinned.repinned: "عاد الاقتباس يطابق مصدره."
 posts.pinned.repin_failed: "تعذّرت إعادة تثبيت الاقتباس: لم تعد كلماته موجودة في المصدر."
+# N8: audience scopes
+posts.audience.menu: "من يمكنه قراءة هذا"
+posts.audience.everyone: "الجميع"
+posts.audience.only_me: "أنا فقط"
+posts.audience.shared_with: "فقط %{names}"
+posts.audience.set_everyone: "يمكن للجميع قراءة هذا المنشور مجددًا، بمن فيهم الوكلاء."
+posts.audience.set_only_me: "أنت وحدك تستطيع قراءة هذا المنشور الآن: لن يصل إلى أي وكيل."
+posts.audience.set_agents: "لا يقرأ هذا المنشور الآن إلا الوكلاء الذين اخترتهم."

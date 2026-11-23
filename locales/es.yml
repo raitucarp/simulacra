@@ -6199,3 +6199,11 @@ posts.pinned.drift.missing: "La fuente ya no está en la bóveda de conocimiento
 posts.pinned.repin: "Volver a fijar la cita a su fuente"
 posts.pinned.repinned: "La cita vuelve a coincidir con su fuente."
 posts.pinned.repin_failed: "No se pudo volver a fijar la cita: sus palabras ya no están en la fuente."
+# N8: audience scopes
+posts.audience.menu: "Quién puede leer esto"
+posts.audience.everyone: "Todos"
+posts.audience.only_me: "Solo yo"
+posts.audience.shared_with: "Solo %{names}"
+posts.audience.set_everyone: "Todos pueden volver a leer esta publicación, agentes incluidos."
+posts.audience.set_only_me: "Ahora solo tú puedes leer esta publicación: ningún agente la recibe."
+posts.audience.set_agents: "Ahora solo los agentes que elegiste pueden leer esta publicación."

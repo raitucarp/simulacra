@@ -29,6 +29,7 @@ fn card_controls_follow_the_shelf_and_edit_counts() {
         memberships: Rc::new(HashMap::from([("p1".to_string(), vec![shelf.clone()])])),
         history_open: false,
         depth: Default::default(),
+        ideas: Default::default(),
         on_event: Rc::new(|_, _, _| {}),
     };
     let own = source.controls(&PostId::new("p1"), true);
@@ -98,6 +99,7 @@ fn an_edited_post_wears_its_version_badge() {
         memberships: Rc::new(HashMap::new()),
         history_open: false,
         depth: Default::default(),
+        ideas: Default::default(),
         on_event: Rc::new(|_, _, _| {}),
     };
     let edited = DataControls { version: Some(crate::domain::data::history::SemVer::new(1, 2, 0)), ..source.controls(&PostId::new("p1"), true) };
@@ -117,7 +119,7 @@ fn a_reply_to_an_older_major_version_says_so() {
 
 #[test]
 fn the_margin_sheet_is_offered_on_posts_that_are_not_locked_and_is_translated() {
-    let source = DataSource { revisions: Rc::new(HashMap::new()), bookmarks: Rc::new(HashSet::new()), collections: Rc::new(Vec::new()), memberships: Rc::new(HashMap::new()), history_open: false, depth: Default::default(), on_event: Rc::new(|_, _, _| {}) };
+    let source = DataSource { revisions: Rc::new(HashMap::new()), bookmarks: Rc::new(HashSet::new()), collections: Rc::new(Vec::new()), memberships: Rc::new(HashMap::new()), history_open: false, depth: Default::default(), ideas: Default::default(), on_event: Rc::new(|_, _, _| {}) };
     assert!(!source.controls(&PostId::new("p1"), true).locked, "a card says when its post is locked");
     let keys = ["menu", "title", "subtitle", "explain", "passages", "reply_label", "reply_placeholder", "send", "pick_first", "write_first", "failed", "sent"];
     for key in keys.map(|key| format!("post.margin.{key}")) {

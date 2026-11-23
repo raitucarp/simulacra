@@ -30,6 +30,8 @@ pub struct DataSource {
     pub history_open: bool,
     /// N5: the depth dial of every post.
     pub depth: Rc<super::depth_dial::DepthView>,
+    /// N6–N10: what every card's menu shares.
+    pub ideas: Rc<super::post_facts::IdeaSource>,
     pub on_event: DataAction,
 }
 
@@ -51,6 +53,7 @@ impl DataSource {
             replied_to: None,
             locked: false,
             facts: Default::default(),
+            ideas: self.ideas.clone(),
             on_event: self.on_event.clone(),
         }
     }
@@ -80,6 +83,7 @@ pub struct DataControls {
     pub locked: bool,
     /// What the menu offers beyond the data (N3 garden stage, N6–N10); set by the feed.
     pub facts: super::post_facts::PostFacts,
+    pub ideas: Rc<super::post_facts::IdeaSource>,
     pub on_event: DataAction,
 }
 

@@ -110,3 +110,16 @@ fn the_future_log_reads_the_thread_todos_and_the_scheduled_posts() {
     assert!(matches!(items[1].1, FutureItem::Post { locked: false }));
     assert!(render_list_view(PostView::Future, &input).is_some());
 }
+
+#[test]
+fn the_board_of_a_thread_holds_its_todos_and_skips_the_locked_text() {
+    use crate::domain::symbols::EntryState;
+    use crate::domain::views::board::{board, card_count};
+    let (state, _) = thread();
+    let theme = ThemeTokens::default();
+    let input = input(&state, &theme, ViewScope::Thread);
+    let columns = board(input.posts.iter().map(|post| (*post, crate::time::local_date(post.created_at))));
+    assert_eq!(card_count(&columns), 1);
+    assert_eq!(columns.iter().find(|column| column.state == EntryState::Open).expect("open").cards[0].text, "write the plan");
+    assert!(render_list_view(PostView::Board, &input).is_some());
+}

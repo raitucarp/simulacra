@@ -14,6 +14,7 @@ pub fn view_icon(view: PostView) -> LucideIcon {
         PostView::Raw => LucideIcon::FileText,
         PostView::Calendar => LucideIcon::CalendarDays,
         PostView::Future => LucideIcon::CalendarRange,
+        PostView::Board => LucideIcon::SquareKanban,
     }
 }
 
@@ -27,6 +28,7 @@ pub fn view_label_key(view: PostView) -> &'static str {
         PostView::Raw => "views.raw.show",
         PostView::Calendar => "views.calendar.show",
         PostView::Future => "views.future.show",
+        PostView::Board => "views.board.show",
     }
 }
 

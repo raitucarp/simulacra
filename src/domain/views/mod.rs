@@ -5,6 +5,7 @@
 //! is offered, so the thread inspector and the profile page build their switchers from the
 //! same list.
 
+pub mod board; // W6
 pub mod calendar; // W4
 pub mod future; // W5
 pub mod rapid_log; // W2
@@ -32,6 +33,8 @@ keyed_enum! {
         Calendar => "calendar",
         /// W5: scheduled posts and dated to-dos ahead, by month.
         Future => "future",
+        /// W6: to-dos and task posts in columns by state.
+        Board => "board",
     }
 }
 
@@ -57,7 +60,7 @@ impl PostView {
     /// Where this view is offered.
     pub const fn scopes(self) -> &'static [ViewScope] {
         match self {
-            Self::Cards | Self::RapidLog | Self::Raw | Self::Calendar | Self::Future => EVERYWHERE,
+            Self::Cards | Self::RapidLog | Self::Raw | Self::Calendar | Self::Future | Self::Board => EVERYWHERE,
             Self::Outline | Self::Argument => THREAD_ONLY,
         }
     }

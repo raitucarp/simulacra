@@ -6045,3 +6045,7 @@ views.calendar.more: "+%{count} de plus"
 # W5: the future log
 views.future.show: "Afficher le journal à venir"
 views.future.empty: "Rien de planifié ni d'échéance à partir d'aujourd'hui."
+# W6: the board view
+views.board.show: "Afficher en tableau"
+views.board.empty: "Aucune tâche à trier pour l'instant."
+views.board.due: "Échéance %{date}"

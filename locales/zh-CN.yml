@@ -6045,3 +6045,7 @@ views.calendar.more: "另外 %{count} 条"
 # W5: the future log
 views.future.show: "显示未来记录"
 views.future.empty: "从今天起没有已排期或到期的内容。"
+# W6: the board view
+views.board.show: "以看板显示"
+views.board.empty: "还没有可整理的待办或任务。"
+views.board.due: "截止 %{date}"

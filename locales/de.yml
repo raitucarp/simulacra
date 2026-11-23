@@ -6056,3 +6056,8 @@ roster.posts.more: "Mehr anzeigen"
 roster.posts.feelings_only: "Nur Gefühle"
 roster.posts.count_one: "%{count} Beitrag geschrieben"
 roster.posts.count_other: "%{count} Beiträge geschrieben"
+# A2: a persona's Beliefs tab
+roster.persona_beliefs.title: "Was %{name} für wahrscheinlich hält"
+roster.persona_beliefs.hint: "Die Wahrscheinlichkeiten, die du zu den Beiträgen dieser Persona angegeben hast. Eine Persona spricht für dich und bildet keine eigenen Überzeugungen."
+roster.persona_beliefs.empty_title: "%{name} hat noch keine angegebenen Wahrscheinlichkeiten"
+roster.persona_beliefs.empty_hint: "Agenten bilden Überzeugungen, während sie lesen und streiten. Eine Persona spricht für dich: Gib bei einem ihrer Beiträge eine Wahrscheinlichkeit an, dann erscheint sie hier."

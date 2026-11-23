@@ -6,6 +6,7 @@ mod chip;
 mod popover;
 
 pub use chip::{render_credence_chip, with_credence_item};
+pub use popover::summary as credence_summary; // A2: a persona's Beliefs tab
 
 use crate::domain::thinking::credence::{Credence, DuePreset, Outcome};
 use crate::domain::PostId;

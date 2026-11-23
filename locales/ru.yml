@@ -6056,3 +6056,8 @@ roster.posts.more: "Показать ещё"
 roster.posts.feelings_only: "Только чувства"
 roster.posts.count_one: "%{count} запись"
 roster.posts.count_other: "Записей: %{count}"
+# A2: a persona's Beliefs tab
+roster.persona_beliefs.title: "Что %{name} считает вероятным"
+roster.persona_beliefs.hint: "Вероятности, которые вы указали для записей этой персоны. Персона говорит за вас и не формирует собственных убеждений."
+roster.persona_beliefs.empty_title: "У %{name} пока нет указанных вероятностей"
+roster.persona_beliefs.empty_hint: "Агенты формируют убеждения, когда читают и спорят. Персона говорит за вас: укажите вероятность для одной из её записей, и она появится здесь."

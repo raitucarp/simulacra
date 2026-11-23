@@ -63,11 +63,45 @@ fn the_posts_tab_renders_in_every_profile_view() {
     for view in PostView::in_scope(crate::domain::views::ViewScope::Profile) {
         let params = RosterParams {
             state: &state, mode: LabMode::PersonaLab, selected_profile_id: Some(&author), theme: &theme, profile_tab: ProfileTab::Posts, beliefs: None,
-            recommended: Rc::from([]), posts: ProfilePosts { view, ..ProfilePosts::default() },
+            recommended: Rc::from([]), posts: ProfilePosts { view, ..ProfilePosts::default() }, persona_credences: Rc::from([]),
         };
         let _view = super::render_roster_view(params, callbacks());
     }
     for key in ["roster.posts.tab", "roster.posts.empty", "roster.posts.more", "roster.posts.feelings_only", "roster.posts.count_one", "roster.posts.count_other"] {
         assert_ne!(rust_i18n::t!(key, locale = "en"), key);
+    }
+}
+
+#[test]
+fn a_persona_s_beliefs_are_its_stated_credences_newest_first() {
+    use super::persona_beliefs::persona_credences;
+    use crate::domain::thinking::credence::Credence;
+    let (mut state, author) = written(2);
+    let ids: Vec<_> = state.posts.iter().filter(|post| post.author_id == author && !post.kind.is_feeling()).map(|post| post.id.clone()).take(2).collect();
+    let at = |second: i64| jiff::Timestamp::from_second(second).expect("timestamp");
+    let credences = [Credence::new(ids[0].clone(), 70, at(100)), Credence::new(ids[1].clone(), 20, at(200)), Credence::new(crate::domain::PostId::new("elsewhere"), 50, at(300))];
+    let today = "2026-11-23".parse().expect("date");
+    let listed = persona_credences(&state, &credences, &author, today);
+    assert_eq!(listed.iter().map(|row| row.post_id.clone()).collect::<Vec<_>>(), [ids[1].clone(), ids[0].clone()]);
+    assert!(listed[0].summary.contains("20"), "{}", listed[0].summary);
+    let at_post = state.post_position(&ids[0]).expect("stored");
+    state.posts[at_post].lock_with(&crate::domain::post::lock::LockPassword::new("seven tidy lanterns"), crate::domain::crypto::KdfParams { memory_kib: 8, iterations: 1, lanes: 1 }).expect("locks");
+    let listed = persona_credences(&state, &credences, &author, today);
+    assert_eq!(listed[1].excerpt, rust_i18n::t!("posts.lock.locked").to_string(), "a locked post shows only its placeholder");
+}
+
+#[test]
+fn personas_and_agents_share_one_tab_row_and_a_persona_s_beliefs_tab_renders() {
+    let (state, author) = written(1);
+    let theme = ThemeTokens::default();
+    for credences in [Vec::new(), vec![super::PersonaCredence { post_id: crate::domain::PostId::new("p"), summary: "70%".into(), excerpt: "a claim".into() }]] {
+        let params = RosterParams {
+            state: &state, mode: LabMode::PersonaLab, selected_profile_id: Some(&author), theme: &theme, profile_tab: ProfileTab::Beliefs, beliefs: None,
+            recommended: Rc::from([]), posts: ProfilePosts::default(), persona_credences: Rc::from(credences),
+        };
+        let _view = super::render_roster_view(params, callbacks());
+    }
+    for key in ["title", "hint", "empty_title", "empty_hint"].map(|key| format!("roster.persona_beliefs.{key}")) {
+        assert_ne!(rust_i18n::t!(&key, locale = "en"), key);
     }
 }

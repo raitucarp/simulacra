@@ -66,6 +66,8 @@ pub struct RosterParams<'a> {
     pub recommended: Rc<[crate::state::semantic::SemanticHit]>,
     /// W7: how the Posts tab is shown.
     pub posts: super::posts_state::ProfilePosts,
+    /// A2: the credences on a persona's posts (its Beliefs tab).
+    pub persona_credences: Rc<[super::persona_beliefs::PersonaCredence]>,
 }
 
 /// Values derived once per render.

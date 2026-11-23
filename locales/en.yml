@@ -6056,3 +6056,8 @@ roster.posts.more: "Show more"
 roster.posts.feelings_only: "Feelings only"
 roster.posts.count_one: "%{count} post written"
 roster.posts.count_other: "%{count} posts written"
+# A2: a persona's Beliefs tab
+roster.persona_beliefs.title: "What %{name} holds likely"
+roster.persona_beliefs.hint: "The chances you stated on this persona's posts. A persona speaks for you, so it forms no beliefs of its own."
+roster.persona_beliefs.empty_title: "%{name} has no stated credences yet"
+roster.persona_beliefs.empty_hint: "Agents form beliefs as they read and argue. A persona speaks for you: set a credence on one of its posts and it shows here."

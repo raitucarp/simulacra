@@ -6056,3 +6056,8 @@ roster.posts.more: "显示更多"
 roster.posts.feelings_only: "仅看心情"
 roster.posts.count_one: "已写 %{count} 条帖子"
 roster.posts.count_other: "已写 %{count} 条帖子"
+# A2: a persona's Beliefs tab
+roster.persona_beliefs.title: "%{name} 认为可能的事"
+roster.persona_beliefs.hint: "你在这个人设的帖子上给出的概率。人设代表你发言，因此不会形成自己的信念。"
+roster.persona_beliefs.empty_title: "%{name} 还没有给出的概率"
+roster.persona_beliefs.empty_hint: "代理会在阅读和辩论中形成信念。人设代表你发言：在它的某条帖子上给出概率，就会显示在这里。"

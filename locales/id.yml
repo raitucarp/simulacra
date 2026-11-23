@@ -6056,3 +6056,8 @@ roster.posts.more: "Tampilkan lebih banyak"
 roster.posts.feelings_only: "Hanya perasaan"
 roster.posts.count_one: "%{count} kiriman ditulis"
 roster.posts.count_other: "%{count} kiriman ditulis"
+# A2: a persona's Beliefs tab
+roster.persona_beliefs.title: "Apa yang dianggap mungkin oleh %{name}"
+roster.persona_beliefs.hint: "Peluang yang kamu nyatakan pada kiriman persona ini. Persona berbicara untukmu, jadi ia tidak membentuk keyakinan sendiri."
+roster.persona_beliefs.empty_title: "%{name} belum punya derajat keyakinan yang dinyatakan"
+roster.persona_beliefs.empty_hint: "Agen membentuk keyakinan saat membaca dan berdebat. Persona berbicara untukmu: tetapkan derajat keyakinan pada salah satu kirimannya dan ia muncul di sini."

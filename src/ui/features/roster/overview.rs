@@ -85,11 +85,12 @@ pub(super) fn render_overview(profile: &Profile, params: &RosterParams<'_>, call
         .child(identity(profile, active_persona, theme))
         .children(bio)
         .child(actions(profile, callbacks).gap(theme.control_gap));
-    // sb F1: the overview switches between the profile card, an agent's beliefs, and the
-    // posts recommended to the profile.
+    // sb F1, A2: the overview switches between the profile card, its posts, its beliefs (a
+    // persona's stated credences), and the posts recommended to it.
     let tabs = profile_tabs(params.profile_tab, profile.is_agent(), theme, callbacks.switch_profile_tab.clone());
     let body = match (&params.beliefs, params.profile_tab, profile.is_agent()) {
         (Some(view), ProfileTab::Beliefs, true) => beliefs_column(view.clone(), theme),
+        (_, ProfileTab::Beliefs, false) => super::persona_beliefs::persona_beliefs_column(profile, &params.persona_credences, &callbacks.open_post, theme), // A2
         (_, ProfileTab::Recommended, _) => recommended_column(profile, &params.recommended, &callbacks.open_post, theme),
         (_, ProfileTab::Posts, _) => super::posts_tab::posts_column(profile, params, callbacks),
         _ => card,

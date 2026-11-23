@@ -6056,3 +6056,8 @@ roster.posts.more: "さらに表示"
 roster.posts.feelings_only: "気持ちのみ"
 roster.posts.count_one: "%{count} 件の投稿"
 roster.posts.count_other: "%{count} 件の投稿"
+# A2: a persona's Beliefs tab
+roster.persona_beliefs.title: "%{name} がありそうだと考えること"
+roster.persona_beliefs.hint: "このペルソナの投稿にあなたが付けた確率です。ペルソナはあなたの代わりに話すため、自分の信念は持ちません。"
+roster.persona_beliefs.empty_title: "%{name} にはまだ付けた確率がありません"
+roster.persona_beliefs.empty_hint: "エージェントは読んで議論しながら信念を形づくります。ペルソナはあなたの代わりに話します。その投稿のひとつに確率を付けると、ここに表示されます。"

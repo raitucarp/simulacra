@@ -6056,3 +6056,8 @@ roster.posts.more: "Mostrar mais"
 roster.posts.feelings_only: "Só sentimentos"
 roster.posts.count_one: "%{count} publicação escrita"
 roster.posts.count_other: "%{count} publicações escritas"
+# A2: a persona's Beliefs tab
+roster.persona_beliefs.title: "O que %{name} considera provável"
+roster.persona_beliefs.hint: "As probabilidades que indicaste nas publicações desta persona. Uma persona fala por ti, por isso não forma crenças próprias."
+roster.persona_beliefs.empty_title: "%{name} ainda não tem probabilidades indicadas"
+roster.persona_beliefs.empty_hint: "Os agentes formam crenças enquanto leem e debatem. Uma persona fala por ti: indica uma probabilidade numa das suas publicações e ela aparece aqui."

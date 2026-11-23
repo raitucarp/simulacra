@@ -6056,3 +6056,8 @@ roster.posts.more: "Mostrar más"
 roster.posts.feelings_only: "Solo sentimientos"
 roster.posts.count_one: "%{count} publicación escrita"
 roster.posts.count_other: "%{count} publicaciones escritas"
+# A2: a persona's Beliefs tab
+roster.persona_beliefs.title: "Lo que %{name} considera probable"
+roster.persona_beliefs.hint: "Las probabilidades que indicaste en las publicaciones de esta persona. Una persona habla por ti, así que no forma creencias propias."
+roster.persona_beliefs.empty_title: "%{name} aún no tiene grados de creencia indicados"
+roster.persona_beliefs.empty_hint: "Los agentes forman creencias mientras leen y debaten. Una persona habla por ti: indica un grado de creencia en una de sus publicaciones y aparecerá aquí."

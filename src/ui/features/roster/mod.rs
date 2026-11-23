@@ -7,6 +7,7 @@ mod empty;
 mod mode_switch;
 mod overview;
 mod pane;
+mod persona_beliefs; // A2
 mod params;
 mod post_cards; // W7
 mod posts_state; // W7
@@ -17,6 +18,7 @@ mod recommended;
 mod tests;
 
 pub use params::{LabMode, ProfileTab, RosterCallbacks, RosterParams};
+pub use persona_beliefs::{persona_credences, PersonaCredence};
 pub use posts_state::{ProfilePosts, ProfilePostsEvent};
 pub use recommended::OpenPostCallback;
 

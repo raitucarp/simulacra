@@ -6056,3 +6056,8 @@ roster.posts.more: "عرض المزيد"
 roster.posts.feelings_only: "المشاعر فقط"
 roster.posts.count_one: "%{count} منشور مكتوب"
 roster.posts.count_other: "المنشورات المكتوبة: %{count}"
+# A2: a persona's Beliefs tab
+roster.persona_beliefs.title: "ما يراه %{name} مرجّحًا"
+roster.persona_beliefs.hint: "الاحتمالات التي حدّدتها على منشورات هذه الشخصية. الشخصية تتحدث باسمك، فلا تكوّن معتقدات خاصة بها."
+roster.persona_beliefs.empty_title: "لا توجد لدى %{name} احتمالات محدّدة بعد"
+roster.persona_beliefs.empty_hint: "يكوّن الوكلاء معتقداتهم وهم يقرؤون ويتجادلون. الشخصية تتحدث باسمك: حدّد احتمالًا على أحد منشوراتها وسيظهر هنا."

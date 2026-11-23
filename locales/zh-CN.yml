@@ -6100,3 +6100,8 @@ post.refs_by.quote: "引用于：%{excerpt}"
 post.refs_by.link: "链接自：%{excerpt}"
 feed.backlinks.title_one: "被 %{count} 条想法引用"
 feed.backlinks.title_other: "被 %{count} 条想法引用"
+# N2: margin replies
+post.margin.quote: "“%{quote}”"
+post.margin.changed: "这段内容此后已更改"
+feed.margin.title_one: "%{count} 条页边批注"
+feed.margin.title_other: "%{count} 条页边批注"

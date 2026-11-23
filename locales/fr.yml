@@ -6100,3 +6100,8 @@ post.refs_by.quote: "Citée dans : %{excerpt}"
 post.refs_by.link: "Liée depuis : %{excerpt}"
 feed.backlinks.title_one: "Citée par %{count} pensée"
 feed.backlinks.title_other: "Citée par %{count} pensées"
+# N2: margin replies
+post.margin.quote: "« %{quote} »"
+post.margin.changed: "Ce passage a changé depuis"
+feed.margin.title_one: "%{count} note en marge"
+feed.margin.title_other: "%{count} notes en marge"

@@ -6100,3 +6100,8 @@ post.refs_by.quote: "مقتبس في: %{excerpt}"
 post.refs_by.link: "مرتبط من: %{excerpt}"
 feed.backlinks.title_one: "يشير إليه %{count} منشور"
 feed.backlinks.title_other: "تشير إليه منشورات: %{count}"
+# N2: margin replies
+post.margin.quote: "«%{quote}»"
+post.margin.changed: "تغيّر هذا المقطع منذ ذلك الحين"
+feed.margin.title_one: "%{count} ملاحظة في الهامش"
+feed.margin.title_other: "ملاحظات في الهامش: %{count}"

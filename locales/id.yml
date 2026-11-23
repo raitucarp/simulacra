@@ -6100,3 +6100,8 @@ post.refs_by.quote: "Dikutip di: %{excerpt}"
 post.refs_by.link: "Ditautkan dari: %{excerpt}"
 feed.backlinks.title_one: "Dirujuk oleh %{count} pemikiran"
 feed.backlinks.title_other: "Dirujuk oleh %{count} pemikiran"
+# N2: margin replies
+post.margin.quote: "“%{quote}”"
+post.margin.changed: "Bagian ini sudah berubah sejak itu"
+feed.margin.title_one: "%{count} catatan di margin"
+feed.margin.title_other: "%{count} catatan di margin"

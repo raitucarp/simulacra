@@ -6100,3 +6100,8 @@ post.refs_by.quote: "Zitiert in: %{excerpt}"
 post.refs_by.link: "Verlinkt von: %{excerpt}"
 feed.backlinks.title_one: "Erwähnt in %{count} Gedanken"
 feed.backlinks.title_other: "Erwähnt in %{count} Gedanken"
+# N2: margin replies
+post.margin.quote: "„%{quote}“"
+post.margin.changed: "Diese Stelle hat sich seitdem geändert"
+feed.margin.title_one: "%{count} Randnotiz"
+feed.margin.title_other: "%{count} Randnotizen"

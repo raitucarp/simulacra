@@ -6100,3 +6100,8 @@ post.refs_by.quote: "引用元: %{excerpt}"
 post.refs_by.link: "リンク元: %{excerpt}"
 feed.backlinks.title_one: "%{count}件の投稿から参照"
 feed.backlinks.title_other: "%{count}件の投稿から参照"
+# N2: margin replies
+post.margin.quote: "「%{quote}」"
+post.margin.changed: "この箇所はその後変更されました"
+feed.margin.title_one: "余白のメモ %{count}件"
+feed.margin.title_other: "余白のメモ %{count}件"

@@ -6100,3 +6100,8 @@ post.refs_by.quote: "Цитируется в: %{excerpt}"
 post.refs_by.link: "Ссылка из: %{excerpt}"
 feed.backlinks.title_one: "Упоминается в мыслях: %{count}"
 feed.backlinks.title_other: "Упоминается в мыслях: %{count}"
+# N2: margin replies
+post.margin.quote: "«%{quote}»"
+post.margin.changed: "Этот фрагмент с тех пор изменился"
+feed.margin.title_one: "Заметок на полях: %{count}"
+feed.margin.title_other: "Заметок на полях: %{count}"

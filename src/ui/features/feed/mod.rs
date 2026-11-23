@@ -8,6 +8,7 @@ mod callbacks;
 mod consts;
 mod inspector;
 mod inspector_backlinks; // N1
+mod inspector_margin; // N2
 mod inspector_grounding;
 mod inspector_header;
 mod inspector_mode_toggle;

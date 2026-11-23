@@ -8,6 +8,7 @@
 pub mod board; // W6
 pub mod calendar; // W4
 pub mod future; // W5
+pub mod memory; // W8
 pub mod rapid_log; // W2
 pub mod raw; // W3
 #[cfg(test)]

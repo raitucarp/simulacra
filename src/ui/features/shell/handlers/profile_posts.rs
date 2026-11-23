@@ -1,7 +1,9 @@
-//! The Posts tab of a profile (W7): its view, the feelings filter, paging and the calendar
-//! month, and opening a post from it (a scheduled one in the scheduled editor).
+//! The Posts tab of a profile (W7): its view (W8: remembered per profile), the feelings
+//! filter, paging and the calendar month, and opening a post from it (a scheduled one in the
+//! scheduled editor).
 
 use super::super::view::AppView;
+use crate::domain::views::memory::ViewOwner;
 use crate::domain::PostId;
 use crate::ui::features::roster::{ProfilePosts, ProfilePostsEvent};
 use gpui_kit::*;
@@ -9,6 +11,9 @@ use gpui_kit::*;
 impl AppView {
     /// Runs one event of the Posts tab.
     pub(crate) fn profile_posts_event(&mut self, event: ProfilePostsEvent, _: &mut Window, cx: &mut Context<Self>) {
+        if let (ProfilePostsEvent::Pick(view), Some(profile)) = (event, self.shown_lab_profile()) {
+            self.inspector.remember(self.state.db.as_ref(), &ViewOwner::Profile(profile), view);
+        }
         self.lab.posts = self.lab.posts.after(event);
         cx.notify();
     }
@@ -22,8 +27,9 @@ impl AppView {
         self.reveal_post(id, window, cx);
     }
 
-    /// A newly shown profile starts on its first page, every post, its newest month.
+    /// A newly shown profile starts on its first page, every post, its newest month (its view
+    /// is the one remembered for it).
     pub(in crate::ui::features::shell) fn reset_profile_posts(&mut self) {
-        self.lab.posts = ProfilePosts { view: self.lab.posts.view, ..ProfilePosts::default() };
+        self.lab.posts = ProfilePosts::default();
     }
 }

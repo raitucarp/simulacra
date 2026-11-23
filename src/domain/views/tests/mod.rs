@@ -3,6 +3,7 @@
 mod board;
 mod calendar;
 mod future;
+mod memory;
 mod rapid_log;
 mod raw;
 mod registry;

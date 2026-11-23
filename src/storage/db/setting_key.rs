@@ -105,6 +105,8 @@ setting_keys! {
     EmbeddingUsage => "embeddings.usage",
     /// sb C2: how the thread inspector shows a thread (`cards` or `outline`).
     InspectorMode => "ui.inspector_mode",
+    /// W8: JSON of the view chosen per thread and per profile (`domain::views::memory`).
+    ViewChoices => "ui.view_choices",
     /// Q5: JSON of the saved searches.
     SavedSearches => "search.saved",
     /// P1: JSON of the runtimes the last detection found (`domain::code::RuntimeCache`).

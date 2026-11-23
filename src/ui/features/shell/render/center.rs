@@ -87,7 +87,7 @@ impl AppView {
             on_cycle_profile: bind.boxed_act(Self::cycle_profile),
             on_run_command: Rc::new(bind.with(Self::run_command)),
             on_post_action: Self::post_action_callback(bind), credence: Some(self.credence_source(bind)), data: Some(self.data_source(bind)), reactions: Some(self.reaction_source(bind)), locks: Some(self.lock_source(bind)), code: self.code_actions(bind), // X4, P5
-            inspector: InspectorView { argument: Some(self.thinking.argument.clone()), ..self.inspector.view() },
+            inspector: InspectorView { argument: Some(self.thinking.argument.clone()), mode: self.inspector_view_mode(), ..self.inspector.view() }, // W8
             on_inspector: Rc::new(bind.with(Self::run_inspector_command)), discovery: self.feed_discovery(bind),
         })
     }

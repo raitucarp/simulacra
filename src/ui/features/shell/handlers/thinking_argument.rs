@@ -34,7 +34,7 @@ impl AppView {
 
     /// Render hook: the Argument view shows the inspected thread and its map.
     pub(super) fn sync_argument_panel(&mut self, cx: &mut Context<Self>) {
-        if self.inspector.mode != PostView::Argument {
+        if self.inspector_view_mode() != PostView::Argument {
             return;
         }
         let inspected = self.feed.selected_thread_post_id.clone().or_else(|| self.feed.stream.rows().post(&self.state, 0).map(|post| post.id.clone()));

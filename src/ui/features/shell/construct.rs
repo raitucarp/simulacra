@@ -52,7 +52,7 @@ impl AppView {
         let (import, import_subscriptions) = ImportUi::new(window, cx);
         let ((review, review_subscriptions), (insights, insights_subscription), (journal, journal_subscription), (thinking, thinking_subscription), (arena, arena_subscriptions)) = (ReviewHost::new(&state, window, cx), InsightsHost::new(&state, window, cx), JournalHost::new(&state, window, cx), ThinkingHost::new(&state, window, cx), ArenaHost::new(&state, window, cx));
         let mut subscriptions = vec![
-            feed.subscribe_search(cx),
+            feed.subscribe_search(cx), feed.subscribe_answer(window, cx), // N4
             cx.subscribe_in(&composer_modal, window, Self::publish_composer_draft),
             graph_subscription, vault_subscription, insights_subscription, journal_subscription, thinking_subscription,
             cx.subscribe_in(&appearance, window, Self::on_appearance_event),

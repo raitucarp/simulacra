@@ -130,7 +130,7 @@ mod feed_budget {
 
     #[test]
     fn the_budget_setting_and_closing_card_are_translated() {
-        for key in ["prefs.group.reading_writing.feed", "prefs.row.writing.feed_budget.title", "prefs.unit.posts_per_day", "feed.end.title", "feed.end.read_one", "feed.end.read_other", "feed.end.question"] {
+        for key in ["prefs.group.reading_writing.feed", "prefs.row.writing.feed_budget.title", "prefs.unit.posts_per_day", "feed.end.title", "feed.end.read_one", "feed.end.read_other", "feed.end.question", "feed.end.placeholder", "feed.end.post", "feed.end.answered", "feed.end.posted"] {
             assert_ne!(rust_i18n::t!(key, locale = "en"), key);
         }
     }

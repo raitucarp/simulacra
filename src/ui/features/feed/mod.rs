@@ -37,5 +37,6 @@ pub use params::{
 pub use render::render_main_feed;
 #[cfg(test)]
 pub(crate) use inspector_views::thread_posts; // epic W: the views tests build threads
+pub use end_card::EndCard; // N4
 pub use stream::{FeedReader, StreamInputs, StreamRows};
 pub use threadline::compute_stream_threadline_style;

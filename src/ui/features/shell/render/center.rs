@@ -66,7 +66,7 @@ impl AppView {
             theme: &self.theme,
             feed_tab: self.feed.feed_tab,
             inspector_expanded: self.feed.inspector_expanded, layout,
-            stream: self.feed.stream.inputs(bind.entity()),
+            stream: crate::ui::features::feed::StreamInputs { end: Some(self.end_card(&bind)), ..self.feed.stream.inputs(bind.entity()) }, // N4
             on_load_more: Some(bind.boxed_act(Self::load_more_posts)),
             on_select_feed_tab: bind.boxed(Self::select_feed_tab),
             on_toggle_replies: bind.boxed_act(Self::toggle_inspector_replies),

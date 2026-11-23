@@ -66,6 +66,8 @@ pub struct StreamInputs {
     pub list: ListState,
     pub rows: StreamRows,
     pub reader: FeedReader,
+    /// N4: what the closing card shows and does (`None`: a card without the answer field).
+    pub end: Option<super::end_card::EndCard>,
 }
 
 /// Renders stream `row`: a post card (with its threadline joins) or the load-more trigger.
@@ -75,12 +77,13 @@ fn render_row(
     reader: &FeedReader,
     callbacks: &PostCallbacks,
     on_load_more: &Option<Rc<LoadMoreCallback>>,
+    end: Option<&super::end_card::EndCard>,
     cx: &App,
 ) -> AnyElement {
     let (state, theme) = reader(cx);
     let Some(post) = rows.post(state, row) else {
         return match rows.ends_with_card() {
-            true => super::end_card::render_end_card(state.preferences().writing.feed_budget, theme), // N4
+            true => super::end_card::render_end_card(state.preferences().writing.feed_budget, end, theme), // N4
             false => render_load_more(rows.shown, rows.positions.len(), theme, on_load_more.clone()),
         };
     };
@@ -105,9 +108,9 @@ pub(crate) fn render_stream_list(
 ) -> impl IntoElement {
     let is_empty = stream.rows.row_count() == 0;
     let scrollbar_handle = stream.list.clone();
-    let (rows, reader) = (stream.rows, stream.reader);
+    let (rows, reader, end) = (stream.rows, stream.reader, stream.end);
     let body = list(stream.list, move |row, _: &mut Window, cx: &mut App| {
-        render_row(row, &rows, &reader, &callbacks, &on_load_more, cx)
+        render_row(row, &rows, &reader, &callbacks, &on_load_more, end.as_ref(), cx)
     })
     .size_full();
     div()

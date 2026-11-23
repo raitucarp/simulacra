@@ -84,7 +84,7 @@ impl StreamList {
 
     /// Inputs of the feed's virtualized stream, reading the store through `view`.
     pub fn inputs(&self, view: &Entity<AppView>) -> StreamInputs {
-        StreamInputs { list: self.list.clone(), rows: self.rows.clone(), reader: reader(view.clone()) }
+        StreamInputs { list: self.list.clone(), rows: self.rows.clone(), reader: reader(view.clone()), end: None }
     }
 }
 

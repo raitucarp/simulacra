@@ -122,3 +122,10 @@ fn the_margin_sheet_is_offered_on_posts_that_are_not_locked_and_is_translated() 
         assert_ne!(rust_i18n::t!(&key, locale = "en"), key);
     }
 }
+
+#[test]
+fn the_garden_items_are_translated() {
+    for key in ["garden_plant", "garden", "garden_grow", "garden_cut", "garden_return"].map(|key| format!("data.menu.{key}")).into_iter().chain(["planted", "tended", "returned"].map(|key| format!("data.garden.{key}"))) {
+        assert_ne!(rust_i18n::t!(&key, locale = "en"), key);
+    }
+}

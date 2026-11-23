@@ -25,6 +25,7 @@ mod data_export;
 mod data_history;
 mod data_legend; // S9
 mod data_margin; // N2
+mod data_garden; // N3
 mod data_posts;
 mod data_restore;
 mod data_review; // S16

@@ -12,6 +12,7 @@ mod history;
 mod history_compare; mod history_log; mod history_rows; mod version_tree; // V5: the version tree
 mod legend; // S9
 mod lifecycle_menu; // Y5, Y6
+mod garden_menu; // N3
 mod margin; // N2
 mod post_menu;
 mod edited_mark; // V8

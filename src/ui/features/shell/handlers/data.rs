@@ -25,6 +25,7 @@ impl AppView {
             E::OpenReview | E::ReviewDecide(_) | E::ReviewSummary | E::CloseReview => self.on_review_event(event, window, cx), // S16
             E::OpenLegend | E::EditMeaning(_) | E::SaveMeaning | E::CancelMeaning | E::CloseLegend => self.on_legend_event(event, window, cx), // S9
             E::ReplyInMargin(_) | E::PickPassage(_) | E::SubmitMargin | E::CloseMargin => self.on_margin_event(event, window, cx), // N2
+            E::SetGarden(id, maturity) => self.set_garden(&id, maturity, window, cx), // N3
             E::OpenScheduled | E::EditScheduled(_) | E::PublishScheduledNow(_) | E::CancelScheduled(_) | E::CloseScheduled => self.on_scheduled_event(event, window, cx),
             _ => self.on_saved_event(event, window, cx),
         }

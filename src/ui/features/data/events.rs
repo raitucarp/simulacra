@@ -121,6 +121,8 @@ pub enum DataEvent {
     PickPassage(usize),
     SubmitMargin,
     CloseMargin,
+    /// N3: plants the post in the garden at this stage, or returns it to the stream (`None`).
+    SetGarden(PostId, Option<crate::domain::post::garden::Maturity>),
     /// The monthly migration review (S16).
     OpenReview,
     ReviewDecide(crate::domain::symbols::ReviewChoice),

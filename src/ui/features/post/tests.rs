@@ -237,3 +237,14 @@ fn a_margin_reply_quotes_its_passage_but_never_a_locked_parent() {
         assert_ne!(rust_i18n::t!(key, locale = "en"), key);
     }
 }
+
+#[test]
+fn a_garden_note_wears_its_stage() {
+    use crate::domain::post::garden::{GardenNote, Maturity};
+    let theme = crate::theme::ThemeTokens::default();
+    let mut post = Post::create("g", "n1", "u1", "A note worth tending.").expect("valid");
+    assert!(super::garden_badge::render_garden_badge(&post, &theme).is_none());
+    post.extras.garden = Some(GardenNote::planted(crate::time::utc(2026, 11, 1, 9, 0, 0)).tended(Maturity::Budding, crate::time::utc(2026, 11, 2, 9, 0, 0)));
+    assert!(super::garden_badge::render_garden_badge(&post, &theme).is_some());
+    assert_ne!(rust_i18n::t!("posts.garden.badge", locale = "en"), "posts.garden.badge");
+}

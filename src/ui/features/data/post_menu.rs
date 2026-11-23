@@ -48,6 +48,7 @@ impl DataSource {
             version: None,
             replied_to: None,
             locked: false,
+            garden: None,
             on_event: self.on_event.clone(),
         }
     }
@@ -75,6 +76,8 @@ pub struct DataControls {
     pub replied_to: Option<crate::domain::data::history::SemVer>,
     /// Its text is sealed (X4): nothing quotes it (N2); set by the feed.
     pub locked: bool,
+    /// The garden stage of a planted post (N3); set by the feed.
+    pub garden: Option<crate::domain::post::garden::Maturity>,
     pub on_event: DataAction,
 }
 
@@ -118,6 +121,7 @@ pub fn with_data_items(menu: PopupMenu, controls: Option<&DataControls>, window:
         menu = menu.item(item(tr("data.menu.edit"), LucideIcon::Pencil, DataEvent::EditPost(post.clone()), &controls.on_event));
         menu = super::lifecycle_menu::with_lifecycle_items(menu, &controls, window, cx); // Y5, Y6
         menu = super::state_menu::with_state_items(menu, &controls, window, cx); // S7
+        menu = super::garden_menu::with_garden_items(menu, &controls, window, cx); // N3
     }
     if controls.revisions > 0 {
         let label = t!("data.menu.history", count = controls.revisions).to_string();

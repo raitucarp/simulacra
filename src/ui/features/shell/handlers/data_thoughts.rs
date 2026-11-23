@@ -2,7 +2,7 @@
 //! with the event that closes it.
 
 use super::super::view::AppView;
-use crate::ui::features::data::{render_glossary_sheet, render_lens_sheet, render_mind_sheet, DataAction, DataEvent, GlossaryEvent, LensEvent, MindEvent, ThoughtEvent};
+use crate::ui::features::data::{render_glossary_sheet, render_lens_sheet, render_mind_sheet, render_words_sheet, DataAction, DataEvent, GlossaryEvent, LensEvent, MindEvent, ThoughtEvent, TranslateEvent};
 use gpui_kit::*;
 
 impl AppView {
@@ -13,6 +13,7 @@ impl AppView {
             ThoughtEvent::Glossary(event) => self.on_glossary_event(event, window, cx),
             ThoughtEvent::Questions(event) => self.on_questions_event(event, window, cx),
             ThoughtEvent::Mind(event) => self.on_mind_event(event, window, cx),
+            ThoughtEvent::Translate(event) => self.on_translate_event(event, window, cx),
         }
     }
 
@@ -22,6 +23,9 @@ impl AppView {
             return Some(found); // N18
         }
         let (sheets, theme) = (&self.data.ideas.thoughts, &self.theme);
+        if let Some(dialog) = &sheets.words {
+            return Some((render_words_sheet(dialog, on_event, theme), DataEvent::Thought(ThoughtEvent::Translate(TranslateEvent::CloseWords))));
+        }
         if let Some(dialog) = &sheets.mind {
             return Some((render_mind_sheet(dialog, on_event, theme), DataEvent::Thought(ThoughtEvent::Mind(MindEvent::Close))));
         }

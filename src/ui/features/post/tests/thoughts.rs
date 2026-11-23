@@ -76,3 +76,17 @@ fn a_change_of_mind_shows_the_old_view_but_never_past_a_lock() {
     sealed.lock_with(&LockPassword::new("seven tidy lanterns"), FAST).expect("locked");
     assert!(sealed.extras.mind_change.is_none(), "a lock drops what would speak past it");
 }
+
+#[test]
+fn a_translation_names_its_language_natively_and_a_lock_drops_it() {
+    use crate::domain::post::translation::Translation;
+    assert_eq!(super::translation_line::language_name("es"), "Español");
+    assert_eq!(super::translation_line::language_name("xx"), "xx");
+    let mut sealed = Post::create("s", "n1", "u1", "Soon sealed.").expect("post");
+    sealed.extras.translation = Some(Box::new(Translation { language: "es".into(), text: "Pronto sellado.".into(), at: jiff::Timestamp::UNIX_EPOCH }));
+    sealed.lock_with(&LockPassword::new("seven tidy lanterns"), FAST).expect("locked");
+    assert!(sealed.extras.translation.is_none(), "a lock drops the translation");
+    for key in ["show", "original", "shown", "words_menu", "review_question"].map(|key| format!("posts.translation.{key}")) {
+        assert_ne!(rust_i18n::t!(key.as_str()).to_string(), key, "{key} is translated");
+    }
+}

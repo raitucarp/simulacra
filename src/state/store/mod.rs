@@ -9,7 +9,7 @@ mod authors;
 mod auto_archive; // Y6
 mod auto_delete; // Y7
 mod catalogue;
-mod avatar; mod backrefs; mod embedded; mod margin; mod garden; mod renderings; mod branches; mod pinned; mod audience; mod questions; mod series; mod media_posts; mod corrections; mod still_true; mod distill; mod lens_fans; mod glossary; mod open_questions; mod mind_changes; // N1: backlinks, embedded versions; N2: margin replies; N3: the garden; N5: renderings; N6: what-if branches; N7: pinned quotes; N8: audience scopes; N9: ask the room; N10: series; N11, N12: voice and ink posts; N13: "Still true?"; N14: corrections; N15: distilling; N16: lens fans; N17: the glossary; N18: open questions; N19: changes of mind
+mod avatar; mod backrefs; mod embedded; mod margin; mod garden; mod renderings; mod branches; mod pinned; mod audience; mod questions; mod series; mod media_posts; mod corrections; mod still_true; mod distill; mod lens_fans; mod glossary; mod open_questions; mod mind_changes; mod translations; // N1: backlinks, embedded versions; N2: margin replies; N3: the garden; N5: renderings; N6: what-if branches; N7: pinned quotes; N8: audience scopes; N9: ask the room; N10: series; N11, N12: voice and ink posts; N13: "Still true?"; N14: corrections; N15: distilling; N16: lens fans; N17: the glossary; N18: open questions; N19: changes of mind; N20: translations
 mod bootstrap;
 mod bulk_posts;
 mod captures;

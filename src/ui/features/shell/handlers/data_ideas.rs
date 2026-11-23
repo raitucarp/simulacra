@@ -35,7 +35,7 @@ impl AppView {
 
     /// What every card's menu shares this render.
     pub(in crate::ui::features::shell) fn idea_source(&self) -> IdeaSource {
-        IdeaSource { agents: self.state.audience_agents(), series: self.state.series_listings().into_iter().map(|listing| listing.title).collect(), playing: self.data.ideas.playing.as_ref().map(|playing| playing.post.clone()), transcribing: self.data.ideas.transcribing.clone(), rechecking: self.data.ideas.rechecking.clone(), rechecks: self.data.ideas.rechecks.clone(), glossary: std::rc::Rc::new(self.state.glossary()) }
+        IdeaSource { agents: self.state.audience_agents(), series: self.state.series_listings().into_iter().map(|listing| listing.title).collect(), playing: self.data.ideas.playing.as_ref().map(|playing| playing.post.clone()), transcribing: self.data.ideas.transcribing.clone(), rechecking: self.data.ideas.rechecking.clone(), rechecks: self.data.ideas.rechecks.clone(), glossary: std::rc::Rc::new(self.state.glossary()), translated: self.data.ideas.thoughts.translated.clone(), translating: self.data.ideas.thoughts.translating.clone(), study_language: self.state.preferences().learning.study_language.native_label().to_string() }
     }
 
     /// Sets who may read the user's post `id` (`None`: everyone) and says what changed.

@@ -94,7 +94,7 @@ fn render_content_column<L: PostLookup>(
                 .py(theme.spacing_2xs)
                 .child(match handlers.lock.as_ref().filter(|_| effective.is_locked()) {
                     Some(lock) => super::locked::render_locked_body(lock, lookup, theme, &handlers.links.scoped(effective.id.to_string())), // X4: the placeholder, or the text unlocked this session
-                    None => render_post_content(effective, lookup, theme, &handlers.links.scoped(effective.id.to_string()), super::checklist::todo_toggle(handlers.data.as_ref())), // D5, D6: its checklist, ticked on the user's own posts
+                    None => super::translation_line::render_translated_body(effective, lookup, theme, &handlers).unwrap_or_else(|| render_post_content(effective, lookup, theme, &handlers.links.scoped(effective.id.to_string()), super::checklist::todo_toggle(handlers.data.as_ref()))), // D5, D6; N20: or its translation
                 }),
         )
         .children(super::pinned_card::render_pinned_quote(effective, lookup, theme)) // N7

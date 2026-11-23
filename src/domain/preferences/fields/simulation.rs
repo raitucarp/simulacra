@@ -56,6 +56,7 @@ category_fields! {
         DailyReviewLimit => "daily_review_limit", NewCardsPerDay => "new_cards_per_day",
         DesiredRetention => "desired_retention", ReviewReminder => "review_reminder", ReminderHour => "reminder_hour",
         WeeklyReminder => "weekly_review_reminder", WeeklyDay => "weekly_review_day", WeeklyHour => "weekly_review_hour",
+        StudyLanguage => "study_language",
     }
 }
 
@@ -69,6 +70,7 @@ impl LearningField {
             Self::ReminderHour | Self::WeeklyHour => number(HOUR_OF_DAY, NumberUnit::Hour),
             Self::WeeklyReminder => FieldKind::Toggle,
             Self::WeeklyDay => choices::<ReviewWeekday>(),
+            Self::StudyLanguage => choices::<crate::i18n::Language>(),
         }
     }
 
@@ -82,6 +84,7 @@ impl LearningField {
             Self::WeeklyReminder => SettingValue::Toggle(prefs.weekly_review_reminder),
             Self::WeeklyDay => choice_value(prefs.weekly_review_day),
             Self::WeeklyHour => number_value(prefs.weekly_review_hour),
+            Self::StudyLanguage => choice_value(prefs.study_language),
         }
     }
 
@@ -95,6 +98,7 @@ impl LearningField {
             Self::WeeklyReminder => LearningPrefs { weekly_review_reminder: toggle(value, prefs.weekly_review_reminder), ..prefs },
             Self::WeeklyDay => LearningPrefs { weekly_review_day: choice(value, prefs.weekly_review_day), ..prefs },
             Self::WeeklyHour => LearningPrefs { weekly_review_hour: count(value, prefs.weekly_review_hour), ..prefs },
+            Self::StudyLanguage => LearningPrefs { study_language: choice(value, prefs.study_language), ..prefs },
         }
     }
 }

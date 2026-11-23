@@ -12,4 +12,6 @@ pub enum ThoughtEvent {
     Questions(super::questions_sheet::QuestionsEvent),
     /// N19: "Changed my mind".
     Mind(super::mind_sheet::MindEvent),
+    /// N20: bilingual posts.
+    Translate(super::translation_sheet::TranslateEvent),
 }

@@ -2,7 +2,7 @@
 //! (N17), the open questions page (N18), the change of mind sheet (N19), and their text fields.
 
 use super::view::AppView;
-use crate::ui::features::data::{GlossaryDialog, LensDialog, MindDialog};
+use crate::ui::features::data::{GlossaryDialog, LensDialog, MindDialog, WordsDialog};
 use gpui_kit::component::input::{InputEvent, InputState};
 use gpui_kit::*;
 use rust_i18n::t;
@@ -18,12 +18,18 @@ pub struct ThoughtSheets {
     pub questions_open: bool,
     /// N19: marking a change of mind.
     pub mind: Option<MindDialog>,
+    /// N20: the posts shown translated, the one being translated (and the ticket of that
+    /// request), and the words sheet.
+    pub translated: Vec<crate::domain::PostId>,
+    pub translating: Option<crate::domain::PostId>,
+    pub translate_ticket: u64,
+    pub words: Option<WordsDialog>,
 }
 
 impl ThoughtSheets {
     /// Whether one of them is open.
     pub fn any_open(&self) -> bool {
-        self.lens.is_some() || self.glossary.is_some() || self.questions_open || self.mind.is_some()
+        self.lens.is_some() || self.glossary.is_some() || self.questions_open || self.mind.is_some() || self.words.is_some()
     }
 }
 

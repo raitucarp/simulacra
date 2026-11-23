@@ -33,6 +33,8 @@ pub struct PostFacts {
     pub answers: Option<PostId>,
     /// It is marked as having changed the user's mind (N19).
     pub changed_mind: bool,
+    /// It keeps a translation (N20).
+    pub translation: bool,
 }
 
 impl PostFacts {
@@ -50,6 +52,7 @@ impl PostFacts {
             question: crate::domain::post::open_question::question_state(post),
             feeling: post.kind.is_feeling(),
             changed_mind: post.extras.mind_change.is_some(),
+            translation: !post.is_locked() && post.extras.translation.is_some(),
             answers: post.reply_to_id.as_ref().and_then(|parent| state.get_post(parent)).filter(|parent| !parent.is_locked() && crate::domain::post::open_question::is_open(parent) && state.author_of(parent).is_human_persona()).map(|parent| parent.id.clone()),
         }
     }
@@ -71,4 +74,9 @@ pub struct IdeaSource {
     pub rechecks: Vec<(PostId, String)>,
     /// N17: the defined terms, read on hover in every body.
     pub glossary: std::rc::Rc<crate::domain::post::glossary::Glossary>,
+    /// N20: the posts shown in the language the user is learning, the one being translated,
+    /// and that language's native name.
+    pub translated: Vec<PostId>,
+    pub translating: Option<PostId>,
+    pub study_language: String,
 }

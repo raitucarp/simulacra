@@ -89,6 +89,7 @@ impl Post {
         self.linked_posts.retain(|id| kept.contains(&Some(id.clone())));
         self.extras.defines = None; // N17: a definition would speak past the lock
         self.extras.mind_change = None; // N19: so would the old view
+        self.extras.translation = None; // N20: and a translation
         Ok(())
     }
 

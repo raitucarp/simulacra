@@ -9,6 +9,7 @@ mod authored;
 pub mod branch; // N6: what-if branches
 pub mod correction; // N14: retractions and corrections
 pub mod depth; // N5
+pub mod distill; // N15: distilling a thread to the vault
 pub mod format;
 pub mod garden; // N3
 pub mod highlight;

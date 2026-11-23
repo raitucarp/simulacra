@@ -11,14 +11,16 @@ use crate::domain::post::SourceKind;
 use crate::domain::Post;
 use std::collections::HashMap;
 
-/// Whether `post` links to `doc`: a `[[wikilink]]` naming its id or title, or a source chip.
+/// Whether `post` links to `doc`: a `[[wikilink]]` naming its id or title, a source chip, or the
+/// root of a thread distilled into it (N15).
 pub fn links_to(post: &Post, doc: &GroundingDocument) -> bool {
     let title = doc.title.trim().to_lowercase();
     let by_wikilink = post.linked_posts.iter().any(|target| {
         let target = target.as_str().trim();
         target == doc.id || target.to_lowercase() == title
     });
-    by_wikilink || post.extras.sources.iter().any(|s| s.kind == SourceKind::VaultDoc && s.id == doc.id)
+    let distilled = post.extras.distilled.as_ref().is_some_and(|d| d.doc_id == doc.id); // N15: the thread it was distilled from
+    by_wikilink || distilled || post.extras.sources.iter().any(|s| s.kind == SourceKind::VaultDoc && s.id == doc.id)
 }
 
 /// Posts of the document's network that link to it, newest first (as `posts` are ordered).

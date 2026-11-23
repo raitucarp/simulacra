@@ -34,3 +34,17 @@ impl Post {
         })
     }
 }
+
+impl Post {
+    /// N15: the post as it goes into a distilled vault document: its text, its voice transcript
+    /// as a quotation, and its drawing as an image of its SVG. A locked post is its placeholder.
+    pub fn distill_text(&self) -> String {
+        if self.is_locked() {
+            return self.content.clone();
+        }
+        let mut parts = vec![self.content.trim().to_string()];
+        parts.extend(self.extras.voice.as_ref().and_then(|voice| voice.transcript.as_ref()).map(|text| format!("> {}", text.replace('\n', "\n> "))));
+        parts.extend(self.extras.ink.as_ref().and_then(|ink| ink.svg_path.as_ref()).map(|path| format!("![]({})", path.replace(' ', "%20"))));
+        parts.into_iter().filter(|part| !part.is_empty()).collect::<Vec<_>>().join("\n\n")
+    }
+}

@@ -45,3 +45,17 @@ fn a_drawing_shows_on_its_card_but_never_past_a_lock() {
     assert!(super::ink_card::shown_ink(&sealed).is_none() && super::ink_card::render_ink_card(&sealed, &theme).is_none(), "a locked post shows only its placeholder");
     assert_eq!(crate::ui::components::ink_figure::hex(theme.accent_brand).len(), 7);
 }
+
+#[test]
+fn a_retraction_wears_its_banner_but_never_past_a_lock() {
+    use crate::domain::post::correction::{Correction, CorrectionKind};
+    let mark = Correction { kind: CorrectionKind::Retracted, reason: "The source was a parody.".into(), at: jiff::Timestamp::UNIX_EPOCH, told: Vec::new() };
+    let mut post = Post::create_with_attachments("p", "n1", "u1", "Big news.", None, None, None, None, None).expect("post");
+    post.extras.correction = Some(Box::new(mark.clone()));
+    let shown = super::correction_banner::shown_correction(&post).expect("shown");
+    assert!(super::correction_banner::correction_text(shown).contains("The source was a parody."));
+    let theme = crate::theme::ThemeTokens::default();
+    assert!(super::correction_banner::render_correction_banner(&post, &theme).is_some());
+    let sealed = forged(|post| post.extras.correction = Some(Box::new(mark.clone())));
+    assert!(super::correction_banner::render_correction_banner(&sealed, &theme).is_none(), "a locked post shows only its placeholder");
+}

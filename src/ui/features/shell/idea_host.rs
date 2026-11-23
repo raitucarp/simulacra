@@ -2,7 +2,7 @@
 //! (N7), series (N10) and voice notes (N11, with the recording under way), and their text fields.
 
 use super::view::AppView;
-use crate::ui::features::data::{BranchDialog, QuoteDialog, InkDialog, SeriesDialog, VoiceDialog};
+use crate::ui::features::data::{BranchDialog, QuoteDialog, CorrectionDialog, InkDialog, SeriesDialog, VoiceDialog};
 use gpui_kit::component::input::{InputEvent, InputState};
 use gpui_kit::*;
 use rust_i18n::t;
@@ -25,12 +25,14 @@ pub struct IdeaSheets {
     pub transcribing: Option<crate::domain::PostId>,
     /// N12: a new drawing.
     pub ink: Option<InkDialog>,
+    /// N14: retracting or correcting a post.
+    pub correction: Option<CorrectionDialog>,
 }
 
 impl IdeaSheets {
     /// Whether one of them is open.
     pub fn any_open(&self) -> bool {
-        self.branch.is_some() || self.quote.is_some() || self.series.is_some() || self.voice.is_some() || self.ink.is_some()
+        self.branch.is_some() || self.quote.is_some() || self.series.is_some() || self.voice.is_some() || self.ink.is_some() || self.correction.is_some()
     }
 }
 
@@ -61,6 +63,8 @@ pub struct IdeaInputs {
     pub voice_caption: Entity<InputState>,
     /// N12: a drawing's caption.
     pub ink_caption: Entity<InputState>,
+    /// N14: why a post is retracted, or what is right instead.
+    pub correction_reason: Entity<InputState>,
 }
 
 fn field(placeholder: &str, window: &mut Window, cx: &mut Context<AppView>) -> Entity<InputState> {
@@ -79,12 +83,13 @@ impl IdeaInputs {
             series_goal: field("posts.series.goal_placeholder", window, cx),
             voice_caption: field("posts.voice.caption_placeholder", window, cx),
             ink_caption: field("posts.ink.caption_placeholder", window, cx),
+            correction_reason: field("posts.correction.reason_placeholder", window, cx),
         }
     }
 
     /// Every field.
-    pub fn all(&self) -> [&Entity<InputState>; 8] {
-        [&self.branch_label, &self.branch_text, &self.quote_find, &self.quote_comment, &self.series_title, &self.series_goal, &self.voice_caption, &self.ink_caption]
+    pub fn all(&self) -> [&Entity<InputState>; 9] {
+        [&self.branch_label, &self.branch_text, &self.quote_find, &self.quote_comment, &self.series_title, &self.series_goal, &self.voice_caption, &self.ink_caption, &self.correction_reason]
     }
 
     /// The quote sheet's list follows its search as it is typed.

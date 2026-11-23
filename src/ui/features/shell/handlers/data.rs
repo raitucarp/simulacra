@@ -32,7 +32,7 @@ impl AppView {
             E::SetAudience(id, audience) => self.set_audience(&id, audience, window, cx), // N8
             E::Question(event) => self.on_question_event(event, window, cx), // N9
             E::Series(event) => self.on_series_event(event, window, cx), // N10
-            E::Voice(event) => self.on_voice_event(event, window, cx), E::Ink(event) => self.on_ink_event(event, window, cx), // N11, N12
+            E::Voice(event) => self.on_voice_event(event, window, cx), E::Ink(event) => self.on_ink_event(event, window, cx), E::Correction(event) => self.on_correction_event(event, window, cx), // N11, N12, N14
             E::OpenScheduled | E::EditScheduled(_) | E::PublishScheduledNow(_) | E::CancelScheduled(_) | E::CloseScheduled => self.on_scheduled_event(event, window, cx),
             _ => self.on_saved_event(event, window, cx),
         }

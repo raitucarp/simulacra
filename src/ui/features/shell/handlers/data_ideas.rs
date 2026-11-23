@@ -5,7 +5,7 @@ use super::super::view::AppView;
 use crate::domain::post::audience::Audience;
 use crate::domain::PostId;
 use crate::ui::features::composer::publish_error_message;
-use crate::ui::features::data::{render_branch_sheet, render_quote_sheet, render_series_sheet, render_ink_sheet, render_voice_sheet, tr, BranchEvent, DataAction, DataEvent, IdeaSource, InkEvent, QuoteEvent, SeriesEvent, VoiceEvent};
+use crate::ui::features::data::{render_branch_sheet, render_quote_sheet, render_series_sheet, render_correction_sheet, render_ink_sheet, render_voice_sheet, tr, BranchEvent, DataAction, DataEvent, IdeaSource, CorrectionEvent, InkEvent, QuoteEvent, SeriesEvent, VoiceEvent};
 use gpui_kit::*;
 
 impl AppView {
@@ -23,6 +23,9 @@ impl AppView {
         }
         if let Some(dialog) = &sheets.ink {
             return Some((render_ink_sheet(dialog, on_event, theme), DataEvent::Ink(InkEvent::Close))); // N12
+        }
+        if let Some(dialog) = &sheets.correction {
+            return Some((render_correction_sheet(dialog, on_event, theme), DataEvent::Correction(CorrectionEvent::Close))); // N14
         }
         let dialog = sheets.quote.as_ref()?;
         Some((render_quote_sheet(dialog, on_event, theme), DataEvent::Quote(QuoteEvent::Close)))

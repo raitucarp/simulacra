@@ -10,6 +10,7 @@ mod pinned_card; // N7
 mod audience_badge; // N8
 mod question_chip; // N9
 mod series_strip; // N10
+mod correction_banner; // N14
 mod voice_card; // N11
 mod ink_card; // N12
 mod media_lines; // N11, N12

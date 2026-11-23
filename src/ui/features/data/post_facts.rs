@@ -22,6 +22,8 @@ pub struct PostFacts {
     pub series: Option<String>,
     /// Its voice note can be transcribed: it has none yet, and the post is not locked (N11).
     pub transcribable: bool,
+    /// It was retracted or corrected (N14).
+    pub correction: Option<crate::domain::post::correction::CorrectionKind>,
 }
 
 impl PostFacts {
@@ -34,6 +36,7 @@ impl PostFacts {
             asked: post.extras.question.is_some(),
             series: post.extras.series.as_ref().map(|entry| entry.title.clone()),
             transcribable: !post.is_locked() && post.extras.voice.as_ref().is_some_and(|voice| voice.transcript.is_none()),
+            correction: post.extras.correction.as_ref().map(|c| c.kind),
         }
     }
 }

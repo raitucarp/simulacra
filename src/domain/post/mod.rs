@@ -7,6 +7,7 @@ mod author_ref;
 pub mod auto_delete; // Y7
 mod authored;
 pub mod branch; // N6: what-if branches
+pub mod correction; // N14: retractions and corrections
 pub mod depth; // N5
 pub mod format;
 pub mod garden; // N3

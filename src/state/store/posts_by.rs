@@ -41,6 +41,11 @@ impl AppState {
         self.written_by(profile, page, |post| post.kind.is_feeling())
     }
 
+    /// How many posts `profile` wrote (W7: the count on its Posts tab).
+    pub fn post_count_by(&self, profile: &ProfileId) -> usize {
+        self.posts.iter().chain(&self.scheduled).filter(|post| &post.author_id == profile).count()
+    }
+
     fn written_by(&self, profile: &ProfileId, page: Page, keep: impl Fn(&Post) -> bool) -> Vec<&Post> {
         let mut written: Vec<&Post> = self.posts.iter().chain(&self.scheduled).filter(|post| &post.author_id == profile && keep(post)).collect();
         written.sort_by(|a, b| b.created_at.cmp(&a.created_at).then_with(|| b.id.as_str().cmp(a.id.as_str())));

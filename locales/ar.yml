@@ -6049,3 +6049,10 @@ views.future.empty: "لا شيء مجدول أو مستحق من اليوم فص
 views.board.show: "العرض كلوحة"
 views.board.empty: "لا توجد مهام لفرزها بعد."
 views.board.due: "الاستحقاق %{date}"
+# W7: the profile's post timeline
+roster.posts.tab: "المنشورات"
+roster.posts.empty: "لا توجد منشورات هنا بعد."
+roster.posts.more: "عرض المزيد"
+roster.posts.feelings_only: "المشاعر فقط"
+roster.posts.count_one: "%{count} منشور مكتوب"
+roster.posts.count_other: "المنشورات المكتوبة: %{count}"

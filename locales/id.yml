@@ -6049,3 +6049,10 @@ views.future.empty: "Tidak ada yang dijadwalkan atau jatuh tempo mulai hari ini.
 views.board.show: "Tampilkan sebagai papan"
 views.board.empty: "Belum ada tugas untuk dipilah."
 views.board.due: "Jatuh tempo %{date}"
+# W7: the profile's post timeline
+roster.posts.tab: "Kiriman"
+roster.posts.empty: "Belum ada kiriman di sini."
+roster.posts.more: "Tampilkan lebih banyak"
+roster.posts.feelings_only: "Hanya perasaan"
+roster.posts.count_one: "%{count} kiriman ditulis"
+roster.posts.count_other: "%{count} kiriman ditulis"

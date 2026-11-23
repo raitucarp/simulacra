@@ -18,6 +18,7 @@ impl AppView {
             profile_tab: self.arena.profile_tab,
             beliefs: Some(self.arena.beliefs_panel.clone().into()),
             recommended: self.roster_recommendations(),
+            posts: self.lab.posts, // W7
         };
         let callbacks = RosterCallbacks {
             select: Rc::new(bind.with(Self::lab_select_profile)),
@@ -28,7 +29,8 @@ impl AppView {
             activate_persona: Rc::new(bind.with(Self::lab_activate_persona)),
             trigger_agent: Rc::new(bind.with(Self::lab_trigger_agent)),
             switch_profile_tab: Rc::new(bind.with(Self::switch_profile_tab)),
-            open_post: Rc::new(bind.with(Self::reveal_post)),
+            open_post: Rc::new(bind.with(Self::open_profile_post)),
+            posts: Rc::new(bind.with(Self::profile_posts_event)), // W7
         };
         render_roster_view(params, callbacks)
     }

@@ -1,4 +1,4 @@
-//! sb F1: the Profile / Beliefs / Recommended switch above a profile's overview (Beliefs for
+//! sb F1: the Profile / Posts (W7) / Beliefs / Recommended switch above a profile's overview (Beliefs for
 //! agents only), and the Beliefs column.
 
 use super::params::ProfileTab;
@@ -10,6 +10,7 @@ use rust_i18n::t;
 use std::rc::Rc;
 
 const PROFILE_ID: &str = "roster-tab-profile";
+const POSTS_ID: &str = "roster-tab-posts";
 const BELIEFS_ID: &str = "roster-tab-beliefs";
 const RECOMMENDED_ID: &str = "roster-tab-recommended";
 
@@ -23,6 +24,7 @@ pub(super) fn profile_tabs(active: ProfileTab, with_beliefs: bool, theme: &Theme
     segmented_track(theme)
         .max_w(theme.forge_trading_card_width)
         .child(pill(ProfileTab::Profile, PROFILE_ID, LucideIcon::User, "beliefs.tab.profile"))
+        .child(pill(ProfileTab::Posts, POSTS_ID, LucideIcon::List, "roster.posts.tab"))
         .children(with_beliefs.then(|| pill(ProfileTab::Beliefs, BELIEFS_ID, LucideIcon::Brain, "beliefs.tab.beliefs")))
         .child(pill(ProfileTab::Recommended, RECOMMENDED_ID, LucideIcon::Sparkles, "roster.recommended.tab"))
 }

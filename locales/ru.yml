@@ -6049,3 +6049,10 @@ views.future.empty: "С сегодняшнего дня ничего не зап
 views.board.show: "Показать доской"
 views.board.empty: "Пока нет задач для сортировки."
 views.board.due: "Срок: %{date}"
+# W7: the profile's post timeline
+roster.posts.tab: "Записи"
+roster.posts.empty: "Здесь пока нет записей."
+roster.posts.more: "Показать ещё"
+roster.posts.feelings_only: "Только чувства"
+roster.posts.count_one: "%{count} запись"
+roster.posts.count_other: "Записей: %{count}"

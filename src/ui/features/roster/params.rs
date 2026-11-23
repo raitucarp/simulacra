@@ -22,6 +22,8 @@ pub enum LabMode {
 pub enum ProfileTab {
     #[default]
     Profile,
+    /// W7: everything it wrote, in a view from the registry.
+    Posts,
     /// Its beliefs and their revision log.
     Beliefs,
     /// The posts closest in meaning to what it writes and answers.
@@ -47,6 +49,8 @@ pub struct RosterCallbacks {
     pub switch_profile_tab: Rc<dyn Fn(ProfileTab, &mut Window, &mut App)>,
     /// Opens a recommended post in the timeline.
     pub open_post: super::recommended::OpenPostCallback,
+    /// W7: the Posts tab's view, filter, paging and month.
+    pub posts: super::posts_tab::PostsAction,
 }
 
 /// Plain data the roster renders from.
@@ -60,6 +64,8 @@ pub struct RosterParams<'a> {
     pub beliefs: Option<AnyView>,
     /// The selected profile's recommended posts.
     pub recommended: Rc<[crate::state::semantic::SemanticHit]>,
+    /// W7: how the Posts tab is shown.
+    pub posts: super::posts_state::ProfilePosts,
 }
 
 /// Values derived once per render.

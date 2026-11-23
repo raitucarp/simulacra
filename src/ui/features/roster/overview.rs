@@ -91,6 +91,7 @@ pub(super) fn render_overview(profile: &Profile, params: &RosterParams<'_>, call
     let body = match (&params.beliefs, params.profile_tab, profile.is_agent()) {
         (Some(view), ProfileTab::Beliefs, true) => beliefs_column(view.clone(), theme),
         (_, ProfileTab::Recommended, _) => recommended_column(profile, &params.recommended, &callbacks.open_post, theme),
+        (_, ProfileTab::Posts, _) => super::posts_tab::posts_column(profile, params, callbacks),
         _ => card,
     };
     div().id(OVERVIEW_ID).flex_1().h_full().overflow_y_scrollbar().p(theme.panel_padding).flex().flex_col().items_center().gap(theme.section_gap).child(tabs).child(body)

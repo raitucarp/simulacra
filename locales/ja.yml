@@ -6049,3 +6049,10 @@ views.future.empty: "今日以降に予定や期限のあるものはありま�
 views.board.show: "ボードで表示"
 views.board.empty: "まだ整理するタスクはありません。"
 views.board.due: "期限 %{date}"
+# W7: the profile's post timeline
+roster.posts.tab: "投稿"
+roster.posts.empty: "ここにはまだ投稿がありません。"
+roster.posts.more: "さらに表示"
+roster.posts.feelings_only: "気持ちのみ"
+roster.posts.count_one: "%{count} 件の投稿"
+roster.posts.count_other: "%{count} 件の投稿"

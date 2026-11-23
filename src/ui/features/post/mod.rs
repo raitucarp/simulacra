@@ -36,6 +36,7 @@ pub use item::render_post_item;
 pub use locked::{render_locked_body, render_locked_placeholder, LockControls, LockSource, OpenedText};
 pub use lookup::PostLookup;
 pub(crate) use surface::row_tint;
+pub(crate) use feeling_row::feeling_line; // W7: the profile timeline
 pub use threadline::ThreadlineStyle;
 
 #[cfg(test)]

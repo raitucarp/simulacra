@@ -8,10 +8,16 @@ mod mode_switch;
 mod overview;
 mod pane;
 mod params;
+mod post_cards; // W7
+mod posts_state; // W7
+mod posts_tab; // W7
 mod profile_tabs;
 mod recommended;
+#[cfg(test)]
+mod tests;
 
 pub use params::{LabMode, ProfileTab, RosterCallbacks, RosterParams};
+pub use posts_state::{ProfilePosts, ProfilePostsEvent};
 pub use recommended::OpenPostCallback;
 
 use crate::theme::ThemeTokens;

@@ -69,7 +69,7 @@ fn thread_files(plan: &ExportPlan, source: &ExportSource) -> Vec<BundleFile> {
     let mut files = Vec::new();
     for thread in &plan.threads {
         for post in &thread.posts {
-            for (path, _) in post_images(post) {
+            for (path, _) in post_images(post).into_iter().chain(super::care::post_media(post)) {
                 let name = Path::new(&path).file_name().map(|n| n.to_string_lossy().to_string()).unwrap_or_default();
                 let inside = format!("{MEDIA_DIR}/{}-{name}", tail(post.id.as_str()));
                 images.entry(path.clone()).or_insert_with(|| {

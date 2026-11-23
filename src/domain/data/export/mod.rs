@@ -15,6 +15,7 @@
 //! turns the plan into files. Writing the zip happens at the edge (`storage::export`).
 
 mod bundle;
+mod care; // N11, N12, N14
 mod markdown;
 mod plan;
 mod reactions; // R10
@@ -104,3 +105,5 @@ pub struct ExportSource {
 
 #[cfg(test)]
 mod tests;
+#[cfg(test)]
+mod care_tests; // N11, N12, N14

@@ -16,6 +16,8 @@ pub struct PostFacts {
     pub repinnable: bool,
     /// Who may read it (`None`: everyone, N8).
     pub audience: Option<Audience>,
+    /// It was asked of the room already (N9).
+    pub asked: bool,
 }
 
 impl PostFacts {
@@ -25,6 +27,7 @@ impl PostFacts {
             garden: post.extras.garden.map(|note| note.maturity),
             repinnable: state.quote_drift(post) == Some(QuoteDrift::SourceChanged),
             audience: post.extras.audience.as_deref().cloned(),
+            asked: post.extras.question.is_some(),
         }
     }
 }

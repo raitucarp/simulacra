@@ -67,3 +67,18 @@ fn a_scoped_post_says_who_may_read_it() {
         assert_ne!(rust_i18n::t!(&key, locale = "en"), key);
     }
 }
+
+#[test]
+fn a_question_names_who_was_asked_but_never_past_a_lock() {
+    use crate::domain::post::question::{Asked, Question};
+    use crate::domain::ProfileId;
+    let name_of = |id: &ProfileId| id.to_string();
+    let mut post = Post::create("q", "n1", "u1", "Why does light bend?").expect("valid");
+    assert_eq!(super::question_chip::question_text(&post, name_of), None);
+    post.extras.question = Some(Box::new(Question { asked: vec![Asked { agent: ProfileId::new("ada"), fit: 900 }], accepted: None }));
+    assert!(super::question_chip::question_text(&post, name_of).is_some_and(|text| text.contains("ada")));
+    assert_eq!(super::question_chip::question_text(&locked(post), name_of), None, "a locked question shows only its placeholder");
+    for key in ["menu", "asked", "nobody", "failed", "answers_one", "answers_other", "accept", "accepted", "chip", "chip_answered"].map(|key| format!("posts.question.{key}")) {
+        assert_ne!(rust_i18n::t!(&key, locale = "en"), key);
+    }
+}

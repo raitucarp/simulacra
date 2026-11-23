@@ -10,6 +10,7 @@ mod end_card; // N4
 mod inspector;
 mod inspector_backlinks; // N1
 mod inspector_margin; // N2
+mod inspector_answers; // N9
 mod inspector_depth; // N5
 mod inspector_grounding;
 mod inspector_header;

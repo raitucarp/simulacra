@@ -27,6 +27,7 @@ mod data_legend; // S9
 mod data_margin; // N2
 mod data_branch; // N6
 mod data_quote; mod data_ideas; // N7, N6–N10
+mod data_question; // N9
 mod data_garden; // N3
 mod feed_answer; // N4
 mod data_depth; // N5

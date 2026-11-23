@@ -132,6 +132,8 @@ pub enum DataEvent {
     Quote(super::quote_sheet::QuoteEvent),
     /// N8: who may read the post (`None`: everyone).
     SetAudience(PostId, Option<crate::domain::post::audience::Audience>),
+    /// N9: asking the room, and accepting an answer.
+    Question(super::question::QuestionEvent),
     /// The monthly migration review (S16).
     OpenReview,
     ReviewDecide(crate::domain::symbols::ReviewChoice),

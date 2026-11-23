@@ -1,9 +1,10 @@
 //! N7–N10: the items of the user's own post in its "…" menu: re-pin a drifted quote (N7) and
-//! who may read the post (N8: everyone, only the user, or chosen agents).
+//! who may read the post (N8: everyone, only the user, or chosen agents), and ask the room (N9).
 
 use super::events::DataEvent;
 use super::post_menu::{item, DataControls};
 use super::quote_sheet::QuoteEvent;
+use super::question::QuestionEvent;
 use super::text::tr;
 use crate::domain::post::audience::Audience;
 use crate::ui::icons::LucideIcon;
@@ -31,6 +32,9 @@ pub(super) fn with_idea_items(menu: PopupMenu, controls: &DataControls, window: 
     let mut menu = menu;
     if controls.facts.repinnable {
         menu = menu.item(item(tr("posts.pinned.repin"), LucideIcon::Quote, DataEvent::Quote(QuoteEvent::Repin(post.clone())), &controls.on_event));
+    }
+    if !controls.locked && !controls.facts.asked {
+        menu = menu.item(item(tr("posts.question.menu"), LucideIcon::HelpCircle, DataEvent::Question(QuestionEvent::Ask(post.clone())), &controls.on_event)); // N9
     }
     let scoped = controls.clone();
     menu.submenu_with_icon(Some(Icon::new(LucideIcon::Users)), tr("posts.audience.menu"), window, cx, move |submenu, _, _| audience_submenu(submenu, &scoped))

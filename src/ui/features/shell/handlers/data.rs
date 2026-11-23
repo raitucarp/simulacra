@@ -30,6 +30,7 @@ impl AppView {
             E::Branch(event) => self.on_branch_event(event, window, cx), // N6
             E::Quote(event) => self.on_quote_event(event, window, cx), // N7
             E::SetAudience(id, audience) => self.set_audience(&id, audience, window, cx), // N8
+            E::Question(event) => self.on_question_event(event, window, cx), // N9
             E::OpenScheduled | E::EditScheduled(_) | E::PublishScheduledNow(_) | E::CancelScheduled(_) | E::CloseScheduled => self.on_scheduled_event(event, window, cx),
             _ => self.on_saved_event(event, window, cx),
         }

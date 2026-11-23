@@ -39,3 +39,13 @@ fn the_lens_sheet_starts_with_the_defaults_and_never_picks_past_the_limit() {
     }
     assert!(dialog.chosen.len() <= MAX_LENSES && dialog.problem.is_some(), "a fifth lens is refused with a reason");
 }
+
+#[test]
+fn a_defining_post_names_its_term_but_never_past_a_lock() {
+    use crate::domain::post::glossary::Definition;
+    let definition = || Some(Box::new(Definition { term: "entropy".into(), text: "Disorder, counted.".into(), at: jiff::Timestamp::UNIX_EPOCH }));
+    let mut post = Post::create("p", "n1", "u1", "Rooms get messy.").expect("post");
+    post.extras.defines = definition();
+    assert!(super::term_chip::term_chip_text(&post).is_some_and(|text| text.contains("entropy")));
+    assert!(super::term_chip::term_chip_text(&forged(|post| post.extras.defines = definition())).is_none());
+}

@@ -24,6 +24,8 @@ pub struct PostFacts {
     pub transcribable: bool,
     /// It was retracted or corrected (N14).
     pub correction: Option<crate::domain::post::correction::CorrectionKind>,
+    /// The term it defines (N17).
+    pub defines: Option<String>,
 }
 
 impl PostFacts {
@@ -37,6 +39,7 @@ impl PostFacts {
             series: post.extras.series.as_ref().map(|entry| entry.title.clone()),
             transcribable: !post.is_locked() && post.extras.voice.as_ref().is_some_and(|voice| voice.transcript.is_none()),
             correction: post.extras.correction.as_ref().map(|c| c.kind),
+            defines: post.extras.defines.as_ref().map(|definition| definition.term.clone()),
         }
     }
 }
@@ -55,4 +58,6 @@ pub struct IdeaSource {
     /// N13: the claim the AI is asked about, and its answers by post.
     pub rechecking: Option<PostId>,
     pub rechecks: Vec<(PostId, String)>,
+    /// N17: the defined terms, read on hover in every body.
+    pub glossary: std::rc::Rc<crate::domain::post::glossary::Glossary>,
 }

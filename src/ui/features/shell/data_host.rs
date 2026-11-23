@@ -91,7 +91,7 @@ impl DataInputs {
 
     /// Whether one of the fields has the keyboard.
     pub fn any_focused(&self, window: &Window, cx: &App) -> bool {
-        [&self.passphrase, &self.repeat, &self.restore_passphrase, &self.from, &self.to, &self.collection_name, &self.note, &self.meaning, &self.margin_reply].into_iter().chain(self.ideas.all()).any(|input| input.read(cx).focus_handle(cx).is_focused(window))
+        [&self.passphrase, &self.repeat, &self.restore_passphrase, &self.from, &self.to, &self.collection_name, &self.note, &self.meaning, &self.margin_reply].into_iter().chain(self.ideas.all()).chain(self.ideas.thoughts.all()).any(|input| input.read(cx).focus_handle(cx).is_focused(window))
     }
 
     /// Re-renders on edits of the live fields; Enter in the name and note fields submits.

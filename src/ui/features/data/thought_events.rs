@@ -6,4 +6,6 @@
 pub enum ThoughtEvent {
     /// N16: the lens fan sheet.
     Lens(super::lens_sheet::LensEvent),
+    /// N17: defining terms.
+    Glossary(super::glossary_sheet::GlossaryEvent),
 }

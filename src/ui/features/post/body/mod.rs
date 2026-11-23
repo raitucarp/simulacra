@@ -6,6 +6,7 @@
 
 mod code_block;
 mod embed; // N1
+mod glossary; // N17
 mod code_run; // P5
 mod run_panel; // P6
 mod inline;
@@ -52,6 +53,8 @@ pub struct BodyLinks {
     pub scope: String,
     /// N1: the body is itself embedded, so its embeds are links (embeds never nest).
     pub nested: bool,
+    /// N17: the defined terms, whose mentions show their definitions on hover.
+    pub glossary: Option<Rc<crate::domain::post::glossary::Glossary>>,
 }
 
 impl BodyLinks {
@@ -80,7 +83,7 @@ pub fn render_body_tokens<L: PostLookup>(
     links: &BodyLinks,
 ) -> AnyElement {
     if let [BodyToken::Text(text)] = tokens {
-        if !text.contains(LINE_BREAK) {
+        if !text.contains(LINE_BREAK) && links.glossary.as_ref().is_none_or(|glossary| glossary.mentions(text).is_empty()) {
             return body_text(theme).w_full().min_w_0().child(text.clone()).into_any_element();
         }
     }
@@ -96,7 +99,8 @@ pub fn render_body_tokens<L: PostLookup>(
 }
 
 fn render_items<L: PostLookup>(items: &[Item<'_>], lookup: &L, theme: &ThemeTokens, links: &BodyLinks) -> Vec<AnyElement> {
-    items.iter().enumerate().map(|(index, item)| render_item(items, index, item, lookup, theme, links)).collect()
+    let marks = glossary::marks(items, links); // N17
+    items.iter().enumerate().map(|(index, item)| glossary::defined(render_item(items, index, item, lookup, theme, links), index, marks[index].as_ref(), links, theme)).collect()
 }
 
 /// One inline item as an element; breaks become full-width rows (taller before a blank line).

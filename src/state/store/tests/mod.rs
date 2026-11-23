@@ -30,6 +30,7 @@ mod backlinks; // N1
 mod margin; // N2
 mod garden; // N3
 mod branches; // N6
+mod pinned; // N7
 mod renderings; // N5
 mod version_looks; // V10
 mod version_attachments; // V11

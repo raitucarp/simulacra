@@ -59,6 +59,9 @@ pub struct PostExtras {
     /// N6: the reply starts a what-if branch of the thread.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub branch: Option<super::branch::BranchPoint>,
+    /// N7: a vault passage the post quotes verbatim, pinned to its document (boxed: posts stay small).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pinned: Option<Box<super::pinned::PinnedQuote>>,
 }
 
 impl PostExtras {
@@ -68,9 +71,9 @@ impl PostExtras {
     }
 
     /// Whether there is anything to show behind the post (the origin, images, files, symbols, tint,
-    /// version, ticks, lock, code runs, margin anchor, garden note and branch pointer alone are not).
+    /// version, ticks, lock, code runs, margin anchor, garden note, branch pointer and pinned quote alone are not).
     pub fn has_details(&self) -> bool {
-        Self { origin: None, images: Vec::new(), files: Vec::new(), symbols: PostSymbols::default(), tint: None, head: None, replied_version: None, todo_state: Default::default(), lock: None, code_runs: Vec::new(), anchor: None, garden: None, branch: None, ..self.clone() } != Self::default()
+        Self { origin: None, images: Vec::new(), files: Vec::new(), symbols: PostSymbols::default(), tint: None, head: None, replied_version: None, todo_state: Default::default(), lock: None, code_runs: Vec::new(), anchor: None, garden: None, branch: None, pinned: None, ..self.clone() } != Self::default()
     }
 
     /// Adds `source` unless an identical reference is already listed.

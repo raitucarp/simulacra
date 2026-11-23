@@ -14,6 +14,7 @@ mod extras;
 mod kind;
 mod lifecycle;
 pub mod lock; // X2: password-locked posts
+pub mod pinned; // N7: pinned quotes
 mod parse;
 mod provenance;
 pub mod refs; // N1: embeds, quotes and wikilinks, and backlinks

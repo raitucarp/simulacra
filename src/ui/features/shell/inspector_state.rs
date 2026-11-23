@@ -3,12 +3,13 @@
 //! outline's keyboard focus.
 
 use crate::storage::{SettingKey, Vault};
-use crate::ui::features::feed::inspector_outline::{InspectorMode, InspectorView, OutlineMemory};
+use crate::domain::views::PostView;
+use crate::ui::features::feed::inspector_outline::{InspectorView, OutlineMemory};
 use gpui_kit::{App, FocusHandle};
 
 /// What the inspector remembers.
 pub struct InspectorState {
-    pub mode: InspectorMode,
+    pub mode: PostView,
     pub outlines: OutlineMemory,
     pub focus: FocusHandle,
 }
@@ -17,12 +18,12 @@ impl InspectorState {
     /// The saved mode (cards when unset or unreadable).
     pub(super) fn load(vault: Option<&Vault>, cx: &mut App) -> Self {
         let saved = vault.and_then(|vault| vault.get_setting(SettingKey::InspectorMode).ok().flatten());
-        let mode = saved.and_then(|key| InspectorMode::from_key(&key)).unwrap_or_default();
+        let mode = saved.and_then(|key| PostView::from_key(&key)).unwrap_or_default();
         Self { mode, outlines: OutlineMemory::default(), focus: cx.focus_handle() }
     }
 
     /// Queues `mode` for the settings table.
-    pub(super) fn save_mode(vault: Option<&Vault>, mode: InspectorMode) {
+    pub(super) fn save_mode(vault: Option<&Vault>, mode: PostView) {
         let Some(vault) = vault else { return };
         if let Err(err) = vault.set_setting(SettingKey::InspectorMode, mode.key()) {
             eprintln!("simulacra: inspector mode not saved: {err}");

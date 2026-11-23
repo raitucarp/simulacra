@@ -42,6 +42,7 @@ pub mod thread;
 pub mod todo; // D2: to-do tree with spans
 pub mod topic;
 pub mod traits;
+pub mod views; // epic W: views of a list of posts
 
 pub use agent_config::{
     AgentConfig, AttachmentStyle, CapitalizationStyle, ClassicTemperament, CodeSwitchingStyle,

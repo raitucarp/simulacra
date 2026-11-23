@@ -3,7 +3,7 @@
 //!
 //! - [`tree`]: the thread tree and its visible rows (pure).
 //! - [`memory`]: folded branches and the cursor per thread, and every command (pure).
-//! - [`mode`]: cards or outline, the view the feed renders and the commands it sends.
+//! - [`mode`]: the view the feed renders (from the registry) and the commands it sends.
 //! - `render` / `row`: the pane, its toolbar and one bullet.
 
 pub mod keys;
@@ -18,6 +18,6 @@ mod tests;
 
 pub use keys::init_key_bindings;
 pub use memory::{apply_command, OutlineCommand, OutlineKey, OutlineMemory, OutlineThread};
-pub use mode::{InspectorCallback, InspectorCommand, InspectorMode, InspectorView};
+pub use mode::{InspectorCallback, InspectorCommand, InspectorView};
 pub(crate) use render::{render_outline_pane, thread_outline};
 pub use tree::{build_outline, thread_root, visible_rows, OutlineNode, OutlineRow};

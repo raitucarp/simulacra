@@ -4,7 +4,8 @@
 use super::super::inspector_state::InspectorState;
 use super::super::view::AppView;
 use crate::domain::PostId;
-use crate::ui::features::feed::inspector_outline::{apply_command, thread_outline, InspectorCommand, InspectorMode, OutlineCommand};
+use crate::domain::views::PostView;
+use crate::ui::features::feed::inspector_outline::{apply_command, thread_outline, InspectorCommand, OutlineCommand};
 use gpui_kit::*;
 
 impl AppView {
@@ -17,10 +18,10 @@ impl AppView {
     }
 
     /// Shows the thread as `mode` and remembers it.
-    pub(crate) fn set_inspector_mode(&mut self, mode: InspectorMode, window: &mut Window, cx: &mut Context<Self>) {
+    pub(crate) fn set_inspector_mode(&mut self, mode: PostView, window: &mut Window, cx: &mut Context<Self>) {
         self.inspector.mode = mode;
         InspectorState::save_mode(self.state.db.as_ref(), mode);
-        if mode == InspectorMode::Outline {
+        if mode == PostView::Outline {
             window.focus(&self.inspector.focus, cx);
         }
         cx.notify();

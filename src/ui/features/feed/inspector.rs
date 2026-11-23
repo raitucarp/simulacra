@@ -3,7 +3,8 @@
 use super::callbacks::PostCallbacks;
 use super::consts::{INSPECTOR_SCROLL_ID, MAX_INSPECTOR_NESTED_REPLIES, MAX_INSPECTOR_REPLIES};
 use super::inspector_header::{render_inspector_header, render_quick_reply_bar};
-use super::inspector_outline::{render_outline_pane, InspectorCallback, InspectorMode, InspectorView};
+use super::inspector_outline::{render_outline_pane, InspectorCallback, InspectorView};
+use crate::domain::views::PostView;
 use super::inspector_related::render_related;
 use super::inspector_replies::conversation_children;
 use super::params::ToggleRepliesCallback;
@@ -50,8 +51,8 @@ pub(crate) fn render_inspector_pane(ctx: &InspectorContext<'_>, focused: Option<
     let conversation = focused.map(|post| build_conversation(ctx.state, post, ctx.limits()));
     let replies_count = conversation.as_ref().map(|c| c.direct_total);
     let body = match (ctx.view.mode, focused, ctx.view.argument.clone()) {
-        (InspectorMode::Outline, Some(post), _) => render_outline_pane(ctx.state, post, ctx.view, &ctx.on_inspector, theme).into_any_element(),
-        (InspectorMode::Argument, Some(_), Some(argument)) => argument.into_any_element(),
+        (PostView::Outline, Some(post), _) => render_outline_pane(ctx.state, post, ctx.view, &ctx.on_inspector, theme).into_any_element(),
+        (PostView::Argument, Some(_), Some(argument)) => argument.into_any_element(),
         _ => render_thread_scroll(ctx, conversation.as_ref()).into_any_element(),
     };
     div()

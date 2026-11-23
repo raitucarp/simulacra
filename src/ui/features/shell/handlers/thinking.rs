@@ -7,7 +7,7 @@ use crate::domain::post_actions::ActionKind;
 use crate::domain::PostId;
 use crate::state::NavigationTab;
 use crate::ui::features::command_palette::CommandId;
-use crate::ui::features::feed::inspector_outline::InspectorMode;
+use crate::domain::views::PostView;
 use crate::ui::features::thinking::insights::ThinkingRequest;
 use gpui_kit::*;
 
@@ -21,7 +21,7 @@ impl AppView {
             }
             CommandId::ShowArgumentMap => {
                 self.select_nav(NavigationTab::Timeline, window, cx);
-                self.set_inspector_mode(InspectorMode::Argument, window, cx);
+                self.set_inspector_mode(PostView::Argument, window, cx);
             }
             _ => self.open_insights(id, window, cx),
         }

@@ -11,6 +11,7 @@ pub mod depth; // N5
 pub mod format;
 pub mod garden; // N3
 pub mod highlight;
+pub mod ink; // N12: ink posts
 mod constructors;
 mod extras;
 mod kind;
@@ -130,10 +131,10 @@ impl Post {
         self.quote_id.is_some()
     }
 
-    /// Whether this thought has any media attachment (link, local image, local file or voice note, N11).
+    /// Whether this thought has any media attachment (link, local image, local file, voice note or drawing, N11, N12).
     #[inline]
     pub fn has_attachments(&self) -> bool {
-        self.link_url.is_some() || self.image_path.is_some() || !self.extras.files.is_empty() || self.extras.voice.is_some()
+        self.link_url.is_some() || self.image_path.is_some() || !self.extras.files.is_empty() || self.extras.voice.is_some() || self.extras.ink.is_some()
     }
 }
 

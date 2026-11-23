@@ -78,6 +78,9 @@ pub struct PostExtras {
     /// N11: a voice note: its audio file, length and transcript (boxed).
     #[serde(skip_serializing_if = "Option::is_none")]
     pub voice: Option<Box<super::voice::VoiceNote>>,
+    /// N12: a hand drawing: its strokes and the SVG file saved from them (boxed).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ink: Option<Box<super::ink::InkDrawing>>,
 }
 
 impl PostExtras {
@@ -87,9 +90,9 @@ impl PostExtras {
     }
 
     /// Whether there is anything to show behind the post (the origin, images, files, symbols, tint,
-    /// version, ticks, lock, code runs, margin anchor, garden note, branch pointer, pinned quote, audience, question, series and voice note alone are not).
+    /// version, ticks, lock, code runs, margin anchor, garden note, branch pointer, pinned quote, audience, question, series, voice note and drawing alone are not).
     pub fn has_details(&self) -> bool {
-        Self { origin: None, images: Vec::new(), files: Vec::new(), symbols: PostSymbols::default(), tint: None, head: None, replied_version: None, todo_state: Default::default(), lock: None, code_runs: Vec::new(), anchor: None, garden: None, branch: None, pinned: None, audience: None, question: None, series: None, voice: None, ..self.clone() } != Self::default()
+        Self { origin: None, images: Vec::new(), files: Vec::new(), symbols: PostSymbols::default(), tint: None, head: None, replied_version: None, todo_state: Default::default(), lock: None, code_runs: Vec::new(), anchor: None, garden: None, branch: None, pinned: None, audience: None, question: None, series: None, voice: None, ink: None, ..self.clone() } != Self::default()
     }
 
     /// Adds `source` unless an identical reference is already listed.

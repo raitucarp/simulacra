@@ -42,3 +42,11 @@ impl AppState {
         }
     }
 }
+
+impl AppState {
+    /// N12: publishes the hand drawing `drawing` (finished, its SVG saved) with `caption`.
+    pub fn submit_ink_post(&mut self, caption: &str, drawing: crate::domain::post::ink::InkDrawing) -> Result<PostId> {
+        let drawing = drawing.finished().ok_or(AppError::EmptyContent)?;
+        self.submit_media_post(caption, |post| post.extras.ink = Some(Box::new(drawing)))
+    }
+}

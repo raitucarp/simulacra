@@ -42,7 +42,7 @@ impl AppView {
     }
 
     /// Closes the sheet and opens the composer on the waiting post `id`.
-    fn open_scheduled_editor(&mut self, id: &PostId, window: &mut Window, cx: &mut Context<Self>) {
+    pub(super) fn open_scheduled_editor(&mut self, id: &PostId, window: &mut Window, cx: &mut Context<Self>) {
         let Some(post) = self.state.scheduled_post(id) else { return };
         let target = self.state.authored(post);
         self.data.scheduled_open = false;

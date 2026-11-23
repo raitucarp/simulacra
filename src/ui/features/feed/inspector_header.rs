@@ -2,7 +2,8 @@
 
 use super::consts::QUICK_REPLY_BUTTON_ID;
 use super::inspector_mode_toggle::render_mode_toggle;
-use super::inspector_outline::{InspectorCallback, InspectorMode};
+use super::inspector_outline::InspectorCallback;
+use crate::domain::views::PostView;
 use super::params::ReplyPostCallback;
 use crate::domain::{Post, Profile};
 use crate::theme::ThemeTokens;
@@ -17,7 +18,7 @@ use std::rc::Rc;
 
 /// Inspector header with title, (when a thread is focused) the replies count pill, and the
 /// cards / outline switch.
-pub(crate) fn render_inspector_header(theme: &ThemeTokens, replies_count: Option<usize>, mode: InspectorMode, on_command: &InspectorCallback) -> Div {
+pub(crate) fn render_inspector_header(theme: &ThemeTokens, replies_count: Option<usize>, mode: PostView, on_command: &InspectorCallback) -> Div {
     div()
         .w_full()
         .px(theme.panel_padding)

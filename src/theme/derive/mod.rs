@@ -35,6 +35,7 @@ mod text;
 mod thinking;
 mod tints;
 mod vault;
+mod views; // epic W
 
 pub use metrics::{DEFAULT_FONT_FAMILY, DEFAULT_MONO_FONT_FAMILY};
 pub use scales::{Density, RadiusScale, TypeScale};
@@ -74,7 +75,7 @@ pub fn derive_tokens(
     actions::apply_actions_layout(&mut t);
     suggestions::apply_suggestions_layout(&mut t);
     image_prompt::apply_image_prompt_layout(&mut t);
-    thinking::apply_thinking_layout(&mut t); data::apply_data_layout(&mut t); reactions::apply_reactions_layout(&mut t); symbols::apply_symbols_layout(&mut t); todos::apply_todos_layout(&mut t); search::apply_search_layout(&mut t); // sb F2; epic R, S, D, Q
+    thinking::apply_thinking_layout(&mut t); data::apply_data_layout(&mut t); reactions::apply_reactions_layout(&mut t); symbols::apply_symbols_layout(&mut t); todos::apply_todos_layout(&mut t); search::apply_search_layout(&mut t); views::apply_views_layout(&mut t); // sb F2; epic R, S, D, Q, W
     surfaces::apply_surfaces(&mut t, palette);
     text::apply_text(&mut t, palette);
     accents::apply_accents(&mut t, palette); accents::apply_shades(&mut t, palette);

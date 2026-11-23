@@ -6026,3 +6026,33 @@ code.output.cancel: "Batal"
 code.output.empty: "Tidak ada keluaran"
 code.output.truncated: "Keluaran dipersingkat"
 code.output.failed: "Tidak dapat dimulai"
+# W2: the rapid log view
+views.rapid_log.show: "Tampilkan sebagai log cepat"
+views.rapid_log.empty: "Belum ada kiriman untuk dicatat."
+# W3: the raw view
+views.raw.show: "Tampilkan sebagai teks mentah"
+views.raw.empty: "Belum ada kiriman untuk ditampilkan sebagai teks."
+views.raw.copy_all: "Salin semua"
+views.raw.count_one: "%{count} kiriman"
+views.raw.count_other: "%{count} kiriman"
+# W4: the calendar view
+views.calendar.show: "Tampilkan sebagai kalender"
+views.calendar.previous: "Bulan sebelumnya"
+views.calendar.next: "Bulan berikutnya"
+views.calendar.today: "Bulan ini"
+views.calendar.month_title: "%{month} %{year}"
+views.calendar.more: "+%{count} lagi"
+# W5: the future log
+views.future.show: "Tampilkan log masa depan"
+views.future.empty: "Tidak ada yang dijadwalkan atau jatuh tempo mulai hari ini."
+# W6: the board view
+views.board.show: "Tampilkan sebagai papan"
+views.board.empty: "Belum ada tugas untuk dipilah."
+views.board.due: "Jatuh tempo %{date}"
+# W7: the profile's post timeline
+roster.posts.tab: "Kiriman"
+roster.posts.empty: "Belum ada kiriman di sini."
+roster.posts.more: "Tampilkan lebih banyak"
+roster.posts.feelings_only: "Hanya perasaan"
+roster.posts.count_one: "%{count} kiriman ditulis"
+roster.posts.count_other: "%{count} kiriman ditulis"

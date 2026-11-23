@@ -34,3 +34,4 @@ pub mod splash;
 pub mod thinking;
 pub mod title_bar;
 pub mod vault;
+pub mod views; // epic W: the view registry and its views

@@ -6026,3 +6026,33 @@ code.output.cancel: "Отменить"
 code.output.empty: "Нет вывода"
 code.output.truncated: "Вывод сокращён"
 code.output.failed: "Не запустился"
+# W2: the rapid log view
+views.rapid_log.show: "Показать как быстрый журнал"
+views.rapid_log.empty: "Пока нет записей для журнала."
+# W3: the raw view
+views.raw.show: "Показать простым текстом"
+views.raw.empty: "Пока нет записей, чтобы показать их текстом."
+views.raw.copy_all: "Копировать всё"
+views.raw.count_one: "%{count} запись"
+views.raw.count_other: "Записей: %{count}"
+# W4: the calendar view
+views.calendar.show: "Показать календарём"
+views.calendar.previous: "Предыдущий месяц"
+views.calendar.next: "Следующий месяц"
+views.calendar.today: "Этот месяц"
+views.calendar.month_title: "%{month} %{year}"
+views.calendar.more: "Ещё: %{count}"
+# W5: the future log
+views.future.show: "Показать журнал будущего"
+views.future.empty: "С сегодняшнего дня ничего не запланировано и не назначено."
+# W6: the board view
+views.board.show: "Показать доской"
+views.board.empty: "Пока нет задач для сортировки."
+views.board.due: "Срок: %{date}"
+# W7: the profile's post timeline
+roster.posts.tab: "Записи"
+roster.posts.empty: "Здесь пока нет записей."
+roster.posts.more: "Показать ещё"
+roster.posts.feelings_only: "Только чувства"
+roster.posts.count_one: "%{count} запись"
+roster.posts.count_other: "Записей: %{count}"

@@ -10,6 +10,9 @@ use gpui_kit::*;
 impl AppView {
     /// Selects `profile_id` in the roster.
     pub fn select_lab_profile(&mut self, profile_id: ProfileId, _: &mut Window, cx: &mut Context<Self>) {
+        if self.lab.selected_profile_id.as_ref() != Some(&profile_id) {
+            self.reset_profile_posts(); // W7
+        }
         self.lab.selected_profile_id = Some(profile_id);
         cx.notify();
     }

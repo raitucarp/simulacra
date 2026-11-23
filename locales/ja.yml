@@ -6026,3 +6026,33 @@ code.output.cancel: "キャンセル"
 code.output.empty: "出力はありません"
 code.output.truncated: "出力は短縮されています"
 code.output.failed: "起動しませんでした"
+# W2: the rapid log view
+views.rapid_log.show: "ラピッドログで表示"
+views.rapid_log.empty: "まだ記録する投稿はありません。"
+# W3: the raw view
+views.raw.show: "プレーンテキストで表示"
+views.raw.empty: "まだテキストで表示する投稿はありません。"
+views.raw.copy_all: "すべてコピー"
+views.raw.count_one: "%{count} 件の投稿"
+views.raw.count_other: "%{count} 件の投稿"
+# W4: the calendar view
+views.calendar.show: "カレンダーで表示"
+views.calendar.previous: "前の月"
+views.calendar.next: "次の月"
+views.calendar.today: "今月"
+views.calendar.month_title: "%{year}年 %{month}"
+views.calendar.more: "ほか %{count} 件"
+# W5: the future log
+views.future.show: "フューチャーログを表示"
+views.future.empty: "今日以降に予定や期限のあるものはありません。"
+# W6: the board view
+views.board.show: "ボードで表示"
+views.board.empty: "まだ整理するタスクはありません。"
+views.board.due: "期限 %{date}"
+# W7: the profile's post timeline
+roster.posts.tab: "投稿"
+roster.posts.empty: "ここにはまだ投稿がありません。"
+roster.posts.more: "さらに表示"
+roster.posts.feelings_only: "気持ちのみ"
+roster.posts.count_one: "%{count} 件の投稿"
+roster.posts.count_other: "%{count} 件の投稿"

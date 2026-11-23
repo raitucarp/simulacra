@@ -10,7 +10,8 @@ use crate::domain::thinking::argument::{extraction_prompt, parse_extraction, Arg
 use crate::domain::spend::SpendEstimate;
 use crate::domain::{Post, PostId};
 use crate::state::{build_conversation, ReplyLimits};
-use crate::ui::features::feed::inspector_outline::{thread_root, InspectorMode};
+use crate::domain::views::PostView;
+use crate::ui::features::feed::inspector_outline::thread_root;
 use crate::ui::features::thinking::argument::{ArgumentEvent, ArgumentPanel, ArgumentThread, ExtractStatus};
 use gpui_kit::*;
 use rust_i18n::t;
@@ -33,7 +34,7 @@ impl AppView {
 
     /// Render hook: the Argument view shows the inspected thread and its map.
     pub(super) fn sync_argument_panel(&mut self, cx: &mut Context<Self>) {
-        if self.inspector.mode != InspectorMode::Argument {
+        if self.inspector_view_mode() != PostView::Argument {
             return;
         }
         let inspected = self.feed.selected_thread_post_id.clone().or_else(|| self.feed.stream.rows().post(&self.state, 0).map(|post| post.id.clone()));
@@ -71,7 +72,7 @@ impl AppView {
     /// with the AI when the thread has none yet.
     pub(super) fn map_argument_of(&mut self, post_id: PostId, window: &mut Window, cx: &mut Context<Self>) {
         self.reveal_post(post_id.clone(), window, cx);
-        self.set_inspector_mode(InspectorMode::Argument, window, cx);
+        self.set_inspector_mode(PostView::Argument, window, cx);
         self.sync_argument_panel(cx);
         if let Some(root) = self.root_of(&post_id).filter(|root| self.thinking.maps.get(root).map_or(true, ArgumentMap::is_empty)) {
             self.extract_argument(root, cx);

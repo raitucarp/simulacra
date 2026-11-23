@@ -1,6 +1,7 @@
 use super::*;
 use crate::domain::{Post, PostId};
 use std::collections::BTreeSet;
+use crate::domain::views::PostView;
 
 /// root ─┬─ a ─── a1
 ///       └─ b
@@ -108,8 +109,8 @@ fn memory_keeps_each_thread_apart_and_modes_round_trip() {
     let memory = OutlineMemory::default().with_thread(id("root"), folded.clone());
     assert_eq!(memory.thread(&id("root")), folded);
     assert_eq!(memory.thread(&id("other")), OutlineThread::default());
-    assert_eq!(InspectorMode::from_key(InspectorMode::Outline.key()), Some(InspectorMode::Outline));
-    assert_eq!(InspectorMode::default().toggled(), InspectorMode::Outline);
+    assert_eq!(PostView::from_key(PostView::Outline.key()), Some(PostView::Outline));
+    assert_eq!(PostView::default().toggled(), PostView::Outline);
 }
 
 #[test]

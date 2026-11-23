@@ -111,6 +111,7 @@ theme_tokens! {
         symbol_badge_size, symbol_badge_offset, symbol_outline_size, symbol_progress_width, symbol_progress_height, // epic S: signifier badges on a symbol face, the symbol of an outline bullet, an icon set download bar
         todo_help_sample_width, todo_indent, todo_box_size, tasks_page_max_width, tasks_filter_label_width, // epic D: to-dos (the syntax help card, the indent of a nested item, a box, the Tasks page and its filter labels)
         search_page_max_width, code_output_max_height, // epic Q: the Search page column; P6: the output panel under a code block
+        view_gutter_width, calendar_cell_min_height, board_column_width, // epic W: the bullet gutter of the rapid log, a calendar day, a board column
     ],
     // Typography Hierarchy & Line Height; heatmap level opacities; graph dimming & curvature
     floats: [

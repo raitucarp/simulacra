@@ -6026,3 +6026,33 @@ code.output.cancel: "Cancel"
 code.output.empty: "No output"
 code.output.truncated: "Output shortened"
 code.output.failed: "Did not start"
+# W2: the rapid log view
+views.rapid_log.show: "Show as a rapid log"
+views.rapid_log.empty: "No posts to log yet."
+# W3: the raw view
+views.raw.show: "Show as raw text"
+views.raw.empty: "No posts to show as text yet."
+views.raw.copy_all: "Copy all"
+views.raw.count_one: "%{count} post"
+views.raw.count_other: "%{count} posts"
+# W4: the calendar view
+views.calendar.show: "Show as a calendar"
+views.calendar.previous: "Previous month"
+views.calendar.next: "Next month"
+views.calendar.today: "This month"
+views.calendar.month_title: "%{month} %{year}"
+views.calendar.more: "+%{count} more"
+# W5: the future log
+views.future.show: "Show the future log"
+views.future.empty: "Nothing scheduled or due from today on."
+# W6: the board view
+views.board.show: "Show as a board"
+views.board.empty: "No to-dos or tasks to sort yet."
+views.board.due: "Due %{date}"
+# W7: the profile's post timeline
+roster.posts.tab: "Posts"
+roster.posts.empty: "No posts here yet."
+roster.posts.more: "Show more"
+roster.posts.feelings_only: "Feelings only"
+roster.posts.count_one: "%{count} post written"
+roster.posts.count_other: "%{count} posts written"

@@ -6026,3 +6026,33 @@ code.output.cancel: "إلغاء"
 code.output.empty: "لا يوجد ناتج"
 code.output.truncated: "اختُصر الناتج"
 code.output.failed: "لم يبدأ"
+# W2: the rapid log view
+views.rapid_log.show: "العرض كسجل سريع"
+views.rapid_log.empty: "لا توجد منشورات لتسجيلها بعد."
+# W3: the raw view
+views.raw.show: "العرض كنص خام"
+views.raw.empty: "لا توجد منشورات لعرضها كنص بعد."
+views.raw.copy_all: "نسخ الكل"
+views.raw.count_one: "%{count} منشور"
+views.raw.count_other: "المنشورات: %{count}"
+# W4: the calendar view
+views.calendar.show: "العرض كتقويم"
+views.calendar.previous: "الشهر السابق"
+views.calendar.next: "الشهر التالي"
+views.calendar.today: "هذا الشهر"
+views.calendar.month_title: "%{month} %{year}"
+views.calendar.more: "+%{count} أخرى"
+# W5: the future log
+views.future.show: "عرض سجل المستقبل"
+views.future.empty: "لا شيء مجدول أو مستحق من اليوم فصاعدًا."
+# W6: the board view
+views.board.show: "العرض كلوحة"
+views.board.empty: "لا توجد مهام لفرزها بعد."
+views.board.due: "الاستحقاق %{date}"
+# W7: the profile's post timeline
+roster.posts.tab: "المنشورات"
+roster.posts.empty: "لا توجد منشورات هنا بعد."
+roster.posts.more: "عرض المزيد"
+roster.posts.feelings_only: "المشاعر فقط"
+roster.posts.count_one: "%{count} منشور مكتوب"
+roster.posts.count_other: "المنشورات المكتوبة: %{count}"

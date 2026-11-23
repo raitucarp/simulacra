@@ -6026,3 +6026,33 @@ code.output.cancel: "Abbrechen"
 code.output.empty: "Keine Ausgabe"
 code.output.truncated: "Ausgabe gekürzt"
 code.output.failed: "Nicht gestartet"
+# W2: the rapid log view
+views.rapid_log.show: "Als Schnellprotokoll anzeigen"
+views.rapid_log.empty: "Noch keine Beiträge zum Protokollieren."
+# W3: the raw view
+views.raw.show: "Als Rohtext anzeigen"
+views.raw.empty: "Noch keine Beiträge, die als Text erscheinen."
+views.raw.copy_all: "Alles kopieren"
+views.raw.count_one: "%{count} Beitrag"
+views.raw.count_other: "%{count} Beiträge"
+# W4: the calendar view
+views.calendar.show: "Als Kalender anzeigen"
+views.calendar.previous: "Vorheriger Monat"
+views.calendar.next: "Nächster Monat"
+views.calendar.today: "Dieser Monat"
+views.calendar.month_title: "%{month} %{year}"
+views.calendar.more: "+%{count} weitere"
+# W5: the future log
+views.future.show: "Zukunftsprotokoll anzeigen"
+views.future.empty: "Ab heute ist nichts geplant oder fällig."
+# W6: the board view
+views.board.show: "Als Board anzeigen"
+views.board.empty: "Noch keine Aufgaben zum Sortieren."
+views.board.due: "Fällig %{date}"
+# W7: the profile's post timeline
+roster.posts.tab: "Beiträge"
+roster.posts.empty: "Hier gibt es noch keine Beiträge."
+roster.posts.more: "Mehr anzeigen"
+roster.posts.feelings_only: "Nur Gefühle"
+roster.posts.count_one: "%{count} Beitrag geschrieben"
+roster.posts.count_other: "%{count} Beiträge geschrieben"

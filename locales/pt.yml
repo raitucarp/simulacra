@@ -6026,3 +6026,33 @@ code.output.cancel: "Cancelar"
 code.output.empty: "Sem saída"
 code.output.truncated: "Saída encurtada"
 code.output.failed: "Não iniciou"
+# W2: the rapid log view
+views.rapid_log.show: "Mostrar como registo rápido"
+views.rapid_log.empty: "Ainda não há publicações para registar."
+# W3: the raw view
+views.raw.show: "Mostrar como texto simples"
+views.raw.empty: "Ainda não há publicações para mostrar como texto."
+views.raw.copy_all: "Copiar tudo"
+views.raw.count_one: "%{count} publicação"
+views.raw.count_other: "%{count} publicações"
+# W4: the calendar view
+views.calendar.show: "Mostrar como calendário"
+views.calendar.previous: "Mês anterior"
+views.calendar.next: "Mês seguinte"
+views.calendar.today: "Este mês"
+views.calendar.month_title: "%{month} de %{year}"
+views.calendar.more: "+%{count} mais"
+# W5: the future log
+views.future.show: "Mostrar o registo futuro"
+views.future.empty: "Nada agendado nem com prazo a partir de hoje."
+# W6: the board view
+views.board.show: "Mostrar como quadro"
+views.board.empty: "Ainda não há tarefas para organizar."
+views.board.due: "Prazo %{date}"
+# W7: the profile's post timeline
+roster.posts.tab: "Publicações"
+roster.posts.empty: "Ainda não há publicações aqui."
+roster.posts.more: "Mostrar mais"
+roster.posts.feelings_only: "Só sentimentos"
+roster.posts.count_one: "%{count} publicação escrita"
+roster.posts.count_other: "%{count} publicações escritas"

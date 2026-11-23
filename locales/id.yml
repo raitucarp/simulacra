@@ -6176,3 +6176,6 @@ posts.branch.failed: "Cabang tidak dapat diposting. Periksa panjangnya lalu coba
 posts.branch.sent: "Cabang andai-andai dimulai"
 posts.branch.chip: "Bagaimana jika: %{label}"
 posts.branch.main: "Alur utama"
+views.branches.show: "Andai-andai berdampingan"
+views.branches.empty: "Belum ada postingan di utas ini yang dicabangkan. Cabangkan satu dari menunya dengan “Cabangkan andai-andai…” untuk membandingkan alurnya di sini."
+views.branches.forked_at: "Dicabangkan di"

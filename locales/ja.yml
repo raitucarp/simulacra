@@ -6176,3 +6176,6 @@ posts.branch.failed: "分岐を投稿できませんでした。長さを確認�
 posts.branch.sent: "「もしも」の分岐を始めました"
 posts.branch.chip: "もしも：%{label}"
 posts.branch.main: "本筋"
+views.branches.show: "「もしも」を並べて比べる"
+views.branches.empty: "このスレッドにはまだ分岐した投稿がありません。投稿のメニューの「「もしも」で分岐…」で分岐すると、ここで筋を比べられます。"
+views.branches.forked_at: "分岐した投稿"

@@ -6176,3 +6176,6 @@ posts.branch.failed: "Não foi possível publicar o ramo. Verifique o tamanho e 
 posts.branch.sent: "Ramo de hipótese iniciado"
 posts.branch.chip: "E se: %{label}"
 posts.branch.main: "Linha principal"
+views.branches.show: "Hipóteses lado a lado"
+views.branches.empty: "Nenhuma publicação desta conversa foi ramificada ainda. Ramifique uma pelo menu dela com “Ramificar uma hipótese…” para comparar as linhas aqui."
+views.branches.forked_at: "Ramificado em"

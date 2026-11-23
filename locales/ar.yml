@@ -6176,3 +6176,6 @@ posts.branch.failed: "تعذّر نشر الفرع. تحقّق من طوله و�
 posts.branch.sent: "بدأ فرع «ماذا لو»"
 posts.branch.chip: "ماذا لو: %{label}"
 posts.branch.main: "الخط الرئيسي"
+views.branches.show: "افتراضات «ماذا لو» جنبًا إلى جنب"
+views.branches.empty: "لم يتفرّع أي منشور في هذه السلسلة بعد. فرّع منشورًا من قائمته عبر «تفرّع بافتراض «ماذا لو»…» لمقارنة الخطوط هنا."
+views.branches.forked_at: "تفرّع عند"

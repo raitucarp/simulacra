@@ -6176,3 +6176,6 @@ posts.branch.failed: "Не удалось опубликовать ветку. �
 posts.branch.sent: "Ветка «а что, если» начата"
 posts.branch.chip: "А что, если: %{label}"
 posts.branch.main: "Основная линия"
+views.branches.show: "Ветки «а что, если» рядом"
+views.branches.empty: "Ни один пост этого треда ещё не ответвлён. Ответвите пост через его меню пунктом «Ответвить «а что, если»…», чтобы сравнить линии здесь."
+views.branches.forked_at: "Ответвлено от"

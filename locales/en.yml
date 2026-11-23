@@ -6176,3 +6176,6 @@ posts.branch.failed: "The branch could not be posted. Check its length and try a
 posts.branch.sent: "What-if branch started"
 posts.branch.chip: "What if: %{label}"
 posts.branch.main: "Main line"
+views.branches.show: "What-ifs side by side"
+views.branches.empty: "No post of this thread has been forked yet. Fork one from its menu with “Fork a what-if…” to compare the lines here."
+views.branches.forked_at: "Forked at"

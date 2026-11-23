@@ -6176,3 +6176,6 @@ posts.branch.failed: "La branche n'a pas pu être publiée. Vérifiez sa longueu
 posts.branch.sent: "Branche d'hypothèse ouverte"
 posts.branch.chip: "Et si : %{label}"
 posts.branch.main: "Piste principale"
+views.branches.show: "Hypothèses côte à côte"
+views.branches.empty: "Aucune publication de ce fil n'a encore bifurqué. Faites-en bifurquer une depuis son menu avec « Bifurquer en hypothèse… » pour comparer les pistes ici."
+views.branches.forked_at: "Bifurcation à"

@@ -6176,3 +6176,6 @@ posts.branch.failed: "Der Zweig konnte nicht gepostet werden. Prüfe seine Läng
 posts.branch.sent: "Was-wäre-wenn-Zweig begonnen"
 posts.branch.chip: "Was wäre, wenn: %{label}"
 posts.branch.main: "Hauptlinie"
+views.branches.show: "Was-wäre-wenn nebeneinander"
+views.branches.empty: "In diesem Thread wurde noch kein Beitrag abgezweigt. Zweige einen über sein Menü mit „Was-wäre-wenn abzweigen…“ ab, um die Linien hier zu vergleichen."
+views.branches.forked_at: "Abgezweigt bei"

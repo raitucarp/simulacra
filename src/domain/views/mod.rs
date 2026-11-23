@@ -39,6 +39,8 @@ keyed_enum! {
         Board => "board",
         /// N3: garden notes in beds by maturity.
         Garden => "garden",
+        /// N6: the lines of each fork of a thread, side by side.
+        Branches => "branches",
     }
 }
 
@@ -65,7 +67,7 @@ impl PostView {
     pub const fn scopes(self) -> &'static [ViewScope] {
         match self {
             Self::Cards | Self::RapidLog | Self::Raw | Self::Calendar | Self::Future | Self::Board | Self::Garden => EVERYWHERE,
-            Self::Outline | Self::Argument => THREAD_ONLY,
+            Self::Outline | Self::Argument | Self::Branches => THREAD_ONLY,
         }
     }
 

@@ -6176,3 +6176,6 @@ posts.branch.failed: "No se pudo publicar la rama. Revisa su longitud e inténta
 posts.branch.sent: "Rama de supuesto iniciada"
 posts.branch.chip: "Supuesto: %{label}"
 posts.branch.main: "Línea principal"
+views.branches.show: "Supuestos lado a lado"
+views.branches.empty: "Ninguna publicación de este hilo se ha bifurcado todavía. Bifurca una desde su menú con «Bifurcar en un supuesto…» para comparar aquí las líneas."
+views.branches.forked_at: "Bifurcado en"

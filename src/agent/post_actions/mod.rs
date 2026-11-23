@@ -5,6 +5,7 @@
 
 mod cancel;
 mod runner;
+mod transcribe; // N11
 
 #[cfg(test)]
 mod tests;
@@ -12,6 +13,9 @@ mod tests;
 mod thinking_tests;
 #[cfg(test)]
 mod depth_tests; // N5
+#[cfg(test)]
+mod transcribe_tests; // N11
 
 pub use cancel::CancelToken;
 pub use runner::{run_action, run_action_blocking, ActionFailure, ActionJob};
+pub use transcribe::{run_transcription, run_transcription_blocking, TranscribeJob};

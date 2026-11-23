@@ -21,6 +21,7 @@ mod question; // N9
 mod series_sheet; // N10
 mod voice_sheet; // N11
 mod post_facts; mod idea_menu; // N3, N6–N10
+mod care_menu; // N11–N15
 mod post_menu;
 mod edited_mark; // V8
 mod replied; // V12

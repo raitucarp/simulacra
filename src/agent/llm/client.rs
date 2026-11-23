@@ -103,7 +103,7 @@ impl LlmClient {
     }
 
     /// The override endpoint, else `default`.
-    fn endpoint_or<'a>(&'a self, default: &'a str) -> &'a str {
+    pub(super) fn endpoint_or<'a>(&'a self, default: &'a str) -> &'a str {
         self.endpoint.as_deref().unwrap_or(default)
     }
 

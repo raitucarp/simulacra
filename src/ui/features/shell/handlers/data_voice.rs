@@ -37,6 +37,7 @@ impl AppView {
             VoiceEvent::Discard => self.edit_voice(|dialog| dialog.note = None),
             VoiceEvent::Play(id) => self.play_voice(&id, window, cx),
             VoiceEvent::StopPlaying => self.stop_voice(),
+            VoiceEvent::Transcribe(id) => self.transcribe_voice(id, cx),
             VoiceEvent::Submit => self.submit_voice(window, cx),
             VoiceEvent::Close => self.close_voice(window, cx),
         }

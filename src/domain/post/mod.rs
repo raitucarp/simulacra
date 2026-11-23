@@ -2,6 +2,7 @@
 
 pub mod anchor; // N2: margin replies
 pub mod audience; // N8: audience scopes
+mod agent_text; // L13, N11: how an agent reads a post
 mod author_ref;
 pub mod auto_delete; // Y7
 mod authored;

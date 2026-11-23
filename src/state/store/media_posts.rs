@@ -2,7 +2,7 @@
 //! with an optional caption. Both count as attachments: such a post is never locked.
 
 use super::AppState;
-use crate::domain::post::voice::VoiceNote;
+use crate::domain::post::voice::{clean_transcript, VoiceNote};
 use crate::domain::{Post, PostId};
 use crate::error::{AppError, Result};
 
@@ -23,5 +23,22 @@ impl AppState {
             return Err(AppError::EmptyContent);
         }
         self.submit_media_post(caption, |post| post.extras.voice = Some(Box::new(note)))
+    }
+
+    /// N11: keeps `raw` (cleaned) as the transcript of the voice note on the user's post `id`;
+    /// never on a locked post.
+    pub fn set_transcript(&mut self, id: &PostId, raw: &str) -> Result<()> {
+        let position = self.post_position(id).ok_or_else(|| AppError::DatabaseError(format!("post '{id}' not found")))?;
+        super::require_persona(self.author_of(&self.posts[position]))?;
+        if self.posts[position].is_locked() {
+            return Err(AppError::PostLocked);
+        }
+        let transcript = clean_transcript(raw).ok_or(AppError::EmptyContent)?;
+        let voice = self.posts[position].extras.voice.as_mut().ok_or(AppError::EmptyContent)?;
+        voice.transcript = Some(transcript);
+        match &self.db {
+            Some(db) => db.save_post(&self.posts[position]),
+            None => Ok(()),
+        }
     }
 }

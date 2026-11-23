@@ -20,6 +20,8 @@ pub struct PostFacts {
     pub asked: bool,
     /// The title of the series it is part of (N10).
     pub series: Option<String>,
+    /// Its voice note can be transcribed: it has none yet, and the post is not locked (N11).
+    pub transcribable: bool,
 }
 
 impl PostFacts {
@@ -31,6 +33,7 @@ impl PostFacts {
             audience: post.extras.audience.as_deref().cloned(),
             asked: post.extras.question.is_some(),
             series: post.extras.series.as_ref().map(|entry| entry.title.clone()),
+            transcribable: !post.is_locked() && post.extras.voice.as_ref().is_some_and(|voice| voice.transcript.is_none()),
         }
     }
 }
@@ -44,4 +47,6 @@ pub struct IdeaSource {
     pub series: Vec<String>,
     /// N11: the post whose voice note is playing in the app.
     pub playing: Option<PostId>,
+    /// N11: the post whose voice note is being transcribed.
+    pub transcribing: Option<PostId>,
 }

@@ -21,6 +21,8 @@ pub struct IdeaSheets {
     pub recording: Option<VoiceRecording>,
     /// N11: the voice note playing in the app (the card shows Stop), until it ends.
     pub playing: Option<VoicePlaying>,
+    /// N11: the post whose voice note is being transcribed.
+    pub transcribing: Option<crate::domain::PostId>,
 }
 
 impl IdeaSheets {

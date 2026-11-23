@@ -64,7 +64,7 @@ impl DialecticEngine {
             &parent_post.author.name,
             &parent_post.author.handle,
             parent_post.id.as_str(),
-            &crate::domain::media::files::with_files_note(&parent_post.content, &parent_post.extras.files), // L13: file names and facts, never contents
+            &parent_post.agent_text(), // L13, N11: file names and facts, the voice transcript; never contents
             is_mentioned,
         )
     }

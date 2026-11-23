@@ -27,7 +27,7 @@ impl AppView {
 
     /// What every card's menu shares this render.
     pub(in crate::ui::features::shell) fn idea_source(&self) -> IdeaSource {
-        IdeaSource { agents: self.state.audience_agents(), series: self.state.series_listings().into_iter().map(|listing| listing.title).collect(), playing: self.data.ideas.playing.as_ref().map(|playing| playing.post.clone()) }
+        IdeaSource { agents: self.state.audience_agents(), series: self.state.series_listings().into_iter().map(|listing| listing.title).collect(), playing: self.data.ideas.playing.as_ref().map(|playing| playing.post.clone()), transcribing: self.data.ideas.transcribing.clone() }
     }
 
     /// Sets who may read the user's post `id` (`None`: everyone) and says what changed.
@@ -42,5 +42,18 @@ impl AppView {
             Ok(false) => {}
             Err(err) => self.notify_data(publish_error_message(&err), window, cx),
         }
+    }
+}
+
+impl AppView {
+    /// An info toast from where no window is at hand (a request that finished in the background).
+    pub(in crate::ui::features::shell) fn notify_soon(&self, text: String, cx: &mut Context<Self>) {
+        let handle = self.spend.window;
+        cx.defer(move |cx| {
+            let _ = handle.update(cx, |_, window, cx| {
+                use gpui_kit::component::WindowExt;
+                window.push_notification(gpui_kit::component::notification::Notification::info(text), cx);
+            });
+        });
     }
 }

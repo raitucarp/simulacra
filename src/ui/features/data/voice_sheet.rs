@@ -30,6 +30,8 @@ pub enum VoiceEvent {
     /// Plays the voice note of a post (from its card), or stops it.
     Play(PostId),
     StopPlaying,
+    /// Asks the AI engine for the transcript of a post's voice note.
+    Transcribe(PostId),
     Submit,
     Close,
 }

@@ -13,6 +13,7 @@ mod client;
 mod failure;
 mod provider;
 mod settings;
+pub mod transcribe; // N11: speech to text
 pub mod wire;
 
 #[cfg(test)]

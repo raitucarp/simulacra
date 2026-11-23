@@ -24,6 +24,17 @@ pub struct PostFacts {
     pub transcribable: bool,
     /// It was retracted or corrected (N14).
     pub correction: Option<crate::domain::post::correction::CorrectionKind>,
+    /// The term it defines (N17).
+    pub defines: Option<String>,
+    /// Where it stands as a question, and whether it is a feeling (N18).
+    pub question: Option<crate::domain::post::open_question::QuestionState>,
+    pub feeling: bool,
+    /// The user's open question it replies to (N18: it may answer it).
+    pub answers: Option<PostId>,
+    /// It is marked as having changed the user's mind (N19).
+    pub changed_mind: bool,
+    /// It keeps a translation (N20).
+    pub translation: bool,
 }
 
 impl PostFacts {
@@ -37,6 +48,12 @@ impl PostFacts {
             series: post.extras.series.as_ref().map(|entry| entry.title.clone()),
             transcribable: !post.is_locked() && post.extras.voice.as_ref().is_some_and(|voice| voice.transcript.is_none()),
             correction: post.extras.correction.as_ref().map(|c| c.kind),
+            defines: post.extras.defines.as_ref().map(|definition| definition.term.clone()),
+            question: crate::domain::post::open_question::question_state(post),
+            feeling: post.kind.is_feeling(),
+            changed_mind: post.extras.mind_change.is_some(),
+            translation: !post.is_locked() && post.extras.translation.is_some(),
+            answers: post.reply_to_id.as_ref().and_then(|parent| state.get_post(parent)).filter(|parent| !parent.is_locked() && crate::domain::post::open_question::is_open(parent) && state.author_of(parent).is_human_persona()).map(|parent| parent.id.clone()),
         }
     }
 }
@@ -55,4 +72,11 @@ pub struct IdeaSource {
     /// N13: the claim the AI is asked about, and its answers by post.
     pub rechecking: Option<PostId>,
     pub rechecks: Vec<(PostId, String)>,
+    /// N17: the defined terms, read on hover in every body.
+    pub glossary: std::rc::Rc<crate::domain::post::glossary::Glossary>,
+    /// N20: the posts shown in the language the user is learning, the one being translated,
+    /// and that language's native name.
+    pub translated: Vec<PostId>,
+    pub translating: Option<PostId>,
+    pub study_language: String,
 }

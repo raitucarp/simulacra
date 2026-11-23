@@ -1,6 +1,7 @@
 mod lists;
 mod branches; // N6
 mod series; // N10
+mod thoughts; // N16–N20
 
 use super::{render_view_switcher, switcher_button_id, view_label_key, PickView, PostView, ViewScope};
 use crate::theme::ThemeTokens;

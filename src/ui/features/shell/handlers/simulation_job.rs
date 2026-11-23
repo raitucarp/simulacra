@@ -45,7 +45,8 @@ impl AppView {
         let tools = (!engine.tools.is_empty())
             .then(|| ToolContext::capture_for(&agent.id, &network, &self.state.posts, &self.state.user_profiles, &self.state.documents));
         let roll = roll_percent(self.scheduler.seed, agent.id.as_str(), self.scheduler.tick ^ self.state.posts.len() as u64);
-        let context = PromptContext { beliefs: self.belief_dossier(&agent.id), ..self.prompt_context(&network) }; // sb F1
+        let glossary = kind.parent().map(|parent| self.state.glossary_note(&agent.id, &parent.agent_text())).unwrap_or_default(); // N17
+        let context = PromptContext { beliefs: self.belief_dossier(&agent.id), glossary, ..self.prompt_context(&network) }; // sb F1
         EngineJob { kind, agent, network, context, plan, tools, roll }
     }
 

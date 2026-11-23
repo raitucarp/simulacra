@@ -20,5 +20,5 @@ pub(super) fn idea_lines<L: PostLookup>(post: &Post, lookup: L, theme: &ThemeTok
         super::series_strip::render_series_strip(post, lookup, theme, handlers),
         super::distill_chip::render_distill_chip(post, theme), // N15
     ];
-    lines.into_iter().flatten().collect()
+    lines.into_iter().flatten().chain(super::thought_lines::thought_lines(post, lookup, theme, handlers)).collect() // N16–N20
 }

@@ -32,7 +32,7 @@ impl AppView {
             E::SetAudience(id, audience) => self.set_audience(&id, audience, window, cx), // N8
             E::Question(event) => self.on_question_event(event, window, cx), // N9
             E::Series(event) => self.on_series_event(event, window, cx), // N10
-            E::Voice(event) => self.on_voice_event(event, window, cx), E::Ink(event) => self.on_ink_event(event, window, cx), E::Correction(event) => self.on_correction_event(event, window, cx), E::Check(event) => self.on_check_event(event, window, cx), E::Distill(event) => self.on_distill_event(event, cx), // N11–N15
+            E::Voice(event) => self.on_voice_event(event, window, cx), E::Ink(event) => self.on_ink_event(event, window, cx), E::Correction(event) => self.on_correction_event(event, window, cx), E::Check(event) => self.on_check_event(event, window, cx), E::Distill(event) => self.on_distill_event(event, cx), E::Thought(event) => self.on_thought_event(event, window, cx), // N11–N20
             E::OpenScheduled | E::EditScheduled(_) | E::PublishScheduledNow(_) | E::CancelScheduled(_) | E::CloseScheduled => self.on_scheduled_event(event, window, cx),
             _ => self.on_saved_event(event, window, cx),
         }
@@ -101,6 +101,7 @@ impl AppView {
             CommandId::MigrationReview => DataEvent::OpenReview, // S16
             CommandId::NewVoiceNote => DataEvent::Voice(crate::ui::features::data::VoiceEvent::Open), // N11
             CommandId::NewDrawing => DataEvent::Ink(crate::ui::features::data::InkEvent::Open), // N12
+            CommandId::OpenQuestions => DataEvent::Thought(crate::ui::features::data::ThoughtEvent::Questions(crate::ui::features::data::QuestionsEvent::ShowAll)), // N18
             _ => DataEvent::OpenRestore,
         };
         self.on_data_event(event, window, cx);

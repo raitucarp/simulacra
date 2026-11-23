@@ -125,4 +125,6 @@ command_ids! {
     NewVoiceNote => "new_voice_note",
     /// N12: a new drawing.
     NewDrawing => "new_drawing",
+    /// N18: the page of every question still open.
+    OpenQuestions => "open_questions",
 }

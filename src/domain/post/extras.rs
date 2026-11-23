@@ -2,6 +2,7 @@
 //! the sources it drew on. Persisted as one JSON column; empty for typed human posts.
 //! Imported and captured posts record their origin and the passage they cite.
 
+mod lenient; // N16–N20
 mod source;
 
 pub use source::{SourceKind, SourceRef, ToolUse};
@@ -90,6 +91,23 @@ pub struct PostExtras {
     /// N15: on a thread's root, the vault document the thread was distilled into (boxed).
     #[serde(skip_serializing_if = "Option::is_none")]
     pub distilled: Option<Box<super::distill::Distilled>>,
+    /// N16: the agents asked to reply through lenses, and the lens a reply was written through.
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "lenient::lenient")]
+    pub fan: Option<Box<super::lens::LensFan>>,
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "lenient::lenient")]
+    pub lens: Option<super::lens::Lens>,
+    /// N17: the term the post defines, and what it means.
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "lenient::lenient")]
+    pub defines: Option<Box<super::glossary::Definition>>,
+    /// N18: the question was marked answered (and by which post).
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "lenient::lenient")]
+    pub answered: Option<Box<super::open_question::Answered>>,
+    /// N19: the post changed the user's mind: the post it revises and what they used to think.
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "lenient::lenient")]
+    pub mind_change: Option<Box<super::mind::MindChange>>,
+    /// N20: its text in the language the user is learning.
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "lenient::lenient")]
+    pub translation: Option<Box<super::translation::Translation>>,
 }
 
 impl PostExtras {
@@ -99,9 +117,9 @@ impl PostExtras {
     }
 
     /// Whether there is anything to show behind the post (the origin, images, files, symbols, tint,
-    /// version, ticks, lock, code runs, margin anchor, garden note, branch pointer, pinned quote, audience, question, series, voice note, drawing, correction, check and distilled document alone are not).
+    /// version, ticks, lock, code runs, margin anchor, garden note, branch pointer, pinned quote, audience, question, series, voice note, drawing, correction, check, distilled document, lens fan, definition, answer, change of mind and translation alone are not).
     pub fn has_details(&self) -> bool {
-        Self { origin: None, images: Vec::new(), files: Vec::new(), symbols: PostSymbols::default(), tint: None, head: None, replied_version: None, todo_state: Default::default(), lock: None, code_runs: Vec::new(), anchor: None, garden: None, branch: None, pinned: None, audience: None, question: None, series: None, voice: None, ink: None, correction: None, check: None, distilled: None, ..self.clone() } != Self::default()
+        Self { origin: None, images: Vec::new(), files: Vec::new(), symbols: PostSymbols::default(), tint: None, head: None, replied_version: None, todo_state: Default::default(), lock: None, code_runs: Vec::new(), anchor: None, garden: None, branch: None, pinned: None, audience: None, question: None, series: None, voice: None, ink: None, correction: None, check: None, distilled: None, fan: None, lens: None, defines: None, answered: None, mind_change: None, translation: None, ..self.clone() } != Self::default()
     }
 
     /// Adds `source` unless an identical reference is already listed.

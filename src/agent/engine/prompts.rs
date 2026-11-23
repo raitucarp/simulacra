@@ -15,6 +15,8 @@ pub struct PromptContext {
     pub grounding_docs: Vec<String>,
     /// sb F1: the agent's "Your current beliefs" section (empty when it holds none).
     pub beliefs: String,
+    /// N17: the user's definitions of the terms the post being answered mentions (empty when none).
+    pub glossary: String,
 }
 
 impl DialecticEngine {
@@ -25,12 +27,7 @@ impl DialecticEngine {
         } else {
             Self::persona_system_prompt_with_context(agent_profile, &context.network_name, &context.grounding_docs)
         };
-        match context.beliefs.trim() {
-            "" => base,
-            beliefs => format!("{base}
-
-{beliefs}"),
-        }
+        [context.beliefs.trim(), context.glossary.trim()].into_iter().filter(|part| !part.is_empty()).fold(base, |prompt, part| format!("{prompt}\n\n{part}"))
     }
 
     /// Constructs the full human psychological & linguistic system prompt for a given agent.

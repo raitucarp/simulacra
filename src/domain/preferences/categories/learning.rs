@@ -1,7 +1,8 @@
 //! Learning: spaced-repetition review limits, desired retention and the review reminder.
 
 use super::super::bounds::{Bounds, HOUR_OF_DAY};
-use super::super::choices::ReviewWeekday;
+use super::super::choices::{language_code, ReviewWeekday};
+use crate::i18n::Language;
 use serde::{Deserialize, Serialize};
 
 /// Reviews per day.
@@ -36,6 +37,9 @@ pub struct LearningPrefs {
     pub weekly_review_day: ReviewWeekday,
     /// Local hour of the weekly review reminder.
     pub weekly_review_hour: u32,
+    /// N20: the language posts can be shown in, and words of them sent to review.
+    #[serde(with = "language_code")]
+    pub study_language: Language,
 }
 
 impl Default for LearningPrefs {
@@ -49,6 +53,7 @@ impl Default for LearningPrefs {
             weekly_review_reminder: false,
             weekly_review_day: ReviewWeekday::default(),
             weekly_review_hour: DEFAULT_WEEKLY_HOUR,
+            study_language: Language::Spanish,
         }
     }
 }

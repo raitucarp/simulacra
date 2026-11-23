@@ -87,6 +87,9 @@ impl Post {
         self.mentions.clear();
         let kept = [self.reply_to_id.clone(), self.quote_id.clone(), self.repost_id.clone()];
         self.linked_posts.retain(|id| kept.contains(&Some(id.clone())));
+        self.extras.defines = None; // N17: a definition would speak past the lock
+        self.extras.mind_change = None; // N19: so would the old view
+        self.extras.translation = None; // N20: and a translation
         Ok(())
     }
 

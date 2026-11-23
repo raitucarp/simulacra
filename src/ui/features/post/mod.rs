@@ -17,6 +17,7 @@ mod voice_card; // N11
 mod ink_card; // N12
 mod media_lines; // N11, N12
 mod idea_lines; // N3, N6–N10
+mod thought_lines; mod lens_chip; mod term_chip; mod open_chip; mod mind_banner; mod translation_line; // N16–N20
 mod attachments;
 mod body;
 mod checklist; // D5
@@ -61,3 +62,6 @@ mod ideas_tests; // N6–N10
 #[cfg(test)]
 #[path = "tests/media.rs"]
 mod media_tests; // N11, N12
+#[cfg(test)]
+#[path = "tests/thoughts.rs"]
+mod thoughts_tests; // N16–N20

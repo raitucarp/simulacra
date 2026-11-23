@@ -16,6 +16,7 @@
 
 mod bundle;
 mod care; // N11, N12, N14
+mod thoughts; // N16–N20
 mod markdown;
 mod plan;
 mod reactions; // R10
@@ -107,3 +108,5 @@ pub struct ExportSource {
 mod tests;
 #[cfg(test)]
 mod care_tests; // N11, N12, N14
+#[cfg(test)]
+mod thoughts_tests; // N16–N20

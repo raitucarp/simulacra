@@ -33,12 +33,14 @@ pub struct IdeaSheets {
     pub ticket: u64,
     /// N15: the thread whose summary the AI is writing.
     pub distilling: Option<crate::domain::PostId>,
+    /// N16–N20: their sheets.
+    pub thoughts: super::thought_host::ThoughtSheets,
 }
 
 impl IdeaSheets {
     /// Whether one of them is open.
     pub fn any_open(&self) -> bool {
-        self.branch.is_some() || self.quote.is_some() || self.series.is_some() || self.voice.is_some() || self.ink.is_some() || self.correction.is_some()
+        self.branch.is_some() || self.quote.is_some() || self.series.is_some() || self.voice.is_some() || self.ink.is_some() || self.correction.is_some() || self.thoughts.any_open()
     }
 }
 
@@ -71,6 +73,8 @@ pub struct IdeaInputs {
     pub ink_caption: Entity<InputState>,
     /// N14: why a post is retracted, or what is right instead.
     pub correction_reason: Entity<InputState>,
+    /// N16–N20: their fields.
+    pub thoughts: super::thought_host::ThoughtInputs,
 }
 
 fn field(placeholder: &str, window: &mut Window, cx: &mut Context<AppView>) -> Entity<InputState> {
@@ -90,6 +94,7 @@ impl IdeaInputs {
             voice_caption: field("posts.voice.caption_placeholder", window, cx),
             ink_caption: field("posts.ink.caption_placeholder", window, cx),
             correction_reason: field("posts.correction.reason_placeholder", window, cx),
+            thoughts: super::thought_host::ThoughtInputs::new(window, cx),
         }
     }
 
@@ -106,6 +111,8 @@ impl IdeaInputs {
                 cx.notify();
             }
         });
-        vec![search]
+        let mut subscriptions = vec![search];
+        subscriptions.extend(self.thoughts.subscribe(window, cx)); // N16–N20
+        subscriptions
     }
 }

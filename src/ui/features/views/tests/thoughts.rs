@@ -35,3 +35,18 @@ fn the_lens_fan_view_lists_each_lens_with_its_reply_side_by_side() {
     assert!(!PostView::LensFan.offered_in(ViewScope::Profile), "a fan belongs to a thread");
     keys_translated("views.lens_fan", &["show", "empty", "heading", "waiting"]);
 }
+
+#[test]
+fn the_glossary_view_lists_the_terms_in_view_and_never_a_locked_post() {
+    let mut state = AppState::new_in_memory();
+    let root = state.submit_post("Entropy is why rooms get messy.").expect("posted");
+    state.define_term(&root, "entropy", "Disorder, counted.", jiff::Timestamp::now()).expect("defined");
+    let theme = ThemeTokens::default();
+    let view = input(&state, &theme, ViewScope::Profile);
+    assert!(render_list_view(PostView::Glossary, &view).is_some());
+    let at = state.post_position(&root).expect("stored");
+    state.posts[at].lock_with(&crate::domain::post::lock::LockPassword::new("seven tidy lanterns"), crate::domain::crypto::KdfParams { memory_kib: 8, iterations: 1, lanes: 1 }).expect("locks");
+    let view = input(&state, &theme, ViewScope::Profile);
+    assert!(crate::domain::post::glossary::Glossary::from_posts(view.posts.iter().copied()).is_empty(), "a locked post defines nothing");
+    keys_translated("views.glossary", &["show", "empty"]);
+}

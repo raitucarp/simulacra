@@ -87,6 +87,7 @@ impl Post {
         self.mentions.clear();
         let kept = [self.reply_to_id.clone(), self.quote_id.clone(), self.repost_id.clone()];
         self.linked_posts.retain(|id| kept.contains(&Some(id.clone())));
+        self.extras.defines = None; // N17: a definition would speak past the lock
         Ok(())
     }
 

@@ -6383,3 +6383,5 @@ posts.glossary.failed: "Nur deine eigenen Beiträge können einen Begriff defini
 posts.glossary.defined: "„%{term}“ ist definiert."
 posts.glossary.undefined: "Der Beitrag definiert „%{term}“ nicht mehr."
 posts.glossary.chip: "Definiert: %{term}"
+views.glossary.show: "Glossar"
+views.glossary.empty: "Hier ist noch kein Begriff definiert."

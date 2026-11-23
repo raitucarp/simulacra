@@ -44,4 +44,7 @@ fn an_agent_reads_only_the_definitions_it_may_read() {
     let theirs = state.glossary_for(&ProfileId::new("ada"));
     assert!(theirs.lookup("agora").is_some() && theirs.lookup("hearth").is_none(), "N8: the scoped definition stays with the user");
     assert_eq!(state.glossary().entries().len(), 2);
+    let note = state.glossary_note(&ProfileId::new("ada"), "Meet me in the agora by the hearth.");
+    assert!(note.contains("- agora: A public square.") && !note.contains("hearth"), "the prompt carries only what Ada may read: {note}");
+    assert!(state.glossary_note(&ProfileId::new("ada"), "Nothing defined here.").is_empty());
 }

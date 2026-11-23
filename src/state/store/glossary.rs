@@ -57,4 +57,14 @@ impl AppState {
     pub fn glossary_for(&self, agent: &ProfileId) -> Glossary {
         Glossary::from_posts(self.posts.iter().filter(|post| self.may_read(agent, post)))
     }
+
+    /// The definitions of the terms `text` mentions, as `agent` may read them, for its prompt
+    /// (empty when it mentions none).
+    pub fn glossary_note(&self, agent: &ProfileId, text: &str) -> String {
+        let lines: Vec<String> = self.glossary_for(agent).mentions(text).iter().map(|entry| format!("- {}: {}", entry.term, entry.text)).collect();
+        if lines.is_empty() {
+            return String::new();
+        }
+        format!("The author defines these terms of the post you are answering; use them as defined:\n{}", lines.join("\n"))
+    }
 }

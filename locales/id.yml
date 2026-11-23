@@ -6383,3 +6383,5 @@ posts.glossary.failed: "Hanya postingan Anda sendiri yang dapat mendefinisikan i
 posts.glossary.defined: "“%{term}” telah didefinisikan."
 posts.glossary.undefined: "Postingan ini tidak lagi mendefinisikan “%{term}”."
 posts.glossary.chip: "Mendefinisikan: %{term}"
+views.glossary.show: "Glosarium"
+views.glossary.empty: "Belum ada istilah yang didefinisikan di sini."

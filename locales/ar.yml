@@ -6383,3 +6383,5 @@ posts.glossary.failed: "منشوراتك أنت وحدها يمكنها تعري
 posts.glossary.defined: "عُرِّف «%{term}»."
 posts.glossary.undefined: "لم يعد المنشور يعرّف «%{term}»."
 posts.glossary.chip: "يعرّف: %{term}"
+views.glossary.show: "المسرد"
+views.glossary.empty: "لم يُعرَّف أي مصطلح هنا بعد."

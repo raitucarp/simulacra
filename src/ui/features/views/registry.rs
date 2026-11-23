@@ -20,6 +20,7 @@ pub fn view_icon(view: PostView) -> LucideIcon {
         PostView::Series => LucideIcon::ListOrdered,
         PostView::StillTrue => LucideIcon::RotateCcwClock,
         PostView::LensFan => LucideIcon::Layers,
+        PostView::Glossary => LucideIcon::BookOpen,
     }
 }
 
@@ -39,6 +40,7 @@ pub fn view_label_key(view: PostView) -> &'static str {
         PostView::Series => "views.series.show",
         PostView::StillTrue => "views.still_true.show",
         PostView::LensFan => "views.lens_fan.show",
+        PostView::Glossary => "views.glossary.show",
     }
 }
 

@@ -6383,3 +6383,5 @@ posts.glossary.failed: "Solo tus propias publicaciones pueden definir un términ
 posts.glossary.defined: "«%{term}» quedó definido."
 posts.glossary.undefined: "La publicación ya no define «%{term}»."
 posts.glossary.chip: "Define: %{term}"
+views.glossary.show: "Glosario"
+views.glossary.empty: "Todavía no hay ningún término definido aquí."

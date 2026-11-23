@@ -6383,3 +6383,5 @@ posts.glossary.failed: "用語を定義できるのは自分の投稿だけで�
 posts.glossary.defined: "「%{term}」を定義しました。"
 posts.glossary.undefined: "この投稿は「%{term}」を定義しなくなりました。"
 posts.glossary.chip: "定義: %{term}"
+views.glossary.show: "用語集"
+views.glossary.empty: "ここではまだ用語が定義されていません。"

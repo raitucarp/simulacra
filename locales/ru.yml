@@ -6383,3 +6383,5 @@ posts.glossary.failed: "Определять термины могут толь�
 posts.glossary.defined: "«%{term}» определён."
 posts.glossary.undefined: "Пост больше не определяет «%{term}»."
 posts.glossary.chip: "Определяет: %{term}"
+views.glossary.show: "Глоссарий"
+views.glossary.empty: "Здесь пока не определён ни один термин."

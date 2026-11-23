@@ -49,6 +49,8 @@ keyed_enum! {
         StillTrue => "still_true",
         /// N16: each lens fan of a thread, its replies side by side.
         LensFan => "lens_fan",
+        /// N17: the terms the posts define, with their definitions.
+        Glossary => "glossary",
     }
 }
 
@@ -74,7 +76,7 @@ impl PostView {
     /// Where this view is offered.
     pub const fn scopes(self) -> &'static [ViewScope] {
         match self {
-            Self::Cards | Self::RapidLog | Self::Raw | Self::Calendar | Self::Future | Self::Board | Self::Garden | Self::Series | Self::StillTrue => EVERYWHERE,
+            Self::Cards | Self::RapidLog | Self::Raw | Self::Calendar | Self::Future | Self::Board | Self::Garden | Self::Series | Self::StillTrue | Self::Glossary => EVERYWHERE,
             Self::Outline | Self::Argument | Self::Branches | Self::LensFan => THREAD_ONLY,
         }
     }

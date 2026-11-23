@@ -10,4 +10,6 @@ pub enum ThoughtEvent {
     Glossary(super::glossary_sheet::GlossaryEvent),
     /// N18: open questions.
     Questions(super::questions_sheet::QuestionsEvent),
+    /// N19: "Changed my mind".
+    Mind(super::mind_sheet::MindEvent),
 }

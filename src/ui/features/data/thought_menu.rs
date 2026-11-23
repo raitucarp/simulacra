@@ -1,11 +1,12 @@
 //! N16–N20: a post's "…" menu items: the lens fan (any post); defining a term in it or taking
 //! the definition back, and making it a question, marking it answered or reopening it (the
-//! user's own); and "This answers my question" on a reply to the user's open question. None
-//! on a locked post.
+//! user's own); and "This answers my question" on a reply to the user's open question; "Changed my mind…" (the user's
+//! own). None on a locked post.
 
 use super::events::DataEvent;
 use super::glossary_sheet::GlossaryEvent;
 use super::lens_sheet::LensEvent;
+use super::mind_sheet::MindEvent;
 use super::post_menu::{item, DataControls};
 use super::questions_sheet::QuestionsEvent;
 use super::text::tr;
@@ -42,6 +43,16 @@ fn question_items(menu: PopupMenu, controls: &DataControls) -> PopupMenu {
     }
 }
 
+/// N19: mark the user's post as one that changed their mind, or take the mark back.
+fn mind_items(menu: PopupMenu, controls: &DataControls) -> PopupMenu {
+    let (post, on_event) = (&controls.post_id, &controls.on_event);
+    let menu = menu.item(item(tr("posts.mind.menu"), LucideIcon::RefreshCw, thought(ThoughtEvent::Mind(MindEvent::Open(post.clone()))), on_event));
+    if !controls.facts.changed_mind {
+        return menu;
+    }
+    menu.item(item(tr("posts.mind.menu_unmark"), LucideIcon::X, thought(ThoughtEvent::Mind(MindEvent::Unmark(post.clone()))), on_event))
+}
+
 /// `menu` with the N16–N20 items of the post.
 pub(super) fn with_thought_items(menu: PopupMenu, controls: &DataControls, _window: &mut Window, _cx: &mut Context<PopupMenu>) -> PopupMenu {
     let (post, on_event) = (&controls.post_id, &controls.on_event);
@@ -53,5 +64,5 @@ pub(super) fn with_thought_items(menu: PopupMenu, controls: &DataControls, _wind
         let event = thought(ThoughtEvent::Questions(QuestionsEvent::Resolve(question.clone(), Some(post.clone()))));
         menu = menu.item(item(tr("posts.open_question.menu_answers"), LucideIcon::CircleCheck, event, on_event)); // N18
     }
-    if controls.own { question_items(glossary_items(menu, controls), controls) } else { menu }
+    if controls.own { mind_items(question_items(glossary_items(menu, controls), controls), controls) } else { menu }
 }

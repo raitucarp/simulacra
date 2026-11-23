@@ -18,6 +18,7 @@ mod still_true; // N13
 mod lens_fan; // N16
 mod glossary; // N17
 mod open_questions; // N18
+mod mind_changes; // N19
 mod rapid_log;
 mod raw;
 pub mod registry;

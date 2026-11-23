@@ -26,7 +26,7 @@ mod check; // N13
 mod distill; // N15
 mod post_facts; mod idea_menu; // N3, N6–N10
 mod care_menu; // N11–N15
-mod thought_events; mod thought_menu; mod lens_sheet; mod glossary_sheet; mod questions_sheet; // N16–N20
+mod thought_events; mod thought_menu; mod lens_sheet; mod glossary_sheet; mod questions_sheet; mod mind_sheet; // N16–N20
 mod post_menu;
 mod edited_mark; // V8
 mod replied; // V12
@@ -57,6 +57,7 @@ pub use distill::DistillEvent;
 pub use thought_events::ThoughtEvent; pub use lens_sheet::{lens_name, render_lens_sheet, LensDialog, LensEvent}; // N16–N20
 pub use glossary_sheet::{render_glossary_sheet, GlossaryDialog, GlossaryEvent}; // N17
 pub use questions_sheet::{render_questions_sheet, QuestionsEvent}; // N18
+pub use mind_sheet::{render_mind_sheet, MindDialog, MindEvent}; // N19
 pub use depth_dial::{depth_label, render_depth_dial, DepthView};
 pub use history::{render_history_sheet, HistorySheet};
 pub use edited_mark::render_edited_mark;

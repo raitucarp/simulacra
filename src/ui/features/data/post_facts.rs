@@ -31,6 +31,8 @@ pub struct PostFacts {
     pub feeling: bool,
     /// The user's open question it replies to (N18: it may answer it).
     pub answers: Option<PostId>,
+    /// It is marked as having changed the user's mind (N19).
+    pub changed_mind: bool,
 }
 
 impl PostFacts {
@@ -47,6 +49,7 @@ impl PostFacts {
             defines: post.extras.defines.as_ref().map(|definition| definition.term.clone()),
             question: crate::domain::post::open_question::question_state(post),
             feeling: post.kind.is_feeling(),
+            changed_mind: post.extras.mind_change.is_some(),
             answers: post.reply_to_id.as_ref().and_then(|parent| state.get_post(parent)).filter(|parent| !parent.is_locked() && crate::domain::post::open_question::is_open(parent) && state.author_of(parent).is_human_persona()).map(|parent| parent.id.clone()),
         }
     }

@@ -22,6 +22,7 @@ pub fn view_icon(view: PostView) -> LucideIcon {
         PostView::LensFan => LucideIcon::Layers,
         PostView::Glossary => LucideIcon::BookOpen,
         PostView::OpenQuestions => LucideIcon::HelpCircle,
+        PostView::MindChanges => LucideIcon::RefreshCw,
     }
 }
 
@@ -43,6 +44,7 @@ pub fn view_label_key(view: PostView) -> &'static str {
         PostView::LensFan => "views.lens_fan.show",
         PostView::Glossary => "views.glossary.show",
         PostView::OpenQuestions => "views.open_questions.show",
+        PostView::MindChanges => "views.mind_changes.show",
     }
 }
 

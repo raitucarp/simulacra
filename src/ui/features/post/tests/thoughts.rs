@@ -61,3 +61,18 @@ fn a_question_shows_whether_it_is_open_but_never_past_a_lock() {
     assert_eq!(super::open_chip::shown_question(&post), Some(QuestionState::Answered));
     assert_eq!(super::open_chip::shown_question(&forged(|post| post.kind = crate::domain::post::PostKind::Question)), None);
 }
+
+#[test]
+fn a_change_of_mind_shows_the_old_view_but_never_past_a_lock() {
+    use crate::domain::post::mind::MindChange;
+    let change = || Some(Box::new(MindChange { revises: None, was: "Roads ease traffic.".into(), at: jiff::Timestamp::UNIX_EPOCH }));
+    let mut post = Post::create("p", "n1", "u1", "Induced demand.").expect("post");
+    post.extras.mind_change = change();
+    let posts: [Post; 0] = [];
+    assert!(super::mind_banner::mind_lines(&post, &posts).is_some_and(|lines| lines.iter().any(|line| line.contains("Roads ease traffic."))));
+    assert!(super::mind_banner::mind_lines(&forged(|post| post.extras.mind_change = change()), &posts).is_none());
+    let mut sealed = Post::create("s", "n1", "u1", "Soon sealed.").expect("post");
+    sealed.extras.mind_change = change();
+    sealed.lock_with(&LockPassword::new("seven tidy lanterns"), FAST).expect("locked");
+    assert!(sealed.extras.mind_change.is_none(), "a lock drops what would speak past it");
+}

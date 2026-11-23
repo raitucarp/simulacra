@@ -54,6 +54,8 @@ keyed_enum! {
         Glossary => "glossary",
         /// N18: the questions still open, the one asked longest ago first.
         OpenQuestions => "open_questions",
+        /// N19: the posts that changed the user's mind, beside what they used to think.
+        MindChanges => "mind_changes",
     }
 }
 
@@ -79,7 +81,7 @@ impl PostView {
     /// Where this view is offered.
     pub const fn scopes(self) -> &'static [ViewScope] {
         match self {
-            Self::Cards | Self::RapidLog | Self::Raw | Self::Calendar | Self::Future | Self::Board | Self::Garden | Self::Series | Self::StillTrue | Self::Glossary | Self::OpenQuestions => EVERYWHERE,
+            Self::Cards | Self::RapidLog | Self::Raw | Self::Calendar | Self::Future | Self::Board | Self::Garden | Self::Series | Self::StillTrue | Self::Glossary | Self::OpenQuestions | Self::MindChanges => EVERYWHERE,
             Self::Outline | Self::Argument | Self::Branches | Self::LensFan => THREAD_ONLY,
         }
     }

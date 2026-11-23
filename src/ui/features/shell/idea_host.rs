@@ -111,6 +111,8 @@ impl IdeaInputs {
                 cx.notify();
             }
         });
-        vec![search]
+        let mut subscriptions = vec![search];
+        subscriptions.extend(self.thoughts.subscribe(window, cx)); // N16–N20
+        subscriptions
     }
 }

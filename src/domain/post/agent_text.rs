@@ -15,7 +15,8 @@ impl Post {
         }
         let mut text = with_files_note(&self.content, &self.extras.files);
         let question = super::open_question::agent_note(self).map(str::to_string); // N18
-        let notes = [self.extras.correction.as_ref().map(|mark| mark.agent_note()), self.voice_note(), question];
+        let mind = self.extras.mind_change.as_ref().map(|change| change.agent_note()); // N19
+        let notes = [self.extras.correction.as_ref().map(|mark| mark.agent_note()), self.voice_note(), question, mind];
         for note in notes.into_iter().flatten() {
             if !text.is_empty() {
                 text.push_str("\n\n");

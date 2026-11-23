@@ -17,7 +17,7 @@ mod voice_card; // N11
 mod ink_card; // N12
 mod media_lines; // N11, N12
 mod idea_lines; // N3, N6–N10
-mod thought_lines; mod lens_chip; mod term_chip; mod open_chip; // N16–N20
+mod thought_lines; mod lens_chip; mod term_chip; mod open_chip; mod mind_banner; // N16–N20
 mod attachments;
 mod body;
 mod checklist; // D5

@@ -102,6 +102,9 @@ pub struct PostExtras {
     /// N18: the question was marked answered (and by which post).
     #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "lenient::lenient")]
     pub answered: Option<Box<super::open_question::Answered>>,
+    /// N19: the post changed the user's mind: the post it revises and what they used to think.
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "lenient::lenient")]
+    pub mind_change: Option<Box<super::mind::MindChange>>,
 }
 
 impl PostExtras {
@@ -111,9 +114,9 @@ impl PostExtras {
     }
 
     /// Whether there is anything to show behind the post (the origin, images, files, symbols, tint,
-    /// version, ticks, lock, code runs, margin anchor, garden note, branch pointer, pinned quote, audience, question, series, voice note, drawing, correction, check, distilled document, lens fan, definition and answer alone are not).
+    /// version, ticks, lock, code runs, margin anchor, garden note, branch pointer, pinned quote, audience, question, series, voice note, drawing, correction, check, distilled document, lens fan, definition, answer and change of mind alone are not).
     pub fn has_details(&self) -> bool {
-        Self { origin: None, images: Vec::new(), files: Vec::new(), symbols: PostSymbols::default(), tint: None, head: None, replied_version: None, todo_state: Default::default(), lock: None, code_runs: Vec::new(), anchor: None, garden: None, branch: None, pinned: None, audience: None, question: None, series: None, voice: None, ink: None, correction: None, check: None, distilled: None, fan: None, lens: None, defines: None, answered: None, ..self.clone() } != Self::default()
+        Self { origin: None, images: Vec::new(), files: Vec::new(), symbols: PostSymbols::default(), tint: None, head: None, replied_version: None, todo_state: Default::default(), lock: None, code_runs: Vec::new(), anchor: None, garden: None, branch: None, pinned: None, audience: None, question: None, series: None, voice: None, ink: None, correction: None, check: None, distilled: None, fan: None, lens: None, defines: None, answered: None, mind_change: None, ..self.clone() } != Self::default()
     }
 
     /// Adds `source` unless an identical reference is already listed.

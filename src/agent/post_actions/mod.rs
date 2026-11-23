@@ -17,6 +17,8 @@ mod depth_tests; // N5
 mod transcribe_tests; // N11
 #[cfg(test)]
 mod recheck_tests; // N13
+#[cfg(test)]
+mod distill_tests; // N15
 
 pub use cancel::CancelToken;
 pub use runner::{run_action, run_action_blocking, ActionFailure, ActionJob};

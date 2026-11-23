@@ -1,7 +1,7 @@
 //! N11–N15: a post's "…" menu items for voice notes, retractions and corrections, and
 //! distilling: "Transcribe voice note" (the user's own, once), "Retract…" and "Mark as
 //! corrected…" or taking the mark back (the user's own; never a locked post), and "Distill
-//! thread to vault" (any post).
+//! thread to vault" with or without a summary (any post).
 
 use super::correction_sheet::CorrectionEvent;
 use super::distill::DistillEvent;
@@ -35,4 +35,5 @@ pub(super) fn with_care_items(menu: PopupMenu, controls: &DataControls) -> Popup
     let menu = if controls.own { own_items(menu, controls) } else { menu };
     let (post, on_event) = (&controls.post_id, &controls.on_event);
     menu.item(item(tr("posts.distill.menu"), LucideIcon::BookMarked, DataEvent::Distill(DistillEvent::Thread(post.clone())), on_event))
+        .item(item(tr("posts.distill.menu_summary"), LucideIcon::Sparkles, DataEvent::Distill(DistillEvent::Summarized(post.clone())), on_event))
 }

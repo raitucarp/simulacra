@@ -6334,3 +6334,6 @@ posts.distill.locked: "(Закрытый пост: его текст остаё�
 posts.distill.restricted: "(Пост для ограниченного круга: его текст не попадает в хранилище.)"
 posts.distill.done: "Выжимка сохранена в хранилище: «%{title}»"
 posts.distill.chip: "Выжимка: «%{title}»"
+posts.distill.menu_summary: "Перенести в хранилище с кратким изложением"
+posts.distill.no_summary: "Без краткого изложения: %{reason}"
+posts.distill.empty: "ответ ИИ оказался пустым"

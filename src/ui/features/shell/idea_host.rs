@@ -31,6 +31,8 @@ pub struct IdeaSheets {
     pub rechecking: Option<crate::domain::PostId>,
     pub rechecks: Vec<(crate::domain::PostId, String)>,
     pub ticket: u64,
+    /// N15: the thread whose summary the AI is writing.
+    pub distilling: Option<crate::domain::PostId>,
 }
 
 impl IdeaSheets {

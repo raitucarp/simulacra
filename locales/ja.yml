@@ -6334,3 +6334,6 @@ posts.distill.locked: "（ロックされた投稿: 本文は封印されたま�
 posts.distill.restricted: "（限られた読み手向けの投稿: 本文は保管庫に入れません。）"
 posts.distill.done: "「%{title}」として保管庫にまとめました"
 posts.distill.chip: "「%{title}」にまとめ済み"
+posts.distill.menu_summary: "要約付きで保管庫にまとめる"
+posts.distill.no_summary: "要約はありません: %{reason}"
+posts.distill.empty: "AI の回答が空でした"

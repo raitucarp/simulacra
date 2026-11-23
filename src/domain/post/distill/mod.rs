@@ -4,6 +4,8 @@
 //! A locked post keeps its place with only the placeholder; a retracted or corrected one
 //! says so. The thread's root remembers the document ([`Distilled`], `extras.distilled`).
 
+pub mod prompt;
+
 use super::correction::Correction;
 use serde::{Deserialize, Serialize};
 use std::fmt::Write;

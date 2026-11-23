@@ -23,6 +23,7 @@ mod voice_sheet; // N11
 mod ink_pad; mod ink_sheet; // N12
 mod correction_sheet; // N14
 mod check; // N13
+mod distill; // N15
 mod post_facts; mod idea_menu; // N3, N6–N10
 mod care_menu; // N11–N15
 mod post_menu;
@@ -51,6 +52,7 @@ pub use ink_pad::InkPad;
 pub use ink_sheet::{render_ink_sheet, InkDialog, InkEvent};
 pub use correction_sheet::{render_correction_sheet, CorrectionDialog, CorrectionEvent};
 pub use check::CheckEvent;
+pub use distill::DistillEvent;
 pub use depth_dial::{depth_label, render_depth_dial, DepthView};
 pub use history::{render_history_sheet, HistorySheet};
 pub use edited_mark::render_edited_mark;
@@ -62,7 +64,7 @@ pub use scheduled::{render_scheduled_sheet, ScheduledRow};
 pub use sheet::closes_on_escape;
 pub use snapshot::{render_restore_sheet, render_snapshot_sheet, RestoreDialog, RestoreStep, SnapshotDialog};
 pub(crate) use snapshot::strength_meter;
-pub use text::{format_time, tr};
+pub use text::{format_date, format_time, tr};
 pub use unlock::{render_unlock_sheet, UnlockAction, UnlockDialog, UnlockEvent};
 
 #[cfg(test)]

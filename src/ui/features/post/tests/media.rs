@@ -71,3 +71,14 @@ fn only_the_users_due_claims_ask_still_true_and_never_a_locked_one() {
     let sealed = forged(|_| {});
     assert!(!super::still_true_strip::asks_still_true(&sealed, true, later), "a locked post shows only its placeholder");
 }
+
+#[test]
+fn a_distilled_root_names_its_document_but_never_past_a_lock() {
+    use crate::domain::post::distill::Distilled;
+    let distilled = Distilled { doc_id: "doc_1".into(), title: "Why bridges hum".into() };
+    let mut post = Post::create_with_attachments("p", "n1", "u1", "Why do bridges hum?", None, None, None, None, None).expect("post");
+    post.extras.distilled = Some(Box::new(distilled.clone()));
+    assert!(super::distill_chip::distill_text(&post).is_some_and(|text| text.contains("Why bridges hum")));
+    let sealed = forged(|post| post.extras.distilled = Some(Box::new(distilled.clone())));
+    assert_eq!(super::distill_chip::distill_text(&sealed), None, "a locked post shows only its placeholder");
+}

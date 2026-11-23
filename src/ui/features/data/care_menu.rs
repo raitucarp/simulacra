@@ -1,8 +1,10 @@
-//! N11–N15: a post's "…" menu items for its voice note and its standing: "Transcribe voice
-//! note" (the user's own, once), and "Retract…" and "Mark as corrected…" or taking the mark
-//! back (the user's own; never a locked post).
+//! N11–N15: a post's "…" menu items for voice notes, retractions and corrections, and
+//! distilling: "Transcribe voice note" (the user's own, once), "Retract…" and "Mark as
+//! corrected…" or taking the mark back (the user's own; never a locked post), and "Distill
+//! thread to vault" (any post).
 
 use super::correction_sheet::CorrectionEvent;
+use super::distill::DistillEvent;
 use super::events::DataEvent;
 use super::post_menu::{item, DataControls};
 use super::text::tr;
@@ -30,5 +32,7 @@ fn own_items(menu: PopupMenu, controls: &DataControls) -> PopupMenu {
 
 /// `menu` with the N11–N15 items of the post.
 pub(super) fn with_care_items(menu: PopupMenu, controls: &DataControls) -> PopupMenu {
-    if controls.own { own_items(menu, controls) } else { menu }
+    let menu = if controls.own { own_items(menu, controls) } else { menu };
+    let (post, on_event) = (&controls.post_id, &controls.on_event);
+    menu.item(item(tr("posts.distill.menu"), LucideIcon::BookMarked, DataEvent::Distill(DistillEvent::Thread(post.clone())), on_event))
 }

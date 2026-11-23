@@ -25,6 +25,10 @@ pub trait PostLookup: Copy {
     fn link_previews_enabled(&self) -> bool {
         false
     }
+    /// N1: the posts referring to `id`, newest first (collections keep no backlinks).
+    fn backlinks(&self, _id: &crate::domain::PostId) -> Vec<crate::domain::post::refs::Backlink> {
+        Vec::new()
+    }
     /// N1: the text `id` shows at `version` (`None`: now), when that version is kept;
     /// collections know only the version each post shows.
     fn version_text(&self, id: &str, version: Option<SemVer>) -> Option<Rc<str>> {
@@ -107,5 +111,9 @@ impl PostLookup for &crate::state::AppState {
     #[inline]
     fn version_text(&self, id: &str, version: Option<SemVer>) -> Option<Rc<str>> {
         crate::state::AppState::version_text(self, id, version)
+    }
+    #[inline]
+    fn backlinks(&self, id: &crate::domain::PostId) -> Vec<crate::domain::post::refs::Backlink> {
+        crate::state::AppState::backlinks(self, id)
     }
 }

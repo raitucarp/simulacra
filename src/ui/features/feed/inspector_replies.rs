@@ -38,6 +38,7 @@ pub(crate) fn conversation_children(ctx: &InspectorContext<'_>, conversation: &C
         .map(|(idx, ancestor)| card(ctx, ancestor, style_for(idx > 0, true)))
         .collect();
     children.push(focused_card(ctx, conversation));
+    children.extend(super::inspector_backlinks::render_backlinks(ctx, conversation.focused).map(IntoElement::into_any_element)); // N1
     if conversation.branches.is_empty() {
         children.push(render_grounding_callout(ctx.theme).into_any_element());
     }

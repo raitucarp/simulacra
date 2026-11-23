@@ -25,6 +25,8 @@ pub struct FeedState {
     pub composer_input: Entity<TextareaState>,
     pub composer_view: Entity<PostComposerView>,
     pub search_input: Entity<InputState>,
+    /// N4: what the feed showed today against its daily budget.
+    pub day: crate::domain::finite_feed::FeedDay,
 }
 
 impl FeedState {
@@ -49,6 +51,7 @@ impl FeedState {
             composer_input,
             composer_view,
             search_input,
+            day: super::feed_budget::load_feed_day(state.db.as_ref()),
         }
     }
 

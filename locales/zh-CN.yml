@@ -6135,3 +6135,13 @@ data.garden.planted: "已作为种子种下。它现在位于你个人资料的�
 data.garden.tended: "已照料：现为%{stage}"
 data.garden.returned: "已回到信息流"
 posts.garden.badge: "%{stage}笔记"
+# N4: the finite feed
+prefs.group.reading_writing.feed: "信息流"
+prefs.row.writing.feed_budget.title: "每日信息流额度"
+prefs.row.writing.feed_budget.description: "信息流每天显示多少条帖子。读完后，它会以一张结束卡片收尾，问你今天学到了什么。你自己的帖子不计入。无限制时信息流没有尽头。"
+prefs.row.writing.feed_budget.keywords: "信息流, 额度, 限制, 每日, 有限, 结束"
+prefs.unit.posts_per_day: "每天 %{count} 条"
+feed.end.title: "今天的信息流到此为止"
+feed.end.read_one: "你已读完今天的 %{count} 条帖子。"
+feed.end.read_other: "你已读完今天的 %{count} 条帖子。"
+feed.end.question: "你今天学到了什么？"

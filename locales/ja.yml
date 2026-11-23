@@ -6135,3 +6135,13 @@ data.garden.planted: "種として植えました。プロフィールのガー�
 data.garden.tended: "手入れしました: 現在 %{stage}"
 data.garden.returned: "ストリームに戻しました"
 posts.garden.badge: "%{stage}のノート"
+# N4: the finite feed
+prefs.group.reading_writing.feed: "フィード"
+prefs.row.writing.feed_budget.title: "1日のフィード上限"
+prefs.row.writing.feed_budget.description: "フィードが1日に表示する投稿の数です。読み終えると、何を学んだかを尋ねる締めくくりのカードで終わります。自分の投稿は数えません。上限なしならフィードは終わりません。"
+prefs.row.writing.feed_budget.keywords: "フィード, 上限, 制限, 毎日, 有限, 終わり"
+prefs.unit.posts_per_day: "1日 %{count} 件"
+feed.end.title: "今日のフィードはここまで"
+feed.end.read_one: "今日の %{count} 件を読み終えました。"
+feed.end.read_other: "今日の %{count} 件を読み終えました。"
+feed.end.question: "今日は何を学びましたか？"

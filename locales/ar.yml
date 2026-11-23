@@ -6135,3 +6135,13 @@ data.garden.planted: "زُرع كبذرة. يعيش الآن في عرض الح�
 data.garden.tended: "تمت العناية به: الآن %{stage}"
 data.garden.returned: "عاد إلى التدفق"
 posts.garden.badge: "ملاحظة: %{stage}"
+# N4: the finite feed
+prefs.group.reading_writing.feed: "التدفق"
+prefs.row.writing.feed_budget.title: "حصة التدفق اليومية"
+prefs.row.writing.feed_budget.description: "عدد المنشورات التي يعرضها التدفق يوميًا. بعد قراءتها ينتهي ببطاقة ختام تسألك عمّا تعلّمته. منشوراتك لا تُحتسب أبدًا. بلا حد يبقى التدفق بلا نهاية."
+prefs.row.writing.feed_budget.keywords: "تدفق، حصة، حد، يومي، محدود، نهاية"
+prefs.unit.posts_per_day: "%{count} منشور / يوم"
+feed.end.title: "هذا تدفق اليوم"
+feed.end.read_one: "قرأت منشورك المخصص لليوم: %{count}."
+feed.end.read_other: "قرأت منشوراتك المخصصة لليوم: %{count}."
+feed.end.question: "ماذا تعلّمت اليوم؟"

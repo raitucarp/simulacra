@@ -6135,3 +6135,13 @@ data.garden.planted: "Planted as a seed. It now lives in the Garden view of your
 data.garden.tended: "Tended: now %{stage}"
 data.garden.returned: "Back in the stream"
 posts.garden.badge: "%{stage} note"
+# N4: the finite feed
+prefs.group.reading_writing.feed: "FEED"
+prefs.row.writing.feed_budget.title: "Daily feed budget"
+prefs.row.writing.feed_budget.description: "How many posts the feed shows a day. Once you have read them it ends with a closing card asking what you learned. Your own posts never count. No limit keeps the feed endless."
+prefs.row.writing.feed_budget.keywords: "feed, budget, limit, daily, finite, end, mindful"
+prefs.unit.posts_per_day: "%{count} posts / day"
+feed.end.title: "That is today's feed"
+feed.end.read_one: "You have read your %{count} post for today."
+feed.end.read_other: "You have read your %{count} posts for today."
+feed.end.question: "What did you learn today?"

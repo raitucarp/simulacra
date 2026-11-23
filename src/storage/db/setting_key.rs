@@ -77,6 +77,8 @@ setting_keys! {
     EmojiPicker => "emoji.picker",
     /// What the composer's symbol picker remembers: the recent symbols (JSON, S5).
     SymbolPicker => "symbols.picker",
+    /// N4: what the feed showed today and the answer to its closing card (JSON).
+    FeedDay => "feed.day",
     /// The user's symbol key: what each custom symbol means (JSON, S9).
     SymbolKey => "symbols.key",
     /// The day the monthly migration review was last finished (`YYYY-MM-DD`, S16).

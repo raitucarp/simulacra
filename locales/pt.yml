@@ -6135,3 +6135,13 @@ data.garden.planted: "Plantada como semente. Agora vive na vista Jardim do teu p
 data.garden.tended: "Cuidada: agora %{stage}"
 data.garden.returned: "De volta ao fluxo"
 posts.garden.badge: "Nota: %{stage}"
+# N4: the finite feed
+prefs.group.reading_writing.feed: "FLUXO"
+prefs.row.writing.feed_budget.title: "Orçamento diário do fluxo"
+prefs.row.writing.feed_budget.description: "Quantas publicações o fluxo mostra por dia. Depois de as leres, termina com um cartão de fecho que pergunta o que aprendeste. As tuas próprias publicações nunca contam. Sem limite, o fluxo é infinito."
+prefs.row.writing.feed_budget.keywords: "fluxo, orçamento, limite, diário, finito, fim"
+prefs.unit.posts_per_day: "%{count} publicações / dia"
+feed.end.title: "Este é o fluxo de hoje"
+feed.end.read_one: "Leste a tua %{count} publicação de hoje."
+feed.end.read_other: "Leste as tuas %{count} publicações de hoje."
+feed.end.question: "O que aprendeste hoje?"

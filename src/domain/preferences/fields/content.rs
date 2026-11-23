@@ -1,9 +1,9 @@
 //! Fields of the Reading & Writing and Import categories.
 
 use super::macros::category_fields;
-use super::value::{choice, choice_value, choices, count, number, number_value, toggle, FieldKind, NumberUnit, SettingValue};
+use super::value::{choice, choice_value, choices, count, limit, number, number_value, toggle, FieldKind, NumberUnit, SettingValue};
 use crate::domain::preferences::{ArchiveAfter, HashtagClick, ImportSegmentation, PostIdentity, WikilinkClick};
-use crate::domain::preferences::{ImportPrefs, WritingPrefs, AUTOSAVE_SECONDS, MAX_FILE_MB, POST_LENGTH};
+use crate::domain::preferences::{ImportPrefs, WritingPrefs, AUTOSAVE_SECONDS, FEED_BUDGET, MAX_FILE_MB, POST_LENGTH};
 
 category_fields! {
     /// A Reading & Writing preference.
@@ -11,7 +11,7 @@ category_fields! {
         PostLengthLimit => "post_length_limit", AutoSplitThreads => "auto_split_threads",
         AutosaveSeconds => "autosave_seconds", Spellcheck => "spellcheck", DefaultIdentity => "default_identity",
         WikilinkClick => "wikilink_click", HashtagClick => "hashtag_click", AtomicHints => "atomic_hints",
-        ReadabilityMeter => "readability_meter", AutoArchive => "auto_archive", SymbolShorthand => "symbol_shorthand", FeelingCheckins => "feeling_checkins",
+        ReadabilityMeter => "readability_meter", AutoArchive => "auto_archive", SymbolShorthand => "symbol_shorthand", FeelingCheckins => "feeling_checkins", FeedBudget => "feed_budget",
     }
 }
 
@@ -25,6 +25,7 @@ impl WritingField {
             Self::WikilinkClick => choices::<WikilinkClick>(),
             Self::HashtagClick => choices::<HashtagClick>(),
             Self::AutoArchive => choices::<ArchiveAfter>(),
+            Self::FeedBudget => limit(FEED_BUDGET, NumberUnit::PostsPerDay), // N4
         }
     }
 
@@ -42,6 +43,7 @@ impl WritingField {
             Self::AutoArchive => choice_value(prefs.auto_archive),
             Self::SymbolShorthand => SettingValue::Toggle(prefs.symbol_shorthand),
             Self::FeelingCheckins => SettingValue::Toggle(prefs.feeling_checkins), // M6
+            Self::FeedBudget => number_value(prefs.feed_budget),
         }
     }
 
@@ -59,6 +61,7 @@ impl WritingField {
             Self::AutoArchive => WritingPrefs { auto_archive: choice(value, prefs.auto_archive), ..prefs },
             Self::SymbolShorthand => WritingPrefs { symbol_shorthand: toggle(value, prefs.symbol_shorthand), ..prefs },
             Self::FeelingCheckins => WritingPrefs { feeling_checkins: toggle(value, prefs.feeling_checkins), ..prefs },
+            Self::FeedBudget => WritingPrefs { feed_budget: count(value, prefs.feed_budget), ..prefs },
         }
     }
 }

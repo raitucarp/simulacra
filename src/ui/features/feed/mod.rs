@@ -6,6 +6,7 @@
 
 mod callbacks;
 mod consts;
+mod end_card; // N4
 mod inspector;
 mod inspector_backlinks; // N1
 mod inspector_margin; // N2

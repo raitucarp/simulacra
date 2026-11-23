@@ -6135,3 +6135,13 @@ data.garden.planted: "Plantée comme graine. Elle vit désormais dans la vue Jar
 data.garden.tended: "Entretenue : désormais %{stage}"
 data.garden.returned: "De retour dans le fil"
 posts.garden.badge: "Note : %{stage}"
+# N4: the finite feed
+prefs.group.reading_writing.feed: "FIL"
+prefs.row.writing.feed_budget.title: "Budget quotidien du fil"
+prefs.row.writing.feed_budget.description: "Le nombre de publications que le fil affiche par jour. Une fois lues, il se termine par une carte de clôture qui vous demande ce que vous avez appris. Vos propres publications ne comptent jamais. Sans limite, le fil reste infini."
+prefs.row.writing.feed_budget.keywords: "fil, budget, limite, quotidien, fini, fin"
+prefs.unit.posts_per_day: "%{count} publications / jour"
+feed.end.title: "C’est tout pour le fil d’aujourd’hui"
+feed.end.read_one: "Vous avez lu votre %{count} publication du jour."
+feed.end.read_other: "Vous avez lu vos %{count} publications du jour."
+feed.end.question: "Qu’avez-vous appris aujourd’hui ?"

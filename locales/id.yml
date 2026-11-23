@@ -6135,3 +6135,13 @@ data.garden.planted: "Ditanam sebagai benih. Kini ia tinggal di tampilan Kebun p
 data.garden.tended: "Dirawat: kini %{stage}"
 data.garden.returned: "Kembali ke arus"
 posts.garden.badge: "Catatan %{stage}"
+# N4: the finite feed
+prefs.group.reading_writing.feed: "ARUS"
+prefs.row.writing.feed_budget.title: "Jatah arus harian"
+prefs.row.writing.feed_budget.description: "Berapa kiriman yang ditampilkan arus setiap hari. Setelah kamu membacanya, arus berakhir dengan kartu penutup yang menanyakan apa yang kamu pelajari. Kirimanmu sendiri tidak dihitung. Tanpa batas membuat arus tak berujung."
+prefs.row.writing.feed_budget.keywords: "arus, jatah, batas, harian, terbatas, akhir"
+prefs.unit.posts_per_day: "%{count} kiriman / hari"
+feed.end.title: "Itulah arus hari ini"
+feed.end.read_one: "Kamu sudah membaca %{count} kiriman jatahmu hari ini."
+feed.end.read_other: "Kamu sudah membaca %{count} kiriman jatahmu hari ini."
+feed.end.question: "Apa yang kamu pelajari hari ini?"

@@ -6135,3 +6135,13 @@ data.garden.planted: "Посажено семенем. Теперь запись
 data.garden.tended: "Ухожено: теперь %{stage}"
 data.garden.returned: "Снова в ленте"
 posts.garden.badge: "Заметка: %{stage}"
+# N4: the finite feed
+prefs.group.reading_writing.feed: "ЛЕНТА"
+prefs.row.writing.feed_budget.title: "Дневной лимит ленты"
+prefs.row.writing.feed_budget.description: "Сколько записей лента показывает в день. Когда вы их прочтёте, она закончится карточкой с вопросом, что вы узнали. Ваши собственные записи не считаются. Без ограничения лента бесконечна."
+prefs.row.writing.feed_budget.keywords: "лента, лимит, ограничение, день, конечная, конец"
+prefs.unit.posts_per_day: "%{count} записей / день"
+feed.end.title: "На сегодня лента закончилась"
+feed.end.read_one: "Вы прочли все записи на сегодня: %{count}."
+feed.end.read_other: "Вы прочли все записи на сегодня: %{count}."
+feed.end.question: "Что вы узнали сегодня?"

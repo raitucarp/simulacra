@@ -6029,3 +6029,9 @@ code.output.failed: "未能启动"
 # W2: the rapid log view
 views.rapid_log.show: "以快速记录显示"
 views.rapid_log.empty: "还没有可记录的帖子。"
+# W3: the raw view
+views.raw.show: "以纯文本显示"
+views.raw.empty: "还没有可显示为文本的帖子。"
+views.raw.copy_all: "全部复制"
+views.raw.count_one: "%{count} 条帖子"
+views.raw.count_other: "%{count} 条帖子"

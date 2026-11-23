@@ -11,6 +11,7 @@ pub fn view_icon(view: PostView) -> LucideIcon {
         PostView::Outline => LucideIcon::ListTree,
         PostView::Argument => LucideIcon::Waypoints,
         PostView::RapidLog => LucideIcon::NotebookText,
+        PostView::Raw => LucideIcon::FileText,
     }
 }
 
@@ -21,6 +22,7 @@ pub fn view_label_key(view: PostView) -> &'static str {
         PostView::Outline => "feed.outline.show_outline",
         PostView::Argument => "thinking.argument.show",
         PostView::RapidLog => "views.rapid_log.show",
+        PostView::Raw => "views.raw.show",
     }
 }
 

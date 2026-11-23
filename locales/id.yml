@@ -6029,3 +6029,9 @@ code.output.failed: "Tidak dapat dimulai"
 # W2: the rapid log view
 views.rapid_log.show: "Tampilkan sebagai log cepat"
 views.rapid_log.empty: "Belum ada kiriman untuk dicatat."
+# W3: the raw view
+views.raw.show: "Tampilkan sebagai teks mentah"
+views.raw.empty: "Belum ada kiriman untuk ditampilkan sebagai teks."
+views.raw.copy_all: "Salin semua"
+views.raw.count_one: "%{count} kiriman"
+views.raw.count_other: "%{count} kiriman"

@@ -6029,3 +6029,9 @@ code.output.failed: "Не запустился"
 # W2: the rapid log view
 views.rapid_log.show: "Показать как быстрый журнал"
 views.rapid_log.empty: "Пока нет записей для журнала."
+# W3: the raw view
+views.raw.show: "Показать простым текстом"
+views.raw.empty: "Пока нет записей, чтобы показать их текстом."
+views.raw.copy_all: "Копировать всё"
+views.raw.count_one: "%{count} запись"
+views.raw.count_other: "Записей: %{count}"

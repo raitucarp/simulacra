@@ -60,3 +60,14 @@ fn an_empty_list_renders_its_empty_note() {
     }
     assert_ne!(rust_i18n::t!("views.rapid_log.empty", locale = "en"), "views.rapid_log.empty");
 }
+
+#[test]
+fn the_raw_text_of_a_thread_never_holds_a_locked_post() {
+    use crate::domain::views::raw::{raw_blocks, raw_text};
+    let (state, _) = thread();
+    let theme = ThemeTokens::default();
+    let input = input(&state, &theme, ViewScope::Thread);
+    let text = raw_text(&raw_blocks(input.posts.iter().copied(), |post| state.author_of(post).name.clone(), "Locked post"));
+    assert!(text.contains("A reply with **marks**"), "marks stay as written");
+    assert!(text.contains("Locked post") && !text.contains("secret"), "{text}");
+}

@@ -6029,3 +6029,9 @@ code.output.failed: "لم يبدأ"
 # W2: the rapid log view
 views.rapid_log.show: "العرض كسجل سريع"
 views.rapid_log.empty: "لا توجد منشورات لتسجيلها بعد."
+# W3: the raw view
+views.raw.show: "العرض كنص خام"
+views.raw.empty: "لا توجد منشورات لعرضها كنص بعد."
+views.raw.copy_all: "نسخ الكل"
+views.raw.count_one: "%{count} منشور"
+views.raw.count_other: "المنشورات: %{count}"

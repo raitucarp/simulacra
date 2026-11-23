@@ -1,6 +1,7 @@
 //! Tests of the views of a list of posts (epic W).
 
 mod rapid_log;
+mod raw;
 mod registry;
 
 use crate::domain::crypto::KdfParams;

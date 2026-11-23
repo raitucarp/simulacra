@@ -6029,3 +6029,9 @@ code.output.failed: "Nicht gestartet"
 # W2: the rapid log view
 views.rapid_log.show: "Als Schnellprotokoll anzeigen"
 views.rapid_log.empty: "Noch keine Beiträge zum Protokollieren."
+# W3: the raw view
+views.raw.show: "Als Rohtext anzeigen"
+views.raw.empty: "Noch keine Beiträge, die als Text erscheinen."
+views.raw.copy_all: "Alles kopieren"
+views.raw.count_one: "%{count} Beitrag"
+views.raw.count_other: "%{count} Beiträge"

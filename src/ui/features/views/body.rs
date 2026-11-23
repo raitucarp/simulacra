@@ -3,6 +3,7 @@
 
 use super::input::ViewInput;
 use super::rapid_log::render_rapid_log;
+use super::raw::render_raw;
 use crate::domain::views::PostView;
 use gpui_kit::AnyElement;
 
@@ -10,6 +11,7 @@ use gpui_kit::AnyElement;
 pub fn render_list_view(view: PostView, input: &ViewInput<'_>) -> Option<AnyElement> {
     match view {
         PostView::RapidLog => Some(render_rapid_log(input)),
+        PostView::Raw => Some(render_raw(input)),
         PostView::Cards | PostView::Outline | PostView::Argument => None,
     }
 }

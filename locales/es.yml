@@ -6029,3 +6029,9 @@ code.output.failed: "No se inició"
 # W2: the rapid log view
 views.rapid_log.show: "Ver como registro rápido"
 views.rapid_log.empty: "Aún no hay publicaciones que registrar."
+# W3: the raw view
+views.raw.show: "Ver como texto sin formato"
+views.raw.empty: "Aún no hay publicaciones para mostrar como texto."
+views.raw.copy_all: "Copiar todo"
+views.raw.count_one: "%{count} publicación"
+views.raw.count_other: "%{count} publicaciones"

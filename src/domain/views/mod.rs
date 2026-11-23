@@ -6,6 +6,7 @@
 //! same list.
 
 pub mod rapid_log; // W2
+pub mod raw; // W3
 #[cfg(test)]
 mod tests;
 
@@ -23,6 +24,8 @@ keyed_enum! {
         Argument => "argument",
         /// W2: bullets grouped by day, symbols as bullets.
         RapidLog => "rapid_log",
+        /// W3: the text as written, with "copy all".
+        Raw => "raw",
     }
 }
 
@@ -48,7 +51,7 @@ impl PostView {
     /// Where this view is offered.
     pub const fn scopes(self) -> &'static [ViewScope] {
         match self {
-            Self::Cards | Self::RapidLog => EVERYWHERE,
+            Self::Cards | Self::RapidLog | Self::Raw => EVERYWHERE,
             Self::Outline | Self::Argument => THREAD_ONLY,
         }
     }

@@ -12,6 +12,7 @@ pub mod garden; // N3
 pub mod memory; // W8
 pub mod rapid_log; // W2
 pub mod raw; // W3
+pub mod series; // N10
 #[cfg(test)]
 mod tests;
 
@@ -41,6 +42,8 @@ keyed_enum! {
         Garden => "garden",
         /// N6: the lines of each fork of a thread, side by side.
         Branches => "branches",
+        /// N10: each series with its parts in order and its progress.
+        Series => "series",
     }
 }
 
@@ -66,7 +69,7 @@ impl PostView {
     /// Where this view is offered.
     pub const fn scopes(self) -> &'static [ViewScope] {
         match self {
-            Self::Cards | Self::RapidLog | Self::Raw | Self::Calendar | Self::Future | Self::Board | Self::Garden => EVERYWHERE,
+            Self::Cards | Self::RapidLog | Self::Raw | Self::Calendar | Self::Future | Self::Board | Self::Garden | Self::Series => EVERYWHERE,
             Self::Outline | Self::Argument | Self::Branches => THREAD_ONLY,
         }
     }

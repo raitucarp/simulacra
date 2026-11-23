@@ -9,7 +9,7 @@ mod authors;
 mod auto_archive; // Y6
 mod auto_delete; // Y7
 mod catalogue;
-mod avatar; mod backrefs; mod embedded; mod margin; mod garden; mod renderings; mod branches; mod pinned; // N1: backlinks, embedded versions; N2: margin replies; N3: the garden; N5: renderings; N6: what-if branches; N7: pinned quotes
+mod avatar; mod backrefs; mod embedded; mod margin; mod garden; mod renderings; mod branches; mod pinned; mod audience; // N1: backlinks, embedded versions; N2: margin replies; N3: the garden; N5: renderings; N6: what-if branches; N7: pinned quotes; N8: audience scopes
 mod bootstrap;
 mod bulk_posts;
 mod captures;

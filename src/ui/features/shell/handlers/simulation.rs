@@ -52,6 +52,9 @@ impl AppView {
         cx: &mut Context<Self>,
     ) {
         let agent_id = agent.id.clone();
+        if kind.parent().is_some_and(|parent| self.state.get_post(&parent.post.id).is_none_or(|post| !self.state.may_read(&agent_id, post))) {
+            return self.scheduler.queue.complete(&agent_id); // N8: never answer a post outside the agent's scope
+        }
         let job = self.engine_job(agent, kind, network);
         let rx = DialecticEngine::spawn_engine_simulation(job);
         cx.spawn_in(window, async move |entity, cx| {

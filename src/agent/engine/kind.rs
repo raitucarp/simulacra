@@ -18,6 +18,14 @@ pub enum JobKind {
 }
 
 impl JobKind {
+    /// The post the job answers (`None` for a new post).
+    pub fn parent(&self) -> Option<&AuthoredPost> {
+        match self {
+            Self::Reply(parent) | Self::Progress { parent, .. } => Some(parent),
+            Self::NewPost(_) => None,
+        }
+    }
+
     /// The user turn for `agent`.
     pub(crate) fn user_prompt(&self, agent: &Profile) -> String {
         match self {

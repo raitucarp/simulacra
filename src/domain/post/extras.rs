@@ -62,6 +62,9 @@ pub struct PostExtras {
     /// N7: a vault passage the post quotes verbatim, pinned to its document (boxed: posts stay small).
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pinned: Option<Box<super::pinned::PinnedQuote>>,
+    /// N8: who besides the author may read it (`None`: everyone; boxed).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub audience: Option<Box<super::audience::Audience>>,
 }
 
 impl PostExtras {
@@ -71,9 +74,9 @@ impl PostExtras {
     }
 
     /// Whether there is anything to show behind the post (the origin, images, files, symbols, tint,
-    /// version, ticks, lock, code runs, margin anchor, garden note, branch pointer and pinned quote alone are not).
+    /// version, ticks, lock, code runs, margin anchor, garden note, branch pointer, pinned quote and audience alone are not).
     pub fn has_details(&self) -> bool {
-        Self { origin: None, images: Vec::new(), files: Vec::new(), symbols: PostSymbols::default(), tint: None, head: None, replied_version: None, todo_state: Default::default(), lock: None, code_runs: Vec::new(), anchor: None, garden: None, branch: None, pinned: None, ..self.clone() } != Self::default()
+        Self { origin: None, images: Vec::new(), files: Vec::new(), symbols: PostSymbols::default(), tint: None, head: None, replied_version: None, todo_state: Default::default(), lock: None, code_runs: Vec::new(), anchor: None, garden: None, branch: None, pinned: None, audience: None, ..self.clone() } != Self::default()
     }
 
     /// Adds `source` unless an identical reference is already listed.

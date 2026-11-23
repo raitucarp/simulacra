@@ -97,7 +97,7 @@ impl AppView {
     }
 
     /// Whether `agent`'s engine has a key and is not backing off.
-    fn engine_allowed(&self, agent: &Profile) -> bool {
+    pub(super) fn engine_allowed(&self, agent: &Profile) -> bool {
         let (key, ready) = EnginePlan::gate_of(&agent.config.engine, &self.state.llm_settings, &self.state.credentials);
         ready && self.scheduler.failures.allows_generation(&key, Timestamp::now())
     }
@@ -111,7 +111,7 @@ impl AppView {
         let model = self.embedding_config().model;
         let recommender = Recommender { state: &self.state, index: &self.semantic.index, model: &model, now: Timestamp::now() };
         let by_interest = recommender.agent_answer(agent, &network).and_then(|post| self.state.get_post(&post));
-        let newest = || self.state.posts.iter().filter(|post| post.network_id == network && post.author_id != agent.id && !post.is_locked()).max_by_key(|post| post.created_at);
+        let newest = || self.state.posts.iter().filter(|post| post.network_id == network && post.author_id != agent.id && self.state.may_read(&agent.id, post)).max_by_key(|post| post.created_at);
         let parent = by_interest.or_else(newest)?;
         Some((agent.clone(), self.state.authored(parent), network))
     }

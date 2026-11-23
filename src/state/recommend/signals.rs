@@ -65,11 +65,11 @@ pub fn signals_of(state: &AppState, profile: &ProfileId, network: &NetworkId) ->
     signals
 }
 
-/// Posts of `network` that `profile` did not write, repost or already answer, newest first.
+/// Posts of `network` that `profile` did not write, repost or already answer and may read (N8), newest first.
 pub fn candidates_for(state: &AppState, profile: &ProfileId, network: &NetworkId) -> Vec<Candidate> {
     let answered: HashSet<&PostId> = network_posts(state, network).filter(|p| &p.author_id == profile).filter_map(|p| p.reply_to_id.as_ref()).collect();
     network_posts(state, network)
-        .filter(|post| &post.author_id != profile && !post.is_repost() && !answered.contains(&post.id))
+        .filter(|post| &post.author_id != profile && !post.is_repost() && !answered.contains(&post.id) && state.may_read(profile, post))
         .map(|post| Candidate { post: post.id.clone(), created_at: post.created_at })
         .collect()
 }

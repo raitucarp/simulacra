@@ -16,6 +16,7 @@ mod kind;
 mod lifecycle;
 pub mod lock; // X2: password-locked posts
 pub mod pinned; // N7: pinned quotes
+pub mod question; // N9: ask the room
 mod parse;
 mod provenance;
 pub mod refs; // N1: embeds, quotes and wikilinks, and backlinks

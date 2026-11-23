@@ -6309,3 +6309,5 @@ posts.correction.marked_corrected: "Пост отмечен как исправ�
 posts.correction.reason_first: "Сначала укажите причину (до 280 символов)."
 posts.correction.banner_retracted: "Отозвано: %{reason}"
 posts.correction.banner_corrected: "Исправлено: %{reason}"
+posts.correction.agents_told: "Агенты, которые цитировали этот пост, получат уведомление и смогут ответить."
+posts.correction.told: "Агенты, которые его цитировали, уведомлены: %{names}"

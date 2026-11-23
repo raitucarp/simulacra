@@ -46,7 +46,7 @@ pub fn render_correction_sheet(dialog: &CorrectionDialog, on_event: DataAction, 
     let key = |part: &str| tr(&format!("posts.correction.{}_{part}", dialog.kind.key()));
     let problem = dialog.problem.clone().map(|text| notice(LucideIcon::CircleAlert, text, theme.accent_danger, theme));
     let reason = div().flex().flex_col().gap(theme.spacing_xs).child(heading(key("reason_label"), theme)).child(Input::new(&dialog.reason));
-    let body = div().flex().flex_col().gap(theme.stack_gap).child(hint(key("explain"), theme)).child(reason).children(problem);
+    let body = div().flex().flex_col().gap(theme.stack_gap).child(hint(key("explain"), theme)).child(reason).child(hint(tr("posts.correction.agents_told"), theme)).children(problem);
     let icon = match dialog.kind {
         CorrectionKind::Retracted => LucideIcon::CircleX,
         CorrectionKind::Corrected => LucideIcon::Pencil,

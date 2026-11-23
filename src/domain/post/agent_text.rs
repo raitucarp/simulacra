@@ -1,5 +1,6 @@
 //! How an agent reads a post: its text, then a note of what else it carries: its files (L13:
-//! names and facts, never contents) and its voice note with the transcript (N11). A locked
+//! names and facts, never contents), its retraction or correction (N14) and its voice note with
+//! the transcript (N11). A locked
 //! post is its placeholder alone: nothing it carries is described.
 
 use super::voice::duration_label;
@@ -13,7 +14,7 @@ impl Post {
             return self.content.clone();
         }
         let mut text = with_files_note(&self.content, &self.extras.files);
-        let notes = [self.voice_note()];
+        let notes = [self.extras.correction.as_ref().map(|mark| mark.agent_note()), self.voice_note()];
         for note in notes.into_iter().flatten() {
             if !text.is_empty() {
                 text.push_str("\n\n");

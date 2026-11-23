@@ -116,6 +116,11 @@ pub enum DataEvent {
     SaveMeaning,
     CancelMeaning,
     CloseLegend,
+    /// N2: the margin sheet: replies to one passage of this post.
+    ReplyInMargin(PostId),
+    PickPassage(usize),
+    SubmitMargin,
+    CloseMargin,
     /// The monthly migration review (S16).
     OpenReview,
     ReviewDecide(crate::domain::symbols::ReviewChoice),

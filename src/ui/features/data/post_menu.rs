@@ -1,6 +1,6 @@
 //! A post's data controls: in the "…" menu, "Edit" (the user's own posts), "History" (once
-//! edited), "Bookmark" and the "Add to collection" submenu; on the card, a quiet "edited"
-//! mark that opens the history.
+//! edited), "Reply in the margin…" (N2, never on a locked post), "Bookmark" and the "Add to
+//! collection" submenu. The card's "edited" mark is `edited_mark`.
 
 use super::events::{DataAction, DataEvent};
 use super::text::tr;
@@ -8,17 +8,13 @@ use crate::domain::document::CollectionId;
 use crate::domain::post::PostLifecycle;
 use crate::domain::preferences::ArchiveAfter;
 use crate::domain::PostId;
-use crate::theme::ThemeTokens;
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::menu::{PopupMenu, PopupMenuItem};
 use gpui_kit::component::Icon;
-use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::*;
 use rust_i18n::t;
 use std::collections::{HashMap, HashSet};
 use std::rc::Rc;
-
-const EDITED_ID_PREFIX: &str = "post-edited-";
 
 /// What the feed knows to build every card's data controls.
 #[derive(Clone)]
@@ -51,6 +47,7 @@ impl DataSource {
             symbols: Default::default(),
             version: None,
             replied_to: None,
+            locked: false,
             on_event: self.on_event.clone(),
         }
     }
@@ -76,6 +73,8 @@ pub struct DataControls {
     pub version: Option<crate::domain::data::history::SemVer>,
     /// The older major version this reply answered, once its parent moved on (V12).
     pub replied_to: Option<crate::domain::data::history::SemVer>,
+    /// Its text is sealed (X4): nothing quotes it (N2); set by the feed.
+    pub locked: bool,
     pub on_event: DataAction,
 }
 
@@ -124,27 +123,11 @@ pub fn with_data_items(menu: PopupMenu, controls: Option<&DataControls>, window:
         let label = t!("data.menu.history", count = controls.revisions).to_string();
         menu = menu.item(item(label, LucideIcon::RotateCcwClock, DataEvent::OpenPostHistory(post.clone()), &controls.on_event));
     }
+    if !controls.locked {
+        menu = menu.item(item(tr("post.margin.menu"), LucideIcon::MessageSquareReply, DataEvent::ReplyInMargin(post.clone()), &controls.on_event)); // N2
+    }
     let (label, icon) = if controls.bookmarked { (tr("data.menu.unbookmark"), LucideIcon::BookmarkCheck) } else { (tr("data.menu.bookmark"), LucideIcon::Bookmark) };
     let menu = menu.item(item(label, icon, DataEvent::ToggleBookmark(post), &controls.on_event));
     let icon = Some(Icon::new(LucideIcon::FolderPlus));
     menu.submenu_with_icon(icon, tr("data.menu.add_to_collection"), window, cx, move |submenu, _, _| collections_submenu(submenu, &controls))
-}
-
-/// The quiet version badge of an edited post (V8), opening its history; `None` before any edit.
-pub fn render_edited_mark(controls: &DataControls, theme: &ThemeTokens) -> Option<AnyElement> {
-    let text = controls.edited_mark()?;
-    let (on_event, post) = (controls.on_event.clone(), controls.post_id.clone());
-    let hover = theme.text_secondary;
-    let mark = div()
-        .id(SharedString::from(format!("{EDITED_ID_PREFIX}{post}")))
-        .flex_none()
-        .cursor_pointer()
-        .font_family(theme.font_family_mono.clone())
-        .text_size(theme.font_size_2xs)
-        .text_color(theme.text_muted)
-        .hover(move |style| style.text_color(hover))
-        .when(controls.edited_tooltip(), |mark| mark.tooltip(move |window, cx| gpui_kit::component::tooltip::Tooltip::new(tr("data.edited_tooltip")).build(window, cx)))
-        .on_click(move |_, window, cx| on_event(DataEvent::OpenPostHistory(post.clone()), window, cx))
-        .child(text);
-    Some(mark.into_any_element())
 }

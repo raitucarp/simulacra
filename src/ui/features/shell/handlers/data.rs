@@ -24,6 +24,7 @@ impl AppView {
             E::OpenRestore | E::PickSnapshotFile | E::VerifySnapshot | E::ConfirmRestore | E::CloseRestore => self.on_restore_event(event, window, cx),
             E::OpenReview | E::ReviewDecide(_) | E::ReviewSummary | E::CloseReview => self.on_review_event(event, window, cx), // S16
             E::OpenLegend | E::EditMeaning(_) | E::SaveMeaning | E::CancelMeaning | E::CloseLegend => self.on_legend_event(event, window, cx), // S9
+            E::ReplyInMargin(_) | E::PickPassage(_) | E::SubmitMargin | E::CloseMargin => self.on_margin_event(event, window, cx), // N2
             E::OpenScheduled | E::EditScheduled(_) | E::PublishScheduledNow(_) | E::CancelScheduled(_) | E::CloseScheduled => self.on_scheduled_event(event, window, cx),
             _ => self.on_saved_event(event, window, cx),
         }
@@ -32,7 +33,7 @@ impl AppView {
     }
 
     fn data_sheet_open(&self) -> bool {
-        self.data.history.is_some() || self.data.export.is_some() || self.data.snapshot.is_some() || self.data.restore.is_some() || self.data.scheduled_open || self.data.legend_open || self.data.review.is_some()
+        self.data.history.is_some() || self.data.export.is_some() || self.data.snapshot.is_some() || self.data.restore.is_some() || self.data.scheduled_open || self.data.legend_open || self.data.review.is_some() || self.data.margin.is_some()
     }
 
     /// A sheet that just opened takes the keyboard (unless one of its fields already did), so
@@ -113,6 +114,8 @@ impl AppView {
         let (on_event, theme) = (self.data_action(bind), &self.theme);
         let (sheet, close) = if let Some(sheet) = &self.data.history {
             (render_history_sheet(sheet, on_event.clone(), theme), DataEvent::CloseHistory)
+        } else if let Some(dialog) = &self.data.margin {
+            (crate::ui::features::data::render_margin_sheet(dialog, on_event.clone(), theme), DataEvent::CloseMargin) // N2
         } else if let Some(dialog) = &self.data.export {
             (render_export_sheet(dialog, on_event.clone(), theme), DataEvent::CloseExport)
         } else if let Some(dialog) = &self.data.snapshot {

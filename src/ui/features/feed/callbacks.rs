@@ -85,7 +85,7 @@ impl PostCallbacks {
             on_post_action: (!target.locked).then(|| bind_action(&self.on_post_action, &target_id)), // X4: a locked post is never sent to a model
             lock: self.locks.as_ref().filter(|_| target.locked).map(|source| source.controls(&target_id)),
             credence: self.credence.as_ref().filter(|_| target.human).map(|source| source.controls(&target_id)),
-            data: self.data.as_ref().map(|source| DataControls { lifecycle: target.lifecycle, auto_archive: target.auto_archive, symbols: target.symbols.clone(), version: target.version, replied_to: target.replied_to, ..source.controls(&target_id, target.human) }),
+            data: self.data.as_ref().map(|source| DataControls { lifecycle: target.lifecycle, auto_archive: target.auto_archive, symbols: target.symbols.clone(), version: target.version, replied_to: target.replied_to, locked: target.locked, ..source.controls(&target_id, target.human) }),
             reactions: self.reactions.as_ref().map(|source| source.controls(&target_id, state)),
         }
     }

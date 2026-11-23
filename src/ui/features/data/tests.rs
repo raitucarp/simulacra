@@ -112,3 +112,13 @@ fn a_reply_to_an_older_major_version_says_so() {
     assert!(text.contains("v1.x"), "{text}");
     assert_eq!(rust_i18n::t!("data.replied_to", locale = "en", version = "v1.x"), "replied to v1.x");
 }
+
+#[test]
+fn the_margin_sheet_is_offered_on_posts_that_are_not_locked_and_is_translated() {
+    let source = DataSource { revisions: Rc::new(HashMap::new()), bookmarks: Rc::new(HashSet::new()), collections: Rc::new(Vec::new()), memberships: Rc::new(HashMap::new()), history_open: false, on_event: Rc::new(|_, _, _| {}) };
+    assert!(!source.controls(&PostId::new("p1"), true).locked, "a card says when its post is locked");
+    let keys = ["menu", "title", "subtitle", "explain", "passages", "reply_label", "reply_placeholder", "send", "pick_first", "write_first", "failed", "sent"];
+    for key in keys.map(|key| format!("post.margin.{key}")) {
+        assert_ne!(rust_i18n::t!(&key, locale = "en"), key);
+    }
+}

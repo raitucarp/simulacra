@@ -5,6 +5,7 @@ mod author_ref;
 pub mod auto_delete; // Y7
 mod authored;
 pub mod format;
+pub mod garden; // N3
 pub mod highlight;
 mod constructors;
 mod extras;

@@ -27,22 +27,23 @@ impl AppState {
     }
 
     /// Returns posts matching the active network and optional search query filter. Without a
-    /// query archived posts are left out; a search finds them too (Y5).
+    /// query archived posts and garden notes are left out; a search finds them too (Y5, N3).
     pub fn filtered_posts<'a>(&'a self, query: &'a str) -> impl Iterator<Item = &'a Post> {
         let q = query.trim().to_lowercase();
         let authors = if q.is_empty() { HashSet::new() } else { self.authors_matching(&q) };
         self.posts.iter().filter(move |p| {
             p.network_id == self.active_network_id
                 && if q.is_empty() {
-                    !p.lifecycle.is_archived()
+                    !p.lifecycle.is_archived() && !self.in_garden(p)
                 } else {
                     authors.contains(&p.author_id) || self.body_matches(p, &q)
                 }
         })
     }
 
-    /// The active network's posts the feed shows: archived posts leave it (Y5).
+    /// The active network's posts the feed shows: archived posts (Y5) and garden notes with
+    /// the threads under them (N3) leave it.
     pub fn feed_posts(&self) -> impl Iterator<Item = &Post> {
-        self.current_network_posts().filter(|p| !p.lifecycle.is_archived())
+        self.current_network_posts().filter(|p| !p.lifecycle.is_archived() && !self.in_garden(p))
     }
 }

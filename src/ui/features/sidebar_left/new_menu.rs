@@ -16,7 +16,7 @@ const NEW_BUTTON_ID: &str = "sidebar-new-button";
 const NEW_LABEL_KEY: &str = "sidebar.new";
 
 /// The menu's commands, top to bottom.
-const NEW_MENU_COMMANDS: [CommandId; 5] = [CommandId::NewThread, CommandId::NewNote, CommandId::NewVoiceNote, CommandId::ImportFile, CommandId::NewAgent];
+const NEW_MENU_COMMANDS: [CommandId; 6] = [CommandId::NewThread, CommandId::NewNote, CommandId::NewVoiceNote, CommandId::NewDrawing, CommandId::ImportFile, CommandId::NewAgent];
 
 pub(super) fn render_new_button(is_rail: bool, shell_focus: FocusHandle, theme: &ThemeTokens) -> impl IntoElement {
     let label = t!(NEW_LABEL_KEY).to_string();

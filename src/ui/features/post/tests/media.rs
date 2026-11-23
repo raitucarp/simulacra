@@ -31,3 +31,17 @@ fn a_voice_note_shows_its_name_and_length_but_never_past_a_lock() {
         assert_ne!(rust_i18n::t!(key.as_str()).to_string(), key, "{key} is translated");
     }
 }
+
+#[test]
+fn a_drawing_shows_on_its_card_but_never_past_a_lock() {
+    use crate::domain::post::ink::{Ink, InkDrawing, Stroke};
+    let drawing = InkDrawing { strokes: vec![Stroke { points: vec![1, 1, 40, 40], width: 4, ink: Ink::Text }], ..InkDrawing::blank() };
+    let mut post = Post::create_with_files("p", "n1", "u1", "", None, None, None, None, None, true).expect("post");
+    post.extras.ink = Some(Box::new(drawing.clone()));
+    assert_eq!(super::ink_card::shown_ink(&post), Some(&drawing));
+    let theme = crate::theme::ThemeTokens::default();
+    assert!(super::ink_card::render_ink_card(&post, &theme).is_some());
+    let sealed = forged(|post| post.extras.ink = Some(Box::new(drawing.clone())));
+    assert!(super::ink_card::shown_ink(&sealed).is_none() && super::ink_card::render_ink_card(&sealed, &theme).is_none(), "a locked post shows only its placeholder");
+    assert_eq!(crate::ui::components::ink_figure::hex(theme.accent_brand).len(), 7);
+}

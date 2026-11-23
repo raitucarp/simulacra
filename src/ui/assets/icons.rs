@@ -40,7 +40,7 @@ gpui_kit::assets::icon_assets!(
         FaceSlightlySmilingPlus,
         // epic W
         NotebookText, CalendarDays, CalendarRange, SquareKanban,
-        // N3: the garden; N11: voice notes
-        Sprout, Mic,
+        // N3: the garden; N11: voice notes; N12: drawings
+        Sprout, Mic, PenTool,
     ]
 );

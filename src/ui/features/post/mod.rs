@@ -11,6 +11,8 @@ mod audience_badge; // N8
 mod question_chip; // N9
 mod series_strip; // N10
 mod voice_card; // N11
+mod ink_card; // N12
+mod media_lines; // N11, N12
 mod idea_lines; // N3, N6–N10
 mod attachments;
 mod body;

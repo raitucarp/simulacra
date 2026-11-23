@@ -146,5 +146,5 @@ lucide_catalog! {
     FaceSlightlySmilingPlus => "icons/face-slightly-smiling-plus.svg", NotebookText => "icons/notebook-text.svg", CalendarDays => "icons/calendar-days.svg", CalendarRange => "icons/calendar-range.svg", SquareKanban => "icons/square-kanban.svg", // epic R: add a reaction; epic W: the views
     Save => "icons/save.svg", Bold => "icons/bold.svg", Italic => "icons/italic.svg", Underline => "icons/underline.svg", Code => "icons/code.svg", // sb F1; posts B: composer formatting
     Pencil => "icons/pencil.svg", RotateCcwClock => "icons/rotate-ccw-clock.svg", BookmarkCheck => "icons/bookmark-check.svg", FolderPlus => "icons/folder-plus.svg", Download => "icons/download.svg", KeyRound => "icons/key-round.svg", ShieldCheck => "icons/shield-check.svg", ArchiveRestore => "icons/archive-restore.svg", Package => "icons/package.svg", LockKeyhole => "icons/lock-keyhole.svg", FileDiff => "icons/file-diff.svg", // sb F2
-    Sprout => "icons/sprout.svg", Mic => "icons/mic.svg", // N3: the garden; N11: voice notes
+    Sprout => "icons/sprout.svg", Mic => "icons/mic.svg", PenTool => "icons/pen-tool.svg", // N3: the garden; N11: voice notes; N12: drawings
 }

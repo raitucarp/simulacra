@@ -20,6 +20,7 @@ mod quote_sheet; // N7
 mod question; // N9
 mod series_sheet; // N10
 mod voice_sheet; // N11
+mod ink_pad; mod ink_sheet; // N12
 mod post_facts; mod idea_menu; // N3, N6–N10
 mod care_menu; // N11–N15
 mod post_menu;
@@ -44,6 +45,8 @@ pub use post_facts::{IdeaSource, PostFacts};
 pub use question::{render_answers, AnswerRow, OpenAnswer, QuestionEvent};
 pub use series_sheet::{render_series_sheet, SeriesDialog, SeriesEvent};
 pub use voice_sheet::{render_voice_sheet, VoiceDialog, VoiceEvent};
+pub use ink_pad::InkPad;
+pub use ink_sheet::{render_ink_sheet, InkDialog, InkEvent};
 pub use depth_dial::{depth_label, render_depth_dial, DepthView};
 pub use history::{render_history_sheet, HistorySheet};
 pub use edited_mark::render_edited_mark;

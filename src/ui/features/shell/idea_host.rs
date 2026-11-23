@@ -2,7 +2,7 @@
 //! (N7), series (N10) and voice notes (N11, with the recording under way), and their text fields.
 
 use super::view::AppView;
-use crate::ui::features::data::{BranchDialog, QuoteDialog, SeriesDialog, VoiceDialog};
+use crate::ui::features::data::{BranchDialog, QuoteDialog, InkDialog, SeriesDialog, VoiceDialog};
 use gpui_kit::component::input::{InputEvent, InputState};
 use gpui_kit::*;
 use rust_i18n::t;
@@ -23,12 +23,14 @@ pub struct IdeaSheets {
     pub playing: Option<VoicePlaying>,
     /// N11: the post whose voice note is being transcribed.
     pub transcribing: Option<crate::domain::PostId>,
+    /// N12: a new drawing.
+    pub ink: Option<InkDialog>,
 }
 
 impl IdeaSheets {
     /// Whether one of them is open.
     pub fn any_open(&self) -> bool {
-        self.branch.is_some() || self.quote.is_some() || self.series.is_some() || self.voice.is_some()
+        self.branch.is_some() || self.quote.is_some() || self.series.is_some() || self.voice.is_some() || self.ink.is_some()
     }
 }
 
@@ -57,6 +59,8 @@ pub struct IdeaInputs {
     pub series_goal: Entity<InputState>,
     /// N11: a voice note's caption.
     pub voice_caption: Entity<InputState>,
+    /// N12: a drawing's caption.
+    pub ink_caption: Entity<InputState>,
 }
 
 fn field(placeholder: &str, window: &mut Window, cx: &mut Context<AppView>) -> Entity<InputState> {
@@ -74,12 +78,13 @@ impl IdeaInputs {
             series_title: field("posts.series.title_placeholder", window, cx),
             series_goal: field("posts.series.goal_placeholder", window, cx),
             voice_caption: field("posts.voice.caption_placeholder", window, cx),
+            ink_caption: field("posts.ink.caption_placeholder", window, cx),
         }
     }
 
     /// Every field.
-    pub fn all(&self) -> [&Entity<InputState>; 7] {
-        [&self.branch_label, &self.branch_text, &self.quote_find, &self.quote_comment, &self.series_title, &self.series_goal, &self.voice_caption]
+    pub fn all(&self) -> [&Entity<InputState>; 8] {
+        [&self.branch_label, &self.branch_text, &self.quote_find, &self.quote_comment, &self.series_title, &self.series_goal, &self.voice_caption, &self.ink_caption]
     }
 
     /// The quote sheet's list follows its search as it is typed.

@@ -6077,3 +6077,12 @@ trigger.estimate.tokens: "Estimativa: cerca de %{sent} tokens enviados, até %{b
 trigger.estimate.requests_one: "%{count} pedido"
 trigger.estimate.requests_other: "até %{count} pedidos"
 trigger.estimate.note: "É uma estimativa a partir do comprimento do prompt. Não são guardados preços, por isso não é mostrado um custo em dinheiro."
+# A5: the run status on the profile
+trigger.status.queued: "Na fila: espera a publicação que %{name} está a escrever"
+trigger.status.writing: "%{name} está a escrever…"
+trigger.status.done: "Publicado"
+trigger.status.failed: "Não publicado: vê o aviso"
+trigger.status.cancelled: "Cancelado"
+trigger.status.cancel: "Cancelar"
+trigger.status.dismiss: "Fechar"
+trigger.status.open: "Abrir a publicação"

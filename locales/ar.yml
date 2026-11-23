@@ -6077,3 +6077,12 @@ trigger.estimate.tokens: "تقدير: نحو %{sent} رمز مُرسل، وحت�
 trigger.estimate.requests_one: "%{count} طلب"
 trigger.estimate.requests_other: "الطلبات: حتى %{count}"
 trigger.estimate.note: "هذا تقدير من طول الموجّه. لا تُحفظ أي أسعار، لذا لا تُعرض تكلفة بالمال."
+# A5: the run status on the profile
+trigger.status.queued: "في الانتظار: ينتظر المنشور الذي يكتبه %{name} الآن"
+trigger.status.writing: "%{name} يكتب…"
+trigger.status.done: "نُشر"
+trigger.status.failed: "لم يُنشر: راجع الإشعار"
+trigger.status.cancelled: "أُلغي"
+trigger.status.cancel: "إلغاء"
+trigger.status.dismiss: "إغلاق"
+trigger.status.open: "فتح المنشور"

@@ -6077,3 +6077,12 @@ trigger.estimate.tokens: "估计：约发送 %{sent} 个令牌，最多返回 %{
 trigger.estimate.requests_one: "%{count} 次请求"
 trigger.estimate.requests_other: "最多 %{count} 次请求"
 trigger.estimate.note: "这是根据提示长度得出的估计。没有保存价格，因此不显示金额。"
+# A5: the run status on the profile
+trigger.status.queued: "排队中：等待 %{name} 写完当前的帖子"
+trigger.status.writing: "%{name} 正在写…"
+trigger.status.done: "已发布"
+trigger.status.failed: "未发布：请查看通知"
+trigger.status.cancelled: "已取消"
+trigger.status.cancel: "取消"
+trigger.status.dismiss: "关闭"
+trigger.status.open: "打开帖子"

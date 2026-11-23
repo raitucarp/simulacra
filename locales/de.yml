@@ -6077,3 +6077,12 @@ trigger.estimate.tokens: "Geschätzt: etwa %{sent} Tokens gesendet, bis zu %{bac
 trigger.estimate.requests_one: "%{count} Anfrage"
 trigger.estimate.requests_other: "bis zu %{count} Anfragen"
 trigger.estimate.note: "Das ist eine Schätzung aus der Länge des Prompts. Es werden keine Preise gespeichert, daher wird kein Geldbetrag angezeigt."
+# A5: the run status on the profile
+trigger.status.queued: "In der Warteschlange: wartet auf den Beitrag, den %{name} gerade schreibt"
+trigger.status.writing: "%{name} schreibt…"
+trigger.status.done: "Veröffentlicht"
+trigger.status.failed: "Nicht veröffentlicht: siehe Hinweis"
+trigger.status.cancelled: "Abgebrochen"
+trigger.status.cancel: "Abbrechen"
+trigger.status.dismiss: "Schließen"
+trigger.status.open: "Beitrag öffnen"

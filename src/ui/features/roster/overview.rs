@@ -84,7 +84,8 @@ pub(super) fn render_overview(profile: &Profile, params: &RosterParams<'_>, call
         .border_color(theme.border_subtle)
         .child(identity(profile, active_persona, theme))
         .children(bio)
-        .child(actions(profile, callbacks).gap(theme.control_gap));
+        .child(actions(profile, callbacks).gap(theme.control_gap))
+        .children(params.run_status.as_ref().filter(|_| profile.is_agent()).map(|status| super::run_status::render_run_status(profile, status, &callbacks.run, &callbacks.open_post, theme))); // A5
     // sb F1, A2: the overview switches between the profile card, its posts, its beliefs (a
     // persona's stated credences), and the posts recommended to it.
     let tabs = profile_tabs(params.profile_tab, profile.is_agent(), theme, callbacks.switch_profile_tab.clone());

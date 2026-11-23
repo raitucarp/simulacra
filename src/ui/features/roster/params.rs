@@ -51,6 +51,8 @@ pub struct RosterCallbacks {
     pub open_post: super::recommended::OpenPostCallback,
     /// W7: the Posts tab's view, filter, paging and month.
     pub posts: super::posts_tab::PostsAction,
+    /// A5: the run status line's Cancel and Dismiss.
+    pub run: super::run_status::RunAction,
 }
 
 /// Plain data the roster renders from.
@@ -68,6 +70,8 @@ pub struct RosterParams<'a> {
     pub posts: super::posts_state::ProfilePosts,
     /// A2: the credences on a persona's posts (its Beliefs tab).
     pub persona_credences: Rc<[super::persona_beliefs::PersonaCredence]>,
+    /// A5: where the shown agent's run stands (`None` when there is none).
+    pub run_status: Option<crate::agent::schedule::RunStatus>,
 }
 
 /// Values derived once per render.

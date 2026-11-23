@@ -15,7 +15,7 @@ fn callbacks() -> RosterCallbacks {
     let profile = || -> super::params::ProfileCallback { Rc::new(|_, _, _| {}) };
     RosterCallbacks {
         select: profile(), switch_mode: Rc::new(|_, _, _| {}), create: Rc::new(|_, _| {}), edit: profile(), delete: profile(), activate_persona: profile(), trigger_agent: profile(),
-        switch_profile_tab: Rc::new(|_, _, _| {}), open_post: Rc::new(|_, _, _| {}), posts: Rc::new(|_, _, _| {}),
+        switch_profile_tab: Rc::new(|_, _, _| {}), open_post: Rc::new(|_, _, _| {}), posts: Rc::new(|_, _, _| {}), run: Rc::new(|_, _, _| {}),
     }
 }
 
@@ -63,7 +63,7 @@ fn the_posts_tab_renders_in_every_profile_view() {
     for view in PostView::in_scope(crate::domain::views::ViewScope::Profile) {
         let params = RosterParams {
             state: &state, mode: LabMode::PersonaLab, selected_profile_id: Some(&author), theme: &theme, profile_tab: ProfileTab::Posts, beliefs: None,
-            recommended: Rc::from([]), posts: ProfilePosts { view, ..ProfilePosts::default() }, persona_credences: Rc::from([]),
+            recommended: Rc::from([]), posts: ProfilePosts { view, ..ProfilePosts::default() }, persona_credences: Rc::from([]), run_status: None,
         };
         let _view = super::render_roster_view(params, callbacks());
     }
@@ -97,7 +97,7 @@ fn personas_and_agents_share_one_tab_row_and_a_persona_s_beliefs_tab_renders() {
     for credences in [Vec::new(), vec![super::PersonaCredence { post_id: crate::domain::PostId::new("p"), summary: "70%".into(), excerpt: "a claim".into() }]] {
         let params = RosterParams {
             state: &state, mode: LabMode::PersonaLab, selected_profile_id: Some(&author), theme: &theme, profile_tab: ProfileTab::Beliefs, beliefs: None,
-            recommended: Rc::from([]), posts: ProfilePosts::default(), persona_credences: Rc::from(credences),
+            recommended: Rc::from([]), posts: ProfilePosts::default(), persona_credences: Rc::from(credences), run_status: Some(crate::agent::schedule::RunStatus::Writing),
         };
         let _view = super::render_roster_view(params, callbacks());
     }
@@ -123,4 +123,23 @@ fn the_trigger_dialog_asks_for_a_new_post_or_a_reply_and_says_its_cost_is_an_est
     for key in ["open", "title", "new_post", "reply", "topic", "topic_placeholder", "document", "no_document", "write", "estimate.note"].map(|key| format!("trigger.{key}")) {
         assert_ne!(rust_i18n::t!(&key, locale = "en"), key);
     }
+}
+
+#[test]
+fn an_agent_s_run_status_reads_for_every_state_and_renders_with_its_actions() {
+    use crate::agent::schedule::RunStatus;
+    let state = AppState::new_in_memory();
+    let theme = ThemeTokens::default();
+    let agent = state.current_network_agents().first().map(|agent| agent.id.clone());
+    let statuses = [RunStatus::Queued, RunStatus::Writing, RunStatus::Done { post: Some(crate::domain::PostId::new("p")) }, RunStatus::Done { post: None }, RunStatus::Failed, RunStatus::Cancelled];
+    for status in statuses {
+        let (_, text) = super::status_line(&status, "Ada");
+        assert!(!text.starts_with("trigger."), "{status:?}: {text}");
+        let params = RosterParams {
+            state: &state, mode: LabMode::NetworkAgents, selected_profile_id: agent.as_ref(), theme: &theme, profile_tab: ProfileTab::Profile, beliefs: None,
+            recommended: Rc::from([]), posts: ProfilePosts::default(), persona_credences: Rc::from([]), run_status: Some(status),
+        };
+        let _view = super::render_roster_view(params, callbacks());
+    }
+    assert!(super::status_line(&RunStatus::Queued, "Ada").1.contains("Ada"));
 }

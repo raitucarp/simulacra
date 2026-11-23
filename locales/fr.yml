@@ -6077,3 +6077,12 @@ trigger.estimate.tokens: "Estimation : environ %{sent} jetons envoyés, jusqu'à
 trigger.estimate.requests_one: "%{count} requête"
 trigger.estimate.requests_other: "jusqu'à %{count} requêtes"
 trigger.estimate.note: "C'est une estimation d'après la longueur du prompt. Aucun prix n'est conservé, donc aucun coût en argent n'est affiché."
+# A5: the run status on the profile
+trigger.status.queued: "En attente : attend la publication que %{name} écrit"
+trigger.status.writing: "%{name} écrit…"
+trigger.status.done: "Publié"
+trigger.status.failed: "Non publié : voir l'avis"
+trigger.status.cancelled: "Annulé"
+trigger.status.cancel: "Annuler"
+trigger.status.dismiss: "Fermer"
+trigger.status.open: "Ouvrir la publication"

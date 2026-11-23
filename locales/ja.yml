@@ -6077,3 +6077,12 @@ trigger.estimate.tokens: "見積もり：送信約 %{sent} トークン、返信
 trigger.estimate.requests_one: "%{count} 件のリクエスト"
 trigger.estimate.requests_other: "最大 %{count} 件のリクエスト"
 trigger.estimate.note: "これはプロンプトの長さからの見積もりです。料金表は保存していないため、金額は表示しません。"
+# A5: the run status on the profile
+trigger.status.queued: "待機中：%{name} がいま書いている投稿のあとに書きます"
+trigger.status.writing: "%{name} が書いています…"
+trigger.status.done: "投稿しました"
+trigger.status.failed: "投稿されませんでした：通知をご覧ください"
+trigger.status.cancelled: "キャンセルしました"
+trigger.status.cancel: "キャンセル"
+trigger.status.dismiss: "閉じる"
+trigger.status.open: "投稿を開く"

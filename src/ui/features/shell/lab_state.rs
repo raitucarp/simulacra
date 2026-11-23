@@ -13,13 +13,15 @@ pub struct LabState {
     pub selected_profile_id: Option<ProfileId>,
     /// W7: how the shown profile's Posts tab is shown.
     pub posts: crate::ui::features::roster::ProfilePosts,
+    /// A5: the runs the user started from agents' profiles.
+    pub runs: crate::agent::schedule::ManualRuns,
 }
 
 impl LabState {
     /// Selects the first network agent (or the first profile).
     pub(super) fn new(state: &AppState) -> Self {
         let first = state.current_network_agents().first().copied().or_else(|| state.user_profiles.first());
-        Self { selected_profile_id: first.map(|profile| profile.id.clone()), posts: Default::default() }
+        Self { selected_profile_id: first.map(|profile| profile.id.clone()), posts: Default::default(), runs: Default::default() }
     }
 }
 

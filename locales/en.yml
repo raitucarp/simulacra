@@ -6077,3 +6077,12 @@ trigger.estimate.tokens: "Estimated: about %{sent} tokens sent, up to %{back} ba
 trigger.estimate.requests_one: "%{count} request"
 trigger.estimate.requests_other: "up to %{count} requests"
 trigger.estimate.note: "This is an estimate from the length of the prompt. No prices are kept, so no cost in money is shown."
+# A5: the run status on the profile
+trigger.status.queued: "Queued: waits for the post %{name} is writing now"
+trigger.status.writing: "%{name} is writing…"
+trigger.status.done: "Posted"
+trigger.status.failed: "Not posted: see the notice"
+trigger.status.cancelled: "Cancelled"
+trigger.status.cancel: "Cancel"
+trigger.status.dismiss: "Dismiss"
+trigger.status.open: "Open the post"

@@ -6077,3 +6077,12 @@ trigger.estimate.tokens: "Оценка: около %{sent} токенов отп
 trigger.estimate.requests_one: "%{count} запрос"
 trigger.estimate.requests_other: "Запросов: до %{count}"
 trigger.estimate.note: "Это оценка по длине запроса. Цены не хранятся, поэтому стоимость в деньгах не показывается."
+# A5: the run status on the profile
+trigger.status.queued: "В очереди: ждёт запись, которую %{name} пишет сейчас"
+trigger.status.writing: "%{name} пишет…"
+trigger.status.done: "Опубликовано"
+trigger.status.failed: "Не опубликовано: см. уведомление"
+trigger.status.cancelled: "Отменено"
+trigger.status.cancel: "Отменить"
+trigger.status.dismiss: "Закрыть"
+trigger.status.open: "Открыть запись"

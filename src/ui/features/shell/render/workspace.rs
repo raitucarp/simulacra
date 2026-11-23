@@ -23,6 +23,7 @@ impl AppView {
             recommended: self.roster_recommendations(),
             posts: ProfilePosts { view: self.profile_view(), ..self.lab.posts }, // W7, W8
             persona_credences: self.shown_persona_credences(), // A2
+            run_status: self.shown_lab_profile().and_then(|id| self.lab.runs.status(&id).cloned()), // A5
         };
         let callbacks = RosterCallbacks {
             select: Rc::new(bind.with(Self::lab_select_profile)),
@@ -35,6 +36,7 @@ impl AppView {
             switch_profile_tab: Rc::new(bind.with(Self::switch_profile_tab)),
             open_post: Rc::new(bind.with(Self::open_profile_post)),
             posts: Rc::new(bind.with(Self::profile_posts_event)), // W7
+            run: Rc::new(bind.with(Self::run_status_event)), // A5
         };
         render_roster_view(params, callbacks)
     }

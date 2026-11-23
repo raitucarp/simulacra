@@ -6077,3 +6077,12 @@ trigger.estimate.tokens: "Perkiraan: sekitar %{sent} token dikirim, hingga %{bac
 trigger.estimate.requests_one: "%{count} permintaan"
 trigger.estimate.requests_other: "hingga %{count} permintaan"
 trigger.estimate.note: "Ini perkiraan dari panjang prompt. Tidak ada daftar harga yang disimpan, jadi biaya dalam uang tidak ditampilkan."
+# A5: the run status on the profile
+trigger.status.queued: "Antre: menunggu kiriman yang sedang ditulis %{name}"
+trigger.status.writing: "%{name} sedang menulis…"
+trigger.status.done: "Terkirim"
+trigger.status.failed: "Tidak terkirim: lihat pemberitahuan"
+trigger.status.cancelled: "Dibatalkan"
+trigger.status.cancel: "Batal"
+trigger.status.dismiss: "Tutup"
+trigger.status.open: "Buka kiriman"

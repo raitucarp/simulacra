@@ -12,6 +12,8 @@ pub struct InspectorState {
     pub mode: PostView,
     pub outlines: OutlineMemory,
     pub focus: FocusHandle,
+    /// W4: the calendar month chosen in one thread (this session).
+    pub month: Option<(crate::domain::PostId, crate::domain::views::calendar::YearMonth)>,
 }
 
 impl InspectorState {
@@ -19,7 +21,7 @@ impl InspectorState {
     pub(super) fn load(vault: Option<&Vault>, cx: &mut App) -> Self {
         let saved = vault.and_then(|vault| vault.get_setting(SettingKey::InspectorMode).ok().flatten());
         let mode = saved.and_then(|key| PostView::from_key(&key)).unwrap_or_default();
-        Self { mode, outlines: OutlineMemory::default(), focus: cx.focus_handle() }
+        Self { mode, outlines: OutlineMemory::default(), focus: cx.focus_handle(), month: None }
     }
 
     /// Queues `mode` for the settings table.
@@ -32,6 +34,6 @@ impl InspectorState {
 
     /// The view the feed renders.
     pub fn view(&self) -> InspectorView {
-        InspectorView { mode: self.mode, outlines: self.outlines.clone(), focus: self.focus.clone(), argument: None }
+        InspectorView { mode: self.mode, outlines: self.outlines.clone(), focus: self.focus.clone(), argument: None, month: self.month.clone() }
     }
 }

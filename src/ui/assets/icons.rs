@@ -39,6 +39,6 @@ gpui_kit::assets::icon_assets!(
         // epic R
         FaceSlightlySmilingPlus,
         // epic W
-        NotebookText,
+        NotebookText, CalendarDays,
     ]
 );

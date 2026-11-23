@@ -6035,3 +6035,10 @@ views.raw.empty: "Пока нет записей, чтобы показать и
 views.raw.copy_all: "Копировать всё"
 views.raw.count_one: "%{count} запись"
 views.raw.count_other: "Записей: %{count}"
+# W4: the calendar view
+views.calendar.show: "Показать календарём"
+views.calendar.previous: "Предыдущий месяц"
+views.calendar.next: "Следующий месяц"
+views.calendar.today: "Этот месяц"
+views.calendar.month_title: "%{month} %{year}"
+views.calendar.more: "Ещё: %{count}"

@@ -14,6 +14,10 @@ impl AppView {
         match command {
             InspectorCommand::SetMode(mode) => self.set_inspector_mode(mode, window, cx),
             InspectorCommand::Outline { root, command } => self.run_outline_command(root, command, window, cx),
+            InspectorCommand::Month { root, month } => {
+                self.inspector.month = Some((root, month));
+                cx.notify();
+            }
         }
     }
 

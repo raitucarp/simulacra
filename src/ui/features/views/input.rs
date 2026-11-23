@@ -1,6 +1,7 @@
-//! What every list view renders from: the posts in view, the scope they come from, and how
-//! a post is opened.
+//! What every list view renders from: the posts in view, the scope they come from, how a
+//! post is opened and the calendar's month.
 
+use crate::domain::views::calendar::YearMonth;
 use crate::domain::views::ViewScope;
 use crate::domain::{Post, PostId};
 use crate::state::AppState;
@@ -10,6 +11,8 @@ use std::rc::Rc;
 
 /// Opens a post (selects it in the timeline).
 pub type OpenPost = Rc<dyn Fn(PostId, &mut Window, &mut App) + 'static>;
+/// Shows another month in the calendar.
+pub type PickMonth = Rc<dyn Fn(YearMonth, &mut Window, &mut App) + 'static>;
 
 /// The inputs of a list view.
 pub struct ViewInput<'a> {
@@ -19,6 +22,9 @@ pub struct ViewInput<'a> {
     pub posts: Vec<&'a Post>,
     pub scope: ViewScope,
     pub on_open: OpenPost,
+    /// The month the calendar was moved to (`None`: the month of the newest post).
+    pub month: Option<YearMonth>,
+    pub on_month: PickMonth,
 }
 
 impl ViewInput<'_> {

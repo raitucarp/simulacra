@@ -26,7 +26,7 @@ pub(super) fn thread() -> (AppState, Vec<PostId>) {
 
 pub(super) fn input<'a>(state: &'a AppState, theme: &'a ThemeTokens, scope: ViewScope) -> ViewInput<'a> {
     let root = state.get_post(&state.posts.iter().find(|post| post.reply_to_id.is_none()).expect("root").id).expect("root");
-    ViewInput { state, theme, posts: thread_posts(state, root), scope, on_open: Rc::new(|_, _, _| {}) }
+    ViewInput { state, theme, posts: thread_posts(state, root), scope, on_open: Rc::new(|_, _, _| {}), month: None, on_month: Rc::new(|_, _, _| {}) }
 }
 
 #[test]
@@ -54,7 +54,7 @@ fn every_list_view_renders_in_both_scopes_and_the_inspector_draws_the_rest() {
 fn an_empty_list_renders_its_empty_note() {
     let state = AppState::new_in_memory();
     let theme = ThemeTokens::default();
-    let input = ViewInput { state: &state, theme: &theme, posts: Vec::new(), scope: ViewScope::Profile, on_open: Rc::new(|_, _, _| {}) };
+    let input = ViewInput { state: &state, theme: &theme, posts: Vec::new(), scope: ViewScope::Profile, on_open: Rc::new(|_, _, _| {}), month: None, on_month: Rc::new(|_, _, _| {}) };
     for view in PostView::ALL {
         let _ = render_list_view(*view, &input);
     }
@@ -70,4 +70,24 @@ fn the_raw_text_of_a_thread_never_holds_a_locked_post() {
     let text = raw_text(&raw_blocks(input.posts.iter().copied(), |post| state.author_of(post).name.clone(), "Locked post"));
     assert!(text.contains("A reply with **marks**"), "marks stay as written");
     assert!(text.contains("Locked post") && !text.contains("secret"), "{text}");
+}
+
+#[test]
+fn the_calendar_opens_on_the_newest_post_or_the_chosen_month() {
+    use crate::domain::views::calendar::YearMonth;
+    use crate::ui::features::views::calendar::shown_month;
+    let (state, _) = thread();
+    let theme = ThemeTokens::default();
+    let mut input = input(&state, &theme, ViewScope::Thread);
+    let today = "2030-05-17".parse().expect("date");
+    let newest = input.posts.iter().map(|post| crate::time::local_date(post.created_at)).max().expect("posts");
+    assert_eq!(shown_month(&input, today), YearMonth::of(newest));
+    input.month = Some(YearMonth { year: 2031, month: 2 });
+    assert_eq!(shown_month(&input, today), YearMonth { year: 2031, month: 2 });
+    input.posts.clear();
+    input.month = None;
+    assert_eq!(shown_month(&input, today), YearMonth { year: 2030, month: 5 });
+    for key in ["views.calendar.previous", "views.calendar.next", "views.calendar.today", "views.calendar.month_title", "views.calendar.more"] {
+        assert_ne!(rust_i18n::t!(key, locale = "en"), key);
+    }
 }

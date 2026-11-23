@@ -1,5 +1,6 @@
 //! Tests of the views of a list of posts (epic W).
 
+mod calendar;
 mod rapid_log;
 mod raw;
 mod registry;

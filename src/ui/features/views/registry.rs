@@ -12,6 +12,7 @@ pub fn view_icon(view: PostView) -> LucideIcon {
         PostView::Argument => LucideIcon::Waypoints,
         PostView::RapidLog => LucideIcon::NotebookText,
         PostView::Raw => LucideIcon::FileText,
+        PostView::Calendar => LucideIcon::CalendarDays,
     }
 }
 
@@ -23,6 +24,7 @@ pub fn view_label_key(view: PostView) -> &'static str {
         PostView::Argument => "thinking.argument.show",
         PostView::RapidLog => "views.rapid_log.show",
         PostView::Raw => "views.raw.show",
+        PostView::Calendar => "views.calendar.show",
     }
 }
 

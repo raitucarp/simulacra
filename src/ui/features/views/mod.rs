@@ -3,11 +3,12 @@
 //!
 //! - [`registry`]: the icon and translated name of every [`PostView`].
 //! - [`switcher`]: the row of view buttons for one scope.
-//! - [`body`]: the list views over a [`ViewInput`] (rapid log W2, raw W3).
+//! - [`body`]: the list views over a [`ViewInput`] (rapid log W2, raw W3, calendar W4).
 
 pub mod body;
 pub mod common;
 pub mod input;
+pub(crate) mod calendar;
 mod rapid_log;
 mod raw;
 pub mod registry;
@@ -17,6 +18,6 @@ mod tests;
 
 pub use crate::domain::views::{PostView, ViewScope};
 pub use body::render_list_view;
-pub use input::{OpenPost, ViewInput};
+pub use input::{OpenPost, PickMonth, ViewInput};
 pub use registry::{view_icon, view_label, view_label_key};
 pub use switcher::{render_view_switcher, switcher_button_id, PickView};

@@ -22,6 +22,7 @@ mod provenance;
 pub mod refs; // N1: embeds, quotes and wikilinks, and backlinks
 mod relations;
 pub mod schedule;
+pub mod series; // N10: series
 pub mod sanitize;
 pub mod seed;
 mod tint;

@@ -9,7 +9,7 @@ mod authors;
 mod auto_archive; // Y6
 mod auto_delete; // Y7
 mod catalogue;
-mod avatar; mod backrefs; mod embedded; mod margin; mod garden; mod renderings; mod branches; mod pinned; mod audience; mod questions; // N1: backlinks, embedded versions; N2: margin replies; N3: the garden; N5: renderings; N6: what-if branches; N7: pinned quotes; N8: audience scopes; N9: ask the room
+mod avatar; mod backrefs; mod embedded; mod margin; mod garden; mod renderings; mod branches; mod pinned; mod audience; mod questions; mod series; // N1: backlinks, embedded versions; N2: margin replies; N3: the garden; N5: renderings; N6: what-if branches; N7: pinned quotes; N8: audience scopes; N9: ask the room; N10: series
 mod bootstrap;
 mod bulk_posts;
 mod captures;
@@ -59,7 +59,7 @@ pub use post_heartbeat::LifecycleReport;
 pub use post_index::PostIndex;
 pub use posts_by::Page;
 pub use scheduled_queue::ScheduledEdit;
-pub use post_meta::PostMeta; pub use margin::MarginNote; pub use questions::agent_knowledge; pub use branches::{branch_label, BranchLine};
+pub use post_meta::PostMeta; pub use margin::MarginNote; pub use questions::agent_knowledge; pub use series::{SeriesListing, SeriesNav}; pub use branches::{branch_label, BranchLine};
 pub use post_versions::PostEdit;
 pub use network_create::{network_slug, validate_network_name, NetworkNameError, MAX_NETWORK_NAME_CHARS};
 pub use threads::{ThreadAnchor, ThreadDraft}; pub use locked::seal_thread;

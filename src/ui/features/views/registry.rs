@@ -10,6 +10,7 @@ pub fn view_icon(view: PostView) -> LucideIcon {
         PostView::Cards => LucideIcon::LayoutGrid,
         PostView::Outline => LucideIcon::ListTree,
         PostView::Argument => LucideIcon::Waypoints,
+        PostView::RapidLog => LucideIcon::NotebookText,
     }
 }
 
@@ -19,6 +20,7 @@ pub fn view_label_key(view: PostView) -> &'static str {
         PostView::Cards => "feed.outline.show_cards",
         PostView::Outline => "feed.outline.show_outline",
         PostView::Argument => "thinking.argument.show",
+        PostView::RapidLog => "views.rapid_log.show",
     }
 }
 

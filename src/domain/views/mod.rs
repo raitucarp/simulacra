@@ -5,6 +5,7 @@
 //! is offered, so the thread inspector and the profile page build their switchers from the
 //! same list.
 
+pub mod rapid_log; // W2
 #[cfg(test)]
 mod tests;
 
@@ -20,6 +21,8 @@ keyed_enum! {
         Outline => "outline",
         /// The thread as an argument map (sb E1).
         Argument => "argument",
+        /// W2: bullets grouped by day, symbols as bullets.
+        RapidLog => "rapid_log",
     }
 }
 
@@ -45,7 +48,7 @@ impl PostView {
     /// Where this view is offered.
     pub const fn scopes(self) -> &'static [ViewScope] {
         match self {
-            Self::Cards => EVERYWHERE,
+            Self::Cards | Self::RapidLog => EVERYWHERE,
             Self::Outline | Self::Argument => THREAD_ONLY,
         }
     }

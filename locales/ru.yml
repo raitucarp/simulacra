@@ -6026,3 +6026,6 @@ code.output.cancel: "Отменить"
 code.output.empty: "Нет вывода"
 code.output.truncated: "Вывод сокращён"
 code.output.failed: "Не запустился"
+# W2: the rapid log view
+views.rapid_log.show: "Показать как быстрый журнал"
+views.rapid_log.empty: "Пока нет записей для журнала."

@@ -38,5 +38,7 @@ gpui_kit::assets::icon_assets!(
         Pencil, RotateCcwClock, BookmarkCheck, FolderPlus, Download, KeyRound, ShieldCheck, ArchiveRestore, Package, LockKeyhole, FileDiff,
         // epic R
         FaceSlightlySmilingPlus,
+        // epic W
+        NotebookText,
     ]
 );

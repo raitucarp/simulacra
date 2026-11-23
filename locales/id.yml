@@ -6026,3 +6026,6 @@ code.output.cancel: "Batal"
 code.output.empty: "Tidak ada keluaran"
 code.output.truncated: "Keluaran dipersingkat"
 code.output.failed: "Tidak dapat dimulai"
+# W2: the rapid log view
+views.rapid_log.show: "Tampilkan sebagai log cepat"
+views.rapid_log.empty: "Belum ada kiriman untuk dicatat."

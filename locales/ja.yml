@@ -6026,3 +6026,6 @@ code.output.cancel: "キャンセル"
 code.output.empty: "出力はありません"
 code.output.truncated: "出力は短縮されています"
 code.output.failed: "起動しませんでした"
+# W2: the rapid log view
+views.rapid_log.show: "ラピッドログで表示"
+views.rapid_log.empty: "まだ記録する投稿はありません。"

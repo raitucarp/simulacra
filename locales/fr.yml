@@ -6026,3 +6026,6 @@ code.output.cancel: "Annuler"
 code.output.empty: "Aucune sortie"
 code.output.truncated: "Sortie raccourcie"
 code.output.failed: "N’a pas démarré"
+# W2: the rapid log view
+views.rapid_log.show: "Afficher en journal rapide"
+views.rapid_log.empty: "Aucune publication à consigner pour l'instant."

@@ -6026,3 +6026,6 @@ code.output.cancel: "Cancelar"
 code.output.empty: "Sem saída"
 code.output.truncated: "Saída encurtada"
 code.output.failed: "Não iniciou"
+# W2: the rapid log view
+views.rapid_log.show: "Mostrar como registo rápido"
+views.rapid_log.empty: "Ainda não há publicações para registar."

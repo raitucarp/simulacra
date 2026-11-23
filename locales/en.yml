@@ -6026,3 +6026,6 @@ code.output.cancel: "Cancel"
 code.output.empty: "No output"
 code.output.truncated: "Output shortened"
 code.output.failed: "Did not start"
+# W2: the rapid log view
+views.rapid_log.show: "Show as a rapid log"
+views.rapid_log.empty: "No posts to log yet."

@@ -50,9 +50,11 @@ pub(crate) fn render_inspector_pane(ctx: &InspectorContext<'_>, focused: Option<
     let theme = ctx.theme;
     let conversation = focused.map(|post| build_conversation(ctx.state, post, ctx.limits()));
     let replies_count = conversation.as_ref().map(|c| c.direct_total);
-    let body = match (ctx.view.mode, focused, ctx.view.argument.clone()) {
-        (PostView::Outline, Some(post), _) => render_outline_pane(ctx.state, post, ctx.view, &ctx.on_inspector, theme).into_any_element(),
-        (PostView::Argument, Some(_), Some(argument)) => argument.into_any_element(),
+    let list = focused.and_then(|post| super::inspector_views::render_thread_view(ctx, post)); // epic W
+    let body = match (ctx.view.mode, focused, ctx.view.argument.clone(), list) {
+        (_, _, _, Some(list)) => list,
+        (PostView::Outline, Some(post), _, _) => render_outline_pane(ctx.state, post, ctx.view, &ctx.on_inspector, theme).into_any_element(),
+        (PostView::Argument, Some(_), Some(argument), _) => argument.into_any_element(),
         _ => render_thread_scroll(ctx, conversation.as_ref()).into_any_element(),
     };
     div()

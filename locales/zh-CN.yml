@@ -6026,3 +6026,6 @@ code.output.cancel: "取消"
 code.output.empty: "没有输出"
 code.output.truncated: "输出已缩短"
 code.output.failed: "未能启动"
+# W2: the rapid log view
+views.rapid_log.show: "以快速记录显示"
+views.rapid_log.empty: "还没有可记录的帖子。"

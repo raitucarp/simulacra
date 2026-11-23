@@ -10,6 +10,7 @@ mod inspector;
 mod inspector_grounding;
 mod inspector_header;
 mod inspector_mode_toggle;
+mod inspector_views; // epic W
 pub mod inspector_outline;
 mod inspector_related;
 mod inspector_replies;
@@ -31,5 +32,7 @@ pub use params::{
     SelectFeedTabCallback, SelectPostCallback, ToggleRepliesCallback, LearnPostCallback, LearningPosts,
 };
 pub use render::render_main_feed;
+#[cfg(test)]
+pub(crate) use inspector_views::thread_posts; // epic W: the views tests build threads
 pub use stream::{FeedReader, StreamInputs, StreamRows};
 pub use threadline::compute_stream_threadline_style;

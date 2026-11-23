@@ -7,6 +7,8 @@
 
 use crate::domain::document::keyed::keyed_enum;
 
+pub mod prompt;
+
 keyed_enum! {
     /// How a rendering reads compared with the post as written. The key is stored in the
     /// version's record: never rename one.

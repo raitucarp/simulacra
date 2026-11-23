@@ -11,6 +11,7 @@ pub mod chip;
 pub mod document_picker;
 pub mod hover_row;
 pub mod image_picker;
+pub mod ink_figure; // N12: painting a drawing
 pub mod measured_width;
 pub mod persisted_split;
 pub mod segmented;

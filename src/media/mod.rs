@@ -11,6 +11,8 @@
 pub mod fetch;
 pub mod files;
 pub mod images;
+pub mod audio; // N11: voice notes
+pub mod ink; // N12: drawings as SVG
 
 #[cfg(test)]
 mod tests;

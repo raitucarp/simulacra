@@ -12,10 +12,6 @@ use gpui_kit::{
 };
 use rust_i18n::t;
 
-/// URI scheme of a thought permalink.
-const PERMALINK_SCHEME: &str = "simulacra://";
-/// Path segment between the network and the post id of a permalink.
-const PERMALINK_POST_SEGMENT: &str = "/post/";
 /// Blank line separating the thought from its attribution.
 const SHARE_PARAGRAPH_BREAK: &str = "\n\n";
 /// Leading dash of the attribution line.
@@ -28,7 +24,7 @@ struct ClipboardNotice;
 
 /// Stable local permalink of a thought: `simulacra://<network>/post/<id>`.
 pub fn post_permalink(post: &Post) -> String {
-    format!("{PERMALINK_SCHEME}{}{PERMALINK_POST_SEGMENT}{}", post.network_id, post.id)
+    crate::domain::post::distill::post_link(post.network_id.as_str(), post.id.as_str())
 }
 
 /// Shareable text: the thought, an attribution line and its permalink.

@@ -121,4 +121,8 @@ command_ids! {
     SymbolKey => "symbol_key",
     /// S16: the monthly review of open tasks.
     MigrationReview => "migration_review",
+    /// N11: a new voice note.
+    NewVoiceNote => "new_voice_note",
+    /// N12: a new drawing.
+    NewDrawing => "new_drawing",
 }

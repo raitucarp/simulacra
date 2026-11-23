@@ -2,14 +2,18 @@
 
 pub mod anchor; // N2: margin replies
 pub mod audience; // N8: audience scopes
+mod agent_text; // L13, N11: how an agent reads a post
 mod author_ref;
 pub mod auto_delete; // Y7
 mod authored;
 pub mod branch; // N6: what-if branches
+pub mod correction; // N14: retractions and corrections
 pub mod depth; // N5
+pub mod distill; // N15: distilling a thread to the vault
 pub mod format;
 pub mod garden; // N3
 pub mod highlight;
+pub mod ink; // N12: ink posts
 mod constructors;
 mod extras;
 mod kind;
@@ -23,6 +27,8 @@ pub mod refs; // N1: embeds, quotes and wikilinks, and backlinks
 mod relations;
 pub mod schedule;
 pub mod series; // N10: series
+pub mod still_true; // N13: "Still true?"
+pub mod voice; // N11: voice posts
 pub mod sanitize;
 pub mod seed;
 mod tint;
@@ -128,10 +134,10 @@ impl Post {
         self.quote_id.is_some()
     }
 
-    /// Whether this thought has any media attachment (link, local image or local file).
+    /// Whether this thought has any media attachment (link, local image, local file, voice note or drawing, N11, N12).
     #[inline]
     pub fn has_attachments(&self) -> bool {
-        self.link_url.is_some() || self.image_path.is_some() || !self.extras.files.is_empty()
+        self.link_url.is_some() || self.image_path.is_some() || !self.extras.files.is_empty() || self.extras.voice.is_some() || self.extras.ink.is_some()
     }
 }
 

@@ -105,7 +105,7 @@ fn post_snapshot(post: &Post, author: Option<&&Profile>) -> PostSnapshot {
         id: post.id.as_str().to_string(),
         author_handle: author.map(|a| a.handle.clone()).unwrap_or_default(),
         author_name: author.map(|a| a.name.clone()).unwrap_or_default(),
-        content: crate::domain::media::files::with_files_note(&post.content, &post.extras.files), // L13: names and facts only
+        content: post.agent_text(), // L13, N11: names and facts only, and the voice transcript
         created_at: post.created_at,
         reply_to: post.reply_to_id.as_ref().map(|id| id.as_str().to_string()),
     }

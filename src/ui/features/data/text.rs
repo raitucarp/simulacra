@@ -5,10 +5,17 @@ use rust_i18n::t;
 
 /// Local date and time as the history and restore sheets show them.
 const TIME_FORMAT: &str = "%Y-%m-%d %H:%M";
+/// A local date.
+const DATE_FORMAT: &str = "%Y-%m-%d";
 
 /// The translation of `key`.
 pub fn tr(key: &str) -> String {
     t!(key).to_string()
+}
+
+/// `at`'s local date (N15: the date of a post in a distilled document).
+pub fn format_date(at: Timestamp) -> String {
+    crate::time::local(at).strftime(DATE_FORMAT).to_string()
 }
 
 /// `at` in local time.

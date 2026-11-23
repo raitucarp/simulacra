@@ -5,7 +5,7 @@ use super::super::view::AppView;
 use crate::domain::post::audience::Audience;
 use crate::domain::PostId;
 use crate::ui::features::composer::publish_error_message;
-use crate::ui::features::data::{render_branch_sheet, render_quote_sheet, render_series_sheet, tr, BranchEvent, DataAction, DataEvent, IdeaSource, QuoteEvent, SeriesEvent};
+use crate::ui::features::data::{render_branch_sheet, render_quote_sheet, render_series_sheet, render_correction_sheet, render_ink_sheet, render_voice_sheet, tr, BranchEvent, DataAction, DataEvent, IdeaSource, CorrectionEvent, InkEvent, QuoteEvent, SeriesEvent, VoiceEvent};
 use gpui_kit::*;
 
 impl AppView {
@@ -18,13 +18,22 @@ impl AppView {
         if let Some(dialog) = &sheets.series {
             return Some((render_series_sheet(dialog, on_event, theme), DataEvent::Series(SeriesEvent::Close)));
         }
+        if let Some(dialog) = &sheets.voice {
+            return Some((render_voice_sheet(dialog, on_event, theme), DataEvent::Voice(VoiceEvent::Close))); // N11
+        }
+        if let Some(dialog) = &sheets.ink {
+            return Some((render_ink_sheet(dialog, on_event, theme), DataEvent::Ink(InkEvent::Close))); // N12
+        }
+        if let Some(dialog) = &sheets.correction {
+            return Some((render_correction_sheet(dialog, on_event, theme), DataEvent::Correction(CorrectionEvent::Close))); // N14
+        }
         let dialog = sheets.quote.as_ref()?;
         Some((render_quote_sheet(dialog, on_event, theme), DataEvent::Quote(QuoteEvent::Close)))
     }
 
     /// What every card's menu shares this render.
     pub(in crate::ui::features::shell) fn idea_source(&self) -> IdeaSource {
-        IdeaSource { agents: self.state.audience_agents(), series: self.state.series_listings().into_iter().map(|listing| listing.title).collect() }
+        IdeaSource { agents: self.state.audience_agents(), series: self.state.series_listings().into_iter().map(|listing| listing.title).collect(), playing: self.data.ideas.playing.as_ref().map(|playing| playing.post.clone()), transcribing: self.data.ideas.transcribing.clone(), rechecking: self.data.ideas.rechecking.clone(), rechecks: self.data.ideas.rechecks.clone() }
     }
 
     /// Sets who may read the user's post `id` (`None`: everyone) and says what changed.
@@ -39,5 +48,18 @@ impl AppView {
             Ok(false) => {}
             Err(err) => self.notify_data(publish_error_message(&err), window, cx),
         }
+    }
+}
+
+impl AppView {
+    /// An info toast from where no window is at hand (a request that finished in the background).
+    pub(in crate::ui::features::shell) fn notify_soon(&self, text: String, cx: &mut Context<Self>) {
+        let handle = self.spend.window;
+        cx.defer(move |cx| {
+            let _ = handle.update(cx, |_, window, cx| {
+                use gpui_kit::component::WindowExt;
+                window.push_notification(gpui_kit::component::notification::Notification::info(text), cx);
+            });
+        });
     }
 }

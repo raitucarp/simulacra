@@ -130,6 +130,7 @@ pub fn with_data_items(menu: PopupMenu, controls: Option<&DataControls>, window:
         menu = super::garden_menu::with_garden_items(menu, &controls, window, cx); // N3
         menu = super::idea_menu::with_idea_items(menu, &controls, window, cx); // N7–N10
     }
+    menu = super::care_menu::with_care_items(menu, &controls); // N11–N15
     if controls.revisions > 0 {
         let label = t!("data.menu.history", count = controls.revisions).to_string();
         menu = menu.item(item(label, LucideIcon::RotateCcwClock, DataEvent::OpenPostHistory(post.clone()), &controls.on_event));

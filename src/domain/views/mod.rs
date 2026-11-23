@@ -13,6 +13,7 @@ pub mod memory; // W8
 pub mod rapid_log; // W2
 pub mod raw; // W3
 pub mod series; // N10
+pub mod still_true; // N13
 #[cfg(test)]
 mod tests;
 
@@ -44,6 +45,8 @@ keyed_enum! {
         Branches => "branches",
         /// N10: each series with its parts in order and its progress.
         Series => "series",
+        /// N13: the claims due for a check, the one due longest first.
+        StillTrue => "still_true",
     }
 }
 
@@ -69,7 +72,7 @@ impl PostView {
     /// Where this view is offered.
     pub const fn scopes(self) -> &'static [ViewScope] {
         match self {
-            Self::Cards | Self::RapidLog | Self::Raw | Self::Calendar | Self::Future | Self::Board | Self::Garden | Self::Series => EVERYWHERE,
+            Self::Cards | Self::RapidLog | Self::Raw | Self::Calendar | Self::Future | Self::Board | Self::Garden | Self::Series | Self::StillTrue => EVERYWHERE,
             Self::Outline | Self::Argument | Self::Branches => THREAD_ONLY,
         }
     }

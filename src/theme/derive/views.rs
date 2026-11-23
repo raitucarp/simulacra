@@ -7,5 +7,6 @@ use gpui_kit::px;
 pub(super) fn apply_views_layout(t: &mut ThemeTokens) {
     set_tokens!(t {
         view_gutter_width: px(44.0), calendar_cell_min_height: px(72.0), board_column_width: px(220.0),
+        ink_canvas_width: px(480.0), ink_canvas_height: px(270.0), ink_card_height: px(180.0), // N12
     });
 }

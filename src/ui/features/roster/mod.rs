@@ -14,6 +14,7 @@ mod posts_state; // W7
 mod posts_tab; // W7
 mod profile_tabs;
 mod recommended;
+mod trigger_body; // A4
 #[cfg(test)]
 mod tests;
 
@@ -21,6 +22,7 @@ pub use params::{LabMode, ProfileTab, RosterCallbacks, RosterParams};
 pub use persona_beliefs::{persona_credences, PersonaCredence};
 pub use posts_state::{ProfilePosts, ProfilePostsEvent};
 pub use recommended::OpenPostCallback;
+pub use trigger_body::{estimate_text, render_trigger_body, ChangeChoice, TriggerBody, TriggerChoice};
 
 use crate::theme::ThemeTokens;
 use crate::ui::components::{persisted_h_resizable, SplitPane};

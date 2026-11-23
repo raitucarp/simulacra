@@ -3,8 +3,12 @@
 //! an action runs; the budget path charges a request only while [`SpendConsent::allows`] it.
 
 mod estimate;
+mod trigger; // A4: a manual agent run
+#[cfg(test)]
+mod trigger_tests;
 
 pub use estimate::{debate_requests, experiment_requests, SpendEstimate};
+pub use trigger::{trigger_estimate, TriggerEstimate};
 
 /// What this session allowed (kept by the shell for as long as the window lives).
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]

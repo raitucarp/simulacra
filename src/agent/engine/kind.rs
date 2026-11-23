@@ -19,7 +19,7 @@ pub enum JobKind {
 
 impl JobKind {
     /// The user turn for `agent`.
-    pub(super) fn user_prompt(&self, agent: &Profile) -> String {
+    pub(crate) fn user_prompt(&self, agent: &Profile) -> String {
         match self {
             Self::Reply(parent) => DialecticEngine::persona_user_prompt(parent, agent),
             Self::NewPost(seed) => DialecticEngine::root_user_prompt(agent, seed),

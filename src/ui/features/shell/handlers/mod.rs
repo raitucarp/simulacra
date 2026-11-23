@@ -59,6 +59,7 @@ mod onboarding;
 mod palette;
 mod post_actions;
 mod profile_posts; // W7
+mod trigger_dialog; // A4
 mod post_actions_context;
 mod post_actions_output;
 mod post_actions_run;

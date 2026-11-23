@@ -94,6 +94,11 @@ fn watch(child: &mut Child, limits: Limits, cancel: &AtomicBool, sink: &Mutex<Si
     loop {
         if let Ok(Some(status)) = child.try_wait() {
             tree.kill(child);
+            // Once the cap closes the pipe, a program may exit on its own (a failed write)
+            // before this loop sees the full sink: the cap still ended the run.
+            if sink.lock().is_ok_and(|sink| sink.capped) {
+                return (End::OutputCapped, None);
+            }
             return (End::Exited, status.code());
         }
         let capped = sink.lock().is_ok_and(|sink| sink.capped);

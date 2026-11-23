@@ -51,7 +51,7 @@ fn actions(profile: &Profile, callbacks: &RosterCallbacks) -> Div {
     let (edit_id, delete_id, action_id) = (id.clone(), id.clone(), id);
     let primary = if profile.is_agent() {
         let run = callbacks.trigger_agent.clone();
-        Button::new(PRIMARY_ACTION_ID).outline().icon(LucideIcon::Zap).label(t!("lab.synthesize_post").to_string()).on_click(move |_, w, cx| run(action_id.clone(), w, cx))
+        Button::new(PRIMARY_ACTION_ID).outline().icon(LucideIcon::Zap).label(t!("trigger.open").to_string()).on_click(move |_, w, cx| run(action_id.clone(), w, cx))
     } else {
         let activate = callbacks.activate_persona.clone();
         Button::new(PRIMARY_ACTION_ID).outline().icon(LucideIcon::UserCheck).label(t!("lab.use_persona").to_string()).on_click(move |_, w, cx| activate(action_id.clone(), w, cx))

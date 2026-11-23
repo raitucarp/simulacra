@@ -39,8 +39,14 @@ impl AppView {
         cx.notify();
     }
 
-    /// Runs one simulation turn for `profile_id`.
+    /// A4: "Write a post…" opens the trigger dialog for `profile_id` (nothing runs yet).
     pub(crate) fn lab_trigger_agent(&mut self, profile_id: ProfileId, window: &mut Window, cx: &mut Context<Self>) {
-        self.trigger_simulation_for_agent(Some(profile_id), TriggerMode::Reply, window, cx);
+        self.open_trigger_dialog(profile_id, window, cx);
+    }
+
+    /// A4: the dialog's "Write": runs `mode` for `agent`.
+    pub(crate) fn start_manual_trigger(&mut self, agent: ProfileId, mode: TriggerMode, window: &mut Window, cx: &mut Context<Self>) {
+        self.trigger_simulation_for_agent(Some(agent), mode, window, cx);
+        cx.notify();
     }
 }

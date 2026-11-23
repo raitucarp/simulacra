@@ -105,3 +105,22 @@ fn personas_and_agents_share_one_tab_row_and_a_persona_s_beliefs_tab_renders() {
         assert_ne!(rust_i18n::t!(&key, locale = "en"), key);
     }
 }
+
+#[test]
+fn the_trigger_dialog_asks_for_a_new_post_or_a_reply_and_says_its_cost_is_an_estimate() {
+    use super::{estimate_text, TriggerChoice};
+    use crate::domain::document::DocumentId;
+    use crate::domain::post::{PostSeed, TriggerMode};
+    use crate::domain::spend::trigger_estimate;
+    let choice = TriggerChoice { reply: false, document: Some(DocumentId::new("doc")) };
+    assert_eq!(choice.mode("  tides  "), TriggerMode::NewPost { seed: PostSeed { topic: "tides".into(), document: Some(DocumentId::new("doc")) } });
+    assert_eq!(TriggerChoice { reply: true, ..choice }.mode("ignored"), TriggerMode::Reply);
+    rust_i18n::set_locale("en");
+    let sent = estimate_text(Some(trigger_estimate(&["a prompt"], 300, 0, true)));
+    assert!(sent.contains("Estimated") && sent.contains("300") && sent.contains("1 request"), "{sent}");
+    assert!(estimate_text(Some(trigger_estimate(&["a prompt"], 300, 0, false))).contains("nothing is sent"));
+    assert_ne!(estimate_text(None), "trigger.nothing_to_answer");
+    for key in ["open", "title", "new_post", "reply", "topic", "topic_placeholder", "document", "no_document", "write", "estimate.note"].map(|key| format!("trigger.{key}")) {
+        assert_ne!(rust_i18n::t!(&key, locale = "en"), key);
+    }
+}

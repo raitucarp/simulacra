@@ -4,6 +4,7 @@ pub mod anchor; // N2: margin replies
 mod author_ref;
 pub mod auto_delete; // Y7
 mod authored;
+pub mod depth; // N5
 pub mod format;
 pub mod garden; // N3
 pub mod highlight;

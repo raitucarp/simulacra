@@ -8,7 +8,7 @@ use rusqlite::{params, Row};
 
 const INSERT_REVISION: &str = "INSERT OR REPLACE INTO revisions (id, subject_kind, subject_id, saved_at, title, content, record_json, parent_id, version, note, bump, edited_at) VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12)";
 const SELECT_REVISIONS: &str = "SELECT id, subject_kind, subject_id, saved_at, title, content, record_json, parent_id, version, note, bump, edited_at FROM revisions WHERE subject_kind = ?1 AND subject_id = ?2 ORDER BY saved_at DESC, id DESC";
-const COUNT_REVISIONS: &str = "SELECT subject_id, COUNT(*) FROM revisions WHERE subject_kind = ?1 GROUP BY subject_id";
+const COUNT_REVISIONS: &str = "SELECT subject_id, COUNT(*) FROM revisions WHERE subject_kind = ?1 AND instr(record_json, '\"rendering\"') = 0 GROUP BY subject_id"; // N5: a rendering is no edit
 const UPDATE_POST_BODY: &str = "UPDATE posts SET content = ?1, mentions_json = ?2, linked_posts_json = ?3 WHERE id = ?4";
 const DELETE_REVISION: &str = "DELETE FROM revisions WHERE id = ?1";
 

@@ -19,14 +19,9 @@ pub(crate) struct MarkSet {
 }
 
 impl MarkSet {
-    fn with(mut self, mark: Mark) -> Self {
-        match mark {
-            Mark::Bold => self.bold = true,
-            Mark::Italic => self.italic = true,
-            Mark::Underline => self.underline = true,
-            Mark::Spoiler => self.spoiler = true,
-        }
-        self
+    fn with(self, mark: Mark) -> Self {
+        let (bold, italic, underline, spoiler) = (mark == Mark::Bold, mark == Mark::Italic, mark == Mark::Underline, mark == Mark::Spoiler);
+        Self { bold: self.bold || bold, italic: self.italic || italic, underline: self.underline || underline, spoiler: self.spoiler || spoiler }
     }
 }
 
@@ -39,6 +34,8 @@ pub(crate) enum Item<'a> {
     Break,
     Code(&'a str),
     Wikilink { target: &'a str, trailing: &'a str },
+    /// N1: another post shown inside this one, at a pinned version; it fills the width.
+    Embed { target: &'a str, version: Option<crate::domain::data::history::SemVer>, trailing: &'a str },
     Hashtag { tag: &'a str, trailing: &'a str },
     /// A web address as written (L1).
     Url { url: &'a str, trailing: &'a str },
@@ -51,7 +48,7 @@ pub(crate) enum Item<'a> {
 
 /// Whether the line after the break at `index` is blank (drawn as a paragraph gap).
 pub(crate) fn blank_line_after(items: &[Item<'_>], index: usize) -> bool {
-    matches!(items.get(index + 1), None | Some(Item::Break | Item::Block { .. }))
+    matches!(items.get(index + 1), None | Some(Item::Break | Item::Block { .. } | Item::Embed { .. }))
 }
 
 /// The inline items of `tokens`, in order.
@@ -88,6 +85,7 @@ impl<'a> Builder<'a> {
             }
             BodyToken::Code(code) => self.item(Item::Code(code)),
             BodyToken::Wikilink { target, trailing } => self.item(Item::Wikilink { target, trailing }),
+            BodyToken::Embed { target, version, trailing } => self.item(Item::Embed { target, version: *version, trailing }),
             BodyToken::Hashtag { tag, trailing } => self.item(Item::Hashtag { tag, trailing }),
             BodyToken::CodeBlock { lang, code } => self.item(Item::Block { lang: lang.as_deref(), code }),
             BodyToken::Spoiler(children) if !marks.spoiler => self.spoiler(children, marks),

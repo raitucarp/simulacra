@@ -1,9 +1,11 @@
 //! What a reader sees of a token tree: its text without markup, and its length.
 //!
 //! Mark delimiters, escapes, code fences and wikilink brackets are markup; a wikilink counts
-//! as its target, a tag as `#tag`, code as its verbatim text.
+//! as its target, a tag as `#tag`, code as its verbatim text. An embed (N1) shows another
+//! post's text, so only its trailing punctuation counts.
 
 use super::{tokenize_post_body, BodyToken};
+use crate::domain::data::history::SemVer;
 
 /// Visible characters of `tokens` (the post length the character limit applies to).
 pub fn visible_len(tokens: &[BodyToken]) -> usize {
@@ -23,6 +25,7 @@ fn token_len(token: &BodyToken) -> usize {
         | BodyToken::Hashtag { tag: text, trailing }
         | BodyToken::Mention { handle: text, trailing }
         | BodyToken::Url { url: text, trailing } => count(text) + count(trailing),
+        BodyToken::Embed { trailing, .. } => count(trailing),
         BodyToken::Bold(children) | BodyToken::Italic(children) | BodyToken::Underline(children) | BodyToken::Spoiler(children) => {
             visible_len(children)
         }
@@ -48,6 +51,7 @@ fn push_visible(token: &BodyToken, out: &mut String) {
             out.push_str(text);
             out.push_str(trailing);
         }
+        BodyToken::Embed { trailing, .. } => out.push_str(trailing),
         BodyToken::Bold(children) | BodyToken::Italic(children) | BodyToken::Underline(children) | BodyToken::Spoiler(children) => {
             children.iter().for_each(|child| push_visible(child, out));
         }
@@ -57,19 +61,32 @@ fn push_visible(token: &BodyToken, out: &mut String) {
 /// Every wikilink target in `tokens`, including those inside marks, in order.
 pub fn wikilink_targets(tokens: &[BodyToken]) -> Vec<String> {
     let mut targets = Vec::new();
-    collect_targets(tokens, &mut targets);
+    walk(tokens, &mut |token| {
+        if let BodyToken::Wikilink { target, .. } = token {
+            targets.push(target.clone());
+        }
+    });
     targets
 }
 
-fn collect_targets(tokens: &[BodyToken], out: &mut Vec<String>) {
+/// Every embed in `tokens` (N1), including those inside marks, in order: the target and the
+/// version written with it.
+pub fn embed_targets(tokens: &[BodyToken]) -> Vec<(String, Option<SemVer>)> {
+    let mut targets = Vec::new();
+    walk(tokens, &mut |token| {
+        if let BodyToken::Embed { target, version, .. } = token {
+            targets.push((target.clone(), *version));
+        }
+    });
+    targets
+}
+
+/// Visits every token of the tree, marks before their children.
+fn walk(tokens: &[BodyToken], visit: &mut impl FnMut(&BodyToken)) {
     for token in tokens {
-        match token {
-            BodyToken::Wikilink { target, .. } => out.push(target.clone()),
-            other => {
-                if let Some((_, children)) = other.as_mark() {
-                    collect_targets(children, out);
-                }
-            }
+        visit(token);
+        if let Some((_, children)) = token.as_mark() {
+            walk(children, visit);
         }
     }
 }

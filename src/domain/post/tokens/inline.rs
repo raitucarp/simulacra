@@ -5,13 +5,14 @@
 //! Underscores also refuse to open or close inside a word (`snake__case__name`).
 
 use super::atoms::{scan_hashtag, scan_url, scan_wikilink};
+use super::embed::scan_embed;
 use super::builder::Builder;
 use super::{BodyToken, Mark};
 
 /// Escape character: the next markup character is taken literally.
 const ESCAPE: char = '\\';
 /// Characters a backslash can escape.
-const ESCAPABLE: [char; 8] = ['\\', '*', '_', '`', '|', '#', '[', ']'];
+const ESCAPABLE: [char; 10] = ['\\', '*', '_', '`', '|', '#', '[', ']', '(', ')'];
 const STAR: char = '*';
 const UNDERSCORE: char = '_';
 const PIPE: char = '|';
@@ -42,7 +43,7 @@ fn step(chars: &[char], i: usize, builder: &mut Builder) -> usize {
         }
         BACKTICK => code_span(chars, i, builder),
         STAR | UNDERSCORE | PIPE => delimiter_run(chars, i, builder),
-        c => match scan_url(chars, i).or_else(|| scan_wikilink(chars, i)).or_else(|| scan_hashtag(chars, i)) {
+        c => match scan_url(chars, i).or_else(|| scan_wikilink(chars, i)).or_else(|| scan_embed(chars, i)).or_else(|| scan_hashtag(chars, i)) {
             Some((token, next)) => {
                 builder.atom(token);
                 next

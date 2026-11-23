@@ -9,7 +9,7 @@ mod authors;
 mod auto_archive; // Y6
 mod auto_delete; // Y7
 mod catalogue;
-mod avatar;
+mod avatar; mod backrefs; // N1: backlinks
 mod bootstrap;
 mod bulk_posts;
 mod captures;

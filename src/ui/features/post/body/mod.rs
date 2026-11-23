@@ -116,7 +116,7 @@ fn render_item<L: PostLookup>(
             let extras = code_block::BlockExtras { run: code_run::run_button(items, index, *lang, code, links), panel: run_panel::run_panel(items, index, lookup, links) };
             code_block::code_block(index, *lang, code, theme, extras)
         }
-        Item::Wikilink { target, trailing } => {
+        Item::Wikilink { target, trailing } | Item::Embed { target, trailing, .. } => {
             let pill = render_obsidian_pill(&lookup.resolve_wikilink(target), theme);
             with_trailing(clickable(pill, target, links.on_wikilink.as_ref()), trailing, theme)
         }

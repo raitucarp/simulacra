@@ -2,6 +2,7 @@
 
 use super::*;
 
+mod embeds; // N1
 mod fences;
 mod inline;
 mod legacy;

@@ -7,13 +7,13 @@ const CASES: usize = 4000;
 /// Longest generated body, in characters.
 const MAX_LEN: u64 = 48;
 /// Characters that write no markup at all.
-const PLAIN: &[char] = &['a', 'b', 'Z', ' ', ' ', '\n', '.', ',', '-', '!', 'é', '字', '1', '(', ')'];
+const PLAIN: &[char] = &['a', 'b', 'Z', ' ', ' ', '\n', '.', ',', '-', '!', 'é', '字', '1', '('];
 /// Plain characters plus every markup character, weighted towards markup.
 const MIXED: &[char] = &[
-    'a', 'b', ' ', '\n', '.', '-', 'é', '*', '*', '_', '_', '|', '|', '`', '`', '\\', '#', '[', ']', '[', ']', '\r',
+    'a', 'b', ' ', '\n', '.', '-', 'é', '*', '*', '_', '_', '|', '|', '`', '`', '\\', '#', '[', ']', '[', ']', '\r', '(', '(', ')', ')',
 ];
 /// Characters the parser lets a backslash escape.
-const ESCAPABLE: &[char] = &['\\', '*', '_', '`', '|', '#', '[', ']'];
+const ESCAPABLE: &[char] = &['\\', '*', '_', '`', '|', '#', '[', ']', '(', ')'];
 
 /// Small xorshift generator: deterministic, no extra dependency.
 struct Rng(u64);

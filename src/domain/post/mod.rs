@@ -12,6 +12,7 @@ mod lifecycle;
 pub mod lock; // X2: password-locked posts
 mod parse;
 mod provenance;
+pub mod refs; // N1: embeds, quotes and wikilinks, and backlinks
 mod relations;
 pub mod schedule;
 pub mod sanitize;
@@ -29,8 +30,8 @@ pub use parse::{HASHTAG_SIGIL, WIKILINK_CLOSE, WIKILINK_OPEN};
 pub use provenance::{PostOrigin, SourceLocator};
 pub use seed::{PostSeed, ResolvedSeed, SeedDocument, TriggerMode};
 pub use tokens::{
-    has_rich_markup, is_trailing_punctuation, tokenize_post_body, visible_len, visible_text, visible_text_len, wikilink_targets, BodyToken,
-    Mark,
+    embed_markup, embed_targets, has_rich_markup, is_trailing_punctuation, tokenize_post_body, visible_len, visible_text, visible_text_len, wikilink_targets,
+    BodyToken, Mark, EMBED_OPEN,
 };
 
 use super::ids::{NetworkId, PostId, ProfileId};

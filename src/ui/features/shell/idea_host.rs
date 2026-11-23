@@ -27,6 +27,10 @@ pub struct IdeaSheets {
     pub ink: Option<InkDialog>,
     /// N14: retracting or correcting a post.
     pub correction: Option<CorrectionDialog>,
+    /// N13: the claim the AI is asked about, and the answers so far; the ticket of the newest AI request (N13, N15).
+    pub rechecking: Option<crate::domain::PostId>,
+    pub rechecks: Vec<(crate::domain::PostId, String)>,
+    pub ticket: u64,
 }
 
 impl IdeaSheets {

@@ -15,6 +15,7 @@ impl AppView {
                 Ok(check) => self.notify_data(t!("posts.still_true.confirmed", days = wait_days(check.streak)).to_string(), window, cx),
                 Err(err) => self.notify_data(publish_error_message(&err), window, cx),
             },
+            CheckEvent::Recheck(id) => self.recheck_claim(id, cx),
         }
     }
 }

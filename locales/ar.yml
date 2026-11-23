@@ -6319,3 +6319,7 @@ posts.still_true.confirmed: "تم التأكيد. سيعود السؤال بعد
 views.still_true.show: "أما زال صحيحًا؟"
 views.still_true.empty: "لا شيء للتحقق منه: لم ينتظر أي ادعاء هنا ما يكفي ليُسأل عنه مجددًا."
 views.still_true.due: "مستحق منذ %{date}"
+posts.still_true.ask_ai: "اسأل الذكاء الاصطناعي"
+posts.still_true.checking: "نسأل الذكاء الاصطناعي إن كان ما زال صحيحًا…"
+posts.still_true.verdict: "الذكاء الاصطناعي: %{answer}"
+posts.still_true.recheck_failed: "لا إجابة من الذكاء الاصطناعي: %{reason}"

@@ -4,6 +4,8 @@
 //! post is due from when it was written, last edited and last confirmed ([`StillTrue`],
 //! `extras.check`); [`checkable`] says which posts are checked at all.
 
+pub mod prompt;
+
 use super::Post;
 use jiff::{SignedDuration, Timestamp};
 use serde::{Deserialize, Serialize};

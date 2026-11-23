@@ -6319,3 +6319,7 @@ posts.still_true.confirmed: "確認しました。%{days} 日後にまた尋ね�
 views.still_true.show: "今も正しい？"
 views.still_true.empty: "確認するものはありません。ここには、まだ尋ね直す時期の来た主張がありません。"
 views.still_true.due: "%{date} から確認待ち"
+posts.still_true.ask_ai: "AI に聞く"
+posts.still_true.checking: "今も成り立つか AI に尋ねています…"
+posts.still_true.verdict: "AI: %{answer}"
+posts.still_true.recheck_failed: "AI から回答がありません: %{reason}"

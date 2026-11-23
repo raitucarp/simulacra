@@ -6319,3 +6319,7 @@ posts.still_true.confirmed: "Dikonfirmasi. Ini akan muncul lagi dalam %{days} ha
 views.still_true.show: "Masih benar?"
 views.still_true.empty: "Tidak ada yang perlu dicek: belum ada klaim di sini yang cukup lama untuk ditanyakan lagi."
 views.still_true.due: "Jatuh tempo sejak %{date}"
+posts.still_true.ask_ai: "Tanya AI"
+posts.still_true.checking: "Menanyakan ke AI apakah ini masih berlaku…"
+posts.still_true.verdict: "AI: %{answer}"
+posts.still_true.recheck_failed: "Tidak ada jawaban dari AI: %{reason}"

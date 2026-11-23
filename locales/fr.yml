@@ -6319,3 +6319,7 @@ posts.still_true.confirmed: "Confirmé. La question reviendra dans %{days} jours
 views.still_true.show: "Toujours vrai ?"
 views.still_true.empty: "Rien à vérifier : aucune affirmation ici n’a attendu assez longtemps pour être reposée."
 views.still_true.due: "À revoir depuis le %{date}"
+posts.still_true.ask_ai: "Demander à l’IA"
+posts.still_true.checking: "L’IA vérifie si cela tient toujours…"
+posts.still_true.verdict: "IA : %{answer}"
+posts.still_true.recheck_failed: "Pas de réponse de l’IA : %{reason}"

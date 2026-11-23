@@ -52,4 +52,7 @@ pub struct IdeaSource {
     pub playing: Option<PostId>,
     /// N11: the post whose voice note is being transcribed.
     pub transcribing: Option<PostId>,
+    /// N13: the claim the AI is asked about, and its answers by post.
+    pub rechecking: Option<PostId>,
+    pub rechecks: Vec<(PostId, String)>,
 }

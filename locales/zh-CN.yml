@@ -6089,3 +6089,6 @@ trigger.status.open: "打开帖子"
 # N1: embeds and backlinks
 post.menu_copy_embed: "复制嵌入"
 post.copied_embed: "已复制嵌入：粘贴到帖子中即可在其中显示此帖"
+post.embed.unavailable: "嵌入的帖子 %{id} 不可用"
+post.embed.now: "现为 %{version}"
+post.embed.not_kept: "%{version} 已不再保留，因此显示当前文本"

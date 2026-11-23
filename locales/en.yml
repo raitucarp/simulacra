@@ -6089,3 +6089,6 @@ trigger.status.open: "Open the post"
 # N1: embeds and backlinks
 post.menu_copy_embed: "Copy embed"
 post.copied_embed: "Embed copied: paste it into a post to show this one inside it"
+post.embed.unavailable: "Embedded post %{id} is not available"
+post.embed.now: "now %{version}"
+post.embed.not_kept: "%{version} is no longer kept, so the text shown now appears instead"

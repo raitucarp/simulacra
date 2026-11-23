@@ -45,3 +45,16 @@ fn an_embed_is_pinned_to_the_version_its_post_shows_when_written() {
     assert_eq!(state.get_post(&embeds).expect("post").content, format!("Look again: (({target}@{version}))"));
     assert_eq!(kinds(&state, &target), vec![(embeds, RefKind::Embed)]);
 }
+
+#[test]
+fn a_kept_version_s_text_is_read_for_embeds_and_refreshed_after_an_edit() {
+    let mut state = AppState::new_in_memory();
+    let id = state.submit_post("Draft one of the note.").expect("posted");
+    let original = crate::domain::data::history::SemVer::ORIGINAL;
+    assert_eq!(state.version_text(id.as_str(), Some(original)).as_deref(), Some("Draft one of the note."));
+    state.edit_post(&id, "Draft two of the note, now with a whole new second half to it.").expect("edited");
+    assert_eq!(state.version_text(id.as_str(), Some(original)).as_deref(), Some("Draft one of the note."), "kept as a revision");
+    state.edit_post(&id, "Draft three, which replaces everything that was written before.").expect("edited");
+    let revisions = state.post_revisions(&id);
+    assert!(revisions.iter().filter_map(|r| r.version).all(|v| state.version_text(id.as_str(), Some(v)).is_some()), "every kept version is found after the cache was refreshed");
+}

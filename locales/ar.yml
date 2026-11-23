@@ -6089,3 +6089,6 @@ trigger.status.open: "فتح المنشور"
 # N1: embeds and backlinks
 post.menu_copy_embed: "نسخ التضمين"
 post.copied_embed: "تم نسخ التضمين: الصقه في منشور لعرض هذا المنشور داخله"
+post.embed.unavailable: "المنشور المضمّن %{id} غير متاح"
+post.embed.now: "الآن %{version}"
+post.embed.not_kept: "لم تعد %{version} محفوظة، لذا يظهر النص الحالي بدلًا منها"

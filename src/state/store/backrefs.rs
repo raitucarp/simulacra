@@ -54,6 +54,7 @@ impl super::PostIndex {
             self.backrefs.remove(&post.id, &old.refs);
         }
         self.backrefs.add(&post.id, &meta.refs);
+        self.versions.forget(&post.id);
         self.revision += 1;
     }
 

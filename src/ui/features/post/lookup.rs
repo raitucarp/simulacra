@@ -2,6 +2,7 @@
 
 use super::excerpt::excerpt_with;
 use crate::domain::post::{tokenize_post_body, BodyToken};
+use crate::domain::data::history::SemVer;
 use crate::domain::media::MediaCatalog;
 use crate::domain::{Post, Profile};
 use std::rc::Rc;
@@ -23,6 +24,13 @@ pub trait PostLookup: Copy {
     /// Whether link previews may be shown (Settings › Privacy & Data); off shows plain links.
     fn link_previews_enabled(&self) -> bool {
         false
+    }
+    /// N1: the text `id` shows at `version` (`None`: now), when that version is kept;
+    /// collections know only the version each post shows.
+    fn version_text(&self, id: &str, version: Option<SemVer>) -> Option<Rc<str>> {
+        let post = self.find_post(id)?;
+        let now = post.extras.head.as_ref().map_or_else(SemVer::default, |head| head.version);
+        version.is_none_or(|wanted| wanted == now).then(|| Rc::from(post.content.as_str()))
     }
 }
 
@@ -95,5 +103,9 @@ impl PostLookup for &crate::state::AppState {
     #[inline]
     fn link_previews_enabled(&self) -> bool {
         self.preferences().privacy.link_previews
+    }
+    #[inline]
+    fn version_text(&self, id: &str, version: Option<SemVer>) -> Option<Rc<str>> {
+        crate::state::AppState::version_text(self, id, version)
     }
 }

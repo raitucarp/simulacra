@@ -6089,3 +6089,6 @@ trigger.status.open: "投稿を開く"
 # N1: embeds and backlinks
 post.menu_copy_embed: "埋め込みをコピー"
 post.copied_embed: "埋め込みをコピーしました。投稿に貼り付けると、この投稿がその中に表示されます"
+post.embed.unavailable: "埋め込まれた投稿 %{id} は利用できません"
+post.embed.now: "現在 %{version}"
+post.embed.not_kept: "%{version} は保存されていないため、現在のテキストを表示しています"

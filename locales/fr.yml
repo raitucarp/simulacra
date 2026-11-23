@@ -6089,3 +6089,6 @@ trigger.status.open: "Ouvrir la publication"
 # N1: embeds and backlinks
 post.menu_copy_embed: "Copier l’intégration"
 post.copied_embed: "Intégration copiée : collez-la dans une publication pour y afficher celle-ci"
+post.embed.unavailable: "La publication intégrée %{id} n’est pas disponible"
+post.embed.now: "désormais %{version}"
+post.embed.not_kept: "%{version} n’est plus conservée : le texte actuel s’affiche à la place"

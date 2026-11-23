@@ -6089,3 +6089,6 @@ trigger.status.open: "Buka kiriman"
 # N1: embeds and backlinks
 post.menu_copy_embed: "Salin sematan"
 post.copied_embed: "Sematan disalin: tempel ke kiriman untuk menampilkan kiriman ini di dalamnya"
+post.embed.unavailable: "Kiriman tersemat %{id} tidak tersedia"
+post.embed.now: "kini %{version}"
+post.embed.not_kept: "%{version} tidak lagi disimpan, jadi teks yang ditampilkan sekarang muncul sebagai gantinya"

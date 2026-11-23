@@ -6089,3 +6089,6 @@ trigger.status.open: "Abrir la publicación"
 # N1: embeds and backlinks
 post.menu_copy_embed: "Copiar inserción"
 post.copied_embed: "Inserción copiada: pégala en una publicación para mostrar esta dentro"
+post.embed.unavailable: "La publicación insertada %{id} no está disponible"
+post.embed.now: "ahora %{version}"
+post.embed.not_kept: "%{version} ya no se conserva, así que se muestra el texto actual"

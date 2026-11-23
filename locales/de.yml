@@ -6089,3 +6089,6 @@ trigger.status.open: "Beitrag öffnen"
 # N1: embeds and backlinks
 post.menu_copy_embed: "Einbettung kopieren"
 post.copied_embed: "Einbettung kopiert: in einen Beitrag einfügen, um diesen darin zu zeigen"
+post.embed.unavailable: "Eingebetteter Beitrag %{id} ist nicht verfügbar"
+post.embed.now: "jetzt %{version}"
+post.embed.not_kept: "%{version} wird nicht mehr aufbewahrt, daher erscheint der aktuelle Text"

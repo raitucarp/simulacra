@@ -18,6 +18,7 @@ pub struct PostIndex {
     network_counts: HashMap<NetworkId, usize>,
     pub(super) meta: HashMap<PostId, PostMeta>,
     pub(super) backrefs: super::backrefs::Backrefs, // N1
+    pub(super) versions: super::embedded::VersionTexts, // N1
     len: usize,
     pub(super) revision: u64,
     full_rebuilds: usize,
@@ -51,6 +52,7 @@ impl PostIndex {
     pub fn removed(&mut self, post: &Post, position: usize) {
         let ordinal = self.len - 1 - position;
         self.ordinals.remove(&post.id);
+        self.versions.forget(&post.id);
         if let Some(meta) = self.meta.remove(&post.id) {
             self.backrefs.remove(&post.id, &meta.refs);
         }

@@ -180,4 +180,5 @@ fn highlights_come_from_marks_and_theme_tokens() {
 }
 
 mod links;
+mod embed; // N1
 mod code_run; // P5

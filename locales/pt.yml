@@ -6266,3 +6266,6 @@ posts.voice.no_recorder: "Não é possível gravar neste sistema. Escolha um arq
 posts.voice.no_microphone: "Não foi possível abrir nenhum microfone (código %{code}). Verifique se há um conectado e se os apps podem usá-lo, ou escolha um arquivo de áudio."
 posts.voice.failed: "A gravação foi interrompida: %{detail}"
 posts.voice.not_stored: "Não foi possível salvar o áudio: %{reason}. Arquivos de áudio de até %{limit} MB podem ser usados."
+posts.voice.play: "Reproduzir"
+posts.voice.stop_playing: "Parar"
+posts.voice.play_failed: "Não foi possível reproduzir a nota de voz: %{reason}"

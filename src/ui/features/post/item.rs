@@ -98,6 +98,7 @@ fn render_content_column<L: PostLookup>(
                 }),
         )
         .children(super::pinned_card::render_pinned_quote(effective, lookup, theme)) // N7
+        .children(super::voice_card::render_voice_card(effective, theme, &handlers)) // N11
         .children(render_post_extras(&effective.extras, theme, handlers.links.on_source.as_ref()))
         .children(render_post_media(effective, lookup, theme, handlers.links.on_media.as_ref(), handlers.links.on_relink.as_ref()))
         .when_some(effective.quote_id.as_ref(), |this, quote_id| {

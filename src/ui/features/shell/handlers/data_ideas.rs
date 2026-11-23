@@ -27,7 +27,7 @@ impl AppView {
 
     /// What every card's menu shares this render.
     pub(in crate::ui::features::shell) fn idea_source(&self) -> IdeaSource {
-        IdeaSource { agents: self.state.audience_agents(), series: self.state.series_listings().into_iter().map(|listing| listing.title).collect() }
+        IdeaSource { agents: self.state.audience_agents(), series: self.state.series_listings().into_iter().map(|listing| listing.title).collect(), playing: self.data.ideas.playing.as_ref().map(|playing| playing.post.clone()) }
     }
 
     /// Sets who may read the user's post `id` (`None`: everyone) and says what changed.

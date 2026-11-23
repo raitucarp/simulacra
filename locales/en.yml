@@ -6266,3 +6266,6 @@ posts.voice.no_recorder: "Recording is not available on this system. Choose an a
 posts.voice.no_microphone: "No microphone could be opened (code %{code}). Check that one is connected and that apps may use it, or choose an audio file."
 posts.voice.failed: "The recording broke off: %{detail}"
 posts.voice.not_stored: "The audio could not be saved: %{reason}. Audio files of up to %{limit} MB can be used."
+posts.voice.play: "Play"
+posts.voice.stop_playing: "Stop"
+posts.voice.play_failed: "The voice note could not be played: %{reason}"

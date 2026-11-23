@@ -10,6 +10,7 @@ mod pinned_card; // N7
 mod audience_badge; // N8
 mod question_chip; // N9
 mod series_strip; // N10
+mod voice_card; // N11
 mod idea_lines; // N3, N6–N10
 mod attachments;
 mod body;
@@ -52,3 +53,6 @@ mod tests;
 #[cfg(test)]
 #[path = "tests/ideas.rs"]
 mod ideas_tests; // N6–N10
+#[cfg(test)]
+#[path = "tests/media.rs"]
+mod media_tests; // N11, N12

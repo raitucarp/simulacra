@@ -4,7 +4,7 @@
 use crate::domain::post::audience::Audience;
 use crate::domain::post::garden::Maturity;
 use crate::domain::post::pinned::QuoteDrift;
-use crate::domain::{Post, ProfileId};
+use crate::domain::{Post, PostId, ProfileId};
 use crate::state::AppState;
 
 /// The facts of one post its menu needs.
@@ -42,4 +42,6 @@ pub struct IdeaSource {
     pub agents: Vec<(ProfileId, String)>,
     /// The titles of the active network's series, most recently added to first (N10).
     pub series: Vec<String>,
+    /// N11: the post whose voice note is playing in the app.
+    pub playing: Option<PostId>,
 }

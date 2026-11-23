@@ -4,7 +4,9 @@
 //! - [`record`]: records the default microphone as 16 kHz mono PCM (Windows, through the
 //!   system's WinMM wave-in API, so no new dependency); elsewhere recording reports itself
 //!   unavailable and the user chooses an audio file instead.
+//! - [`play`]: plays a note back (WAV in the app on Windows, anything else in the system player).
 
+pub mod play;
 pub mod record;
 
 use crate::domain::post::voice::{mime_of, wav_duration_ms, VoiceNote, MAX_VOICE_BYTES};

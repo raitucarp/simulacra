@@ -6266,3 +6266,6 @@ posts.voice.no_recorder: "Perekaman tidak tersedia di sistem ini. Pilih berkas a
 posts.voice.no_microphone: "Tidak ada mikrofon yang bisa dibuka (kode %{code}). Pastikan mikrofon tersambung dan aplikasi boleh memakainya, atau pilih berkas audio."
 posts.voice.failed: "Rekaman terputus: %{detail}"
 posts.voice.not_stored: "Audio tidak bisa disimpan: %{reason}. Berkas audio hingga %{limit} MB bisa dipakai."
+posts.voice.play: "Putar"
+posts.voice.stop_playing: "Berhenti"
+posts.voice.play_failed: "Catatan suara tidak bisa diputar: %{reason}"

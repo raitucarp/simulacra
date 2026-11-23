@@ -5,6 +5,7 @@ use super::events::{DataAction, DataEvent};
 use super::sheet::{footer, heading, hint, notice, sheet_frame, SheetParts};
 use super::text::tr;
 use crate::domain::post::voice::{duration_label, VoiceNote};
+use crate::domain::PostId;
 use crate::theme::ThemeTokens;
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::button::{Button, ButtonVariants};
@@ -26,6 +27,9 @@ pub enum VoiceEvent {
     Choose,
     /// Drops the take (or file) to start again.
     Discard,
+    /// Plays the voice note of a post (from its card), or stops it.
+    Play(PostId),
+    StopPlaying,
     Submit,
     Close,
 }

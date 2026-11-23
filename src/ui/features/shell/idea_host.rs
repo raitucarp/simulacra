@@ -19,6 +19,8 @@ pub struct IdeaSheets {
     /// N11: a new voice note, and the recording under way (dropping it discards the take).
     pub voice: Option<VoiceDialog>,
     pub recording: Option<VoiceRecording>,
+    /// N11: the voice note playing in the app (the card shows Stop), until it ends.
+    pub playing: Option<VoicePlaying>,
 }
 
 impl IdeaSheets {
@@ -26,6 +28,12 @@ impl IdeaSheets {
     pub fn any_open(&self) -> bool {
         self.branch.is_some() || self.quote.is_some() || self.series.is_some() || self.voice.is_some()
     }
+}
+
+/// N11: a note playing in the app, and the task that marks its end.
+pub struct VoicePlaying {
+    pub post: crate::domain::PostId,
+    pub _end: Option<Task<()>>,
 }
 
 /// N11: a recording under way and the task that ticks its clock.

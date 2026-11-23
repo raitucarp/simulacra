@@ -6266,3 +6266,6 @@ posts.voice.no_recorder: "このシステムでは録音できません。代わ
 posts.voice.no_microphone: "マイクを開けませんでした（コード %{code}）。マイクが接続され、アプリの使用が許可されているか確認するか、音声ファイルを選んでください。"
 posts.voice.failed: "録音が途切れました: %{detail}"
 posts.voice.not_stored: "音声を保存できませんでした: %{reason}。%{limit} MB までの音声ファイルを使えます。"
+posts.voice.play: "再生"
+posts.voice.stop_playing: "停止"
+posts.voice.play_failed: "ボイスメモを再生できませんでした: %{reason}"

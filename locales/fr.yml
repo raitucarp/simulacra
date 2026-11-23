@@ -6266,3 +6266,6 @@ posts.voice.no_recorder: "L’enregistrement n’est pas possible sur ce systèm
 posts.voice.no_microphone: "Aucun micro n’a pu être ouvert (code %{code}). Vérifiez qu’il est branché et que les applications peuvent l’utiliser, ou choisissez un fichier audio."
 posts.voice.failed: "L’enregistrement s’est interrompu : %{detail}"
 posts.voice.not_stored: "L’audio n’a pas pu être sauvegardé : %{reason}. Les fichiers audio jusqu’à %{limit} Mo sont acceptés."
+posts.voice.play: "Écouter"
+posts.voice.stop_playing: "Arrêter"
+posts.voice.play_failed: "La note vocale n’a pas pu être lue : %{reason}"

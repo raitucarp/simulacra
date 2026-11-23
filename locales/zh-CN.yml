@@ -6266,3 +6266,6 @@ posts.voice.no_recorder: "此系统无法录音，请改为选择一个音频文
 posts.voice.no_microphone: "无法打开麦克风（代码 %{code}）。请确认已连接麦克风且允许应用使用，或选择一个音频文件。"
 posts.voice.failed: "录音中断：%{detail}"
 posts.voice.not_stored: "无法保存音频：%{reason}。可使用最大 %{limit} MB 的音频文件。"
+posts.voice.play: "播放"
+posts.voice.stop_playing: "停止"
+posts.voice.play_failed: "无法播放语音笔记：%{reason}"

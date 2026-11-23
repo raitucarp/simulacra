@@ -6266,3 +6266,6 @@ posts.voice.no_recorder: "التسجيل غير متاح على هذا النظ�
 posts.voice.no_microphone: "تعذّر فتح أي ميكروفون (الرمز %{code}). تحقّق من توصيله ومن السماح للتطبيقات باستخدامه، أو اختر ملفًا صوتيًا."
 posts.voice.failed: "انقطع التسجيل: %{detail}"
 posts.voice.not_stored: "تعذّر حفظ الصوت: %{reason}. يمكن استخدام ملفات صوتية حتى %{limit} ميغابايت."
+posts.voice.play: "تشغيل"
+posts.voice.stop_playing: "إيقاف"
+posts.voice.play_failed: "تعذّر تشغيل الملاحظة الصوتية: %{reason}"

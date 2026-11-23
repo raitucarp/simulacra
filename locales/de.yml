@@ -6266,3 +6266,6 @@ posts.voice.no_recorder: "Aufnehmen ist auf diesem System nicht möglich. Wähle
 posts.voice.no_microphone: "Es ließ sich kein Mikrofon öffnen (Code %{code}). Prüfe, ob eines angeschlossen ist und Apps es verwenden dürfen, oder wähle eine Audiodatei."
 posts.voice.failed: "Die Aufnahme brach ab: %{detail}"
 posts.voice.not_stored: "Das Audio ließ sich nicht speichern: %{reason}. Audiodateien bis %{limit} MB sind möglich."
+posts.voice.play: "Abspielen"
+posts.voice.stop_playing: "Stopp"
+posts.voice.play_failed: "Die Sprachnotiz ließ sich nicht abspielen: %{reason}"

@@ -6266,3 +6266,6 @@ posts.voice.no_recorder: "Запись на этой системе недост
 posts.voice.no_microphone: "Не удалось открыть микрофон (код %{code}). Проверьте, что он подключён и приложениям разрешено им пользоваться, или выберите аудиофайл."
 posts.voice.failed: "Запись прервалась: %{detail}"
 posts.voice.not_stored: "Не удалось сохранить аудио: %{reason}. Подходят аудиофайлы до %{limit} МБ."
+posts.voice.play: "Слушать"
+posts.voice.stop_playing: "Стоп"
+posts.voice.play_failed: "Не удалось воспроизвести голосовую заметку: %{reason}"

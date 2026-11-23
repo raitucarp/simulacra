@@ -6266,3 +6266,6 @@ posts.voice.no_recorder: "Grabar no es posible en este sistema. Elige un archivo
 posts.voice.no_microphone: "No se pudo abrir ningún micrófono (código %{code}). Comprueba que haya uno conectado y que las apps puedan usarlo, o elige un archivo de audio."
 posts.voice.failed: "La grabación se cortó: %{detail}"
 posts.voice.not_stored: "No se pudo guardar el audio: %{reason}. Se admiten archivos de audio de hasta %{limit} MB."
+posts.voice.play: "Reproducir"
+posts.voice.stop_playing: "Detener"
+posts.voice.play_failed: "No se pudo reproducir la nota de voz: %{reason}"

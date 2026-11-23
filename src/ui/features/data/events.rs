@@ -136,6 +136,8 @@ pub enum DataEvent {
     Question(super::question::QuestionEvent),
     /// N10: series.
     Series(super::series_sheet::SeriesEvent),
+    /// N11: the voice note sheet.
+    Voice(super::voice_sheet::VoiceEvent),
     /// The monthly migration review (S16).
     OpenReview,
     ReviewDecide(crate::domain::symbols::ReviewChoice),

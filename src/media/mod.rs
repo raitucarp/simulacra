@@ -11,6 +11,7 @@
 pub mod fetch;
 pub mod files;
 pub mod images;
+pub mod audio; // N11: voice notes
 
 #[cfg(test)]
 mod tests;

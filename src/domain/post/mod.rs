@@ -23,6 +23,7 @@ pub mod refs; // N1: embeds, quotes and wikilinks, and backlinks
 mod relations;
 pub mod schedule;
 pub mod series; // N10: series
+pub mod voice; // N11: voice posts
 pub mod sanitize;
 pub mod seed;
 mod tint;
@@ -128,10 +129,10 @@ impl Post {
         self.quote_id.is_some()
     }
 
-    /// Whether this thought has any media attachment (link, local image or local file).
+    /// Whether this thought has any media attachment (link, local image, local file or voice note, N11).
     #[inline]
     pub fn has_attachments(&self) -> bool {
-        self.link_url.is_some() || self.image_path.is_some() || !self.extras.files.is_empty()
+        self.link_url.is_some() || self.image_path.is_some() || !self.extras.files.is_empty() || self.extras.voice.is_some()
     }
 }
 

@@ -101,6 +101,7 @@ pub const COMMANDS: &[CommandSpec] = &[
     action(C::InsightsTimeline, I::Activity, Ready), action(C::InsightsDiversity, I::Shuffle, Ready), action(C::InsightsReadability, I::BookOpen, Ready), // sb F3
     action(C::ScheduledPosts, I::CalendarClock, Ready), // Y4
     action(C::SymbolKey, I::BookOpen, Ready), action(C::MigrationReview, I::ListChecks, Ready), // S9, S16
+    action(C::NewVoiceNote, I::Mic, Ready), // N11
 ];
 
 /// The registry row of `id`.

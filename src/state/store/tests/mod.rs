@@ -34,6 +34,7 @@ mod pinned; // N7
 mod audience; // N8
 mod questions; // N9
 mod series; // N10
+mod voice; // N11
 mod renderings; // N5
 mod version_looks; // V10
 mod version_attachments; // V11

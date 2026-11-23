@@ -1,8 +1,8 @@
-//! N6–N10 in the shell's data host: the open sheets of what-if branches (N6), pinned quotes
-//! (N7) and series (N10), and their text fields.
+//! N6–N11 in the shell's data host: the open sheets of what-if branches (N6), pinned quotes
+//! (N7), series (N10) and voice notes (N11, with the recording under way), and their text fields.
 
 use super::view::AppView;
-use crate::ui::features::data::{BranchDialog, QuoteDialog, SeriesDialog};
+use crate::ui::features::data::{BranchDialog, QuoteDialog, SeriesDialog, VoiceDialog};
 use gpui_kit::component::input::{InputEvent, InputState};
 use gpui_kit::*;
 use rust_i18n::t;
@@ -16,13 +16,22 @@ pub struct IdeaSheets {
     pub quote: Option<QuoteDialog>,
     /// N10: starting a series.
     pub series: Option<SeriesDialog>,
+    /// N11: a new voice note, and the recording under way (dropping it discards the take).
+    pub voice: Option<VoiceDialog>,
+    pub recording: Option<VoiceRecording>,
 }
 
 impl IdeaSheets {
     /// Whether one of them is open.
     pub fn any_open(&self) -> bool {
-        self.branch.is_some() || self.quote.is_some() || self.series.is_some()
+        self.branch.is_some() || self.quote.is_some() || self.series.is_some() || self.voice.is_some()
     }
+}
+
+/// N11: a recording under way and the task that ticks its clock.
+pub struct VoiceRecording {
+    pub recorder: crate::media::audio::record::Recorder,
+    pub _tick: Task<()>,
 }
 
 /// The text fields of the N6–N10 sheets.
@@ -36,6 +45,8 @@ pub struct IdeaInputs {
     /// N10: a new series' title and planned parts.
     pub series_title: Entity<InputState>,
     pub series_goal: Entity<InputState>,
+    /// N11: a voice note's caption.
+    pub voice_caption: Entity<InputState>,
 }
 
 fn field(placeholder: &str, window: &mut Window, cx: &mut Context<AppView>) -> Entity<InputState> {
@@ -52,12 +63,13 @@ impl IdeaInputs {
             quote_comment: field("posts.pinned.comment_placeholder", window, cx),
             series_title: field("posts.series.title_placeholder", window, cx),
             series_goal: field("posts.series.goal_placeholder", window, cx),
+            voice_caption: field("posts.voice.caption_placeholder", window, cx),
         }
     }
 
     /// Every field.
-    pub fn all(&self) -> [&Entity<InputState>; 6] {
-        [&self.branch_label, &self.branch_text, &self.quote_find, &self.quote_comment, &self.series_title, &self.series_goal]
+    pub fn all(&self) -> [&Entity<InputState>; 7] {
+        [&self.branch_label, &self.branch_text, &self.quote_find, &self.quote_comment, &self.series_title, &self.series_goal, &self.voice_caption]
     }
 
     /// The quote sheet's list follows its search as it is typed.

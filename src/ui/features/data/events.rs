@@ -136,8 +136,8 @@ pub enum DataEvent {
     Question(super::question::QuestionEvent),
     /// N10: series.
     Series(super::series_sheet::SeriesEvent),
-    /// N11, N12: the voice note and drawing sheets; N13: "Still true?"; N14: retracting and correcting; N15: distilling a thread.
-    Voice(super::voice_sheet::VoiceEvent), Ink(super::ink_sheet::InkEvent), Correction(super::correction_sheet::CorrectionEvent), Check(super::check::CheckEvent), Distill(super::distill::DistillEvent),
+    /// N11, N12: the voice note and drawing sheets; N13: "Still true?"; N14: retracting and correcting; N15: distilling a thread; N16–N20 (one event).
+    Voice(super::voice_sheet::VoiceEvent), Ink(super::ink_sheet::InkEvent), Correction(super::correction_sheet::CorrectionEvent), Check(super::check::CheckEvent), Distill(super::distill::DistillEvent), Thought(super::thought_events::ThoughtEvent),
     /// The monthly migration review (S16).
     OpenReview,
     ReviewDecide(crate::domain::symbols::ReviewChoice),

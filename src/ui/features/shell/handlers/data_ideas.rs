@@ -27,8 +27,10 @@ impl AppView {
         if let Some(dialog) = &sheets.correction {
             return Some((render_correction_sheet(dialog, on_event, theme), DataEvent::Correction(CorrectionEvent::Close))); // N14
         }
-        let dialog = sheets.quote.as_ref()?;
-        Some((render_quote_sheet(dialog, on_event, theme), DataEvent::Quote(QuoteEvent::Close)))
+        if let Some(dialog) = &sheets.quote {
+            return Some((render_quote_sheet(dialog, on_event, theme), DataEvent::Quote(QuoteEvent::Close)));
+        }
+        self.thought_overlay(on_event) // N16–N20
     }
 
     /// What every card's menu shares this render.

@@ -33,12 +33,14 @@ pub struct IdeaSheets {
     pub ticket: u64,
     /// N15: the thread whose summary the AI is writing.
     pub distilling: Option<crate::domain::PostId>,
+    /// N16–N20: their sheets.
+    pub thoughts: super::thought_host::ThoughtSheets,
 }
 
 impl IdeaSheets {
     /// Whether one of them is open.
     pub fn any_open(&self) -> bool {
-        self.branch.is_some() || self.quote.is_some() || self.series.is_some() || self.voice.is_some() || self.ink.is_some() || self.correction.is_some()
+        self.branch.is_some() || self.quote.is_some() || self.series.is_some() || self.voice.is_some() || self.ink.is_some() || self.correction.is_some() || self.thoughts.any_open()
     }
 }
 

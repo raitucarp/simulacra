@@ -14,6 +14,7 @@ pub mod format;
 pub mod garden; // N3
 pub mod highlight;
 pub mod ink; // N12: ink posts
+pub mod lens; // N16: the lens fan
 mod constructors;
 mod extras;
 mod kind;

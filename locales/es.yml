@@ -6086,3 +6086,6 @@ trigger.status.cancelled: "Cancelado"
 trigger.status.cancel: "Cancelar"
 trigger.status.dismiss: "Cerrar"
 trigger.status.open: "Abrir la publicación"
+# N1: embeds and backlinks
+post.menu_copy_embed: "Copiar inserción"
+post.copied_embed: "Inserción copiada: pégala en una publicación para mostrar esta dentro"

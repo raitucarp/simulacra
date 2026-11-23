@@ -6086,3 +6086,6 @@ trigger.status.cancelled: "Cancelled"
 trigger.status.cancel: "Cancel"
 trigger.status.dismiss: "Dismiss"
 trigger.status.open: "Open the post"
+# N1: embeds and backlinks
+post.menu_copy_embed: "Copy embed"
+post.copied_embed: "Embed copied: paste it into a post to show this one inside it"

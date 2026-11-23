@@ -41,3 +41,14 @@ fn a_thought_without_quote_or_links_has_no_references() {
     let all = [lonely.clone()];
     assert!(collect_references(&lonely, &all[..]).is_empty());
 }
+
+#[test]
+fn copy_embed_pins_the_version_the_post_shows() {
+    let mut post = crate::domain::Post::create("post_1", "n1", "u1", "An idea worth keeping.").expect("valid");
+    assert_eq!(super::menu::embed_code(&post), "((post_1@1.0.0))");
+    post.extras.head = Some(crate::domain::data::history::VersionHead { version: crate::domain::data::history::SemVer::new(2, 1, 0), ..Default::default() });
+    assert_eq!(super::menu::embed_code(&post), "((post_1@2.1.0))");
+    for key in ["post.menu_copy_embed", "post.copied_embed"] {
+        assert_ne!(rust_i18n::t!(key, locale = "en"), key);
+    }
+}

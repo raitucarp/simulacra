@@ -41,3 +41,11 @@ fn the_markup_round_trips() {
     assert_eq!(tokenize_post_body(&pinned), vec![embed("post_1", Some(SemVer::new(2, 0, 1)), "")]);
     assert!(has_rich_markup(&embed_markup("x", None)));
 }
+
+#[test]
+fn unpinned_embeds_are_pinned_to_the_version_shown_and_code_is_left_alone() {
+    let now = |id: &str| (id == "a").then_some(SemVer::new(1, 1, 0));
+    assert_eq!(pin_embeds("((a)) and ((a@1.0.0)) and ((b)), ((a))", now), "((a@1.1.0)) and ((a@1.0.0)) and ((b)), ((a@1.1.0))");
+    assert_eq!(pin_embeds("((a)) `((a))`", now), "((a)) `((a))`", "a target also written as code stays as written");
+    assert_eq!(pin_embeds("plain words", now), "plain words");
+}

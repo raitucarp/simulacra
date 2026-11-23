@@ -6086,3 +6086,6 @@ trigger.status.cancelled: "Отменено"
 trigger.status.cancel: "Отменить"
 trigger.status.dismiss: "Закрыть"
 trigger.status.open: "Открыть запись"
+# N1: embeds and backlinks
+post.menu_copy_embed: "Копировать вставку"
+post.copied_embed: "Вставка скопирована: вставьте её в запись, чтобы показать эту запись внутри"

@@ -12,7 +12,7 @@ mod inline;
 mod visible;
 
 pub use atoms::is_trailing_punctuation;
-pub use embed::{embed_markup, EMBED_OPEN};
+pub use embed::{embed_markup, pin_embeds, EMBED_OPEN};
 pub use visible::{embed_targets, visible_len, visible_text, visible_text_len, wikilink_targets};
 
 use super::parse::{HASHTAG_SIGIL, WIKILINK_OPEN};

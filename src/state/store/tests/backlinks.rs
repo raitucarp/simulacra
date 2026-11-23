@@ -32,3 +32,16 @@ fn a_locked_post_embedding_another_is_no_backlink() {
     let _other = locked_post(&mut state);
     assert!(state.backlinks(&target).is_empty(), "the sealed text is never read for references");
 }
+
+#[test]
+fn an_embed_is_pinned_to_the_version_its_post_shows_when_written() {
+    let mut state = AppState::new_in_memory();
+    let target = state.submit_post("The first draft of an idea.").expect("target");
+    state.edit_post(&target, "The first draft of an idea, with a second thought added to it.").expect("edited");
+    let version = state.get_post(&target).and_then(|post| post.extras.head.clone()).expect("a head").version;
+    let embeds = state.submit_post(&format!("Look: (({target})) and ((post_unknown))")).expect("embeds");
+    assert_eq!(state.get_post(&embeds).expect("post").content, format!("Look: (({target}@{version})) and ((post_unknown))"));
+    state.edit_post(&embeds, &format!("Look again: (({target}))")).expect("edited");
+    assert_eq!(state.get_post(&embeds).expect("post").content, format!("Look again: (({target}@{version}))"));
+    assert_eq!(kinds(&state, &target), vec![(embeds, RefKind::Embed)]);
+}

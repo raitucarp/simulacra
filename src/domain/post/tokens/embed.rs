@@ -59,3 +59,21 @@ pub fn embed_markup(target: &str, version: Option<SemVer>) -> String {
         None => format!("{EMBED_OPEN}{target}{EMBED_CLOSE}"),
     }
 }
+
+/// `content` with each embed written without a version pinned to the version `current`
+/// names for its target (N1: an embed keeps showing what was embedded). Targets `current`
+/// does not know stay unpinned, and so does a target also written literally inside code.
+pub fn pin_embeds(content: &str, current: impl Fn(&str) -> Option<SemVer>) -> String {
+    let embeds = super::embed_targets(&super::tokenize_post_body(content));
+    let mut targets: Vec<&str> = embeds.iter().filter(|(_, version)| version.is_none()).map(|(target, _)| target.as_str()).collect();
+    targets.sort_unstable();
+    targets.dedup();
+    let mut pinned = content.to_string();
+    for target in targets {
+        let (written, parsed) = (embed_markup(target, None), embeds.iter().filter(|(t, v)| t == target && v.is_none()).count());
+        if let (Some(version), true) = (current(target), pinned.matches(&written).count() == parsed) {
+            pinned = pinned.replace(&written, &embed_markup(target, Some(version)));
+        }
+    }
+    pinned
+}

@@ -6086,3 +6086,6 @@ trigger.status.cancelled: "أُلغي"
 trigger.status.cancel: "إلغاء"
 trigger.status.dismiss: "إغلاق"
 trigger.status.open: "فتح المنشور"
+# N1: embeds and backlinks
+post.menu_copy_embed: "نسخ التضمين"
+post.copied_embed: "تم نسخ التضمين: الصقه في منشور لعرض هذا المنشور داخله"

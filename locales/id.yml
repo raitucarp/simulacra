@@ -6086,3 +6086,6 @@ trigger.status.cancelled: "Dibatalkan"
 trigger.status.cancel: "Batal"
 trigger.status.dismiss: "Tutup"
 trigger.status.open: "Buka kiriman"
+# N1: embeds and backlinks
+post.menu_copy_embed: "Salin sematan"
+post.copied_embed: "Sematan disalin: tempel ke kiriman untuk menampilkan kiriman ini di dalamnya"

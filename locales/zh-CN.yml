@@ -6086,3 +6086,6 @@ trigger.status.cancelled: "已取消"
 trigger.status.cancel: "取消"
 trigger.status.dismiss: "关闭"
 trigger.status.open: "打开帖子"
+# N1: embeds and backlinks
+post.menu_copy_embed: "复制嵌入"
+post.copied_embed: "已复制嵌入：粘贴到帖子中即可在其中显示此帖"

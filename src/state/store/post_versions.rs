@@ -63,6 +63,7 @@ impl AppState {
         if post.is_locked() {
             return Err(AppError::PostLocked); // X2: plain text never replaces a sealed one
         }
+        let edit = &PostEdit { content: self.pinned_embeds(&edit.content), ..edit.clone() }; // N1
         let shown = PostRecord::of(&post);
         let mut look = edit.look.clone().unwrap_or_else(|| shown.clone());
         look.attachments = look.attachments.or_else(|| shown.attachments.clone()); // V11: kept unless the edit sends them

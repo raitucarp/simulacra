@@ -6086,3 +6086,6 @@ trigger.status.cancelled: "キャンセルしました"
 trigger.status.cancel: "キャンセル"
 trigger.status.dismiss: "閉じる"
 trigger.status.open: "投稿を開く"
+# N1: embeds and backlinks
+post.menu_copy_embed: "埋め込みをコピー"
+post.copied_embed: "埋め込みをコピーしました。投稿に貼り付けると、この投稿がその中に表示されます"

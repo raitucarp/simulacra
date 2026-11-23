@@ -19,6 +19,7 @@ pub fn view_icon(view: PostView) -> LucideIcon {
         PostView::Branches => LucideIcon::GitBranch,
         PostView::Series => LucideIcon::ListOrdered,
         PostView::StillTrue => LucideIcon::RotateCcwClock,
+        PostView::LensFan => LucideIcon::Layers,
     }
 }
 
@@ -37,6 +38,7 @@ pub fn view_label_key(view: PostView) -> &'static str {
         PostView::Branches => "views.branches.show",
         PostView::Series => "views.series.show",
         PostView::StillTrue => "views.still_true.show",
+        PostView::LensFan => "views.lens_fan.show",
     }
 }
 

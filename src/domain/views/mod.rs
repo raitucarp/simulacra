@@ -47,6 +47,8 @@ keyed_enum! {
         Series => "series",
         /// N13: the claims due for a check, the one due longest first.
         StillTrue => "still_true",
+        /// N16: each lens fan of a thread, its replies side by side.
+        LensFan => "lens_fan",
     }
 }
 
@@ -73,7 +75,7 @@ impl PostView {
     pub const fn scopes(self) -> &'static [ViewScope] {
         match self {
             Self::Cards | Self::RapidLog | Self::Raw | Self::Calendar | Self::Future | Self::Board | Self::Garden | Self::Series | Self::StillTrue => EVERYWHERE,
-            Self::Outline | Self::Argument | Self::Branches => THREAD_ONLY,
+            Self::Outline | Self::Argument | Self::Branches | Self::LensFan => THREAD_ONLY,
         }
     }
 

@@ -18,6 +18,7 @@ mod margin; // N2
 mod branch_sheet; // N6
 mod quote_sheet; // N7
 mod question; // N9
+mod series_sheet; // N10
 mod post_facts; mod idea_menu; // N3, N6–N10
 mod post_menu;
 mod edited_mark; // V8
@@ -39,6 +40,7 @@ pub use branch_sheet::{render_branch_sheet, BranchDialog, BranchEvent};
 pub use quote_sheet::{listed_passages, render_quote_sheet, QuoteDialog, QuoteEvent};
 pub use post_facts::{IdeaSource, PostFacts};
 pub use question::{render_answers, AnswerRow, OpenAnswer, QuestionEvent};
+pub use series_sheet::{render_series_sheet, SeriesDialog, SeriesEvent};
 pub use depth_dial::{depth_label, render_depth_dial, DepthView};
 pub use history::{render_history_sheet, HistorySheet};
 pub use edited_mark::render_edited_mark;

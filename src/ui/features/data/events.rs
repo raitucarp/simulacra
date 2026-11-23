@@ -134,6 +134,8 @@ pub enum DataEvent {
     SetAudience(PostId, Option<crate::domain::post::audience::Audience>),
     /// N9: asking the room, and accepting an answer.
     Question(super::question::QuestionEvent),
+    /// N10: series.
+    Series(super::series_sheet::SeriesEvent),
     /// The monthly migration review (S16).
     OpenReview,
     ReviewDecide(crate::domain::symbols::ReviewChoice),

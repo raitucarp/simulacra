@@ -1,11 +1,11 @@
-//! N6–N10: the open idea sheet over the shell (what-if branch, pinned quote), with the event
+//! N6–N10: the open idea sheet over the shell (what-if branch, pinned quote, series), with the event
 //! that closes it; what every card's menu shares; and setting who may read a post (N8).
 
 use super::super::view::AppView;
 use crate::domain::post::audience::Audience;
 use crate::domain::PostId;
 use crate::ui::features::composer::publish_error_message;
-use crate::ui::features::data::{render_branch_sheet, render_quote_sheet, tr, BranchEvent, DataAction, DataEvent, IdeaSource, QuoteEvent};
+use crate::ui::features::data::{render_branch_sheet, render_quote_sheet, render_series_sheet, tr, BranchEvent, DataAction, DataEvent, IdeaSource, QuoteEvent, SeriesEvent};
 use gpui_kit::*;
 
 impl AppView {
@@ -15,13 +15,16 @@ impl AppView {
         if let Some(dialog) = &sheets.branch {
             return Some((render_branch_sheet(dialog, on_event, theme), DataEvent::Branch(BranchEvent::Close)));
         }
+        if let Some(dialog) = &sheets.series {
+            return Some((render_series_sheet(dialog, on_event, theme), DataEvent::Series(SeriesEvent::Close)));
+        }
         let dialog = sheets.quote.as_ref()?;
         Some((render_quote_sheet(dialog, on_event, theme), DataEvent::Quote(QuoteEvent::Close)))
     }
 
     /// What every card's menu shares this render.
     pub(in crate::ui::features::shell) fn idea_source(&self) -> IdeaSource {
-        IdeaSource { agents: self.state.audience_agents() }
+        IdeaSource { agents: self.state.audience_agents(), series: self.state.series_listings().into_iter().map(|listing| listing.title).collect() }
     }
 
     /// Sets who may read the user's post `id` (`None`: everyone) and says what changed.

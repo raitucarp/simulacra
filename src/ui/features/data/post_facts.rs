@@ -18,6 +18,8 @@ pub struct PostFacts {
     pub audience: Option<Audience>,
     /// It was asked of the room already (N9).
     pub asked: bool,
+    /// The title of the series it is part of (N10).
+    pub series: Option<String>,
 }
 
 impl PostFacts {
@@ -28,6 +30,7 @@ impl PostFacts {
             repinnable: state.quote_drift(post) == Some(QuoteDrift::SourceChanged),
             audience: post.extras.audience.as_deref().cloned(),
             asked: post.extras.question.is_some(),
+            series: post.extras.series.as_ref().map(|entry| entry.title.clone()),
         }
     }
 }
@@ -37,4 +40,6 @@ impl PostFacts {
 pub struct IdeaSource {
     /// The active network's agents, by name: who a post can be shared with (N8).
     pub agents: Vec<(ProfileId, String)>,
+    /// The titles of the active network's series, most recently added to first (N10).
+    pub series: Vec<String>,
 }

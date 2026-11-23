@@ -82,3 +82,18 @@ fn a_question_names_who_was_asked_but_never_past_a_lock() {
         assert_ne!(rust_i18n::t!(&key, locale = "en"), key);
     }
 }
+
+#[test]
+fn a_series_part_is_labelled_with_its_number_and_goal() {
+    use crate::domain::post::series::SeriesEntry;
+    use crate::state::store::SeriesNav;
+    let entry = SeriesEntry { id: "series_x".into(), title: "Sketches".into(), number: 12, goal: Some(30) };
+    let nav = SeriesNav { entry: entry.clone(), position: 12, posted: 12, previous: None, next: None };
+    assert!(super::series_strip::series_label(&nav).contains("Sketches") && super::series_strip::series_label(&nav).contains("12"));
+    let open = SeriesNav { entry: SeriesEntry { goal: None, ..entry }, ..nav };
+    assert!(super::series_strip::series_label(&open).contains("12"));
+    let keys = ["menu", "new", "leave", "new_title", "subtitle", "explain", "title_label", "title_placeholder", "goal_label", "goal_placeholder", "start", "name_first", "goal_invalid", "failed", "added", "left", "part", "part_of", "previous", "next"];
+    for key in keys.map(|key| format!("posts.series.{key}")) {
+        assert_ne!(rust_i18n::t!(&key, locale = "en"), key);
+    }
+}

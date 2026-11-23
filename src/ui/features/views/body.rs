@@ -6,6 +6,7 @@ use super::rapid_log::render_rapid_log;
 use super::board::render_board;
 use super::calendar::render_calendar;
 use super::future::render_future;
+use super::garden::render_garden;
 use super::raw::render_raw;
 use crate::domain::views::PostView;
 use gpui_kit::AnyElement;
@@ -18,6 +19,7 @@ pub fn render_list_view(view: PostView, input: &ViewInput<'_>) -> Option<AnyElem
         PostView::Calendar => Some(render_calendar(input)),
         PostView::Future => Some(render_future(input)),
         PostView::Board => Some(render_board(input)),
+        PostView::Garden => Some(render_garden(input)), // N3
         PostView::Cards | PostView::Outline | PostView::Argument => None,
     }
 }

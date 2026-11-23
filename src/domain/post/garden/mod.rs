@@ -30,6 +30,11 @@ impl Maturity {
         self.rank().checked_sub(1).and_then(|at| Self::ALL.get(at).copied())
     }
 
+    /// The art of this stage (`illustrations/garden/<key>.svg`, a symbol canvas).
+    pub fn art_path(self) -> String {
+        format!("illustrations/garden/{}.svg", self.key())
+    }
+
     fn rank(self) -> usize {
         Self::ALL.iter().position(|stage| *stage == self).unwrap_or_default()
     }

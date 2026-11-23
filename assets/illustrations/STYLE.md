@@ -31,6 +31,7 @@ and garments that must stay white/black on every theme (lab coat, scholar gown).
 | Guide pose | `0 0 128 128` | `illustrations/guide/<pose>.svg` |
 | Empty state | `0 0 240 160` | `illustrations/empty/<name>.svg` |
 | Post symbol (entry state, note, signifier) | `0 0 64 64` | `illustrations/symbols/<key>.svg` |
+| Garden stage (seed, budding, evergreen) | `0 0 64 64` | `illustrations/garden/<maturity>.svg` |
 | Splash brand mark | `0 0 160 120` (hand-drawn, like the guide owl) | `illustrations/splash/brand.svg` |
 | Portrait part | `0 0 256 256` (layered, shared origin) | `illustrations/portrait/<layer>/<variant>.svg` |
 | Form part | `0 0 256 256` (layered, shared origin) | `illustrations/forms/<kind or shared>/<layer>/<variant>.svg` |
@@ -65,6 +66,11 @@ one per signifier). Each is a backdrop disc in `{{elevated}}` ringed by its hue 
 one bold glyph: a task's dot, cross or chevrons, an event's ring (a filled disc with an `{{elevated}}` hole),
 the note's dash. Glyphs are solid bars (stroke 4-6), so they read at avatar size; no shadow ellipse. Each
 state keeps its own shape, never just a colour.
+
+## Garden stages
+One per stage of a garden note (`garden/seed.svg`, `garden/budding.svg`, `garden/evergreen.svg`), drawn like the
+symbols: a backdrop disc in `{{elevated}}` ringed by its hue at `stroke-opacity="0.5"`, with one bold plant: a seed with a
+first shoot, a stem with two leaves and a bud, a small conifer. Each stage keeps its own shape, never just a colour.
 
 ## Visual rules
 - **Shapes:** soft geometric primitives (circles, rounded rects, arcs). `stroke-linecap="round"`, `stroke-linejoin="round"`.

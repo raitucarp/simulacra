@@ -6117,3 +6117,12 @@ post.margin.pick_first: "اختر أولًا المقطع الذي ترد علي
 post.margin.write_first: "اكتب ردك أولًا."
 post.margin.failed: "تعذّر نشر الرد. تحقّق من طوله وحاول مرة أخرى."
 post.margin.sent: "نُشرت ملاحظة الهامش"
+# N3: the garden
+views.garden.show: "الحديقة"
+views.garden.empty: "لم يُزرع شيء بعد. انقل منشورًا إلى الحديقة من قائمته، فينمو هنا خارج التدفق."
+views.garden.planted: "زُرع في %{date}"
+views.garden.replies_one: "%{count} رد في سلسلته"
+views.garden.replies_other: "ردود في سلسلته: %{count}"
+posts.garden.stage.seed: "بذرة"
+posts.garden.stage.budding: "برعم"
+posts.garden.stage.evergreen: "دائمة الخضرة"

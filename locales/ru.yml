@@ -6117,3 +6117,12 @@ post.margin.pick_first: "Сначала выберите фрагмент, на 
 post.margin.write_first: "Сначала напишите ответ."
 post.margin.failed: "Не удалось опубликовать ответ. Проверьте его длину и попробуйте снова."
 post.margin.sent: "Заметка на полях опубликована"
+# N3: the garden
+views.garden.show: "Сад"
+views.garden.empty: "Пока ничего не посажено. Перенесите запись в сад через её меню, и она будет расти здесь, вне ленты."
+views.garden.planted: "посажено %{date}"
+views.garden.replies_one: "Ответов в ветке: %{count}"
+views.garden.replies_other: "Ответов в ветке: %{count}"
+posts.garden.stage.seed: "Семя"
+posts.garden.stage.budding: "Росток"
+posts.garden.stage.evergreen: "Вечнозелёная"

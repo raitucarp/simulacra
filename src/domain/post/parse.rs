@@ -17,7 +17,8 @@ const HANDLE_JOINER: char = '_';
 const MIN_TAGGED_TOKEN_LEN: usize = 2;
 
 impl Post {
-    /// Extracts Obsidian-style `[[post_id]]` mentions.
+    /// Extracts Obsidian-style `[[post_id]]` mentions, then the posts embedded with
+    /// `((post_id))` (N1) not already linked.
     pub fn parse_linked_posts(text: &str) -> Vec<PostId> {
         let mut links = Vec::new();
         for part in text.split(WIKILINK_OPEN) {
@@ -25,6 +26,14 @@ impl Post {
                 let link_id = part[..end].trim();
                 if !link_id.is_empty() {
                     links.push(PostId::new(link_id));
+                }
+            }
+        }
+        if text.contains(super::tokens::EMBED_OPEN) {
+            for (target, _) in super::tokens::embed_targets(&super::tokens::tokenize_post_body(text)) {
+                let id = PostId::new(target);
+                if !links.contains(&id) {
+                    links.push(id);
                 }
             }
         }

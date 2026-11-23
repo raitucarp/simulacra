@@ -30,8 +30,9 @@ fn kind_label(version: &Version) -> String {
 /// "Current v1.2.0": what the version is, and its number when it has one.
 fn title_line(version: &Version, theme: &ThemeTokens) -> Div {
     let number = version.number.map(|n| div().font_family(theme.font_family_mono.clone()).text_color(theme.text_muted).child(version_label(n)));
+    let rendering = crate::domain::data::history::PostRecord::parse(&version.record_json).and_then(|record| record.rendering).map(|depth| div().text_color(theme.text_muted).child(t!("posts.depth.history", depth = super::depth_dial::depth_label(Some(depth))).to_string())); // N5
     let kind = div().font_weight(FontWeight::SEMIBOLD).text_color(theme.text_primary).child(kind_label(version));
-    div().flex().flex_wrap().items_center().gap(theme.inline_gap).text_size(theme.font_size_xs).child(kind).children(number)
+    div().flex().flex_wrap().items_center().gap(theme.inline_gap).text_size(theme.font_size_xs).child(kind).children(number).children(rendering)
 }
 
 /// The "B" button picking a row as the other side of the comparison (V6), lit on version B.

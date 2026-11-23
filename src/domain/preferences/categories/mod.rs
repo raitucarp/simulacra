@@ -29,4 +29,4 @@ pub use import::{ImportPrefs, MAX_FILE_MB};
 pub use learning::{LearningPrefs, DAILY_REVIEWS, DESIRED_RETENTION, NEW_CARDS};
 pub use notifications::{NotificationPrefs, ToastKind};
 pub use privacy::PrivacyPrefs;
-pub use writing::{WritingPrefs, AUTOSAVE_SECONDS, POST_LENGTH};
+pub use writing::{WritingPrefs, AUTOSAVE_SECONDS, FEED_BUDGET, POST_LENGTH};

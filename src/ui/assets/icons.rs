@@ -40,5 +40,7 @@ gpui_kit::assets::icon_assets!(
         FaceSlightlySmilingPlus,
         // epic W
         NotebookText, CalendarDays, CalendarRange, SquareKanban,
+        // N3: the garden
+        Sprout,
     ]
 );

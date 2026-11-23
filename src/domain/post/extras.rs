@@ -50,6 +50,12 @@ pub struct PostExtras {
     /// The latest run of each code block (P6); saving one never makes a new version.
     #[serde(skip_serializing_if = "Vec::is_empty")]
     pub code_runs: Vec<crate::domain::code::CodeRun>,
+    /// N2: the span of the parent a margin reply answers.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub anchor: Option<super::anchor::SpanAnchor>,
+    /// N3: the post is a garden note, out of the stream, at this stage.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub garden: Option<super::garden::GardenNote>,
 }
 
 impl PostExtras {
@@ -59,9 +65,9 @@ impl PostExtras {
     }
 
     /// Whether there is anything to show behind the post (the origin, images, files, symbols, tint,
-    /// version, ticks, lock and code runs alone are not).
+    /// version, ticks, lock, code runs, margin anchor and garden note alone are not).
     pub fn has_details(&self) -> bool {
-        Self { origin: None, images: Vec::new(), files: Vec::new(), symbols: PostSymbols::default(), tint: None, head: None, replied_version: None, todo_state: Default::default(), lock: None, code_runs: Vec::new(), ..self.clone() } != Self::default()
+        Self { origin: None, images: Vec::new(), files: Vec::new(), symbols: PostSymbols::default(), tint: None, head: None, replied_version: None, todo_state: Default::default(), lock: None, code_runs: Vec::new(), anchor: None, garden: None, ..self.clone() } != Self::default()
     }
 
     /// Adds `source` unless an identical reference is already listed.

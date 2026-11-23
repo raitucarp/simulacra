@@ -11,6 +11,7 @@ pub mod input;
 mod board;
 pub(crate) mod calendar;
 mod future;
+mod garden; // N3
 mod rapid_log;
 mod raw;
 pub mod registry;
@@ -20,6 +21,7 @@ mod tests;
 
 pub use crate::domain::views::{PostView, ViewScope};
 pub use body::render_list_view;
+pub use garden::{maturity_art, maturity_label};
 pub use input::{OpenPost, PickMonth, ViewInput};
 pub use registry::{view_icon, view_label, view_label_key};
 pub use switcher::{render_view_switcher, switcher_button_id, PickView};

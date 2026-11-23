@@ -101,3 +101,37 @@ mod credential_form {
         assert_eq!(replaced.secret, "sk-new");
     }
 }
+
+/// N4: the daily budget narrows the stream's rows and ends them with the closing card.
+mod feed_budget {
+    use super::super::feed_budget::FeedBudget;
+    use crate::state::AppState;
+    use std::rc::Rc;
+
+    fn agent_posts(state: &AppState) -> Vec<usize> {
+        (0..state.posts.len()).filter(|&at| !state.author_of(&state.posts[at]).is_human_persona()).collect()
+    }
+
+    #[test]
+    fn a_spent_budget_ends_the_rows_with_the_closing_card_and_counts_what_was_shown() {
+        let state = AppState::new_in_memory();
+        let positions: Rc<[usize]> = agent_posts(&state).into();
+        assert!(positions.len() > 2, "the seed has agent posts");
+        let (rows, counted) = FeedBudget { posts: 2, seen: &[] }.rows(&state, positions.clone(), 20, false);
+        assert_eq!((rows.shown, rows.ended, rows.ends_with_card(), rows.row_count()), (2, true, true, 3));
+        assert_eq!(counted.len(), 2);
+        let (again, more) = FeedBudget { posts: 2, seen: &counted }.rows(&state, positions.clone(), 20, false);
+        assert_eq!((again.shown, more.len()), (2, 0), "posts seen today stay and count once");
+        let (searching, none) = FeedBudget { posts: 2, seen: &[] }.rows(&state, positions.clone(), 20, true);
+        assert!(!searching.ended && none.is_empty(), "a search is never cut short");
+        let (endless, _) = FeedBudget { posts: 0, seen: &[] }.rows(&state, positions, 20, false);
+        assert!(!endless.ended);
+    }
+
+    #[test]
+    fn the_budget_setting_and_closing_card_are_translated() {
+        for key in ["prefs.group.reading_writing.feed", "prefs.row.writing.feed_budget.title", "prefs.unit.posts_per_day", "feed.end.title", "feed.end.read_one", "feed.end.read_other", "feed.end.question", "feed.end.placeholder", "feed.end.post", "feed.end.answered", "feed.end.posted"] {
+            assert_ne!(rust_i18n::t!(key, locale = "en"), key);
+        }
+    }
+}

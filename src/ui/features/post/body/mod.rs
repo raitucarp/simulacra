@@ -5,6 +5,7 @@
 //! wikilink pill dispatches to [`BodyLinks`] instead of selecting the surrounding card.
 
 mod code_block;
+mod embed; // N1
 mod code_run; // P5
 mod run_panel; // P6
 mod inline;
@@ -49,6 +50,8 @@ pub struct BodyLinks {
     pub code: Option<CodeActions>,
     /// The post the body belongs to, which its spoilers' reveals are kept under.
     pub scope: String,
+    /// N1: the body is itself embedded, so its embeds are links (embeds never nest).
+    pub nested: bool,
 }
 
 impl BodyLinks {
@@ -116,7 +119,8 @@ fn render_item<L: PostLookup>(
             let extras = code_block::BlockExtras { run: code_run::run_button(items, index, *lang, code, links), panel: run_panel::run_panel(items, index, lookup, links) };
             code_block::code_block(index, *lang, code, theme, extras)
         }
-        Item::Wikilink { target, trailing } => {
+        Item::Embed { target, version, .. } if !links.nested => embed::embed_card(index, target, *version, *lookup, theme, links),
+        Item::Wikilink { target, trailing } | Item::Embed { target, trailing, .. } => {
             let pill = render_obsidian_pill(&lookup.resolve_wikilink(target), theme);
             with_trailing(clickable(pill, target, links.on_wikilink.as_ref()), trailing, theme)
         }

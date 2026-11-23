@@ -137,5 +137,5 @@ pub(super) fn thread_from_submission(submission: ComposerSubmission, shorthand: 
 /// version (V10, V11, L12).
 fn edit_look(submission: &ComposerSubmission) -> crate::domain::data::history::PostRecord {
     let attachments = crate::domain::data::history::Attachments::new(submission.link.clone(), submission.images.clone()).with_files(submission.files.clone());
-    crate::domain::data::history::PostRecord { symbols: submission.symbols.clone(), tint: submission.tint, attachments: Some(attachments), lock: None }
+    crate::domain::data::history::PostRecord { symbols: submission.symbols.clone(), tint: submission.tint, attachments: Some(attachments), lock: None, rendering: None }
 }

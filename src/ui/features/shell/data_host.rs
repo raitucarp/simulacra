@@ -24,6 +24,8 @@ pub struct DataInputs {
     pub note: Entity<InputState>,
     /// The meaning of a custom symbol on the legend page (S9).
     pub meaning: Entity<InputState>,
+    /// N2: the reply in the margin sheet.
+    pub margin_reply: Entity<InputState>,
 }
 
 /// Everything data ownership keeps in the shell.
@@ -55,6 +57,11 @@ pub struct DataHost {
     pub focus: FocusHandle,
     /// Locked posts: the session's unlocked texts and the unlock sheet (X4).
     pub locks: super::lock_host::LockHost,
+    /// N2: the open margin sheet.
+    pub margin: Option<crate::ui::features::data::MarginDialog>,
+    /// N5: the depth dial, and the ticket of the newest rendering request.
+    pub depth: crate::ui::features::data::DepthView,
+    pub depth_ticket: u64,
     _subscriptions: Vec<Subscription>,
 }
 
@@ -73,21 +80,22 @@ impl DataInputs {
             collection_name: field(t!("data.saved.name_placeholder").to_string(), false, window, cx),
             note: field(t!("data.saved.note_placeholder").to_string(), false, window, cx),
             meaning: field(t!("symbols.legend.meaning_placeholder").to_string(), false, window, cx),
+            margin_reply: field(t!("post.margin.reply_placeholder").to_string(), false, window, cx),
         }
     }
 
     /// Whether one of the fields has the keyboard.
     pub fn any_focused(&self, window: &Window, cx: &App) -> bool {
-        [&self.passphrase, &self.repeat, &self.restore_passphrase, &self.from, &self.to, &self.collection_name, &self.note, &self.meaning].into_iter().any(|input| input.read(cx).focus_handle(cx).is_focused(window))
+        [&self.passphrase, &self.repeat, &self.restore_passphrase, &self.from, &self.to, &self.collection_name, &self.note, &self.meaning, &self.margin_reply].into_iter().any(|input| input.read(cx).focus_handle(cx).is_focused(window))
     }
 
     /// Re-renders on edits of the live fields; Enter in the name and note fields submits.
     fn subscribe(&self, window: &mut Window, cx: &mut Context<AppView>) -> Vec<Subscription> {
         let changes = [&self.passphrase, &self.repeat, &self.from, &self.to].map(|input| cx.subscribe_in(input, window, AppView::on_data_input_change));
-        let enter = [(&self.collection_name, true), (&self.note, false)].map(|(input, is_name)| {
+        let enter = [(&self.collection_name, Some(true)), (&self.note, Some(false)), (&self.margin_reply, None)].map(|(input, is_name)| {
             cx.subscribe_in(input, window, move |this: &mut AppView, _, event: &InputEvent, window, cx| {
                 if matches!(event, InputEvent::PressEnter { .. }) {
-                    let next = if is_name { crate::ui::features::data::DataEvent::CreateCollection } else { crate::ui::features::data::DataEvent::SaveNote };
+                    let next = match is_name { Some(true) => crate::ui::features::data::DataEvent::CreateCollection, Some(false) => crate::ui::features::data::DataEvent::SaveNote, None => crate::ui::features::data::DataEvent::SubmitMargin };
                     this.on_data_event(next, window, cx);
                 }
             })
@@ -120,6 +128,9 @@ impl DataHost {
             inputs,
             focus: cx.focus_handle(),
             locks: super::lock_host::LockHost::new(window, cx),
+            margin: None,
+            depth: Default::default(),
+            depth_ticket: 0,
             _subscriptions: subscriptions,
         }
     }

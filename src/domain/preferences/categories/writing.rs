@@ -8,6 +8,8 @@ use serde::{Deserialize, Serialize};
 
 /// Characters per post.
 pub const POST_LENGTH: Bounds = Bounds::new(140, 1000, 20);
+/// N4: posts the feed shows a day (`0`: no budget, the feed never ends).
+pub const FEED_BUDGET: Bounds = Bounds::new(0, 500, 10);
 /// Seconds between draft autosaves.
 pub const AUTOSAVE_SECONDS: Bounds = Bounds::new(5, 300, 5);
 const DEFAULT_AUTOSAVE_SECONDS: u32 = 30;
@@ -40,6 +42,8 @@ pub struct WritingPrefs {
     pub symbol_shorthand: bool,
     /// M6: a persona's feeling also logs a mood check-in in the private journal (off by default).
     pub feeling_checkins: bool,
+    /// N4: posts the feed shows a day before it ends with a closing card (`0`: no budget).
+    pub feed_budget: u32,
 }
 
 impl Default for WritingPrefs {
@@ -57,6 +61,7 @@ impl Default for WritingPrefs {
             auto_archive: ArchiveAfter::default(),
             symbol_shorthand: false,
             feeling_checkins: false,
+            feed_budget: 0,
         }
     }
 }
@@ -67,6 +72,7 @@ impl WritingPrefs {
         Self {
             post_length_limit: POST_LENGTH.clamp_u32(self.post_length_limit),
             autosave_seconds: AUTOSAVE_SECONDS.clamp_u32(self.autosave_seconds),
+            feed_budget: FEED_BUDGET.clamp_u32(self.feed_budget),
             ..self
         }
     }

@@ -24,6 +24,10 @@ mod data; // sb F2: history, export, snapshots, collections and bookmarks
 mod data_export;
 mod data_history;
 mod data_legend; // S9
+mod data_margin; // N2
+mod data_garden; // N3
+mod feed_answer; // N4
+mod data_depth; // N5
 mod data_posts;
 mod data_restore;
 mod data_review; // S16

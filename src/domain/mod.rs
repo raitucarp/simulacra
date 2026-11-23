@@ -12,6 +12,7 @@ pub mod compose; // T1: free compose text to a tree of drafts
 pub mod crypto; // sb X1: password-based seal shared by snapshots and encrypted posts
 pub mod data; // sb F2: history, collections and bookmarks, export, snapshots
 pub mod document;
+pub mod finite_feed; // N4: a daily budget for the feed
 pub mod emoji; // R3: emoji names, groups and skin tones
 pub mod icons; // epic S: the downloadable icon library
 pub mod embedding;

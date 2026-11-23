@@ -57,3 +57,17 @@ impl AppState {
         post
     }
 }
+
+impl AppState {
+    /// `content` with its embeds written without a version pinned to the version each
+    /// embedded post shows now (N1); embeds of unknown posts stay unpinned.
+    pub(super) fn pinned_embeds(&self, content: &str) -> String {
+        crate::domain::post::pin_embeds(content, |id| self.get_post_by_id(id).map(|post| post.extras.head.as_ref().map_or_else(Default::default, |head| head.version)))
+    }
+
+    /// `post` with its embeds pinned (N1). A locked post holds only its placeholder.
+    pub(super) fn with_pinned_embeds(&self, mut post: crate::domain::Post) -> crate::domain::Post {
+        post.content = self.pinned_embeds(&post.content);
+        post
+    }
+}

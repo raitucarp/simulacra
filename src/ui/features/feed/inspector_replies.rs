@@ -38,6 +38,8 @@ pub(crate) fn conversation_children(ctx: &InspectorContext<'_>, conversation: &C
         .map(|(idx, ancestor)| card(ctx, ancestor, style_for(idx > 0, true)))
         .collect();
     children.push(focused_card(ctx, conversation));
+    children.extend(super::inspector_backlinks::render_backlinks(ctx, conversation.focused).map(IntoElement::into_any_element)); // N1
+    children.extend(super::inspector_margin::render_margin_notes(ctx, conversation.focused).map(IntoElement::into_any_element)); // N2
     if conversation.branches.is_empty() {
         children.push(render_grounding_callout(ctx.theme).into_any_element());
     }
@@ -59,6 +61,7 @@ fn focused_card(ctx: &InspectorContext<'_>, conversation: &Conversation<'_>) -> 
         .bg(ctx.theme.bg_elevated)
         .child(ctx.callbacks.render_post(conversation.focused, ctx.state, ctx.theme, mode))
         .children(render_extras_detail(&conversation.focused.extras, ctx.theme, ctx.callbacks.links.on_source.as_ref()))
+        .children(super::inspector_depth::render_depth(ctx, conversation.focused)) // N5
         .into_any_element()
 }
 

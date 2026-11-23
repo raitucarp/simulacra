@@ -16,9 +16,11 @@ pub struct PostIndex {
     /// Direct `reply_to_id` children per parent, as ordinals in store order (descending).
     replies: HashMap<PostId, Vec<usize>>,
     network_counts: HashMap<NetworkId, usize>,
-    meta: HashMap<PostId, PostMeta>,
+    pub(super) meta: HashMap<PostId, PostMeta>,
+    pub(super) backrefs: super::backrefs::Backrefs, // N1
+    pub(super) versions: super::embedded::VersionTexts, // N1
     len: usize,
-    revision: u64,
+    pub(super) revision: u64,
     full_rebuilds: usize,
 }
 
@@ -50,7 +52,10 @@ impl PostIndex {
     pub fn removed(&mut self, post: &Post, position: usize) {
         let ordinal = self.len - 1 - position;
         self.ordinals.remove(&post.id);
-        self.meta.remove(&post.id);
+        self.versions.forget(&post.id);
+        if let Some(meta) = self.meta.remove(&post.id) {
+            self.backrefs.remove(&post.id, &meta.refs);
+        }
         if let Some(children) = reply_parent(post).and_then(|parent| self.replies.get_mut(parent)) {
             children.retain(|&child| child != ordinal);
         }
@@ -64,7 +69,9 @@ impl PostIndex {
 
     fn add(&mut self, post: &Post, ordinal: usize) {
         self.ordinals.insert(post.id.clone(), ordinal);
-        self.meta.insert(post.id.clone(), PostMeta::of(post));
+        let meta = PostMeta::of(post);
+        self.backrefs.add(&post.id, &meta.refs);
+        self.meta.insert(post.id.clone(), meta);
         *self.network_counts.entry(post.network_id.clone()).or_default() += 1;
         if let Some(parent) = reply_parent(post) {
             let children = self.replies.entry(parent.clone()).or_default();
@@ -120,12 +127,6 @@ impl PostIndex {
     /// Whether no post is indexed.
     pub fn is_empty(&self) -> bool {
         self.len == 0
-    }
-
-    /// Re-derives the body data of `post`, whose text was edited (sb F2).
-    pub fn content_changed(&mut self, post: &Post) {
-        self.meta.insert(post.id.clone(), PostMeta::of(post));
-        self.revision += 1;
     }
 
     /// Marks author data (names, handles, archived authors) or a post's place in the feed

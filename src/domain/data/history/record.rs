@@ -58,13 +58,16 @@ pub struct PostRecord {
     /// The sealed text of a locked post's version (X5): each version keeps its own seal.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub lock: Option<crate::domain::post::lock::PostLock>,
+    /// N5: the version is an agent's rendering of the version it was edited from, at this depth.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub rendering: Option<crate::domain::post::depth::Depth>,
 }
 
 impl PostRecord {
     /// What `post` shows beside its text.
     pub fn of(post: &Post) -> Self {
         let attachments = Attachments { link_url: post.link_url.clone(), image_path: post.image_path.clone(), images: post.extras.images.clone(), files: post.extras.files.clone() };
-        Self { symbols: post.extras.symbols.clone(), tint: post.extras.tint, attachments: Some(attachments), lock: post.extras.lock.clone() }
+        Self { symbols: post.extras.symbols.clone(), tint: post.extras.tint, attachments: Some(attachments), lock: post.extras.lock.clone(), rendering: None }
     }
 
     /// The record as stored.

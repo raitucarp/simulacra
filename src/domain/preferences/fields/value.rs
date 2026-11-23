@@ -23,6 +23,8 @@ pub enum NumberUnit {
     Tokens,
     TokensPerDay,
     Posts,
+    /// N4: posts a day (the feed budget).
+    PostsPerDay,
     Generations,
     Replies,
     Cards,
@@ -45,6 +47,7 @@ impl NumberUnit {
             Self::Tokens => "tokens",
             Self::TokensPerDay => "tokens_per_day",
             Self::Posts => "posts",
+            Self::PostsPerDay => "posts_per_day",
             Self::Generations => "generations",
             Self::Replies => "replies",
             Self::Cards => "cards",

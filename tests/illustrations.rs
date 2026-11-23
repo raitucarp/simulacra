@@ -25,8 +25,9 @@ const WIDE_KINDS: [&str; 4] = ["classes", "steps", "palettes", "vault"];
 const FORBIDDEN_TAGS: [&str; 4] = ["<style", "<image", "<text", "<script"];
 
 /// Expected `viewBox` per top-level folder; anything else is a trait option card.
-const CANVASES: [(&str, &str); 10] = [
+const CANVASES: [(&str, &str); 11] = [
     ("symbols", "0 0 64 64"),
+    ("garden", "0 0 64 64"), // N3: garden stages
     ("steps", "0 0 320 120"),
     ("vault", "0 0 320 120"),
     ("classes", "0 0 200 240"),

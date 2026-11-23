@@ -10,6 +10,8 @@ mod runner;
 mod tests;
 #[cfg(test)]
 mod thinking_tests;
+#[cfg(test)]
+mod depth_tests; // N5
 
 pub use cancel::CancelToken;
 pub use runner::{run_action, run_action_blocking, ActionFailure, ActionJob};

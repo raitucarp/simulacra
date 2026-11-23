@@ -3,6 +3,8 @@
 //! human-readable wikilink excerpts, and click-to-focus thread inspection.
 
 mod actions;
+mod anchor_line; // N2
+mod garden_badge; // N3
 mod attachments;
 mod body;
 mod checklist; // D5

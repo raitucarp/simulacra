@@ -2,6 +2,7 @@
 //! used to splice only what changed (so scroll position survives new posts and load-more).
 
 use super::consts::STREAM_LIST_OVERDRAW;
+use super::feed_budget::FeedBudget;
 use super::view::AppView;
 use crate::domain::PostId;
 use crate::state::{AppState, FeedRanking, FeedTab, StreamCache};
@@ -43,21 +44,22 @@ fn changed_range(old: &[RowKey], new: &[RowKey]) -> (usize, usize, usize) {
 impl StreamList {
     /// Brings the rows up to date with the store (ordered by `ranking` when given), splicing
     /// the list where rows changed.
-    pub fn sync(&mut self, state: &AppState, tab: FeedTab, query: &str, limit: usize, ranking: Option<&FeedRanking>) {
+    /// Under a daily `budget` (N4, never while searching) only what it allows is listed; returns
+    /// the shown posts that count against it.
+    pub fn sync(&mut self, state: &AppState, tab: FeedTab, query: &str, limit: usize, ranking: Option<&FeedRanking>, budget: FeedBudget<'_>) -> Vec<PostId> {
         let (positions, rebuilt) = self.cache.ranked_positions(state, tab, query, ranking);
-        let rows = StreamRows::new(positions, limit);
-        if !rebuilt && rows.shown == self.rows.shown {
-            return;
+        let (rows, counted) = budget.rows(state, positions, limit, !query.trim().is_empty());
+        if !rebuilt && rows == self.rows {
+            return counted;
         }
-        let keys: Vec<RowKey> = (0..rows.row_count())
-            .map(|row| rows.post(state, row).map(|post| post.id.clone()))
-            .collect();
+        let keys: Vec<RowKey> = (0..rows.row_count()).map(|row| rows.post(state, row).map(|post| post.id.clone()).or_else(|| rows.ends_with_card().then(super::feed_budget::end_row_key))).collect();
         let (start, old_end, count) = changed_range(&self.keys, &keys);
         if start != old_end || count > 0 {
             self.list.splice(start..old_end, count);
         }
         self.rows = rows;
         self.keys = keys;
+        counted
     }
 
     /// The rows as of the last [`Self::sync`].
@@ -82,7 +84,7 @@ impl StreamList {
 
     /// Inputs of the feed's virtualized stream, reading the store through `view`.
     pub fn inputs(&self, view: &Entity<AppView>) -> StreamInputs {
-        StreamInputs { list: self.list.clone(), rows: self.rows.clone(), reader: reader(view.clone()) }
+        StreamInputs { list: self.list.clone(), rows: self.rows.clone(), reader: reader(view.clone()), end: None }
     }
 }
 

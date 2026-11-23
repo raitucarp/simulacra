@@ -6,12 +6,14 @@
 
 mod atoms;
 mod builder;
+mod embed; // N1
 mod fence;
 mod inline;
 mod visible;
 
 pub use atoms::is_trailing_punctuation;
-pub use visible::{visible_len, visible_text, visible_text_len, wikilink_targets};
+pub use embed::{embed_markup, pin_embeds, EMBED_OPEN};
+pub use visible::{embed_targets, visible_len, visible_text, visible_text_len, wikilink_targets};
 
 use super::parse::{HASHTAG_SIGIL, WIKILINK_OPEN};
 
@@ -27,6 +29,9 @@ pub enum BodyToken {
     Text(String),
     /// Obsidian `[[target]]` link followed by optional trailing punctuation.
     Wikilink { target: String, trailing: String },
+    /// N1: `((target))` embeds another post, `((target@1.2.0))` at that version, followed by
+    /// optional trailing punctuation.
+    Embed { target: String, version: Option<crate::domain::data::history::SemVer>, trailing: String },
     /// `#Tag` followed by optional trailing punctuation.
     Hashtag { tag: String, trailing: String },
     /// `@handle` mention followed by optional trailing punctuation (not produced yet).
@@ -93,7 +98,7 @@ impl BodyToken {
 
 /// True when the content needs tokenized rendering (links, hashtags, marks or line breaks).
 pub fn has_rich_markup(content: &str) -> bool {
-    content.contains(WIKILINK_OPEN) || content.contains(HASHTAG_SIGIL) || content.contains(MARKUP_CHARS) || content.contains(URL_SEPARATOR)
+    content.contains(WIKILINK_OPEN) || content.contains(EMBED_OPEN) || content.contains(HASHTAG_SIGIL) || content.contains(MARKUP_CHARS) || content.contains(URL_SEPARATOR)
 }
 
 /// Splits post content into ordered tokens: fenced code blocks first, then inline marks,

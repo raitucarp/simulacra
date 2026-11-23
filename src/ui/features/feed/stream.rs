@@ -28,13 +28,15 @@ pub struct StreamRows {
     pub positions: Rc<[usize]>,
     /// Number of posts shown before the load-more row.
     pub shown: usize,
+    /// N4: the day's budget is spent, so the feed ends with the closing card.
+    pub ended: bool,
 }
 
 impl StreamRows {
     /// Windows `positions` to at most `limit` posts.
     pub fn new(positions: Rc<[usize]>, limit: usize) -> Self {
         let shown = limit.min(positions.len());
-        Self { positions, shown }
+        Self { positions, shown, ended: false }
     }
 
     /// Whether a load-more row follows the shown posts.
@@ -42,9 +44,14 @@ impl StreamRows {
         self.shown < self.positions.len()
     }
 
-    /// Number of list rows (shown posts plus the load-more row).
+    /// Number of list rows (shown posts plus the load-more row or the closing card).
     pub fn row_count(&self) -> usize {
-        self.shown + usize::from(self.has_more())
+        self.shown + usize::from(self.has_more() || self.ended)
+    }
+
+    /// Whether the closing card ends the rows (N4): the budget is spent and nothing more loads.
+    pub fn ends_with_card(&self) -> bool {
+        self.ended && !self.has_more()
     }
 
     /// The post at display `row`, if it is a shown post.
@@ -59,6 +66,8 @@ pub struct StreamInputs {
     pub list: ListState,
     pub rows: StreamRows,
     pub reader: FeedReader,
+    /// N4: what the closing card shows and does (`None`: a card without the answer field).
+    pub end: Option<super::end_card::EndCard>,
 }
 
 /// Renders stream `row`: a post card (with its threadline joins) or the load-more trigger.
@@ -68,11 +77,15 @@ fn render_row(
     reader: &FeedReader,
     callbacks: &PostCallbacks,
     on_load_more: &Option<Rc<LoadMoreCallback>>,
+    end: Option<&super::end_card::EndCard>,
     cx: &App,
 ) -> AnyElement {
     let (state, theme) = reader(cx);
     let Some(post) = rows.post(state, row) else {
-        return render_load_more(rows.shown, rows.positions.len(), theme, on_load_more.clone());
+        return match rows.ends_with_card() {
+            true => super::end_card::render_end_card(state.preferences().writing.feed_budget, end, theme), // N4
+            false => render_load_more(rows.shown, rows.positions.len(), theme, on_load_more.clone()),
+        };
     };
     let neighbours: Vec<&Post> = [row.checked_sub(1), Some(row), Some(row + 1)]
         .into_iter()
@@ -95,9 +108,9 @@ pub(crate) fn render_stream_list(
 ) -> impl IntoElement {
     let is_empty = stream.rows.row_count() == 0;
     let scrollbar_handle = stream.list.clone();
-    let (rows, reader) = (stream.rows, stream.reader);
+    let (rows, reader, end) = (stream.rows, stream.reader, stream.end);
     let body = list(stream.list, move |row, _: &mut Window, cx: &mut App| {
-        render_row(row, &rows, &reader, &callbacks, &on_load_more, cx)
+        render_row(row, &rows, &reader, &callbacks, &on_load_more, end.as_ref(), cx)
     })
     .size_full();
     div()

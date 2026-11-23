@@ -17,6 +17,7 @@ mod lock_host; // X4
 mod forge_host;
 mod forge_suggest;
 mod lab_selection;
+mod feed_budget; // N4
 mod feed_state;
 mod graph_state;
 mod handlers;

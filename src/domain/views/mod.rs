@@ -8,6 +8,7 @@
 pub mod board; // W6
 pub mod calendar; // W4
 pub mod future; // W5
+pub mod garden; // N3
 pub mod memory; // W8
 pub mod rapid_log; // W2
 pub mod raw; // W3
@@ -36,6 +37,8 @@ keyed_enum! {
         Future => "future",
         /// W6: to-dos and task posts in columns by state.
         Board => "board",
+        /// N3: garden notes in beds by maturity.
+        Garden => "garden",
     }
 }
 
@@ -61,7 +64,7 @@ impl PostView {
     /// Where this view is offered.
     pub const fn scopes(self) -> &'static [ViewScope] {
         match self {
-            Self::Cards | Self::RapidLog | Self::Raw | Self::Calendar | Self::Future | Self::Board => EVERYWHERE,
+            Self::Cards | Self::RapidLog | Self::Raw | Self::Calendar | Self::Future | Self::Board | Self::Garden => EVERYWHERE,
             Self::Outline | Self::Argument => THREAD_ONLY,
         }
     }

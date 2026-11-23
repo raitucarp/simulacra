@@ -49,7 +49,7 @@ pub(crate) fn split_params<C>(params: FeedParams<'_, C>) -> (PostCallbacks, Time
             on_source: Some(params.on_open_source),
             on_media: Some(params.on_open_media),
             on_relink: Some(params.on_relink_file), code: params.code, // P5
-            scope: String::new(),
+            scope: String::new(), nested: false,
         },
     };
     let timeline = TimelineInputs {

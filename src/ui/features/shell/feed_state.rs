@@ -25,6 +25,10 @@ pub struct FeedState {
     pub composer_input: Entity<TextareaState>,
     pub composer_view: Entity<PostComposerView>,
     pub search_input: Entity<InputState>,
+    /// N4: what the feed showed today against its daily budget.
+    pub day: crate::domain::finite_feed::FeedDay,
+    /// N4: the closing card's one-line answer.
+    pub learned_input: Entity<InputState>,
 }
 
 impl FeedState {
@@ -49,6 +53,8 @@ impl FeedState {
             composer_input,
             composer_view,
             search_input,
+            day: super::feed_budget::load_feed_day(state.db.as_ref()),
+            learned_input: cx.new(|cx| InputState::new(window, cx).placeholder(t!("feed.end.placeholder").to_string())),
         }
     }
 
@@ -67,6 +73,15 @@ impl FeedState {
                 entity_self.update(cx, |this, cx| this.submit_post_content(&content, window, cx))
             };
             PostComposerView::new(profile, composer_input, theme, on_submit, window, cx)
+        })
+    }
+
+    /// N4: Enter in the closing card's field posts the answer.
+    pub(super) fn subscribe_answer(&self, window: &mut Window, cx: &mut Context<AppView>) -> Subscription {
+        cx.subscribe_in(&self.learned_input, window, |this, _, event: &InputEvent, window, cx| {
+            if matches!(event, InputEvent::PressEnter { .. }) {
+                this.answer_feed_day(window, cx);
+            }
         })
     }
 

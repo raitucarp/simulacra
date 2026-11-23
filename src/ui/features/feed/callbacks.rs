@@ -85,7 +85,7 @@ impl PostCallbacks {
             on_post_action: (!target.locked).then(|| bind_action(&self.on_post_action, &target_id)), // X4: a locked post is never sent to a model
             lock: self.locks.as_ref().filter(|_| target.locked).map(|source| source.controls(&target_id)),
             credence: self.credence.as_ref().filter(|_| target.human).map(|source| source.controls(&target_id)),
-            data: self.data.as_ref().map(|source| DataControls { lifecycle: target.lifecycle, auto_archive: target.auto_archive, symbols: target.symbols.clone(), version: target.version, replied_to: target.replied_to, ..source.controls(&target_id, target.human) }),
+            data: self.data.as_ref().map(|source| DataControls { lifecycle: target.lifecycle, auto_archive: target.auto_archive, symbols: target.symbols.clone(), version: target.version, replied_to: target.replied_to, locked: target.locked, garden: target.garden, ..source.controls(&target_id, target.human) }),
             reactions: self.reactions.as_ref().map(|source| source.controls(&target_id, state)),
         }
     }
@@ -129,6 +129,7 @@ struct CardTarget {
     replied_to: Option<crate::domain::data::history::SemVer>,
     /// Its text is sealed (X4).
     locked: bool,
+    garden: Option<crate::domain::post::garden::Maturity>, // N3: its garden stage, once planted
 }
 
 impl CardTarget {
@@ -137,7 +138,7 @@ impl CardTarget {
         let author = state.get_post(&id).map_or_else(|| state.author_of(post), |p| state.author_of(p));
         let target = state.get_post(&id).unwrap_or(post);
         let (lifecycle, auto_archive) = (target.lifecycle, ArchiveAfter::of(target.created_at, target.lifecycle.archive_at));
-        Self { id, handle: author.handle.clone(), human: author.is_human_persona(), lifecycle, auto_archive, symbols: target.extras.symbols.clone(), version: target.extras.head.as_ref().map(|head| head.version), replied_to: replied_to(target, state), locked: target.is_locked() }
+        Self { id, handle: author.handle.clone(), human: author.is_human_persona(), lifecycle, auto_archive, symbols: target.extras.symbols.clone(), version: target.extras.head.as_ref().map(|head| head.version), replied_to: replied_to(target, state), locked: target.is_locked(), garden: target.extras.garden.map(|note| note.maturity) }
     }
 }
 

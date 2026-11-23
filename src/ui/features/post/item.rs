@@ -85,6 +85,8 @@ fn render_content_column<L: PostLookup>(
         .gap(theme.spacing_xs)
         .when(post.repost_id.is_some(), |this| this.child(render_repost_header(&lookup.author_of(post).name, theme)))
         .child(render_author_row(effective, lookup.author_of(effective), is_instant_repost, theme, &handlers))
+        .children(super::garden_badge::render_garden_badge(effective, theme)) // N3
+        .children(super::anchor_line::render_anchor_line(effective, lookup, theme)) // N2: the passage a margin reply answers
         .child(
             div()
                 .w_full()

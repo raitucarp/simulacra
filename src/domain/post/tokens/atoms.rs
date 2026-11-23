@@ -93,7 +93,7 @@ fn is_hashtag_char(chars: &[char], e: usize) -> bool {
 }
 
 /// Collects trailing punctuation from `cursor`; returns it and the index after it.
-fn scan_trailing(chars: &[char], mut cursor: usize) -> (String, usize) {
+pub(super) fn scan_trailing(chars: &[char], mut cursor: usize) -> (String, usize) {
     let mut trailing = String::new();
     while cursor < chars.len() && is_trailing_punctuation(chars[cursor]) {
         trailing.push(chars[cursor]);

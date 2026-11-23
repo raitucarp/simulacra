@@ -87,6 +87,9 @@ impl AppView {
         let query = self.feed.search_input.read(cx).value().to_string();
         let (tab, limit) = (self.feed.feed_tab, self.feed.feed_visible_count);
         let ranking = self.feed_ranking();
-        self.feed.stream.sync(&self.state, tab, &query, limit, ranking.as_ref());
+        self.feed_day_today(); // N4: the daily budget
+        let budget = super::super::feed_budget::FeedBudget { posts: self.state.preferences().writing.feed_budget as usize, seen: &self.feed.day.seen };
+        let counted = self.feed.stream.sync(&self.state, tab, &query, limit, ranking.as_ref(), budget);
+        self.count_feed_day(counted);
     }
 }

@@ -220,3 +220,31 @@ fn test_slice_of_refs_lookup_matches_owned_excerpt() {
     assert_eq!(refs.resolve_wikilink("post_missing_slug"), "#miss");
     assert!(refs.find_post("post_ref_1").is_some());
 }
+
+#[test]
+fn a_margin_reply_quotes_its_passage_but_never_a_locked_parent() {
+    use crate::domain::post::anchor::SpanAnchor;
+    use crate::domain::post::lock::{LockPassword, LOCKED_PLACEHOLDER};
+    let mut parent = Post::create("p", "n1", "u1", "Habits compound. Small steps add up.").expect("valid");
+    let anchor = SpanAnchor::of(&parent.content, 0..16, None).expect("anchor");
+    assert_eq!(super::anchor_line::anchor_quote(&anchor, Some(&parent)), ("Habits compound.".to_string(), false));
+    let edited = Post { content: "Rewritten entirely.".into(), ..parent.clone() };
+    assert_eq!(super::anchor_line::anchor_quote(&anchor, Some(&edited)), ("Habits compound.".to_string(), true));
+    let fast = crate::domain::crypto::KdfParams { memory_kib: 8, iterations: 1, lanes: 1 };
+    parent.lock_with(&LockPassword::new("seven tidy lanterns"), fast).expect("locked");
+    assert_eq!(super::anchor_line::anchor_quote(&anchor, Some(&parent)), (LOCKED_PLACEHOLDER.to_string(), false));
+    for key in ["post.margin.quote", "post.margin.changed", "feed.margin.title_one", "feed.margin.title_other"] {
+        assert_ne!(rust_i18n::t!(key, locale = "en"), key);
+    }
+}
+
+#[test]
+fn a_garden_note_wears_its_stage() {
+    use crate::domain::post::garden::{GardenNote, Maturity};
+    let theme = crate::theme::ThemeTokens::default();
+    let mut post = Post::create("g", "n1", "u1", "A note worth tending.").expect("valid");
+    assert!(super::garden_badge::render_garden_badge(&post, &theme).is_none());
+    post.extras.garden = Some(GardenNote::planted(crate::time::utc(2026, 11, 1, 9, 0, 0)).tended(Maturity::Budding, crate::time::utc(2026, 11, 2, 9, 0, 0)));
+    assert!(super::garden_badge::render_garden_badge(&post, &theme).is_some());
+    assert_ne!(rust_i18n::t!("posts.garden.badge", locale = "en"), "posts.garden.badge");
+}

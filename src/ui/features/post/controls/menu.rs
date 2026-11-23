@@ -16,7 +16,7 @@ use rust_i18n::t;
 
 /// Ghost "…" button opening the post's action menu.
 pub(crate) fn render_overflow_menu(post: &Post, handlers: &PostCardHandlers) -> impl IntoElement {
-    let (text, link) = (post.content.clone(), post_permalink(post));
+    let (text, link, embed) = (post.content.clone(), post_permalink(post), embed_code(post));
     let handlers = handlers.clone();
     Button::new(format!("{OVERFLOW_BTN_ID_PREFIX}{}", post.id))
         .ghost()
@@ -25,14 +25,15 @@ pub(crate) fn render_overflow_menu(post: &Post, handlers: &PostCardHandlers) -> 
         .tooltip(t!("post.menu_tooltip").to_string())
         .dropdown_menu_with_anchor(Anchor::TopRight, move |menu, window, cx| {
             let menu = with_actions_submenu(menu, handlers.on_post_action.as_ref(), window, cx);
-            build_menu(menu, &text, &link, &handlers, window, cx)
+            build_menu(menu, [&text, &link, &embed], &handlers, window, cx)
         })
 }
 
-fn build_menu(menu: PopupMenu, text: &str, link: &str, handlers: &PostCardHandlers, window: &mut Window, cx: &mut Context<PopupMenu>) -> PopupMenu {
+fn build_menu(menu: PopupMenu, [text, link, embed]: [&str; 3], handlers: &PostCardHandlers, window: &mut Window, cx: &mut Context<PopupMenu>) -> PopupMenu {
     let menu = menu
         .item(copy_item(LucideIcon::Copy, t!("post.menu_copy_text"), text, t!("post.copied_text")))
         .item(copy_item(LucideIcon::Link2, t!("post.menu_copy_link"), link, t!("post.copied_link")))
+        .item(copy_item(LucideIcon::Layers, t!("post.menu_copy_embed"), embed, t!("post.copied_embed")))
         .separator()
         .item(action_item(LucideIcon::MessageSquare, t!("post.menu_reply"), &handlers.on_reply))
         .item(action_item(LucideIcon::Edit, t!("post.menu_quote"), &handlers.on_quote))
@@ -87,4 +88,9 @@ fn confirm_delete(on_delete: PostAction, window: &mut Window, cx: &mut App) {
                 true
             })
     });
+}
+
+/// N1: the embed of `post` pinned to the version it shows, ready to paste into another post.
+pub(crate) fn embed_code(post: &Post) -> String {
+    crate::domain::post::embed_markup(post.id.as_str(), Some(post.extras.head.as_ref().map_or_else(Default::default, |head| head.version)))
 }

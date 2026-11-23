@@ -28,6 +28,8 @@ pub struct DataSource {
     pub memberships: Rc<HashMap<String, Vec<CollectionId>>>,
     /// The history sheet is open (the "edited" marks drop their tooltips), sb P16.
     pub history_open: bool,
+    /// N5: the depth dial of every post.
+    pub depth: Rc<super::depth_dial::DepthView>,
     pub on_event: DataAction,
 }
 

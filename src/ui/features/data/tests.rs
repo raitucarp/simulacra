@@ -28,6 +28,7 @@ fn card_controls_follow_the_shelf_and_edit_counts() {
         collections: Rc::new(vec![(shelf.clone(), "Shelf".into())]),
         memberships: Rc::new(HashMap::from([("p1".to_string(), vec![shelf.clone()])])),
         history_open: false,
+        depth: Default::default(),
         on_event: Rc::new(|_, _, _| {}),
     };
     let own = source.controls(&PostId::new("p1"), true);
@@ -96,6 +97,7 @@ fn an_edited_post_wears_its_version_badge() {
         collections: Rc::new(Vec::new()),
         memberships: Rc::new(HashMap::new()),
         history_open: false,
+        depth: Default::default(),
         on_event: Rc::new(|_, _, _| {}),
     };
     let edited = DataControls { version: Some(crate::domain::data::history::SemVer::new(1, 2, 0)), ..source.controls(&PostId::new("p1"), true) };
@@ -115,7 +117,7 @@ fn a_reply_to_an_older_major_version_says_so() {
 
 #[test]
 fn the_margin_sheet_is_offered_on_posts_that_are_not_locked_and_is_translated() {
-    let source = DataSource { revisions: Rc::new(HashMap::new()), bookmarks: Rc::new(HashSet::new()), collections: Rc::new(Vec::new()), memberships: Rc::new(HashMap::new()), history_open: false, on_event: Rc::new(|_, _, _| {}) };
+    let source = DataSource { revisions: Rc::new(HashMap::new()), bookmarks: Rc::new(HashSet::new()), collections: Rc::new(Vec::new()), memberships: Rc::new(HashMap::new()), history_open: false, depth: Default::default(), on_event: Rc::new(|_, _, _| {}) };
     assert!(!source.controls(&PostId::new("p1"), true).locked, "a card says when its post is locked");
     let keys = ["menu", "title", "subtitle", "explain", "passages", "reply_label", "reply_placeholder", "send", "pick_first", "write_first", "failed", "sent"];
     for key in keys.map(|key| format!("post.margin.{key}")) {
@@ -128,4 +130,21 @@ fn the_garden_items_are_translated() {
     for key in ["garden_plant", "garden", "garden_grow", "garden_cut", "garden_return"].map(|key| format!("data.menu.{key}")).into_iter().chain(["planted", "tended", "returned"].map(|key| format!("data.garden.{key}"))) {
         assert_ne!(rust_i18n::t!(&key, locale = "en"), key);
     }
+}
+
+#[test]
+fn the_depth_dial_is_never_offered_on_a_locked_post_and_is_translated() {
+    use crate::domain::post::depth::Depth;
+    let theme = crate::theme::ThemeTokens::default();
+    let on_event: DataAction = Rc::new(|_, _, _| {});
+    let mut post = crate::domain::Post::create("p", "n1", "u1", "Entropy counts microstates.").expect("valid");
+    let view = DepthView { chosen: HashMap::from([(post.id.clone(), Depth::Simpler)]), ..DepthView::default() };
+    assert!(render_depth_dial(&post, None, &view, &on_event, &theme).is_some());
+    post.lock_with(&crate::domain::post::lock::LockPassword::new("seven tidy lanterns"), crate::domain::crypto::KdfParams { memory_kib: 8, iterations: 1, lanes: 1 }).expect("locked");
+    assert!(render_depth_dial(&post, None, &view, &on_event, &theme).is_none(), "a locked post has no dial");
+    let keys = ["simpler", "as_written", "expert", "ask.simpler", "ask.expert", "again", "running", "rendering", "note", "history"];
+    for key in keys.map(|key| format!("posts.depth.{key}")) {
+        assert_ne!(rust_i18n::t!(&key, locale = "en"), key);
+    }
+    assert_eq!(depth_label(None), rust_i18n::t!("posts.depth.as_written").to_string());
 }

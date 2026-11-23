@@ -123,6 +123,9 @@ pub enum DataEvent {
     CloseMargin,
     /// N3: plants the post in the garden at this stage, or returns it to the stream (`None`).
     SetGarden(PostId, Option<crate::domain::post::garden::Maturity>),
+    /// N5: reads the post at this depth (`None`: as written), or asks an agent for that rendering.
+    ShowDepth(PostId, Option<crate::domain::post::depth::Depth>),
+    RenderDepth(PostId, crate::domain::post::depth::Depth),
     /// The monthly migration review (S16).
     OpenReview,
     ReviewDecide(crate::domain::symbols::ReviewChoice),

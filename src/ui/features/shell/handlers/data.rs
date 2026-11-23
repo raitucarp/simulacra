@@ -26,6 +26,7 @@ impl AppView {
             E::OpenLegend | E::EditMeaning(_) | E::SaveMeaning | E::CancelMeaning | E::CloseLegend => self.on_legend_event(event, window, cx), // S9
             E::ReplyInMargin(_) | E::PickPassage(_) | E::SubmitMargin | E::CloseMargin => self.on_margin_event(event, window, cx), // N2
             E::SetGarden(id, maturity) => self.set_garden(&id, maturity, window, cx), // N3
+            E::ShowDepth(..) | E::RenderDepth(..) => self.on_depth_event(event, window, cx), // N5
             E::OpenScheduled | E::EditScheduled(_) | E::PublishScheduledNow(_) | E::CancelScheduled(_) | E::CloseScheduled => self.on_scheduled_event(event, window, cx),
             _ => self.on_saved_event(event, window, cx),
         }
@@ -66,6 +67,7 @@ impl AppView {
             collections: Rc::new(self.network_collections()),
             memberships: Rc::new(memberships),
             history_open: self.data.history.is_some(),
+            depth: Rc::new(self.data.depth.clone()), // N5
             on_event: self.data_action(bind),
         }
     }

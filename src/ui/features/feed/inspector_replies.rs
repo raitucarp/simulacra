@@ -61,6 +61,7 @@ fn focused_card(ctx: &InspectorContext<'_>, conversation: &Conversation<'_>) -> 
         .bg(ctx.theme.bg_elevated)
         .child(ctx.callbacks.render_post(conversation.focused, ctx.state, ctx.theme, mode))
         .children(render_extras_detail(&conversation.focused.extras, ctx.theme, ctx.callbacks.links.on_source.as_ref()))
+        .children(super::inspector_depth::render_depth(ctx, conversation.focused)) // N5
         .into_any_element()
 }
 

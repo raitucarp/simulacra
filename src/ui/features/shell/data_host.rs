@@ -59,6 +59,9 @@ pub struct DataHost {
     pub locks: super::lock_host::LockHost,
     /// N2: the open margin sheet.
     pub margin: Option<crate::ui::features::data::MarginDialog>,
+    /// N5: the depth dial, and the ticket of the newest rendering request.
+    pub depth: crate::ui::features::data::DepthView,
+    pub depth_ticket: u64,
     _subscriptions: Vec<Subscription>,
 }
 
@@ -126,6 +129,8 @@ impl DataHost {
             focus: cx.focus_handle(),
             locks: super::lock_host::LockHost::new(window, cx),
             margin: None,
+            depth: Default::default(),
+            depth_ticket: 0,
             _subscriptions: subscriptions,
         }
     }

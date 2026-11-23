@@ -13,6 +13,7 @@ mod history_compare; mod history_log; mod history_rows; mod version_tree; // V5:
 mod legend; // S9
 mod lifecycle_menu; // Y5, Y6
 mod garden_menu; // N3
+mod depth_dial; // N5
 mod margin; // N2
 mod post_menu;
 mod edited_mark; // V8
@@ -30,6 +31,7 @@ pub use events::{DataAction, DataEvent, SavedTarget, ScopeKind};
 pub use export::{render_export_sheet, ExportDialog};
 pub use legend::{render_legend_sheet, LegendView};
 pub use margin::{render_margin_sheet, MarginDialog};
+pub use depth_dial::{depth_label, render_depth_dial, DepthView};
 pub use history::{render_history_sheet, HistorySheet};
 pub use edited_mark::render_edited_mark;
 pub use post_menu::{with_data_items, DataControls, DataSource};

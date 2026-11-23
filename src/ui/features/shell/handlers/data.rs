@@ -101,6 +101,7 @@ impl AppView {
             CommandId::MigrationReview => DataEvent::OpenReview, // S16
             CommandId::NewVoiceNote => DataEvent::Voice(crate::ui::features::data::VoiceEvent::Open), // N11
             CommandId::NewDrawing => DataEvent::Ink(crate::ui::features::data::InkEvent::Open), // N12
+            CommandId::OpenQuestions => DataEvent::Thought(crate::ui::features::data::ThoughtEvent::Questions(crate::ui::features::data::QuestionsEvent::ShowAll)), // N18
             _ => DataEvent::OpenRestore,
         };
         self.on_data_event(event, window, cx);

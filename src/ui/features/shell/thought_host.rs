@@ -1,5 +1,5 @@
 //! N16–N20 in the shell's data host: the open sheets of the lens fan (N16) and the glossary
-//! (N17), and their text fields.
+//! (N17), the open questions page (N18), and their text fields.
 
 use super::view::AppView;
 use crate::ui::features::data::{GlossaryDialog, LensDialog};
@@ -14,12 +14,14 @@ pub struct ThoughtSheets {
     pub lens: Option<LensDialog>,
     /// N17: defining a term.
     pub glossary: Option<GlossaryDialog>,
+    /// N18: the page of every open question is open.
+    pub questions_open: bool,
 }
 
 impl ThoughtSheets {
     /// Whether one of them is open.
     pub fn any_open(&self) -> bool {
-        self.lens.is_some() || self.glossary.is_some()
+        self.lens.is_some() || self.glossary.is_some() || self.questions_open
     }
 }
 

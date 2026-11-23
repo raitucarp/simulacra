@@ -49,3 +49,15 @@ fn a_defining_post_names_its_term_but_never_past_a_lock() {
     assert!(super::term_chip::term_chip_text(&post).is_some_and(|text| text.contains("entropy")));
     assert!(super::term_chip::term_chip_text(&forged(|post| post.extras.defines = definition())).is_none());
 }
+
+#[test]
+fn a_question_shows_whether_it_is_open_but_never_past_a_lock() {
+    use crate::domain::post::open_question::{Answered, QuestionState};
+    let mut post = Post::create("p", "n1", "u1", "Why is the sky blue?").expect("post");
+    assert_eq!(super::open_chip::shown_question(&post), None);
+    post.kind = crate::domain::post::PostKind::Question;
+    assert_eq!(super::open_chip::shown_question(&post), Some(QuestionState::Open));
+    post.extras.answered = Some(Box::new(Answered { at: jiff::Timestamp::UNIX_EPOCH, answer: None }));
+    assert_eq!(super::open_chip::shown_question(&post), Some(QuestionState::Answered));
+    assert_eq!(super::open_chip::shown_question(&forged(|post| post.kind = crate::domain::post::PostKind::Question)), None);
+}

@@ -8,4 +8,6 @@ pub enum ThoughtEvent {
     Lens(super::lens_sheet::LensEvent),
     /// N17: defining terms.
     Glossary(super::glossary_sheet::GlossaryEvent),
+    /// N18: open questions.
+    Questions(super::questions_sheet::QuestionsEvent),
 }

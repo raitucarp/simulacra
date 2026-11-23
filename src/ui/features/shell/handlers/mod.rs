@@ -34,7 +34,7 @@ mod data_ink; // N12
 mod data_correction; // N14
 mod data_check; mod data_recheck; // N13
 mod data_distill; // N15
-mod data_thoughts; mod data_lens; mod data_glossary; mod data_glossary_draft; // N16–N20
+mod data_thoughts; mod data_lens; mod data_glossary; mod data_glossary_draft; mod data_questions; // N16–N20
 mod data_garden; // N3
 mod feed_answer; // N4
 mod data_depth; // N5

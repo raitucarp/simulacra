@@ -99,6 +99,9 @@ pub struct PostExtras {
     /// N17: the term the post defines, and what it means.
     #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "lenient::lenient")]
     pub defines: Option<Box<super::glossary::Definition>>,
+    /// N18: the question was marked answered (and by which post).
+    #[serde(default, skip_serializing_if = "Option::is_none", deserialize_with = "lenient::lenient")]
+    pub answered: Option<Box<super::open_question::Answered>>,
 }
 
 impl PostExtras {
@@ -108,9 +111,9 @@ impl PostExtras {
     }
 
     /// Whether there is anything to show behind the post (the origin, images, files, symbols, tint,
-    /// version, ticks, lock, code runs, margin anchor, garden note, branch pointer, pinned quote, audience, question, series, voice note, drawing, correction, check, distilled document, lens fan and definition alone are not).
+    /// version, ticks, lock, code runs, margin anchor, garden note, branch pointer, pinned quote, audience, question, series, voice note, drawing, correction, check, distilled document, lens fan, definition and answer alone are not).
     pub fn has_details(&self) -> bool {
-        Self { origin: None, images: Vec::new(), files: Vec::new(), symbols: PostSymbols::default(), tint: None, head: None, replied_version: None, todo_state: Default::default(), lock: None, code_runs: Vec::new(), anchor: None, garden: None, branch: None, pinned: None, audience: None, question: None, series: None, voice: None, ink: None, correction: None, check: None, distilled: None, fan: None, lens: None, defines: None, ..self.clone() } != Self::default()
+        Self { origin: None, images: Vec::new(), files: Vec::new(), symbols: PostSymbols::default(), tint: None, head: None, replied_version: None, todo_state: Default::default(), lock: None, code_runs: Vec::new(), anchor: None, garden: None, branch: None, pinned: None, audience: None, question: None, series: None, voice: None, ink: None, correction: None, check: None, distilled: None, fan: None, lens: None, defines: None, answered: None, ..self.clone() } != Self::default()
     }
 
     /// Adds `source` unless an identical reference is already listed.

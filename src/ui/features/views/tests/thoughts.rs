@@ -50,3 +50,22 @@ fn the_glossary_view_lists_the_terms_in_view_and_never_a_locked_post() {
     assert!(crate::domain::post::glossary::Glossary::from_posts(view.posts.iter().copied()).is_empty(), "a locked post defines nothing");
     keys_translated("views.glossary", &["show", "empty"]);
 }
+
+#[test]
+fn the_open_questions_view_lists_open_ones_oldest_first_and_a_locked_one_as_its_placeholder() {
+    let mut state = AppState::new_in_memory();
+    let root = state.submit_post("Why do cats purr?").expect("posted");
+    state.set_question(&root, true).expect("asked");
+    let theme = ThemeTokens::default();
+    let view = input(&state, &theme, ViewScope::Profile);
+    let rows = crate::domain::views::open_questions::open_rows(view.posts.iter().copied());
+    assert_eq!(rows.iter().map(|row| row.text.as_deref()).collect::<Vec<_>>(), vec![Some("Why do cats purr?")]);
+    assert!(render_list_view(PostView::OpenQuestions, &view).is_some());
+    let mut forged = crate::domain::Post::create("forged", "n1", "u1", "secret question").expect("post");
+    forged.lock_with(&crate::domain::post::lock::LockPassword::new("seven tidy lanterns"), crate::domain::crypto::KdfParams { memory_kib: 8, iterations: 1, lanes: 1 }).expect("locks");
+    forged.kind = crate::domain::post::PostKind::Question;
+    let rows = crate::domain::views::open_questions::open_rows([&forged]);
+    assert_eq!(rows[0].text, None, "a locked question is its placeholder");
+    keys_translated("views.open_questions", &["show", "empty", "asked"]);
+    keys_translated("posts.open_question", &["page_title", "page_explain", "chip_open", "chip_answered", "menu_answers"]);
+}

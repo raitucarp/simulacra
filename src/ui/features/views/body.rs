@@ -12,6 +12,7 @@ use super::series::render_series;
 use super::still_true::render_still_true;
 use super::lens_fan::render_lens_fan;
 use super::glossary::render_glossary;
+use super::open_questions::render_open_questions;
 use super::raw::render_raw;
 use crate::domain::views::PostView;
 use gpui_kit::AnyElement;
@@ -30,6 +31,7 @@ pub fn render_list_view(view: PostView, input: &ViewInput<'_>) -> Option<AnyElem
         PostView::StillTrue => Some(render_still_true(input)), // N13
         PostView::LensFan => Some(render_lens_fan(input)), // N16
         PostView::Glossary => Some(render_glossary(input)), // N17
+        PostView::OpenQuestions => Some(render_open_questions(input)), // N18
         PostView::Cards | PostView::Outline | PostView::Argument => None,
     }
 }

@@ -11,11 +11,15 @@ impl AppView {
         match event {
             ThoughtEvent::Lens(event) => self.on_lens_event(event, window, cx),
             ThoughtEvent::Glossary(event) => self.on_glossary_event(event, window, cx),
+            ThoughtEvent::Questions(event) => self.on_questions_event(event, window, cx),
         }
     }
 
     /// The open N16–N20 sheet and the event closing it, if one is open.
     pub(in crate::ui::features::shell) fn thought_overlay(&self, on_event: DataAction) -> Option<(Stateful<Div>, DataEvent)> {
+        if let Some(found) = self.questions_page(on_event.clone()) {
+            return Some(found); // N18
+        }
         let (sheets, theme) = (&self.data.ideas.thoughts, &self.theme);
         if let Some(dialog) = &sheets.glossary {
             return Some((render_glossary_sheet(dialog, on_event, theme), DataEvent::Thought(ThoughtEvent::Glossary(GlossaryEvent::Close))));

@@ -14,6 +14,7 @@ pub mod rapid_log; // W2
 pub mod raw; // W3
 pub mod series; // N10
 pub mod still_true; // N13
+pub mod open_questions; // N18
 #[cfg(test)]
 mod tests;
 
@@ -51,6 +52,8 @@ keyed_enum! {
         LensFan => "lens_fan",
         /// N17: the terms the posts define, with their definitions.
         Glossary => "glossary",
+        /// N18: the questions still open, the one asked longest ago first.
+        OpenQuestions => "open_questions",
     }
 }
 
@@ -76,7 +79,7 @@ impl PostView {
     /// Where this view is offered.
     pub const fn scopes(self) -> &'static [ViewScope] {
         match self {
-            Self::Cards | Self::RapidLog | Self::Raw | Self::Calendar | Self::Future | Self::Board | Self::Garden | Self::Series | Self::StillTrue | Self::Glossary => EVERYWHERE,
+            Self::Cards | Self::RapidLog | Self::Raw | Self::Calendar | Self::Future | Self::Board | Self::Garden | Self::Series | Self::StillTrue | Self::Glossary | Self::OpenQuestions => EVERYWHERE,
             Self::Outline | Self::Argument | Self::Branches | Self::LensFan => THREAD_ONLY,
         }
     }

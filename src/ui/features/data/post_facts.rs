@@ -26,6 +26,11 @@ pub struct PostFacts {
     pub correction: Option<crate::domain::post::correction::CorrectionKind>,
     /// The term it defines (N17).
     pub defines: Option<String>,
+    /// Where it stands as a question, and whether it is a feeling (N18).
+    pub question: Option<crate::domain::post::open_question::QuestionState>,
+    pub feeling: bool,
+    /// The user's open question it replies to (N18: it may answer it).
+    pub answers: Option<PostId>,
 }
 
 impl PostFacts {
@@ -40,6 +45,9 @@ impl PostFacts {
             transcribable: !post.is_locked() && post.extras.voice.as_ref().is_some_and(|voice| voice.transcript.is_none()),
             correction: post.extras.correction.as_ref().map(|c| c.kind),
             defines: post.extras.defines.as_ref().map(|definition| definition.term.clone()),
+            question: crate::domain::post::open_question::question_state(post),
+            feeling: post.kind.is_feeling(),
+            answers: post.reply_to_id.as_ref().and_then(|parent| state.get_post(parent)).filter(|parent| !parent.is_locked() && crate::domain::post::open_question::is_open(parent) && state.author_of(parent).is_human_persona()).map(|parent| parent.id.clone()),
         }
     }
 }

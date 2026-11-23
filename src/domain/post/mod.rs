@@ -14,8 +14,7 @@ pub mod format;
 pub mod garden; // N3
 pub mod highlight;
 pub mod ink; // N12: ink posts
-pub mod lens; // N16: the lens fan
-pub mod glossary; // N17: the glossary
+pub mod lens; pub mod glossary; pub mod open_question; // N16: the lens fan; N17: the glossary; N18: open questions
 mod constructors;
 mod extras;
 mod kind;

@@ -23,7 +23,7 @@ fn garden_submenu(menu: PopupMenu, controls: &DataControls, stage: Maturity) -> 
 
 /// `menu` with "Plant in the garden", or the garden submenu of a planted post.
 pub(super) fn with_garden_items(menu: PopupMenu, controls: &DataControls, window: &mut Window, cx: &mut Context<PopupMenu>) -> PopupMenu {
-    match controls.garden {
+    match controls.facts.garden {
         None => menu.item(item(tr("data.menu.garden_plant"), LucideIcon::Sprout, DataEvent::SetGarden(controls.post_id.clone(), Some(Maturity::Seed)), &controls.on_event)),
         Some(stage) => {
             let (controls, label) = (controls.clone(), t!("data.menu.garden", stage = maturity_label(stage)).to_string());

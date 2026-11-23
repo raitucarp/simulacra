@@ -98,6 +98,7 @@ fn render_content_column<L: PostLookup>(
                     None => render_post_content(effective, lookup, theme, &handlers.links.scoped(effective.id.to_string()), super::checklist::todo_toggle(handlers.data.as_ref())), // D5, D6: its checklist, ticked on the user's own posts
                 }),
         )
+        .children(super::pinned_card::render_pinned_quote(effective, lookup, theme)) // N7
         .children(render_post_extras(&effective.extras, theme, handlers.links.on_source.as_ref()))
         .children(render_post_media(effective, lookup, theme, handlers.links.on_media.as_ref(), handlers.links.on_relink.as_ref()))
         .when_some(effective.quote_id.as_ref(), |this, quote_id| {

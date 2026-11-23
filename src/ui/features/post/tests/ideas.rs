@@ -26,3 +26,28 @@ fn a_branch_wears_its_label_but_never_past_a_lock() {
         assert_ne!(rust_i18n::t!(&key, locale = "en"), key);
     }
 }
+
+#[test]
+fn a_pinned_quote_shows_its_passage_and_flag_but_never_on_a_locked_post() {
+    use crate::domain::post::pinned::{PinnedQuote, QuoteDrift};
+    let mut post = Post::create("q", "n1", "u1", "Worth remembering.").expect("valid");
+    assert_eq!(super::pinned_card::pinned_view(&post, None), None);
+    post.extras.pinned = PinnedQuote::of("doc1", "On memory", "Memory is reconstructive.", 0..25).map(Box::new);
+    let view = super::pinned_card::pinned_view(&post, Some(QuoteDrift::Intact)).expect("view");
+    assert_eq!((view.passage.as_str(), view.flag.is_none()), ("Memory is reconstructive.", true));
+    assert!(view.source.contains("On memory"));
+    assert!(super::pinned_card::pinned_view(&post, Some(QuoteDrift::PassageGone)).and_then(|view| view.flag).is_some());
+    assert_eq!(super::pinned_card::pinned_view(&locked(post), Some(QuoteDrift::PassageGone)), None, "a locked post shows only its placeholder");
+    let keys = ["button", "title", "explain", "find_placeholder", "passages", "comment_label", "comment_placeholder", "send", "pick_first", "write_first", "sent", "source", "drift.intact", "drift.changed", "drift.gone", "drift.missing", "repin", "repinned", "repin_failed"];
+    for key in keys.map(|key| format!("posts.pinned.{key}")) {
+        assert_ne!(rust_i18n::t!(&key, locale = "en"), key);
+    }
+}
+
+#[test]
+fn the_quote_sheet_lists_matching_passages_only() {
+    use crate::ui::features::data::listed_passages;
+    let passages = vec![(0..11, "Alpha beta.".to_string()), (12..24, "Gamma delta.".to_string())];
+    let at = |query: &str| listed_passages(&passages, query).into_iter().map(|(at, _)| at).collect::<Vec<_>>();
+    assert_eq!((at(""), at("gamma"), at("zeta")), (vec![0, 1], vec![1], vec![]));
+}

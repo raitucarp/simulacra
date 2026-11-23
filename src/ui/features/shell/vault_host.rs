@@ -84,6 +84,7 @@ impl AppView {
             VaultEvent::LearnPassages(id) => self.learn_passages(&id, window, cx),
             VaultEvent::LearnConnections(id) => self.learn_connections(&id, window, cx),
             VaultEvent::History(id) => self.on_data_event(crate::ui::features::data::DataEvent::OpenDocumentHistory(id), window, cx),
+            VaultEvent::Quote(id) => self.on_data_event(crate::ui::features::data::DataEvent::Quote(crate::ui::features::data::QuoteEvent::Open(id)), window, cx), // N7
         }
         cx.notify();
     }

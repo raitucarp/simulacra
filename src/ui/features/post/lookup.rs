@@ -29,6 +29,10 @@ pub trait PostLookup: Copy {
     fn backlinks(&self, _id: &crate::domain::PostId) -> Vec<crate::domain::post::refs::Backlink> {
         Vec::new()
     }
+    /// N7–N10: the store behind the lookup, for what a card asks of it (collections have none).
+    fn store(&self) -> Option<&crate::state::AppState> {
+        None
+    }
     /// N1: the text `id` shows at `version` (`None`: now), when that version is kept;
     /// collections know only the version each post shows.
     fn version_text(&self, id: &str, version: Option<SemVer>) -> Option<Rc<str>> {
@@ -115,5 +119,9 @@ impl PostLookup for &crate::state::AppState {
     #[inline]
     fn backlinks(&self, id: &crate::domain::PostId) -> Vec<crate::domain::post::refs::Backlink> {
         crate::state::AppState::backlinks(self, id)
+    }
+    #[inline]
+    fn store(&self) -> Option<&crate::state::AppState> {
+        Some(self)
     }
 }

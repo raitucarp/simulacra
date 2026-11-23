@@ -6,6 +6,7 @@ mod actions;
 mod anchor_line; // N2
 mod garden_badge; // N3
 mod branch_chip; // N6
+mod pinned_card; // N7
 mod attachments;
 mod body;
 mod checklist; // D5

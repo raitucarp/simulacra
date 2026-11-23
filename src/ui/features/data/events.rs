@@ -128,6 +128,8 @@ pub enum DataEvent {
     RenderDepth(PostId, crate::domain::post::depth::Depth),
     /// N6: the what-if branch sheet.
     Branch(super::branch_sheet::BranchEvent),
+    /// N7: the quote sheet, and re-pinning a quote.
+    Quote(super::quote_sheet::QuoteEvent),
     /// The monthly migration review (S16).
     OpenReview,
     ReviewDecide(crate::domain::symbols::ReviewChoice),

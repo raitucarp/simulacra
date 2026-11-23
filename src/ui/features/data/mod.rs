@@ -16,6 +16,8 @@ mod garden_menu; // N3
 mod depth_dial; // N5
 mod margin; // N2
 mod branch_sheet; // N6
+mod quote_sheet; // N7
+mod post_facts; mod idea_menu; // N3, N6–N10
 mod post_menu;
 mod edited_mark; // V8
 mod replied; // V12
@@ -33,6 +35,8 @@ pub use export::{render_export_sheet, ExportDialog};
 pub use legend::{render_legend_sheet, LegendView};
 pub use margin::{render_margin_sheet, MarginDialog};
 pub use branch_sheet::{render_branch_sheet, BranchDialog, BranchEvent};
+pub use quote_sheet::{listed_passages, render_quote_sheet, QuoteDialog, QuoteEvent};
+pub use post_facts::PostFacts;
 pub use depth_dial::{depth_label, render_depth_dial, DepthView};
 pub use history::{render_history_sheet, HistorySheet};
 pub use edited_mark::render_edited_mark;

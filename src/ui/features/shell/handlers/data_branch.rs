@@ -21,24 +21,24 @@ impl AppView {
         if self.state.get_post(&id).is_none_or(|post| post.is_locked()) {
             return;
         }
-        let (label, text) = (self.data.inputs.branch_label.clone(), self.data.inputs.branch_text.clone());
+        let (label, text) = (self.data.inputs.ideas.branch_label.clone(), self.data.inputs.ideas.branch_text.clone());
         for input in [&label, &text] {
             input.update(cx, |field, cx| field.set_value("", window, cx));
         }
-        self.data.branch = Some(BranchDialog { post_id: id, label: label.clone(), text, problem: None });
+        self.data.ideas.branch = Some(BranchDialog { post_id: id, label: label.clone(), text, problem: None });
         label.update(cx, |field, cx| field.focus(window, cx));
     }
 
     fn close_branch(&mut self, window: &mut Window, cx: &mut Context<Self>) {
-        for input in [&self.data.inputs.branch_label, &self.data.inputs.branch_text] {
+        for input in [&self.data.inputs.ideas.branch_label, &self.data.inputs.ideas.branch_text] {
             input.update(cx, |field, cx| field.set_value("", window, cx));
         }
-        self.data.branch = None;
+        self.data.ideas.branch = None;
     }
 
     /// Publishes the branch's first post, or says why it cannot go yet.
     fn submit_branch(&mut self, window: &mut Window, cx: &mut Context<Self>) {
-        let Some(dialog) = self.data.branch.as_ref() else { return };
+        let Some(dialog) = self.data.ideas.branch.as_ref() else { return };
         let (post, label, text) = (dialog.post_id.clone(), dialog.label.read(cx).value().to_string(), dialog.text.read(cx).value().trim().to_string());
         let outcome = match BranchPoint::named(&label) {
             None => Err(tr("posts.branch.name_first")),
@@ -52,7 +52,7 @@ impl AppView {
                 self.notify_data(tr("posts.branch.sent"), window, cx);
             }
             Err(problem) => {
-                if let Some(dialog) = self.data.branch.as_mut() {
+                if let Some(dialog) = self.data.ideas.branch.as_mut() {
                     dialog.problem = Some(problem);
                 }
             }

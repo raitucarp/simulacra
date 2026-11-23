@@ -45,5 +45,6 @@ const fn home_tab(pane: EmbeddedPane) -> SettingsTab {
         EmbeddedPane::Themes => SettingsTab::Appearance,
         EmbeddedPane::SymbolSets => SettingsTab::Symbols,
         EmbeddedPane::Licences => SettingsTab::Licences,
+        EmbeddedPane::Runtimes => SettingsTab::Code,
     }
 }

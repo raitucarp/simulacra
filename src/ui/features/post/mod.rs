@@ -23,7 +23,7 @@ mod surface;
 mod threadline;
 
 pub use actions::ActionClickCallback;
-pub use body::{render_body_tokens, render_post_body, BodyLinks, OpenTextAction};
+pub use body::{needs_confirm, render_body_tokens, render_post_body, run_line, BodyLinks, CancelRunAction, CodeActions, OpenTextAction, RunCodeAction, RunRequest};
 pub(crate) use body::render_code_block;
 pub use checklist::{render_post_content, render_task_row, todo_due_label, TodoToggle};
 pub use controls::{post_permalink, share_text, LearnAction, LearnControls, LearnRequestKind, LearnStatus, OpenPostAction, PickPostAction, PostAction, PostCardHandlers};

@@ -11,7 +11,7 @@ use serde::Serialize;
 const BACKUP_INTO: &str = "VACUUM INTO ?1";
 
 /// Every category row, in [`Preferences`] field order.
-pub const PREFERENCE_KEYS: [SettingKey; 12] = [
+pub const PREFERENCE_KEYS: [SettingKey; 13] = [
     SettingKey::PrefsGeneral,
     SettingKey::PrefsAppearance,
     SettingKey::PrefsWriting,
@@ -23,6 +23,7 @@ pub const PREFERENCE_KEYS: [SettingKey; 12] = [
     SettingKey::PrefsImport,
     SettingKey::PrefsPrivacy,
     SettingKey::PrefsNotifications,
+    SettingKey::PrefsCode,
     SettingKey::PrefsAdvanced,
 ];
 
@@ -35,7 +36,7 @@ pub fn preference_rows(prefs: &Preferences) -> Result<Vec<(SettingKey, String)>>
     let values = [
         json(&prefs.general)?, json(&prefs.appearance)?, json(&prefs.writing)?, json(&prefs.ai)?,
         json(&prefs.embeddings)?, json(&prefs.images)?, json(&prefs.agents)?, json(&prefs.learning)?,
-        json(&prefs.import)?, json(&prefs.privacy)?, json(&prefs.notifications)?, json(&prefs.advanced)?,
+        json(&prefs.import)?, json(&prefs.privacy)?, json(&prefs.notifications)?, json(&prefs.code)?, json(&prefs.advanced)?,
     ];
     Ok(PREFERENCE_KEYS.into_iter().zip(values).collect())
 }
@@ -67,6 +68,7 @@ impl Database {
             import: self.preference_row(SettingKey::PrefsImport),
             privacy: self.preference_row(SettingKey::PrefsPrivacy),
             notifications: self.preference_row(SettingKey::PrefsNotifications),
+            code: self.preference_row(SettingKey::PrefsCode),
             advanced: self.preference_row(SettingKey::PrefsAdvanced),
         }
         .validated()

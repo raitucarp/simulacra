@@ -95,7 +95,8 @@ pub fn render_locked_body<L: PostLookup>(controls: &LockControls, lookup: L, the
     let on_relock = controls.on_relock.clone();
     let relock = Button::new(SharedString::from(format!("{RELOCK_ID}{}", controls.post_id))).ghost().xsmall().icon(Icon::new(LucideIcon::LockKeyhole)).label(t!("posts.lock.relock").to_string()).on_click(move |_, window, cx| on_relock(window, cx));
     let bar = div().flex().items_center().justify_between().gap(theme.control_gap).child(note(LucideIcon::LockOpen, t!("posts.lock.unlocked").to_string(), theme)).child(relock);
-    div().w_full().flex().flex_col().gap(theme.spacing_xs).child(render_body_tokens(&tokenize_post_body(text), lookup, theme, links)).child(bar).into_any_element()
+    let links = BodyLinks { code: None, ..links.clone() }; // P5: a locked post's code never runs (its output would be stored in the open)
+    div().w_full().flex().flex_col().gap(theme.spacing_xs).child(render_body_tokens(&tokenize_post_body(text), lookup, theme, &links)).child(bar).into_any_element()
 }
 
 #[cfg(test)]

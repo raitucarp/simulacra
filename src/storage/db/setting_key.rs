@@ -92,6 +92,8 @@ setting_keys! {
     PrefsImport => "preferences.import",
     PrefsPrivacy => "preferences.privacy",
     PrefsNotifications => "preferences.notifications",
+    /// P4: Settings › Code (off by default; never carried by an export).
+    PrefsCode => "preferences.code",
     PrefsAdvanced => "preferences.advanced",
     /// Pre-palette serialized `ThemeTokens`; migrated on load, then removed.
     LegacyThemeTokens => "theme_tokens",
@@ -105,4 +107,6 @@ setting_keys! {
     InspectorMode => "ui.inspector_mode",
     /// Q5: JSON of the saved searches.
     SavedSearches => "search.saved",
+    /// P1: JSON of the runtimes the last detection found (`domain::code::RuntimeCache`).
+    CodeRuntimes => "code.runtimes",
 }

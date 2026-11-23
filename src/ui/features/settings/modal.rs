@@ -35,7 +35,7 @@ impl SettingsModal {
         actions: SettingsActions,
         appearance: Entity<AppearancePanel>,
     ) -> Self {
-        let panes = EmbeddedPanes { ai: None, credentials: None, appearance: Some(appearance), scheduler: data.scheduler.clone(), symbols: None, licences: None };
+        let panes = EmbeddedPanes { ai: None, credentials: None, appearance: Some(appearance), scheduler: data.scheduler.clone(), symbols: None, licences: None, runtimes: None };
         Self { theme, active_tab, data, inputs, actions, panes }
     }
 
@@ -48,6 +48,12 @@ impl SettingsModal {
     /// Supplies the credentials list, editor and callbacks.
     pub fn credentials(mut self, credentials: CredentialsPaneProps) -> Self {
         self.panes.credentials = Some(credentials);
+        self
+    }
+
+    /// Supplies Settings › Code › Runtimes (P1).
+    pub fn code(mut self, runtimes: super::panes::RuntimesProps) -> Self {
+        self.panes.runtimes = Some(runtimes);
         self
     }
 

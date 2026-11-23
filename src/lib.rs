@@ -16,6 +16,7 @@ pub mod icons;
 pub mod import;
 pub mod media;
 pub mod prelude;
+pub mod runner; // epic P: running code on this computer
 pub mod state;
 pub mod storage;
 pub mod theme;

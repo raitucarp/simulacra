@@ -15,6 +15,7 @@ pub(in crate::ui::features::settings) struct EmbeddedPanes {
     pub scheduler: SchedulerStatus,
     pub symbols: Option<super::super::panes::SymbolSetsProps>,
     pub licences: Option<Vec<super::super::panes::LicenceView>>,
+    pub runtimes: Option<super::super::panes::RuntimesProps>, // P1
 }
 
 impl EmbeddedPanes {
@@ -31,6 +32,7 @@ impl EmbeddedPanes {
             EmbeddedPane::Themes => self.appearance.take().map(IntoElement::into_any_element),
             EmbeddedPane::SymbolSets => self.symbols.take().map(|props| super::super::panes::render_symbol_sets(theme, props).into_any_element()),
             EmbeddedPane::Licences => self.licences.take().map(|licences| super::super::panes::render_licences(theme, &licences).into_any_element()),
+            EmbeddedPane::Runtimes => self.runtimes.take().map(|props| super::super::panes::render_runtimes(theme, props).into_any_element()),
             EmbeddedPane::SchedulerStatus => Some(render_scheduler_status(theme, &self.scheduler).into_any_element()),
         }
     }

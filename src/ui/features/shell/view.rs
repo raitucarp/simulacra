@@ -90,6 +90,8 @@ pub struct AppView {
     pub tasks: super::tasks_host::TasksHost,
     /// Q4: the Search page, made when it first opens.
     pub search: Option<super::search_host::SearchHost>,
+    /// Epic P: Settings › Code (the runtime detection).
+    pub code: super::code_host::CodeHost,
     /// Cached views of the sidebars and the center column.
     pub(super) panels: ShellPanels,
     pub(super) _subscriptions: Vec<Subscription>,

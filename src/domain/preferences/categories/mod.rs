@@ -4,6 +4,7 @@ mod advanced;
 mod agents;
 mod ai;
 mod appearance;
+mod code; // P4
 mod embeddings;
 mod general;
 mod images;
@@ -17,6 +18,7 @@ pub use advanced::AdvancedPrefs;
 pub use agents::{AgentPrefs, MAX_CONCURRENT, POSTS_PER_HOUR, REPLY_DEPTH};
 pub use ai::{AiPrefs, DAILY_REQUESTS, DAILY_TOKENS, MAX_RETRIES, REQUEST_TIMEOUT_SECONDS};
 pub use appearance::AppearancePrefs;
+pub use code::{CodePrefs, RUN_TIMEOUT_SECONDS};
 pub use embeddings::{
     default_model, EmbeddingPrefs, CHUNK_OVERLAP, CHUNK_SIZE, DEFAULT_EMBEDDING_MODEL, DEFAULT_LOCAL_ENDPOINT, DIMENSIONS,
     LOCAL_EMBEDDING_MODEL, OPENAI_EMBEDDING_MODEL,

@@ -1,5 +1,6 @@
 //! Preferences: defaults, clamping, migration, serde round trips and the generic fields.
 
+mod code; // P4
 mod defaults;
 mod fields;
 mod format;

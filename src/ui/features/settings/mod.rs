@@ -31,6 +31,7 @@ pub use catalog::{settings_sections, SettingRow, SettingsCommand, SettingsSectio
 pub use credentials::{CredentialEditorView, CredentialRowView, CredentialsPaneProps};
 pub use modal::SettingsModal;
 pub use panes::{action_set, set_label, AppearanceEvent, AppearancePanel, LicenceView, SetDownload, SymbolSetAction, SymbolSetCallback, SymbolSetsProps};
+pub use panes::{checked_label, RuntimeAction, RuntimeCallback, RuntimesProps}; // P1
 pub use props::{AiPaneProps, PersonaOption, SchedulerStatus, SettingsData, SettingsInputs};
 pub use tabs::SettingsTab;
 

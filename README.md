@@ -9,11 +9,11 @@ Simulacra 0.2.0 is available for Windows, macOS and Linux. All releases are list
 
 | Platform | Installer | Without installer |
 |---|---|---|
-| Windows 10/11 (x64) | [simulacra_0.2.0_x64-setup.exe](https://github.com/raitucarp/simulacra/releases/download/v0.2.0/simulacra_0.2.0_x64-setup.exe) (13 MB) | [simulacra-0.2.0-windows-x64.zip](https://github.com/raitucarp/simulacra/releases/download/v0.2.0/simulacra-0.2.0-windows-x64.zip) (17 MB) |
-| macOS 11+ (Apple silicon) | [Simulacra_0.2.0_aarch64.dmg](https://github.com/raitucarp/simulacra/releases/download/v0.2.0/Simulacra_0.2.0_aarch64.dmg) (17 MB) | [simulacra-0.2.0-macos-arm64.tar.gz](https://github.com/raitucarp/simulacra/releases/download/v0.2.0/simulacra-0.2.0-macos-arm64.tar.gz) (16 MB) |
-| macOS 11+ (Intel) | [Simulacra_0.2.0_x64.dmg](https://github.com/raitucarp/simulacra/releases/download/v0.2.0/Simulacra_0.2.0_x64.dmg) (18 MB) | [simulacra-0.2.0-macos-x64.tar.gz](https://github.com/raitucarp/simulacra/releases/download/v0.2.0/simulacra-0.2.0-macos-x64.tar.gz) (18 MB) |
-| Linux x64 (Debian, Ubuntu) | [simulacra_0.2.0_amd64.deb](https://github.com/raitucarp/simulacra/releases/download/v0.2.0/simulacra_0.2.0_amd64.deb) (25 MB) | [simulacra-0.2.0-linux-x64.tar.gz](https://github.com/raitucarp/simulacra/releases/download/v0.2.0/simulacra-0.2.0-linux-x64.tar.gz) (24 MB) |
-| Linux x64 (any distribution) | [simulacra_0.2.0_x86_64.AppImage](https://github.com/raitucarp/simulacra/releases/download/v0.2.0/simulacra_0.2.0_x86_64.AppImage) (24 MB) | |
+| Windows 10/11 (x64) | [simulacra_0.2.0_x64-setup.exe](https://github.com/raitucarp/simulacra/releases/download/v0.2.0/simulacra_0.2.0_x64-setup.exe) (14 MB) | [simulacra-0.2.0-windows-x64.zip](https://github.com/raitucarp/simulacra/releases/download/v0.2.0/simulacra-0.2.0-windows-x64.zip) (19 MB) |
+| macOS 11+ (Apple silicon) | [Simulacra_0.2.0_aarch64.dmg](https://github.com/raitucarp/simulacra/releases/download/v0.2.0/Simulacra_0.2.0_aarch64.dmg) (19 MB) | [simulacra-0.2.0-macos-arm64.tar.gz](https://github.com/raitucarp/simulacra/releases/download/v0.2.0/simulacra-0.2.0-macos-arm64.tar.gz) (18 MB) |
+| macOS 11+ (Intel) | [Simulacra_0.2.0_x64.dmg](https://github.com/raitucarp/simulacra/releases/download/v0.2.0/Simulacra_0.2.0_x64.dmg) (20 MB) | [simulacra-0.2.0-macos-x64.tar.gz](https://github.com/raitucarp/simulacra/releases/download/v0.2.0/simulacra-0.2.0-macos-x64.tar.gz) (20 MB) |
+| Linux x64 (Debian, Ubuntu) | [simulacra_0.2.0_amd64.deb](https://github.com/raitucarp/simulacra/releases/download/v0.2.0/simulacra_0.2.0_amd64.deb) (26 MB) | [simulacra-0.2.0-linux-x64.tar.gz](https://github.com/raitucarp/simulacra/releases/download/v0.2.0/simulacra-0.2.0-linux-x64.tar.gz) (26 MB) |
+| Linux x64 (any distribution) | [simulacra_0.2.0_x86_64.AppImage](https://github.com/raitucarp/simulacra/releases/download/v0.2.0/simulacra_0.2.0_x86_64.AppImage) (25 MB) | |
 
 Not sure which Mac you have? Open the Apple menu → About This Mac: "Chip: Apple M…" means Apple
 silicon, "Processor: Intel…" means Intel.

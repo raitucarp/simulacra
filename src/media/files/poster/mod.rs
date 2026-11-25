@@ -9,7 +9,7 @@ mod quick_look;
 mod windows;
 
 pub use freedesktop::{cached_thumbnail, thumbnail_name};
-pub use quick_look::{quick_look_args, quick_look_output};
+pub use quick_look::{quick_look_args, quick_look_output, ran_to_success, QUICK_LOOK_LIMITS};
 
 use crate::domain::media::FileRef;
 use crate::import::parse::sha256_hex;

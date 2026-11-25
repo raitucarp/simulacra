@@ -16,7 +16,7 @@ pub(super) const CODE_FILE: &str = "main.txt";
 const LONG_SLEEP: Duration = Duration::from_secs(60);
 
 /// The arguments that run only [`fake_runtime`] in a copy of this binary.
-fn fake_args() -> Vec<String> {
+pub(super) fn fake_args() -> Vec<String> {
     ["--exact", FAKE_TEST, "--ignored", "--nocapture", "--test-threads=1", "--quiet"].map(String::from).to_vec()
 }
 

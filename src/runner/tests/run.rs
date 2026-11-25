@@ -11,6 +11,12 @@ use std::time::{Duration, Instant};
 
 const ROOMY: Limits = Limits { timeout: Duration::from_secs(60), output_cap: 64 * 1024 };
 const SHORT: Duration = Duration::from_millis(1_500);
+/// Variables the fake runtime's own system libraries set as it starts (none come from us):
+/// on macOS, the system framework every app links writes its text encoding at load.
+#[cfg(target_os = "macos")]
+const SET_BY_THE_CHILD_ITSELF: &[&str] = &["__CF_USER_TEXT_ENCODING"];
+#[cfg(not(target_os = "macos"))]
+const SET_BY_THE_CHILD_ITSELF: &[&str] = &[];
 
 fn line<'a>(output: &'a str, key: &str) -> &'a str {
     output.lines().find_map(|line| line.strip_prefix(key)).unwrap_or_default()
@@ -32,7 +38,8 @@ fn the_environment_holds_only_what_a_runtime_needs() {
     let found = run_fake("echo", "", ROOMY);
     let vars: Vec<&str> = line(&found.output, "vars=").split(',').collect();
     let allowed = ["PATH", "HOME", "TMPDIR", "USERPROFILE", "TEMP", "TMP", "SystemRoot", "SystemDrive", "windir", super::fake::MODE];
-    assert!(vars.iter().all(|var| allowed.iter().any(|ok| ok.eq_ignore_ascii_case(var))), "{vars:?}");
+    let set_by_the_child = SET_BY_THE_CHILD_ITSELF;
+    assert!(vars.iter().all(|var| allowed.iter().chain(set_by_the_child).any(|ok| ok.eq_ignore_ascii_case(var))), "{vars:?}");
     assert!(!vars.iter().any(|var| var.starts_with("CARGO")), "nothing of this process leaks in");
 }
 
@@ -50,6 +57,16 @@ fn a_run_past_its_time_is_stopped_with_everything_it_started() {
     assert!(line(&found.output, "spawned=").parse::<u32>().is_ok_and(|pid| pid > 0), "a grandchild started: {}", found.output);
     // The grandchild shares the output pipe: had it survived, reading would wait out READ_GRACE.
     assert!(started.elapsed() < SHORT + READ_GRACE, "the grandchild was ended too ({:?})", started.elapsed());
+}
+
+#[test]
+fn an_os_tool_that_never_ends_is_stopped_at_its_limit() {
+    let mut tool = std::process::Command::new(std::env::current_exe().expect("test binary"));
+    tool.args(super::fake::fake_args()).env(super::fake::MODE, "sleep");
+    let started = Instant::now();
+    let limits = Limits { timeout: SHORT, ..crate::media::files::poster::QUICK_LOOK_LIMITS };
+    assert!(!crate::media::files::poster::ran_to_success(tool, limits), "a tool stopped at its limit did not succeed");
+    assert!(started.elapsed() < SHORT + READ_GRACE, "stopped, not waited for ({:?})", started.elapsed());
 }
 
 #[test]

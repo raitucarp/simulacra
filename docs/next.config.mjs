@@ -1,7 +1,8 @@
 import { createMDX } from 'fumadocs-mdx/next';
 
-// GitHub Pages serves the site from /<repository>; the workflow sets DOCS_BASE_PATH=/simulacra.
-// Local `npm run dev` leaves it empty so the site lives at the root.
+// The site is served at the root of https://simulacra.raitucarp.name, so the base path is empty.
+// The deploy workflow passes the one GitHub Pages reports, which is "/simulacra" only when the
+// repository has no custom domain and Pages serves it from /<repository>.
 const basePath = process.env.DOCS_BASE_PATH ?? '';
 
 /** @type {import('next').NextConfig} */

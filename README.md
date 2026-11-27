@@ -55,7 +55,7 @@ sudo apt-get install -y --no-install-recommends pkg-config clang \
 ## Documentation
 
 The user guide lives in [docs/](docs/) (Next.js + Fumadocs) and is published to GitHub Pages at
-<https://raitucarp.github.io/simulacra/>. Run it locally with `npm install` and `npm run dev` in `docs/`.
+<https://simulacra.raitucarp.name/>. Run it locally with `npm install` and `npm run dev` in `docs/`.
 
 ## Licenses
 

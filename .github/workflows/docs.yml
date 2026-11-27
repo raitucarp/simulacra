@@ -2,7 +2,8 @@ name: Docs
 
 # The user guide in docs/ (Next.js + Fumadocs), exported as static HTML and published to GitHub
 # Pages. Pull requests that touch docs/ build the site to catch broken pages; pushes to main build
-# and deploy it. In the repository settings, Pages → Source must be "GitHub Actions".
+# and deploy it to https://simulacra.raitucarp.name. In the repository settings, Pages → Source must
+# be "GitHub Actions" and Pages → Custom domain holds that host (a workflow deploy ignores a CNAME file).
 
 on:
   push:
@@ -56,8 +57,9 @@ jobs:
 
       - name: Build
         env:
-          # "/simulacra" on <owner>.github.io; empty when Pages serves a custom domain.
-          DOCS_BASE_PATH: ${{ steps.pages.outputs.base_path || '/simulacra' }}
+          # Read from the Pages settings: empty on the custom domain, where the site sits at the root,
+          # and "/simulacra" if the domain is ever removed. Pull requests build at the root.
+          DOCS_BASE_PATH: ${{ steps.pages.outputs.base_path }}
         run: npm run build
 
       - name: Upload site

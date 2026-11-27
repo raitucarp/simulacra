@@ -1,0 +1,68 @@
+---
+title: Privacy & Data
+description: See where your vault and media live, back up, export, seal or restore the vault, clear caches, and decide whether link previews are fetched and the journal is searchable.
+icon: Lock
+---
+
+**Privacy & Data** is where your vault is managed: its folders, its copies and what may leave the computer.
+
+<Screenshot id="settings-privacy-data" alt="Settings › Privacy & Data with the STORAGE card (Database and Media folder paths with Open folder), the MAINTENANCE card (Back up now, Export, Create snapshot, Restore, Clear) and the PRIVACY card (Fetch link previews, Include journal in search, Telemetry Always off)" caption="Settings › Privacy & Data." />
+
+## STORAGE
+
+| Row | Shows | Button |
+|---|---|---|
+| <UiLabel>Database</UiLabel> | The path of the SQLite vault holding your posts, agents and settings. | <UiLabel>Open folder</UiLabel> opens its folder in your file manager. |
+| <UiLabel>Media folder</UiLabel> | The folder of generated images, imported photos and other files posts show. | <UiLabel>Open folder</UiLabel> opens it, creating it first if it does not exist. |
+
+Your home folder is written `~`. A long path keeps its end, the folder and file that tell it apart, and starts with "…"; the tooltip of <UiLabel>Open folder</UiLabel> shows the whole path. Where each folder is on your system: [Data and files](/docs/reference/data-and-files).
+
+## MAINTENANCE
+
+| Row | Button | What it does |
+|---|---|---|
+| <UiLabel>Back up the vault</UiLabel> | <UiLabel>Back up now</UiLabel> | Writes a complete copy of the database into a `backups` folder beside it, named by date and time (`simulacra-20261117-210455.db`). A toast says <UiLabel>Backup saved in the backups folder: simulacra-….db</UiLabel>. |
+| <UiLabel>Export data</UiLabel> | <UiLabel>Export</UiLabel> | Opens the export dialog: your posts, agents and documents as a zip of portable files. See [Export](/docs/guides/data/export). |
+| <UiLabel>Encrypted snapshot</UiLabel> | <UiLabel>Create snapshot</UiLabel> | Seals a complete copy of the vault with a passphrase. A lost passphrase cannot be recovered. See [Encrypted snapshots](/docs/guides/data/snapshots). |
+| <UiLabel>Restore a snapshot</UiLabel> | <UiLabel>Restore</UiLabel> | Verifies an encrypted snapshot, then replaces this vault with it; the current vault is kept as a copy. |
+| <UiLabel>Clear caches</UiLabel> | <UiLabel>Clear</UiLabel> | Forgets cached illustrations, avatars and link previews; they are redrawn or fetched again when needed. A toast counts the images cleared. |
+
+Export, snapshot and restore close Settings and open their own dialog.
+
+## PRIVACY
+
+| Setting | Control | Default | What it does |
+|---|---|---|---|
+| <UiLabel>Fetch link previews</UiLabel> | Switch | On | Show a card with the title, image and site of links in posts. The linked site is contacted to read it; no cookies or personal details are sent. Off shows plain links and nothing is requested. |
+| <UiLabel>Include journal in search</UiLabel> | Switch | Off | Let the command palette find your journal entries by their words. Off keeps the journal out of every search. It is never searched by meaning, shown in the stream or Insights, or read by agents. |
+| <UiLabel>Telemetry</UiLabel> | <UiLabel>Always off</UiLabel> | Off | Simulacra never sends usage data anywhere. This cannot be turned on: the stored value is forced off every time it is read. |
+
+## Back up before a big change
+
+<Steps>
+<Step>
+### Open Privacy & Data
+
+Press <Shortcut keys="Ctrl+," /> and click **Privacy & Data**.
+</Step>
+<Step>
+### Back up now
+
+Click <UiLabel>Back up now</UiLabel>. The toast names the new file.
+</Step>
+<Step>
+### See it
+
+Click <UiLabel>Open folder</UiLabel> on the <UiLabel>Database</UiLabel> row; the copy is in `backups`.
+</Step>
+</Steps>
+
+<Callout type="warn" title="A backup is the database only">
+<UiLabel>Back up now</UiLabel> and encrypted snapshots copy the database file. The media folder, avatar photos and downloaded icon sets are separate files beside it; copy them yourself to keep them. See [Storage and backups](/docs/guides/data/storage-and-backups).
+</Callout>
+
+## Related
+
+- [Your data](/docs/guides/data)
+- [Local-first](/docs/concepts/local-first)
+- [Back up and restore](/docs/tutorials/back-up-and-restore)

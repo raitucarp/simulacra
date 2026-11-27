@@ -1,0 +1,135 @@
+---
+title: The Settings window
+description: How the Settings window is laid out, how every kind of setting row works, how changes are saved, and how to search, reset and navigate it.
+icon: Settings
+---
+
+Settings holds every preference of the app in sixteen categories, from the interface language to the code runner. Almost every change takes effect and is saved the moment you make it.
+
+<Screenshot id="settings-window" alt="The Settings window over the main window: the category rail on the left, the General category with its LANGUAGE & REGION and STARTUP cards on the right" caption="Settings, open on General." />
+
+## Open it
+
+| From | How |
+|---|---|
+| Keyboard | <Shortcut keys="Ctrl+," /> opens Settings on **General**. |
+| Left sidebar | The **Settings** row in the sidebar footer, or the gear icon when the sidebar is collapsed to the rail. The palette icon beside it (<UiLabel>Appearance</UiLabel>) opens the **Appearance** category. |
+| Command palette | <UiLabel>Open settings</UiLabel>, or <UiLabel>Appearance</UiLabel>. The palette's <UiLabel>Settings</UiLabel> group also lists every category by name: type `budget`, `privacy` or `theme` and pick the category. |
+
+Settings takes the keyboard focus when it opens, so <Kbd>Esc</Kbd> closes it straight away. You can also close it with the **×** in the header (<UiLabel>Close (Esc)</UiLabel>), <UiLabel>Close</UiLabel> in the footer, or a click on the dimmed window around it.
+
+## Anatomy
+
+The window is a dialog over the app, sized to fit inside the main window.
+
+1. **Search box** (<UiLabel>Search settings…</UiLabel>) at the top of the rail.
+2. **Category rail.** One button per category with its icon. The active one is highlighted. The rail is resizable: drag the divider, and the width is remembered.
+3. **Rail footer.** A lock and <UiLabel>Local Epistemic Sovereignty</UiLabel>, a reminder that everything stays on this computer.
+4. **Header.** The category's illustration, title and one-line description, and the **×** button.
+5. **Body.** The category's cards. Each card has an uppercase title (<UiLabel>LANGUAGE & REGION</UiLabel>, <UiLabel>STARTUP</UiLabel>) and a list of rows separated by hairlines. Larger panes, such as the theme gallery or the AI provider grid, sit in the body with their own headings.
+6. **Footer.** How changes are saved, <UiLabel>Close</UiLabel>, and on **AI & Models** the <UiLabel>Save & Apply Settings</UiLabel> button.
+
+<Screenshot id="settings-rail" alt="The category rail: the search box, sixteen category buttons from General to Advanced, and the lock footer" caption="The category rail." size="sm" />
+
+## Categories
+
+| Category | What it holds | Page |
+|---|---|---|
+| **General** | Interface language, regional formats, default persona, startup screen, welcome tour | [General](/docs/guides/settings/general) |
+| **Appearance** | Reading width, reduced motion, themes, colours, typography and layout | [Appearance](/docs/guides/appearance) |
+| **Reading & Writing** | Post length, archiving, symbol shorthand, drafts, hints, links, daily feed budget | [Reading & Writing](/docs/guides/settings/reading-writing) |
+| **AI & Models** | Provider and default model, credentials, timeouts, retries, daily budget | [AI & Models](/docs/guides/settings/ai-and-models), [Credentials](/docs/guides/settings/credentials) |
+| **Embeddings** | Embedding provider and model, chunking, semantic search, the index | [Embeddings](/docs/guides/settings/embeddings) |
+| **Images** | Default image engine, size, style prefix, avatars | [Images](/docs/guides/settings/images) |
+| **Agents & Simulation** | Autonomous posting, scheduler status, concurrency, quiet hours, reply depth | [Agents & Simulation](/docs/guides/settings/agents-and-simulation) |
+| **Learning** | Review limits, retention, reminders, the language you are learning | [Learning](/docs/guides/settings/learning) |
+| **Import** | How imported documents are split, who posts them, file size, originals | [Import](/docs/guides/settings/import) |
+| **Privacy & Data** | Database and media folders, backup, export, snapshots, caches, link previews, journal search, telemetry | [Privacy & Data](/docs/guides/settings/privacy-and-data) |
+| **Notifications** | Which in-app toasts you see | [Notifications](/docs/guides/settings/notifications) |
+| **Shortcuts** | The keyboard shortcut sheet | [Shortcuts and Advanced](/docs/guides/settings/shortcuts-and-advanced) |
+| **Code** | Running code blocks, the time limit, the runtimes found | [Code](/docs/guides/settings/code) |
+| **Symbols** | Icon sets to download for custom symbols | [Icon sets](/docs/guides/appearance/icon-sets) |
+| **Licences** | Who made the icon sets you downloaded | [Icon sets](/docs/guides/appearance/icon-sets) |
+| **Advanced** | Log level, developer options, reset all settings | [Shortcuts and Advanced](/docs/guides/settings/shortcuts-and-advanced) |
+
+Every setting is also listed in one table in the [settings reference](/docs/reference/settings).
+
+## How a setting row works
+
+Each row has its title and a short description on the left and its control on the right. In a narrow window the control wraps below the text.
+
+<Screenshot id="settings-row-modified" alt="The Autosave drafts every row set to 45 s, with the minus and plus buttons and the reset-to-default arrow before them" caption="A row changed from its default shows the reset arrow." size="md" />
+
+| Control | Used for | How it behaves |
+|---|---|---|
+| **Switch** | On/off settings | Click to flip. |
+| **Chips** | Choices of up to three options | The chosen chip is highlighted. |
+| **Menu button** | Choices of four or more options | Shows the current option; the menu ticks it. |
+| **Stepper** | Numbers | **−** and **+** move one step (the step differs per setting) and are disabled at the ends of the range. The readout carries its unit: `30 s`, `2×`, `200 / day`, `90%`. Hours read `22:00`. Where 0 means unlimited, 0 reads <UiLabel>No limit</UiLabel>. |
+| **Text field** | Model names, addresses, the style prefix | Saved as you type. |
+| **Button** | One-off actions | <UiLabel>Back up now</UiLabel>, <UiLabel>Rebuild</UiLabel>, <UiLabel>Open shortcut sheet</UiLabel> and similar. |
+| **Folder** | Where the vault lives | The path in monospace, your home folder written `~` (a long path keeps its end: the folder and the file) and <UiLabel>Open folder</UiLabel>, whose tooltip shows the whole path. |
+| **Locked badge** | Telemetry | A lock and <UiLabel>Always off</UiLabel>. It cannot be changed. |
+
+<ScreenshotGrid cols={2}>
+<Screenshot id="settings-control-menu" alt="The Startup screen menu open with Timeline ticked, then Knowledge Vault, Mind Graph and Agent Lab" caption="A menu button." size="sm" />
+<Screenshot id="settings-control-locked" alt="The Telemetry row with the green Always off badge" caption="The locked badge." size="sm" />
+</ScreenshotGrid>
+
+- **Reset to default.** While a value differs from its default, a small arrow button (<UiLabel>Reset to default</UiLabel>) appears before the control. Click it to put that one setting back.
+- **Rows that depend on a switch** are dimmed and ignore clicks while the switch is off: <UiLabel>Quiet from</UiLabel> and <UiLabel>Quiet until</UiLabel> follow <UiLabel>Quiet hours</UiLabel>, each <UiLabel>Remind me at</UiLabel> follows its reminder, <UiLabel>Local server address</UiLabel> follows the embedding provider, and every toast kind follows <UiLabel>Show toasts</UiLabel>.
+
+## How changes are saved
+
+The footer says <UiLabel>Changes are saved as you make them.</UiLabel> Every switch, chip, step and keystroke is checked, pulled into its allowed range and written to your vault straight away. There is nothing to confirm.
+
+The one exception is the provider pane of **AI & Models**: the provider, its API key, the custom endpoint and the default model wait for <UiLabel>Save & Apply Settings</UiLabel>. On that category the footer reads <UiLabel>Provider, key and model changes apply when you save.</UiLabel> Once you change one of them, the footer turns to <UiLabel>Unsaved provider changes</UiLabel> with an amber dot, the same dot appears on **AI & Models** in the rail, and the save button stays in the footer whichever category you open.
+
+<Screenshot id="settings-footer-unsaved" alt="The footer with an amber dot, Unsaved provider changes, Close and Save & Apply Settings" caption="Unsaved provider changes." size="md" />
+
+<Callout type="warn" title="Closing discards provider changes">
+Closing Settings without <UiLabel>Save & Apply Settings</UiLabel> puts the provider, key, endpoint and model back as they were saved. Every other setting is already saved.
+</Callout>
+
+## Search settings
+
+Type in <UiLabel>Search settings…</UiLabel> to search every category at once.
+
+<Screenshot id="settings-search" alt="Search results for the word key: rows from AI & Models, Notifications, Shortcuts and Advanced with key highlighted, and match counts beside those categories in the rail" caption="Searching for key." />
+
+- A row matches when every word you type appears, in any letter case, in its title, its description, its hidden keywords or its category's name. `api key`, `quiet` or `retention` all work.
+- The header reads <UiLabel>Search results</UiLabel> and <UiLabel>Matching settings: N</UiLabel>. Results are grouped under their category's icon and name, in rail order, with the matched words highlighted.
+- Every result is the real control: you can change a setting straight from the results.
+- The rail shows a count beside each category with matches and dims the others.
+- **Density** and **Font size** only appear as search results. They show their current value and <UiLabel>Show in Appearance</UiLabel>; larger panes (the theme gallery, the credentials list) show <UiLabel>Show in …</UiLabel> with the category that holds them.
+- Clicking a category in the rail clears the search. With no match the body shows <UiLabel>No settings match</UiLabel> and <UiLabel>Try another word, or fewer words.</UiLabel>
+
+## Keyboard
+
+| Key | Where | What it does |
+|---|---|---|
+| <Shortcut keys="Ctrl+," /> | Anywhere | Opens Settings on General. |
+| <Kbd>Esc</Kbd> | Settings | Closes Settings. |
+| <Kbd>↑</Kbd> / <Kbd>↓</Kbd> | Category rail focused | Moves to the previous or next category (wrapping round at the ends). It does not apply while the search box has focus. |
+| <Kbd>Tab</Kbd> | Settings | Moves through the categories and controls. |
+
+## In a narrow window
+
+When the main window is narrow, the rail shrinks to icons with tooltips, its footer is hidden, and the search box moves to the top of the content column.
+
+<Screenshot id="settings-compact" alt="Settings in a narrow window: a thin icon rail on the left and the search box above the General category" caption="The compact layout." />
+
+## Tips and limits
+
+- **Saved per vault.** Preferences live in your vault, one stored row per category. If one row cannot be read, only that category returns to its defaults. An option the app does not know (written by a newer version) reads as the default.
+- **Some rows are not used yet.** Version 0.2.0 saves a few settings that no screen reads yet, such as the autosave interval. Each category page says which; the [settings reference](/docs/reference/settings) marks them all.
+- **Reset everything at once** with <UiLabel>Reset all settings</UiLabel> in **Advanced**. It asks for a second click and keeps your themes, keys and data. See [Shortcuts and Advanced](/docs/guides/settings/shortcuts-and-advanced).
+- **Without a vault.** If the vault could not be opened, folder and backup actions report <UiLabel>This session runs without a vault.</UiLabel> See [Troubleshooting](/docs/reference/troubleshooting).
+
+## Related
+
+<Cards>
+  <Card title="Settings reference" href="/docs/reference/settings" description="Every setting in one table: control, range, default and effect." />
+  <Card title="Appearance" href="/docs/guides/appearance" description="Themes, colours, typography and the light and dark modes." />
+  <Card title="Your data" href="/docs/guides/data" description="Backups, exports, encrypted snapshots and version history." />
+</Cards>

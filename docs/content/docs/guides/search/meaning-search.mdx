@@ -1,0 +1,160 @@
+---
+title: Search by meaning
+description: Find posts and vault documents that say what you mean, even in other words, once an embedding provider is set up.
+icon: Sparkles
+---
+
+Search by meaning finds posts and documents that are close to a question or an idea, not only those that share its words. Ask "where do our ideas come from?" and a passage about impressions and sense experience can come up although it never uses the word "ideas".
+
+<Screenshot id="search-meaning-results" alt="The command palette in Meaning mode with the query where do our ideas come from, a By meaning group of posts, each with an excerpt and a similarity bar" caption="Results by meaning, each with its closest passage and a similarity score." />
+
+It works by turning every post and document into vectors (embeddings) with an embedding provider you choose, then comparing your query's vector with them. [Search by meaning, explained](/docs/concepts/meaning-search) describes how.
+
+## Set it up
+
+<Steps>
+<Step>
+### Choose a provider
+
+Open Settings (<Shortcut keys="Ctrl+," />) › <UiLabel>Embeddings</UiLabel> and pick an <UiLabel>Embedding provider</UiLabel>:
+
+| Provider | Needs | Default model |
+|---|---|---|
+| <UiLabel>Gemini</UiLabel> (the default) | A Gemini key | `gemini-embedding-001` |
+| <UiLabel>Local server</UiLabel> | An embedding server on your computer, such as one serving `embeddinggemma` | `embeddinggemma` |
+| <UiLabel>OpenAI</UiLabel> | An OpenAI key | `text-embedding-3-small` |
+| <UiLabel>Custom</UiLabel> | Any OpenAI-compatible service; a key if it asks for one | `text-embedding-3-small` |
+</Step>
+<Step>
+### Add the key or address
+
+Keys go in Settings › AI & Models, with your other credentials (see [AI engines](/docs/concepts/ai-engines)). If Gemini is already your text provider, its key is used. A local server or custom service listens at <UiLabel>Local server address</UiLabel>, `http://localhost:11434` unless you change it.
+</Step>
+<Step>
+### Let it index
+
+Leave <UiLabel>Semantic search</UiLabel> on (it is on by default). Indexing starts by itself in the background, and a small pill in the bottom-right corner shows its progress.
+</Step>
+</Steps>
+
+### Embedding settings
+
+| Setting (Settings › Embeddings) | What it does | Default |
+|---|---|---|
+| <UiLabel>Embedding provider</UiLabel> | The service that turns text into vectors | Gemini |
+| <UiLabel>Embedding model</UiLabel> | The model id; blank uses the provider's default. Switching provider moves a default model to the new provider's default and keeps one you typed. | `gemini-embedding-001` |
+| <UiLabel>Local server address</UiLabel> | Where a local server (or a custom service) listens | `http://localhost:11434` |
+| <UiLabel>Vector size</UiLabel> | Numbers per vector, 128 to 3072. Smaller is lighter; a change re-embeds everything. | 768 |
+| <UiLabel>Chunk size</UiLabel> | How much text goes into one vector, 128 to 4096 tokens | 512 |
+| <UiLabel>Chunk overlap</UiLabel> | Text shared by neighbouring chunks, at most half a chunk | 64 |
+| <UiLabel>Semantic search</UiLabel> | Find posts and documents by meaning as well as by words | On |
+| <UiLabel>Rebuild the index</UiLabel> | Embed every post and document again with the current model | |
+| <UiLabel>Stop indexing</UiLabel> | Stop the embedding that is running | |
+
+Tokens are estimated at about four characters each. See [Settings reference](/docs/reference/settings) for every setting.
+
+## Search from the palette
+
+<Steps>
+<Step>
+### Open Meaning mode
+
+Press <Shortcut keys="Ctrl+Shift+K" />, or run <UiLabel>Search by meaning</UiLabel> from the palette. You can also type `?` at the start of the ordinary palette field. The field shows <UiLabel>Meaning</UiLabel> and a sparkle while in this mode.
+
+<Screenshot id="search-meaning-prompt" alt="The palette in Meaning mode before typing: Type a question or an idea to find posts and documents by meaning." size="md" />
+</Step>
+<Step>
+### Ask
+
+Type a question or an idea. Once you pause typing, <UiLabel>Searching by meaning…</UiLabel> appears, then the results.
+</Step>
+<Step>
+### Open a result
+
+Move with <Kbd>↑</Kbd> <Kbd>↓</Kbd> and press <Kbd>Enter</Kbd>, or click. A post opens in the timeline; a document opens its vault entry.
+</Step>
+</Steps>
+
+Each result row shows:
+
+- an icon: a speech bubble for a post, a page for a document;
+- the author's name and handle, or the document's title;
+- the passage of the post or document closest to your query;
+- a bar and a percentage of similarity, from 0 % to 100 %.
+
+The palette lists up to 12 results of the active network, under <UiLabel>By meaning</UiLabel>. If nothing is close it says <UiLabel>Nothing close to “your query” yet.</UiLabel>
+
+### When meaning is not available
+
+<Screenshot id="search-meaning-fallback" alt="The palette in Meaning mode showing the note Search by meaning is off in Settings, so these are word matches, and a Matching words group" size="md" />
+
+The palette still answers, with word matches under <UiLabel>Matching words</UiLabel> and a note saying why:
+
+| Note | Cause |
+|---|---|
+| <UiLabel>Search by meaning is off in Settings, so these are word matches.</UiLabel> | <UiLabel>Semantic search</UiLabel> is off. |
+| <UiLabel>No embedding key is set, so these are word matches.</UiLabel> | The provider needs a key that is missing. |
+| <UiLabel>Nothing is indexed by meaning yet, so these are word matches.</UiLabel> | Nothing has been embedded with the current model yet. |
+| A provider message, then <UiLabel>Showing word matches instead.</UiLabel> | Embedding the query failed. |
+
+Word matches are scored relative to the best one, so their bars still compare sensibly.
+
+## Search by meaning elsewhere
+
+Once the index exists, meaning also powers:
+
+- the [Search page](/docs/guides/search), which merges posts found by meaning with posts found by words and marks the former <UiLabel>by meaning</UiLabel>;
+- [Find similar](/docs/guides/search/find-similar), for a post or a document;
+- <UiLabel>Close in meaning</UiLabel> under a vault entry's [related entries](/docs/guides/vault/catalogue#related-entries-and-backlinks);
+- [recommendations](/docs/guides/search/recommendations): the recommended For you order, related thoughts and a profile's recommended posts;
+- the map of meaning in [Insights](/docs/guides/insights).
+
+## Indexing
+
+Indexing runs in the background whenever there is something new:
+
+- Every post with text and every vault document is embedded, across all your networks. Reposts without text of their own and locked posts are left out. Documents are embedded with their title.
+- Long texts are cut into chunks (see <UiLabel>Chunk size</UiLabel>). Text that has not changed is never sent again; an edit re-embeds only what changed, and deleted items leave the index.
+- Changing the model, provider or vector size re-embeds everything with the new settings. Vectors from different models are never compared.
+- Chunks are sent 32 at a time. Each request counts against the daily budget in Settings › AI & Models (<UiLabel>Daily request budget</UiLabel> and <UiLabel>Daily token cap</UiLabel>; 0 means no limit).
+- Vectors are stored in your local vault, so the index survives restarts.
+
+### The indexing pill
+
+While indexing runs, a pill in the bottom-right corner reads "Indexing 120 of 800" over a thin progress bar.
+
+- Click the pill to open Settings › Embeddings.
+- Click its × (<UiLabel>Stop indexing</UiLabel>) to stop. A notice says <UiLabel>Indexing stopped. Rebuild the index in Settings › Embeddings to resume.</UiLabel>
+- <UiLabel>Rebuild the index</UiLabel> confirms with "Rebuilding the index with gemini-embedding-001." and starts over.
+
+### When indexing stops
+
+<Screenshot id="search-indexing-paused" alt="The pill reading Indexing paused, with its whole reason: The custom service could not be reached. Check the connection or the address in Settings." size="sm" />
+
+When the provider fails, indexing pauses, the pill reads <UiLabel>Indexing paused</UiLabel> with the reason, and a notice tells you once. The chunks wait and nothing is lost. Close the pill with its ×. Without a key that the provider needs, indexing does not start at all, and <UiLabel>Rebuild the index</UiLabel> answers with the missing-key notice.
+
+| Reason (for the provider you chose) | What to do |
+|---|---|
+| "Gemini needs a key. Add one in Settings › AI & Models to search by meaning." | Add the key. |
+| "Gemini rejected the embedding key. Check it in Settings › AI & Models." | Fix or replace the key. |
+| "Gemini rate limit or quota reached. Try again later." | Wait, then rebuild. |
+| "Today's AI budget is used up, so indexing paused. Raise it in Settings › AI & Models." | Raise the budget, or wait for the next day. |
+| "Gemini could not be reached. Check the connection or the address." | Check the network or the server address. |
+| "Gemini does not serve the model …" | Correct the model id. Gemma embedding runs on a local server; the Gemini API serves `gemini-embedding-001`. |
+| "Gemini had a server error. Try again later." | Wait, then rebuild. |
+| "Gemini sent a reply that could not be read." | Check the model and address of a custom service. |
+
+Rate limits, unreachable servers and server errors are retried automatically first (Settings › AI & Models › <UiLabel>Retries</UiLabel>), waiting longer each time, up to a minute. A paused index resumes when you change the provider, model, address or key, or when you click <UiLabel>Rebuild the index</UiLabel>.
+
+## Tips and limits
+
+- Results only come from the active network, though the index covers all networks.
+- Except with a local server, the text of your posts and documents is sent to the provider to be embedded, and each query is sent too.
+- Every vector is held in memory: about 30 MB for 10 000 chunks of 768 numbers, plus about half that again for the search graph.
+- Short queries work, but a full question usually finds better passages than one word.
+
+## Related
+
+- [Search by meaning, explained](/docs/concepts/meaning-search)
+- [Find similar](/docs/guides/search/find-similar)
+- [Settings](/docs/guides/settings)

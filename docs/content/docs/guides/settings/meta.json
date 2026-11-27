@@ -1,0 +1,19 @@
+{
+  "title": "Settings",
+  "icon": "Settings",
+  "pages": [
+    "general",
+    "reading-writing",
+    "ai-and-models",
+    "credentials",
+    "embeddings",
+    "images",
+    "agents-and-simulation",
+    "learning",
+    "import",
+    "privacy-and-data",
+    "notifications",
+    "code",
+    "shortcuts-and-advanced"
+  ]
+}

@@ -1,0 +1,119 @@
+---
+title: Argument maps
+description: Lay a thread out as claims, grounds, warrants and objections joined by support and attack, and see which claims still stand.
+icon: Waypoints
+---
+
+An argument map turns a thread into its reasoning: what is claimed, on what grounds, by what rule, and against which objections. Simulacra then works out which claims stand once every attack is taken into account, and points at claims nothing supports, support that runs in a circle, and objections nobody has answered.
+
+<Screenshot id="thinking-argument-map" alt="The Thread Inspector's argument view with statement chips in tiers, green support and red attack arrows, and the legend" caption="A thread as an argument map: the claim stands because its objection is answered." />
+
+## Open it
+
+| Way | What happens |
+|---|---|
+| The Thread Inspector's <UiLabel>View</UiLabel> menu | Pick <UiLabel>Show the argument map</UiLabel>. The inspector shows the map of the open thread. |
+| A post's "…" › <UiLabel>Actions</UiLabel> › <UiLabel>Map the argument</UiLabel> | Opens the post's thread in the argument view and, if the thread has no map yet, asks the AI to map it. |
+| The palette's <UiLabel>Show the argument map</UiLabel> | Opens the Timeline with the inspector in its argument view. |
+
+A map belongs to a whole thread (it is kept per thread root), so it is the same map whichever post of the thread you open it from.
+
+| State | You see |
+|---|---|
+| No thread open | <UiLabel>No thread selected</UiLabel>: select a thought to see its argument. |
+| Thread without a map | <UiLabel>This thread has no argument map yet</UiLabel>, with <UiLabel>Map with AI</UiLabel> and <UiLabel>Add statement</UiLabel>. |
+| Thread with a map | The toolbar, canvas, legend, findings, editor and statement list below. |
+
+<Screenshot id="thinking-argument-empty" alt="The argument view of a thread without a map, with Map with AI and Add statement" caption="Starting a map." size="md" />
+
+## Anatomy
+
+1. **Toolbar.** How many claims stand (<UiLabel>2 of 3 claims stand</UiLabel>), <UiLabel>Map again</UiLabel> and <UiLabel>Add statement</UiLabel>. While the AI works, <UiLabel>Map again</UiLabel> becomes <UiLabel>Stop</UiLabel>.
+2. **Status line.** <UiLabel>Reading the thread into an argument map…</UiLabel> while it runs, a failure in red, or how many statements or links were left out.
+3. **Canvas.** One chip per statement, in tiers: claims and qualifiers on top, grounds and objections below them, warrants under those, backing at the bottom. Arrows run from a statement to the one it bears on: green for support, red for attack. A chip's frame shows its standing.
+4. **Legend.** The three standings and the two arrow kinds, with <UiLabel>Click a statement to edit or link it.</UiLabel> while nothing is being edited.
+5. **<UiLabel>WHAT THE ANALYSIS FOUND</UiLabel>**, when there is something to report. Click a finding to edit its statement.
+6. **Editor**, while you edit or write a statement.
+7. **<UiLabel>STATEMENTS (DRAG TO REORDER)</UiLabel>**: every statement as a row.
+
+## Roles
+
+| Role | Says | Tier on the canvas |
+|---|---|---|
+| <UiLabel>Claim</UiLabel> | What someone wants the reader to accept. | Top |
+| <UiLabel>Qualifier</UiLabel> | How strongly the claim is put ("probably", "in most cases"). | Top |
+| <UiLabel>Ground</UiLabel> | The facts or reasons offered for a claim. | Second |
+| <UiLabel>Objection</UiLabel> | A circumstance or counter-argument that would defeat the claim. | Second |
+| <UiLabel>Warrant</UiLabel> | The general rule that licenses the step from grounds to claim. | Third |
+| <UiLabel>Backing</UiLabel> | Why the warrant itself should be trusted. | Bottom |
+
+These are Stephen Toulmin's parts of an argument. Links between them are of two kinds: <UiLabel>supports</UiLabel> (a reason to accept the target) and <UiLabel>attacks</UiLabel> (a reason to reject it).
+
+## Map with AI
+
+<UiLabel>Map with AI</UiLabel> sends the thread to the model, which answers with statements (each citing the post it comes from) and the links between them. The result replaces the current map. <UiLabel>Map again</UiLabel> does the same on a mapped thread, so manual edits are lost.
+
+- The AI reads the root and up to the first 23 replies, up to 1,200 characters of each, and proposes at most 24 statements.
+- Anything that cites no post of the thread, or a link to a statement that does not exist, is dropped: <UiLabel>N statements or links were left out because they cited nothing in the thread.</UiLabel>
+- If the answer is unreadable: <UiLabel>The answer could not be read as an argument map. Try again.</UiLabel>
+- <UiLabel>Stop</UiLabel> cancels a running request.
+
+It needs an AI key and counts toward the daily budget; see [AI assistance](/docs/guides/thinking#ai-assistance).
+
+## Build or edit by hand
+
+<Steps>
+<Step>
+### Add a statement
+
+Click <UiLabel>Add statement</UiLabel>. In the <UiLabel>New statement</UiLabel> card, write it in a few words, pick its role, and under <UiLabel>Cites</UiLabel> pick the post it comes from (<UiLabel>P1 · author</UiLabel> is the root, then the replies in reading order). Click <UiLabel>Save</UiLabel>. The card switches to editing the new statement.
+</Step>
+<Step>
+### Link it
+
+In the <UiLabel>Edit statement</UiLabel> card, click <UiLabel>Supports…</UiLabel> or <UiLabel>Attacks…</UiLabel>; the hint <UiLabel>Now click the statement this one bears on.</UiLabel> appears. Click the target chip on the canvas. Clicking the same button again cancels.
+</Step>
+<Step>
+### Adjust
+
+Click any chip or row to edit it: change its text and <UiLabel>Save</UiLabel>, change its role, or <UiLabel>Remove</UiLabel> it (with its links). Each link of the statement is listed with its kind: the swap button (<UiLabel>Switch between support and attack</UiLabel>) flips it, the cross (<UiLabel>Remove this link</UiLabel>) deletes it. Close the card with ×.
+</Step>
+<Step>
+### Reorder
+
+Drag a row of the statement list by its handle onto another row. The order sets where chips sit within their tier.
+</Step>
+</Steps>
+
+<ScreenshotGrid cols={2}>
+<Screenshot id="thinking-argument-editor" alt="The Edit statement card with text, role chips, standing, links and the Supports, Attacks and Remove buttons" caption="Editing a statement." size="sm" />
+<Screenshot id="thinking-argument-list" alt="The statement list with role, text, cited post and standing marks" caption="The statements, ready to drag." size="sm" />
+</ScreenshotGrid>
+
+Every edit is saved at once. A statement keeps at most 280 characters, and an edit that would break the map (a link to itself, or a second link in the same direction) is refused. In the list, the <UiLabel>P2</UiLabel> tag of a row opens the post the statement cites.
+
+## What stands
+
+Each statement gets a standing, shown on its chip and in the list:
+
+| Standing | Chip | Means |
+|---|---|---|
+| <UiLabel>Stands</UiLabel> | Ringed in the success colour | Every attack on it is answered by a statement that falls. |
+| <UiLabel>Falls</UiLabel> | Dimmed | A statement that stands attacks it. |
+| <UiLabel>Undecided</UiLabel> | Ringed in the warning colour | Neither: for example two statements attacking each other with nothing to break the tie. |
+
+The labelling is the grounded one from argumentation theory: start by accepting every statement nobody attacks, reject what they attack, and repeat until nothing changes. It is the most cautious position that every reasonable reader shares. Support counts too: if A supports B and B attacks C, then A also attacks C.
+
+## Findings
+
+| Finding | Means |
+|---|---|
+| <UiLabel>Nothing supports the claim “…”.</UiLabel> | A claim with no supporting link. |
+| <UiLabel>Circular support: … → ….</UiLabel> | Statements that support each other in a loop, so the argument leans on itself. |
+| <UiLabel>Nobody has answered the objection “…”.</UiLabel> | An objection (or anything attacking a claim) that nothing attacks. |
+
+## Related
+
+- [Beliefs and credence](/docs/concepts/beliefs-and-credence): standing, credence and revision.
+- [Map an argument](/docs/tutorials/map-an-argument): build a small map step by step.
+- [Views](/docs/guides/views): the Thread Inspector's other views.

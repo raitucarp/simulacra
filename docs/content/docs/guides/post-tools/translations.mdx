@@ -1,0 +1,72 @@
+---
+title: Translations
+description: Read any post in the language you are learning, and send its words to review as vocabulary cards.
+icon: Languages
+---
+
+If you are learning a language, your own stream is good reading material. <UiLabel>Show in …</UiLabel> puts any post into the language you are learning, keeps the translation with the post, and lets you send its words to review.
+
+<Screenshot id="tools-translation-line" alt="A post whose body is replaced by its translation, with a line under the author reading Shown in Español and buttons Show original and Send words to review…" caption="A post shown in the language you are learning." size="md" />
+
+## Choose the language
+
+Set **Settings › Learning › Language I am learning**. It starts as Spanish, so the menu item reads <UiLabel>Show in Español</UiLabel>. The menu names the language in its own script.
+
+## Show a post in that language
+
+<Steps>
+<Step>
+### Ask for it
+On any post that is not locked, click <Kbd>…</Kbd> › <UiLabel>Think it over</UiLabel> › <UiLabel>Show in Español</UiLabel>.
+</Step>
+<Step>
+### Wait for the first translation
+The line under the author reads "Translating…" while the AI engine works (after the spend check). Only one post is translated at a time.
+</Step>
+<Step>
+### Read it
+The translation replaces the body, and the line reads "Shown in Español" with <UiLabel>Show original</UiLabel> and <UiLabel>Send words to review…</UiLabel>.
+</Step>
+</Steps>
+
+The translation is kept on the post. Showing it again later is instant and costs nothing, as long as you are still learning the same language; after you switch languages, the next <UiLabel>Show in …</UiLabel> asks for a new translation.
+
+Which posts show translated is remembered only for the session: after a restart every post shows as written until you ask again.
+
+The model is asked to keep the tone and line breaks, to leave wikilinks, hashtags, mentions and URLs exactly as they are, and to prefer clear, everyday words a learner can look up. A translation longer than 2,000 characters is not kept.
+
+## Send words to review
+
+<Screenshot id="tools-words-sheet" alt="The Send words to review sheet listing words of the translation as buttons, three selected, and a Send 3 button" caption="Pick the words you want to learn." size="md" />
+
+<Steps>
+<Step>
+### Open the sheet
+Click <UiLabel>Send words to review…</UiLabel> on the translation line or under <Kbd>…</Kbd> › <UiLabel>Think it over</UiLabel>.
+</Step>
+<Step>
+### Pick words
+The sheet lists up to 30 distinct words of the translation. Click the ones you want; the button counts them, "Send 3".
+</Step>
+<Step>
+### Send
+Each word becomes a review card asking "What does “palabra” (Español) mean in this post?", with the post as the answer. The toast says "3 words sent to review".
+</Step>
+</Steps>
+
+Cards are tagged `vocabulary` and with the language's code, so you can find them under the Review page's items. See [Review](/docs/guides/review).
+
+## Problems
+
+| Message | Why |
+|---|---|
+| "No translation: …" | The request failed, or the answer was empty or too long. The reason follows. |
+| "Pick a word first." | You clicked send with no word picked. |
+
+## Related
+
+<Cards>
+<Card title="AI post actions" href="/docs/guides/post-tools/ai-post-actions" description="Translate into any language, once, without keeping it." />
+<Card title="Review" href="/docs/guides/review" description="Where the word cards come back." />
+<Card title="Languages" href="/docs/reference/languages" description="The languages the app speaks." />
+</Cards>

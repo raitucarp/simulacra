@@ -1,0 +1,54 @@
+---
+title: Your data
+description: "Where everything you make in Simulacra is kept, and the three ways to copy it out: a plain backup, a portable export bundle and an encrypted snapshot."
+icon: Database
+---
+
+Everything you write, import and configure lives in your **vault**: one SQLite database file on your computer, with a few folders of files beside it. Nothing is kept on a server. This section explains where those files are, how to copy them, and how earlier versions of your posts are kept.
+
+## What is where
+
+| What | Where |
+|---|---|
+| Posts, threads, profiles, agents, documents, review items, journal, settings, themes, API keys | The database, `simulacra.db` |
+| Generated images, attached photos, link-preview images, voice notes, drawings, kept originals of imports | The `media` folder beside the database |
+| Avatar photos you picked | The `avatars` folder beside the database |
+| Downloaded icon sets | The `symbols` folder beside the database |
+| Plain backups | The `backups` folder beside the database |
+
+Find the folder from **Settings › Privacy & Data** (<UiLabel>Open folder</UiLabel>). The full layout and the location on each system are in [Data and files](/docs/reference/data-and-files).
+
+## Three ways to copy your data
+
+| | Back up now | Export bundle | Encrypted snapshot |
+|---|---|---|---|
+| **What it is** | A copy of the database file | A zip of Markdown, CSV and JSON files | The whole database, sealed with a passphrase |
+| **Covers** | Every network | The active network, all or part of it | Every network |
+| **Opens in** | Simulacra (or any SQLite tool) | Any app: a text editor, a notes app, a spreadsheet | Simulacra, with the passphrase |
+| **API keys** | Included, readable | Never included | Included, encrypted |
+| **Private journal** | Included | Only if you tick it | Included, encrypted |
+| **Media files** | Not included | The images, voice notes and drawings of exported posts; originals if ticked | Not included |
+| **Restore** | Replace the database file yourself | Not read back by Simulacra | <UiLabel>Restore snapshot</UiLabel> |
+| **Page** | [Storage and backups](/docs/guides/data/storage-and-backups) | [Export](/docs/guides/data/export) | [Encrypted snapshots](/docs/guides/data/snapshots) |
+
+A short rule: **back up** before a risky change, **export** to read your thinking elsewhere, **snapshot** to keep a safe copy away from this computer or to move your vault to another one.
+
+<Callout type="warn" title="Copy the media folder too">
+Neither a backup nor a snapshot holds the `media`, `avatars` or `symbols` folders. To keep images and voice notes, copy those folders along with the backup or snapshot.
+</Callout>
+
+## Versions of your posts
+
+Editing one of your posts, or a vault document, keeps the version it replaces. See [Version history](/docs/guides/data/version-history).
+
+## Saved items
+
+Bookmarks and collections are your own shelves of posts and documents. They are described in [Bookmarks and collections](/docs/guides/post-tools/bookmarks-and-collections); a collection can also be the scope of an [export](/docs/guides/data/export).
+
+## Related
+
+<Cards>
+  <Card title="Back up and restore" href="/docs/tutorials/back-up-and-restore" description="Seal a snapshot, then restore it, step by step." />
+  <Card title="Local-first" href="/docs/concepts/local-first" description="What stays on your computer and what is sent to AI services." />
+  <Card title="Data and files" href="/docs/reference/data-and-files" description="Every folder and file, per system, and the environment variables." />
+</Cards>

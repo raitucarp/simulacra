@@ -1,0 +1,63 @@
+---
+title: Shortcuts and Advanced
+description: Open the keyboard shortcut sheet, the diagnostic options, and reset every setting to its default.
+icon: Terminal
+---
+
+The last categories of the rail are short: **Shortcuts** opens the shortcut sheet, and **Advanced** holds diagnostics and the reset of every setting.
+
+## Shortcuts › KEYMAP
+
+| Row | Button | What it does |
+|---|---|---|
+| <UiLabel>Keyboard shortcuts</UiLabel> | <UiLabel>Open shortcut sheet</UiLabel> | Closes Settings and opens the shortcut sheet, which lists every shortcut. <Shortcut keys="Ctrl+/" /> opens it from anywhere. |
+
+Shortcuts cannot be changed in 0.2.0. All of them are listed in [Keyboard shortcuts](/docs/reference/keyboard-shortcuts).
+
+## Advanced
+
+<Screenshot id="settings-advanced" alt="Settings › Advanced with the DIAGNOSTICS card (Log level Warnings, Developer options) and the RESET card with Reset all settings showing Click again to reset" caption="Settings › Advanced, with the reset waiting for its second click." size="md" />
+
+### DIAGNOSTICS
+
+| Setting | Control | Options | Default | What it does |
+|---|---|---|---|---|
+| <UiLabel>Log level</UiLabel> | Menu | <UiLabel>Errors</UiLabel>, <UiLabel>Warnings</UiLabel>, <UiLabel>Info</UiLabel>, <UiLabel>Debug</UiLabel> | Warnings | How much the app writes to its log. Saved, not yet used by 0.2.0. |
+| <UiLabel>Developer options</UiLabel> | Switch | | Off | Extra diagnostics in the interface, such as render counters. Saved, not yet used by 0.2.0. |
+
+### RESET
+
+| Row | Button | What it does |
+|---|---|---|
+| <UiLabel>Reset all settings</UiLabel> | <UiLabel>Reset all</UiLabel> | Puts every setting in this window back to its default. Themes, keys and your data are kept. |
+
+## Reset all settings
+
+<Steps>
+<Step>
+### Click Reset all
+
+In Settings › Advanced, click <UiLabel>Reset all</UiLabel>. The button turns red and reads <UiLabel>Click again to reset</UiLabel>.
+</Step>
+<Step>
+### Click again
+
+Click it a second time. A toast says <UiLabel>Every setting is back to its default.</UiLabel>
+</Step>
+</Steps>
+
+Changing any setting, switching category or closing Settings in between cancels the waiting reset.
+
+What it resets and what it keeps:
+
+| Reset | Kept |
+|---|---|
+| Every row of General, Appearance (reading width, reduced motion), Reading & Writing, AI & Models (timeouts, retries, budget), Embeddings, Images, Agents & Simulation, Learning, Import, Privacy & Data, Notifications, Code and Advanced. Autonomous posting goes back to off. | The theme, its colours, font, text size, density and corners; the AI provider, key and model; credentials; downloaded icon sets; panel sizes; and everything in your vault. |
+
+To put one setting back, use the arrow beside it instead (<UiLabel>Reset to default</UiLabel>). To reset the panel sizes, use <UiLabel>Reset layout</UiLabel> in [Typography and layout](/docs/guides/appearance/typography-and-layout).
+
+## Related
+
+- [Keyboard shortcuts](/docs/reference/keyboard-shortcuts)
+- [Settings reference](/docs/reference/settings)
+- [Troubleshooting](/docs/reference/troubleshooting)

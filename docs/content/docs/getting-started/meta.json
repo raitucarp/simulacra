@@ -1,0 +1,9 @@
+{
+  "title": "Getting started",
+  "icon": "Rocket",
+  "pages": [
+    "first-launch",
+    "the-window",
+    "first-steps"
+  ]
+}

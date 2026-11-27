@@ -1,0 +1,132 @@
+---
+title: Export
+description: Save the active network, a collection, a date range or one persona as a zip of Markdown, CSV and JSON files that any other app can open.
+icon: Package
+---
+
+An **export bundle** turns your thinking into ordinary files: one Markdown file per thread, your vault documents as Markdown, review items as CSV, and agent configurations as JSON. Use it to read your notes in another app, to archive them, or to hand them to someone.
+
+<Screenshot id="data-export-sheet" alt="The Export bundle dialog: WHAT TO EXPORT with Everything chosen, ALSO INCLUDE with two tick boxes, and WILL BE WRITTEN with counts of threads, posts, documents and the other kinds, then Cancel and Export…" caption="The export dialog, exporting everything." />
+
+## Open it
+
+- **Settings › Privacy & Data** › <UiLabel>Export data</UiLabel> › <UiLabel>Export</UiLabel>.
+- The command palette: <UiLabel>Export bundle…</UiLabel>.
+
+The dialog is titled <UiLabel>Export bundle</UiLabel>: <UiLabel>A zip of Markdown, CSV and JSON files you can open anywhere.</UiLabel> It always exports from the **active network**; switch network first to export another.
+
+## WHAT TO EXPORT
+
+| Scope | What goes in |
+|---|---|
+| <UiLabel>Everything</UiLabel> | Every post and vault document of the network, every review item, every agent and persona, and your appearance and preference settings. |
+| <UiLabel>A collection</UiLabel> | The posts and documents of one collection (pick it from the chips), the review items made from them, and the profiles of their authors. Without collections: <UiLabel>No collections yet. Create one in the Saved view of the Knowledge page.</UiLabel> |
+| <UiLabel>Date range</UiLabel> | Posts and documents created between <UiLabel>From</UiLabel> and <UiLabel>To</UiLabel> (both days included, your local calendar), written `YYYY-MM-DD`. The chips <UiLabel>Last 7 days</UiLabel>, <UiLabel>Last 30 days</UiLabel>, <UiLabel>Last 90 days</UiLabel> and <UiLabel>Last 365 days</UiLabel> fill both fields. A new dialog proposes the last 30 days. |
+| <UiLabel>One persona</UiLabel> | One of your personas' posts (pick it from the chips) and the documents it added. |
+
+<Screenshot id="data-export-date-range" alt="The Date range scope: From and To fields with dates and the Last 7, 30, 90 and 365 days chips" caption="The date range scope." size="md" />
+
+Review items always follow what was picked: only <UiLabel>Everything</UiLabel> exports all of them. Settings go along only with <UiLabel>Everything</UiLabel>.
+
+## ALSO INCLUDE
+
+| Tick | Adds |
+|---|---|
+| <UiLabel>Original files of imported documents</UiLabel> | The files you imported, as they were, when they were kept. |
+| <UiLabel>Include private journal</UiLabel> | Your journal entries, mood check-ins, focus sessions and time capsules (only those of the range, for a date range). |
+
+<Screenshot id="data-export-journal-warning" alt="The ALSO INCLUDE section with Include private journal ticked and an amber warning that the journal is written unencrypted" caption="The journal warning." size="md" />
+
+Ticking the journal shows: <UiLabel>Your journal, mood log, focus sessions and time capsules will be written into the bundle unencrypted. Anyone who gets the file can read them.</UiLabel> Both ticks start off.
+
+## WILL BE WRITTEN
+
+The preview counts exactly what the zip will hold, and updates with every choice: threads (one Markdown file each), posts, vault documents, original files, images, review items, agent and persona configurations, settings and private journal records. Below it, in green: <UiLabel>Never included: credentials, API keys and AI provider settings.</UiLabel>
+
+While the choice is incomplete, the preview says why and <UiLabel>Export…</UiLabel> stays disabled: <UiLabel>Write both dates as YYYY-MM-DD.</UiLabel>, <UiLabel>The start date comes after the end date.</UiLabel>, <UiLabel>Pick a collection to export.</UiLabel> or <UiLabel>Pick a persona to export.</UiLabel>
+
+## Export
+
+<Steps>
+<Step>
+### Choose the scope and extras
+
+Pick a scope and tick what to include. Check the counts.
+</Step>
+<Step>
+### Click Export…
+
+A save dialog proposes `simulacra-export-YYYYMMDD-HHMMSS.zip`. Choose where.
+</Step>
+<Step>
+### Wait for the toast
+
+The button reads <UiLabel>Writing…</UiLabel> while the zip is written in the background. Then a toast says <UiLabel>Export saved to … (N files).</UiLabel> and the dialog closes.
+</Step>
+</Steps>
+
+The zip is written under a temporary name and only renamed when complete, so a failed export (<UiLabel>Export failed: …</UiLabel>) never leaves half a bundle under your chosen name. A media file that no longer exists is skipped, not fatal.
+
+## What is in the zip
+
+<Files>
+  <File name="manifest.json" />
+  <Folder name="threads" defaultOpen>
+    <File name="2026-11-17-knowledge-is-a-conversation-ab12cd34.md" />
+    <Folder name="media">
+      <File name="ab12cd34-photo.png" />
+    </Folder>
+  </Folder>
+  <Folder name="documents" defaultOpen>
+    <File name="ethics-1a2b3c4d.md" />
+    <Folder name="originals">
+      <File name="ethics.epub" />
+    </Folder>
+  </Folder>
+  <Folder name="review" defaultOpen>
+    <File name="items.csv" />
+    <File name="items.json" />
+  </Folder>
+  <Folder name="agents" defaultOpen>
+    <File name="socrates-9f8e7d6c.json" />
+  </Folder>
+  <Folder name="reactions">
+    <File name="reactions.json" />
+  </Folder>
+  <Folder name="journal">
+    <File name="journal.json" />
+  </Folder>
+  <File name="settings.json" />
+</Files>
+
+| File | Holds |
+|---|---|
+| `manifest.json` | The format (`simulacra-export`, version 1), the app version, when and from which network it was exported, the scope, whether originals and the journal are included, the counts, and what a bundle never holds. |
+| `threads/*.md` | One file per thread, named by its first day, its first words and the end of its id. Front matter: `title`, `thread`, `network`, `created`, `updated`, `posts`, `authors`, `tags`. Then each post under `### Name (@handle) · date time UTC`, its text kept verbatim, so `[[wikilinks]]`, `#tags` and the post marks survive. Posts are separated by `---`. |
+| `threads/media/` | The images, voice notes and drawings the exported posts show, each once, named after its post. |
+| `documents/*.md` | Each vault document: its catalogue record as front matter (`title`, `subtitle`, `kind`, `creators`, `date`, `publisher`, `language`, `identifier`, `subjects`, `collections`, `added`, `source`, `rights`, `original`), its abstract as a quote, then its text. |
+| `documents/originals/` | The kept original files, when ticked. |
+| `review/items.csv`, `review/items.json` | The review items. The CSV columns are `id`, `type`, `anchor`, `written`, `tags`, `created`, `due`, `interval_days`, `reps`, `lapses`, `suspended`. |
+| `agents/*.json` | Each agent or persona configuration, with secrets redacted (below). |
+| `reactions/reactions.json` | The reactions and claps given to the exported posts. |
+| `journal/journal.json` | Your journal records, only when ticked. |
+| `settings.json` | Your theme and preference settings, only for <UiLabel>Everything</UiLabel>. |
+
+A post's extras are written in Markdown too: a retraction or correction with its reason, its series and pinned quote, a voice note as a link with its transcript quoted, a drawing as an image, and its lens, definition, open question, change of mind or translation. A [locked post](/docs/guides/composer/locked-posts) travels as its seal only: its text stays unreadable in the bundle.
+
+## Secrets stay out
+
+- **Settings** are an allow-list: only the theme rows and the preference categories go in. Credentials, the AI provider's key, endpoint and model, usage counters and the code-running switches never do.
+- **Agent configurations** have every field whose name suggests a secret (key, token, secret, password, passphrase, credential, authorization) written as `[redacted]`, the values of custom request headers blanked, and query strings cut from URLs.
+
+## Tips and limits
+
+- **One network per bundle.** Export each network separately.
+- **Not a backup to restore.** Simulacra does not read a bundle back in; to move a whole vault, use an [encrypted snapshot](/docs/guides/data/snapshots).
+- **Plain files.** Everything in the zip is readable by anyone who has it, including the journal when you include it.
+
+## Related
+
+- [Your data](/docs/guides/data)
+- [Bookmarks and collections](/docs/guides/post-tools/bookmarks-and-collections)
+- [Local-first](/docs/concepts/local-first)

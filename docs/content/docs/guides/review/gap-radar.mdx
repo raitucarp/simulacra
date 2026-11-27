@@ -1,0 +1,51 @@
+---
+title: Gap radar
+description: See which concepts you refer to are weakest, on six dimensions, with one-click ways to strengthen each.
+icon: Gauge
+---
+
+The knowledge-gap radar scores every concept you refer to on six dimensions: your own writing, vault sources, review retention, tutor mastery, connections and recency. The weakest come first, each with actions that fix its weakest side.
+
+## Open it
+
+On the [Review](/docs/guides/review) page, click <UiLabel>Learn</UiLabel>, then <UiLabel>Gaps</UiLabel>. A goal's <UiLabel>Gap radar</UiLabel> button and the weekly review's <UiLabel>Open the gap radar</UiLabel> open it too.
+
+<Screenshot id="review-learn-gaps" alt="The Knowledge-gap radar: scope chips, a six-axis radar with the average and the selected concept, and the Weakest concepts list with gap bars and action buttons" caption="The average in the brand colour, the selected concept in red." />
+
+## Anatomy
+
+1. **Scope chips.** <UiLabel>All concepts</UiLabel>, or one chip per goal to narrow the radar to that goal's concepts and its linked posts' concepts.
+2. **<UiLabel>Radar</UiLabel>.** Six axes, <UiLabel>Own writing</UiLabel>, <UiLabel>Sources</UiLabel>, <UiLabel>Retention</UiLabel>, <UiLabel>Mastery</UiLabel>, <UiLabel>Connections</UiLabel> and <UiLabel>Recency</UiLabel>, with two shapes: the <UiLabel>Average</UiLabel> of all concepts and the selected concept. A line under it reads "free will is weakest on Sources."
+3. **<UiLabel>Weakest concepts</UiLabel>.** Up to eight concepts, weakest first. Each row has its gap as a bar, "62% gap · weakest: Sources", and four actions. Click a row to show it on the radar; the first row is selected until you choose another.
+
+| Action | What it does |
+|---|---|
+| <UiLabel>Ask the tutor</UiLabel> | Starts a [tutor](/docs/guides/review/tutor) dialogue on the concept |
+| <UiLabel>Import a source</UiLabel> | Opens the vault importer to bring in a source on it |
+| <UiLabel>Write a post</UiLabel> | Opens the composer with `[[concept]]` already typed |
+| <UiLabel>Learn related posts</UiLabel> | Opens the post picker searching for the concept, to learn the posts about it |
+
+## How concepts are scored
+
+**Which concepts.** Those marked in your own posts (wikilinks and hashtags), concepts the extractor finds that appear in at least two of your posts, review item tags, concepts you typed for the tutor, and a goal's concepts. At most 24, most mentioned first.
+
+| Dimension | Score (0 to 1) | Weight |
+|---|---|---|
+| <UiLabel>Own writing</UiLabel> | Your posts on it: two posts make one half | 20% |
+| <UiLabel>Sources</UiLabel> | Vault documents on it: one makes one half | 15% |
+| <UiLabel>Retention</UiLabel> | Mean recall chance of its review items (0 without items) | 25% |
+| <UiLabel>Mastery</UiLabel> | Highest Bloom level shown with the tutor, as a share of the ladder | 20% |
+| <UiLabel>Connections</UiLabel> | Other concepts it shares a post with: three make one half | 10% |
+| <UiLabel>Recency</UiLabel> | Halves every 14 days since you last wrote about or reviewed it (0 if never) | 10% |
+
+The concept's strength is the weighted sum; its gap is what is left. Among equally weak concepts, the more mentioned comes first.
+
+## Empty state
+
+"No concepts yet: write posts with `[[links]]` or `#tags`, or link concepts to a goal."
+
+## Related
+
+- [Goals and the weekly review](/docs/guides/review/goals)
+- [Socratic tutor](/docs/guides/review/tutor)
+- [Knowledge Vault](/docs/guides/vault)

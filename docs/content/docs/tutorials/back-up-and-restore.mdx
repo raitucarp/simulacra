@@ -1,0 +1,126 @@
+---
+title: Back up and restore your vault
+description: Make a plain backup, seal an encrypted snapshot of the whole vault, keep it with your media, and restore it later or on another computer.
+icon: ArchiveArrowUp
+---
+
+In this tutorial you make a safe, encrypted copy of your vault and bring it back. It takes about ten minutes. You will need a passphrase you can remember, and somewhere to keep the copy, such as a USB stick or a cloud folder.
+
+## 1. Make a quick plain backup
+
+A plain backup is the fastest safety net before anything else.
+
+<Steps>
+<Step>
+### Open Privacy & Data
+
+Press <Shortcut keys="Ctrl+," /> and click **Privacy & Data** in the rail.
+</Step>
+<Step>
+### Back up now
+
+In **MAINTENANCE**, click <UiLabel>Back up now</UiLabel>. The toast <UiLabel>Backup saved in the backups folder: simulacra-….db</UiLabel> names the new file in the `backups` folder beside your vault.
+</Step>
+</Steps>
+
+This copy is readable by anyone with the file and stays on this computer. Next, make one you can take away.
+
+## 2. Seal an encrypted snapshot
+
+<Steps>
+<Step>
+### Open the snapshot sheet
+
+Still in **Privacy & Data**, click <UiLabel>Create snapshot</UiLabel> on the <UiLabel>Encrypted snapshot</UiLabel> row. Settings closes and the <UiLabel>Encrypted snapshot</UiLabel> sheet opens.
+</Step>
+<Step>
+### Choose a passphrase
+
+Type four or five unrelated words into <UiLabel>Passphrase</UiLabel>, for example `lantern orbit pickle granite`. Watch the meter reach <UiLabel>Strong</UiLabel> or <UiLabel>Very strong</UiLabel>.
+</Step>
+<Step>
+### Type it again
+
+Repeat it in <UiLabel>Type it again</UiLabel>. <UiLabel>Create snapshot…</UiLabel> becomes available once both match.
+</Step>
+<Step>
+### Write it down
+
+Read the amber notice: <UiLabel>If you lose this passphrase, the snapshot cannot be opened. It is not stored anywhere, and nobody can reset or recover it.</UiLabel> Note the passphrase somewhere safe, away from the snapshot.
+</Step>
+<Step>
+### Save the snapshot
+
+Click <UiLabel>Create snapshot…</UiLabel>, choose your USB stick or cloud folder, and keep the proposed name (`simulacra-YYYYMMDD-HHMMSS.simsnap`). Wait for <UiLabel>Encrypted snapshot saved to ….</UiLabel>
+</Step>
+</Steps>
+
+## 3. Take your media along
+
+The snapshot holds the database: every post, document, agent, setting, key and journal entry. Images, voice notes and other files live in folders beside it.
+
+<Steps>
+<Step>
+### Open the vault folder
+
+In **Settings › Privacy & Data**, click <UiLabel>Open folder</UiLabel> on the <UiLabel>Database</UiLabel> row.
+</Step>
+<Step>
+### Copy three folders
+
+Copy `media`, `avatars` and, if you downloaded icon sets, `symbols` next to your snapshot. These are not encrypted; put them somewhere you trust.
+</Step>
+</Steps>
+
+## 4. Restore the snapshot
+
+Do this later on the same computer, or on a new one with Simulacra installed and started once.
+
+<Steps>
+<Step>
+### Open the restore sheet
+
+Open the command palette (<Shortcut keys="Ctrl+K" />), type `restore` and choose <UiLabel>Restore snapshot…</UiLabel>.
+</Step>
+<Step>
+### Choose the file
+
+Click <UiLabel>Choose file…</UiLabel> and pick your `.simsnap` file.
+</Step>
+<Step>
+### Verify
+
+Type the passphrase into <UiLabel>Passphrase of the snapshot</UiLabel> and click <UiLabel>Verify</UiLabel>. After a moment a green notice reads <UiLabel>Verified. Snapshot from …</UiLabel> with the number of posts, profiles and documents it holds. Check that the date and numbers are what you expect.
+</Step>
+<Step>
+### Restore and restart
+
+Click <UiLabel>Restore and restart</UiLabel>. Simulacra keeps the vault it had as `simulacra.db.pre-restore`, swaps in the snapshot and starts again.
+</Step>
+<Step>
+### Put the media back
+
+Quit Simulacra, open the vault folder (see [Data and files](/docs/reference/data-and-files)) and copy your `media`, `avatars` and `symbols` folders into it. Start Simulacra.
+</Step>
+</Steps>
+
+<Callout type="info" title="On another computer">
+Posts refer to their attached images by full path. If the vault folder's path is different on the new computer (another user name, another system), some attached images may not be found even after you copy `media` back.
+</Callout>
+
+## 5. Check, or undo
+
+- Your posts, agents, documents, theme and keys are back as they were when you sealed the snapshot.
+- Changed your mind? Quit Simulacra, and in the vault folder rename `simulacra.db.pre-restore` to `simulacra.db` (move the current `simulacra.db` and its `-wal` and `-shm` files away first). Start Simulacra again.
+
+## What you learned
+
+- <UiLabel>Back up now</UiLabel> makes a quick local copy; an encrypted snapshot makes a portable, sealed one.
+- A snapshot is the database only: keep the media folders with it.
+- A restore is checked first, keeps your previous vault, and restarts the app.
+
+## Related
+
+- [Encrypted snapshots](/docs/guides/data/snapshots)
+- [Storage and backups](/docs/guides/data/storage-and-backups)
+- [Local-first](/docs/concepts/local-first)

@@ -1,0 +1,159 @@
+---
+title: The window
+description: A tour of the main window, the title bar, the left sidebar, the centre column and the right sidebar, and how the layout changes with the window's width.
+icon: AppWindow
+---
+
+The main window has the **title bar** across the top, the **left sidebar** for navigation and the **centre column** with the screen you are on. On the Timeline of a wide window a fourth part joins them: the **right sidebar**, a live view of the network. Most of what you see belongs to the active network, named in the title bar.
+
+<Screenshot id="shell-window-overview" alt="The main window on the Timeline of Epistemology & Mind: title bar, expanded left sidebar, the stream and the Thread Inspector" caption="The main window at 1440 pixels wide: title bar, left sidebar and the Timeline with its Thread Inspector." />
+
+1. **Title bar**: sidebar toggles, where you are, language, appearance, settings and the window buttons.
+2. **Left sidebar**: the network, creating and finding, the places of the app, your pinned and recent items, and you.
+3. **Centre column**: the screen you picked, such as the Timeline with its Thread Inspector.
+4. **Right sidebar** (Timeline, on a window 1600 px or wider, or when you open it): <UiLabel>Mind & Cadence</UiLabel> or <UiLabel>Vault & Telemetry</UiLabel> for the active network.
+
+Drag the thin line between two columns to resize them. Each arrangement (sidebar expanded or as a rail, the medium layout, the Agent Forge) remembers its own widths.
+
+## Title bar
+
+<Screenshot id="shell-title-bar" alt="The title bar: panel toggle, Simulacra › Epistemology & Mind, and the action buttons on the right" caption="The title bar." />
+
+From left to right (hover any button for its name and shortcut):
+
+| Control | What it does |
+|---|---|
+| Left panel icon | Expands or collapses the left sidebar, like <Shortcut keys="Ctrl+B" />. |
+| <UiLabel>Simulacra</UiLabel> › network name | Shows the active network. |
+| Empty middle | Drag it to move the window. |
+| Right panel icon | Shows or hides the right sidebar, like <Shortcut keys="Ctrl+Alt+B" />. |
+| Globe and language code (<UiLabel>EN</UiLabel>) | Opens the [language menu](/docs/guides/shell/language). |
+| Sun, moon or sun-and-moon | Cycles the appearance: Dark, then Light, then System. |
+| Gear | Opens or closes **Settings**. |
+| Minimize, maximize or restore, close | The window buttons. |
+
+<ScreenshotGrid cols={2}>
+<Screenshot id="shell-title-bar-actions" alt="The right end of the title bar: right panel icon, globe with EN, moon, gear and the three window buttons" caption="The action buttons and window buttons." size="sm" />
+<Screenshot id="shell-appearance-tooltip" alt="Tooltip under the moon icon reading Appearance: Dark (click for Light)" caption="The appearance toggle names the current mode and the next one." size="sm" />
+</ScreenshotGrid>
+
+The appearance icon is a moon in Dark mode, a sun in Light mode and a sun-and-moon in System mode. **System** follows your computer's light or dark setting and switches the moment it does. The same choice is in **Settings › Appearance**; see [Appearance](/docs/guides/appearance).
+
+## Left sidebar
+
+The left sidebar is either **expanded**, with labels, counts and sections, or a narrow **rail** of icons with tooltips.
+
+<ScreenshotGrid cols={2}>
+<Screenshot id="shell-sidebar-expanded" alt="The expanded left sidebar from the network switcher down to the user card" caption="Expanded." size="sm" />
+<Screenshot id="shell-sidebar-rail" alt="The left sidebar as an icon rail" caption="The rail." size="sm" />
+</ScreenshotGrid>
+
+From top to bottom:
+
+1. **Network switcher.** The active network's initial on a tinted square, its name and a chevron. Click it to [switch or create a network](/docs/guides/networks). In the expanded sidebar, the <UiLabel>Collapse sidebar</UiLabel> button sits beside it.
+2. **<UiLabel>New</UiLabel> and search.** <UiLabel>New</UiLabel> opens a menu for creating things; the magnifier opens the [command palette](/docs/guides/shell/command-palette) (<UiLabel>Search everything</UiLabel>, <Shortcut keys="Ctrl+P" />).
+3. **Places.** The screens of the app, each with a count where it has one.
+4. **Your things.** Pinned and Recent (once they hold something), Sources and Members. The rail shows your first five pins as icons instead.
+5. **Footer.** Settings, Appearance, Keyboard shortcuts and the user card.
+
+### Places
+
+<Screenshot id="shell-sidebar-places" alt="The places list: Timeline, Knowledge Vault, Personas & Agents, Mind Graph, Review, Insights, Journal, Arena, Tasks, Search, with counts" caption="The places, with counts for the active network." size="sm" />
+
+| Place | Count shown | Shortcut |
+|---|---|---|
+| <UiLabel>Timeline</UiLabel> | Posts in this network | <Shortcut keys="Ctrl+1" /> |
+| <UiLabel>Knowledge Vault</UiLabel> | Documents in this network | <Shortcut keys="Ctrl+2" /> |
+| <UiLabel>Personas & Agents</UiLabel> | Agents plus your personas in this network | <Shortcut keys="Ctrl+3" /> |
+| <UiLabel>Mind Graph</UiLabel> | none | <Shortcut keys="Ctrl+5" /> |
+| <UiLabel>Review</UiLabel> | Cards due for review | <Shortcut keys="Ctrl+6" /> |
+| <UiLabel>Insights</UiLabel> | none | <Shortcut keys="Ctrl+7" /> |
+| <UiLabel>Journal</UiLabel> | none | <Shortcut keys="Ctrl+8" /> |
+| <UiLabel>Arena</UiLabel> | none | <Shortcut keys="Ctrl+9" /> |
+| <UiLabel>Tasks</UiLabel> | none | none |
+| <UiLabel>Search</UiLabel> | none | none |
+
+A count of zero is hidden. The active place has an accent bar on its left edge. <Shortcut keys="Ctrl+4" /> opens **Personas & Agents** on your personas (the Persona Lab), and the place stays highlighted there.
+
+You can also reach every place from the keyboard: press <Kbd>Tab</Kbd> to move to it, then <Kbd>Enter</Kbd> or <Kbd>Space</Kbd>.
+
+### The New menu
+
+<Screenshot id="shell-new-menu" alt="The New menu open with New thread, New note, New voice note, New drawing, Import file and New agent" caption="The New menu shows each item's shortcut." size="sm" />
+
+| Item | What it does | Shortcut |
+|---|---|---|
+| <UiLabel>New thread</UiLabel> | Opens the composer for a new thread. | <Shortcut keys="Ctrl+N" /> |
+| <UiLabel>New note</UiLabel> | Opens quick capture, which saves to your Inbox. | <Shortcut keys="Ctrl+Shift+Space" /> |
+| <UiLabel>New voice note</UiLabel> | Records from your microphone, or posts an audio file. | none |
+| <UiLabel>New drawing</UiLabel> | Draw by hand; the drawing is posted and saved as an SVG file. | none |
+| <UiLabel>Import file</UiLabel> | Picks files to import. | <Shortcut keys="Ctrl+O" /> |
+| <UiLabel>New agent</UiLabel> | Opens the Agent Forge on a new draft. | none |
+
+See [the composer](/docs/guides/composer), [import formats](/docs/reference/import-formats) and [the Agent Forge](/docs/guides/agents).
+
+### Footer and user card
+
+<Screenshot id="shell-sidebar-footer" alt="The sidebar footer: Settings row, Appearance and Keyboard icons, and the user card with Arya Wiratama, @architect and the switch button" caption="Preferences beside who you are." size="sm" />
+
+- <UiLabel>Settings</UiLabel> opens Settings on **General** (<Shortcut keys="Ctrl+," />).
+- The palette icon opens **Settings › Appearance**.
+- The keyboard icon opens the [shortcut sheet](/docs/guides/shell/keyboard) (<Shortcut keys="Ctrl+/" />).
+- The **user card** shows the persona you write as. Click the name to open it in the Persona Lab; click the arrows button (<UiLabel>Switch</UiLabel>) to switch to your next persona. See [Personas and switching](/docs/guides/shell/personas-switching).
+
+In the rail, the footer stacks the Settings, Appearance and Keyboard icons, your avatar (opens the Persona Lab) and the <UiLabel>Expand sidebar</UiLabel> button.
+
+The [Sidebars guide](/docs/guides/shell/sidebars) covers pinning, sections and the rail in depth.
+
+## Centre column
+
+The centre column shows the place you picked:
+
+| Place | Centre column |
+|---|---|
+| Timeline | The stream of threads with its tabs (<UiLabel>For you</UiLabel>, <UiLabel>Dialectic</UiLabel>, <UiLabel>Inbox</UiLabel>, <UiLabel>Feelings</UiLabel>) and the Thread Inspector for the selected thread. |
+| Knowledge Vault | The network's documents. |
+| Personas & Agents | The roster and the selected profile. |
+| Mind Graph, Review, Insights, Journal, Arena, Tasks, Search | That screen. |
+
+While the **Agent Forge** is open it fills the centre column and the right sidebar steps aside. The Journal's focus mode takes over everything below the title bar.
+
+## Right sidebar
+
+<Screenshot id="shell-right-mind-cadence" alt="The right sidebar on Mind & Cadence: mini Mind Graph, Thought Cadence heatmap and Serendipitous Sparks" caption="Mind & Cadence, the tab the right sidebar opens on." size="sm" />
+
+Two tabs at the top switch what it shows:
+
+- <UiLabel>Mind & Cadence</UiLabel>: a small Mind Graph (click it to open the full graph), the **Thought Cadence** heatmap of the network's posts (click a day to filter the Timeline to it) and **Serendipitous Sparks**.
+- <UiLabel>Vault & Telemetry</UiLabel>: a search box that filters the Timeline, the network's grounding knowledge with <UiLabel>Add Document</UiLabel>, trending topics and the network's members.
+
+It belongs to the Timeline, whose stream its cards act on. There it shows by itself when the window is at least 1600 px wide; on a narrower window, and on every other place, it starts closed so the centre column keeps the room. Open or close it with the right panel icon in the title bar or <Shortcut keys="Ctrl+Alt+B" />; Simulacra remembers your choice for that place until you quit. Details are in the [Sidebars guide](/docs/guides/shell/sidebars#right-sidebar).
+
+## How the layout adapts
+
+Simulacra picks one of three layouts from the window's width:
+
+| Window width | Layout | Left sidebar | Right sidebar | Thread Inspector |
+|---|---|---|---|---|
+| 1280 px and wider | Wide | Expanded | A column, 320 px by default (260–460); on the Timeline it opens by itself from 1600 px | Beside the stream |
+| 900 to 1279 px | Medium | Folds to the rail | A narrower column when opened, 272 px by default (260–340) | Below the stream |
+| Under 900 px | Compact | Folds to the rail | A drawer over the content, 320 px | Below the stream |
+
+<ScreenshotGrid cols={2}>
+<Screenshot id="shell-layout-medium" alt="The window at about 1100 pixels: icon rail, centre column with the inspector under the stream, narrower right sidebar" caption="Medium: the rail and a narrower right sidebar." />
+<Screenshot id="shell-layout-compact" alt="The window at about 820 pixels with the right drawer open over the content and a dimmed area beside it" caption="Compact: the right sidebar opens as a drawer." />
+</ScreenshotGrid>
+
+- **The left sidebar folds by itself** below 1280 px. Press <Shortcut keys="Ctrl+B" /> to keep it expanded anyway; press it again to fold it. On a wide window, <Shortcut keys="Ctrl+B" /> keeps it as a rail until you press it again. Your choice is remembered.
+- **The drawer** slides in from the right edge, under the title bar. Click the dimmed area beside it to close it.
+- **Column widths:** the expanded sidebar is 240 px by default (180–380), the rail 64 px (60–68).
+
+The window opens maximized. Restored, it is 1440 × 900; it cannot get smaller than 720 × 520.
+
+## Related
+
+<Cards>
+  <Card title="Sidebars" href="/docs/guides/shell/sidebars" description="Pinning, recents, sections and every card of the right sidebar." />
+  <Card title="Command palette" href="/docs/guides/shell/command-palette" description="Jump anywhere and run any command by typing." />
+  <Card title="Keyboard shortcuts" href="/docs/reference/keyboard-shortcuts" description="Every binding in one table." />
+</Cards>

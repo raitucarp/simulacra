@@ -1,0 +1,111 @@
+---
+title: Appearance
+description: Switch between dark, light and your system's mode, pick the theme used in each, and set reading comfort; every change shows at once.
+icon: Palette
+---
+
+Appearance is the **Appearance** category of Settings. It changes how the whole app looks: the dark or light mode, the theme of each mode, colours, typography and spacing. Every change is applied and saved the moment you make it.
+
+<Screenshot id="appearance-pane" alt="Settings › Appearance: the READING COMFORT card, then APPEARANCE MODE with Dark, Light and System chips and the Dark theme and Light theme menus, then the THEME GALLERY" caption="Settings › Appearance." />
+
+## Open it
+
+| From | How |
+|---|---|
+| Left sidebar | The palette icon in the sidebar footer, beside **Settings**. |
+| Command palette | <UiLabel>Appearance</UiLabel>. |
+| Settings | **Appearance** in the rail. |
+
+## Anatomy
+
+From top to bottom:
+
+1. **READING COMFORT** — <UiLabel>Reading width</UiLabel> and <UiLabel>Reduce motion</UiLabel> (below).
+2. **APPEARANCE MODE** — Dark, Light or System, and the theme each mode uses (below).
+3. **THEME GALLERY** — every theme as a live preview card. See [Themes](/docs/guides/appearance/themes).
+4. **CUSTOM THEME** — the colour editor and the contrast checks. See [Custom themes](/docs/guides/appearance/custom-themes).
+5. **TYPOGRAPHY & LAYOUT** — font family, text size, density, corners and the panel layout. See [Typography and layout](/docs/guides/appearance/typography-and-layout).
+6. **IMPORT & EXPORT** — themes as JSON, through the clipboard or a file. See [Custom themes](/docs/guides/appearance/custom-themes#import-and-export).
+
+The pane draws itself with the theme you are editing, so it changes as you click.
+
+## Appearance mode
+
+<Screenshot id="appearance-mode" alt="The APPEARANCE MODE card: Dark, Light and System chips with Dark chosen, the hint about System, and the Dark theme and Light theme menus" caption="APPEARANCE MODE." size="md" />
+
+| Chip | What it shows |
+|---|---|
+| <UiLabel>Dark</UiLabel> | The theme picked in <UiLabel>Dark theme</UiLabel>. The default. |
+| <UiLabel>Light</UiLabel> | The theme picked in <UiLabel>Light theme</UiLabel>. |
+| <UiLabel>System</UiLabel> | <UiLabel>System follows your computer's light or dark setting and switches with it.</UiLabel> When your system changes mode, Simulacra follows at once. |
+
+The two menus below the chips choose the theme of each mode:
+
+| Menu | Lists | Default |
+|---|---|---|
+| <UiLabel>Dark theme</UiLabel> | Every dark theme, bundled then your own | Simulacra Midnight |
+| <UiLabel>Light theme</UiLabel> | Every light theme, bundled then your own | Graphite Light |
+
+Picking a theme in the gallery also makes it the theme of its mode. If you pick a light theme while in Dark mode (or the other way round), the mode switches to match, so your pick stays on screen. If a mode's theme no longer exists (a deleted custom theme), that mode falls back to its default.
+
+### The title bar toggle
+
+<Screenshot id="appearance-title-bar-toggle" alt="The appearance button in the title bar, a moon icon, with its tooltip Appearance: Dark (click for Light)" caption="The title bar toggle." size="sm" />
+
+The title bar has a one-click toggle. Its icon shows the current mode: a moon for Dark, a sun for Light, a sun and moon for System. Each click moves to the next mode: Dark, then Light, then System, then Dark again. The tooltip names both: <UiLabel>Appearance: Dark (click for Light)</UiLabel>.
+
+## Switch to a light theme
+
+<Steps>
+<Step>
+### Open Appearance
+
+Click the palette icon in the sidebar footer.
+</Step>
+<Step>
+### Pick the light theme you like
+
+In <UiLabel>Light theme</UiLabel>, choose for example **Rosé Pine Dawn**.
+</Step>
+<Step>
+### Switch the mode
+
+Click <UiLabel>Light</UiLabel>, or <UiLabel>System</UiLabel> to follow your computer. The title bar toggle does the same in one click.
+</Step>
+</Steps>
+
+## Reading comfort
+
+<Screenshot id="appearance-reading-comfort" alt="The READING COMFORT card with Reading width chips Narrow, Comfortable and Wide, and the Reduce motion switch" caption="READING COMFORT." size="md" />
+
+| Setting | Control | Options | Default | What it does |
+|---|---|---|---|---|
+| <UiLabel>Reading width</UiLabel> | Chips | <UiLabel>Narrow</UiLabel>, <UiLabel>Comfortable</UiLabel>, <UiLabel>Wide</UiLabel> | Comfortable | The widest a column of prose may grow. In 0.2.0 it sets the width of the Knowledge Vault's reader. |
+| <UiLabel>Reduce motion</UiLabel> | Switch | | Off | Replace fades and animations with instant changes. In 0.2.0 it applies to the pages of the Knowledge Vault and the journal. |
+
+These two are preferences like the rest of Settings: <UiLabel>Reset all settings</UiLabel> resets them. The theme, colours and typography below are not affected by that reset.
+
+## Emoji
+
+Emoji in reactions, the emoji picker and the clap button are drawn as text with your system's colour emoji font; Simulacra bundles none.
+
+| System | Colour emoji |
+|---|---|
+| Windows 10 and 11 | Segoe UI Emoji. Windows 10 lacks the newest emoji. |
+| macOS 11 and later | Apple Color Emoji. |
+| Linux | Needs the **Noto Color Emoji** font (`fonts-noto-color-emoji` on Debian and Ubuntu). Without it emoji are one-colour shapes or empty boxes. |
+
+The picker offers emoji up to Emoji 15.0, the newest version every supported system's font covers. See [R4 in the design decisions](/docs/reference/design-decisions#r4-colour-emoji-rendering).
+
+## Tips and limits
+
+- **Saved with the vault.** The theme settings live in your vault, so a backup or snapshot brings them back. An [export bundle](/docs/guides/data/export) includes them in `settings.json`.
+- **Tints follow the theme.** The six post tints (Amber, Rose, Sky, Mint, Violet, Slate) take their colours from the active theme, so they change with it.
+- **Illustrations follow the theme** too: they are redrawn in the new colours.
+
+## Related
+
+- [Themes](/docs/guides/appearance/themes)
+- [Custom themes](/docs/guides/appearance/custom-themes)
+- [Typography and layout](/docs/guides/appearance/typography-and-layout)
+- [Icon sets](/docs/guides/appearance/icon-sets)

@@ -1,0 +1,61 @@
+---
+title: Bookmarks and collections
+description: Keep posts to come back to, alone or with vault documents in ordered collections with notes, on the Saved shelf.
+icon: Bookmark
+---
+
+A **bookmark** keeps a post one click away. A **collection** goes further: it gathers posts and vault documents in your own order, each with a note on why it belongs. Both live on the **Saved** shelf of the Knowledge page.
+
+<Screenshot id="tools-saved-view" alt="The Saved page with its title, a New collection name field and Create button, Learn this collection, shelf chips for Bookmarks and three collections, and a list of saved items" caption="The Saved shelf, on the Bookmarks chip." />
+
+## Bookmark a post
+
+- Click <Kbd>…</Kbd> › <UiLabel>Bookmark</UiLabel> on any post. The toast says "Bookmarked." and the item turns into <UiLabel>Remove bookmark</UiLabel>.
+- Or, with the post open in the Thread Inspector, run <UiLabel>Bookmark this post</UiLabel> from the command palette (<Shortcut keys="Ctrl+Shift+P" />). It toggles the same way. Without a post open it says "Open a post in the inspector first."
+
+## Add a post to a collection
+
+<Screenshot id="tools-collection-submenu" alt="The Add to collection submenu listing three collections, one ticked, then New collection…" caption="A tick means the post is already in that collection." size="sm" />
+
+Click <Kbd>…</Kbd> › <UiLabel>Organize</UiLabel> › <UiLabel>Add to collection</UiLabel>. The submenu lists the active network's collections by name:
+
+- Click a collection to add the post at its end ("Added to Reading list."). A ticked collection already holds it; clicking it takes the post out.
+- Click <UiLabel>New collection…</UiLabel> to create one. The Saved page opens with the name field focused; type a name and click <UiLabel>Create</UiLabel>, and the post is filed in the new collection.
+
+Collections are the vault's own collections, so documents filed under one in the [Knowledge Vault](/docs/guides/vault) appear in it too.
+
+## The Saved page
+
+Open it with <UiLabel>Saved</UiLabel> in the switch at the top of the Knowledge page (<Shortcut keys="Ctrl+2" />), or with <UiLabel>Open collection…</UiLabel> in the command palette.
+
+1. **Header.** <UiLabel>Saved</UiLabel>, "Bookmarks and collections: posts and documents together, in your order.", the <UiLabel>New collection name</UiLabel> field with <UiLabel>Create</UiLabel>, and <UiLabel>Learn this collection</UiLabel>.
+2. **Shelf chips.** <UiLabel>Bookmarks</UiLabel> and every collection, each with its item count. Click one to show it.
+3. **The count**, "ITEMS: 4", and in a collection the hint "Drag a row by its grip to reorder."
+4. **Rows.** Each shows the item's kind, its title (the post's opening words or the document's title) and a byline (author and time, or document kind and creators), with <UiLabel>Open</UiLabel> and <UiLabel>Remove from this shelf</UiLabel> buttons.
+
+| In a collection you can | How |
+|---|---|
+| Reorder | Drag a row by its grip onto another row. |
+| Add a note | Click <UiLabel>Add a note…</UiLabel>, write why it belongs, click <UiLabel>Save note</UiLabel>. |
+| Remove an item | Click the remove button. A document is unfiled from the collection; it stays in the vault. |
+
+Bookmarks cannot be reordered and carry no notes. Removing a bookmark from the shelf is the same as <UiLabel>Remove bookmark</UiLabel>.
+
+<UiLabel>Open</UiLabel> shows a post on the Timeline, or a document in the vault.
+
+## Learn a shelf
+
+<UiLabel>Learn this collection</UiLabel> turns the shelf you are looking at (bookmarks or a collection) into a connection map titled "Collection: name", opened in the Review page's map editor. It is disabled while the shelf is empty. See [Connection maps](/docs/guides/review/connection-maps).
+
+## Empty shelves
+
+- "No bookmarks yet": "Bookmark any post from its … menu to find it here."
+- "This collection is empty": "Add posts from their … menu, or file documents under it in the vault."
+
+## Related
+
+<Cards>
+<Card title="Knowledge Vault" href="/docs/guides/vault" description="Documents and their collections." />
+<Card title="Your data" href="/docs/guides/data" description="Export, snapshots and restore." />
+<Card title="Distill to the vault" href="/docs/guides/post-tools/distill-to-vault" description="Turn a thread into a document." />
+</Cards>

@@ -1,0 +1,53 @@
+---
+title: The day filter
+description: Click a day in the thought cadence heatmap to narrow the stream to the posts written that day.
+icon: Calendar
+---
+
+The **thought cadence** heatmap in the right sidebar shows how much the active network wrote on each day of the past year. Click a day to narrow the stream to that day's posts; a chip above the feed says which day you are looking at.
+
+<Screenshot id="view-cadence-heatmap" alt="The THOUGHT CADENCE section of the right sidebar: a posts-per-year badge, the hint line, a grid of day cells in shades of one colour, and a Less to More legend" caption="The cadence heatmap, on the Mind & Cadence tab of the right sidebar." size="md" />
+
+## Read the heatmap
+
+Open the right sidebar (<Shortcut keys="Ctrl+Alt+B" />) on its <UiLabel>Mind & Cadence</UiLabel> tab. The <UiLabel>THOUGHT CADENCE</UiLabel> section holds:
+
+- **The badge**: how many posts the network has in the year shown, "42 posts/yr".
+- **The subtitle**: "Hover a day for details · click to filter the feed", or, once a day is picked, "3 posts on 2026-11-16" ("No posts on …" for an empty day; dates follow the Date format setting).
+- **The grid**: one cell per day, a column per week, the most recent weeks that fit the sidebar's width (up to a year). Rows start on Sunday, with Mon, Wed and Fri labelled; month names run along the top. Hover a cell for a tooltip such as "3 posts on 2026-11-16".
+- **The legend**, <UiLabel>Less</UiLabel> to <UiLabel>More</UiLabel>: five shades. Days without posts take the empty tone; the other four shades split the days that have posts into quarters, so the darkest shade marks your busiest days, whatever your pace.
+
+Days are counted in your computer's local time.
+
+## Filter the stream to one day
+
+<Steps>
+<Step>
+### Click a day
+Click a cell. Simulacra switches to the Timeline if you were elsewhere, and the stream shows only the posts written on that day. The day is highlighted in the grid.
+</Step>
+<Step>
+### Read the chip
+A chip above the stream reads "Showing 2026-11-16".
+</Step>
+<Step>
+### Clear it
+Click the <Kbd>×</Kbd> on the chip, or click the same day in the heatmap again. Clicking another day moves the filter there.
+</Step>
+</Steps>
+
+<Screenshot id="view-day-filter-chip" alt="A rounded chip above the stream with a calendar icon, the text Showing and a date, and a small close button" caption="The chip while the stream is narrowed to one day." size="sm" />
+
+## Tips and limits
+
+- The filter narrows the stream only. The Thread Inspector still shows whole threads, including replies written on other days.
+- The filter applies before the feed's tabs and search, so both work within the chosen day.
+- Each change of filter resets the stream to its first page of posts.
+
+## Related
+
+<Cards>
+<Card title="Calendar and future log" href="/docs/guides/views/calendar-and-future-log" description="Posts on a month grid." />
+<Card title="The finite feed" href="/docs/guides/views/finite-feed" description="A daily budget for the stream." />
+<Card title="Insights" href="/docs/guides/insights" description="Longer views of your activity." />
+</Cards>

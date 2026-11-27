@@ -1,0 +1,12 @@
+{
+  "title": "Thinking tools",
+  "icon": "Brain",
+  "pages": [
+    "credence",
+    "argument-maps",
+    "atomic-notes",
+    "agent-beliefs",
+    "[Calibration](/docs/guides/insights/calibration)",
+    "[Tensions](/docs/guides/insights/tensions)"
+  ]
+}

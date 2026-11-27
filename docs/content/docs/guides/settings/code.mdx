@@ -1,0 +1,66 @@
+---
+title: Code
+description: Let the code blocks of posts run with the runtimes installed on this computer, set the time limit, and choose which runtimes may be used.
+icon: Code
+---
+
+**Code** decides whether fenced code blocks in posts get a **Run** button. It is off until you switch it on, and every run is bounded.
+
+<Screenshot id="settings-code" alt="Settings › Code with the RUNNING CODE card (Run code blocks, Time limit 10 s) and the RUNTIMES card listing Node, Deno, Python, Lua, Go, Ruby and PHP with their versions and switches" caption="Settings › Code after Refresh." />
+
+## RUNNING CODE
+
+| Setting | Control | Range | Default | What it does |
+|---|---|---|---|---|
+| <UiLabel>Run code blocks</UiLabel> | Switch | | Off | When on, code blocks in a language with a runtime on this computer get a Run button. Code from agents is always shown to you first and runs only once you confirm. |
+| <UiLabel>Time limit</UiLabel> | Stepper | 1 to 300 s | `10 s` | A run that takes longer is stopped, with everything it started. |
+
+## RUNTIMES
+
+The card says <UiLabel>Refresh asks each runtime on this computer for its version, nothing else. The result is kept until you refresh again.</UiLabel> Nothing is checked until you press it.
+
+| Part | What it is |
+|---|---|
+| Status line | <UiLabel>Not checked yet.</UiLabel> or <UiLabel>Checked …</UiLabel> with the time of the last check. |
+| <UiLabel>Refresh</UiLabel> | Asks every runtime for its version (<UiLabel>Checking…</UiLabel> while it runs). |
+| One row per runtime | **Node**, **Deno**, **Python**, **Lua**, **Go**, **Ruby**, **PHP**: the version and path found (`3.12.1 · /usr/bin/python3`; your home folder is written `~`), or <UiLabel>Not found</UiLabel>. |
+| Runtime switch | Lets that runtime run code. Every runtime is on by default; the switches are dimmed until <UiLabel>Run code blocks</UiLabel> is on. A runtime the last check did not find has no switch until a later check finds it. |
+
+## Switch code running on
+
+<Steps>
+<Step>
+### Find your runtimes
+
+In Settings › Code, click <UiLabel>Refresh</UiLabel>. Each installed runtime shows its version.
+</Step>
+<Step>
+### Switch running on
+
+Turn on <UiLabel>Run code blocks</UiLabel>.
+</Step>
+<Step>
+### Narrow it down (optional)
+
+Turn off the runtimes you never want used, and set the <UiLabel>Time limit</UiLabel>.
+</Step>
+</Steps>
+
+## How a run is contained
+
+- Only the runtime's own program starts, never a shell; shell languages have no runtime.
+- Each run gets a fresh, private folder, deleted afterwards, and an environment cleared of your keys, tokens and proxy settings.
+- A run stops at the time limit or when its output passes 64 KiB, together with every process it started.
+- The runner is **not** a sandbox for files or the network: code runs with your rights, like code pasted into a terminal. That is why code you did not write asks for a confirm.
+
+The full review is in the [design decisions](/docs/reference/design-decisions) (P7).
+
+## Tips and limits
+
+- **Exports never carry these switches**, so an imported bundle cannot turn code running on.
+- **A restored snapshot brings its own switches back**, including the master switch, because it replaces the whole vault.
+
+## Related
+
+- [Design decisions](/docs/reference/design-decisions)
+- [Composer](/docs/guides/composer)

@@ -1,0 +1,71 @@
+---
+title: Atomic notes
+description: Check that a post makes one claim with enough context to stand alone, and split it into one post per claim when it does not.
+icon: Atom
+---
+
+An atomic note says one thing, in its own words, with enough context to be read alone and with links that place it among other notes. Simulacra checks drafts and posts against that idea, scores them from 0 to 100, explains what costs points, and offers to split a crowded post into one post per claim. It is advice only: nothing here ever stops you from posting.
+
+<Screenshot id="thinking-atomic-sheet" alt="The Atomicity sheet with a score ring, the numbered claims, the findings and a proposed split into posts" caption="Check atomicity on a post that makes three claims." />
+
+## While you write: the composer hint
+
+When you pause typing in the composer, the focused draft is checked. If the check finds something, a quiet hint appears in the row under that draft, beside the character count (the row is always there, so nothing moves):
+
+- the headline <UiLabel>Atomicity 70 · 2 claims</UiLabel>, coloured by score;
+- the first finding that the claim count does not already say (for example <UiLabel>Touches separate topics: …</UiLabel>), cut to fit, with the first two findings on hover;
+- <UiLabel>Split</UiLabel>, when the draft makes more than one claim: the draft is replaced by one draft per claim, ready to post as a thread;
+- a × (<UiLabel>Hide this hint</UiLabel>) that hides it for the rest of this composition.
+
+Drafts shorter than 24 characters are not checked yet, and while you write the hint never raises **Too short**: a quick note or a thread part is short on purpose. (The finding still counts in <UiLabel>Check atomicity</UiLabel> below.) Turn the hint off in Settings › <UiLabel>Reading & Writing</UiLabel> › <UiLabel>Atomic-note hints</UiLabel> (on by default).
+
+<Screenshot id="thinking-atomic-hint" alt="The composer with the atomic-note hint in the row under a draft: the score, the first finding, Split and a close button, beside the readability meter and the character count" caption="The atomic-note hint in the composer." size="md" />
+
+## On a post: Check atomicity
+
+On any post, open "…" › <UiLabel>Actions</UiLabel> › <UiLabel>Check atomicity</UiLabel>. The <UiLabel>Atomicity</UiLabel> sheet shows:
+
+1. **The score**, in a ring, with the verdict <UiLabel>One claim, ready to stand alone</UiLabel> or <UiLabel>N claims in one post</UiLabel>, and the note <UiLabel>100 means one claim with its context; each finding below takes points off.</UiLabel>
+2. **<UiLabel>CLAIMS</UiLabel>**: the claims found, numbered.
+3. **<UiLabel>FINDINGS</UiLabel>**: what took points off, numbered.
+4. **<UiLabel>PROPOSED SPLIT INTO N POSTS</UiLabel>**, when there is more than one claim: one post per claim.
+
+<UiLabel>Split into atomic posts</UiLabel> opens the composer with those posts as a thread quoting the original, for you to edit and post. <UiLabel>Close</UiLabel>, <Kbd>Esc</Kbd> or a click outside the sheet closes it; so does going to another place.
+
+## Findings and the score
+
+The score starts at 100; each finding takes points off, never below 0.
+
+| Finding | Shown as | Points off |
+|---|---|---|
+| Several claims | <UiLabel>Makes N claims; an atomic note makes one.</UiLabel> | 15 per claim beyond the first, at most 60 |
+| Too short | <UiLabel>Only N characters: too short to say why it matters.</UiLabel> (under 40 characters) | 15 |
+| Too long | <UiLabel>N characters: long enough to hold several ideas.</UiLabel> (over 560 characters) | 15 |
+| Separate topics | <UiLabel>Touches separate topics: …</UiLabel> (concepts that never meet in one claim) | 15 |
+| No link | <UiLabel>Links to nothing: add a [[link]] or a #tag to place it.</UiLabel> (from 80 characters on) | 10 |
+| No source | <UiLabel>Sounds factual but cites no source.</UiLabel> | 15 |
+| Dangling opening | <UiLabel>Starts with “It”, which points at something outside the note.</UiLabel> | 10 |
+
+| Score | Colour | Reads as |
+|---|---|---|
+| 80 and above | Success | Atomic, when it also makes at most one claim. |
+| 50 to 79 | Warning | Mixed. |
+| Below 50 | Danger | Not atomic. |
+
+## How the check reads a note
+
+- **Claims.** The text is cut into list items and sentences (with the sentence rules of your interface language), and sentences are cut again at `;` and at a comma followed by a conjunction such as ", but" or ", and" (or "whereas") when both sides have at least three words. A question is not a claim, nor is a fragment of fewer than three words (five characters in Chinese, Japanese or Korean). Repeated claims count once.
+- **Topics.** The note's strongest concepts are grouped by the claims they share; groups that never meet in one claim are separate topics.
+- **Links.** A `[[wikilink]]`, a URL or a `#hashtag` places the note.
+- **Sources.** A note that sounds empirical (a number, or words such as "study", "research", "data", "evidence", "according to") should say where it comes from: a URL, or a marker such as "(2019)", "et al.", "source:", "via" or "doi:".
+- **Opening.** A note that starts with a pronoun like "This", "It" or "They" points back at something its reader never saw.
+
+## Splits
+
+A split keeps each claim's own wikilinks and hashtags as written, turns a clause cut from a longer sentence back into a sentence (capital letter, full stop), and attaches a following question or fragment to the claim before it. At most eight posts are proposed; the rest merge into the last one. Posts that open with a pronoun are left as they are: rewrite them before posting.
+
+## Related
+
+- [Composer](/docs/guides/composer): drafts and threads.
+- [Post syntax](/docs/reference/post-syntax): wikilinks and hashtags.
+- [Thinking tools](/docs/guides/thinking).

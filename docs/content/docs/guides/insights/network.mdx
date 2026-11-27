@@ -1,0 +1,97 @@
+---
+title: Network
+description: Measure the network's graph, find its communities, bridges and most central items, and draw it by community, kind or measure.
+icon: Network
+---
+
+The Network tab treats the network as a graph and measures it: how dense it is, how it falls apart into communities, which links hold it together and which items sit at its centre. It is the analytical twin of the [Mind Graph](/docs/guides/mind-graph).
+
+<Screenshot id="insights-network" alt="The Network card with its controls, the graph coloured by community, its legend and the start of the ranked list under it" caption="The Network tab, coloured by community and ranked by influence." />
+
+## Anatomy
+
+1. **Graph-level tiles** above the card (see [Graph numbers](#graph-numbers)).
+2. **The <UiLabel>Network</UiLabel> card**, with <UiLabel>Fit to view</UiLabel> in its title row (greyed out until you pan or zoom).
+3. **Controls**: <UiLabel>Graph</UiLabel>, <UiLabel>Measure</UiLabel> and <UiLabel>Colour by</UiLabel>.
+4. **Canvas** with its legend underneath.
+5. **Side panel**: the ranking by the chosen measure and, once you pick a node, its details. On a wide page the panel sits beside the canvas with the details under the ranking. Otherwise it sits below the canvas, with the details beside the ranking.
+6. **Summary line**, of the form "N nodes and M edges in K communities (modularity Q); X ranks first", where X leads the chosen measure.
+
+## Controls
+
+| Control | Choice | Effect |
+|---|---|---|
+| <UiLabel>Graph</UiLabel> | <UiLabel>Everything</UiLabel> (default) | The whole knowledge graph: posts, documents, concepts and people with every relation, the same graph as the Mind Graph. |
+| | <UiLabel>Thoughts</UiLabel> | Posts only, joined by replies, quotes, reposts and wikilinks between posts. |
+| | <UiLabel>Concepts</UiLabel> | Hashtags only; two concepts are joined when one post carries both. |
+| <UiLabel>Measure</UiLabel> | <UiLabel>Degree</UiLabel>, <UiLabel>Influence (PageRank)</UiLabel> (default), <UiLabel>Betweenness</UiLabel>, <UiLabel>Clustering</UiLabel> | Sizes the nodes, orders the ranking and, with <UiLabel>Colour by › Measure</UiLabel>, colours them. |
+| <UiLabel>Colour by</UiLabel> | <UiLabel>Community</UiLabel> (default) | The eight largest communities each get a colour; smaller ones share <UiLabel>Other</UiLabel>. |
+| | <UiLabel>Kind</UiLabel> | <UiLabel>Thoughts</UiLabel>, <UiLabel>Documents</UiLabel>, <UiLabel>Concepts</UiLabel>, <UiLabel>People</UiLabel>, in the Mind Graph's colours. |
+| | <UiLabel>Measure</UiLabel> | A ramp from a pale tone (low) to the accent colour (high). |
+
+Changing <UiLabel>Graph</UiLabel> recomputes the report; the others redraw at once. With <UiLabel>Community</UiLabel> or <UiLabel>Kind</UiLabel>, click a legend entry to hide those nodes.
+
+## Explore the graph
+
+| To | Do this |
+|---|---|
+| Read a node's numbers | Hover it. The tooltip shows its label, <UiLabel>Degree</UiLabel> (with incoming and outgoing links), <UiLabel>Influence (PageRank)</UiLabel>, <UiLabel>Betweenness</UiLabel>, <UiLabel>Clustering</UiLabel> and its community. |
+| See its neighbourhood | Hover or pick it: the node and its neighbours stay bright, the rest fades, and its links take the accent colour. |
+| Pick a node | Click it, or click its row in the ranking. A ring marks it and its details appear in the side panel. |
+| Open a node | Click the picked node (or its row) again, double-click it, or press <UiLabel>Open</UiLabel> in its details. Posts open their thread, documents open in the vault, concepts search the Timeline, people open their profile. |
+| Clear the pick | Click empty canvas. |
+| Pan and zoom | Drag; scroll to zoom at the pointer (from half to twelve times). <UiLabel>Fit to view</UiLabel> resets. |
+
+<ScreenshotGrid cols={2}>
+<Screenshot id="insights-network-tooltip" alt="A node tooltip with degree, influence, betweenness, clustering and community" caption="Hovering a node." size="sm" />
+<Screenshot id="insights-network-picked" alt="The ranking with its first row picked, and the picked node's details and Open button" caption="The ranking and a picked node." size="sm" />
+</ScreenshotGrid>
+
+### From the keyboard
+
+Tab to the canvas (it shows a focus ring), then:
+
+| Key | Does |
+|---|---|
+| <Kbd>→</Kbd> or <Kbd>↓</Kbd> | Pick the next node in ranking order. |
+| <Kbd>←</Kbd> or <Kbd>↑</Kbd> | Pick the previous node. |
+| <Kbd>Enter</Kbd> | Open the picked node. |
+| <Kbd>Esc</Kbd> | Clear the pick. |
+| <Kbd>0</Kbd> | Fit to view. |
+
+With <UiLabel>Clustering</UiLabel> as the measure, the arrow keys walk the nodes by degree instead.
+
+## Graph numbers
+
+| Tile | Meaning |
+|---|---|
+| <UiLabel>Nodes</UiLabel> | Items in the chosen graph. |
+| <UiLabel>Edges</UiLabel> | Links between them, each pair counted once whatever its direction. |
+| <UiLabel>Density</UiLabel> | The share of all possible links that exist, `2m / (n (n − 1))`. A small number is normal: few items are linked to everything. |
+| <UiLabel>Components · largest share</UiLabel> | How many separate pieces the graph has, and what share of the nodes the largest piece holds. Many pieces means many isolated islands of thought. |
+| <UiLabel>Diameter (at least)</UiLabel> | The longest shortest path in the largest piece, in links. It is a lower bound found by two searches (exact when the piece is a tree). |
+| <UiLabel>Bridges · cut points</UiLabel> | Bridges are links whose removal splits their piece in two; cut points are nodes whose removal does. They are the single threads that hold parts of your thinking together. |
+
+## Node measures
+
+| Measure | What it tells you |
+|---|---|
+| <UiLabel>Degree</UiLabel> | How many links touch the item. The tooltip splits it into incoming and outgoing: a reply points at its parent, a post at the tag it carries. |
+| <UiLabel>Influence (PageRank)</UiLabel> | How much attention flows into the item. Links are followed in their direction, so a reply, quote or link passes influence to what it points at. All values add up to 1. |
+| <UiLabel>Betweenness</UiLabel> | How often the item lies on the shortest paths between other items, from 0 to 1. High betweenness marks a broker between groups. |
+| <UiLabel>Clustering</UiLabel> | Of the item's neighbours, the share that are linked to each other. High clustering is a tight circle; items with fewer than two links score 0. |
+
+## Communities
+
+Communities are found with the Louvain method: items start alone and join the neighbouring group that most raises the modularity score, then groups merge into larger groups, until nothing improves. The result is deterministic and numbered by size, so <UiLabel>Community 1</UiLabel> is always the largest. Modularity (shown in the summary and on Overview) says how much more linked the groups are inside than chance would give.
+
+## Tips and limits
+
+- On graphs of more than 256 nodes, betweenness is estimated from 256 evenly spread starting points; the summary then adds <UiLabel>Betweenness is estimated from a sample of starting points on this large graph.</UiLabel>
+- On very large graphs, links shorter than about a pixel are skipped while drawing, and only the most important visible nodes get labels.
+- When the chosen graph has no items in the period, the tab shows <UiLabel>No graph to measure</UiLabel>; try another <UiLabel>Graph</UiLabel> or a longer period.
+
+## Related
+
+- [Mind Graph](/docs/guides/mind-graph) and [Nodes and links](/docs/guides/mind-graph/nodes-and-links): what the nodes and links are.
+- [Overview](/docs/guides/insights/overview): communities, modularity and clustering at a glance.

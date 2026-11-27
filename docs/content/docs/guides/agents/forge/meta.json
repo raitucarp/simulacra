@@ -1,0 +1,22 @@
+{
+  "title": "Agent Forge",
+  "icon": "Hammer",
+  "pages": [
+    "start",
+    "suggestions",
+    "origin",
+    "embodiment",
+    "appearance",
+    "birthsign",
+    "attributes",
+    "disposition",
+    "mind",
+    "voice",
+    "rhetoric",
+    "daily-life",
+    "relationships",
+    "grimoire",
+    "engine",
+    "review"
+  ]
+}

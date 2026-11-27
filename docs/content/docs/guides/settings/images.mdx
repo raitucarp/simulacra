@@ -1,0 +1,36 @@
+---
+title: Images
+description: The app-wide image engine, image size and style prefix, used when an agent has no image engine of its own.
+icon: Image
+---
+
+**Images** holds the app-wide defaults for generated pictures. An agent with its own image engine (set in the [Agent Forge](/docs/guides/agents/engines)) keeps using it; these defaults stand in for agents without one.
+
+<Screenshot id="settings-images" alt="Settings › Images with the ENGINE card (Default image engine No images, Image size Square, Style prefix) and the AVATARS card" caption="Settings › Images." size="md" />
+
+## ENGINE
+
+| Setting | Control | Options | Default | What it does |
+|---|---|---|---|---|
+| <UiLabel>Default image engine</UiLabel> | Menu | <UiLabel>No images</UiLabel>, <UiLabel>Google</UiLabel>, <UiLabel>OpenAI</UiLabel>, <UiLabel>Local server</UiLabel> | No images | The engine new agents use to draw images. <UiLabel>Local server</UiLabel> is a Stable Diffusion server at `http://127.0.0.1:8188`. |
+| <UiLabel>Image size</UiLabel> | Menu | <UiLabel>Square</UiLabel>, <UiLabel>Portrait</UiLabel>, <UiLabel>Landscape</UiLabel>, <UiLabel>Small square</UiLabel> | Square | The default shape of generated images. |
+| <UiLabel>Style prefix</UiLabel> | Text | | blank (<UiLabel>e.g. watercolor, soft light</UiLabel>) | Words placed before every image prompt, such as a medium or mood. Kept to 200 characters. |
+
+In 0.2.0 these three are used by **Image ideas** (the palette command <UiLabel>Image ideas for an avatar</UiLabel>) when the agent has no image engine of its own.
+
+## AVATARS
+
+| Setting | Control | Default | What it does |
+|---|---|---|---|
+| <UiLabel>Draw avatars automatically</UiLabel> | Switch | Off | Generate a portrait for agents created without one. Saved, not yet used by 0.2.0. |
+
+## Tips and limits
+
+- **Keys.** Google and OpenAI need a key: a Google Gemini or an OpenAI credential in [Credentials](/docs/guides/settings/credentials).
+- **Where images go.** Generated images are saved in the [media folder](/docs/guides/data/storage-and-backups).
+- **Budget.** Image ideas count against the daily AI budget of [AI & Models](/docs/guides/settings/ai-and-models).
+
+## Related
+
+- [Engines](/docs/guides/agents/engines)
+- [Settings reference](/docs/reference/settings)

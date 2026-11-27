@@ -1,0 +1,57 @@
+---
+title: Sets
+description: Group posts by concept, author, kind or vault subject and see how the groups overlap, with Venn diagrams, UpSet matrices and Jaccard similarity.
+icon: Layers
+---
+
+Sets treats each concept, author, kind of post or vault subject as a set of posts, and shows where those sets overlap. Use it to see which topics travel together, or which authors write about the same things.
+
+<Screenshot id="insights-sets-venn" alt="The Sets tab with Group by chips, set chips and a three-circle Venn diagram" caption="Three concept sets as a Venn diagram." />
+
+## Choose the sets
+
+| Control | Choices | Notes |
+|---|---|---|
+| <UiLabel>Group by</UiLabel> | <UiLabel>Concept</UiLabel> (default), <UiLabel>Author</UiLabel>, <UiLabel>Kind</UiLabel>, <UiLabel>Subject</UiLabel> | Changing it starts again from the three largest sets. |
+| <UiLabel>Sets</UiLabel> | One chip per set, written as name · size | Click chips to add or remove sets, up to eight. With none picked, the three largest are shown. |
+
+| Group by | A set is |
+|---|---|
+| <UiLabel>Concept</UiLabel> | The posts carrying one hashtag. |
+| <UiLabel>Author</UiLabel> | The posts of one author. |
+| <UiLabel>Kind</UiLabel> | All thoughts, replies, quotes, reposts or captured posts. |
+| <UiLabel>Subject</UiLabel> | The posts that wikilink a vault document filed under one subject. |
+
+Each grouping offers its twelve largest sets.
+
+## Read the diagram
+
+The diagram depends on how many sets you choose.
+
+**Two or three sets: a Venn diagram.** One circle per set in a fixed, symmetric arrangement, with the number of posts written in each region. The circles are not drawn to scale; the numbers carry the sizes. Hover a region to see which sets it is (for example `#epistemology ∩ #semiotics`), how many posts are in it and the first three of them. Click a region to open its first post. The legend under the diagram names each circle with its size.
+
+**One set, or four or more: an UpSet matrix.** Each column is one exclusive intersection, largest first, up to sixteen: its bar shows how many posts are in exactly those sets, and the dots below mark which sets they are. Each row names a set and its size. Hover a column for its sets and count; click it to open its first post. The matrix scrolls sideways when it is wider than the card. When there are fewer than four sets, the Venn diagram is used instead.
+
+<Screenshot id="insights-sets-upset" alt="An UpSet matrix with bars for each intersection and dots marking member sets" caption="Four or more sets switch to an UpSet matrix." />
+
+"Exclusive" means each post is counted once, in the region of exactly the sets it belongs to: a post in A and B but not C is in the A ∩ B region only.
+
+The summary says how many sets are compared and how many posts belong to more than one of them.
+
+## Similarity of sets
+
+The <UiLabel>Similarity of sets (Jaccard)</UiLabel> card compares every pair of chosen sets. Each cell is the Jaccard index: the posts the two sets share, divided by the posts in either. 100% means the sets are identical, 0% that they share nothing; the diagonal is always 100%. The stronger a cell's colour, the more alike the two sets. The sets are named over the columns as well as beside the rows, and the columns widen to fill the card.
+
+<Screenshot id="insights-sets-jaccard" alt="The Jaccard similarity table with shaded percentage cells" caption="Jaccard similarity of every pair." size="md" />
+
+## Tips and limits
+
+- If no post carries a concept, author, cited document or kind in the period, the tab shows <UiLabel>No sets to compare</UiLabel>. Add hashtags or wikilinks to vault documents to form sets.
+- The <UiLabel>Subject</UiLabel> grouping only counts posts that cite a document by wikilink, so a network without such links has no subject sets.
+- Your chosen sets are remembered with the page.
+
+## Related
+
+- [Overview](/docs/guides/insights/overview): the largest concepts at a glance.
+- [Concept timeline](/docs/guides/insights/timeline): concepts over time.
+- [Post syntax](/docs/reference/post-syntax): hashtags and wikilinks.

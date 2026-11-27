@@ -1,0 +1,53 @@
+---
+title: Categories
+description: View the network as a category, with kinds of items as objects and typed relations as arrows, and see which two-step paths are common and which close into squares.
+icon: GitCompareArrows
+---
+
+Categories draws the network's grammar rather than its items: which kinds of things relate to which, by what relation, and how relations chain. It is category theory made concrete: objects are the kinds of items, arrows are their typed relations, and following one relation after another composes them.
+
+<Screenshot id="insights-categories" alt="The Categories tab with the schema diagram of four objects and labelled arrows, the composition list and squares" caption="The category of relations of a network." />
+
+## Category of relations
+
+The diagram has four objects, each sized and labelled with its count: <UiLabel>Thoughts</UiLabel> in the middle, <UiLabel>Documents</UiLabel> to the right, <UiLabel>Concepts</UiLabel> below and <UiLabel>People</UiLabel> to the left, in the Mind Graph's colours. Each arrow is one type of relation between two kinds, labelled with its name and how many such relations exist, for example `replies to · 12`. Relations from a kind to itself, such as a thought replying to a thought, are loops stacked above the object. Hover an object to highlight its arrows and fade the rest.
+
+| Arrow | From → to | Comes from |
+|---|---|---|
+| <UiLabel>writes</UiLabel> | People → Thoughts | Every post's author. |
+| <UiLabel>replies to</UiLabel> | Thoughts → Thoughts | A reply. |
+| <UiLabel>quotes</UiLabel> | Thoughts → Thoughts | A quote. |
+| <UiLabel>reposts</UiLabel> | Thoughts → Thoughts | A repost. |
+| <UiLabel>links</UiLabel> | Thoughts → Thoughts | A wikilink to a post. |
+| <UiLabel>cites</UiLabel> | Thoughts → Documents | A wikilink to a vault document. |
+| <UiLabel>is about</UiLabel> | Thoughts → Concepts | A hashtag. |
+| <UiLabel>mentions</UiLabel> | Thoughts → People | An `@mention`. |
+
+The summary counts objects, relations and relation types; the card adds that every item also has its identity (the empty path), which is what makes this a category.
+
+## Composition of relations
+
+Two relations compose when the end of one is the start of the other: a person *writes* a thought that *is about* a concept gives the path "writes, then is about". The <UiLabel>Composition of relations</UiLabel> list ranks the ten most common two-step paths. Each row shows how many such paths there are and, after the dot, the share whose two ends are also related directly.
+
+A high share says the shortcut is usually there already: the two ends are linked directly as well. A low share points at connections that exist only through the middle step, which are good places to add a direct link if it matters.
+
+## Squares
+
+A square is two different two-step paths between the same pair of items, `x → y → z` and `x → y′ → z`. The <UiLabel>Squares</UiLabel> card lists up to eight examples:
+
+| Badge | Meaning |
+|---|---|
+| <UiLabel>Same relations</UiLabel> | Both routes carry the same relations (the square commutes in type). |
+| <UiLabel>Different relations</UiLabel> | The routes use different relations to reach the same place. |
+
+Click a square to open the item it starts from. The summary counts both kinds.
+
+## Tips and limits
+
+- Without any relation in the period, the tab shows <UiLabel>No relations yet</UiLabel>: replies, quotes, links and concepts become the arrows.
+- To keep large networks quick, at most two million two-step paths are counted.
+
+## Related
+
+- [Nodes and links](/docs/guides/mind-graph/nodes-and-links): the relations behind the arrows.
+- [Network](/docs/guides/insights/network): the same relations as one graph.

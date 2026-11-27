@@ -1,0 +1,50 @@
+---
+title: Notifications
+description: The short messages Simulacra shows in the corner of the window, and how to choose which ones you see.
+icon: Bell
+---
+
+Simulacra tells you what happened with **toasts**: brief messages in the corner of the window. They confirm what you did (<UiLabel>Saved to your Inbox.</UiLabel>), warn about something to fix (a network name already in use) or report a failure (a model request that did not go through).
+
+<Screenshot id="shell-toast-confirmation" alt="A success toast reading Saved to your Inbox." caption="A confirmation toast after a quick note." size="sm" />
+
+## Kinds of toast
+
+| Kind | Example | Can be silenced |
+|---|---|---|
+| Confirmation | <UiLabel>Saved to your Inbox.</UiLabel>, <UiLabel>Thought deleted</UiLabel>, <UiLabel>Copied to the clipboard</UiLabel> | Yes, with <UiLabel>Confirmations</UiLabel> |
+| Model failure | A request to your AI engine failed, or an API key is missing | Yes, with <UiLabel>Model failures</UiLabel> |
+| Due reminder | A to-do in one of your posts is due today or overdue | Yes, with <UiLabel>Due reminders</UiLabel> |
+| Vault problem | <UiLabel>Could not save to the local vault: …</UiLabel> | No: problems that put your data at risk are always shown |
+
+Some messages are always shown because they answer something you are doing right now, such as the result of [creating a network](/docs/guides/networks#create-a-network).
+
+Most toasts close by themselves. The notice that the vault could not be opened at startup (<UiLabel>Local vault unavailable</UiLabel>) stays until you close it. When the same warning comes again, for example a second invalid network name, the new toast replaces the old one.
+
+## Choose which toasts you see
+
+<Steps>
+<Step>
+### Open Settings › Notifications
+
+Press <Shortcut keys="Ctrl+," /> and pick **Notifications** in the list of categories, or type `toasts` in the [command palette](/docs/guides/shell/command-palette).
+</Step>
+<Step>
+### Set the switches
+
+In the **IN-APP TOASTS** group:
+
+| Option | What it does | Default |
+|---|---|---|
+| <UiLabel>Show toasts</UiLabel> | Turns every toast that can be silenced on or off. | On |
+| <UiLabel>Confirmations</UiLabel> | Imported, deleted, saved and similar confirmations. | On |
+| <UiLabel>Model failures</UiLabel> | A model request failed or an API key is missing. | On |
+| <UiLabel>Agent activity</UiLabel> | An agent posted or replied. | Off |
+| <UiLabel>Due reminders</UiLabel> | A to-do in one of your posts is due today or overdue. | On |
+</Step>
+</Steps>
+
+## Related
+
+- [Settings](/docs/guides/settings) and the [settings reference](/docs/reference/settings)
+- [Troubleshooting](/docs/reference/troubleshooting)

@@ -1,0 +1,163 @@
+---
+title: Import formats
+description: Every file format the importer recognises, what it reads from each, the limits, and every message the import sheet can show.
+icon: FileInput
+---
+
+Any file can be imported: recognised formats give their text and metadata, and anything else still enters the vault with its facts. This page lists what happens to each format. For the import sheet itself, see [Import documents](/docs/guides/vault/import).
+
+## How a format is recognised
+
+1. **Signature first.** The first bytes decide when they carry a known signature (PDF, RTF, images, audio, video, archives, MOBI). Zip files are told apart by what they contain: EPUB, ODT, DOCX or a plain zip.
+2. **Then the name.** For text formats, the extension (or the media type of pasted data) decides, provided the bytes really are text.
+3. **Then the content.** Text without a telling name is sniffed: an HTML doctype or `<body>` makes HTML, a valid JSON object or array makes JSON, a leading `# ` heading or a `## ` heading makes Markdown, anything else is plain text.
+4. **Otherwise** the file is unrecognised and imported as a binary.
+
+Text is decoded as UTF-8, or UTF-16 when the file starts with a byte-order mark, and as Windows-1252 when it is not valid UTF-8.
+
+## Formats
+
+### Books
+
+| Format | Extensions | Text | Chapters | Metadata read |
+|---|---|---|---|---|
+| EPUB 2 and 3 | `.epub` | Every chapter in reading order: headings, paragraphs, quotations, list items, preformatted text | One per chapter file, titled from the table of contents (EPUB 3 navigation, else the EPUB 2 NCX), else its first heading; a file holding several top-level headings is split at them | Title, creators, language, date, identifiers, publisher, description |
+| MOBI, AZW, AZW3 (KF8), PRC | `.mobi`, `.azw`, `.azw3`, `.prc` | The book's text, decompressed | At the top-level headings | Title, authors, publisher, description, ISBN and other identifiers, publication date, language |
+
+- EPUB books protected by DRM are not read as books (see [notes](#notes-in-the-sheet)).
+- MOBI books compressed with HUFF/CDIC, or protected by DRM, are not read as books. A plain PalmDOC text is read as plain text, titled with its internal name.
+
+### Documents
+
+| Format | Extensions | Text | Chapters | Metadata read |
+|---|---|---|---|---|
+| PDF | `.pdf` | The text layer, page by page, with paragraphs rebuilt from lines and words split by a line-end hyphen joined again | One per page that has text | Title, author, creation date (as `YYYY-MM-DD`), subject (as the abstract) |
+| Word (DOCX) | `.docx` | Paragraphs; Title and Heading 1 to 6 styles become headings, Quote styles quotations, numbered and bulleted paragraphs list items | At the top-level headings | Title, creators, language, created date, identifiers, description or subject |
+| OpenDocument text | `.odt` | Headings by outline level, paragraphs, list items | At the top-level headings | Title, creator (or initial creator), language, creation date, identifiers, description or subject |
+| RTF | `.rtf` | Body text with paragraph breaks and special characters; headers, footers, tables of fonts and pictures are skipped | At the top-level headings | Title and author from the document information |
+
+- A PDF protected by a password is opened when it allows opening without one; otherwise it is not read as a PDF.
+- Scanned PDF pages, which carry no text layer, are skipped and counted in a note. The importer does not recognise text in images.
+
+### Web and text
+
+| Format | Extensions | Text | Chapters | Metadata read |
+|---|---|---|---|---|
+| HTML, XHTML | `.html`, `.htm`, `.xhtml` | Headings, paragraphs, quotations, list items, preformatted text; the page head, scripts, styles, SVG, math, noscript, templates and objects are skipped | At the top-level headings | Title (from `<title>`), language (`lang`) |
+| Markdown | `.md`, `.markdown` | Headings, quotations, list items, fenced code, paragraphs; front matter and horizontal rules are skipped | At the top-level headings | Title from the first `# ` heading |
+| Plain text | `.txt`, `.text`, `.log` | Paragraphs separated by blank lines; wrapped lines are joined, but a paragraph of short lines (under 48 characters, like verse) keeps its line breaks | One | None (the title comes from the file name) |
+
+Markdown keeps the marks posts use (`**bold**`, `*italic*`, `__underline__`, `` `code` ``, `||spoiler||` and fenced code with its language), so a thread exported as Markdown imports back with its formatting. Links and images keep their text; strikethrough keeps its text without the tildes.
+
+### Data
+
+| Format | Extensions | Text | Metadata read |
+|---|---|---|---|
+| CSV | `.csv` | The first row names the columns; each later row becomes one paragraph of `column: value` pairs joined by " · " (blank values skipped). Quoted fields may contain commas, line breaks and doubled quotes. | None |
+| TSV | `.tsv`, `.tab` | As CSV, separated by tabs. | None |
+| JSON | `.json` | A top-level array gives one paragraph per element; an object gives one per key. Nested values are written as `key: value` pairs. | Title from a top-level `title` or `name` |
+
+### Media and archives
+
+| Format | Extensions | What is kept |
+|---|---|---|
+| Images: PNG, JPEG, GIF, WebP, BMP | `.png`, `.jpg`, `.jpeg`, `.gif`, `.webp`, `.bmp` | The pixel size, as a note. No text. |
+| Audio: MP3, WAV, OGG, FLAC | `.mp3`, `.wav`, `.ogg`, `.flac` | The file's facts only. |
+| Video: MP4, MKV and WebM, AVI | `.mp4`, `.m4v`, `.mkv`, `.webm` (AVI by signature) | The file's facts only. |
+| Zip and tar archives | `.zip`, `.tar` | The names of the files inside, one per line (up to 5000). |
+| Gzip | `.gz` | The original file name stored inside, when there is one. |
+| 7z, RAR and unrecognised files | (by signature, or any other) | Readable text fragments found in the bytes. |
+
+A file without text is stored with a one-line description as its text: its title, format, media type, size in bytes and SHA-256 checksum.
+
+## How the catalogue record is filled
+
+| Record field | From |
+|---|---|
+| Title | The <UiLabel>Title</UiLabel> field of the sheet: the file's own title, else the file name with underscores and hyphens as spaces and no extension; cut to 300 characters |
+| Type | The format: EPUB and MOBI are Book; PDF, DOCX, ODT and RTF are Article; HTML is Web page; CSV, TSV and JSON are Dataset; Markdown and plain text are Note; images, audio and video are Media; archives and unrecognised files are Other. A file that could not be read as its format keeps the type of the format it claimed. |
+| Creators | The <UiLabel>Authors</UiLabel> field, each as an author |
+| Published, Language | The <UiLabel>Date</UiLabel> and <UiLabel>Language</UiLabel> fields, left out when the catalogue cannot read them |
+| Publisher, Abstract | The file's metadata |
+| Identifier | The first valid identifier of the file, preferring an ISBN, then a DOI, then a URL (`urn:isbn:`, `isbn:` and `doi:` prefixes are understood) |
+| Source | <UiLabel>Imported</UiLabel>, with the file name |
+| Added | Now, by the persona you are acting as |
+
+## Sentence splitting
+
+<UiLabel>Sentences</UiLabel> splits at `.`, `!`, `?`, `…`, `‽`, `؟` and `।` followed by a space and a word that is not lower case, keeping closing quotes and brackets with their sentence. Chinese and Japanese full stops (`。`, `！`, `？`) split without a space. A single full stop after an initial ("J.") or a known abbreviation does not end a sentence. The abbreviations depend on the document's language:
+
+| Language tag | Extra abbreviations |
+|---|---|
+| `en` (and no tag) | Mr, Mrs, Ms, Jr, Sr, Mt, Gen, Col, Capt, Lt, Sgt, Rev, Hon, Inc, Ltd, Co, p, pp |
+| `de` | z.B, bzw, vgl, d.h, u.a, Hr, Fr, Str, S, ggf, evtl, inkl, z.T |
+| `fr` | M, MM, Mme, Mlle, Ste, p.ex, env, av |
+| `es` | Sr, Sra, Srta, D, Dña, Ud, Uds, p.ej, pág |
+| `pt` | Sr, Sra, Srª, D, p.ex, pág |
+| `id`, `ms` | Bpk, Ibu, Yth, Sdr |
+| `ru`, `uk`, `be` | т.е, т.д, т.п, г, ул, им, др, см |
+
+Every language also knows e.g, i.e, vs, cf, Dr, Prof, St, Nr, Fig, approx, ca and vol.
+
+## Limits
+
+| Limit | Value |
+|---|---|
+| Largest file | 50 MB by default; Settings › Import › <UiLabel>Largest file</UiLabel>, 1 to 1024 MB. Larger files are refused before reading. |
+| One entry inside an EPUB, DOCX, ODT or zip | 64 MB uncompressed; larger entries are cut |
+| One PDF page's content | 32 MB |
+| Files listed from an archive | 5000 |
+| Text fragments kept from an unrecognised file | 2000, each at least 8 characters and holding a word of four lower-case letters |
+| Title | 300 characters |
+
+## Notes in the sheet
+
+The import sheet shows these notes under the file name:
+
+| Note | Meaning |
+|---|---|
+| <UiLabel>An image of 1600 × 900 pixels: only its details are kept.</UiLabel> | An image: its size is recorded, there is no text. |
+| <UiLabel>An archive of 12 files: their names are listed.</UiLabel> | A zip, tar or gzip archive. |
+| <UiLabel>An unrecognised format: 40 readable text fragments were recovered.</UiLabel> | Readable text was salvaged from an unknown file. |
+| <UiLabel>12 pages have no text layer (scanned pages) and were skipped.</UiLabel> | A PDF with scanned pages. |
+| <UiLabel>This file uses HUFF/CDIC, which cannot be read yet, so it was opened as a plain binary.</UiLabel> | A MOBI book compressed in a way the reader does not decode. |
+| <UiLabel>This file is encrypted or copy-protected, so it was opened as a plain binary.</UiLabel> | A DRM-protected e-book or a password-protected PDF. |
+| <UiLabel>This file could not be read as its format (reason), so it was opened as a plain binary.</UiLabel> | The file claims a format but is damaged or incomplete. |
+
+A file opened as a plain binary shows the <UiLabel>Unrecognised file</UiLabel> card and keeps any readable text found in it.
+
+## Messages
+
+| Message | When |
+|---|---|
+| <UiLabel>Reading book.epub…</UiLabel> | The file is being read. |
+| <UiLabel>Could not open this file: the file is 80.0 MB, larger than the 50.0 MB import limit</UiLabel> | The file is over the size limit. |
+| <UiLabel>Could not open this file:</UiLabel> and a system message | The file could not be read from disk. |
+| <UiLabel>No text to post. The file goes into the vault with its details.</UiLabel> | The file has no text. |
+| <UiLabel>Added “Title” to the vault.</UiLabel> | <UiLabel>Just add to vault</UiLabel> succeeded. |
+| <UiLabel>Imported “Title” as 312 posts.</UiLabel> | <UiLabel>Create posts</UiLabel> succeeded. |
+| <UiLabel>The original file was not kept: reason</UiLabel> | Keeping a copy of the source failed; the import itself went through. |
+| <UiLabel>The import failed: reason</UiLabel> | The document or the posts could not be stored. |
+
+## Format families
+
+The card at the top of the sheet names the family:
+
+| Card | Formats |
+|---|---|
+| <UiLabel>E-book</UiLabel> | EPUB, MOBI / AZW3 |
+| <UiLabel>PDF document</UiLabel> | PDF |
+| <UiLabel>Word-processor document</UiLabel> | DOCX, ODT, RTF |
+| <UiLabel>Web page</UiLabel> | HTML |
+| <UiLabel>Text</UiLabel> | Markdown, TXT |
+| <UiLabel>Data</UiLabel> | CSV, TSV, JSON |
+| <UiLabel>Image</UiLabel> | PNG, JPEG, GIF, WebP, BMP |
+| <UiLabel>Audio</UiLabel> | MP3, WAV, OGG, FLAC |
+| <UiLabel>Video</UiLabel> | MP4, MKV / WebM, AVI |
+| <UiLabel>Archive</UiLabel> | ZIP, TAR, GZIP, 7Z, RAR |
+| <UiLabel>Unrecognised file</UiLabel> | Anything else |
+
+## Related
+
+- [Import documents](/docs/guides/vault/import)
+- [Catalogue](/docs/guides/vault/catalogue)

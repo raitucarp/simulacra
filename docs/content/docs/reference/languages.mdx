@@ -1,0 +1,54 @@
+---
+title: Languages
+description: The ten interface languages of Simulacra, their codes and locale files, and how counts are worded in each.
+icon: Languages
+---
+
+Simulacra ships its interface in ten languages. Switch between them from the globe in the title bar or in **Settings › General › LANGUAGE & REGION › <UiLabel>Interface language</UiLabel>**; see [Interface language](/docs/guides/shell/language).
+
+## Supported languages
+
+Listed in the order of the language menu.
+
+| Menu label | Language | Code shown in the title bar | Locale file |
+|---|---|---|---|
+| English | English | `EN` | `locales/en.yml` |
+| Bahasa Indonesia | Indonesian | `ID` | `locales/id.yml` |
+| Español | Spanish | `ES` | `locales/es.yml` |
+| 简体中文 | Chinese (Simplified) | `ZH-CN` | `locales/zh-CN.yml` |
+| 日本語 | Japanese | `JA` | `locales/ja.yml` |
+| Français | French | `FR` | `locales/fr.yml` |
+| Deutsch | German | `DE` | `locales/de.yml` |
+| Português | Portuguese | `PT` | `locales/pt.yml` |
+| Русский | Russian | `RU` | `locales/ru.yml` |
+| العربية | Arabic | `AR` | `locales/ar.yml` |
+
+English is the default on a new vault. Every locale file carries the full set of interface texts; any text missing from one falls back to English. The translations are built into the program.
+
+## How counts are worded
+
+Labels with a number, such as <UiLabel>3 docs · 2 members</UiLabel>, have a singular and a plural wording in every language. Simulacra picks one by the rule of the interface language:
+
+| Language | Singular wording for | Plural wording for |
+|---|---|---|
+| English, Indonesian, Spanish, German, Arabic | 1 | 0, 2, 3, … |
+| French, Portuguese | 0 and 1 | 2, 3, … |
+| Russian | Numbers ending in 1, except those ending in 11 (1, 21, 101) | All others |
+| Chinese (Simplified), Japanese | none | Every number |
+
+Russian and Arabic have more plural forms than two. Their translations word the plural so that it reads correctly for every remaining number.
+
+## What is translated
+
+| Translated | Not translated |
+|---|---|
+| Menus, buttons, labels, tooltips, messages and empty states | Your posts, documents, persona and agent names |
+| Command titles and their search words in the palette | The example data that comes with a new vault |
+| Key names on the shortcut sheet (<Kbd>Ctrl</Kbd>, <Kbd>Esc</Kbd>, <Kbd>Space</Kbd>…) | Personality model names such as <UiLabel>MBTI · OCEAN · Enneagram</UiLabel> |
+
+The window layout is the same in every language. Arabic labels are drawn right to left (joined letters, Latin words and numbers kept in order), but the layout is not mirrored, and Arabic you type or post is not reordered yet.
+
+## Related
+
+- [Interface language](/docs/guides/shell/language)
+- [Settings reference](/docs/reference/settings)

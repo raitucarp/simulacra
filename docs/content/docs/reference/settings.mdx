@@ -1,0 +1,194 @@
+---
+title: Settings reference
+description: Every setting of the Settings window in one table, with its control, range or options, default and whether version 0.2.0 already uses it.
+icon: ListChecks
+---
+
+Every row of the Settings window, in rail order. **Used** says whether version 0.2.0 acts on the setting; rows marked *saved only* keep your choice for a later version. Numbers step by the amount in brackets. How the window works: [The Settings window](/docs/guides/settings).
+
+## General
+
+| Setting | Card | Control | Range or options | Default | Used |
+|---|---|---|---|---|---|
+| Interface language | LANGUAGE & REGION | Menu | 10 languages | English | Yes |
+| Date format | LANGUAGE & REGION | Chips | `2026-11-17`, `17/11/2026`, `11/17/2026` | `2026-11-17` | Every date on screen: posts, quotes, cards, views, sheets, Insights |
+| Time format | LANGUAGE & REGION | Chips | 24-hour, 12-hour | 24-hour | Times on posts, quotes, cards and sheets |
+| Number format | LANGUAGE & REGION | Menu | Follow the language, `1,234.5`, `1.234,5`, `1 234,5` | Follow the language | Settings readouts |
+| First day of the week | LANGUAGE & REGION | Chips | Monday, Sunday, Saturday | Monday | Calendar view |
+| Default persona | STARTUP | Menu | Last used, your personas | Last used | Next start |
+| Startup screen | STARTUP | Menu | Timeline, Knowledge Vault, Mind Graph, Agent Lab | Timeline | Next start |
+| Welcome tour | STARTUP | Button | Show again | | Yes |
+
+## Appearance
+
+| Setting | Card | Control | Range or options | Default | Used |
+|---|---|---|---|---|---|
+| Density | (search only) | Shows value | Compact, Comfortable, Cozy | Comfortable | Yes |
+| Font size | (search only) | Shows value | Small, Default, Large | Default | Yes |
+| Reading width | READING COMFORT | Chips | Narrow, Comfortable, Wide | Comfortable | Vault reader |
+| Reduce motion | READING COMFORT | Switch | | Off | Vault and journal |
+| Theme gallery | (pane) | Pane | 28 bundled themes and yours | Simulacra Midnight | Yes |
+| Appearance mode | (pane) | Chips | Dark, Light, System | Dark | Yes |
+| Dark theme, Light theme | (pane) | Menus | Themes of that mode | Simulacra Midnight, Graphite Light | Yes |
+| Font family | (pane) | Chips | Segoe UI, Calibri, Georgia, Verdana, Trebuchet MS | Segoe UI | Yes |
+| Text size, Density, Corners | (pane) | Chips | three steps each | Default, Comfortable, Default | Yes |
+
+The pane's settings are theme settings: [Appearance](/docs/guides/appearance). <UiLabel>Reset all settings</UiLabel> does not reset them.
+
+## Reading & Writing
+
+| Setting | Card | Control | Range or options | Default | Used |
+|---|---|---|---|---|---|
+| Post length limit | POSTS | Stepper (20) | 140 to 1000 chars | 280 chars | Up to 280 |
+| Split long drafts into a thread | POSTS | Switch | | On | Saved only |
+| Post as | POSTS | Chips | Yourself, Pseudonym, Anonymous | Yourself | Saved only |
+| Archive posts automatically | POSTS | Menu | Never, After a week, After 30 days, After 90 days, After a year | Never | Yes |
+| Symbol shorthand | POSTS | Switch | | Off | Yes |
+| Log my feelings in the journal | POSTS | Switch | | Off | Yes |
+| Autosave drafts every | DRAFTS | Stepper (5) | 5 to 300 s | 30 s | Saved only |
+| Check spelling | DRAFTS | Switch | | On | Saved only |
+| Atomic-note hints | DRAFTS | Switch | | On | Yes |
+| Readability meter | DRAFTS | Switch | | On | Yes |
+| Clicking a wikilink | LINKS & TAGS | Chips | Preview, Open inspector | Preview | Saved only |
+| Clicking a hashtag | LINKS & TAGS | Chips | Search the feed, Nothing | Search the feed | Saved only |
+| Daily feed budget | FEED | Stepper (10) | No limit, up to 500 posts / day | No limit | Yes |
+
+## AI & Models
+
+| Setting | Card | Control | Range or options | Default | Used |
+|---|---|---|---|---|---|
+| Provider | (pane) | Buttons | Google Gemini, OpenAI, Anthropic, OpenRouter, Groq, Custom Endpoint | Google Gemini | On save |
+| API key | (pane) | Text | | blank | On save |
+| Custom Endpoint URL | (pane) | Text | Custom Endpoint only | blank | On save |
+| Model Identifier | (pane) | Text, presets | | `gemini-1.5-flash` | On save |
+| Credentials | (pane) | List | nine services | none | Yes |
+| Request timeout | REQUESTS | Stepper (10) | 10 to 300 s | 60 s | Yes |
+| Retries | REQUESTS | Stepper (1) | 0 to 5 | 2× | Yes |
+| Daily request budget | DAILY BUDGET | Stepper (50) | No limit, up to 10,000 / day | No limit | Yes |
+| Daily token cap | DAILY BUDGET | Stepper (50,000) | No limit, up to 5,000,000 / day | No limit | Yes |
+| Ask before spending | DAILY BUDGET | Switch | | On | Yes |
+
+## Embeddings
+
+| Setting | Card | Control | Range or options | Default | Used |
+|---|---|---|---|---|---|
+| Embedding provider | MODEL | Menu | Gemini, Local server, OpenAI, Custom | Gemini | Yes |
+| Embedding model | MODEL | Text | | `gemini-embedding-001` | Yes |
+| Local server address | MODEL | Text | Local server and Custom only | blank (`http://localhost:11434`) | Yes |
+| Vector size | MODEL | Stepper (128) | 128 to 3072 dims | 768 dims | Yes |
+| Chunk size | CHUNKING | Stepper (64) | 128 to 4096 tokens | 512 tokens | Yes |
+| Chunk overlap | CHUNKING | Stepper (16) | 0 to 1024 tokens, at most half a chunk | 64 tokens | Yes |
+| Semantic search | INDEX | Switch | | On | Yes |
+| Rebuild the index | INDEX | Button | Rebuild | | Yes |
+| Stop indexing | INDEX | Button | Stop | | Yes |
+
+## Images
+
+| Setting | Card | Control | Range or options | Default | Used |
+|---|---|---|---|---|---|
+| Default image engine | ENGINE | Menu | No images, Google, OpenAI, Local server | No images | Image ideas |
+| Image size | ENGINE | Menu | Square, Portrait, Landscape, Small square | Square | Image ideas |
+| Style prefix | ENGINE | Text | up to 200 characters | blank | Image ideas |
+| Draw avatars automatically | AVATARS | Switch | | Off | Saved only |
+
+## Agents & Simulation
+
+| Setting | Card | Control | Range or options | Default | Used |
+|---|---|---|---|---|---|
+| Autonomous posting | AUTONOMY | Switch | | Off | Yes |
+| Scheduler status | AUTONOMY | Status | | | Yes |
+| Rate limit | AUTONOMY | Stepper (1) | 1 to 120 / hour | 12 / hour | Saved only |
+| Concurrent generations | AUTONOMY | Stepper (1) | 1 to 4 at once | 1 at once | Yes |
+| Quiet hours | QUIET HOURS | Switch | | Off | Yes |
+| Quiet from | QUIET HOURS | Stepper (1 h) | 00:00 to 23:00 | 22:00 | Yes |
+| Quiet until | QUIET HOURS | Stepper (1 h) | 00:00 to 23:00 | 07:00 | Yes |
+| Reply depth limit | REPLIES | Stepper (1) | 1 to 20 deep | 6 deep | Saved only |
+
+## Learning
+
+| Setting | Card | Control | Range or options | Default | Used |
+|---|---|---|---|---|---|
+| Daily review limit | REVIEWS | Stepper (10) | 10 to 2,000 / day | 200 / day | Yes |
+| New cards per day | REVIEWS | Stepper (5) | 0 to 500 / day, at most the review limit | 20 / day | Yes |
+| Desired retention | REVIEWS | Stepper (1) | 70% to 99% | 90% | Yes |
+| Review reminder | REMINDER | Switch | | Off | Yes |
+| Remind me at | REMINDER | Stepper (1 h) | 00:00 to 23:00 | 09:00 | Yes |
+| Weekly review reminder | WEEKLY REVIEW | Switch | | Off | Yes |
+| Weekly review day | WEEKLY REVIEW | Menu | Monday to Sunday | Sunday | Yes |
+| Remind me at | WEEKLY REVIEW | Stepper (1 h) | 00:00 to 23:00 | 18:00 | Yes |
+| Language I am learning | LANGUAGES | Menu | 10 languages | Español | Yes |
+
+## Import
+
+| Setting | Card | Control | Range or options | Default | Used |
+|---|---|---|---|---|---|
+| Split documents by | SPLITTING | Chips | Paragraph, Sentence, Chapter | Paragraph | Yes |
+| Post imports as | SPLITTING | Chips | Yourself, Pseudonym, Anonymous | Yourself | Yes |
+| Largest file | FILES | Stepper (5) | 1 to 1,024 MB | 50 MB | Yes |
+| Keep the original file | FILES | Switch | | On | Yes |
+
+## Privacy & Data
+
+| Setting | Card | Control | Range or options | Default | Used |
+|---|---|---|---|---|---|
+| Database | STORAGE | Path, Open folder | | | Yes |
+| Media folder | STORAGE | Path, Open folder | | | Yes |
+| Back up the vault | MAINTENANCE | Button | Back up now | | Yes |
+| Export data | MAINTENANCE | Button | Export | | Yes |
+| Encrypted snapshot | MAINTENANCE | Button | Create snapshot | | Yes |
+| Restore a snapshot | MAINTENANCE | Button | Restore | | Yes |
+| Clear caches | MAINTENANCE | Button | Clear | | Yes |
+| Fetch link previews | PRIVACY | Switch | | On | Yes |
+| Include journal in search | PRIVACY | Switch | | Off | Yes |
+| Telemetry | PRIVACY | Locked | Always off | Off | Never sent |
+
+## Notifications
+
+| Setting | Card | Control | Range or options | Default | Used |
+|---|---|---|---|---|---|
+| Show toasts | IN-APP TOASTS | Switch | | On | Yes |
+| Confirmations | IN-APP TOASTS | Switch | | On | Yes |
+| Model failures | IN-APP TOASTS | Switch | | On | Yes |
+| Agent activity | IN-APP TOASTS | Switch | | Off | Saved only |
+| Due reminders | IN-APP TOASTS | Switch | | On | Yes |
+
+## Shortcuts
+
+| Setting | Card | Control | Range or options | Default | Used |
+|---|---|---|---|---|---|
+| Keyboard shortcuts | KEYMAP | Button | Open shortcut sheet | | Yes |
+
+## Code
+
+| Setting | Card | Control | Range or options | Default | Used |
+|---|---|---|---|---|---|
+| Run code blocks | RUNNING CODE | Switch | | Off | Yes |
+| Time limit | RUNNING CODE | Stepper (1) | 1 to 300 s | 10 s | Yes |
+| Runtimes | RUNTIMES | Refresh, one switch each | Node, Deno, Python, Lua, Go, Ruby, PHP | all on | Yes |
+
+## Symbols and Licences
+
+| Setting | Card | Control | Range or options | Default | Used |
+|---|---|---|---|---|---|
+| Icon sets | ICON SETS | Download or Remove per set | 31 sets | none downloaded | Yes |
+| Icon set licences | ICON SETS | List | downloaded sets | | Yes |
+
+## Advanced
+
+| Setting | Card | Control | Range or options | Default | Used |
+|---|---|---|---|---|---|
+| Log level | DIAGNOSTICS | Menu | Errors, Warnings, Info, Debug | Warnings | Saved only |
+| Developer options | DIAGNOSTICS | Switch | | Off | Saved only |
+| Reset all settings | RESET | Button, two clicks | Reset all | | Yes |
+
+## How settings are stored
+
+- Each category is one JSON row (`preferences.general`, `preferences.writing`, …) in the vault's settings table, so an unreadable row resets only its category.
+- Numbers are pulled into their range when loaded and on every edit; new cards per day never exceed the review limit, and chunk overlap never exceeds half a chunk.
+- An option the app does not know (from a newer version or a hand-edited vault) reads as the default; telemetry always reads as off.
+- The AI provider, its key and model keep their own rows; credentials are one JSON row; theme settings have their own rows.
+
+## Related
+
+- [The Settings window](/docs/guides/settings)
+- [Data and files](/docs/reference/data-and-files)

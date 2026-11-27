@@ -1,0 +1,89 @@
+---
+title: Quick notes and the Inbox
+description: Catch a thought, a link or a pasted image in one keystroke, and sort it later from the Inbox.
+icon: StickyNote
+---
+
+When a thought arrives mid-task, you do not want a full composer. **Quick capture** is a small box at the top of the window: type, press <Kbd>Enter</Kbd>, and it is saved to your **Inbox**, a view of the Timeline that holds only captured notes.
+
+<Screenshot id="composer-capture-box" alt="The quick capture box at the top of the window with a typed note, Save, the hint line and Inbox (2)" caption="Quick capture, opened with Ctrl+Shift+Space." size="md" />
+
+## Open it
+
+- Press <Shortcut keys="Ctrl+Shift+Space" /> anywhere in the window.
+- Pick <UiLabel>New note</UiLabel> in the left sidebar's <UiLabel>New</UiLabel> menu.
+- Run <UiLabel>New note</UiLabel> from the command palette.
+
+## Anatomy
+
+1. **Feather mark** and the field: <UiLabel>Capture a thought or paste a link…</UiLabel>
+2. <UiLabel>Save</UiLabel>, the same as <Kbd>Enter</Kbd>.
+3. The hint: <UiLabel>Enter saves to your Inbox · Esc closes · drop or paste files anywhere to import</UiLabel>
+4. `Inbox (2)`: how many captures wait in the active network's Inbox. Click it to open the Inbox.
+
+## Capture a note
+
+<Steps>
+<Step>
+### Type or paste
+Write the thought, or paste a link with or without words around it.
+</Step>
+<Step>
+### Press Enter
+A toast says <UiLabel>Saved to your Inbox.</UiLabel> The box empties and stays open for the next note.
+</Step>
+<Step>
+### Close it
+Press <Kbd>Esc</Kbd> or click anywhere outside the box.
+</Step>
+</Steps>
+
+What a capture becomes:
+
+| You type | It becomes |
+|---|---|
+| Words | A note post with your text. |
+| A lone address (`https://…`) | A link post: the link with no text, shown as a [link card](/docs/guides/composer/attachments#links). |
+| Words with an address in them | A note with your text and the first address attached as its link. |
+| More than one post's worth | A thread: the text is split at sentence ends into posts that each fit, each replying to the one before. |
+
+Every capture is posted as your active persona in the active network, and marked as a capture so it shows in the Inbox. An empty box saves nothing.
+
+## Paste anywhere
+
+With no text field focused, press <Shortcut keys="Ctrl+V" /> to capture whatever is on the clipboard, without opening the box:
+
+| Clipboard holds | What happens |
+|---|---|
+| Text | Captured like a typed note. |
+| An image | Saved in the media folder (under `captures`) and captured as an image post. |
+| Files | The [import sheet](/docs/guides/vault) opens for them. |
+
+Dropping files on the window does the same as pasting files: they go to the import sheet. (With the composer window open, dropped files are attached to the post instead.)
+
+## The Inbox
+
+The Inbox is a tab of the Timeline's stream, beside <UiLabel>For you</UiLabel>, <UiLabel>Dialectic</UiLabel> and <UiLabel>Feelings</UiLabel>. It shows every conversation that holds a captured post.
+
+<Screenshot id="composer-inbox-tab" alt="The Timeline with the Inbox tab selected, showing a captured note and a captured link" caption="The Inbox tab collects every capture." />
+
+Open it with:
+
+- the `Inbox (N)` button in the capture box,
+- <UiLabel>Open Inbox</UiLabel> in the command palette,
+- or the <UiLabel>Inbox</UiLabel> tab at the top of the stream.
+
+Captured posts are ordinary posts: reply to them, quote them, add them to a thread, or tidy them with the tools in their ⋯ menu (see [Post tools](/docs/guides/post-tools)). Replying to a capture keeps its conversation in the Inbox.
+
+## Tips and limits
+
+- Long captures are split at <UiLabel>Post length limit</UiLabel> in Settings › Reading & Writing (280 characters by default; a capture never makes a post longer than 280).
+- The capture box is one line. For a formatted note, a checklist or several separate posts, use the [composer window](/docs/guides/composer).
+- A capture that cannot be saved says `Could not save the capture: …`.
+- Code in a captured post asks for confirmation before it runs, like code you did not write yourself ([Attachments › Code blocks](/docs/guides/composer/attachments#code-blocks)).
+
+## Related
+
+- [Capture your thinking](/docs/tutorials/capture-your-thinking): a day of quick notes, threads and checklists.
+- [Keyboard shortcuts](/docs/reference/keyboard-shortcuts)
+- [Knowledge Vault › Import](/docs/guides/vault)

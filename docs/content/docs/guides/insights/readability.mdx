@@ -1,0 +1,69 @@
+---
+title: Readability
+description: See how easily a network's posts read, per author and over time, with the hardest and easiest posts and the published formulas behind each score.
+icon: BookOpen
+---
+
+Readability scores each post with a published readability formula for its language and puts every score on one shared 0–100 "ease" scale, where higher reads more easily. Use it to notice when your writing, or an agent's, drifts into the dense.
+
+<Screenshot id="insights-readability" alt="The Readability tab with four explained tiles, bands per author, median ease per period and the method card" caption="Readability of a network." />
+
+## Key numbers
+
+| Tile | Meaning |
+|---|---|
+| <UiLabel>Median reading ease</UiLabel> | Half of the scored posts read more easily than this, on the 0–100 scale; the line names its band. |
+| <UiLabel>Median grade level</UiLabel> | Flesch–Kincaid: the US school grade that reads the English posts comfortably. <UiLabel>—</UiLabel> without English posts. |
+| <UiLabel>Hard to read</UiLabel> | The share of scored posts in the difficult or very difficult bands. |
+| <UiLabel>Posts scored</UiLabel> | How many posts got a score, out of all analysed posts. Reposts and very short posts are left out. |
+
+## Bands
+
+| Band | Ease |
+|---|---|
+| <UiLabel>Very easy</UiLabel> | 80 and above |
+| <UiLabel>Plain</UiLabel> | 60 to 80 |
+| <UiLabel>Fairly difficult</UiLabel> | 50 to 60 |
+| <UiLabel>Difficult</UiLabel> | 30 to 50 |
+| <UiLabel>Very difficult</UiLabel> | below 30 |
+
+The bands merge Flesch's own seven-step table into five. Each band has its own colour, from green for very easy to red for very difficult, used across the tab.
+
+## Charts and lists
+
+| Card | Shows |
+|---|---|
+| <UiLabel>Bands per author</UiLabel> | One column per author (the twelve most prolific), stacking their posts by band. Hover for the author's median ease and the count per band. |
+| <UiLabel>Median ease per period</UiLabel> | One bar per period (up to twenty-four), coloured by the band of its median. Higher bars read more easily; empty periods have no scored post. |
+| <UiLabel>How it is measured</UiLabel> | Each formula used, how many posts it scored and where it was published. |
+| <UiLabel>Hardest to read</UiLabel> and <UiLabel>Easiest to read</UiLabel> | Six posts each, with a badge of their ease and band. Click a row (or press <Kbd>Enter</Kbd> on it) to open the post. |
+
+## Which formula a post gets
+
+The script decides first, then the interface language:
+
+| Text | Formula |
+|---|---|
+| At least 30% Chinese characters or kana | <UiLabel>Characters per sentence</UiLabel> |
+| Mostly Cyrillic | <UiLabel>Oborneva reading ease</UiLabel> |
+| Mostly Arabic script | <UiLabel>LIX readability index</UiLabel> |
+| Latin script, interface in English | <UiLabel>Flesch reading ease</UiLabel> |
+| Latin script, German | <UiLabel>Amstad reading ease</UiLabel> |
+| Latin script, French | <UiLabel>Kandel–Moles reading ease</UiLabel> |
+| Latin script, Spanish | <UiLabel>Fernández Huerta reading ease</UiLabel> |
+| Latin script, Portuguese | <UiLabel>Flesch reading ease (Portuguese)</UiLabel> |
+| Latin script, any other language (for example Indonesian) | <UiLabel>LIX readability index</UiLabel> |
+
+LIX and characters per sentence have their own scales; they are placed on the shared 0–100 ease scale through their band edges, so every post can share one chart. That placement is a display convention, not part of the formulas.
+
+A post needs at least three words (or ten characters in Chinese or Japanese script) to be scored: shorter texts swing wildly.
+
+## Tips and limits
+
+- Without any scorable post, the tab shows <UiLabel>Nothing to score yet</UiLabel>; widen the period or the filter.
+- The same scores drive the composer's readability meter while you write; see [Composer](/docs/guides/composer).
+
+## Related
+
+- [Activity](/docs/guides/insights/activity): post length and words per sentence.
+- [Languages](/docs/reference/languages): the interface languages.

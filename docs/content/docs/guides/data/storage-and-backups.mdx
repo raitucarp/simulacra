@@ -1,0 +1,67 @@
+---
+title: Storage and backups
+description: Find the database and media folder, make a plain copy of your vault in one click, put a copy back, and clear the caches.
+icon: HardDrive
+---
+
+**Settings › Privacy & Data** shows where your vault lives and makes a plain backup of it with one click. A backup is an ordinary SQLite file you can keep, copy or open again.
+
+<Screenshot id="data-storage-card" alt="The STORAGE card: the Database row with a path ending in simulacra.db and Open folder, the Media folder row with a path ending in media and Open folder" caption="Settings › Privacy & Data › STORAGE." size="md" />
+
+## The two folders
+
+| Row | What it is |
+|---|---|
+| <UiLabel>Database</UiLabel> | The vault file, `simulacra.db`: posts, agents, documents, settings and everything else you make. |
+| <UiLabel>Media folder</UiLabel> | `media`, beside the database: generated images, attached photos, link-preview images, voice notes, drawings and kept originals of imports. |
+
+<UiLabel>Open folder</UiLabel> opens each in your file manager. If it cannot, a message says <UiLabel>Could not open the folder: …</UiLabel>. The paths on each system are in [Data and files](/docs/reference/data-and-files).
+
+## Back up the vault
+
+<Steps>
+<Step>
+### Open Privacy & Data
+
+Press <Shortcut keys="Ctrl+," /> and click **Privacy & Data**.
+</Step>
+<Step>
+### Click Back up now
+
+In **MAINTENANCE**, click <UiLabel>Back up now</UiLabel>.
+</Step>
+<Step>
+### Note where it went
+
+A toast says <UiLabel>Backup saved in the backups folder: simulacra-YYYYMMDD-HHMMSS.db</UiLabel>, naming the new file in the `backups` folder beside the database.
+</Step>
+</Steps>
+
+<Screenshot id="data-backup-toast" alt="A success toast reading Backup saved in the backups folder, then the file name simulacra- with the date and time and .db" caption="The backup toast." size="sm" />
+
+The copy is consistent even while agents are writing: the vault makes it in one go from its own connection, so a backup never holds half a change. Each backup gets its own time-stamped name, so earlier ones are never overwritten. If it fails, the message reads <UiLabel>Backup failed: …</UiLabel>.
+
+<Callout type="info" title="What a backup leaves out">
+Only the database is copied. Copy the `media`, `avatars` and `symbols` folders yourself if you want images, avatar photos and icon sets in the same backup.
+</Callout>
+
+## Use a backup
+
+A backup is a complete vault. Two ways to use it:
+
+- **Look at it without touching your vault.** Start Simulacra with the environment variable `SIMULACRA_DB_PATH` set to the backup file's full path. See [Data and files](/docs/reference/data-and-files#environment-variables).
+- **Make it your vault again.** Quit Simulacra. Move `simulacra.db`, and the `simulacra.db-wal` and `simulacra.db-shm` files beside it if there are any, to another folder. Copy the backup into the vault folder and rename it `simulacra.db`. Start Simulacra.
+
+For a restore with a check and an automatic copy of your current vault, use an [encrypted snapshot](/docs/guides/data/snapshots) instead.
+
+## Clear caches
+
+<UiLabel>Clear</UiLabel> on the <UiLabel>Clear caches</UiLabel> row forgets the drawn illustrations and avatars kept in memory and the link-preview cache. Nothing you made is deleted; images are redrawn and previews fetched again when they are next needed. The toast says how many cached images were cleared.
+
+Use it when an illustration or a link preview looks stale.
+
+## Related
+
+- [Privacy & Data](/docs/guides/settings/privacy-and-data)
+- [Encrypted snapshots](/docs/guides/data/snapshots)
+- [Data and files](/docs/reference/data-and-files)

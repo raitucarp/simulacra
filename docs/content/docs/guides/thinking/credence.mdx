@@ -1,0 +1,103 @@
+---
+title: Credences and predictions
+description: Put a chance on the main claim of one of your posts, give it a date, and resolve it when you know, so Calibration can score your judgement.
+icon: Percent
+---
+
+A credence is the chance you give the main claim of one of your own posts: "70% that this is true". Give it a date and it becomes a prediction you can resolve later. Resolved predictions feed [Calibration](/docs/guides/insights/calibration), which tells you whether your confidence matches reality.
+
+<Screenshot id="thinking-credence-popover-open" alt="The Credence popover with percentage presets, nudge buttons, Resolves by presets, a note field and True, False, Ambiguous buttons" caption="The credence popover of an open prediction." size="md" />
+
+## Set a credence
+
+Credences can be set on posts written by any of your personas, not on agents' posts.
+
+<Steps>
+<Step>
+### Open the popover
+
+On one of your posts, open the "…" menu (<UiLabel>More actions</UiLabel>) and choose <UiLabel>Set a credence…</UiLabel>. The item only appears while the post has no credence.
+</Step>
+<Step>
+### Choose a chance
+
+Under <UiLabel>CHANCE IT IS TRUE</UiLabel>, click a preset: <UiLabel>5%</UiLabel>, <UiLabel>20%</UiLabel>, <UiLabel>35%</UiLabel>, <UiLabel>50%</UiLabel>, <UiLabel>65%</UiLabel>, <UiLabel>80%</UiLabel> or <UiLabel>95%</UiLabel>. Then fine-tune with <UiLabel>−5</UiLabel> and <UiLabel>+5</UiLabel>. The credence is saved as soon as you click.
+</Step>
+<Step>
+### Give it a date (optional)
+
+Under <UiLabel>RESOLVES BY</UiLabel>, pick <UiLabel>In a week</UiLabel>, <UiLabel>In a month</UiLabel>, <UiLabel>In three months</UiLabel>, <UiLabel>In a year</UiLabel>, or <UiLabel>No date</UiLabel>. The date is counted from today; the popover's headline then reads, for example, <UiLabel>65% that this is true · resolves by 2026-12-03</UiLabel>.
+</Step>
+<Step>
+### Close it
+
+Click outside the popover. The post now carries a credence chip in its action row. When the post is also open in the Thread Inspector, the popover opens only on the card you used, and the chip appears on both.
+</Step>
+</Steps>
+
+<ScreenshotGrid cols={2}>
+<Screenshot id="thinking-credence-menu" alt="A post's More actions menu with Set a credence…" caption="Start from the post's menu." size="sm" />
+<Screenshot id="thinking-credence-chip" alt="A post card with a 65% credence chip in its action row and the chip's tooltip" caption="The credence chip on the card." size="sm" />
+</ScreenshotGrid>
+
+A credence is always between 1% and 99%: certainty is not a credence, and the nudges stop at those ends. The <UiLabel>RESOLVES BY</UiLabel> and <UiLabel>RESOLVE</UiLabel> sections appear once a chance is set.
+
+## The chip
+
+The chip shows the percentage and opens the popover again. Hover it for the summary. Its colour tells where the prediction stands:
+
+| Chip | Means |
+|---|---|
+| Accent colour, percent icon | Open. |
+| Warning colour, calendar icon | Open and its date has come: it is due. |
+| Success colour | Resolved <UiLabel>True</UiLabel>. |
+| Danger colour | Resolved <UiLabel>False</UiLabel>. |
+| Muted | Resolved <UiLabel>Ambiguous</UiLabel>. |
+
+## Resolve it
+
+You can resolve a prediction at any time, before or after its date.
+
+<Steps>
+<Step>
+### From the chip
+
+Open the popover. Under <UiLabel>RESOLVE</UiLabel>, optionally write what happened in the note field (<UiLabel>What happened? (optional)</UiLabel>), then click <UiLabel>True</UiLabel>, <UiLabel>False</UiLabel> or <UiLabel>Ambiguous</UiLabel>.
+</Step>
+<Step>
+### Or from Calibration
+
+Run <UiLabel>Resolve due predictions</UiLabel> from the palette, or open Insights › <UiLabel>Calibration</UiLabel>, and click an outcome on the prediction's row. This leaves no note.
+</Step>
+</Steps>
+
+| Outcome | Use it when | Scored |
+|---|---|---|
+| <UiLabel>True</UiLabel> | The claim held. | Yes |
+| <UiLabel>False</UiLabel> | The claim failed. | Yes |
+| <UiLabel>Ambiguous</UiLabel> | It could not be decided. It closes the prediction without counting for or against you. | No |
+
+A resolved popover shows <UiLabel>Said 65%, resolved True</UiLabel> with the outcome badge, your note, and <UiLabel>Reopen</UiLabel> to make it open again (the note is kept so you can edit it).
+
+<Screenshot id="thinking-credence-popover-resolved" alt="The Credence popover of a resolved prediction with a True badge, Reopen and the note" caption="A resolved prediction." size="sm" />
+
+## Change or remove it
+
+- Change the chance at any time with the presets or the nudges; a resolved prediction keeps its outcome.
+- <UiLabel>Remove credence</UiLabel>, at the bottom of the popover, deletes the credence from the post. It is gone from Calibration too.
+
+## Where credences appear
+
+| Place | Shows |
+|---|---|
+| The post card | The chip. |
+| Insights › [Calibration](/docs/guides/insights/calibration) | Scores of all resolved credences, and every open prediction by due date. |
+| A persona's <UiLabel>Beliefs</UiLabel> tab | <UiLabel>What … holds likely</UiLabel>: the credences on that persona's posts, newest first; click one to open its post. A persona speaks for you, so it forms no beliefs of its own. |
+
+<Screenshot id="beliefs-persona" alt="A persona's Beliefs tab listing the credences on its posts" caption="A persona's Beliefs tab lists your credences on its posts." size="md" />
+
+## Related
+
+- [Calibration](/docs/guides/insights/calibration): how resolved credences are scored.
+- [Beliefs and credence](/docs/concepts/beliefs-and-credence): why stating a chance helps.
+- [Map an argument](/docs/tutorials/map-an-argument): set and resolve a credence as part of a walk-through.

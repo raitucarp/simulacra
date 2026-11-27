@@ -1,0 +1,130 @@
+---
+title: Suggestions and help
+description: Mnemo's tips, the "?" explainers, Why? cards, example chips, AI suggestions, Fill the rest and the step palettes that help you choose values in the Forge.
+icon: Lightbulb
+---
+
+The Forge has hundreds of settings, and most of them have help next to them. You can read what a
+setting does, see typical values and good picks, borrow one step from a palette, or ask the AI for
+values that fit the rest of the character.
+
+<Screenshot id="forge-suggest-bar" alt="The Not sure what to pick? card with Suggest with AI and Fill the rest" size="md" />
+
+## Mnemo the owl
+
+Mnemo sits at the top of the options panel (and of the start screen) with a plain-language tip for the
+current step, a welcome on the start screen, a reading pose while a description is being filled in and
+a cheer on the celebration screen.
+
+- Click the X beside the bubble (<UiLabel>Hide Mnemo</UiLabel>) to hide the guide.
+- Click the **?** in the top bar (<UiLabel>Show Mnemo's tips</UiLabel>) to bring it back.
+
+The choice is remembered between sessions.
+
+## “?” explainers
+
+A small **?** beside a setting opens a card in three parts: <UiLabel>WHAT IT IS</UiLabel>,
+<UiLabel>HOW IT CHANGES POSTS</UiLabel> and <UiLabel>EXAMPLE</UiLabel>.
+
+<Screenshot id="forge-explainer" alt="An explainer card for Handle with WHAT IT IS, HOW IT CHANGES POSTS and EXAMPLE" size="sm" />
+
+Hover the **?** to read it. It is also a tab stop: <Kbd>Enter</Kbd> or <Kbd>Space</Kbd> pins the card
+open while it keeps focus, and <Kbd>Esc</Kbd> closes every open card.
+
+## Why? cards
+
+Each setting's caption ends with <UiLabel>Why?</UiLabel> (a light bulb). Its card, titled
+<UiLabel>Help with …</UiLabel>, gathers whichever of these apply:
+
+| Heading | What it says |
+|---|---|
+| <UiLabel>What makes a good value</UiLabel> | A one-line tip for the field |
+| <UiLabel>Why this range</UiLabel> / <UiLabel>Why these picks</UiLabel> | Why the typical range or starting picks fit this character |
+| <UiLabel>Advice</UiLabel> | Guidance for the current draft |
+| <UiLabel>Examples</UiLabel> | Sample values |
+| <UiLabel>Good starting picks</UiLabel> | Options that suit what you have chosen so far |
+| <UiLabel>Works well with</UiLabel> / <UiLabel>Clashes with</UiLabel> | Combinations that support or fight each other |
+
+<Screenshot id="forge-why-card" alt="A Why? card with its tip, good starting picks and the combinations that pair or clash" size="sm" />
+
+## Hints next to each control
+
+| Hint | Where | How to use it |
+|---|---|---|
+| Example chips | Under text fields | Click a chip to use it; <Kbd>Shift</Kbd>-click to add it to what is typed. In a narrow window the chips collapse to one row with <UiLabel>More</UiLabel> / <UiLabel>Less</UiLabel>. |
+| <UiLabel>Suggested</UiLabel> badge | On option cards | Marks good starting picks for this character |
+| Typical range | Under sliders | <UiLabel>Typical a–b</UiLabel>, or <UiLabel>Typical a–b · suggested v</UiLabel> |
+| Clash line | Under a choice | <UiLabel>Clashes with …: reason</UiLabel>, in yellow; it never blocks saving |
+| Sparkle | In the caption | <UiLabel>Suggest values that fit the rest of this character</UiLabel>, for that one setting |
+
+## Suggest with AI and Fill the rest
+
+Every step except Review starts with a card titled <UiLabel>Not sure what to pick?</UiLabel> holding two
+buttons. Hover <UiLabel>Suggest with AI</UiLabel> for a reminder of what each does.
+
+| Button | What it does |
+|---|---|
+| <UiLabel>Suggest with AI</UiLabel> | Asks the AI for values for every suggestible setting on this page that fit the rest of the character |
+| <UiLabel>Stop</UiLabel> | Cancels the request while it runs |
+| <UiLabel>Fill the rest</UiLabel> | Fills blank fields, and settings still at their starting value, with suggested values. One undo step. |
+
+AI values never change the draft by themselves. They wait as sparkle chips under their fields:
+
+<Steps>
+<Step>
+### Ask
+Click <UiLabel>Suggest with AI</UiLabel> (or a field's sparkle). The card says
+<UiLabel>Asking the AI for values that fit…</UiLabel>
+</Step>
+<Step>
+### Look them over
+When they arrive: <UiLabel>n AI suggestions are waiting under their fields.</UiLabel>, plus
+<UiLabel>n unusable proposals were skipped.</UiLabel> when some made no sense.
+</Step>
+<Step>
+### Take what you like
+Click a sparkle chip to use that value, <UiLabel>Use all</UiLabel> to take every one, or
+<UiLabel>Dismiss</UiLabel> to clear them.
+</Step>
+</Steps>
+
+Other messages: <UiLabel>The AI had no usable suggestions this time. Try again.</UiLabel>,
+<UiLabel>The AI's answer could not be read. Try again.</UiLabel>,
+<UiLabel>Suggestions failed: …</UiLabel>, <UiLabel>Nothing on this page can be suggested by the AI.</UiLabel>
+and, for Fill the rest, <UiLabel>Every field on this page already has a value.</UiLabel>
+
+<Callout type="warn" title="Suggest with AI sends a request">
+  It uses the provider and key in Settings › AI & Models, counts against the daily AI budget and, while
+  **Ask before spending** is on, asks first. See [Spending and limits](/docs/guides/agents/spend).
+  Fill the rest and every other hint on this page work offline.
+</Callout>
+
+## Step palettes
+
+Some steps offer **step palettes**: ready-made settings for that step only. They sit in a card titled
+<UiLabel>Palettes for this step (n)</UiLabel> at the top of the options, folded to that one line so the
+step's own fields start near the top. Click the title to unfold the chips; it stays unfolded on the
+other steps until you fold it again.
+
+<Screenshot id="forge-palette-strip" alt="Palettes for this step on the Voice step: Plain Speaker hovered, with the changes it would make listed below, beside Lowercase Poet" />
+
+- Hover a chip to list what it would change on this step.
+- Click it to apply it as one undo step. A notice confirms
+  <UiLabel>Applied “…”. Every field stays editable; Ctrl+Z undoes it.</UiLabel>
+
+| Step | Palettes |
+|---|---|
+| Disposition | Warm Heart · Stoic Calm · Brooding Romantic · Rebel Spark |
+| Mind | Skeptical Scientist · Systems Thinker · Intuitive Dreamer · Quick Wit |
+| Voice | Plain Speaker · Lowercase Poet · Academic Hedger · Emoji Enthusiast · Telegraphic |
+| Rhetoric | Socratic Questioner · Storyteller · Polemicist · Aphorist · Surrealist Dreamer |
+| Daily Life | Early Bird · Night Owl · Office Hours · Weekend Wanderer · Quiet Hermit |
+| Engine | Fast & Cheap · Deep Reasoner · Illustrator · Researcher · Thread Weaver |
+
+The Engine palettes are described on the [Engine step](/docs/guides/agents/forge/engine#engine-palettes).
+
+## Related
+
+- [Agent Forge overview](/docs/guides/agents/forge)
+- [Start screen](/docs/guides/agents/forge/start): whole-being palettes.
+- [Spending and limits](/docs/guides/agents/spend)

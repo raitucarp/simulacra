@@ -1,0 +1,75 @@
+---
+title: Still true?
+description: "Your old claims come back for a check: confirm them, revise them, retract them, or ask the AI whether they still hold."
+icon: RotateCcwClock
+---
+
+A claim you wrote a month ago may no longer be what you think. **Still true?** brings your own posts back once they have stood a while and asks you to look again. Confirming one sends it away for longer each time, so the claims you keep reaffirming bother you less and less.
+
+<Screenshot id="tools-still-true-strip" alt="A post card with a strip under its author reading Still true? You wrote this on a date, and buttons Still true, Revise, Retract and Ask the AI" caption="The strip on a claim that is due. The seed post of Epistemology & Mind is due on a fresh profile." />
+
+## Where it appears
+
+- **On the card.** A post that is due shows a strip under its author: "Still true? You wrote this on 2026-09-30." with four buttons. It shows in the stream and in the Thread Inspector.
+- **In the Still true? view.** The <UiLabel>Still true?</UiLabel> entry of a thread's or profile's <UiLabel>View</UiLabel> menu lists the posts due for a check, the one due longest first. See [Claim views](/docs/guides/views/claim-views#still-true).
+
+The strip appears only on your own posts, and never on a locked one.
+
+## When a post is due
+
+The rule is the same for every post:
+
+| After | The post comes back in |
+|---|---|
+| Writing it, or its last edit | 30 days |
+| The first confirmation | 60 days |
+| The second | 120 days |
+| The third | 240 days |
+| The fourth and every later one | 365 days |
+
+An edit restarts the count: the new version comes back 30 days after it was saved, and earlier confirmations no longer count.
+
+Only claims are checked. A post is never due when it is locked, a repost, empty, a feeling, an open question, a question you asked the room, retracted, or archived.
+
+## Answer the strip
+
+| Button | What it does |
+|---|---|
+| <UiLabel>Still true</UiLabel> | Confirms the claim. The toast says when it returns: "Confirmed. It will come back in 60 days." |
+| <UiLabel>Revise</UiLabel> | Opens the composer on the post. Saving makes a new version and restarts the 30-day wait. |
+| <UiLabel>Retract</UiLabel> | Opens the retraction sheet. See [Retract and correct](/docs/guides/post-tools/retract-and-correct). |
+| <UiLabel>Ask the AI</UiLabel> | Asks your AI engine whether the claim still holds. |
+
+## Ask the AI
+
+<Steps>
+<Step>
+### Click Ask the AI
+The strip reads "Asking the AI whether it still holds…" and the button hides until the answer is in. Only one claim is asked about at a time.
+</Step>
+<Step>
+### Read the verdict
+The answer appears under the strip as "AI: " followed by STILL TRUE, OUTDATED or UNSURE and one reason, naming what changed if anything did.
+</Step>
+<Step>
+### Decide
+The verdict does not change the post. Confirm, revise or retract it yourself.
+</Step>
+</Steps>
+
+The model receives the claim and the date you wrote it, marked as quoted data, and answers in your interface language in a sentence or two. A failed request shows "No answer from the AI: " and the reason in a toast. The verdict is kept for the session only.
+
+## Tips and limits
+
+- The strip keeps asking until you answer it. If a claim is fine as it is, <UiLabel>Still true</UiLabel> is the quickest way to quiet it.
+- A corrected post can still come due; a retracted one never does.
+- Confirming is stored on the post, so the schedule survives restarts.
+
+## Related
+
+<Cards>
+<Card title="Keep your claims honest" href="/docs/tutorials/keep-your-claims-honest" description="Check, revise, retract and change your mind, step by step." />
+<Card title="Retract and correct" href="/docs/guides/post-tools/retract-and-correct" description="What a retraction does." />
+<Card title="Claim views" href="/docs/guides/views/claim-views" description="Still true?, changes of mind, open questions, glossary." />
+<Card title="Beliefs and credence" href="/docs/concepts/beliefs-and-credence" description="How sure you are, stated." />
+</Cards>

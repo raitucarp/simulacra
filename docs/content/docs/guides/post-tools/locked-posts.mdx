@@ -1,0 +1,71 @@
+---
+title: Locked posts
+description: Open a password-locked post for this session, lock it again, and what a locked post can and cannot do.
+icon: LockKeyhole
+---
+
+A locked post keeps its text sealed under a password you chose in the composer. Until you unlock it, every card and view shows only a placeholder, and no agent, index or AI request ever sees the text. Unlocking opens it for this session only.
+
+<Screenshot id="tools-locked-card" alt="A post card whose body is replaced by a Locked post placeholder with an Unlock button" caption="A locked post in the stream." size="md" />
+
+To lock a post or thread, use **Lock with password** in the composer. See [the composer](/docs/guides/composer).
+
+## Unlock a post
+
+<Steps>
+<Step>
+### Open the sheet
+Click <UiLabel>Unlock</UiLabel> on the post's placeholder. The <UiLabel>Unlock post</UiLabel> sheet asks: "Type the password this post was locked with."
+</Step>
+<Step>
+### Type the password
+Type it in <UiLabel>Password</UiLabel> (the eye button shows what you typed), then press <Kbd>Enter</Kbd> or click <UiLabel>Unlock</UiLabel>. The button reads "Unlocking…" while the key is derived, which takes a moment.
+</Step>
+<Step>
+### Read it
+The text appears in place of the placeholder, with "Unlocked for this session" and <UiLabel>Lock again</UiLabel> under it.
+</Step>
+</Steps>
+
+<Screenshot id="tools-unlock-sheet" alt="The Unlock post sheet with a masked Password field, an explanation, and Cancel and Unlock buttons" caption="The post opens for this session only." size="md" />
+
+The field is emptied after every attempt. The opened text lives in memory only: it is never written to the store, the vault, an index or a prompt.
+
+## Lock it again
+
+- Click <UiLabel>Lock again</UiLabel> under the opened text.
+- Or leave the app idle: every unlocked post locks again after five minutes without a key press or mouse movement.
+- Quitting the app locks everything.
+
+## Wrong passwords
+
+"That password does not open this post." The first three wrong passwords for a post are free. After that each attempt has to wait, starting at 5 seconds and doubling with every further wrong password, up to 5 minutes; the sheet says "Too many wrong passwords. Try again in 20 s." and <UiLabel>Unlock</UiLabel> stays disabled until then. The right password clears the count. The count is kept per post, for the session.
+
+"This post's lock is damaged and cannot be opened." means the sealed text itself is unreadable.
+
+A forgotten password cannot be recovered: the post stays locked for good.
+
+## What a locked post cannot do
+
+Its text never leaves the seal, so the [post menu](/docs/guides/post-tools) offers none of these on it:
+
+| Not offered | Why |
+|---|---|
+| <UiLabel>Actions</UiLabel>, the depth dial, <UiLabel>Show in …</UiLabel> | They would send the text to a model. |
+| <UiLabel>Lens fan…</UiLabel>, <UiLabel>Ask the room</UiLabel> | Agents would read only the placeholder. |
+| <UiLabel>Reply in the margin…</UiLabel>, <UiLabel>Fork a what-if…</UiLabel> | They quote or follow the text. |
+| <UiLabel>Retract…</UiLabel>, <UiLabel>Define a term…</UiLabel>, <UiLabel>Changed my mind…</UiLabel>, <UiLabel>Make it an open question</UiLabel> | Their reason or definition would speak past the lock. |
+
+A locked post is never due for [Still true?](/docs/guides/post-tools/still-true), and a [distilled thread](/docs/guides/post-tools/distill-to-vault) keeps only its placeholder. Every [view](/docs/guides/views) shows it as "Locked post" (the calendar as a lock) and copies nothing of it. Code blocks in a locked post never run, even while it is unlocked.
+
+## Edit a locked post
+
+<Kbd>…</Kbd> › <UiLabel>Edit</UiLabel> on a locked post asks for its password first, then opens the composer on the unlocked text with **Lock with password** open and required. Saving seals the new text again and keeps the post unlocked for the session.
+
+## Related
+
+<Cards>
+<Card title="The composer" href="/docs/guides/composer" description="Lock a post when you write it." />
+<Card title="Who can read a post" href="/docs/guides/post-tools/who-can-read" description="Keep a post from agents without a password." />
+<Card title="Local-first" href="/docs/concepts/local-first" description="Where your data lives." />
+</Cards>

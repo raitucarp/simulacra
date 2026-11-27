@@ -1,0 +1,130 @@
+---
+title: Encrypted snapshots
+description: Seal a complete copy of your vault with a passphrase, and restore one after checking it, with your current vault kept as a copy.
+icon: LockKeyhole
+---
+
+An **encrypted snapshot** is the whole vault, sealed with a passphrase into one `.simsnap` file. It is the safe way to keep a copy on a USB stick or a cloud drive, and the way to move your vault to another computer: without the passphrase the file is unreadable.
+
+## Create a snapshot
+
+Open it from **Settings › Privacy & Data** › <UiLabel>Encrypted snapshot</UiLabel> › <UiLabel>Create snapshot</UiLabel>, or the command palette: <UiLabel>Encrypted snapshot…</UiLabel>.
+
+<Screenshot id="data-snapshot-sheet" alt="The Encrypted snapshot sheet: the explanation, the PASSPHRASE fields with a strength meter showing Strong and its tip, the warning that a lost passphrase cannot be recovered, and Cancel and Create snapshot…" caption="Sealing a snapshot." size="md" />
+
+The sheet explains: <UiLabel>A snapshot is a complete copy of this vault: posts, documents, agents, settings, credentials and your private journal, encrypted with a key made from your passphrase.</UiLabel>
+
+<Steps>
+<Step>
+### Type a passphrase
+
+Type it into <UiLabel>Passphrase</UiLabel> (<UiLabel>A long phrase only you know</UiLabel>). The eye button shows or hides it. Use at least 8 characters; several unrelated words are easy to remember and hard to guess.
+</Step>
+<Step>
+### Read the meter
+
+A four-part meter rates it <UiLabel>Weak</UiLabel>, <UiLabel>Fair</UiLabel>, <UiLabel>Strong</UiLabel> or <UiLabel>Very strong</UiLabel>, with a tip under it.
+</Step>
+<Step>
+### Type it again
+
+Repeat it in <UiLabel>Type it again</UiLabel>. Until both match and are long enough, a line says <UiLabel>Use at least 8 characters.</UiLabel> or <UiLabel>The two passphrases differ.</UiLabel> and the button stays disabled.
+</Step>
+<Step>
+### Seal
+
+Click <UiLabel>Create snapshot…</UiLabel> and choose where to save. The name proposed is `simulacra-YYYYMMDD-HHMMSS.simsnap`. The button reads <UiLabel>Sealing…</UiLabel>, then a toast says <UiLabel>Encrypted snapshot saved to ….</UiLabel>
+</Step>
+</Steps>
+
+<Callout type="error" title="A lost passphrase cannot be recovered">
+<UiLabel>If you lose this passphrase, the snapshot cannot be opened. It is not stored anywhere, and nobody can reset or recover it.</UiLabel> Write it down somewhere safe before you rely on the snapshot.
+</Callout>
+
+### The strength meter
+
+The meter estimates how hard the passphrase is to guess, cautiously: by its length and the kinds of characters in it (a repeated character or a run such as `abc` counts for little), and, for a phrase of several words, by the number of words. The lower estimate wins. It cannot know that a phrase is a famous quotation, so treat it as a hint.
+
+| Level | Tip shown |
+|---|---|
+| <UiLabel>Not set</UiLabel> | <UiLabel>Several unrelated words make a passphrase that is easy to remember and hard to guess.</UiLabel> |
+| <UiLabel>Weak</UiLabel> | <UiLabel>Easy to guess. Make it longer, or add more unrelated words.</UiLabel> |
+| <UiLabel>Fair</UiLabel> | <UiLabel>Getting there. One or two more words would make it much harder to guess.</UiLabel> |
+| <UiLabel>Strong</UiLabel> | <UiLabel>Hard to guess. Make sure you can remember it.</UiLabel> |
+| <UiLabel>Very strong</UiLabel> | <UiLabel>Very hard to guess. Keep it somewhere safe.</UiLabel> |
+
+## Restore a snapshot
+
+Open it from **Settings › Privacy & Data** › <UiLabel>Restore a snapshot</UiLabel> › <UiLabel>Restore</UiLabel>, or the command palette: <UiLabel>Restore snapshot…</UiLabel>. The sheet says: <UiLabel>The snapshot is checked first. Nothing changes until you confirm, and the current vault is kept beside it as a .pre-restore copy.</UiLabel>
+
+<Screenshot id="data-restore-choose" alt="The Restore snapshot sheet: SNAPSHOT FILE with Choose file… and a file name, the passphrase field, the verify hint, and Cancel and Verify" caption="Choosing and verifying a snapshot." size="md" />
+
+<Steps>
+<Step>
+### Choose the file
+
+Click <UiLabel>Choose file…</UiLabel> and pick a `.simsnap` file (<UiLabel>Simulacra snapshot</UiLabel>). Its name appears beside the button.
+</Step>
+<Step>
+### Verify it
+
+Type its passphrase in <UiLabel>Passphrase of the snapshot</UiLabel> and click <UiLabel>Verify</UiLabel>. <UiLabel>Verifying decrypts the snapshot into a separate file and checks that it holds a sound vault.</UiLabel>
+</Step>
+<Step>
+### Read what it holds
+
+A green notice says, for example, <UiLabel>Verified. Snapshot from …: 120 posts, 14 profiles, 3 documents.</UiLabel> and an amber one warns: <UiLabel>Restoring replaces everything in this vault with the snapshot, then restarts the app. The current vault is kept as a .pre-restore copy.</UiLabel>
+</Step>
+<Step>
+### Restore
+
+Click <UiLabel>Restore and restart</UiLabel>. Simulacra keeps your current vault, swaps the snapshot in and starts again on it.
+</Step>
+</Steps>
+
+<Screenshot id="data-restore-verified" alt="The Restore snapshot sheet after verifying: a green Verified notice with the date and counts, an amber warning, and the red Restore and restart button" caption="Ready to restore." size="md" />
+
+<UiLabel>Cancel</UiLabel> at any point leaves your vault untouched and deletes the decrypted copy. Choosing another file starts again from the first step.
+
+### What happens to your current vault
+
+Before anything is replaced, the current database is copied to `simulacra.db.pre-restore` beside it (or `simulacra.db.YYYYMMDD-HHMMSS.pre-restore` when an earlier copy is already there). To go back, quit Simulacra and make that copy your `simulacra.db` again (see [Storage and backups](/docs/guides/data/storage-and-backups#use-a-backup)).
+
+## Errors
+
+| Message | Why |
+|---|---|
+| <UiLabel>The passphrase is wrong, or the file was changed after it was sealed.</UiLabel> | The passphrase does not open it, or a byte of the file changed. The two cannot be told apart. |
+| <UiLabel>This file is not a Simulacra snapshot.</UiLabel> | The file does not start like a snapshot. |
+| <UiLabel>This snapshot was made by a newer version of the app.</UiLabel> | Update Simulacra, then try again. |
+| <UiLabel>This snapshot is incomplete: the file ends too early.</UiLabel> | The file was cut short, for example by an interrupted copy. |
+| <UiLabel>This snapshot is damaged.</UiLabel> | Its header is inconsistent. |
+| <UiLabel>The key could not be derived with this snapshot's settings.</UiLabel> | The key settings stored in the file were refused. |
+| <UiLabel>The snapshot opened but does not hold a sound vault: …</UiLabel> | It decrypted, but the database inside failed its check. Nothing was changed. |
+| <UiLabel>The file could not be read: …</UiLabel> | The file could not be opened. |
+| <UiLabel>The snapshot could not be made: …</UiLabel> | Creating failed, for example because the folder is not writable. |
+| <UiLabel>The restore failed: …</UiLabel> | The swap failed; read the reason. |
+
+## How the seal works
+
+| | |
+|---|---|
+| **Key** | Derived from your passphrase with Argon2id (64 MiB of memory, three passes, one lane: about half a second on a laptop) and a random 16-byte salt. |
+| **Encryption** | XChaCha20-Poly1305 with a random 24-byte nonce. Salt and nonce come from the operating system's random generator and are new for every snapshot. |
+| **Tamper check** | The file header (format version, key settings, salt, nonce, creation time, length) is authenticated with the contents, so changing any byte makes opening fail. |
+| **Passphrase** | Never stored, logged or written to the database. The fields are emptied as soon as it is read, and the key and decrypted bytes are wiped from memory when no longer needed. |
+| **Restore check** | The decrypted database is written to a separate file beside the vault, opened read-only, checked for integrity and for the tables every vault has, and counted. Only then can you confirm. |
+
+The cryptography comes from the RustCrypto libraries; nothing is home-made.
+
+## Tips and limits
+
+- **The database only.** A snapshot holds the database. The `media`, `avatars` and `symbols` folders are not in it: copy them separately to keep images, avatar photos and icon sets.
+- **Everything comes back.** A restore brings back the snapshot's settings too, including the code-running switch and the API keys. Code in restored posts by your own personas runs without a confirm, as it would have before.
+- **A plain copy waits briefly.** While sealing, a plain copy of the vault sits beside it for a moment and is deleted as soon as it is read.
+
+## Related
+
+- [Back up and restore](/docs/tutorials/back-up-and-restore)
+- [Your data](/docs/guides/data)
+- [Local-first](/docs/concepts/local-first)

@@ -1,0 +1,136 @@
+---
+title: Install Simulacra
+description: Download Simulacra 0.2.0 for Windows, macOS or Linux, get past the first-start warning, and know where your vault is kept.
+icon: Download
+---
+
+Simulacra is one desktop program. The illustrations, themes, palettes, seed data and translations are built into it, so there is nothing else to download, no account to create and no server to run.
+
+## System requirements
+
+| Platform | Supported | Downloads |
+|---|---|---|
+| Windows | Windows 10 or 11, 64-bit (x64) | Setup program (`.exe`) or a `.zip` |
+| macOS | macOS 11 or later, Apple silicon or Intel | Disk image (`.dmg`) or a `.tar.gz` |
+| Linux | 64-bit (x64) | `.deb` for Debian and Ubuntu, `.AppImage` for any distribution, or a `.tar.gz` |
+
+The `.deb` package depends on `libxkbcommon0`, `libxkbcommon-x11-0`, `libwayland-client0`, `libfontconfig1`, `libgtk-3-0` and `libvulkan1`; `apt` installs them for you.
+
+The main window needs at least 720 × 520 pixels. It opens maximized.
+
+## Download
+
+Every file of a release is on the [Releases page](https://github.com/raitucarp/simulacra/releases). For 0.2.0:
+
+| Platform | Installer | Without installer |
+|---|---|---|
+| Windows 10/11 (x64) | [simulacra_0.2.0_x64-setup.exe](https://github.com/raitucarp/simulacra/releases/download/v0.2.0/simulacra_0.2.0_x64-setup.exe) (14 MB) | [simulacra-0.2.0-windows-x64.zip](https://github.com/raitucarp/simulacra/releases/download/v0.2.0/simulacra-0.2.0-windows-x64.zip) (19 MB) |
+| macOS 11+ (Apple silicon) | [Simulacra_0.2.0_aarch64.dmg](https://github.com/raitucarp/simulacra/releases/download/v0.2.0/Simulacra_0.2.0_aarch64.dmg) (19 MB) | [simulacra-0.2.0-macos-arm64.tar.gz](https://github.com/raitucarp/simulacra/releases/download/v0.2.0/simulacra-0.2.0-macos-arm64.tar.gz) (18 MB) |
+| macOS 11+ (Intel) | [Simulacra_0.2.0_x64.dmg](https://github.com/raitucarp/simulacra/releases/download/v0.2.0/Simulacra_0.2.0_x64.dmg) (20 MB) | [simulacra-0.2.0-macos-x64.tar.gz](https://github.com/raitucarp/simulacra/releases/download/v0.2.0/simulacra-0.2.0-macos-x64.tar.gz) (20 MB) |
+| Linux x64 (Debian, Ubuntu) | [simulacra_0.2.0_amd64.deb](https://github.com/raitucarp/simulacra/releases/download/v0.2.0/simulacra_0.2.0_amd64.deb) (26 MB) | [simulacra-0.2.0-linux-x64.tar.gz](https://github.com/raitucarp/simulacra/releases/download/v0.2.0/simulacra-0.2.0-linux-x64.tar.gz) (26 MB) |
+| Linux x64 (any distribution) | [simulacra_0.2.0_x86_64.AppImage](https://github.com/raitucarp/simulacra/releases/download/v0.2.0/simulacra_0.2.0_x86_64.AppImage) (25 MB) | |
+
+Not sure which Mac you have? Open the Apple menu › **About This Mac**. "Chip: Apple M…" means Apple silicon; "Processor: Intel…" means Intel.
+
+The archives without an installer hold one folder with the `simulacra` program (`simulacra.exe` on Windows), `README.md` and `THIRD_PARTY.md`.
+
+## Install
+
+The installers are not code-signed yet, so your system asks you to confirm the first time you run Simulacra.
+
+<Tabs items={['Windows', 'macOS', 'Linux']}>
+<Tab value="Windows">
+
+<Steps>
+<Step>
+### Run the setup program
+
+Double-click `simulacra_0.2.0_x64-setup.exe`.
+</Step>
+<Step>
+### Confirm SmartScreen
+
+If Windows SmartScreen appears, choose **More info**, then **Run anyway**.
+</Step>
+<Step>
+### Start Simulacra
+
+When setup finishes, start **Simulacra**. A small splash window appears first; see [First launch](/docs/getting-started/first-launch).
+</Step>
+</Steps>
+
+Prefer no installer? Unzip `simulacra-0.2.0-windows-x64.zip` anywhere and run `simulacra.exe`.
+
+</Tab>
+<Tab value="macOS">
+
+<Steps>
+<Step>
+### Open the disk image
+
+Open the `.dmg` that matches your Mac and drag **Simulacra** to **Applications**.
+</Step>
+<Step>
+### Open it the first time
+
+In **Applications**, right-click **Simulacra** and choose **Open**, then confirm. After this, open it as usual.
+</Step>
+</Steps>
+
+Prefer no installer? Extract the `.tar.gz` and run the `simulacra` program inside the folder.
+
+</Tab>
+<Tab value="Linux">
+
+For the `.deb` package (Debian, Ubuntu):
+
+```bash
+sudo apt install ./simulacra_0.2.0_amd64.deb
+```
+
+For the AppImage (any distribution):
+
+```bash
+chmod +x simulacra_0.2.0_x86_64.AppImage
+./simulacra_0.2.0_x86_64.AppImage
+```
+
+Or extract `simulacra-0.2.0-linux-x64.tar.gz` and run the `simulacra` program inside the folder.
+
+</Tab>
+</Tabs>
+
+## Check a download
+
+Each release lists a SHA-256 checksum for every file in [SHA256SUMS.txt](https://github.com/raitucarp/simulacra/releases/download/v0.2.0/SHA256SUMS.txt). Compare it with the checksum of the file you downloaded.
+
+Every file also carries signed build provenance. With the GitHub CLI installed, this proves a file was built by the project's release workflow from its own source:
+
+```bash
+gh attestation verify <file> --repo raitucarp/simulacra
+```
+
+## Where your vault is kept
+
+Everything you make (posts, documents, agents, settings) lives in one local database file, your **vault**. It is kept in your user data folder, apart from the program, so replacing or removing the program does not touch it.
+
+| Platform | Vault file |
+|---|---|
+| Windows | `%APPDATA%\simulacra\simulacra.db` |
+| macOS | `~/Library/Application Support/simulacra/simulacra.db` |
+| Linux | `$XDG_DATA_HOME/simulacra/simulacra.db`, or `~/.local/share/simulacra/simulacra.db` when `XDG_DATA_HOME` is not set |
+
+To use another file, set the environment variable `SIMULACRA_DB_PATH` to its full path before you start Simulacra. See [Data and files](/docs/reference/data-and-files) for everything stored beside it.
+
+## Tips and limits
+
+- **Open files at launch.** Start Simulacra with file paths as arguments (for example `simulacra notes.md`) and it imports those files once the window is up.
+- **Build from source.** Install [Rust](https://rustup.rs) (stable) and run `cargo run --release` in a clone of the repository.
+
+## Related
+
+<Cards>
+  <Card title="First launch" href="/docs/getting-started/first-launch" description="The splash window, the seed networks and Mnemo's welcome." />
+  <Card title="The window" href="/docs/getting-started/the-window" description="Every region of the main window, and how it adapts to its width." />
+  <Card title="Local-first" href="/docs/concepts/local-first" description="Why everything stays on your computer." />
+</Cards>

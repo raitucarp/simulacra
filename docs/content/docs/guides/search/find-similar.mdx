@@ -1,0 +1,38 @@
+---
+title: Find similar
+description: List the posts and documents closest in meaning to a post, and keep exploring from any of them.
+icon: Compass
+---
+
+Find similar shows what else in the network is close in meaning to one post: other posts that make the same point, and vault documents that speak to it. From any result you can find similar again, and wander through your network by meaning.
+
+<Screenshot id="search-similar-sheet" alt="The Similar by meaning sheet: Closest to “Precisely, and the remedy is the same…”, then rows of posts and documents with excerpts, similarity bars and compass buttons" caption="Items closest to a post, with a compass button on each to keep exploring." />
+
+## Open it
+
+| From | How |
+|---|---|
+| A post | Open its "…" menu and choose <UiLabel>Find similar</UiLabel>. |
+| The palette | Run <UiLabel>Find similar to the open thought</UiLabel>. It uses the post open in the thread inspector; with none open, it opens the palette in Meaning mode instead. |
+| The sheet itself | Click the compass beside a result (<UiLabel>Find similar to this</UiLabel>), which works for documents too. |
+
+## Read the sheet
+
+- The header reads <UiLabel>Similar by meaning</UiLabel> and "Closest to" the opening words of the post or the title of the document.
+- Each row shows a post's author and handle, or a document's title, the passage closest in meaning, and a similarity bar with a percentage.
+- Up to 12 items of the active network are listed, best first. The post or document you started from is never among them.
+
+Click a row to open it: a post in the timeline, a document at its vault entry. The sheet closes. Close it without opening anything with <Kbd>Esc</Kbd>, the cross, or a click outside it.
+
+## Without meaning
+
+When search by meaning is off, has no key, or the item has not been indexed yet, the sheet still answers with word matches, using the first 48 words of the item as the query. A note under the header says why, such as <UiLabel>Nothing is indexed by meaning yet, so these are word matches.</UiLabel> With nothing to show it reads <UiLabel>Nothing similar found yet.</UiLabel>
+
+## How it works
+
+Find similar compares the item's stored vectors with every other item's, so it needs no request to your provider and answers at once. A long item counts as the average of its chunks; another item counts by its closest chunk, which is the passage shown. See [Search by meaning, explained](/docs/concepts/meaning-search).
+
+## Related
+
+- [Search by meaning](/docs/guides/search/meaning-search): set up the index.
+- [Recommendations](/docs/guides/search/recommendations): related thoughts appear under every conversation.

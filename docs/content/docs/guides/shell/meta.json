@@ -1,0 +1,12 @@
+{
+  "title": "Window & navigation",
+  "icon": "AppWindow",
+  "pages": [
+    "command-palette",
+    "keyboard",
+    "sidebars",
+    "personas-switching",
+    "language",
+    "notifications"
+  ]
+}

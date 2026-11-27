@@ -1,0 +1,37 @@
+---
+title: Board
+description: Every to-do and task post of a thread or profile, sorted into columns by the state it is in.
+icon: SquareKanban
+---
+
+The **board** gathers the to-dos written inside posts, and task posts themselves, into one column per state: open, scheduled, delegated, migrated, done and dropped. It shows at a glance where a thread's work stands.
+
+<Screenshot id="view-board" alt="The board view with its three filled columns, Open, Scheduled and Done, each with a count, and cards showing a to-do's text, priority marks and due date" caption="To-dos from a profile, sorted by state." />
+
+## Open it
+
+Pick <UiLabel>Show as a board</UiLabel> from a <UiLabel>View</UiLabel> menu (the Thread Inspector or a profile's <UiLabel>Posts</UiLabel> tab).
+
+## Anatomy
+
+- **Columns**, always in this order: <UiLabel>Open</UiLabel>, <UiLabel>Scheduled</UiLabel>, <UiLabel>Delegated</UiLabel>, <UiLabel>Migrated</UiLabel>, <UiLabel>Done</UiLabel>, <UiLabel>Dropped</UiLabel>. Each heading has its state's symbol and a count, "Open · 3". Only columns with cards are drawn, sharing the width between them; the empty ones are named on one line under the board, such as "Empty: Delegated, Migrated, Dropped".
+- **Cards.** One per to-do (a line such as `[ ] Draft the outline ^fri !!`) and one per task post. A card shows the to-do's text, its priority as "!" marks (one to three), and "Due 2026-11-28" when it has a due date (dates follow the Date format setting).
+- **Order.** Within a column, cards follow the order of the posts, then the order of the to-dos inside each post.
+
+The filled columns share the width of the view and scroll sideways only when even their narrowest width does not fit.
+
+Click a card to open the post it belongs to. To move a to-do, tick it in its post; a task post moves with <Kbd>…</Kbd> › <UiLabel>Organize</UiLabel> › <UiLabel>Entry</UiLabel>. See [Tasks](/docs/guides/tasks).
+
+## Locked posts
+
+A locked post brings no to-dos to the board: its text is sealed. A locked task post shows its card with "Locked post" only.
+
+With nothing to sort the board says "No to-dos or tasks to sort yet."
+
+## Related
+
+<Cards>
+<Card title="Tasks" href="/docs/guides/tasks" description="To-do syntax, states and the task list." />
+<Card title="Calendar and future log" href="/docs/guides/views/calendar-and-future-log" description="Due dates ahead, by month." />
+<Card title="Post syntax" href="/docs/reference/post-syntax" description="Boxes, due dates and priorities." />
+</Cards>

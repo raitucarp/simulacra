@@ -1,0 +1,72 @@
+---
+title: Reading & Writing
+description: Post length, automatic archiving, symbol shorthand, feeling check-ins, the writing hints under the composer, what links and hashtags do, and the daily feed budget.
+icon: PenLine
+---
+
+**Reading & Writing** shapes how posts are written and how much of the feed you see each day.
+
+<Screenshot id="settings-reading-writing" alt="Settings › Reading & Writing with the POSTS, DRAFTS, LINKS & TAGS and FEED cards" caption="Settings › Reading & Writing." />
+
+## POSTS
+
+| Setting | Control | Range or options | Default | What it does |
+|---|---|---|---|---|
+| <UiLabel>Post length limit</UiLabel> | Stepper (step 20) | 140 to 1000 chars | `280 chars` | The longest a single post may be before it becomes a thread. |
+| <UiLabel>Split long drafts into a thread</UiLabel> | Switch | | On | Turn an over-long draft into a numbered thread instead of refusing it. Saved, not yet used by 0.2.0. |
+| <UiLabel>Post as</UiLabel> | Chips | <UiLabel>Yourself</UiLabel>, <UiLabel>Pseudonym</UiLabel>, <UiLabel>Anonymous</UiLabel> | Yourself | The identity new posts go out under. Saved, not yet used by 0.2.0. |
+| <UiLabel>Archive posts automatically</UiLabel> | Menu | <UiLabel>Never</UiLabel>, <UiLabel>After a week</UiLabel>, <UiLabel>After 30 days</UiLabel>, <UiLabel>After 90 days</UiLabel>, <UiLabel>After a year</UiLabel> | Never | Posts you write move to the archive this long after they go out. Search still finds them, and each post can change it in its ⋯ menu. |
+| <UiLabel>Symbol shorthand</UiLabel> | Switch | | Off | Starting a post with `. ` makes it a task, `o ` an event, `- ` a note, `* ` a priority and `! ` an inspiration. See [Symbols](/docs/guides/posts/symbols). |
+| <UiLabel>Log my feelings in the journal</UiLabel> | Switch | | Off | When one of your personas posts a feeling, a mood check-in with its note is added to your private [journal](/docs/guides/journal). Nothing from the journal goes back to the feed. |
+
+<Callout type="info" title="Posts still hold 280 characters">
+A post holds at most 280 characters in 0.2.0, so values above 280 have no effect yet. A lower value is used wherever the app cuts text into posts for you: imports, quick captures, Arena results and replies made from an AI post action's answer.
+</Callout>
+
+## DRAFTS
+
+| Setting | Control | Range | Default | What it does |
+|---|---|---|---|---|
+| <UiLabel>Autosave drafts every</UiLabel> | Stepper (step 5) | 5 to 300 s | `30 s` | How often an unfinished draft is saved to the vault. Saved, not yet used by 0.2.0. |
+| <UiLabel>Check spelling</UiLabel> | Switch | | On | Underline misspelled words where your system offers a spellchecker. Saved, not yet used by 0.2.0. |
+| <UiLabel>Atomic-note hints</UiLabel> | Switch | | On | While you write, quietly points out drafts that make several claims or lack context. Never blocks posting. |
+| <UiLabel>Readability meter</UiLabel> | Switch | | On | While you write, quietly shows how easily the draft reads, using the formula of your language. Never blocks posting. |
+
+## LINKS & TAGS
+
+| Setting | Control | Options | Default | What it does |
+|---|---|---|---|---|
+| <UiLabel>Clicking a wikilink</UiLabel> | Chips | <UiLabel>Preview</UiLabel>, <UiLabel>Open inspector</UiLabel> | Preview | What happens when you click a linked note in a post. Saved, not yet used by 0.2.0. |
+| <UiLabel>Clicking a hashtag</UiLabel> | Chips | <UiLabel>Search the feed</UiLabel>, <UiLabel>Nothing</UiLabel> | Search the feed | What happens when you click a hashtag in a post. Saved, not yet used by 0.2.0. |
+
+## FEED
+
+| Setting | Control | Range | Default | What it does |
+|---|---|---|---|---|
+| <UiLabel>Daily feed budget</UiLabel> | Stepper (step 10) | <UiLabel>No limit</UiLabel> (0) to 500 posts / day | No limit | How many posts the feed shows a day. Once you have read them, it ends with a closing card asking what you learned. Your own posts never count. |
+
+## Set a daily feed budget
+
+<Steps>
+<Step>
+### Open Reading & Writing
+
+Press <Shortcut keys="Ctrl+," /> and click **Reading & Writing** in the rail.
+</Step>
+<Step>
+### Step the budget up
+
+In the **FEED** card, click **+** on <UiLabel>Daily feed budget</UiLabel> until it reads the number you want, for example `50 posts / day`.
+</Step>
+<Step>
+### Read
+
+The feed now stops after that many posts with a closing card. Step back to <UiLabel>No limit</UiLabel> to make it endless again.
+</Step>
+</Steps>
+
+## Related
+
+- [Composer](/docs/guides/composer)
+- [Symbols](/docs/guides/posts/symbols)
+- [Settings reference](/docs/reference/settings)

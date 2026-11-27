@@ -1,0 +1,10 @@
+{
+  "title": "Your data",
+  "icon": "Database",
+  "pages": [
+    "storage-and-backups",
+    "export",
+    "snapshots",
+    "version-history"
+  ]
+}

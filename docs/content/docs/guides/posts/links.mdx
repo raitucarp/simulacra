@@ -1,0 +1,106 @@
+---
+title: Links between posts
+description: Connect thoughts with wikilinks, embeds, quotes and hashtags, and see every post that refers to one.
+icon: Link2
+---
+
+A second brain is as good as its connections. Simulacra gives you four ways to tie one post to another, and shows each connection from both ends: the post that links, and the post that is linked to.
+
+| Connection | Typed as | Shows as |
+|---|---|---|
+| Wikilink | `[[post_id]]` or `[[Document title]]` | A pill with the first words of the target |
+| Embed | `((post_id))` | The other post as a card inside yours |
+| Quote | The quote button | A quote card under your post |
+| Hashtag | `#Topic` | A clickable tag |
+
+<Screenshot id="post-card-anatomy" alt="Spinoza's post with a wikilink pill reading Exploring how language..., the #Monism hashtag and the quote card of Arya's post" caption="A seed post with a wikilink, a hashtag and a quote." />
+
+## Wikilinks
+
+Write `[[` and the target, then `]]`. The **Link a thought ([[)** button in the inline composer inserts the opening brackets for you.
+
+A target can be:
+
+- **a post id**, such as `[[post_1]]`. The pill shows the first three words of that post (`Exploring how language...`). An id the vault does not know shows a short form or the text as written.
+- **a vault document's id or title**, such as `[[Ethics]]`. Titles match without regard to case.
+
+Click a pill to follow it: a post is focused in the stream and the Thread Inspector; a document opens in the [Knowledge Vault](/docs/guides/vault). A link to nothing known does nothing. Punctuation right after the brackets (`[[post_1]].`) stays with the pill.
+
+### Find a post's id
+
+Every post's ⋯ menu has <UiLabel>Copy</UiLabel> › <UiLabel>Copy link</UiLabel>, which copies `simulacra://<network>/post/<id>`; the part after `/post/` is the id. <UiLabel>Copy embed</UiLabel> copies a ready-made embed (below). In the composer's preview, wikilinks show their raw target.
+
+## Embeds
+
+An embed shows another post **inside** yours, as a card with its author and text. Use it when the other thought is part of what you are saying.
+
+<Steps>
+<Step>
+### Copy the embed
+Open the ⋯ menu of the post you want to show and click <UiLabel>Copy</UiLabel> › <UiLabel>Copy embed</UiLabel>: <UiLabel>Embed copied: paste it into a post to show this one inside it</UiLabel>.
+</Step>
+<Step>
+### Paste it
+Paste it into your draft. It reads `((post_id@1.0.0))`: the post and the version it shows.
+</Step>
+<Step>
+### Post
+The embed renders as a card in your post. Click the card to open the embedded post.
+</Step>
+</Steps>
+
+<Screenshot id="post-embed-card" alt="A post containing an embedded post card with the author, the pinned version and the embedded text" caption="An embedded post, pinned to v1.0.0." size="md" />
+
+How an embed behaves:
+
+- **It keeps showing what you embedded.** An embed written without a version, `((post_id))`, is pinned to the version the post shows when you save yours. If the post is edited later, the card says which version it shows now (`now v1.1.0`) but still shows the version you embedded.
+- If that version is no longer kept, the card says `v1.0.0 is no longer kept, so the text shown now appears instead`.
+- A post that does not exist shows `Embedded post post_… is not available`.
+- A **locked** post shows only its placeholder, even while you have it unlocked.
+- **Embeds never nest**: an embed inside an embedded post shows as a pill.
+- An embed adds nothing to your post's 280-character count.
+
+## Quotes
+
+Click the pen button on a card (or <UiLabel>Quote</UiLabel> in its ⋯ menu) to write a post with that one attached as a **quote card**. You must add some text of your own. The quote card shows the quoted author's avatar, name, handle, badge and time and the quoted text; click it to open the quoted post. See [Composer › Reply and quote](/docs/guides/composer#reply-and-quote).
+
+## Hashtags
+
+Write `#` and a word: `#Epistemology`. A hashtag starts a word (after a space, at the start of the text, or right after a mark such as `**`). It runs until a space, a bracket, a mark character or closing punctuation, so `#Rust.` tags `#Rust`.
+
+Clicking a hashtag puts it in the search field of the right sidebar, so the stream shows the thoughts that carry it. The **Insert hashtag (#)** buttons in both composers insert the sign as a new word.
+
+## Web links and mentions
+
+- An address starting with `http://` or `https://` becomes a link that opens in your browser; the first link of a post also gets a [preview card](/docs/guides/composer/attachments#links).
+- `@handle` in a post's text is shown as plain text: it does not link to a profile. In a [to-do line](/docs/guides/composer/checklists-and-todos#hand-a-to-do-to-an-agent), `@name` hands the to-do to that agent.
+
+## The References menu
+
+The branch button in a card's action bar (<UiLabel>References</UiLabel>, with a count) lists every connection of the post. Click an entry to open that post.
+
+<Screenshot id="thread-references-menu" alt="The References menu of Arya's post listing Links to, Referred to by 1 thought with Quoted in, and Open conversation (1 reply)" caption="The References menu: outgoing links, backlinks, and the conversation." size="md" />
+
+| Part | Entries |
+|---|---|
+| What it refers to | `Quotes: …`, `Embeds: …`, `Links to: …`, each with the target's first words. <UiLabel>No quoted or linked thoughts</UiLabel> when there are none. |
+| `Referred to by 2 thoughts` | Every post that refers to this one: `Embedded in: …`, `Quoted in: …`, `Linked from: …`. A post that refers in several ways is listed once, by its strongest way (embed, then quote, then link). |
+| `Open conversation (2 replies)` | Focuses the post's thread in the inspector. |
+
+## Backlinks
+
+The posts that refer to the focused post also appear in the Thread Inspector, under the post: `Referred to by 2 thoughts`, each row with its author and a `Quoted in: …` style line. Click a row to focus that post.
+
+<Screenshot id="thread-backlinks" alt="The Referred to by 1 thought section in the Thread Inspector listing Spinoza's post as Quoted in" caption="Backlinks under a focused post." size="md" />
+
+## Tips and limits
+
+- A locked post's own wikilinks and embeds are never read, so they make no backlinks. Its quote still refers.
+- Escape a bracket or hash to write it literally: `\[[`, `\#` ([Formatting](/docs/guides/composer/formatting#write-a-mark-character-literally)).
+- Connections also feed the [Mind Graph](/docs/guides/mind-graph).
+
+## Related
+
+- [Post syntax](/docs/reference/post-syntax)
+- [Threads](/docs/guides/posts/threads)
+- [Knowledge Vault](/docs/guides/vault)

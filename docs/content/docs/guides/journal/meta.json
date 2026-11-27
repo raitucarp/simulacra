@@ -1,0 +1,11 @@
+{
+  "title": "Journal",
+  "icon": "NotebookPen",
+  "pages": [
+    "entries",
+    "mood",
+    "focus",
+    "capsules",
+    "privacy"
+  ]
+}

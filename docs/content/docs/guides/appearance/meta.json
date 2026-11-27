@@ -1,0 +1,10 @@
+{
+  "title": "Appearance",
+  "icon": "Palette",
+  "pages": [
+    "themes",
+    "custom-themes",
+    "typography-and-layout",
+    "icon-sets"
+  ]
+}

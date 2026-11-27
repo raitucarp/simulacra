@@ -1,0 +1,53 @@
+---
+title: Embedding map
+description: See posts placed by meaning on a flat map, clustered into themes, and find each post's nearest neighbours in meaning.
+icon: Compass
+---
+
+The Embedding map places every indexed post on a plane so that posts with similar meaning land near each other, whatever words they use. Clusters show the themes of a network; a lone point is a thought unlike the rest.
+
+<Screenshot id="insights-embedding" alt="The Embedding map with coloured clusters of points, cluster labels and a tooltip listing nearest posts" caption="Posts by meaning, coloured by cluster, with one post's nearest neighbours." />
+
+## Before you start
+
+The map needs posts that have been embedded, which happens when semantic search is on and an embedding provider is configured in Settings › <UiLabel>Embeddings</UiLabel>. With fewer than two indexed posts in the period, the tab shows <UiLabel>No map of meaning yet</UiLabel>. See [Meaning search](/docs/concepts/meaning-search).
+
+## Anatomy
+
+1. **<UiLabel>Map of meaning</UiLabel>** card with <UiLabel>Fit to view</UiLabel> in its title row.
+2. **<UiLabel>Colour by</UiLabel>** chips.
+3. **The map.** One dot per post. Coloured by cluster, each cluster that has a concept is named at the middle of its points.
+4. **Legend** of the current colouring (click entries to hide them), or for <UiLabel>Time</UiLabel> a note: <UiLabel>Older posts are pale, newer posts take the accent colour.</UiLabel>
+5. **Summary**: how many posts, in how many clusters.
+
+| <UiLabel>Colour by</UiLabel> | Colours |
+|---|---|
+| <UiLabel>Cluster</UiLabel> (default) | One colour per cluster; the legend names each cluster after its most common concept. Each concept names only one cluster (the one where it is strongest), so a cluster whose concepts all name other clusters is numbered instead: <UiLabel>Cluster 1</UiLabel>, <UiLabel>Cluster 2</UiLabel>…. |
+| <UiLabel>Author</UiLabel> | One colour per author, for the first eight authors. |
+| <UiLabel>Kind</UiLabel> | Thoughts, replies, quotes, reposts and captured posts. |
+| <UiLabel>Time</UiLabel> | A ramp from pale (oldest) to the accent colour (newest). |
+
+## Explore
+
+| To | Do this |
+|---|---|
+| Find a post's neighbours | Hover it. Lines join it to its five nearest posts in meaning, the other posts fade, and the tooltip shows its author, its opening words and, under <UiLabel>Nearest in meaning:</UiLabel>, the three closest with their similarity (1 is the same meaning). |
+| Open a post | Click it. |
+| Pan and zoom | Drag; scroll to zoom at the pointer. <UiLabel>Fit to view</UiLabel> resets. |
+
+## How it is made
+
+- **Placement.** Each post's embedding vector is projected onto its two main directions of variation (principal components). Nearness on the map is approximate: two directions cannot hold everything a vector says. The tooltip's neighbours are measured in the full space and are exact.
+- **Clusters.** Posts are grouped by k-means in the full space, with about √(n/2) clusters, at least two and at most eight. Seeding is deterministic, so the same posts give the same clusters.
+- **Neighbours.** Similarity is the cosine between two posts' vectors.
+
+## Tips and limits
+
+- Only posts embedded with the current model appear; after changing the embedding model, rebuild the index in Settings › <UiLabel>Embeddings</UiLabel>.
+- Large networks are clustered on an evenly spread sample of 1,500 posts, and every post is then assigned to its nearest cluster.
+
+## Related
+
+- [Meaning search](/docs/concepts/meaning-search): what embeddings are.
+- [Search](/docs/guides/search): find posts by meaning.
+- [Viewpoint diversity](/docs/guides/insights/diversity): the spread in meaning as one number.

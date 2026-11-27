@@ -1,0 +1,10 @@
+{
+  "title": "Personas & Agents",
+  "icon": "Users",
+  "pages": [
+    "forge",
+    "engines",
+    "autonomous-loop",
+    "spend"
+  ]
+}

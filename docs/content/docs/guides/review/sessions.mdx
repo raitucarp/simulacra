@@ -1,0 +1,94 @@
+---
+title: The review session
+description: Recall each item, reveal it, and grade how well you knew it with the keys 1 to 4.
+icon: Play
+---
+
+A session walks through today's queue one item at a time: you try to recall the hidden face, reveal it, and grade yourself. The grade decides when the item comes back.
+
+<Screenshot id="review-session-prompt" alt="A review session showing a question written by the learner, the progress bar, and the Show answer button with the Space key cap" caption="The prompt: recall first, then reveal." />
+
+## Start a session
+
+On the <UiLabel>Today</UiLabel> tab, click <UiLabel>Start review (N)</UiLabel>. The session takes the keyboard at once, so you can work through it without the mouse.
+
+The queue holds the due items (most overdue first) and a ration of new ones (oldest first), within the limits of Settings › Learning. New items are spread evenly between the reviews, and items from the same post or document are moved apart where possible, so similar items rarely follow each other.
+
+## Anatomy
+
+1. **Progress** reads "N of N · N left": distinct items done, items the session started with, and cards still in the queue (an item to relearn counts again here).
+2. **<UiLabel>End</UiLabel>** ends the session early and shows its summary (or returns to Today if you answered nothing).
+3. **The item card.** Its top line names the kind (<UiLabel>Question</UiLabel>, <UiLabel>Answer</UiLabel> or <UiLabel>Connections</UiLabel>) and its tags. Below it, the prompt face: your written text in large type, a post as the stream shows it, or a passage as a quote.
+4. **<UiLabel>Open the post</UiLabel>** / **<UiLabel>Open the document</UiLabel>** at the foot of the card jumps to the source.
+5. **<UiLabel>Show answer</UiLabel>**, with the hint "Try to recall it before you look."
+
+A connection map item shows a drawing canvas instead; see [Connection maps](/docs/guides/review/connection-maps#the-drill).
+
+## Reveal and grade
+
+<Screenshot id="review-session-revealed" alt="The revealed item: the question above a divider, the post below it, and four grade buttons with their intervals" caption="After the reveal, the answer face appears under a divider and the grade buttons replace Show answer." />
+
+<Steps>
+<Step>
+### Recall
+Say or think the answer before you look. A rough recall still counts; looking first does not.
+</Step>
+<Step>
+### Reveal
+Press <Kbd>Space</Kbd> or <Kbd>Enter</Kbd>, or click <UiLabel>Show answer</UiLabel>.
+</Step>
+<Step>
+### Grade
+Press <Kbd>1</Kbd> to <Kbd>4</Kbd> or click a grade button. The next item appears at once.
+</Step>
+</Steps>
+
+<Screenshot id="review-grade-buttons" alt="Four grade buttons: 1 Again Soon, 2 Hard 1 d, 3 Good 2 d, 4 Easy 8 d" caption="Each button shows its key, its grade and the interval it gives." size="md" />
+
+| Key | Grade | Hover text | What happens |
+|---|---|---|---|
+| <Kbd>1</Kbd> | <UiLabel>Again</UiLabel> | <UiLabel>Forgotten. It comes back in this session.</UiLabel> | The item returns three cards later, at most twice per session. |
+| <Kbd>2</Kbd> | <UiLabel>Hard</UiLabel> | <UiLabel>Recalled, but with real effort.</UiLabel> | The shortest successful interval. |
+| <Kbd>3</Kbd> | <UiLabel>Good</UiLabel> | <UiLabel>Recalled after a moment's thought.</UiLabel> | The interval for your target recall. |
+| <Kbd>4</Kbd> | <UiLabel>Easy</UiLabel> | <UiLabel>Recalled at once, without effort.</UiLabel> | Always longer than Good. |
+
+The small figure under each grade is the interval it gives: <UiLabel>Soon</UiLabel> (this session), "4 d", "2.5 mo" or "1.2 y". The intervals come from the item's memory model and your desired retention; Hard is never longer than Good, and Easy is always at least a day longer. See [Spaced repetition](/docs/concepts/spaced-repetition).
+
+Every grade is saved the moment you give it, so ending early or closing the app loses nothing.
+
+## Keys
+
+The review keys are live only while an item waits for them, so digits typed into a text field are never taken as grades.
+
+| Key | In a session | In a quiz |
+|---|---|---|
+| <Kbd>Space</Kbd>, <Kbd>Enter</Kbd> | Show the answer, or check a drawn map | Next question (multiple choice) |
+| <Kbd>1</Kbd> <Kbd>2</Kbd> <Kbd>3</Kbd> <Kbd>4</Kbd> | Again, Hard, Good, Easy | Pick option 1–4 (multiple choice), or grade a checked free-recall answer |
+
+The same keys reveal and grade the stops of a [memory palace walk](/docs/guides/review/memory-palace#walk-through).
+
+## The summary
+
+<Screenshot id="review-summary" alt="The Session complete card with items reviewed, first-try recall and items to relearn, a bar split by grade and buttons" caption="What the session did, and what comes tomorrow." size="md" />
+
+| Part | Shows |
+|---|---|
+| <UiLabel>items reviewed</UiLabel> | Distinct items answered |
+| <UiLabel>recalled on the first try</UiLabel> | The share of first answers that were not Again |
+| <UiLabel>to relearn</UiLabel> | Answers graded Again |
+| The bar | Every answer split by grade, with a legend |
+| The captions | How many items are due tomorrow, and the tip "Short daily sessions beat long ones: spacing is what makes memories last." |
+
+The buttons go <UiLabel>Back to today</UiLabel>, to <UiLabel>Statistics</UiLabel>, or straight into a <UiLabel>Free recall</UiLabel> quiz.
+
+## Tips and limits
+
+- An item deleted while the session runs is skipped.
+- Switching networks ends the session.
+- New items count against the daily limit for new items from the moment they are first answered.
+
+## Related
+
+- [Spaced repetition](/docs/concepts/spaced-repetition)
+- [Quizzes](/docs/guides/review/quizzes)
+- [Statistics](/docs/guides/review/statistics)

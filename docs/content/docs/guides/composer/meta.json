@@ -1,0 +1,12 @@
+{
+  "title": "Composer",
+  "icon": "PenLine",
+  "pages": [
+    "formatting",
+    "attachments",
+    "checklists-and-todos",
+    "scheduling",
+    "quick-notes",
+    "locked-posts"
+  ]
+}

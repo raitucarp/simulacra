@@ -1,0 +1,609 @@
+[
+  {
+    "id": "start-splash",
+    "page": "getting-started/first-launch.mdx",
+    "kind": "window",
+    "subject": "The splash window during startup: the brand mark, 'Simulacra', the tagline 'A local-first dialectic simulator', Mnemo reading beside the progress line, a stage label (on the demo profile it is already 'Ready' when the capture is taken; 'Loading networks…' or 'Warming up…' on a slower start), and 'Version 0.2.0' at the bottom.",
+    "region": "The 560 x 420 splash window only (it is a separate window from the main one).",
+    "setup": "Fresh profile. The splash is visible for about one second before it fades; capture the splash window, not the main window.",
+    "steps": [
+      "Start Simulacra",
+      "Capture the splash window while a stage label is showing"
+    ]
+  },
+  {
+    "id": "start-welcome",
+    "page": "getting-started/first-launch.mdx",
+    "kind": "window",
+    "subject": "Mnemo's welcome dialog over the dimmed main window: 'Welcome to Simulacra' with Mnemo cheering, the three cards 'A network of minds', 'They live on their own', 'Create your first thinker', the hint 'You can see this again in Settings › General.' and the buttons 'Skip for now' and 'Create your first thinker'.",
+    "region": "",
+    "setup": "Fresh profile (the welcome opens by itself on a new vault).",
+    "steps": [
+      "Start Simulacra",
+      "Wait until the welcome dialog is shown"
+    ]
+  },
+  {
+    "id": "start-settings-welcome-tour",
+    "page": "getting-started/first-launch.mdx",
+    "kind": "element",
+    "subject": "The STARTUP group of Settings › General with the rows 'Default persona', 'Startup screen' and 'Welcome tour' with its 'Show again' button.",
+    "region": "The STARTUP card only.",
+    "setup": "Fresh profile.",
+    "steps": [
+      "Click Skip for now on the welcome",
+      "Press Ctrl+,",
+      "Scroll the General pane until the STARTUP group is fully visible"
+    ]
+  },
+  {
+    "id": "shell-window-overview",
+    "page": "getting-started/the-window.mdx",
+    "kind": "window",
+    "subject": "The whole main window at 1440 x 900 on the Timeline of Epistemology & Mind: title bar with 'Simulacra › Epistemology & Mind', the expanded left sidebar (Recent holding the opened thread), the stream with the composer, and the thread with Baruch de Spinoza's reply ('Proposition of the day…' by Arya Wiratama, then 'Precisely, and the remedy…') open in the Thread Inspector beside it. The right sidebar is closed (at this width it opens only when asked).",
+    "region": "",
+    "setup": "Fresh profile, welcome skipped.",
+    "steps": [
+      "Click Skip for now",
+      "Press Ctrl+1",
+      "Click the post by Baruch de Spinoza in the stream"
+    ]
+  },
+  {
+    "id": "shell-title-bar",
+    "page": "getting-started/the-window.mdx",
+    "kind": "region",
+    "subject": "The title bar from edge to edge: left panel icon, 'Simulacra › Epistemology & Mind', the empty drag area, then the right panel icon, globe with 'EN', the moon icon, the gear and the minimize, maximize and close buttons.",
+    "region": "The title bar strip only (full window width, about 38 px high).",
+    "setup": "Fresh profile, welcome skipped.",
+    "steps": [
+      "Click Skip for now"
+    ]
+  },
+  {
+    "id": "shell-title-bar-actions",
+    "page": "getting-started/the-window.mdx",
+    "kind": "element",
+    "subject": "The right end of the title bar: right panel icon, globe with 'EN', moon (Dark mode), gear, and the three window buttons.",
+    "region": "From the right panel icon to the close button.",
+    "setup": "Fresh profile, welcome skipped.",
+    "steps": [
+      "Click Skip for now"
+    ]
+  },
+  {
+    "id": "shell-appearance-tooltip",
+    "page": "getting-started/the-window.mdx",
+    "kind": "element",
+    "subject": "The tooltip of the title bar's moon icon reading 'Appearance: Dark (click for Light)'.",
+    "region": "The moon icon and its tooltip.",
+    "setup": "Fresh profile, welcome skipped, appearance Dark (the default).",
+    "steps": [
+      "Click Skip for now",
+      "Hover the moon icon in the title bar until its tooltip shows"
+    ]
+  },
+  {
+    "id": "shell-sidebar-expanded",
+    "page": "getting-started/the-window.mdx",
+    "kind": "region",
+    "subject": "The expanded left sidebar from the network switcher ('Epistemology & Mind' with the collapse button) through New and the magnifier, the places with counts, the Recent section (Baruch de Spinoza's thread), Sources and Members, down to the footer and the user card 'Arya Wiratama'. Pinned is left out while empty.",
+    "region": "The left sidebar column, full height.",
+    "setup": "Fresh profile, welcome skipped, window 1440 px wide.",
+    "steps": [
+      "Click Skip for now",
+      "Click the post by Baruch de Spinoza so Recent has one item"
+    ]
+  },
+  {
+    "id": "shell-sidebar-rail",
+    "page": "getting-started/the-window.mdx",
+    "kind": "region",
+    "subject": "The left sidebar as an icon rail: the network badge 'E', the + (New) and magnifier buttons, the place icons, the pinned Baruch de Spinoza ('B'), then at the bottom the Settings, Appearance and Keyboard icons, the avatar and the 'Expand sidebar' button.",
+    "region": "The rail column, full height.",
+    "setup": "Fresh profile, welcome skipped, window 1440 px wide.",
+    "steps": [
+      "Click Skip for now",
+      "Pin Baruch de Spinoza under Members (see shell-sidebar-sections)",
+      "Press Ctrl+B"
+    ]
+  },
+  {
+    "id": "shell-sidebar-places",
+    "page": "getting-started/the-window.mdx",
+    "kind": "element",
+    "subject": "The places list: Timeline (active, with accent bar and count), Knowledge Vault (2), Personas & Agents (count), Mind Graph, Review, Insights, Journal, Arena, Tasks, Search.",
+    "region": "From the Timeline row to the Search row.",
+    "setup": "Fresh profile, welcome skipped.",
+    "steps": [
+      "Click Skip for now",
+      "Press Ctrl+1"
+    ]
+  },
+  {
+    "id": "shell-new-menu",
+    "page": "getting-started/the-window.mdx",
+    "kind": "element",
+    "subject": "The New menu open under the New button with New thread (Ctrl+N), New note (Ctrl+Shift+Space), New voice note, New drawing, Import file (Ctrl+O) and New agent, each with its icon.",
+    "region": "The New button and its open menu.",
+    "setup": "Fresh profile, welcome skipped.",
+    "steps": [
+      "Click Skip for now",
+      "Click New in the left sidebar"
+    ]
+  },
+  {
+    "id": "shell-sidebar-footer",
+    "page": "getting-started/the-window.mdx",
+    "kind": "element",
+    "subject": "The left sidebar footer: the 'Settings' row with the Appearance (palette) and Keyboard icons beside it, and the user card with Arya Wiratama's avatar, name, '@architect' and the switch (arrows) button.",
+    "region": "The footer below the divider line.",
+    "setup": "Fresh profile, welcome skipped.",
+    "steps": [
+      "Click Skip for now"
+    ]
+  },
+  {
+    "id": "shell-right-mind-cadence",
+    "page": "getting-started/the-window.mdx",
+    "kind": "region",
+    "subject": "The right sidebar on the 'Mind & Cadence' tab: the tab switcher, the MIND GRAPH card, the THOUGHT CADENCE heatmap and SERENDIPITOUS SPARKS.",
+    "region": "The right sidebar column, full height.",
+    "setup": "Fresh profile, welcome skipped.",
+    "steps": [
+      "Click Skip for now",
+      "Press Ctrl+1",
+      "Press Ctrl+Alt+B (the right sidebar starts closed at 1440 px)"
+    ]
+  },
+  {
+    "id": "shell-layout-medium",
+    "page": "getting-started/the-window.mdx",
+    "kind": "window",
+    "subject": "The medium layout: left sidebar folded to the rail, the Thread Inspector stacked below the stream, and a narrower right sidebar column.",
+    "region": "",
+    "setup": "Fresh profile, welcome skipped. Window client area about 1100 x 800 (between 900 and 1279 px wide).",
+    "steps": [
+      "Click Skip for now",
+      "Resize the window to about 1100 px wide",
+      "Click the post by Baruch de Spinoza in the stream",
+      "Press Ctrl+Alt+B to open the right sidebar"
+    ]
+  },
+  {
+    "id": "shell-layout-compact",
+    "page": "getting-started/the-window.mdx",
+    "kind": "window",
+    "subject": "The compact layout with the right sidebar open as a drawer from the right edge under the title bar, over a dimmed scrim, and the rail on the left.",
+    "region": "",
+    "setup": "Fresh profile, welcome skipped. Window client area about 820 x 700 (under 900 px wide).",
+    "steps": [
+      "Click Skip for now",
+      "Resize the window to about 820 px wide",
+      "Press Ctrl+Alt+B"
+    ]
+  },
+  {
+    "id": "shell-rail-tooltip",
+    "page": "guides/shell/sidebars.mdx",
+    "kind": "element",
+    "subject": "The icon rail with the tooltip of the Knowledge Vault icon showing 'Knowledge Vault' and Ctrl+2.",
+    "region": "The upper part of the rail and the tooltip.",
+    "setup": "Fresh profile, welcome skipped.",
+    "steps": [
+      "Click Skip for now",
+      "Press Ctrl+B",
+      "Hover the Knowledge Vault (open book) icon until its tooltip shows"
+    ]
+  },
+  {
+    "id": "shell-sidebar-sections",
+    "page": "guides/shell/sidebars.mdx",
+    "kind": "region",
+    "subject": "The four sections of the expanded left sidebar with content: Pinned with Baruch de Spinoza, Recent with five rows and 'Show all (7)' under them, Sources with Tractatus Logico-Philosophicus and Ethics and their passage counts, Members with the three agents; each header with its count.",
+    "region": "From the Pinned header to the last Members row.",
+    "setup": "Fresh profile, welcome skipped, Epistemology & Mind. Window client area 1440 x 1064 for this capture.",
+    "steps": [
+      "Click Skip for now",
+      "Click each of the three posts in the stream",
+      "Click Tractatus Logico-Philosophicus, then Ethics, under Sources",
+      "Press Ctrl+3 and click Sokrates of Alopece, then Simone Weil, in the roster",
+      "Press Ctrl+1, scroll the sections, hover Baruch de Spinoza under Members and click its pin icon",
+      "Make the window about 1064 px tall: only the sections scroll, and at 900 px they do not fit at once"
+    ]
+  },
+  {
+    "id": "shell-sidebar-pin-toggle",
+    "page": "guides/shell/sidebars.mdx",
+    "kind": "element",
+    "subject": "A row of the Recent section under the pointer, with the pin icon visible at its right end and the tooltip 'Pin'.",
+    "region": "The hovered Recent row and the tooltip.",
+    "setup": "Fresh profile, welcome skipped, at least one thread in Recent.",
+    "steps": [
+      "Click Skip for now",
+      "Click the post by Baruch de Spinoza in the stream",
+      "Hover its row under Recent, then hover the pin icon until the tooltip shows"
+    ]
+  },
+  {
+    "id": "shell-mini-graph",
+    "page": "guides/shell/sidebars.mdx",
+    "kind": "element",
+    "subject": "The MIND GRAPH card of the right sidebar: title, the 'N nodes · M edges' badge and the small graph drawing.",
+    "region": "The MIND GRAPH card only.",
+    "setup": "Fresh profile, welcome skipped, right sidebar on Mind & Cadence.",
+    "steps": [
+      "Click Skip for now",
+      "Press Ctrl+1",
+      "Press Ctrl+Alt+B (the right sidebar starts closed at 1440 px)"
+    ]
+  },
+  {
+    "id": "shell-cadence-heatmap",
+    "page": "guides/shell/sidebars.mdx",
+    "kind": "element",
+    "subject": "The THOUGHT CADENCE card: title, the 'N posts/yr' badge, the line 'Hover a day for details · click to filter the feed', the grid of day squares with month and weekday labels, and the Less … More legend.",
+    "region": "The THOUGHT CADENCE card only.",
+    "setup": "Fresh profile, welcome skipped, right sidebar on Mind & Cadence.",
+    "steps": [
+      "Click Skip for now",
+      "Press Ctrl+1",
+      "Press Ctrl+Alt+B (the right sidebar starts closed at 1440 px)"
+    ]
+  },
+  {
+    "id": "shell-sparks",
+    "page": "guides/shell/sidebars.mdx",
+    "kind": "element",
+    "subject": "The SERENDIPITOUS SPARKS section: title with the dice 'New each day' badge and the thought cards with avatar, name, handle, date, text and like, reply and link counts.",
+    "region": "The SERENDIPITOUS SPARKS section only.",
+    "setup": "Fresh profile, welcome skipped, right sidebar on Mind & Cadence.",
+    "steps": [
+      "Click Skip for now",
+      "Press Ctrl+1",
+      "Press Ctrl+Alt+B (the right sidebar starts closed at 1440 px)"
+    ]
+  },
+  {
+    "id": "shell-right-vault-telemetry",
+    "page": "guides/shell/sidebars.mdx",
+    "kind": "region",
+    "subject": "The right sidebar on the 'Vault & Telemetry' tab: the search box 'Search thoughts and authors...', GROUNDING KNOWLEDGE with 'Add Document', TRENDING TOPICS and NETWORK MEMBER TELEMETRY, all visible without scrolling.",
+    "region": "The right sidebar column, full height.",
+    "setup": "Fresh profile, welcome skipped.",
+    "steps": [
+      "Click Skip for now",
+      "Press Ctrl+1",
+      "Press Ctrl+Alt+B (the right sidebar starts closed at 1440 px)",
+      "Click Vault & Telemetry at the top of the right sidebar"
+    ]
+  },
+  {
+    "id": "shell-knowledge-card",
+    "page": "guides/shell/sidebars.mdx",
+    "kind": "element",
+    "subject": "The GROUNDING KNOWLEDGE card: library icon, title, the '2 docs' badge, 'Foundational texts for this network, stored in your local vault.' and the 'Add Document' button.",
+    "region": "The GROUNDING KNOWLEDGE card only.",
+    "setup": "Fresh profile, welcome skipped, Epistemology & Mind.",
+    "steps": [
+      "Click Skip for now",
+      "Press Ctrl+1",
+      "Press Ctrl+Alt+B (the right sidebar starts closed at 1440 px)",
+      "Click Vault & Telemetry at the top of the right sidebar"
+    ]
+  },
+  {
+    "id": "shell-trending-topics",
+    "page": "guides/shell/sidebars.mdx",
+    "kind": "element",
+    "subject": "The TRENDING TOPICS list: ranked rows 01 to 04, each with a hashtag and its count of thoughts (#Mind, #Ethics, #Spinoza, #Attention in the demo).",
+    "region": "The TRENDING TOPICS block only.",
+    "setup": "Fresh profile, welcome skipped.",
+    "steps": [
+      "Click Skip for now",
+      "Press Ctrl+1",
+      "Press Ctrl+Alt+B (the right sidebar starts closed at 1440 px)",
+      "Click Vault & Telemetry at the top of the right sidebar"
+    ]
+  },
+  {
+    "id": "shell-telemetry-roster",
+    "page": "guides/shell/sidebars.mdx",
+    "kind": "element",
+    "subject": "The NETWORK MEMBER TELEMETRY card: 'Psychology Engine' = 'MBTI · OCEAN · Enneagram', 'Network Members' = '3 human-like agents', and a pill per agent with avatar, name and personality code.",
+    "region": "The NETWORK MEMBER TELEMETRY card only.",
+    "setup": "Fresh profile, welcome skipped, Epistemology & Mind.",
+    "steps": [
+      "Click Skip for now",
+      "Press Ctrl+1",
+      "Press Ctrl+Alt+B (the right sidebar starts closed at 1440 px)",
+      "Click Vault & Telemetry at the top of the right sidebar"
+    ]
+  },
+  {
+    "id": "palette-blank",
+    "page": "guides/shell/command-palette.mdx",
+    "kind": "region",
+    "subject": "The command palette with an empty field (placeholder 'Search screens, agents, posts, documents…'), the Screens group and the start of the Commands group, and the key hints row.",
+    "region": "The palette card only.",
+    "setup": "Fresh profile (no palette history), welcome skipped.",
+    "steps": [
+      "Click Skip for now",
+      "Press Ctrl+K"
+    ]
+  },
+  {
+    "id": "palette-footer",
+    "page": "guides/shell/command-palette.mdx",
+    "kind": "element",
+    "subject": "The key hints at the bottom of the palette: ↑ ↓ move, Enter open, Tab next group, Esc close, and on the right ? by meaning and > commands only.",
+    "region": "The hint row at the bottom of the palette card.",
+    "setup": "Fresh profile, welcome skipped.",
+    "steps": [
+      "Click Skip for now",
+      "Press Ctrl+K"
+    ]
+  },
+  {
+    "id": "palette-search",
+    "page": "guides/shell/command-palette.mdx",
+    "kind": "region",
+    "subject": "The palette with the query 'spin': Baruch de Spinoza selected under 'Agents & personas' with '@baruch_spinoza' on the right and the letters s, p, i, n highlighted, plus any other groups that match.",
+    "region": "The palette card only.",
+    "setup": "Fresh profile, welcome skipped, Epistemology & Mind.",
+    "steps": [
+      "Click Skip for now",
+      "Press Ctrl+K",
+      "Type spin"
+    ]
+  },
+  {
+    "id": "palette-mixed-groups",
+    "page": "guides/shell/command-palette.mdx",
+    "kind": "region",
+    "subject": "The palette with the query 'graph': 'Go to Mind Graph' under Screens and several commands (for example 'New connection map', 'Insights: network') under Commands, showing results grouped under more than one heading.",
+    "region": "The palette card only.",
+    "setup": "Fresh profile, welcome skipped.",
+    "steps": [
+      "Click Skip for now",
+      "Press Ctrl+K",
+      "Type graph"
+    ]
+  },
+  {
+    "id": "palette-commands-mode",
+    "page": "guides/shell/command-palette.mdx",
+    "kind": "region",
+    "subject": "The palette in commands-only mode: the field starts with '>', the 'Commands' chip at the right of the field, the command icon, and only screens ('Go to …') and commands listed with their shortcuts: the Screens group and the start of the Commands group.",
+    "region": "The palette card only.",
+    "setup": "Fresh profile, welcome skipped.",
+    "steps": [
+      "Click Skip for now",
+      "Press Ctrl+Shift+P"
+    ]
+  },
+  {
+    "id": "palette-semantic-mode",
+    "page": "guides/shell/command-palette.mdx",
+    "kind": "region",
+    "subject": "The palette in meaning mode: the field starts with '?', the 'Meaning' chip, the sparkles icon and the line 'Type a question or an idea to find posts and documents by meaning.'",
+    "region": "The palette card only.",
+    "setup": "Fresh profile, welcome skipped.",
+    "steps": [
+      "Click Skip for now",
+      "Press Ctrl+Shift+K"
+    ]
+  },
+  {
+    "id": "palette-empty",
+    "page": "guides/shell/command-palette.mdx",
+    "kind": "element",
+    "subject": "The palette's empty result: the illustration, 'No matches for “zzqx”.' and the hint that posts, documents and journal entries match only when every typed word appears, or to start with ? to search by meaning.",
+    "region": "The results area of the palette under the field.",
+    "setup": "Fresh profile, welcome skipped.",
+    "steps": [
+      "Click Skip for now",
+      "Press Ctrl+K",
+      "Type zzqx"
+    ]
+  },
+  {
+    "id": "shell-shortcut-sheet",
+    "page": "guides/shell/keyboard.mdx",
+    "kind": "region",
+    "subject": "The 'Keyboard shortcuts' sheet: keyboard icon, title, 'Every shortcut in Simulacra. Press Esc to close.', the close button, and all six sections in two rows of three (General, Navigation, Writing; Command palette, Agent Forge, Review) with their key caps.",
+    "region": "The sheet card only.",
+    "setup": "Fresh profile, welcome skipped.",
+    "steps": [
+      "Click Skip for now",
+      "Press Ctrl+/"
+    ]
+  },
+  {
+    "id": "shell-user-card",
+    "page": "guides/shell/personas-switching.mdx",
+    "kind": "element",
+    "subject": "The user card at the bottom of the left sidebar: Arya Wiratama's avatar, the name, '@architect' and the arrows (switch) button.",
+    "region": "The user card row only.",
+    "setup": "Fresh profile, welcome skipped, Epistemology & Mind.",
+    "steps": [
+      "Click Skip for now"
+    ]
+  },
+  {
+    "id": "shell-user-card-switched",
+    "page": "guides/shell/personas-switching.mdx",
+    "kind": "element",
+    "subject": "The user card after one switch: Senja Prakasa's avatar, the name and '@ghost_pen'.",
+    "region": "The user card row only.",
+    "setup": "Fresh profile, welcome skipped, Epistemology & Mind.",
+    "steps": [
+      "Click Skip for now",
+      "Click the arrows button on the user card once",
+      "Move the pointer away so no tooltip shows"
+    ]
+  },
+  {
+    "id": "shell-persona-lab-active",
+    "page": "guides/shell/personas-switching.mdx",
+    "kind": "region",
+    "subject": "Personas & Agents on its 'Personas (2)' tab with Senja Prakasa selected: her card with the INFP tag, the 'Active Identity' badge and the 'Edit in Forge' and 'Switch to Persona' buttons.",
+    "region": "The centre column.",
+    "setup": "Fresh profile, welcome skipped, Epistemology & Mind.",
+    "steps": [
+      "Click Skip for now",
+      "Press Ctrl+4",
+      "Click Senja Prakasa in the roster",
+      "Click Switch to Persona"
+    ]
+  },
+  {
+    "id": "shell-language-popover",
+    "page": "guides/shell/language.mdx",
+    "kind": "element",
+    "subject": "The language menu under the title bar's globe: header 'Interface language' with 'EN', then English (ticked), Bahasa Indonesia, Español, 简体中文, 日本語, Français, Deutsch, Português, Русский, العربية, each with its code.",
+    "region": "The globe button and the open menu.",
+    "setup": "Fresh profile, welcome skipped.",
+    "steps": [
+      "Click Skip for now",
+      "Click the globe (EN) in the title bar"
+    ]
+  },
+  {
+    "id": "shell-window-arabic",
+    "page": "guides/shell/language.mdx",
+    "kind": "window",
+    "subject": "The main window with the interface in Arabic: labels drawn right to left in the title bar, left sidebar, stream tabs, composer and Thread Inspector (times such as 'أمس 21:41'); posts keep their language and the layout is unchanged (navigation still on the left).",
+    "region": "",
+    "setup": "Fresh profile, welcome skipped. Switch back to English after the capture.",
+    "steps": [
+      "Click Skip for now",
+      "Click the globe (EN) in the title bar",
+      "Click العربية",
+      "Capture",
+      "Click the globe (AR) and click English"
+    ]
+  },
+  {
+    "id": "shell-toast-confirmation",
+    "page": "guides/shell/notifications.mdx",
+    "kind": "element",
+    "subject": "The success toast 'Saved to your Inbox.' in the corner of the window.",
+    "region": "The toast only.",
+    "setup": "Fresh profile, welcome skipped, toasts on (the default).",
+    "steps": [
+      "Click Skip for now",
+      "Press Ctrl+Shift+Space",
+      "Type Read Ethics, Part II",
+      "Press Enter",
+      "Capture while the toast is visible"
+    ]
+  },
+  {
+    "id": "network-switcher",
+    "page": "guides/networks.mdx",
+    "kind": "element",
+    "subject": "The network switcher at the top of the expanded left sidebar: the 'E' badge, 'Epistemology & Mind', the up-down chevron, and the collapse button beside it.",
+    "region": "The top row of the left sidebar.",
+    "setup": "Fresh profile, welcome skipped.",
+    "steps": [
+      "Click Skip for now"
+    ]
+  },
+  {
+    "id": "network-popover",
+    "page": "guides/networks.mdx",
+    "kind": "element",
+    "subject": "The network menu open under the switcher: header 'Switch network', the rows Epistemology & Mind (active: filled dot, check mark), Distributed Systems & Rust and Sci-Fi & Cybernetics, each with a 'N docs · N members' caption, and '+ Create network' at the bottom.",
+    "region": "The switcher row and the open menu.",
+    "setup": "Fresh profile, welcome skipped.",
+    "steps": [
+      "Click Skip for now",
+      "Click Epistemology & Mind at the top of the left sidebar"
+    ]
+  },
+  {
+    "id": "network-create-dialog",
+    "page": "guides/networks.mdx",
+    "kind": "element",
+    "subject": "The 'Create network' dialog: title, the description about keeping thoughts, documents and agents separate, the name field with 'Stoa' typed, and the Cancel and Create buttons.",
+    "region": "The dialog only.",
+    "setup": "Fresh profile, welcome skipped.",
+    "steps": [
+      "Click Skip for now",
+      "Press Ctrl+K, type create network and press Enter (or Create network in the network menu)",
+      "Type Stoa"
+    ]
+  },
+  {
+    "id": "network-name-error",
+    "page": "guides/networks.mdx",
+    "kind": "element",
+    "subject": "The Create network dialog with 'Epistemology & Mind' typed in the name field and, directly under it in red, 'A network named \"Epistemology & Mind\" already exists.'",
+    "region": "The dialog only.",
+    "setup": "Fresh profile, welcome skipped.",
+    "steps": [
+      "Click Skip for now",
+      "Press Ctrl+K, type create network and press Enter",
+      "Type Epistemology & Mind",
+      "Click Create",
+      "Capture the dialog with the message under the field"
+    ]
+  },
+  {
+    "id": "network-created",
+    "page": "guides/networks.mdx",
+    "kind": "window",
+    "subject": "The window right after creating 'Stoa': title bar 'Simulacra › Stoa', the switcher showing Stoa, no counts on the places except Personas & Agents (the two personas shared by every network), the 'No documents' and 'No agents' hints under Sources and Members, the empty Timeline, and the success toast 'Network \"Stoa\" created'. The Thread Inspector is empty: the new network has no posts.",
+    "region": "",
+    "setup": "Fresh profile, welcome skipped.",
+    "steps": [
+      "Click Skip for now",
+      "Click Epistemology & Mind at the top of the left sidebar",
+      "Click + Create Network",
+      "Type Stoa",
+      "Click Create",
+      "Capture while the toast is visible"
+    ]
+  },
+  {
+    "id": "start-tour-first-post",
+    "page": "getting-started/first-steps.mdx",
+    "kind": "window",
+    "subject": "The Timeline of Epistemology & Mind with the new post by Arya Wiratama ('Is a mirror's image a sign of the sun, or the sun itself? #Semiotics') at the top of the stream and open in the Thread Inspector.",
+    "region": "",
+    "setup": "Fresh profile, welcome skipped.",
+    "steps": [
+      "Click Skip for now",
+      "Press Ctrl+1",
+      "Click the composer at the top of the stream",
+      "Type Is a mirror's image a sign of the sun, or the sun itself? #Semiotics",
+      "Press Ctrl+Enter"
+    ]
+  },
+  {
+    "id": "start-tour-vault",
+    "page": "getting-started/first-steps.mdx",
+    "kind": "window",
+    "subject": "The Knowledge Vault of Epistemology & Mind listing Tractatus Logico-Philosophicus and Ethics.",
+    "region": "",
+    "setup": "Fresh profile, welcome skipped.",
+    "steps": [
+      "Click Skip for now",
+      "Press Ctrl+2"
+    ]
+  },
+  {
+    "id": "start-tour-agent",
+    "page": "getting-started/first-steps.mdx",
+    "kind": "window",
+    "subject": "Personas & Agents on the network's agents with Baruch de Spinoza selected: his card with portrait, name, '@baruch_spinoza', personality tag and bio, and the buttons 'Edit in Forge' and 'Write a post…'.",
+    "region": "",
+    "setup": "Fresh profile, welcome skipped, Epistemology & Mind.",
+    "steps": [
+      "Click Skip for now",
+      "Press Ctrl+3",
+      "Click Baruch de Spinoza in the roster"
+    ]
+  }
+]

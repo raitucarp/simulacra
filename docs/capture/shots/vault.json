@@ -1,0 +1,631 @@
+[
+  {
+    "id": "vault-overview",
+    "page": "guides/vault/index.mdx",
+    "kind": "window",
+    "subject": "The Knowledge Vault in shelf layout for Epistemology & Mind: the Library/Saved switch, the Browse by facet column, the header '2 documents · 4 subjects · 1 collection' with Subject index, Import file and Add document, the toolbar, and the covers of Ethics and Tractatus Logico-Philosophicus.",
+    "region": "",
+    "setup": "Fresh first-run profile with seed data; Epistemology & Mind active.",
+    "steps": [
+      "Press Ctrl+2"
+    ]
+  },
+  {
+    "id": "vault-toolbar",
+    "page": "guides/vault/index.mdx",
+    "kind": "element",
+    "subject": "The browse toolbar: the search field with placeholder 'Search titles, creators, subjects and text…', the 'Sort: Date added' button and the Shelf / Table segmented switch with Shelf active.",
+    "region": "The toolbar row under the vault header, from the search field to the Table segment.",
+    "setup": "Fresh first-run profile with seed data; Epistemology & Mind active.",
+    "steps": [
+      "Press Ctrl+2"
+    ]
+  },
+  {
+    "id": "vault-sort-menu",
+    "page": "guides/vault/index.mdx",
+    "kind": "element",
+    "subject": "The sort dropdown open with Relevance, Title, Date added (checked), Date published and Most linked.",
+    "region": "The sort button and its open menu.",
+    "setup": "Fresh first-run profile with seed data; Epistemology & Mind active.",
+    "steps": [
+      "Press Ctrl+2",
+      "Click 'Sort: Date added'"
+    ]
+  },
+  {
+    "id": "vault-facet-rail",
+    "page": "guides/vault/index.mdx",
+    "kind": "region",
+    "subject": "The facet column headed BROWSE BY with the groups SUBJECTS (Philosophy 2), COLLECTIONS (Foundations 2), TYPE (Book 2), READING, DISCIPLINE, FORM, PERIOD, PLACE and LANGUAGE (EN 2), each value with its count.",
+    "region": "The facet column on the left of the vault, full height.",
+    "setup": "Fresh first-run profile with seed data; Epistemology & Mind active.",
+    "steps": [
+      "Press Ctrl+2"
+    ]
+  },
+  {
+    "id": "vault-active-filters",
+    "page": "guides/vault/index.mdx",
+    "kind": "element",
+    "subject": "The active filters row reading '1 of 2', a highlighted 'Treatise' chip with a cross, and 'Clear filters'.",
+    "region": "The row between the toolbar and the shelf.",
+    "setup": "Fresh first-run profile with seed data; Epistemology & Mind active.",
+    "steps": [
+      "Press Ctrl+2",
+      "In the facet column under FORM, click 'Treatise'"
+    ]
+  },
+  {
+    "id": "vault-table",
+    "page": "guides/vault/index.mdx",
+    "kind": "region",
+    "subject": "The vault in table layout: columns TITLE, CREATOR, TYPE, YEAR, ADDED (with a down arrow, sorting) and LINKS; rows for Ethics (with subtitle 'Demonstrated in Geometrical Order') and Tractatus Logico-Philosophicus, each with a small cover.",
+    "region": "The centre column below the toolbar: the table card.",
+    "setup": "Fresh first-run profile with seed data; Epistemology & Mind active.",
+    "steps": [
+      "Press Ctrl+2",
+      "Click 'Table' in the toolbar"
+    ]
+  },
+  {
+    "id": "vault-empty",
+    "page": "guides/vault/index.mdx",
+    "kind": "region",
+    "subject": "The empty vault: the header ('0 documents · 4 subjects · 0 collections' with Subject index, Import file and Add document), the empty-vault illustration, 'Your vault is empty', the hint about adding texts, and the 'Add document' and 'Import file' buttons; no toolbar and no facet column.",
+    "region": "The centre column of the Knowledge Vault.",
+    "setup": "Fresh first-run profile with seed data.",
+    "steps": [
+      "Click 'Epistemology & Mind' at the top of the left sidebar and choose 'Sci-Fi & Cybernetics'",
+      "Press Ctrl+2"
+    ]
+  },
+  {
+    "id": "vault-no-matches",
+    "page": "guides/vault/index.mdx",
+    "kind": "region",
+    "subject": "A search with no results: the search field holding 'zzzz', the row '0 of 2', the no-matches illustration, 'Nothing matches', the hint, and 'Clear search and filters'.",
+    "region": "The centre column from the toolbar down to the button.",
+    "setup": "Fresh first-run profile with seed data; Epistemology & Mind active.",
+    "steps": [
+      "Press Ctrl+2",
+      "Click the vault search field",
+      "Type zzzz"
+    ]
+  },
+  {
+    "id": "vault-compact-drawer",
+    "page": "guides/vault/index.mdx",
+    "kind": "window",
+    "subject": "The vault on a narrow window: the toolbar shows a 'Filters' button, icon-only Subject index and Import file buttons, and the facet column open as a drawer over a dimmed shelf.",
+    "region": "",
+    "setup": "Fresh first-run profile with seed data; window resized to 720 × 900 so the compact layout applies.",
+    "steps": [
+      "Press Ctrl+2",
+      "Click 'Filters' in the toolbar"
+    ]
+  },
+  {
+    "id": "vault-entry",
+    "page": "guides/vault/documents.mdx",
+    "kind": "window",
+    "subject": "The entry page of Ethics: Back, the title block with Book and Unread badges and actions, Abstract, Filed under, Contents and the start of Cite this; on the right the generated cover and the Catalogue record card. (Related entries and the backlinks section are further down the page.)",
+    "region": "",
+    "setup": "Fresh first-run profile with seed data; Epistemology & Mind active.",
+    "steps": [
+      "Press Ctrl+2",
+      "Click the Ethics cover"
+    ]
+  },
+  {
+    "id": "vault-entry-title",
+    "page": "guides/vault/documents.mdx",
+    "kind": "element",
+    "subject": "The title block of Tractatus Logico-Philosophicus: Book and Reading badges, the title, 'Ludwig Wittgenstein · translated by C. K. Ogden', '1922 · Kegan Paul · Vienna', a green progress bar at 35 %, and the buttons 'Continue reading (35%)', Edit, Mark as read, Learn passages, Learn connections, History, Quote a passage and Delete.",
+    "region": "The title block at the top of the entry, from the badges to the row of buttons.",
+    "setup": "Fresh first-run profile with seed data; Epistemology & Mind active.",
+    "steps": [
+      "Press Ctrl+2",
+      "Click the Tractatus Logico-Philosophicus cover"
+    ]
+  },
+  {
+    "id": "vault-entry-record",
+    "page": "guides/vault/documents.mdx",
+    "kind": "element",
+    "subject": "The side column of the Ethics entry: the generated cover above the CATALOGUE RECORD card with rows Type, Creators, Published, Publisher, Language, Format, Extent, Rights, Added, Source (Demo network) and Checksum.",
+    "region": "The right-hand column of the entry: the cover and the record card.",
+    "setup": "Fresh first-run profile with seed data; Epistemology & Mind active.",
+    "steps": [
+      "Press Ctrl+2",
+      "Click the Ethics cover"
+    ]
+  },
+  {
+    "id": "vault-reader",
+    "page": "guides/vault/documents.mdx",
+    "kind": "window",
+    "subject": "The reader for Tractatus Logico-Philosophicus: the top bar with Back, the title, '35%' and 'Mark as read', a thin progress bar, then the title, byline and first heading '1 The world as facts' in a centred reading column.",
+    "region": "",
+    "setup": "Fresh first-run profile with seed data; Epistemology & Mind active.",
+    "steps": [
+      "Press Ctrl+2",
+      "Click the Tractatus Logico-Philosophicus cover",
+      "Click 'Continue reading (35%)'"
+    ]
+  },
+  {
+    "id": "vault-shelf-card",
+    "page": "guides/vault/documents.mdx",
+    "kind": "element",
+    "subject": "One shelf card: the generated book cover of Tractatus Logico-Philosophicus, its title, 'Ludwig Wittgenstein', '1922 · Book' and the green reading-progress bar.",
+    "region": "The Tractatus Logico-Philosophicus card on the shelf.",
+    "setup": "Fresh first-run profile with seed data; Epistemology & Mind active.",
+    "steps": [
+      "Press Ctrl+2"
+    ]
+  },
+  {
+    "id": "vault-sources-sidebar",
+    "page": "guides/vault/documents.mdx",
+    "kind": "element",
+    "subject": "The Sources section of the expanded left sidebar listing Tractatus Logico-Philosophicus and Ethics with a document icon and their grounding chunk counts on the right.",
+    "region": "The 'Sources' heading and its two rows in the left sidebar.",
+    "setup": "Fresh first-run profile with seed data; Epistemology & Mind active; left sidebar expanded.",
+    "steps": [
+      "Press Ctrl+2"
+    ]
+  },
+  {
+    "id": "vault-editor",
+    "page": "guides/vault/documents.mdx",
+    "kind": "window",
+    "subject": "The 'Add document' form: Back and the title, the BASICS card with Title, the Type chips beside the Note illustration (Note selected), Creators and Published side by side with their hints, and Text; then the folded Publication details, Classification and Abstract sections with their hints (Cancel and Save are further down).",
+    "region": "",
+    "setup": "Fresh first-run profile with seed data; Epistemology & Mind active.",
+    "steps": [
+      "Press Ctrl+2",
+      "Click 'Add document'"
+    ]
+  },
+  {
+    "id": "vault-editor-sections",
+    "page": "guides/vault/documents.mdx",
+    "kind": "region",
+    "subject": "The lower part of Publication details (the ISBN / DOI / URL chips with ISBN chosen, the Identifier field, Pages and Rights) and the unfolded Classification section: Subjects with the vocabulary chips Ethics, Metaphysics, Philosophy and Philosophy of language, Collections with the Foundations chip, and the Discipline, Form and Period chips with Place.",
+    "region": "From the identifier scheme chips of Publication details to the end of the Classification card.",
+    "setup": "Fresh first-run profile with seed data; Epistemology & Mind active.",
+    "steps": [
+      "Press Ctrl+2",
+      "Click 'Add document'",
+      "Click 'Publication details'",
+      "Click the 'ISBN' chip",
+      "Click 'Classification'",
+      "Scroll so both sections are visible"
+    ]
+  },
+  {
+    "id": "vault-editor-problems",
+    "page": "guides/vault/documents.mdx",
+    "kind": "element",
+    "subject": "The Published field outlined in red holding 'abc', with the red message, in place of the hint, 'Start the date with a year, such as 1677 or 1921-07-01.'",
+    "region": "The Creators / Published row of the BASICS card.",
+    "setup": "Fresh first-run profile with seed data; Epistemology & Mind active.",
+    "steps": [
+      "Press Ctrl+2",
+      "Click 'Add document'",
+      "Type Test in Title",
+      "Type abc in Published",
+      "Click 'Save'"
+    ]
+  },
+  {
+    "id": "vault-delete-dialog",
+    "page": "guides/vault/documents.mdx",
+    "kind": "element",
+    "subject": "The confirmation dialog 'Delete this document?' with '“Ethics” and its catalogue record leave the vault. Posts that link to it keep their text.', Cancel and a red Delete button.",
+    "region": "The dialog only.",
+    "setup": "Fresh first-run profile with seed data; Epistemology & Mind active.",
+    "steps": [
+      "Press Ctrl+2",
+      "Click the Ethics cover",
+      "Click 'Delete'",
+      "After capturing, click 'Cancel'"
+    ]
+  },
+  {
+    "id": "vault-subject-tree",
+    "page": "guides/vault/catalogue.mdx",
+    "kind": "element",
+    "subject": "The SUBJECTS facet group with Philosophy expanded (chevron down), showing Ethics, Metaphysics and Philosophy of language indented below it, each with its count.",
+    "region": "The SUBJECTS group of the facet column.",
+    "setup": "Fresh first-run profile with seed data; Epistemology & Mind active.",
+    "steps": [
+      "Press Ctrl+2",
+      "Click the chevron to the left of 'Philosophy' under SUBJECTS"
+    ]
+  },
+  {
+    "id": "vault-subject-index",
+    "page": "guides/vault/catalogue.mdx",
+    "kind": "window",
+    "subject": "The Subject index page: Back, the banner illustration with 'Subject index' and its hint, then letters E, M and P listing Ethics, Metaphysics, Philosophy and Philosophy of language with 'under Philosophy', document counts and scope notes.",
+    "region": "",
+    "setup": "Fresh first-run profile with seed data; Epistemology & Mind active.",
+    "steps": [
+      "Press Ctrl+2",
+      "Click 'Subject index'"
+    ]
+  },
+  {
+    "id": "vault-entry-filing",
+    "page": "guides/vault/catalogue.mdx",
+    "kind": "element",
+    "subject": "The FILED UNDER tags of Ethics (Philosophy › Metaphysics, Philosophy › Ethics, Foundations, Philosophy & psychology, Treatise, Early modern, Amsterdam) and the CONTENTS list (Part I: Of God, Part II: Of the mind, Part III: Of the affects, Part V: Of freedom).",
+    "region": "The 'Filed under' and 'Contents' sections of the entry.",
+    "setup": "Fresh first-run profile with seed data; Epistemology & Mind active.",
+    "steps": [
+      "Press Ctrl+2",
+      "Click the Ethics cover",
+      "Scroll until 'Filed under' and 'Contents' are visible"
+    ]
+  },
+  {
+    "id": "vault-entry-citations",
+    "page": "guides/vault/catalogue.mdx",
+    "kind": "element",
+    "subject": "The CITE THIS card of Ethics with the Author–date, Notes and bibliography and Numeric citations (titles in italics), each with a Copy button; the first button reads 'Copied'.",
+    "region": "The 'Cite this' heading and card.",
+    "setup": "Fresh first-run profile with seed data; Epistemology & Mind active.",
+    "steps": [
+      "Press Ctrl+2",
+      "Click the Ethics cover",
+      "Scroll to 'Cite this'",
+      "Click 'Copy' beside Author–date"
+    ]
+  },
+  {
+    "id": "vault-entry-related",
+    "page": "guides/vault/catalogue.mdx",
+    "kind": "element",
+    "subject": "The RELATED ENTRIES section of Ethics listing Tractatus Logico-Philosophicus with its small cover and 'Ludwig Wittgenstein · 2 shared subjects', and below it the backlinks section '0 posts link here' with 'No posts link here yet. Write [[Ethics]] in a thought to link it.'",
+    "region": "The 'Related entries' and backlinks sections at the bottom of the entry.",
+    "setup": "Fresh first-run profile with seed data; Epistemology & Mind active; search by meaning not set up.",
+    "steps": [
+      "Press Ctrl+2",
+      "Click the Ethics cover",
+      "Scroll to the bottom of the entry"
+    ]
+  },
+  {
+    "id": "import-sheet",
+    "page": "guides/vault/import.mdx",
+    "kind": "window",
+    "subject": "The import sheet over the dimmed window for the EPUB: the E-book card, file name and facts line, DETAILS (Title, Authors, Language, Date filled), POST AS with You, SPLIT INTO with Paragraphs, the selection bar, chapter chips and the list of paragraphs with checkboxes, and the footer summary with 'Just add to vault' and 'Create posts'.",
+    "region": "",
+    "setup": "Fresh first-run profile with seed data. A public-domain EPUB of David Hume's 'An Enquiry Concerning Human Understanding' (Project Gutenberg) saved as hume-enquiry.epub.",
+    "steps": [
+      "Press Ctrl+2",
+      "Click 'Import file'",
+      "Choose hume-enquiry.epub in the file picker",
+      "Wait until the paragraphs are listed"
+    ]
+  },
+  {
+    "id": "import-drop-overlay",
+    "page": "guides/vault/import.mdx",
+    "kind": "window",
+    "subject": "The drop overlay: the window dimmed, a card with the drop illustration, 'Drop to import' and 'Books, PDFs, documents, pages, data, images: any file.'",
+    "region": "",
+    "setup": "Fresh first-run profile with seed data; any file (for example hume-enquiry.epub) visible in File Explorer beside the window; the composer closed.",
+    "steps": [
+      "Drag the file from File Explorer over the middle of the Simulacra window and hold it there",
+      "Capture",
+      "Press Esc or drag back out to cancel"
+    ]
+  },
+  {
+    "id": "import-sheet-reading",
+    "page": "guides/vault/import.mdx",
+    "kind": "element",
+    "subject": "The import sheet while reading: 'Reading' and the file name, 'Large books take a few seconds. You can keep working.' and a Cancel button; the footer buttons disabled.",
+    "region": "The import sheet only.",
+    "setup": "Fresh first-run profile with seed data. A large text PDF (about 40 MB, under the 50 MB limit) so reading takes a few seconds.",
+    "steps": [
+      "Press Ctrl+O",
+      "Choose the large PDF",
+      "Capture immediately, before the paragraphs appear"
+    ]
+  },
+  {
+    "id": "import-sheet-header",
+    "page": "guides/vault/import.mdx",
+    "kind": "element",
+    "subject": "The sheet header: the e-book illustration card, the file name hume-enquiry.epub, the facts line 'E-book · EPUB · size · N chapters · N paragraphs', and the close cross.",
+    "region": "The header band of the import sheet.",
+    "setup": "As for import-sheet.",
+    "steps": [
+      "Press Ctrl+O",
+      "Choose hume-enquiry.epub",
+      "Wait until the paragraphs are listed"
+    ]
+  },
+  {
+    "id": "import-sheet-units",
+    "page": "guides/vault/import.mdx",
+    "kind": "region",
+    "subject": "The SPLIT INTO section: the Chapters / Paragraphs / Sentences switch with Paragraphs active, 'N of N selected' with Select all and Select none, the scrolling row of chapter chips, and the preview list with checkbox, position ('Section … · ¶1') and first line per paragraph.",
+    "region": "The lower part of the sheet body, from 'SPLIT INTO' to the bottom of the preview list.",
+    "setup": "As for import-sheet.",
+    "steps": [
+      "Press Ctrl+O",
+      "Choose hume-enquiry.epub",
+      "Wait until the paragraphs are listed",
+      "Scroll the sheet body to 'SPLIT INTO'"
+    ]
+  },
+  {
+    "id": "import-sheet-post-as",
+    "page": "guides/vault/import.mdx",
+    "kind": "element",
+    "subject": "The POST AS section with You, Anonymous and Pseudonym, Pseudonym active, a Pen name field holding 'Philo', and the hint 'Posts appear under a pen name. A name you used before is reused.'",
+    "region": "The POST AS section of the sheet.",
+    "setup": "As for import-sheet.",
+    "steps": [
+      "Press Ctrl+O",
+      "Choose hume-enquiry.epub",
+      "Wait until the paragraphs are listed",
+      "Click 'Pseudonym'",
+      "Type Philo"
+    ]
+  },
+  {
+    "id": "import-sheet-footer",
+    "page": "guides/vault/import.mdx",
+    "kind": "element",
+    "subject": "The sheet footer: the summary 'N passages → N posts, N of them threads' and the buttons 'Just add to vault' and 'Create posts' (enabled).",
+    "region": "The footer band of the import sheet.",
+    "setup": "As for import-sheet.",
+    "steps": [
+      "Press Ctrl+O",
+      "Choose hume-enquiry.epub",
+      "Wait until the paragraphs are listed"
+    ]
+  },
+  {
+    "id": "import-sheet-image",
+    "page": "guides/vault/import.mdx",
+    "kind": "element",
+    "subject": "The sheet for an image: the Image card, photo.png, the facts line, the warning-coloured note 'An image of 1600 × 900 pixels: only its details are kept.', the empty-state illustration with 'No text to post. The file goes into the vault with its details.', and the footer 'Nothing selected: the file only goes into the vault.' with 'Create posts' disabled.",
+    "region": "The import sheet only.",
+    "setup": "Fresh first-run profile with seed data. A 1600 × 900 PNG saved as photo.png.",
+    "steps": [
+      "Press Ctrl+O",
+      "Choose photo.png"
+    ]
+  },
+  {
+    "id": "import-sheet-failed",
+    "page": "guides/vault/import.mdx",
+    "kind": "element",
+    "subject": "The sheet showing in red 'Could not open this file: the file is 2.0 MB, larger than the 1.0 MB import limit', with both footer buttons disabled (the header still reads 'Large books take a few seconds. You can keep working.').",
+    "region": "The import sheet only.",
+    "setup": "Fresh first-run profile with seed data. Settings (Ctrl+,) › Import › 'Largest file' set to 1 MB. Any file of about 2 MB (for example a 2 MB PDF).",
+    "steps": [
+      "Press Ctrl+O",
+      "Choose the 2 MB file"
+    ]
+  },
+  {
+    "id": "vault-trigger-document",
+    "page": "guides/vault/grounding.mdx",
+    "kind": "element",
+    "subject": "The dialog 'What should Baruch de Spinoza write?' with New post selected, TOPIC (OPTIONAL) with its field, VAULT DOCUMENT (OPTIONAL) with chips None, Ethics (selected) and Tractatus Logico-Philosophicus, the estimate line, Cancel and Write.",
+    "region": "The dialog only.",
+    "setup": "Fresh first-run profile with seed data; Epistemology & Mind active.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click 'Baruch de Spinoza' in the list",
+      "Click 'Write a post…'",
+      "Click 'New post'",
+      "Click the 'Ethics' chip under VAULT DOCUMENT (OPTIONAL)"
+    ]
+  },
+  {
+    "id": "vault-post-sources",
+    "page": "guides/vault/grounding.mdx",
+    "kind": "element",
+    "subject": "A post by Baruch de Spinoza in the timeline with, under its text, the row 'Sources' and a chip with a document icon reading 'Ethics'.",
+    "region": "The one post card.",
+    "setup": "Fresh first-run profile with seed data; Epistemology & Mind active. The stub engine (docs/capture/stub-ai.mjs) set as Spinoza's engine is optional: without it he writes offline and the source is still attached.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click 'Baruch de Spinoza'",
+      "Click 'Write a post…'",
+      "Click 'New post'",
+      "Click the 'Ethics' chip",
+      "Click 'Write'",
+      "When 'Posted' appears under the profile's actions, click 'Open the post'"
+    ]
+  },
+  {
+    "id": "search-page",
+    "page": "guides/search/index.mdx",
+    "kind": "window",
+    "subject": "The empty Search page: the title 'Search', the field with the placeholder 'Words, \"phrases\", from: kind: symbol: tint: has: is: before: after:', the Filters row with the quick filters and 'Include old versions', and the illustration with 'Search your posts' and its hint.",
+    "region": "",
+    "setup": "Fresh first-run profile with seed data; Epistemology & Mind active.",
+    "steps": [
+      "Click 'Search' in the left sidebar"
+    ]
+  },
+  {
+    "id": "search-results",
+    "page": "guides/search/index.mdx",
+    "kind": "window",
+    "subject": "The Search page with the query 'the -from:architect': the result count, the active chip '-from:architect ×', the Saved row with 'from:sokrates', and result rows by Baruch de Spinoza, Sokrates of Alopece and Simone Weil with handle, date and the passage as plain text (no link ids) with 'the' highlighted; the first row selected.",
+    "region": "",
+    "setup": "Fresh first-run profile with seed data; Epistemology & Mind active.",
+    "steps": [
+      "Click 'Search' in the left sidebar",
+      "Type the -from:architect"
+    ]
+  },
+  {
+    "id": "search-chips",
+    "page": "guides/search/index.mdx",
+    "kind": "region",
+    "subject": "The Filters row (label, the active chip '-from:architect ×', quick filters has:image, has:file, has:code, has:todo, is:open, is:done, is:archived, is:locked, and 'Include old versions') and below it the Saved row with a 'from:sokrates' chip, its ×, and 'Save search'.",
+    "region": "The two chip rows under the search field.",
+    "setup": "Fresh first-run profile with seed data; Epistemology & Mind active. On the Search page, type from:sokrates, click 'Save search', then clear the field.",
+    "steps": [
+      "Click 'Search' in the left sidebar",
+      "Type the -from:architect"
+    ]
+  },
+  {
+    "id": "search-meaning-prompt",
+    "page": "guides/search/meaning-search.mdx",
+    "kind": "element",
+    "subject": "The command palette in Meaning mode before typing: the field with the sparkle icon, 'Meaning' and '?', and the status line 'Type a question or an idea to find posts and documents by meaning.'",
+    "region": "The command palette only.",
+    "setup": "Fresh first-run profile with seed data.",
+    "steps": [
+      "Press Ctrl+Shift+K"
+    ]
+  },
+  {
+    "id": "search-meaning-results",
+    "page": "guides/search/meaning-search.mdx",
+    "kind": "region",
+    "subject": "The palette in Meaning mode with '?where do our ideas come from?': a 'By meaning' group heading and scored post rows (speech-bubble icon, author and handle), each with an excerpt and a similarity bar with a percentage.",
+    "region": "The command palette only.",
+    "setup": "Fresh first-run profile with seed data. node docs/capture/stub-ai.mjs running; Settings (Ctrl+,) › Embeddings: Embedding provider 'Custom', Local server address 'http://127.0.0.1:8765/v1'; wait until the indexing pill disappears.",
+    "steps": [
+      "Press Ctrl+Shift+K",
+      "Type where do our ideas come from?",
+      "Wait for the results to replace 'Searching by meaning…'"
+    ]
+  },
+  {
+    "id": "search-meaning-fallback",
+    "page": "guides/search/meaning-search.mdx",
+    "kind": "element",
+    "subject": "The palette in Meaning mode with 'substance': the info note 'Search by meaning is off in Settings, so these are word matches.', a 'Matching words' heading and scored rows.",
+    "region": "The command palette only.",
+    "setup": "Fresh first-run profile with seed data. Settings (Ctrl+,) › Embeddings › 'Semantic search' turned off.",
+    "steps": [
+      "Press Ctrl+Shift+K",
+      "Type substance",
+      "Wait for the results"
+    ]
+  },
+  {
+    "id": "search-indexing-paused",
+    "page": "guides/search/meaning-search.mdx",
+    "kind": "element",
+    "subject": "The indexing pill in the bottom-right corner in its paused state: a warning icon, 'Indexing paused', the whole reason 'The custom service could not be reached. Check the connection or the address…' on as many lines as it needs, and a close cross.",
+    "region": "The pill in the bottom-right corner of the window.",
+    "setup": "Fresh first-run profile with seed data. Settings (Ctrl+,) › Embeddings: Embedding provider 'Custom', Local server address 'http://127.0.0.1:9' (nothing listening there); close Settings.",
+    "steps": [
+      "Press Ctrl+1",
+      "Wait until the pill reads 'Indexing paused' (after the automatic retries)"
+    ]
+  },
+  {
+    "id": "search-similar-sheet",
+    "page": "guides/search/find-similar.mdx",
+    "kind": "region",
+    "subject": "The 'Similar by meaning' sheet: compass icon, title, 'Closest to “Precisely, and the remedy is the same: an affect ceases to b…”', close cross, then scored rows of posts and documents (Ethics, Tractatus Logico-Philosophicus) with excerpt and similarity bar, each with a compass button.",
+    "region": "The sheet card only.",
+    "setup": "Fresh first-run profile with seed data; Epistemology & Mind active; embeddings indexed with the stub as for search-meaning-results.",
+    "steps": [
+      "Press Ctrl+1",
+      "Hover Baruch de Spinoza's post and click its '…' menu",
+      "Click 'Find similar'"
+    ]
+  },
+  {
+    "id": "search-feed-order",
+    "page": "guides/search/recommendations.mdx",
+    "kind": "element",
+    "subject": "The timeline header with the 'For you' tab active and the order button reading 'Latest', with its tooltip 'Newest conversations first. Click to rank For you by what you write, answer and like.'",
+    "region": "The timeline tab row and the order button with its tooltip.",
+    "setup": "Fresh first-run profile with seed data; Epistemology & Mind active.",
+    "steps": [
+      "Press Ctrl+1",
+      "Click the 'For you' tab",
+      "Hover the 'Latest' button"
+    ]
+  },
+  {
+    "id": "search-related-thoughts",
+    "page": "guides/search/recommendations.mdx",
+    "kind": "element",
+    "subject": "The bottom of the thread inspector: 'Related thoughts', 'Closest in meaning, from other conversations', and rows of posts from other conversations with similarity bars.",
+    "region": "The 'Related thoughts' section of the thread inspector.",
+    "setup": "Fresh first-run profile with seed data; Epistemology & Mind active; embeddings indexed with the stub as for search-meaning-results.",
+    "steps": [
+      "Press Ctrl+1",
+      "Click Baruch de Spinoza's post",
+      "Scroll the inspector to 'Related thoughts'"
+    ]
+  },
+  {
+    "id": "import-tutorial-sheet",
+    "page": "tutorials/ground-a-network-in-a-book.mdx",
+    "kind": "region",
+    "subject": "The import sheet for hume-enquiry.epub: the E-book card and facts line, DETAILS with Title 'An Enquiry Concerning Human Understanding', Authors 'David Hume', Language and Date, and the start of the paragraph list.",
+    "region": "The import sheet only.",
+    "setup": "As for import-sheet.",
+    "steps": [
+      "Press Ctrl+2",
+      "Click 'Import file'",
+      "Choose hume-enquiry.epub",
+      "Wait until the paragraphs are listed"
+    ]
+  },
+  {
+    "id": "vault-tutorial-entry",
+    "page": "tutorials/ground-a-network-in-a-book.mdx",
+    "kind": "window",
+    "subject": "The entry of 'An Enquiry Concerning Human Understanding' after cataloguing: Book and Unread badges, title, 'David Hume', imprint 1748, the actions, Filed under (Epistemology, Philosophy, Foundations, Philosophy & psychology, Essay, Early modern), Cite this, Related entries listing Tractatus Logico-Philosophicus and Ethics as 'Close in meaning', and '0 posts link here'; on the right the generated cover and the catalogue record.",
+    "region": "",
+    "setup": "Fresh first-run profile with seed data. hume-enquiry.epub imported with 'Just add to vault', then edited as in the tutorial: Subjects 'Epistemology, Philosophy', Collections 'Foundations', Discipline 'Philosophy & psychology', Form 'Essay', Period 'Early modern', Published '1748'; search by meaning not set up.",
+    "steps": [
+      "Press Ctrl+2",
+      "Click the cover of An Enquiry Concerning Human Understanding"
+    ]
+  },
+  {
+    "id": "search-tutorial-meaning",
+    "page": "tutorials/ground-a-network-in-a-book.mdx",
+    "kind": "region",
+    "subject": "The palette in Meaning mode with 'where do our ideas come from?' and 'By meaning' results that include the Hume document (page icon, title, a passage and a similarity bar).",
+    "region": "The command palette only.",
+    "setup": "As for vault-tutorial-entry, then embeddings set up with the stub as for search-meaning-results and indexing finished.",
+    "steps": [
+      "Press Ctrl+Shift+K",
+      "Type where do our ideas come from?",
+      "Wait for the results"
+    ]
+  },
+  {
+    "id": "vault-tutorial-citation",
+    "page": "tutorials/ground-a-network-in-a-book.mdx",
+    "kind": "element",
+    "subject": "Baruch de Spinoza's new post with, under its text, 'Sources' and a document chip reading 'An Enquiry Concerning Human Understanding'.",
+    "region": "The one post card.",
+    "setup": "As for vault-tutorial-entry.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click 'Baruch de Spinoza'",
+      "Click 'Write a post…'",
+      "Click 'New post'",
+      "Type impressions and ideas in the topic field",
+      "Click the 'An Enquiry Concerning Human Understanding' chip",
+      "Click 'Write'",
+      "When 'Posted' appears, click 'Open the post'"
+    ]
+  }
+]

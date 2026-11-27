@@ -78,7 +78,7 @@ fn section_heading(theme: &ThemeTokens, tab: SettingsTab) -> Div {
         .flex()
         .items_center()
         .gap(theme.inline_gap)
-        .child(Icon::new(tab.icon()).size(theme.icon_size_sm).text_color(theme.accent_brand))
+        .child(Icon::new(tab.icon()).size(theme.icon_size_sm).text_color(theme.accent_brand_text))
         .child(section_label(theme, tab.title()))
 }
 

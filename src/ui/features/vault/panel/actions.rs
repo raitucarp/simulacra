@@ -31,6 +31,21 @@ impl VaultPanel {
         cx.notify();
     }
 
+    /// Escape: closes the facet drawer, or leaves the reader or the form (as its Cancel does).
+    /// Returns whether it closed something.
+    pub fn escape(&mut self, cx: &mut Context<Self>) -> bool {
+        if self.drawer_open {
+            self.drawer_open = false;
+            cx.notify();
+            return true;
+        }
+        let leaves = matches!(self.nav.current, Screen::Reader(_) | Screen::Editor(_));
+        if leaves {
+            self.back(cx);
+        }
+        leaves
+    }
+
     /// Opens the entry of document `id` (from links elsewhere in the app).
     pub fn open_entry(&mut self, id: &str, cx: &mut Context<Self>) {
         if self.data.document(id).is_some() {

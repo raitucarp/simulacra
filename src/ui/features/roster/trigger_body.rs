@@ -97,6 +97,6 @@ pub fn render_trigger_body(body: TriggerBody<'_>, theme: &ThemeTokens) -> Div {
         .text_size(theme.font_size_xs)
         .text_color(theme.text_secondary)
         .child(Icon::new(LucideIcon::Gauge).xsmall().text_color(theme.text_muted))
-        .child(div().flex().flex_col().child(estimate_text(body.estimate)).when(body.estimate.is_some_and(TriggerEstimate::uses_model), |text| text.child(div().text_color(theme.text_muted).child(t!("trigger.estimate.note").to_string()))));
+        .child(div().flex_1().min_w_0().flex().flex_col().child(estimate_text(body.estimate)).when(body.estimate.is_some_and(TriggerEstimate::uses_model), |text| text.child(div().text_color(theme.text_muted).child(t!("trigger.estimate.note").to_string()))));
     div().flex().flex_col().gap(theme.spacing_sm).child(modes).when(!current.reply, |this| this.child(seed)).child(estimate)
 }

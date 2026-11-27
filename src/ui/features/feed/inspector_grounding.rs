@@ -23,7 +23,7 @@ pub(crate) fn render_grounding_callout(theme: &ThemeTokens) -> Div {
                 .flex()
                 .items_center()
                 .gap(theme.spacing_xs)
-                .child(Icon::new(LucideIcon::Sparkles).size(theme.font_size_sm).text_color(theme.accent_brand))
+                .child(Icon::new(LucideIcon::Sparkles).size(theme.font_size_sm).text_color(theme.accent_brand_text))
                 .child(
                     div()
                         .font_family(theme.font_family_display.clone())

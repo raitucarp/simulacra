@@ -16,6 +16,7 @@ use super::network::{GraphScope, NetworkReport};
 use super::sets::{NamedSet, SetDimension};
 use crate::domain::document::SubjectId;
 use crate::domain::graph::{excerpt, GraphModel, GraphSource};
+use crate::domain::post::readable_line;
 use crate::domain::{GroundingDocument, NetworkId, Post, PostId, Profile};
 use jiff::Timestamp;
 use jiff::tz::Offset;
@@ -107,7 +108,7 @@ impl InsightsReport {
 }
 
 fn summary(post: &Post, facts: &PostFacts) -> PostSummary {
-    PostSummary { id: post.id.clone(), author: facts.author, kind: facts.kind, excerpt: excerpt(&post.content, EXCERPT_CHARS), created_at: post.created_at }
+    PostSummary { id: post.id.clone(), author: facts.author, kind: facts.kind, excerpt: excerpt(&readable_line(&post.content), EXCERPT_CHARS), created_at: post.created_at }
 }
 
 /// Authors of `posts` in order of first appearance (unknown authors keep their id as name).

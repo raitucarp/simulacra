@@ -10,12 +10,15 @@ fn styled_runs(ops: &[DiffOp], theme: &ThemeTokens) -> (String, Vec<(Range<usize
     let added = HighlightStyle { color: Some(theme.accent_success.into()), background_color: Some(theme.accent_success_subtle.into()), ..HighlightStyle::default() };
     let strike = StrikethroughStyle { thickness: theme.border_width_hairline, color: Some(theme.accent_danger.into()) };
     let removed = HighlightStyle { color: Some(theme.accent_danger.into()), strikethrough: Some(strike), ..HighlightStyle::default() };
-    ops.iter().fold((String::new(), Vec::new()), |(mut text, mut runs), op| {
+    ops.iter().enumerate().fold((String::new(), Vec::new()), |(mut text, mut runs), (at, op)| {
         let (run, style) = match op {
             DiffOp::Same(t) => (t, None),
             DiffOp::Added(t) => (t, Some(added)),
             DiffOp::Removed(t) => (t, Some(removed)),
         };
+        if at > 0 && touching_change(&ops[at - 1], op) {
+            text.push(' ');
+        }
         let start = text.len();
         text.push_str(run);
         if let Some(style) = style {
@@ -23,6 +26,16 @@ fn styled_runs(ops: &[DiffOp], theme: &ThemeTokens) -> (String, Vec<(Range<usize
         }
         (text, runs)
     })
+}
+
+/// A removal and an addition that meet with no space between them ("internal" replaced by
+/// "public"): they get one, so the two words read apart.
+fn touching_change(before: &DiffOp, op: &DiffOp) -> bool {
+    let (left, right) = match (before, op) {
+        (DiffOp::Removed(left), DiffOp::Added(right)) | (DiffOp::Added(left), DiffOp::Removed(right)) => (left, right),
+        _ => return false,
+    };
+    !left.ends_with(char::is_whitespace) && !right.starts_with(char::is_whitespace)
 }
 
 /// The diff as wrapped prose.

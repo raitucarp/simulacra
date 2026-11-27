@@ -88,6 +88,10 @@ impl InsightsPanel {
         });
         let heading = div().text_size(theme.font_size_xs).font_weight(FontWeight::SEMIBOLD).text_color(theme.text_muted).child(t!("insights.ranked_by", measure = tr(&format!("insights.measure.{}", measure.key()))).to_string());
         let details = self.selected.filter(|&i| i < report.network.nodes.len()).map(|i| self.picked_details(report, i, cx));
-        div().min_w_0().flex().flex_col().gap(theme.stack_gap).child(heading).child(ranked_list("insights-network-ranked", &rows, Some(pick), theme)).children(details)
+        // Under the graph the picked node's details sit beside the list, which then keeps a
+        // readable length; in the narrow side column they wrap below it.
+        let list = div().flex_1().min_w(theme.insights_side_width).child(ranked_list("insights-network-ranked", &rows, Some(pick), theme));
+        let body = div().flex().flex_wrap().items_start().gap(theme.section_gap).child(list).children(details.map(|d| d.w(theme.insights_side_width).flex_none()));
+        div().min_w_0().flex().flex_col().gap(theme.stack_gap).child(heading).child(body)
     }
 }

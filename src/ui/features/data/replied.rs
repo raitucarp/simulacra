@@ -16,6 +16,6 @@ pub fn replied_text(version: SemVer) -> String {
 /// The hint, or `None` while the reply answers the version its parent shows.
 pub fn render_replied_hint(controls: &DataControls, theme: &ThemeTokens) -> Option<AnyElement> {
     let version = controls.replied_to?;
-    let hint = div().flex_none().font_family(theme.font_family_mono.clone()).text_size(theme.font_size_2xs).text_color(theme.text_muted).child(replied_text(version));
+    let hint = div().flex_none().text_size(theme.font_size_2xs).text_color(theme.text_muted).child(replied_text(version));
     Some(hint.into_any_element())
 }

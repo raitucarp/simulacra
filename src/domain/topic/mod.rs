@@ -20,3 +20,9 @@ impl TrendingTopic {
         }
     }
 }
+
+mod rank;
+#[cfg(test)]
+mod tests;
+
+pub use rank::{rank_tags, TRENDING_WINDOW_DAYS};

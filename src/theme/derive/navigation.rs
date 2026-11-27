@@ -13,7 +13,8 @@ pub(super) fn apply_navigation_layout(t: &mut ThemeTokens) {
         new_menu_width: px(232.0),
         palette_width: px(640.0), palette_results_max_height: px(420.0), palette_top_offset: px(88.0),
         key_cap_min_width: px(20.0),
-        shortcut_sheet_width: px(680.0), shortcut_sheet_max_height: px(560.0),
+        // Three 300 px sections a row (two rows hold all six); a narrower window wraps them.
+        shortcut_sheet_width: px(1000.0), shortcut_sheet_max_height: px(760.0),
         shortcut_sheet_section_width: px(300.0),
     });
 }

@@ -1,4 +1,4 @@
-//! Segmented `Network Agents | My Personas` switch plus active-network subtitle.
+//! Segmented `Agents | Personas` switch plus active-network subtitle.
 
 use crate::theme::ThemeTokens;
 use crate::ui::components::{segment_pill, segmented_track, Segment};
@@ -76,10 +76,9 @@ fn scope_subtitle(network_name: &str, count: usize, theme: &ThemeTokens) -> Div 
         )
         .child(
             div()
-                .font_family(theme.font_family_mono.clone())
                 .text_size(theme.font_size_2xs)
                 .font_weight(FontWeight::SEMIBOLD)
-                .text_color(theme.accent_brand)
+                .text_color(theme.accent_brand_text)
                 .child(format!("{}", count)),
         )
 }

@@ -77,7 +77,7 @@ impl CaptureBox {
             .flex()
             .items_center()
             .gap(theme.control_gap)
-            .child(Icon::new(LucideIcon::Feather).size(theme.icon_size_md).text_color(theme.accent_brand))
+            .child(Icon::new(LucideIcon::Feather).size(theme.icon_size_md).text_color(theme.accent_brand_text))
             .child(div().flex_1().min_w_0().child(Input::new(&self.input).appearance(false).text_size(theme.font_size_base)))
             .child(Button::new(SAVE_ID).primary().small().label(t!("capture.save").to_string()).on_click(move |_, w, cx| save(w, cx)))
     }

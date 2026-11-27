@@ -64,9 +64,11 @@ impl InsightsPanel {
             let click = Rc::clone(&open);
             let tip = tr(&format!("insights.view.{}", view.key()));
             segment_pill(segment, theme, move |window, cx| click(window, cx))
+                .flex_auto()
+                .flex_shrink_0()
                 .tooltip(move |window, cx| gpui_kit::component::tooltip::Tooltip::new(tip.clone()).build(window, cx))
                 .keyboard_stop(theme, open)
         });
-        segmented_track(theme).flex_wrap().children(pills) // sb F3: twelve views wrap onto a second row when they do not fit
+        segmented_track(theme).flex_wrap().children(pills) // sb F3: tabs keep their full names and wrap onto a second row when they do not fit
     }
 }

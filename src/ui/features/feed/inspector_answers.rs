@@ -2,6 +2,7 @@
 //! with Accept on the user's own question. A locked question lists none.
 
 use super::inspector::InspectorContext;
+use crate::domain::views::rapid_log::one_line;
 use crate::domain::Post;
 use crate::state::AppState;
 use crate::ui::features::data::{render_answers, AnswerRow, OpenAnswer};
@@ -14,7 +15,8 @@ pub(crate) fn answer_rows(state: &AppState, question: &Post) -> Vec<AnswerRow> {
     let rows = state.ranked_answers(&question.id).into_iter().filter_map(|answer| {
         let reply = state.get_post(&answer.post)?;
         let author = state.author_of(reply).name.clone();
-        Some(AnswerRow { accepted: accepted.as_ref() == Some(&answer.post), excerpt: state.resolve_wikilink_fast(answer.post.as_str()), post: answer.post, author })
+        let excerpt = if reply.is_locked() { rust_i18n::t!("posts.lock.locked").to_string() } else { one_line(reply) };
+        Some(AnswerRow { accepted: accepted.as_ref() == Some(&answer.post), excerpt, post: answer.post, author })
     });
     rows.collect()
 }

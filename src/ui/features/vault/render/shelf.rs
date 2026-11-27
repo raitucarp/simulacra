@@ -53,7 +53,7 @@ impl VaultPanel {
                     .font_weight(FontWeight::SEMIBOLD)
                     .text_color(theme.text_primary)
                     .line_height(relative(theme.line_height_body))
-                    .line_clamp(2)
+                    .line_clamp(2).text_ellipsis()
                     .child(doc.title.clone()),
             )
             .child(div().text_size(theme.font_size_xs).text_color(theme.text_secondary).truncate().child(first_creator(doc)))

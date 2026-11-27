@@ -6,7 +6,7 @@
 //! Organizes raw human thoughts into distinct network domains grounded by
 //! knowledge documents (NotebookLM style) and populated by autonomous personas.
 
-rust_i18n::i18n!("locales", fallback = "en");
+rust_i18n::i18n!("locales", fallback = "en", backend = crate::i18n::VisualArabic::default()); // T21: Arabic drawn right to left
 
 pub mod agent;
 pub mod domain;

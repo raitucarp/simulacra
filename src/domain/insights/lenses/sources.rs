@@ -8,6 +8,7 @@ use crate::domain::graph::excerpt;
 use crate::domain::insights::filter::InsightsFilter;
 use crate::domain::insights::report::EXCERPT_CHARS;
 use crate::domain::learning::concept::{concept_key, concepts_of, dedup};
+use crate::domain::post::readable_line;
 use crate::domain::review::{Anchor, ReviewItem, Subject};
 use crate::domain::NetworkId;
 use jiff::Timestamp;
@@ -59,7 +60,7 @@ pub struct Source {
 pub fn all(input: &LensInput, analysed: &Analysed, filter: &InsightsFilter) -> Vec<Source> {
     let since = filter.range.days().map(|days| input.now - crate::time::days(days));
     let admits = |network: &NetworkId, at: Timestamp| (filter.all_networks || network == &input.network) && since.is_none_or(|since| at >= since);
-    let posts = analysed.posts.iter().map(|post| Source { kind: SourceKind::Post, id: post.id.as_str().to_string(), day: analysed.day(post.created_at), excerpt: excerpt(&post.content, EXCERPT_CHARS), concepts: concepts_of(&post.content) });
+    let posts = analysed.posts.iter().map(|post| Source { kind: SourceKind::Post, id: post.id.as_str().to_string(), day: analysed.day(post.created_at), excerpt: excerpt(&readable_line(&post.content), EXCERPT_CHARS), concepts: concepts_of(&post.content) });
     let documents = input.documents.iter().filter(|doc| admits(&doc.network_id, doc.created_at)).map(|doc| {
         let labels = doc.record.subjects.iter().filter_map(|id| input.subjects.iter().find(|(s, _)| s == id).map(|(_, label)| concept_key(label)));
         let concepts = dedup(concepts_of(&format!("{}{TEXT_JOINT}{}", doc.title, doc.record.description)).into_iter().chain(labels));

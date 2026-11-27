@@ -69,7 +69,7 @@ fn render_column(fork: &PostId, at: usize, column: &LineColumn, input: &ViewInpu
     let theme = input.theme;
     let title = match &column.label {
         None => t!("posts.branch.main").to_string(),
-        Some(label) => t!("posts.branch.chip", label = label.clone()).to_string(),
+        Some(label) => crate::ui::features::post::what_if_text(label),
     };
     let edge = if column.label.is_some() { theme.accent_dialectic } else { theme.border_subtle };
     let head = div().text_size(theme.font_size_2xs).font_weight(FontWeight::SEMIBOLD).text_color(theme.text_secondary).child(title);

@@ -70,8 +70,8 @@ fn row(item: &ScheduledRow, on_event: &DataAction, theme: &ThemeTokens) -> Div {
         .rounded(theme.radius_md)
         .border(theme.border_width_hairline)
         .border_color(theme.border_subtle)
-        .child(div().font_family(theme.font_family_mono.clone()).text_size(theme.font_size_2xs).text_color(theme.text_muted).child(when))
-        .child(div().text_size(theme.font_size_xs).line_clamp(EXCERPT_LINES).text_color(theme.text_primary).child(item.text.clone()))
+        .child(div().text_size(theme.font_size_2xs).text_color(theme.text_muted).child(when))
+        .child(div().text_size(theme.font_size_xs).line_clamp(EXCERPT_LINES).text_ellipsis().text_color(theme.text_primary).child(item.text.clone()))
         .child(actions)
 }
 

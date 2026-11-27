@@ -41,6 +41,8 @@ fn preferred_row(pane: &AppearancePanel, handle: &PanelHandle, mode: PaletteMode
         .outline()
         .small()
         .label(name)
+        // The caret says it is a menu, as on every other settings menu button.
+        .dropdown_caret(true)
         .dropdown_menu(move |mut menu, _, _| {
             for (id, label) in &options {
                 let checked = *id == current;

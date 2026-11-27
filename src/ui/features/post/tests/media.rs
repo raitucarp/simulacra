@@ -20,14 +20,14 @@ fn forged(finish: impl FnOnce(&mut Post)) -> Post {
 }
 
 #[test]
-fn a_voice_note_shows_its_name_and_length_but_never_past_a_lock() {
+fn a_voice_note_shows_its_length_but_never_past_a_lock() {
     let mut post = Post::create_with_files("p", "n1", "u1", "", None, None, None, None, None, true).expect("post");
     post.extras.voice = Some(Box::new(note()));
     let shown = super::voice_card::shown_voice(&post).expect("shown");
-    assert_eq!(super::voice_card::voice_label(shown), "take.wav · 0:04");
+    assert_eq!(super::voice_card::voice_label(shown), format!("{} · 0:04", rust_i18n::t!("posts.voice.label")));
     let sealed = forged(|post| post.extras.voice = Some(Box::new(note())));
     assert!(super::voice_card::shown_voice(&sealed).is_none(), "a locked post shows only its placeholder");
-    for key in ["play", "stop_playing", "play_failed"].map(|key| format!("posts.voice.{key}")) {
+    for key in ["play", "label", "stop_playing", "play_failed"].map(|key| format!("posts.voice.{key}")) {
         assert_ne!(rust_i18n::t!(key.as_str()).to_string(), key, "{key} is translated");
     }
 }

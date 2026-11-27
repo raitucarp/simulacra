@@ -26,6 +26,13 @@ impl SidebarSection {
     /// Every section, top to bottom.
     pub const ALL: [SidebarSection; 4] = [Self::Pinned, Self::Recent, Self::Sources, Self::Members];
 
+    /// Whether the section is left out while it has no rows. Pinned and Recent only fill up
+    /// with use, so their empty hints would be permanent clutter; empty Sources and Members
+    /// still tell what the network lacks.
+    pub const fn hides_when_empty(self) -> bool {
+        matches!(self, Self::Pinned | Self::Recent)
+    }
+
     /// Locale key of the section title.
     pub const fn title_key(self) -> &'static str {
         match self {

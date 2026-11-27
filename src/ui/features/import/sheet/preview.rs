@@ -29,6 +29,7 @@ fn unit_row(theme: &ThemeTokens, index: usize, unit: &Unit, label: String, check
         .child(div().text_size(theme.font_size_sm).text_color(text_color).truncate().child(unit.text.replace('\n', LINE_BREAK_MARK)));
     div()
         .id((ROW_ID, index))
+        .w_full()
         .h(theme.import_preview_row_height)
         .px(theme.card_padding)
         .flex()
@@ -62,7 +63,8 @@ impl ImportSheet {
                 })
                 .collect::<Vec<_>>()
         };
-        let list = uniform_list(LIST_ID, self.session.units.len(), rows).h(self.theme.import_preview_height);
+        // Full width, so each row's text is cut with an ellipsis instead of running under the edge.
+        let list = uniform_list(LIST_ID, self.session.units.len(), rows).w_full().h(self.theme.import_preview_height);
         div()
             .rounded(self.theme.radius_md)
             .border(self.theme.border_width_hairline)

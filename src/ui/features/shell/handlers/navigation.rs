@@ -9,25 +9,33 @@ use crate::ui::features::settings::SettingsTab;
 use gpui_kit::*;
 
 impl AppView {
-    /// Switches to `net_id` and keeps the lab selection valid in the new network.
+    /// Switches to `net_id` and keeps the lab selection valid in the new network. A thread
+    /// left open from the previous network closes: it would sit beside a feed it is not in.
     pub(crate) fn select_network(&mut self, net_id: NetworkId, window: &mut Window, cx: &mut Context<Self>) {
         let _ = self.state.switch_network(&net_id);
         self.chrome.is_workspace_open = false;
+        let open_elsewhere = self.feed.selected_thread_post_id.as_ref().and_then(|id| self.state.get_post(id)).is_some_and(|post| post.network_id != net_id);
+        if open_elsewhere {
+            self.feed.selected_thread_post_id = None;
+        }
         let mode = self.current_lab_mode();
         self.ensure_valid_lab_selection(mode, window, cx);
         cx.notify();
     }
 
-    /// Navigates to `tab`; "Appearance" opens the settings modal instead.
+    /// Navigates to `tab`; "Appearance" opens the settings modal instead. A post's atomicity
+    /// sheet closes: it belongs to the place it was opened from.
     pub(crate) fn select_nav(&mut self, tab: NavigationTab, window: &mut Window, cx: &mut Context<Self>) {
         if tab == NavigationTab::Appearance {
             self.revert_settings_draft(window, cx);
             self.chrome.is_settings_open = true;
             self.chrome.active_settings_tab = SettingsTab::Appearance;
+            window.focus(&self.settings_ui.rail_focus, cx);
             cx.notify();
             return;
         }
         self.close_forge(window, cx);
+        self.thinking.atomic_sheet = None;
         self.state.active_tab = tab;
         if tab == NavigationTab::AgentLab {
             self.ensure_valid_lab_selection(LabMode::NetworkAgents, window, cx);

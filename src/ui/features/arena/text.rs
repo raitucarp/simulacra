@@ -7,8 +7,6 @@ use crate::domain::thinking::argument::Standing;
 use jiff::Timestamp;
 use rust_i18n::t;
 
-/// How saved records show their time.
-const STAMP_FORMAT: &str = "%Y-%m-%d %H:%M";
 
 /// A translated key.
 pub fn tr(key: &str) -> String {
@@ -57,5 +55,5 @@ pub fn scenario_problem_text(problem: ScenarioProblem) -> String {
 
 /// A time in the user's local zone.
 pub fn stamp(at: Timestamp) -> String {
-    crate::time::local(at).strftime(STAMP_FORMAT).to_string()
+    crate::ui::format::date_time(at)
 }

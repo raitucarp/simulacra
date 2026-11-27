@@ -11,8 +11,6 @@ use gpui_kit::*;
 use crate::ui::features::vault::text::tr;
 use rust_i18n::t;
 
-/// Date format of the "added" row.
-const ADDED_FORMAT: &str = "%Y-%m-%d";
 const LIST_JOINER: &str = ", ";
 
 /// (label key, value) rows of `doc`, empty values left out.
@@ -26,7 +24,7 @@ fn metadata_rows(doc: &GroundingDocument) -> Vec<(&'static str, String)> {
         (record.extent.words > 0).then(|| t!("vault.minutes_read", minutes = reading_minutes(record.extent.words)).to_string()),
     ];
     let added_by = record.provenance.added_by.trim();
-    let added = doc.created_at.strftime(ADDED_FORMAT).to_string();
+    let added = crate::ui::format::date(crate::time::local(doc.created_at).date());
     let origin = tr(format!("vault.origin.{}", record.provenance.origin.key()));
     let source = record.provenance.source.trim();
     vec![

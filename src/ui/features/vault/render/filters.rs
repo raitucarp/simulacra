@@ -29,7 +29,7 @@ impl VaultPanel {
             div()
                 .id(CLEAR_FILTERS_ID)
                 .text_size(theme.font_size_xs)
-                .text_color(theme.accent_brand)
+                .text_color(theme.accent_brand_text)
                 .cursor_pointer()
                 .on_click(cx.listener(|this, _, _, cx| this.clear_filters(cx)))
                 .child(t!("vault.clear_filters").to_string())

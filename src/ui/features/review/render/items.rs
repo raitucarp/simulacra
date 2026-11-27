@@ -79,7 +79,7 @@ impl ReviewPanel {
                     .flex()
                     .flex_col()
                     .gap(theme.spacing_3xs)
-                    .child(div().text_size(theme.font_size_sm).text_color(theme.text_primary).line_clamp(PROMPT_LINES).child(self.item_headline(item)))
+                    .child(div().text_size(theme.font_size_sm).text_color(theme.text_primary).line_clamp(PROMPT_LINES).text_ellipsis().child(self.item_headline(item)))
                     .child(div().truncate().text_size(theme.font_size_2xs).text_color(theme.text_muted).child(self.item_meta(item))),
             )
             .when(!item.retired, |row| row.child(edit).child(toggle))

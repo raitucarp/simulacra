@@ -4,8 +4,6 @@ use crate::domain::beliefs::{BeliefSource, Credence, Revision, RevisionCause};
 use jiff::Timestamp;
 use rust_i18n::t;
 
-/// How revisions show their time.
-const STAMP_FORMAT: &str = "%Y-%m-%d %H:%M";
 
 pub fn tr(key: &str) -> String {
     t!(key).to_string()
@@ -17,7 +15,7 @@ pub fn credence_text(credence: Credence) -> String {
 }
 
 pub fn stamp(at: Timestamp) -> String {
-    crate::time::local(at).strftime(STAMP_FORMAT).to_string()
+    crate::ui::format::date_time(at)
 }
 
 /// "From a debate: Cars", or "Set by you".

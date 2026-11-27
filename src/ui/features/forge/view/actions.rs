@@ -63,20 +63,24 @@ impl ForgeView {
 
     /// Opens `step`, autosaving pending edits first.
     pub fn go_to(&mut self, step: ForgeStep, window: &mut Window, cx: &mut Context<Self>) {
-        if step == self.draft.step() || !self.draft.go_to(step) {
+        let leaving = self.draft.step();
+        if step == leaving || !self.draft.go_to(step) {
             return;
         }
+        self.left_steps.insert(leaving);
         self.entered_step(window, cx);
     }
 
     /// "Next": marks the step complete and opens the following one.
     pub fn next(&mut self, window: &mut Window, cx: &mut Context<Self>) {
+        self.left_steps.insert(self.draft.step());
         if self.draft.advance() {
             self.entered_step(window, cx);
         }
     }
 
     pub fn back(&mut self, window: &mut Window, cx: &mut Context<Self>) {
+        self.left_steps.insert(self.draft.step());
         if self.draft.back() {
             self.entered_step(window, cx);
         }

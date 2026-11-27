@@ -18,11 +18,12 @@ pub(in crate::ui::features::settings) fn section(header: impl IntoElement, body:
     div().flex().flex_col().gap(theme.spacing_sm).child(header).child(body)
 }
 
-/// Bordered card surface laid out as a vertical stack (caller adds the gap).
+/// Bordered card surface laid out as a vertical stack (caller adds the gap); its corners match
+/// the cards of the settings rows.
 pub(in crate::ui::features::settings) fn card(theme: &ThemeTokens) -> Div {
     div()
         .p(theme.card_padding)
-        .rounded(theme.radius_md)
+        .rounded(theme.radius_lg)
         .bg(theme.bg_card)
         .border(theme.border_width_hairline)
         .border_color(theme.border)

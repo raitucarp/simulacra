@@ -11,7 +11,6 @@ use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::*;
 
 const SPARK_ITEM_ID_PREFIX: &str = "spark-item";
-const SPARK_TIME_FORMAT: &str = "%H:%M";
 
 fn render_author(author: &Profile, theme: &ThemeTokens) -> Div {
     div()
@@ -51,10 +50,9 @@ fn render_item_header(post: &Post, author: &Profile, theme: &ThemeTokens) -> Div
         .child(
             div()
                 .flex_none()
-                .font_family(theme.font_family_mono.clone())
                 .text_size(theme.font_size_label)
                 .text_color(theme.text_muted)
-                .child(post.created_at.strftime(SPARK_TIME_FORMAT).to_string()),
+                .child(crate::ui::format::post_stamp(post.created_at)),
         )
 }
 

@@ -73,6 +73,8 @@ pub struct LearningUi {
     pub tutor_unticked: Vec<usize>,
     pub goals: GoalsScreen,
     pub new_goal_days: u32,
+    /// Create was clicked with a problem left: the problem shows from then on.
+    pub goal_tried: bool,
     /// Weekly review actions left unticked (by index).
     pub weekly_unticked: Vec<usize>,
     /// The goal the weekly review's actions go to.

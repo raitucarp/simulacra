@@ -22,7 +22,7 @@ pub fn render_obsidian_pill(target_id: &str, theme: &ThemeTokens) -> impl IntoEl
         .bg(theme.bg_elevated)
         .border(theme.border_width_hairline)
         .border_color(theme.border_subtle)
-        .font_family(theme.font_family_mono.clone())
+        .font_family(theme.font_family_ui.clone())
         .text_size(theme.font_size_xs)
         .font_weight(gpui_kit::FontWeight::MEDIUM)
         .text_color(theme.accent_user)
@@ -32,17 +32,17 @@ pub fn render_obsidian_pill(target_id: &str, theme: &ThemeTokens) -> impl IntoEl
         .child(target_id.trim().to_string())
 }
 
-/// Renders a hashtag span with tokenized styling.
+/// Renders a hashtag as coloured text in the line, the size of the prose around it: a filled
+/// chip per tag turned every post into a row of boxes.
 pub fn render_hashtag_span(tag: &str, theme: &ThemeTokens) -> impl IntoElement {
     let hover_bg = theme.hover_bg;
     let clean_tag = tag.trim_start_matches(HASHTAG_PREFIX);
     div()
-        .px(theme.spacing_xs)
-        .py(theme.spacing_2xs)
-        .rounded(theme.radius_sm)
-        .bg(theme.hover_bg)
+        .px(theme.spacing_3xs)
+        .rounded(theme.radius_xs)
         .font_family(theme.font_family_ui.clone())
-        .text_size(theme.font_size_xs)
+        .text_size(theme.font_size_md)
+        .line_height(gpui_kit::relative(theme.line_height_body))
         .font_weight(gpui_kit::FontWeight::MEDIUM)
         .text_color(theme.accent_agent)
         .cursor_pointer()

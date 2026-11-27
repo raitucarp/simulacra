@@ -10,6 +10,7 @@ use crate::domain::{Post, PostId};
 use crate::theme::ThemeTokens;
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::{Icon, Sizable};
+use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::*;
 use rust_i18n::t;
 
@@ -24,16 +25,18 @@ pub(crate) fn mind_lines<L: PostLookup>(post: &Post, lookup: L) -> Option<Vec<St
 fn opener(target: Option<PostId>, part: &str, post: &Post, handlers: &PostCardHandlers, row: Div) -> Div {
     let Some(target) = target else { return row };
     let on_open = handlers.on_open_post.clone();
-    div().w_full().child(row.id(SharedString::from(format!("mind-{part}-{}", post.id))).cursor_pointer().on_click(move |_, window, cx| on_open(target.clone(), window, cx)))
+    div().min_w_0().child(row.id(SharedString::from(format!("mind-{part}-{}", post.id))).cursor_pointer().on_click(move |_, window, cx| on_open(target.clone(), window, cx)))
 }
 
 /// The banner of a post that changed the user's mind; `None` for every other post.
 pub(super) fn render_mind_banner<L: PostLookup>(post: &Post, lookup: L, theme: &ThemeTokens, handlers: &PostCardHandlers) -> Option<Div> {
     let lines = mind_lines(post, lookup)?;
-    let head = div().flex().items_center().gap(theme.inline_gap).font_weight(FontWeight::SEMIBOLD).text_color(theme.accent_dialectic).child(Icon::new(LucideIcon::RefreshCw).xsmall().text_color(theme.accent_dialectic)).child(t!("posts.mind.banner").to_string());
-    let body = lines.into_iter().map(|line| div().min_w_0().text_color(theme.text_primary).child(line));
-    let banner = div().w_full().flex().flex_col().gap(theme.spacing_3xs).px(theme.spacing_sm).py(theme.spacing_xs).rounded(theme.radius_md).bg(theme.bg_callout).border_l(theme.border_width_threadline).border_color(theme.accent_dialectic).text_size(theme.font_size_xs).child(head).children(body);
     let target = post.extras.mind_change.as_ref().and_then(|change| change.revises.clone()).filter(|id| lookup.find_post(id.as_str()).is_some_and(|old| !old.is_locked()));
+    // The revised post is quoted on one line: the banner points at it, a click opens it whole.
+    let revises_at = target.as_ref().map(|_| lines.len() - 1);
+    let head = div().flex().items_center().gap(theme.inline_gap).font_weight(FontWeight::SEMIBOLD).text_color(theme.accent_dialectic).child(Icon::new(LucideIcon::RefreshCw).xsmall().text_color(theme.accent_dialectic)).child(t!("posts.mind.banner").to_string());
+    let body = lines.into_iter().enumerate().map(|(at, line)| div().min_w_0().text_color(theme.text_primary).when(revises_at == Some(at), |row| row.truncate()).child(line));
+    let banner = div().w_full().flex().flex_col().gap(theme.spacing_3xs).px(theme.spacing_sm).py(theme.spacing_xs).rounded(theme.radius_md).bg(theme.bg_callout).border_l(theme.border_width_threadline).border_color(theme.accent_dialectic).text_size(theme.font_size_xs).child(head).children(body);
     Some(opener(target, "banner", post, handlers, banner))
 }
 

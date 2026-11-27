@@ -26,6 +26,9 @@ pub(super) fn render_audience_badge<L: PostLookup>(post: &Post, lookup: L, theme
     let text = audience_text(post, name_of)?;
     let icon = if matches!(post.extras.audience.as_deref(), Some(Audience::Agents { agents }) if !agents.is_empty()) { LucideIcon::Users } else { LucideIcon::EyeOff };
     let badge = div()
+        .max_w_full()
+        .min_w_0()
+        .overflow_hidden()
         .flex()
         .items_center()
         .gap(theme.inline_gap)

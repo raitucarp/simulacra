@@ -9,7 +9,6 @@ use super::super::events::LearningEvent;
 use super::super::render::{bullet, chip, section_label};
 use super::weekly::{action_label, WEEKLY_GAPS};
 use crate::domain::learning::goals::edit::with_tasks;
-use crate::domain::post::{WIKILINK_CLOSE, WIKILINK_OPEN};
 use crate::domain::review::quiz::piece_text;
 use crate::i18n::t_count;
 use crate::ui::icons::LucideIcon;
@@ -35,8 +34,7 @@ impl ReviewPanel {
         let theme = &self.theme;
         let digest = &self.data.learning.digest;
         let recalled = digest.recalled.iter().take(LOOK_BACK_ROWS).filter_map(|id| self.data.item(id)).map(|item| bullet(self.item_line(item), theme.accent_success, theme));
-        let plain = |text: String| text.replace(WIKILINK_OPEN, "").replace(WIKILINK_CLOSE, "");
-        let posts = digest.posts.iter().take(LOOK_BACK_ROWS).filter_map(|id| self.data.post_text(id)).map(|text| bullet(piece_text(&plain(text), POST_CHARS), theme.accent_dialectic, theme));
+        let posts = digest.posts.iter().take(LOOK_BACK_ROWS).filter_map(|id| self.data.post_text(id)).map(|text| bullet(piece_text(&text, POST_CHARS), theme.accent_dialectic, theme));
         let concepts = digest.concepts.iter().enumerate().map(|(index, (concept, count))| chip(ElementId::NamedInteger(CONCEPT_ID_PREFIX.into(), index as u64), format!("{concept} · {count}"), false, theme));
         let quiet = (digest.reviews == 0 && digest.posts_written == 0).then(|| caption(tr("learning.weekly.quiet"), theme));
         div()

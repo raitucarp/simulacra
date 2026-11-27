@@ -70,7 +70,7 @@ impl VaultPanel {
                     .font_family(theme.font_family_display.clone())
                     .text_size(theme.font_size_xl)
                     .font_weight(FontWeight::BOLD)
-                    .text_color(theme.accent_brand)
+                    .text_color(theme.accent_brand_text)
                     .child(letter.letter.to_string()),
             )
             .child(div().flex_1().min_w_0().flex().flex_col().gap(theme.spacing_xs).children(letter.entries.into_iter().map(|e| self.render_index_entry(e, cx))))

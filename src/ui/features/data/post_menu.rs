@@ -11,8 +11,6 @@ use crate::domain::PostId;
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::menu::{PopupMenu, PopupMenuItem};
 use gpui_kit::component::Icon;
-use gpui_kit::*;
-use rust_i18n::t;
 use std::collections::{HashMap, HashSet};
 use std::rc::Rc;
 
@@ -94,10 +92,10 @@ impl DataControls {
         !self.history_open
     }
 
-    /// The card's edited mark: the version it shows (`v1.2.0`, V8), or "edited" when the
-    /// number is unknown; `None` before any edit.
+    /// The card's edited mark, "edited" (V8); `None` before any edit. The version number
+    /// (`v1.2.0`) reads as software jargon on a thought, so it stays in the history sheet.
     pub fn edited_mark(&self) -> Option<String> {
-        (self.revisions > 0).then(|| self.version.map_or_else(|| tr("data.edited"), crate::ui::features::composer::version_label))
+        (self.revisions > 0).then(|| tr("data.edited"))
     }
 }
 
@@ -106,7 +104,7 @@ pub(super) fn item(label: String, icon: LucideIcon, event: DataEvent, on_event: 
     PopupMenuItem::new(label).icon(Icon::new(icon)).on_click(move |_, window, cx| on_event(event.clone(), window, cx))
 }
 
-fn collections_submenu(menu: PopupMenu, controls: &DataControls) -> PopupMenu {
+pub(super) fn collections_submenu(menu: PopupMenu, controls: &DataControls) -> PopupMenu {
     let post = &controls.post_id;
     let menu = controls.collections.iter().fold(menu, |menu, (id, name)| {
         let member = controls.member_of.contains(id);
@@ -116,32 +114,4 @@ fn collections_submenu(menu: PopupMenu, controls: &DataControls) -> PopupMenu {
     });
     let menu = if controls.collections.is_empty() { menu } else { menu.separator() };
     menu.item(item(tr("data.menu.new_collection"), LucideIcon::FolderPlus, DataEvent::NewCollectionFor(post.clone()), &controls.on_event))
-}
-
-/// `menu` with the post's data items (unchanged when the host offers none).
-pub fn with_data_items(menu: PopupMenu, controls: Option<&DataControls>, window: &mut Window, cx: &mut Context<PopupMenu>) -> PopupMenu {
-    let Some(controls) = controls.cloned() else { return menu };
-    let post = controls.post_id.clone();
-    let mut menu = menu.separator();
-    if controls.own {
-        menu = menu.item(item(tr("data.menu.edit"), LucideIcon::Pencil, DataEvent::EditPost(post.clone()), &controls.on_event));
-        menu = super::lifecycle_menu::with_lifecycle_items(menu, &controls, window, cx); // Y5, Y6
-        menu = super::state_menu::with_state_items(menu, &controls, window, cx); // S7
-        menu = super::garden_menu::with_garden_items(menu, &controls, window, cx); // N3
-        menu = super::idea_menu::with_idea_items(menu, &controls, window, cx); // N7–N10
-    }
-    menu = super::care_menu::with_care_items(menu, &controls); // N11–N15
-    menu = super::thought_menu::with_thought_items(menu, &controls, window, cx); // N16–N20
-    if controls.revisions > 0 {
-        let label = t!("data.menu.history", count = controls.revisions).to_string();
-        menu = menu.item(item(label, LucideIcon::RotateCcwClock, DataEvent::OpenPostHistory(post.clone()), &controls.on_event));
-    }
-    if !controls.locked {
-        menu = menu.item(item(tr("post.margin.menu"), LucideIcon::MessageSquareReply, DataEvent::ReplyInMargin(post.clone()), &controls.on_event)); // N2
-        menu = menu.item(item(tr("posts.branch.menu"), LucideIcon::GitBranch, DataEvent::Branch(super::branch_sheet::BranchEvent::Fork(post.clone())), &controls.on_event)); // N6
-    }
-    let (label, icon) = if controls.bookmarked { (tr("data.menu.unbookmark"), LucideIcon::BookmarkCheck) } else { (tr("data.menu.bookmark"), LucideIcon::Bookmark) };
-    let menu = menu.item(item(label, icon, DataEvent::ToggleBookmark(post), &controls.on_event));
-    let icon = Some(Icon::new(LucideIcon::FolderPlus));
-    menu.submenu_with_icon(icon, tr("data.menu.add_to_collection"), window, cx, move |submenu, _, _| collections_submenu(submenu, &controls))
 }

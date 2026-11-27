@@ -12,8 +12,6 @@ use crate::ui::features::post::render_post_body;
 use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::*;
 
-/// How a post's time reads on its face.
-const TIME_FORMAT: &str = "%b %-d, %Y · %H:%M";
 const META_SEPARATOR: &str = "·";
 
 /// Whether a face is asked or shown as the answer (the answer is emphasised).
@@ -26,7 +24,7 @@ pub enum FaceRole {
 /// A post exactly as the stream shows its author row and body.
 pub fn render_post_face(view: &PostView, theme: &ThemeTokens) -> Div {
     let (post, author) = (&view.post, &view.author);
-    let time = post.created_at.strftime(TIME_FORMAT).to_string();
+    let time = crate::ui::format::date_time(post.created_at);
     let meta = div()
         .flex()
         .flex_wrap()
@@ -35,14 +33,14 @@ pub fn render_post_face(view: &PostView, theme: &ThemeTokens) -> Div {
         .child(div().font_family(theme.font_family_display.clone()).text_size(theme.font_size_sm).font_weight(FontWeight::SEMIBOLD).text_color(theme.text_primary).child(author.name.clone()))
         .child(div().text_size(theme.font_size_xs).text_color(theme.text_muted).child(author.handle.clone()))
         .child(div().font_family(theme.font_family_mono.clone()).text_size(theme.font_size_xs).text_color(theme.text_muted).child(format!("{META_SEPARATOR} {time}")));
-    let none: &[Post] = &[];
+    let linked: &[Post] = &view.linked;
     div()
         .w_full()
         .flex()
         .items_start()
         .gap(theme.spacing_md)
         .child(render_profile_avatar(author, theme.avatar_size_lg, theme))
-        .child(div().flex_1().min_w_0().flex().flex_col().gap(theme.spacing_xs).child(meta).child(div().w_full().child(render_post_body(&post.content, none, theme))))
+        .child(div().flex_1().min_w_0().flex().flex_col().gap(theme.spacing_xs).child(meta).child(div().w_full().child(render_post_body(&post.content, linked, theme))))
 }
 
 /// A passage as a quoted callout: the text, then the document's title and place.

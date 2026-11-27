@@ -101,7 +101,7 @@ impl ForgeView {
         let service = kind.map(CredentialKind::label).unwrap_or_default();
         let matching: Vec<&Credential> = store.items.iter().filter(|c| kind.is_none_or(|k| c.kind == k)).collect();
         let first = (tr(if kind.is_some() { AUTO_KEY } else { NONE_KEY }), String::new(), None);
-        let options = std::iter::once(first).chain(matching.iter().map(|c| (c.label.clone(), c.masked_secret(), Some(c.id.clone()))));
+        let options = std::iter::once(first).chain(matching.iter().map(|c| (c.shown_label(), c.masked_secret(), Some(c.id.clone()))));
         let pick = handle.engine(set);
         let cells = options
             .enumerate()

@@ -1,5 +1,6 @@
 //! Unsaved AI-provider choices of the open settings modal: they only reach the store on Save.
 
+use crate::agent::credentials::{CredentialKind, CredentialStore};
 use crate::agent::{LlmProvider, LlmSettings};
 
 /// `(api key, model, endpoint)` as typed into the settings inputs.
@@ -64,4 +65,14 @@ impl SettingsDraft {
     pub fn discard(&mut self) {
         self.draft = None;
     }
+}
+
+/// The key the API key input shows once `provider` is picked: the saved key for the saved
+/// provider, otherwise the first stored credential of that service (blank without one), so
+/// one service's key never sits under another's name.
+pub fn provider_key(saved: &LlmSettings, credentials: &CredentialStore, provider: LlmProvider) -> String {
+    if provider == saved.provider {
+        return saved.api_key.clone();
+    }
+    credentials.first_of(CredentialKind::from_provider(provider)).map(|stored| stored.secret.clone()).unwrap_or_default()
 }

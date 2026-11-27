@@ -94,7 +94,7 @@ fn render_provider_label(theme: &ThemeTokens, provider: LlmProvider, is_selected
                 .child(provider.to_string()),
         )
         .when(provider == LlmProvider::Gemini, |this| {
-            this.child(div().text_size(theme.font_size_micro).text_color(theme.accent_brand).child(t!("settings.provider_recommended").to_string()))
+            this.child(div().text_size(theme.font_size_micro).text_color(theme.accent_brand_text).child(t!("settings.provider_recommended").to_string()))
         })
 }
 

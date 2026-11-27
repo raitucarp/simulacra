@@ -1,4 +1,4 @@
-//! Modal footer: the format toolbar and post options hint, and the primary post (or
+//! Modal footer: the format toolbar and post options, and the primary post (or
 //! "post all") button.
 
 use super::super::consts::MODAL_SUBMIT_POST_BTN_ID;
@@ -15,9 +15,17 @@ use gpui_kit::prelude::FluentBuilder;
 use super::ComposerModalView;
 use gpui_kit::base::Disableable;
 use gpui_kit::component::button::{Button, ButtonVariants};
-use gpui_kit::component::Sizable;
+use gpui_kit::component::{Selectable, Sizable};
 use gpui_kit::*;
 use rust_i18n::t;
+
+/// Id of the button unfolding the tint and symbol rows.
+const STYLE_BTN_ID: &str = "composer-style-toggle";
+
+/// The "Style" button, lit while the tint and symbol rows show.
+fn style_button(open: bool, on_toggle: super::ModalActionCallback) -> Button {
+    Button::new(STYLE_BTN_ID).ghost().small().selected(open).icon(gpui_kit::component::Icon::new(crate::ui::icons::LucideIcon::Palette)).tooltip(t!("composer.style_toggle").to_string()).on_click(move |_, window, cx| on_toggle(window, cx))
+}
 
 /// Id scope of the modal's format buttons.
 const MODAL_FORMAT_SCOPE: &str = "modal";
@@ -36,16 +44,20 @@ impl ComposerModalView {
             .flex()
             .items_center()
             .justify_between()
+            .gap(theme.control_gap)
+            // The tools give way; the post button never leaves the dialog
             .child(self.footer_tools())
             .child(
-                Button::new(MODAL_SUBMIT_POST_BTN_ID)
-                    .primary()
-                    .small()
-                    .disabled(!can_post)
-                    .label(label.to_string())
-                    .on_click(move |_, window, cx| {
-                        (on_submit_btn)(window, cx);
-                    }),
+                div().flex_none().child(
+                    Button::new(MODAL_SUBMIT_POST_BTN_ID)
+                        .primary()
+                        .small()
+                        .disabled(!can_post)
+                        .label(label.to_string())
+                        .on_click(move |_, window, cx| {
+                            (on_submit_btn)(window, cx);
+                        }),
+                ),
             )
     }
 
@@ -81,22 +93,23 @@ impl ComposerModalView {
     }
 
     /// The preview toggle, the format toolbar (acting on the last focused draft; hidden while
-    /// previewing) and the audience hint.
+    /// previewing) and the post options (the audience line sits in the header).
     fn footer_tools(&self) -> Div {
         let theme = &self.theme;
-        let hint = div().text_size(theme.font_size_xs).text_color(theme.text_muted).child(t!("composer.post_options").to_string());
         let toggle = preview_button(MODAL_FORMAT_SCOPE, self.preview, self.callbacks.on_toggle_preview.clone());
         div()
+            .flex_1()
+            .min_w_0()
             .flex()
             .items_center()
             .gap(theme.control_gap)
             .child(toggle)
             .when(!self.preview, |row| row.child(format_buttons(MODAL_FORMAT_SCOPE, self.callbacks.on_format.clone(), theme)))
+            .child(style_button(self.style_open, self.callbacks.on_toggle_style.clone()))
             .when(self.can_schedule(), |row| row.child(schedule_button(self.schedule.is_some(), self.callbacks.on_toggle_schedule.clone())))
             .when(!self.is_editing(), |row| row.child(lock_button(self.lock.is_some(), self.callbacks.on_toggle_lock.clone()))) // X3
             .when(!self.is_editing(), |row| row.child(feeling_button(self.feeling.is_some(), self.callbacks.on_toggle_feeling.clone()))) // M2
             .when(!self.is_editing(), |row| row.child(free_button(self.free.is_some(), self.callbacks.on_toggle_free.clone()))) // T2
             .child(todo_help_button(self.todo_help, self.callbacks.on_toggle_todo_help.clone())) // D1
-            .child(hint)
     }
 }

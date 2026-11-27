@@ -19,6 +19,8 @@ pub struct Picker {
     pub posts: Vec<PostView>,
     /// Posts gathered for a map, in the order picked.
     pub picked: Vec<PostId>,
+    /// The tab it was opened from: it stays lit, and Back returns there.
+    pub from: Screen,
 }
 
 /// Whether `view` matches every word of `query` (in its text, author name or handle).
@@ -35,9 +37,18 @@ impl Picker {
 }
 
 impl ReviewPanel {
+    /// The header tab of the current screen; the picker keeps the tab it was opened from.
+    pub fn tab(&self) -> Screen {
+        match (self.screen, &self.picker) {
+            (Screen::Picker, Some(picker)) => picker.from,
+            (screen, _) => Screen::TABS.into_iter().find(|tab| tab.key() == screen.key()).unwrap_or(Screen::Items),
+        }
+    }
+
     /// Opens the picker over `posts` (newest first).
     pub fn open_picker(&mut self, mode: PickerMode, posts: Vec<PostView>, window: &mut Window, cx: &mut Context<Self>) {
-        self.picker = Some(Picker { mode, posts, picked: Vec::new() });
+        let from = self.tab();
+        self.picker = Some(Picker { mode, posts, picked: Vec::new(), from });
         self.fields.search.update(cx, |input, cx| {
             input.set_value("", window, cx);
             input.focus(window, cx);

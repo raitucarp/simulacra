@@ -4,7 +4,7 @@ use super::edges::RawGraph;
 use super::label::{excerpt, LABEL_MAX_CHARS};
 use super::resolve::Lookup;
 use super::{GraphEdge, GraphModel, GraphNode, NodeRef};
-use crate::domain::post::HASHTAG_SIGIL;
+use crate::domain::post::{readable_line, HASHTAG_SIGIL};
 use crate::domain::{GroundingDocument, NetworkId, Post, Profile};
 use std::collections::HashMap;
 
@@ -42,9 +42,9 @@ impl GraphSource<'_> {
     }
 }
 
-/// Label of a post node: its excerpt, or the author's name for text-less reposts.
+/// Label of a post node: its excerpt read as text, or the author's name for text-less reposts.
 fn post_label(post: &Post, lookup: &Lookup<'_>) -> String {
-    let text = excerpt(&post.content, LABEL_MAX_CHARS);
+    let text = excerpt(&readable_line(&post.content), LABEL_MAX_CHARS);
     if text.is_empty() {
         excerpt(&lookup.author_name(&post.author_id), LABEL_MAX_CHARS)
     } else {

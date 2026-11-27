@@ -63,7 +63,8 @@ fn node<'a>(post: &'a Post, depth: usize, replies_of: &impl Fn(&PostId) -> Vec<&
     let replies = if depth < MAX_OUTLINE_DEPTH { replies_of(&post.id) } else { Vec::new() };
     let fresh: Vec<&Post> = replies.into_iter().filter(|reply| seen.insert(reply.id.clone())).collect();
     let children = fresh.into_iter().map(|reply| node(reply, depth + 1, replies_of, author_of, seen)).collect();
-    let text = post.content.split_whitespace().collect::<Vec<_>>().join(" ");
+    // As a reader says it: no markup, no `[[post_…]]` ids.
+    let text = crate::domain::post::readable_line(&post.content);
     OutlineNode { id: post.id.clone(), author: author_of(post), text, tint: post.extras.tint, symbol: post.extras.symbols.face().map(|face| face.primary), children }
 }
 

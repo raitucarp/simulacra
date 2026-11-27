@@ -37,7 +37,7 @@ fn tab(key: &str, active: bool, theme: &ThemeTokens, pick: ActionCallback) -> St
             div()
                 .text_size(theme.font_size_sm)
                 .font_weight(if active { FontWeight::BOLD } else { FontWeight::MEDIUM })
-                .text_color(if active { theme.accent_brand } else { theme.text_primary })
+                .text_color(if active { theme.accent_brand_text } else { theme.text_primary })
                 .child(tr(&category_label_key(key))),
         )
 }

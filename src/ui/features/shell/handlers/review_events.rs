@@ -37,7 +37,7 @@ impl AppView {
 
     /// `post` with its author, as the stream shows it.
     pub(in crate::ui::features::shell) fn post_view(&self, id: &str) -> Option<PostView> {
-        self.state.get_post_by_id(id).map(|post| PostView { post: post.clone(), author: self.state.author_of(post).clone() })
+        self.state.get_post_by_id(id).map(|post| PostView::of(&self.state, post))
     }
 
     /// Views of the posts `items` refer to (anchors and map points).
@@ -108,7 +108,7 @@ impl AppView {
 
     /// The picker over the network's posts, newest first.
     pub(in crate::ui::features::shell) fn open_review_picker(&mut self, mode: PickerMode, window: &mut Window, cx: &mut Context<Self>) {
-        let mut posts: Vec<PostView> = self.state.current_network_posts().filter(|post| !post.is_instant_repost()).map(|post| PostView { post: post.clone(), author: self.state.author_of(post).clone() }).collect();
+        let mut posts: Vec<PostView> = self.state.current_network_posts().filter(|post| !post.is_instant_repost()).map(|post| PostView::of(&self.state, post)).collect();
         posts.sort_by_key(|a| std::cmp::Reverse(a.post.created_at));
         posts.truncate(PICKER_POSTS);
         self.review.panel.update(cx, |panel, cx| panel.open_picker(mode, posts, window, cx));

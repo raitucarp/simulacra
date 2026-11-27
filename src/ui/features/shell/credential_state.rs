@@ -24,11 +24,11 @@ pub struct CredentialInputs {
 impl CredentialInputs {
     /// Empty inputs with their placeholders; the form starts closed.
     pub(super) fn new(window: &mut Window, cx: &mut App) -> Self {
-        let mut input = |placeholder: String| cx.new(|cx| InputState::new(window, cx).placeholder(placeholder));
+        let mut input = |placeholder: String, masked: bool| cx.new(|cx| InputState::new(window, cx).masked(masked).placeholder(placeholder));
         Self {
-            label: input(t!("settings.credentials_label_placeholder").to_string()),
-            secret: input(t!("settings.api_key_placeholder").to_string()),
-            endpoint: input(t!("settings.credentials_endpoint_placeholder").to_string()),
+            label: input(t!("settings.credentials_label_placeholder").to_string(), false),
+            secret: input(t!("settings.api_key_placeholder").to_string(), true),
+            endpoint: input(t!("settings.credentials_endpoint_placeholder").to_string(), false),
             editing: None,
         }
     }

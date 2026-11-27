@@ -71,10 +71,26 @@ pub fn is_compact(positions: &[usize]) -> bool {
     }
 }
 
-/// Title match (highlighted, compact) or keyword match (a literal substring, lower), plus the
-/// use bonus.
+/// Whether a group's titles are prose (a post, a document, a journal entry): there, letters
+/// strung through other words ("spin" in "spring") are noise, so only the typed text counts.
+fn is_prose(group: PaletteGroup) -> bool {
+    matches!(group, PaletteGroup::Posts | PaletteGroup::Documents | PaletteGroup::Journal)
+}
+
+/// Whether `title` holds every word of `text` as typed (case-insensitive; the fuzzy match
+/// already keeps them in order).
+fn holds_literally(title: &str, text: &str) -> bool {
+    let title = title.to_lowercase();
+    text.split_whitespace().all(|word| title.contains(&word.to_lowercase()))
+}
+
+/// Title match (highlighted, compact; literal for prose) or keyword match (a literal
+/// substring, lower), plus the use bonus.
 fn score_item(item: &PaletteItem, text: &str, history: &PaletteHistory) -> Option<(i32, Vec<usize>)> {
-    let title = fuzzy_match(text, &item.title).filter(|found| is_compact(&found.positions)).map(|found| (found.score, found.positions));
+    let title = fuzzy_match(text, &item.title)
+        .filter(|found| is_compact(&found.positions))
+        .filter(|_| !is_prose(item.group) || holds_literally(&item.title, text))
+        .map(|found| (found.score, found.positions));
     let keywords = || {
         let literal = item.keywords.to_lowercase().contains(&text.to_lowercase());
         literal.then(|| fuzzy_match(text, &item.keywords)).flatten().map(|found| (found.score - KEYWORD_PENALTY, Vec::new()))

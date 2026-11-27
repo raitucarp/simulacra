@@ -61,13 +61,16 @@ pub(super) fn handles(ctx: &SuggestContext) -> Vec<Example> {
     let words: Vec<String> = first.trim_start_matches('@').split(HANDLE_JOINER).map(str::to_string).collect();
     let initial = words.first().and_then(|word| word.chars().next()).map(String::from).unwrap_or_default();
     let tail = words.iter().skip(1).cloned().collect::<Vec<_>>().join(HANDLE_JOINER);
-    let derived = vec![
-        first.clone(),
-        format!("@{}", words.concat()),
-        format!("@{initial}{}", if tail.is_empty() { words.concat() } else { tail.clone() }),
-        format!("@{}", words.first().cloned().unwrap_or_default()),
+    // A one-word name has no initial + surname form ("@hhypatia"); the handle already typed is
+    // not offered again.
+    let derived = [
+        Some(first.clone()),
+        Some(format!("@{}", words.concat())),
+        (!tail.is_empty()).then(|| format!("@{initial}{tail}")),
+        Some(format!("@{}", words.first().cloned().unwrap_or_default())),
     ];
-    padded(derived, &FALLBACK_HANDLES)
+    let typed = format!("@{}", ctx.profile.handle.trim().trim_start_matches('@'));
+    padded(derived.into_iter().flatten().filter(|handle| *handle != typed).collect(), &FALLBACK_HANDLES)
 }
 
 /// One- and two-letter initials of the name.

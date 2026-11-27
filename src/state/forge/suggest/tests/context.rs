@@ -59,6 +59,15 @@ fn handles_and_initials_come_from_the_name() {
 }
 
 #[test]
+fn a_one_word_name_gets_no_doubled_initial_and_the_typed_handle_is_not_offered() {
+    let mut draft = agent();
+    draft.edit(DraftEdit::Text(TextField::Name, "Hypatia".into()));
+    draft.edit(DraftEdit::Text(TextField::Handle, "hypatia".into()));
+    let handles = texts(Param::Text(TextField::Handle), &draft);
+    assert!(!handles.iter().any(|handle| handle == "@hhypatia" || handle == "@hypatia"), "{handles:?}");
+}
+
+#[test]
 fn tritypes_start_at_the_core_with_one_digit_per_center() {
     let draft = with(TraitValue::Enneagram(crate::domain::traits::EnneagramType::Type5w4));
     for tritype in texts(Param::Text(TextField::Tritype), &draft) {

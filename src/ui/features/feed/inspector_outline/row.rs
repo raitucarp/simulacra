@@ -91,7 +91,7 @@ fn render_text(row: &OutlineRow, marks: RowMarks, theme: &ThemeTokens) -> Div {
         .max_w(theme.outline_author_max_width)
         .truncate()
         .text_size(theme.font_size_xs)
-        .text_color(if marks.is_inspected { theme.accent_brand } else { theme.text_muted })
+        .text_color(if marks.is_inspected { theme.accent_brand_text } else { theme.text_muted })
         .child(row.author.clone());
     let folded = (row.collapsed && row.hidden > 0).then(|| {
         div().flex_none().line_height(line).text_size(theme.font_size_2xs).text_color(theme.text_muted).font_family(theme.font_family_mono.clone()).child(format!("+{}", row.hidden))

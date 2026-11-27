@@ -58,8 +58,14 @@ impl TextField {
         tr(format!("vault.field.{}", self.key()))
     }
 
+    /// The field's hint. Sample values read "e.g. 1677": shown bare, they looked like data
+    /// already filled in. The publisher's hint says what goes there instead.
     pub fn placeholder(self) -> String {
-        tr(format!("vault.hint.{}", self.key()))
+        let hint = tr(format!("vault.hint.{}", self.key()));
+        match self {
+            Self::Publisher => hint,
+            _ => rust_i18n::t!("vault.hint.example", example = hint).to_string(),
+        }
     }
 
     /// The draft value of this field.

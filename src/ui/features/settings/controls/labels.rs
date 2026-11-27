@@ -42,7 +42,7 @@ fn option_group(field: SettingField) -> Option<&'static str> {
 pub(super) fn option_label(field: SettingField, key: &str) -> String {
     match option_group(field) {
         Some(group) => tr(&format!("{OPTION_PREFIX}.{group}.{key}")),
-        None => Language::from_key(key).map_or_else(|| key.to_string(), |language| language.native_label().to_string()),
+        None => Language::from_key(key).map_or_else(|| key.to_string(), |language| language.display_label().into_owned()),
     }
 }
 

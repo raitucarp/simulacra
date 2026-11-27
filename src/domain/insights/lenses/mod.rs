@@ -28,6 +28,7 @@ use super::filter::InsightsFilter;
 use super::report::{PostSummary, EXCERPT_CHARS};
 use crate::domain::document::SubjectId;
 use crate::domain::graph::excerpt;
+use crate::domain::post::readable_line;
 use crate::domain::readability::ReadingLanguage;
 use crate::domain::{GroundingDocument, NetworkId, Post, Profile};
 use jiff::Timestamp;
@@ -123,5 +124,5 @@ pub fn analyse<'a>(input: &'a LensInput, filter: &InsightsFilter) -> Analysed<'a
 }
 
 fn summary(post: &Post, author: usize) -> PostSummary {
-    PostSummary { id: post.id.clone(), author, kind: PostKind::of(post), excerpt: excerpt(&post.content, EXCERPT_CHARS), created_at: post.created_at }
+    PostSummary { id: post.id.clone(), author, kind: PostKind::of(post), excerpt: excerpt(&readable_line(&post.content), EXCERPT_CHARS), created_at: post.created_at }
 }

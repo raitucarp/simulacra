@@ -1,6 +1,7 @@
-//! sb F3: the meter row under a draft: a small bar filled to the draft's ease (0–100, in its
-//! band's colour), the band and ease, the formula with its value (and the grade level for
-//! English), the formula's source on hover, and a dismiss button. Muted on purpose.
+//! sb F3: the readability meter in a draft's meter row, on one line: a small bar filled to the
+//! draft's ease (0–100, in its band's colour) and the band ("Very easy"); on hover the ease,
+//! the formula with its value (and the grade level for English) and its source; and a dismiss
+//! button. Muted on purpose, and it never pushes the composer down when it appears (Q12).
 
 use super::super::modal::ModalActionCallback;
 use crate::domain::readability::Readability;
@@ -37,27 +38,20 @@ pub fn render_readability_meter(view: &ReadabilityMeterView, theme: &ThemeTokens
     let score = &view.score;
     let colour = band_colour(score.band, theme);
     let headline = t!("insight.meter.headline", band = band_label(score.band), ease = ease_text(score.ease)).to_string();
-    let source = t!("insight.meter.source", source = formula_source(score.formula)).to_string();
+    // The formula and its source sit in the tooltip: the meter row is shared with the
+    // atomic-note hint and the character count, and the band says enough at a glance.
+    let source = format!("{headline}
+{}
+{}", score_detail(score), t!("insight.meter.source", source = formula_source(score.formula)));
     let on_dismiss = view.on_dismiss.clone();
     let dismiss = Button::new(DISMISS_ID).ghost().xsmall().icon(Icon::new(LucideIcon::X)).tooltip(t!("insight.meter.dismiss").to_string()).on_click(move |_, window, cx| on_dismiss(window, cx));
-    let text = div()
-        .flex_1()
-        .min_w_0()
-        .flex()
-        .flex_wrap()
-        .items_center()
-        .gap(theme.inline_gap)
-        .child(div().text_size(theme.font_size_2xs).font_weight(FontWeight::SEMIBOLD).text_color(theme.text_secondary).child(headline))
-        .child(div().text_size(theme.font_size_2xs).text_color(theme.text_muted).child(score_detail(score)));
+    let text = div().flex_none().text_size(theme.font_size_2xs).font_weight(FontWeight::SEMIBOLD).text_color(theme.text_secondary).child(band_label(score.band));
     div()
         .id(ROW_ID)
-        .w_full()
+        .flex_none()
         .flex()
         .items_center()
         .gap(theme.inline_gap)
-        .px(theme.spacing_sm)
-        .py(theme.spacing_3xs)
-        .rounded(theme.radius_md)
         .tooltip(move |window, cx| Tooltip::new(source.clone()).build(window, cx))
         .child(Icon::new(LucideIcon::BookOpen).size(theme.icon_size_sm).text_color(theme.text_muted))
         .child(bar(score.ease, colour, theme))

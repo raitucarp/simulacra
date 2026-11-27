@@ -89,7 +89,7 @@ impl ForgeView {
                     .flex()
                     .items_baseline()
                     .gap(theme.spacing_sm)
-                    .child(div().text_size(theme.font_size_2xs).font_weight(FontWeight::BOLD).text_color(theme.accent_brand).child(counter))
+                    .child(div().text_size(theme.font_size_2xs).font_weight(FontWeight::BOLD).text_color(theme.accent_brand_text).child(counter))
                     .child(div().text_size(theme.font_size_lg).font_weight(FontWeight::BOLD).child(tr(&step.label_key()))),
             )
             .child(muted(tr(&step.tagline_key()), theme).truncate())

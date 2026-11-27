@@ -9,6 +9,8 @@ pub(super) fn apply_responsive_layout(t: &mut ThemeTokens) {
     set_tokens!(t {
         // Below the medium width the layout is compact; from the wide width on it is wide
         layout_medium_min_width: px(900.0), layout_wide_min_width: px(1280.0),
+        // The right panel opens by itself only from this width on (four columns need the room)
+        right_panel_auto_min_width: px(1600.0),
         right_sidebar_medium_width: px(272.0), right_sidebar_medium_max: px(340.0),
         right_drawer_width: px(320.0),
         inspector_stacked_height: px(220.0), inspector_stacked_min: px(120.0), inspector_stacked_max: px(480.0),

@@ -35,7 +35,7 @@ pub(crate) fn render_inspector_header(theme: &ThemeTokens, replies_count: Option
                 .min_w_0()
                 .items_center()
                 .gap(theme.spacing_sm)
-                .child(Icon::new(LucideIcon::MessageSquare).size(theme.font_size_md).text_color(theme.accent_brand))
+                .child(Icon::new(LucideIcon::MessageSquare).size(theme.font_size_md).text_color(theme.accent_brand_text))
                 .child(
                     div()
                         .min_w_0()
@@ -69,7 +69,6 @@ fn render_replies_pill(count: usize, theme: &ThemeTokens) -> Div {
         .py(theme.spacing_2xs)
         .rounded(theme.radius_sm)
         .bg(theme.hover_bg)
-        .font_family(theme.font_family_mono.clone())
         .text_size(theme.font_size_xs)
         .font_weight(FontWeight::MEDIUM)
         .text_color(theme.text_secondary)

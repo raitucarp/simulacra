@@ -35,7 +35,7 @@ pub fn render_scored_row(
         .gap(theme.spacing_3xs)
         .child(heading)
         .when(!excerpt.is_empty() && excerpt != title, |col| {
-            col.child(div().text_size(theme.font_size_xs).text_color(theme.text_secondary).line_clamp(2).child(excerpt.to_string()))
+            col.child(div().text_size(theme.font_size_xs).text_color(theme.text_secondary).line_clamp(2).text_ellipsis().child(excerpt.to_string()))
         });
     div()
         .id(SharedString::from(format!("{ROW_ID_PREFIX}{index}")))

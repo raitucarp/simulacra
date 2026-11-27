@@ -6,7 +6,7 @@ use super::palette::{categorical, contrast, mix, sequential, series, MIN_MARK_CO
 use super::projection::{fit_of, project};
 use super::scale::{BandScale, LinearScale, RadialScale};
 use super::spatial::SpatialGrid;
-use super::ticks::{compact, nice_ticks, percent};
+use super::ticks::{compact, count_ticks, nice_ticks, percent};
 use super::tooltip::placement;
 use crate::theme::ThemeTokens;
 use crate::ui::features::mind_graph::viewport::{Frame, Viewport};
@@ -40,6 +40,9 @@ fn ticks_and_labels() {
     assert_eq!(nice_ticks(9.0, 4), vec![0.0, 5.0, 10.0]);
     assert_eq!(nice_ticks(37.0, 4), vec![0.0, 10.0, 20.0, 30.0, 40.0]);
     assert_eq!(nice_ticks(0.0, 4), vec![0.0, 1.0]);
+    assert_eq!(count_ticks(2.0, 4), vec![0.0, 1.0, 2.0]);
+    assert_eq!(count_ticks(1.0, 4), vec![0.0, 1.0]);
+    assert_eq!(count_ticks(37.0, 4), nice_ticks(37.0, 4));
     assert_eq!(compact(12.0), "12");
     assert_eq!(compact(1_500.0), "1.5k");
     assert_eq!(compact(25_000.0), "25k");

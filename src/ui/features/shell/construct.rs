@@ -99,11 +99,12 @@ impl AppView {
     }
 }
 
-/// Points the render-side globals at the store: the interface language, the vault folder
-/// (relative avatar photos), the active palette (themed illustrations) and the icon store
+/// Points the render-side globals at the store: the interface language and date settings,
+/// the vault folder (relative avatar photos), the active palette (themed illustrations) and the icon store
 /// (custom symbols).
 fn register_render_globals(state: &AppState) {
     crate::i18n::set_locale(state.preferences().general.language);
+    crate::ui::format::set_clock(crate::ui::format::Clock::of(&state.preferences().general));
     crate::storage::avatars::register_vault_dir(state.vault_dir());
     let _ = crate::ui::illustration::set_active_palette(&state.theme_settings.effective_palette().colors);
     crate::ui::assets::set_symbol_store(Some(state.symbols_dir())); // S14: custom symbols

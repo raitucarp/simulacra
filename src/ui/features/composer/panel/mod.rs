@@ -8,7 +8,7 @@ mod actions;
 mod atomic;
 mod drafts;
 mod edit; // sb F2: edit mode
-mod files; mod format; mod host; mod media; mod preview; mod readability; pub mod readability_meter; mod render; mod schedule; mod symbols; mod version; mod free; mod todo; mod lock; mod feeling; #[cfg(test)] mod tests; // T2: free compose; sb F3: the readability meter; posts B: formatting; D1: to-do help; L12: file chips
+mod files; mod format; mod host; mod media; mod preview; mod readability; pub mod readability_meter; mod render; mod schedule; mod symbols; mod version; mod free; mod todo; mod style; mod lock; mod feeling; #[cfg(test)] mod tests; // T2: free compose; sb F3: the readability meter; posts B: formatting; D1: to-do help; L12: file chips
 
 use super::consts::MODAL_LINK_PLACEHOLDER;
 use super::modal::ComposerModalMode;
@@ -84,7 +84,7 @@ pub struct ComposerModalPanel {
     readability: readability::ReadabilityState, // sb F3: the readability meter
     /// Drafts shown through the post body renderer instead of their editors.
     preview: bool, free: free::FreeCompose, // T2: the first editor is free compose text, one post per line
-    tint: Option<Tint>, // sb C3: the picked container tint
+    tint: Option<Tint>, style_open: bool, // sb C3: the picked container tint; the tint and symbol rows unfolded
     schedule: schedule::SchedulePicker, // Y3: the "Schedule…" picker
     symbols: symbols::SymbolPicker, // S5: the symbol picker
     version: version::VersionPicker, todo: todo::TodoAssist, files: files::ComposerFiles, lock: lock::LockPicker, feeling: feeling::FeelingPicker, // M2; V3: the bump and note of an edit; D1: to-do help; L12: attached files; X3: "Lock with password"
@@ -121,7 +121,7 @@ impl ComposerModalPanel {
             error: None,
             theme,
             profile,
-            atomic: Default::default(), readability: Default::default(), preview: false, free: Default::default(), tint: None, schedule, symbols, version, todo: Default::default(), files: Default::default(), lock, feeling, _subscriptions: Vec::new(),
+            atomic: Default::default(), readability: Default::default(), preview: false, free: Default::default(), tint: None, style_open: false, schedule, symbols, version, todo: Default::default(), files: Default::default(), lock, feeling, _subscriptions: Vec::new(),
         };
         panel._subscriptions = panel.subscribe(window, cx);
         panel.drafts.push(panel.new_draft_slot(window, cx));

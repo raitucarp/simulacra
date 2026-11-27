@@ -1,15 +1,16 @@
-//! Overview card of the selected profile: portrait, identity, a glimpse of the biography and
-//! the actions (Edit in Forge, use persona / run a turn, delete).
+//! Overview card of the selected profile, as wide as its other tabs: portrait beside the
+//! identity, the biography and the actions (Edit in Forge, use persona / run a turn, remove).
 
-use super::params::{ProfileTab, RosterCallbacks, RosterParams};
+use super::params::{ProfileCallback, ProfileTab, RosterCallbacks, RosterParams};
 use super::profile_tabs::{beliefs_column, profile_tabs};
 use super::recommended::recommended_column;
-use crate::domain::Profile;
+use crate::domain::{Profile, ProfileId};
 use crate::theme::ThemeTokens;
 use crate::ui::atoms::render_profile_avatar;
 use crate::ui::components::{meta_badge, mono_tag, BadgeColors};
 use crate::ui::icons::LucideIcon;
-use gpui_kit::component::button::{Button, ButtonVariants};
+use gpui_kit::component::button::{Button, ButtonVariant, ButtonVariants};
+use gpui_kit::component::WindowExt;
 use gpui_kit::component::scroll::ScrollableElement;
 use gpui_kit::*;
 use rust_i18n::t;
@@ -33,22 +34,24 @@ fn identity(profile: &Profile, active_persona: bool, theme: &ThemeTokens) -> Div
         let colors = BadgeColors::new(theme.accent_success, theme.accent_success_subtle, theme.accent_success_border);
         meta_badge(&t!("lab.active_persona_badge"), colors, theme)
     });
-    div()
+    let text = div()
+        .flex_1()
+        .min_w_0()
         .flex()
         .flex_col()
-        .items_center()
         .gap(theme.spacing_xs)
-        .child(render_profile_avatar(profile, theme.forge_portrait_size * PORTRAIT_SCALE, theme))
         .child(div().text_size(theme.font_size_xl).font_weight(FontWeight::BOLD).child(profile.name.clone()))
         .child(div().text_size(theme.font_size_sm).text_color(theme.text_muted).child(profile.display_handle()))
         .child(div().flex().gap(theme.spacing_xs).child(mono_tag(profile.config.mbti.code(), accent, theme)).children(active))
-        .children((!meta.is_empty()).then(|| div().text_size(theme.font_size_sm).text_color(theme.text_secondary).child(meta.join(META_SEPARATOR))))
+        .children((!meta.is_empty()).then(|| div().text_size(theme.font_size_sm).text_color(theme.text_secondary).child(meta.join(META_SEPARATOR))));
+    div().flex().items_center().gap(theme.section_gap).child(render_profile_avatar(profile, theme.forge_portrait_size * PORTRAIT_SCALE, theme)).child(text)
 }
 
 fn actions(profile: &Profile, callbacks: &RosterCallbacks) -> Div {
     let id = profile.id.clone();
     let (edit, delete) = (callbacks.edit.clone(), callbacks.delete.clone());
     let (edit_id, delete_id, action_id) = (id.clone(), id.clone(), id);
+    let name = profile.name.clone();
     let primary = if profile.is_agent() {
         let run = callbacks.trigger_agent.clone();
         Button::new(PRIMARY_ACTION_ID).outline().icon(LucideIcon::Zap).label(t!("trigger.open").to_string()).on_click(move |_, w, cx| run(action_id.clone(), w, cx))
@@ -59,10 +62,27 @@ fn actions(profile: &Profile, callbacks: &RosterCallbacks) -> Div {
     div()
         .flex()
         .flex_wrap()
-        .justify_center()
         .child(Button::new(EDIT_ID).primary().icon(LucideIcon::Edit).label(t!("lab.edit_in_forge").to_string()).on_click(move |_, w, cx| edit(edit_id.clone(), w, cx)))
         .child(primary)
-        .child(Button::new(DELETE_ID).ghost().icon(LucideIcon::Trash).tooltip(t!("lab.delete_tooltip").to_string()).on_click(move |_, w, cx| delete(delete_id.clone(), w, cx)))
+        .child(Button::new(DELETE_ID).ghost().icon(LucideIcon::Trash).tooltip(t!("lab.delete_tooltip").to_string()).on_click(move |_, w, cx| confirm_remove(name.clone(), delete_id.clone(), delete.clone(), w, cx)))
+}
+
+/// Asks before removing a profile: it leaves the roster for good (its posts stay).
+fn confirm_remove(name: String, id: ProfileId, delete: ProfileCallback, window: &mut Window, cx: &mut App) {
+    window.open_alert_dialog(cx, move |alert, _, _| {
+        let (id, delete) = (id.clone(), delete.clone());
+        alert
+            .confirm()
+            .title(t!("lab.delete_title", name = name).to_string())
+            .description(t!("lab.delete_desc").to_string())
+            .ok_text(t!("lab.delete_ok").to_string())
+            .ok_variant(ButtonVariant::Danger)
+            .cancel_text(t!("composer.cancel").to_string())
+            .on_ok(move |_, window, cx| {
+                delete(id.clone(), window, cx);
+                true
+            })
+    });
 }
 
 pub(super) fn render_overview(profile: &Profile, params: &RosterParams<'_>, callbacks: &RosterCallbacks) -> impl IntoElement {
@@ -72,11 +92,11 @@ pub(super) fn render_overview(profile: &Profile, params: &RosterParams<'_>, call
         div().text_size(theme.font_size_sm).text_color(theme.text_muted).line_height(relative(theme.line_height_body)).child(profile.config.bio.clone())
     });
     let card = div()
-        .w(theme.forge_trading_card_width)
+        .w_full()
+        .max_w(theme.reader_measure_width)
         .p(theme.panel_padding)
         .flex()
         .flex_col()
-        .items_center()
         .gap(theme.section_gap)
         .rounded(theme.radius_xl)
         .bg(theme.bg_card)

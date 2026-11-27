@@ -60,7 +60,7 @@ impl ReviewPanel {
             TutorPhase::AwaitingAnswer if !self.data.learning.tutor.is_running(&session.id) => self.render_answer_box(session, cx).into_any_element(),
             _ => self.render_request_status(session, cx).into_any_element(),
         };
-        let column = div().w_full().max_w(theme.review_card_max_width).flex().flex_col().gap(theme.section_gap).child(head);
+        let column = div().w_full().flex().flex_col().gap(theme.section_gap).child(head);
         match session.phase() == TutorPhase::Finished {
             true => column.child(below).children(earlier).children(exchanges),
             false => column.children(earlier).children(exchanges).child(below),

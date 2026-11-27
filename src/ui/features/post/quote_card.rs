@@ -2,7 +2,7 @@
 
 use super::body::BodyLinks;
 use super::checklist::render_post_content;
-use super::consts::{META_SEPARATOR, QUOTE_CARD_ID_PREFIX, TIME_FORMAT};
+use super::consts::{META_SEPARATOR, QUOTE_CARD_ID_PREFIX};
 use super::controls::OpenPostAction;
 use super::lookup::PostLookup;
 use crate::domain::{Post, Profile, ProfileRole};
@@ -64,7 +64,7 @@ fn render_quoted_card<L: PostLookup>(
 }
 
 fn render_quoted_meta(quoted: &Post, author: &Profile, theme: &ThemeTokens) -> Div {
-    let quoted_time = quoted.created_at.strftime(TIME_FORMAT).to_string();
+    let quoted_time = crate::ui::format::post_stamp(quoted.created_at);
     let quoted_is_agent = matches!(author.role, ProfileRole::Agent { .. });
     div()
         .flex()
@@ -81,8 +81,8 @@ fn render_quoted_meta(quoted: &Post, author: &Profile, theme: &ThemeTokens) -> D
         )
         .child(small_meta(theme, theme.font_family_ui.clone()).child(author.handle.clone()))
         .when(quoted_is_agent, |this| this.child(render_role_badge(&author.role, theme)))
-        .child(small_meta(theme, theme.font_family_mono.clone()).child(META_SEPARATOR))
-        .child(small_meta(theme, theme.font_family_mono.clone()).child(quoted_time))
+        .child(small_meta(theme, theme.font_family_ui.clone()).child(META_SEPARATOR))
+        .child(small_meta(theme, theme.font_family_ui.clone()).child(quoted_time))
 }
 
 /// Muted extra-small metadata text in the given font family.
@@ -113,7 +113,6 @@ fn render_quote_unavailable(quote_id: &str, theme: &ThemeTokens) -> Div {
         )
         .child(
             div()
-                .font_family(theme.font_family_mono.clone())
                 .text_size(theme.font_size_xs)
                 .text_color(theme.text_muted)
                 .child(rust_i18n::t!("post.quote_unavailable", id = quote_id).to_string()),

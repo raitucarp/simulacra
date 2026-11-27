@@ -43,15 +43,24 @@ pub(super) fn render_mind_changes(input: &ViewInput<'_>) -> AnyElement {
     scroll_column(input, "mind-changes").children(rows.iter().map(|row| render_row(row, input))).into_any_element()
 }
 
+/// The revised post is quoted, not read: a couple of lines, quieter than what was thought.
+const REVISED_LINES: usize = 2;
+
 fn side(label: &str, lines: Vec<String>, input: &ViewInput<'_>) -> Div {
     let theme = input.theme;
     let texts = lines.into_iter().filter(|line| !line.is_empty()).map(|line| div().min_w_0().text_size(theme.font_size_xs).text_color(theme.text_primary).child(line));
     div().flex_1().min_w_0().flex().flex_col().gap(theme.spacing_3xs).child(section_heading(t!(label).to_string(), theme)).children(texts)
 }
 
+fn revised_quote(row: &MindRow, input: &ViewInput<'_>) -> Option<Div> {
+    let theme = input.theme;
+    let text = row.revised.clone().filter(|text| !text.is_empty())?;
+    Some(div().min_w_0().line_clamp(REVISED_LINES).text_ellipsis().text_size(theme.font_size_xs).text_color(theme.text_muted).child(t!("posts.mind.revises", post = text).to_string()))
+}
+
 fn render_row(row: &MindRow, input: &ViewInput<'_>) -> Stateful<Div> {
     let theme = input.theme;
-    let before = side("views.mind_changes.before", vec![row.was.clone(), row.revised.clone().unwrap_or_default()], input);
+    let before = side("views.mind_changes.before", vec![row.was.clone()], input).children(revised_quote(row, input));
     let hover = theme.hover_bg;
     div()
         .id(input.id(format!("mind-change-{}", row.post_id)))

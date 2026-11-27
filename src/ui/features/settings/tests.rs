@@ -21,13 +21,14 @@ fn the_dialog_always_fits_inside_the_window() {
 }
 
 #[test]
-fn long_paths_keep_their_start_and_end() {
-    use super::controls::path::elide_middle;
-    assert_eq!(elide_middle("C:/short", 20, 4), "C:/short");
+fn long_paths_keep_their_folder_and_file() {
+    use super::controls::path::{elide_start, home_relative};
+    assert_eq!(elide_start("C:/short", 20), "C:/short");
     let long = "C:/Users/someone/AppData/Roaming/simulacra/simulacra.db";
-    let shown = elide_middle(long, 24, 6);
-    assert_eq!(shown.chars().count(), 24);
-    assert!(shown.starts_with("C:/Use") && shown.ends_with("simulacra.db") && shown.contains('…'));
+    assert_eq!(elide_start(long, 30), "…/simulacra/simulacra.db");
+    assert_eq!(elide_start("C:/a/averyveryverylongfilename.db", 12), "…filename.db", "a lone long name is cut");
+    assert_eq!(home_relative(long, Some("C:/Users/someone")), "~/AppData/Roaming/simulacra/simulacra.db");
+    assert_eq!(home_relative("C:/Users/someoneelse/x", Some("C:/Users/someone")), "C:/Users/someoneelse/x");
 }
 
 #[test]

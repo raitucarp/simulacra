@@ -99,3 +99,19 @@ fn indexing_end_to_end_against_a_mock_gemini_server() {
     assert_eq!(requests[0].json()["requests"][0]["taskType"], "RETRIEVAL_DOCUMENT");
     assert_eq!(requests[1].json()["requests"][0]["taskType"], "RETRIEVAL_QUERY");
 }
+
+#[test]
+fn a_post_excerpt_reads_as_text() {
+    let mut state = state();
+    let id = state.submit_post("Is prediction modelling? [[post_2]] #Semiotics\n[ ] reread Gravity and Grace ^fri !!").expect("post");
+    let scored = vec![ScoredOwner { owner: EmbeddingOwner::post(&id), score: 0.8, best_chunk: 0 }];
+    let hits = hits_for(&state, &scored, spec());
+    assert!(!hits[0].excerpt.contains("[[") && !hits[0].excerpt.contains("^fri"), "{}", hits[0].excerpt);
+    assert!(hits[0].excerpt.contains("reread Gravity and Grace"), "{}", hits[0].excerpt);
+}
+
+#[test]
+fn a_document_excerpt_drops_markdown_line_marks() {
+    let text = "# 1 The world as facts\nThe world is everything that is the case.\n> A quoted line\n## Notes";
+    assert_eq!(hits::plain_markdown(text), "1 The world as facts · The world is everything that is the case. A quoted line Notes");
+}

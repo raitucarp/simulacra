@@ -62,7 +62,7 @@ pub(super) fn issue_args(issue: &ValidationIssue, unnamed: &str) -> Vec<(&'stati
 impl ForgeView {
     /// Issues reported on the field with serde name `path`.
     pub(super) fn field_issues(&self, path: &str) -> Vec<&ValidationIssue> {
-        self.issues.iter().filter(|issue| issue.field == path).collect()
+        self.issues.iter().filter(|issue| issue.field == path && self.reveals(issue)).collect()
     }
 
     /// Red / yellow lines under a field for its issues.

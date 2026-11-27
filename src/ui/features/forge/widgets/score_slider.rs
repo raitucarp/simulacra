@@ -78,7 +78,7 @@ impl ScoreSlider {
         let theme = &self.theme;
         let level = div()
             .text_size(theme.font_size_xs)
-            .text_color(theme.accent_brand)
+            .text_color(theme.accent_brand_text)
             .font_weight(FontWeight::SEMIBOLD)
             .child(format!("{} · {shown}", tr(&score_level_key(self.field, shown))));
         let name = div()

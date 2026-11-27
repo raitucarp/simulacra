@@ -54,12 +54,12 @@ impl ReviewPanel {
             .flex_col()
             .gap(theme.stack_gap)
             .child(div().flex().flex_wrap().items_center().gap(theme.control_gap).child(titles).child(pick).child(map))
-            .child(div().max_w(theme.review_card_max_width).child(self.render_tabs(cx)))
+            .child(self.render_tabs(cx))
     }
 
     fn render_tabs(&self, cx: &mut Context<Self>) -> impl IntoElement {
         let theme = &self.theme;
-        let active = self.screen.key();
+        let active = self.tab().key();
         let pills = Screen::TABS.into_iter().map(|screen| {
             let segment = Segment {
                 id: ElementId::Name(format!("{TAB_ID_PREFIX}{}", screen.key()).into()),
@@ -78,7 +78,7 @@ impl ReviewPanel {
 
     /// A tab click: "Today" returns to a running session rather than abandoning it (its
     /// "End" button ends it).
-    fn open_tab(&mut self, screen: Screen, cx: &mut Context<Self>) {
+    pub(super) fn open_tab(&mut self, screen: Screen, cx: &mut Context<Self>) {
         let resume = if screen == Screen::Today && !self.session.is_finished() { Screen::Session } else { screen };
         self.show(resume, cx);
     }

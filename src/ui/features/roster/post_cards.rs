@@ -12,8 +12,6 @@ use crate::ui::features::symbols::render_symbol_face;
 use gpui_kit::*;
 
 const CARD_ID: &str = "profile-post-card-";
-/// How a card's time is written (the same in every language).
-const TIME_FORMAT: &str = "%Y-%m-%d %H:%M";
 
 /// The cards of `posts`, newest first.
 pub(super) fn post_cards(posts: &[&Post], profile: &Profile, state: &AppState, on_open: &OpenPostCallback, theme: &ThemeTokens) -> Div {
@@ -25,7 +23,7 @@ fn card(post: &Post, profile: &Profile, state: &AppState, on_open: &OpenPostCall
         Some(face) => render_symbol_face(post.id.as_str(), &face, theme.contact_avatar_size, theme).into_any_element(),
         None => render_profile_avatar(profile, theme.contact_avatar_size, theme).into_any_element(),
     };
-    let when = crate::time::local(post.created_at).strftime(TIME_FORMAT).to_string();
+    let when = crate::ui::format::post_stamp(post.created_at);
     let head = div().flex().items_center().gap(theme.spacing_xs).child(face).child(div().text_size(theme.font_size_xs).text_color(theme.text_muted).child(when));
     let (on_open, id, hover) = (on_open.clone(), post.id.clone(), theme.hover_bg);
     div()

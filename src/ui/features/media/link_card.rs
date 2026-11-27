@@ -47,7 +47,7 @@ pub(super) fn link_card(url: &str, entry: &PreviewEntry, theme: &ThemeTokens) ->
         .child(site_row(url, &preview.site_name, entry.icon_path.as_deref(), theme))
         .when(!preview.title.is_empty(), |col| col.child(title_text(&preview.title, theme)))
         .when(!preview.description.is_empty(), |col| {
-            col.child(div().text_size(theme.font_size_xs).text_color(theme.text_secondary).line_clamp(DESCRIPTION_LINES).child(preview.description.clone()))
+            col.child(div().text_size(theme.font_size_xs).text_color(theme.text_secondary).line_clamp(DESCRIPTION_LINES).text_ellipsis().child(preview.description.clone()))
         });
     let thumb = entry.image_path.as_ref().map(|path| {
         let still = round_corners(img(PathBuf::from(path)), LEFT_CORNERS, theme.radius_lg).absolute().inset_0().size_full().object_fit(ObjectFit::Cover);
@@ -62,7 +62,7 @@ pub(super) fn title_text(title: &str, theme: &ThemeTokens) -> Div {
         .text_size(theme.font_size_sm)
         .font_weight(FontWeight::SEMIBOLD)
         .text_color(theme.text_primary)
-        .line_clamp(TITLE_LINES)
+        .line_clamp(TITLE_LINES).text_ellipsis()
         .child(title.to_string())
 }
 
@@ -127,7 +127,7 @@ pub(super) fn link_chip(url: &str, is_video: bool, theme: &ThemeTokens) -> State
         .items_center()
         .gap(theme.inline_gap)
         .text_size(theme.font_size_xs)
-        .text_color(theme.accent_brand)
+        .text_color(theme.accent_brand_text)
         .child(Icon::new(icon).size(theme.icon_size_sm))
         .child(div().min_w_0().truncate().child(text))
 }

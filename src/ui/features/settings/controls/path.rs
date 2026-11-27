@@ -9,20 +9,37 @@ use gpui_kit::component::{Icon, Sizable};
 use gpui_kit::*;
 
 const OPEN_PART: &str = "open";
-/// Longest path shown; longer ones keep their start and their end.
-const PATH_MAX_CHARS: usize = 44;
-/// Characters kept from the start of an elided path (the rest of the budget goes to its end).
-const PATH_HEAD_CHARS: usize = 12;
+/// Longest path shown; a longer one keeps its end, from a folder boundary.
+const PATH_MAX_CHARS: usize = 56;
 const ELLIPSIS: char = '…';
+/// How the home folder is written at the start of a path.
+const HOME_MARK: &str = "~";
+const SEPARATORS: [char; 2] = ['\\', '/'];
 
-/// `text` shortened to `max` characters by eliding its middle (pure).
-pub(in crate::ui::features::settings) fn elide_middle(text: &str, max: usize, head: usize) -> String {
-    let chars: Vec<char> = text.chars().collect();
-    if chars.len() <= max {
-        return text.to_string();
+/// The user's home folder, from the environment.
+pub(in crate::ui::features::settings) fn home_dir() -> Option<String> {
+    std::env::var("USERPROFILE").or_else(|_| std::env::var("HOME")).ok()
+}
+
+/// `path` with the home folder written `~`, so the readout keeps to what tells folders
+/// apart (and leaves the account name out of screenshots) (pure).
+pub(in crate::ui::features::settings) fn home_relative(path: &str, home: Option<&str>) -> String {
+    match home.filter(|home| !home.is_empty()).and_then(|home| path.strip_prefix(home)) {
+        Some(rest) if rest.is_empty() || rest.starts_with(SEPARATORS) => format!("{HOME_MARK}{rest}"),
+        _ => path.to_string(),
     }
-    let tail = max.saturating_sub(head + 1);
-    chars[..head].iter().chain(std::iter::once(&ELLIPSIS)).chain(&chars[chars.len() - tail..]).collect()
+}
+
+/// `path` shortened to `max` characters by dropping its start: the end names the folder and
+/// file, so it is kept whole from a separator when one leaves a folder and a file (pure).
+pub(in crate::ui::features::settings) fn elide_start(path: &str, max: usize) -> String {
+    let chars: Vec<char> = path.chars().collect();
+    if chars.len() <= max {
+        return path.to_string();
+    }
+    let tail: String = chars[chars.len() - max.saturating_sub(1)..].iter().collect();
+    let cut = tail.find(SEPARATORS).filter(|&at| tail[at + 1..].contains(SEPARATORS)).unwrap_or(0);
+    format!("{ELLIPSIS}{}", &tail[cut..])
 }
 
 /// The path readout and its "Open folder" button.
@@ -32,7 +49,8 @@ pub(super) fn render(ctx: &RowContext, row: SettingRow, folder: DataFolder) -> A
         DataFolder::Database => &ctx.data.database_path,
         DataFolder::Media => &ctx.data.media_path,
     };
-    let path = elide_middle(path, PATH_MAX_CHARS, PATH_HEAD_CHARS);
+    let full = home_relative(path, home_dir().as_deref());
+    let path = elide_start(&full, PATH_MAX_CHARS);
     let (on_command, command) = (ctx.actions.on_command.clone(), folder.open_command());
     div()
         .flex()
@@ -51,6 +69,7 @@ pub(super) fn render(ctx: &RowContext, row: SettingRow, folder: DataFolder) -> A
                 .small()
                 .icon(Icon::new(LucideIcon::Folder).size(theme.icon_size_sm))
                 .label(label(command))
+                .tooltip(full)
                 .on_click(move |_, window, cx| on_command(command, window, cx)),
         )
         .into_any_element()

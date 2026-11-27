@@ -45,7 +45,7 @@ pub use parse::{HASHTAG_SIGIL, WIKILINK_CLOSE, WIKILINK_OPEN};
 pub use provenance::{PostOrigin, SourceLocator};
 pub use seed::{PostSeed, ResolvedSeed, SeedDocument, TriggerMode};
 pub use tokens::{
-    embed_markup, embed_targets, has_rich_markup, pin_embeds, is_trailing_punctuation, tokenize_post_body, visible_len, visible_text, visible_text_len, wikilink_targets,
+    embed_markup, embed_targets, has_rich_markup, pin_embeds, is_trailing_punctuation, readable_line, tokenize_post_body, visible_len, visible_text, visible_text_len, wikilink_targets,
     BodyToken, Mark, EMBED_OPEN,
 };
 

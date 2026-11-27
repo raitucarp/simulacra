@@ -17,10 +17,10 @@ pub struct LicenceView {
 
 /// The ICON SETS section of the Licences screen.
 pub fn render_licences(theme: &ThemeTokens, licences: &[LicenceView]) -> Div {
-    let mut body = card(theme).gap(theme.spacing_md).child(muted_note(theme, t!("licences.icons.note")));
-    if licences.is_empty() {
-        body = body.child(muted_note(theme, t!("licences.icons.none")));
-    }
+    // With nothing downloaded the card says so alone: "These sets were downloaded…" would
+    // introduce a list that is not there.
+    let intro = if licences.is_empty() { t!("licences.icons.none") } else { t!("licences.icons.note") };
+    let mut body = card(theme).gap(theme.spacing_md).child(muted_note(theme, intro));
     for licence in licences {
         body = body.child(entry(theme, licence));
     }

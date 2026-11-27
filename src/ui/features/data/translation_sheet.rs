@@ -61,7 +61,10 @@ fn send(on_event: &DataAction, event: TranslateEvent) -> impl Fn(&ClickEvent, &m
 pub fn render_words_sheet(dialog: &WordsDialog, on_event: DataAction, theme: &ThemeTokens) -> Stateful<Div> {
     let words = dialog.words.iter().enumerate().map(|(at, word)| {
         let chosen = dialog.chosen.contains(word);
-        Button::new(SharedString::from(format!("{WORD_ID}{at}"))).ghost().small().selected(chosen).label(word.clone()).on_click(send(&on_event, TranslateEvent::ToggleWord(word.clone())))
+        // A picked word carries a tick and the others a plus, as the lens chips do (the selected
+        // tint alone is too faint to scan a row of words by); same width, so nothing shifts.
+        let icon = if chosen { LucideIcon::Check } else { LucideIcon::Plus };
+        Button::new(SharedString::from(format!("{WORD_ID}{at}"))).ghost().small().selected(chosen).icon(Icon::new(icon)).label(word.clone()).on_click(send(&on_event, TranslateEvent::ToggleWord(word.clone())))
     });
     let body = div().flex().flex_col().gap(theme.stack_gap).child(hint(tr("posts.translation.words_explain"), theme)).child(div().flex().flex_wrap().gap(theme.inline_gap).children(words));
     let label = t!("posts.translation.words_send", count = dialog.chosen.len()).to_string();

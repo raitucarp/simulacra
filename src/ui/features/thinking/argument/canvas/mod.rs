@@ -89,7 +89,7 @@ impl ArgumentCanvas {
             .overflow_hidden()
             .when_some(on_node, |c, action| c.cursor_pointer().on_click(move |_, window, cx| action(index, window, cx)))
             .child(header)
-            .child(div().text_size(theme.font_size_2xs).line_height(relative(theme.line_height_body)).text_color(theme.text_primary).line_clamp(CHIP_LINES).child(chip.text.clone()))
+            .child(div().text_size(theme.font_size_2xs).line_height(relative(theme.line_height_body)).text_color(theme.text_primary).line_clamp(CHIP_LINES).text_ellipsis().child(chip.text.clone()))
     }
 }
 

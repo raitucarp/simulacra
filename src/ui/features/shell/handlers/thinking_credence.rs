@@ -6,7 +6,7 @@ use super::super::binder::Binder;
 use super::super::view::AppView;
 use crate::domain::thinking::credence::{clamp_percent, Credence, Outcome};
 use crate::domain::PostId;
-use crate::ui::features::thinking::credence::{CredenceChip, CredenceEvent, CredenceSource};
+use crate::ui::features::thinking::credence::{CredenceChip, CredenceEvent, CredencePane, CredenceSource};
 use jiff::Timestamp;
 use gpui_kit::*;
 use std::rc::Rc;
@@ -16,14 +16,14 @@ impl AppView {
     pub(in crate::ui::features::shell) fn credence_source(&self, bind: &Binder) -> CredenceSource {
         let today = crate::time::local_now().date();
         let chips = self.thinking.credences.iter().map(|(id, credence)| (id.as_str().to_string(), CredenceChip::of(credence, today))).collect();
-        CredenceSource { chips: Rc::new(chips), open: self.thinking.credence_open.clone(), note: self.thinking.note.clone(), on_event: Rc::new(bind.with(Self::on_credence_event)) }
+        CredenceSource { chips: Rc::new(chips), open: self.thinking.credence_open.clone(), pane: CredencePane::Feed, note: self.thinking.note.clone(), on_event: Rc::new(bind.with(Self::on_credence_event)) }
     }
 
     pub(in crate::ui::features::shell) fn on_credence_event(&mut self, event: CredenceEvent, window: &mut Window, cx: &mut Context<Self>) {
         let today = crate::time::local_now().date();
         match event {
-            CredenceEvent::Open(id) => {
-                self.thinking.credence_open = Some(id);
+            CredenceEvent::Open(id, pane) => {
+                self.thinking.credence_open = Some((id, pane));
                 self.thinking.note.update(cx, |input, cx| input.set_value("", window, cx));
             }
             CredenceEvent::Close => self.thinking.credence_open = None,

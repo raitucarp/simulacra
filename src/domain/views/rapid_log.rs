@@ -30,12 +30,13 @@ pub struct LogDay {
     pub entries: Vec<LogEntry>,
 }
 
-/// `post`'s text on one line, whitespace collapsed (empty when locked).
+/// `post`'s text on one line as a reader sees it, markup and post links left out (empty
+/// when locked).
 pub fn one_line(post: &Post) -> String {
     if post.is_locked() {
         return String::new();
     }
-    post.content.split_whitespace().collect::<Vec<_>>().join(" ")
+    crate::domain::post::readable_line(&post.content)
 }
 
 fn entry(post: &Post) -> LogEntry {

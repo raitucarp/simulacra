@@ -37,14 +37,14 @@ pub fn render_credence_chip(controls: &CredenceControls, theme: &ThemeTokens) ->
         .icon(Icon::new(if due { LucideIcon::CalendarClock } else { LucideIcon::Percent }).text_color(colour))
         .label(label)
         .tooltip(tooltip);
-    let (on_event, post_id, content) = (controls.on_event.clone(), post.clone(), controls.clone());
+    let (on_event, post_id, pane, content) = (controls.on_event.clone(), post.clone(), controls.pane, controls.clone());
     let content_theme = theme.clone();
     let popover = Popover::new(SharedString::from(format!("{POPOVER_ID_PREFIX}{post}")))
         .anchor(Anchor::TopRight)
         .trigger(trigger)
         .open(controls.open)
         .on_open_change(move |open, window, cx| {
-            let event = if *open { CredenceEvent::Open(post_id.clone()) } else { CredenceEvent::Close };
+            let event = if *open { CredenceEvent::Open(post_id.clone(), pane) } else { CredenceEvent::Close };
             on_event(event, window, cx)
         })
         .content(move |_, _, _| popover_content(&content.post_id, &content, &content_theme));
@@ -54,7 +54,7 @@ pub fn render_credence_chip(controls: &CredenceControls, theme: &ThemeTokens) ->
 /// `menu` with "Set a credence…" when the post is the user's and has none yet.
 pub fn with_credence_item(menu: PopupMenu, controls: Option<&CredenceControls>) -> PopupMenu {
     let Some(controls) = controls.filter(|c| c.chip.is_none()) else { return menu };
-    let (on_event, post) = (controls.on_event.clone(), controls.post_id.clone());
-    let item = PopupMenuItem::new(tr("thinking.credence.set")).icon(Icon::new(LucideIcon::Percent)).on_click(move |_, window, cx| on_event(CredenceEvent::Open(post.clone()), window, cx));
+    let (on_event, post, pane) = (controls.on_event.clone(), controls.post_id.clone(), controls.pane);
+    let item = PopupMenuItem::new(tr("thinking.credence.set")).icon(Icon::new(LucideIcon::Percent)).on_click(move |_, window, cx| on_event(CredenceEvent::Open(post.clone(), pane), window, cx));
     menu.item(item)
 }

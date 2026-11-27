@@ -57,7 +57,7 @@ impl ReviewPanel {
             LearnTool::Gaps => self.render_gaps(class, cx),
             LearnTool::Palace => self.render_palace(class, cx),
         };
-        div().w_full().flex().flex_col().gap(self.theme.section_gap).child(div().max_w(self.theme.review_card_max_width).child(self.render_tool_switch(cx))).child(body).into_any_element()
+        div().w_full().flex().flex_col().gap(self.theme.section_gap).child(self.render_tool_switch(cx)).child(body).into_any_element()
     }
 
     fn render_tool_switch(&self, cx: &mut Context<Self>) -> impl IntoElement {

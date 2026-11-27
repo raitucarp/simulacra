@@ -3,7 +3,7 @@
 //! per period the concepts mentioned alongside it (a chip picks that concept instead).
 
 use super::super::super::common::{card, card_title, option_chip, tr};
-use super::{period_label, phase_label};
+use super::{period_in_text, period_label, phase_label};
 use crate::domain::graph::NodeRef;
 use crate::domain::insights::lenses::sources::SourceKind;
 use crate::domain::insights::lenses::timeline::{ConceptTimeline, Mention, Phase};
@@ -39,7 +39,7 @@ impl InsightsPanel {
         };
         let (index, concept) = lane;
         let last = if concept.phase == Phase::Dormant { t!("insight.timeline.quiet_since", day = format_day(concept.last_day)) } else { t!("insight.timeline.last_seen", day = format_day(concept.last_day)) };
-        let facts = t!("insight.timeline.facts", first = format_day(concept.first_day), peak = period_label(timeline.periods.start_of(concept.peak), timeline.periods.days), last = last).to_string();
+        let facts = t!("insight.timeline.facts", first = format_day(concept.first_day), peak = period_in_text(timeline.periods.start_of(concept.peak), timeline.periods.days), last = last).to_string();
         let mentions: Vec<&Mention> = timeline.mentions_of(index, range);
         let heading = card(theme).child(card_title(LucideIcon::Target, format!("{} · {}", concept.key, phase_label(concept.phase)), None, theme)).child(summary_line(facts, theme));
         if mentions.is_empty() {

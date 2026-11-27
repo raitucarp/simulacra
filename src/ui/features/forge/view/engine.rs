@@ -61,7 +61,7 @@ impl ForgeView {
 
     /// Whether `section` has an issue of `severity`.
     pub(crate) fn section_has(&self, section: EngineSection, severity: Severity) -> bool {
-        self.issues.iter().any(|issue| issue.field == section.issue_field() && issue.severity == severity)
+        self.issues.iter().any(|issue| issue.field == section.issue_field() && issue.severity == severity && self.reveals(issue))
     }
 
     /// Replaces the credentials after Settings › AI changed them, and re-checks the draft.

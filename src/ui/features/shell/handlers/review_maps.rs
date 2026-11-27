@@ -8,6 +8,7 @@ use crate::domain::document::links::{backlinks, related_entries};
 use crate::domain::review::connections::seed::{map_from_document, map_from_posts, thread_posts, DocumentNeighbourhood};
 use crate::domain::review::connections::{ConnectionMap, MapPoint, MAX_POINTS};
 use crate::domain::review::item::{new_map_item, NewItemContext};
+use crate::domain::post::readable_line;
 use crate::domain::review::quiz::piece_text;
 use crate::domain::review::{ItemId, ReviewItem, Subject};
 use crate::domain::{Post, PostId};
@@ -43,7 +44,7 @@ impl AppView {
     pub(in crate::ui::features::shell) fn map_from_thread(&mut self, post_id: &PostId, window: &mut Window, cx: &mut Context<Self>) {
         let line = thread_posts(self.state.posts(), post_id);
         let Some(first) = line.first() else { return };
-        let title = t!("review.map.thread_title", start = piece_text(&first.content, TITLE_CHARS)).to_string();
+        let title = t!("review.map.thread_title", start = piece_text(&readable_line(&first.content), TITLE_CHARS)).to_string();
         let map = map_from_posts(title, &line);
         self.open_map_editor(map, None, window, cx);
     }

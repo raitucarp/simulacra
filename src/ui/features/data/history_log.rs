@@ -23,7 +23,7 @@ fn entry_row(entry: &LogEntry, theme: &ThemeTokens) -> Div {
     let time = entry.edited_at.map_or_else(|| tr("data.history.log_unknown_time"), format_time);
     let note = if entry.note.is_empty() { tr("data.history.log_no_note") } else { entry.note.clone() };
     let note_colour = if entry.note.is_empty() { theme.text_muted } else { theme.text_primary };
-    let number_colour = if entry.current { theme.accent_brand } else { theme.text_secondary };
+    let number_colour = if entry.current { theme.accent_brand_text } else { theme.text_secondary };
     div()
         .flex()
         .items_start()

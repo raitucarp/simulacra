@@ -85,7 +85,8 @@ impl CommandPalette {
         if self.groups.is_empty() {
             let text = t!("palette.empty", query = self.query.text.as_str()).to_string();
             let art = crate::ui::illustration::Illustration::empty(crate::ui::illustration::EmptyKey::NoResults).width(theme.art_notice_width);
-            let state = crate::ui::components::art_state(crate::ui::components::ArtState::hint(art, text), theme);
+            // T16: say why nothing matched and what to try next, not only that nothing did.
+            let state = crate::ui::components::art_state(crate::ui::components::ArtState::titled(art, text, t!("palette.empty_hint").to_string()), theme);
             return div().p(theme.panel_padding).flex().justify_center().child(state).into_any_element();
         }
         let mut flat = 0;
@@ -127,6 +128,6 @@ fn render_mode_chip(label_key: &str, theme: &ThemeTokens) -> Div {
         .border(theme.border_width_hairline)
         .border_color(theme.accent_brand_border)
         .text_size(theme.font_size_2xs)
-        .text_color(theme.accent_brand)
+        .text_color(theme.accent_brand_text)
         .child(t!(label_key).to_string())
 }

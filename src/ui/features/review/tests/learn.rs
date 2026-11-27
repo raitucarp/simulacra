@@ -8,7 +8,7 @@ use crate::ui::features::review::PostView;
 fn view() -> PostView {
     let post = Post::create(PostId::new("p1"), NetworkId::new("n"), ProfileId::new("a"), "Desire is the essence of man.").unwrap();
     let author = Profile { name: "Spinoza Node".into(), handle: "@spinoza".into(), ..Profile::unknown().clone() };
-    PostView { post, author }
+    PostView { post, author, linked: Vec::new() }
 }
 
 fn document() -> LearnSource {

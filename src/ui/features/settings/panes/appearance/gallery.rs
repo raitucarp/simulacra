@@ -52,7 +52,11 @@ pub(super) fn body(pane: &AppearancePanel, handle: &PanelHandle, cx: &App) -> Di
     body
 }
 
-/// Wrapping grid of cards for `palettes`.
+/// Empty cells after the cards: the cards grow to fill each row, and these keep a short last
+/// row at the width of the rows above (`flex_1` grows them; the basis is the card width) (the dialog never fits more cards in a row than this).
+const ROW_FILLERS: usize = 4;
+
+/// Wrapping grid of cards for `palettes`, filling the width of the pane.
 fn grid(pane: &AppearancePanel, handle: &PanelHandle, palettes: &[&ThemePalette]) -> Div {
     let theme = &pane.tokens;
     let cards = palettes.iter().map(|palette| {
@@ -64,5 +68,7 @@ fn grid(pane: &AppearancePanel, handle: &PanelHandle, palettes: &[&ThemePalette]
         let id = palette.id.clone();
         preview_card::render(palette, &preview, state, theme, act(handle, move |pane, window, cx| pane.select(id.clone(), window, cx)))
     });
-    div().flex().flex_wrap().gap(theme.spacing_md).children(cards)
+    let width = theme.theme_preview_card_width;
+    let fillers = (0..ROW_FILLERS).map(|_| div().flex_1().flex_basis(width).min_w(width));
+    div().flex().flex_wrap().gap(theme.spacing_md).children(cards).children(fillers)
 }

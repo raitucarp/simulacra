@@ -17,6 +17,6 @@ pub(crate) fn term_chip_text(post: &Post) -> Option<String> {
 /// The chip; `None` for every other post.
 pub(super) fn render_term_chip(post: &Post, theme: &ThemeTokens) -> Option<Div> {
     let text = term_chip_text(post)?;
-    let chip = div().flex().items_center().gap(theme.inline_gap).text_size(theme.font_size_2xs).text_color(theme.accent_brand).child(Icon::new(LucideIcon::BookOpen).xsmall().text_color(theme.accent_brand)).child(div().min_w_0().truncate().child(text));
+    let chip = div().flex().items_center().gap(theme.inline_gap).text_size(theme.font_size_2xs).text_color(theme.accent_brand_text).child(Icon::new(LucideIcon::BookOpen).xsmall().text_color(theme.accent_brand_text)).child(div().min_w_0().truncate().child(text));
     Some(chip)
 }

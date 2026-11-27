@@ -9,6 +9,7 @@ use super::stream_header::render_stream_header;
 use crate::state::AppState;
 use crate::theme::ThemeTokens;
 use crate::ui::components::{persisted_h_resizable, persisted_v_resizable, SplitPane};
+use crate::ui::features::thinking::credence::CredencePane;
 use gpui_kit::{div, AnyElement, Div, IntoElement, ParentElement, Styled};
 use std::rc::Rc;
 
@@ -20,19 +21,21 @@ pub(crate) fn render_timeline<C: IntoElement>(
     callbacks: &PostCallbacks,
     inputs: TimelineInputs<C>,
 ) -> AnyElement {
-    // Focused post (or the top of the feed), resolved to the original of an instant repost.
+    // Focused post (or the top of the feed, else the active network's first post: never another
+    // network's), resolved to the original of an instant repost.
     let focused_post = inputs
         .selected_post_id
         .as_ref()
         .and_then(|id| state.get_post(id))
         .or_else(|| inputs.stream.rows.post(state, 0))
-        .or_else(|| state.posts.first())
+        .or_else(|| state.current_network_posts().next())
         .and_then(|post| state.get_post(&state.action_target(&post.id)));
     let on_load_more = inputs.on_load_more.map(Rc::new);
+    let inspector_callbacks = PostCallbacks { credence: callbacks.credence.as_ref().map(|source| source.in_pane(CredencePane::Inspector)), ..callbacks.clone() };
     let ctx = InspectorContext {
         state,
         theme,
-        callbacks,
+        callbacks: &inspector_callbacks,
         expanded: inputs.inspector_expanded,
         on_toggle_replies: Rc::new(inputs.on_toggle_replies),
         view: &inputs.inspector,

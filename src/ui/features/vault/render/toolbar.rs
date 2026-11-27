@@ -101,11 +101,13 @@ impl VaultPanel {
         };
         let shelf = segment(SHELF_SEGMENT_ID, LucideIcon::LayoutGrid, t!("vault.layout_shelf").to_string(), BrowseLayout::Shelf);
         let table = segment(TABLE_SEGMENT_ID, LucideIcon::List, t!("vault.layout_table").to_string(), BrowseLayout::Table);
+        // A content-wide track: its pills keep their natural width (shared-width pills, the
+        // segment default, measured nothing here and cut "Table" to "Ta…").
         segmented_track(theme)
             .w_auto()
             .flex_shrink_0()
-            .child(segment_pill(shelf, theme, self.layout_listener(BrowseLayout::Shelf, cx)))
-            .child(segment_pill(table, theme, self.layout_listener(BrowseLayout::Table, cx)))
+            .child(segment_pill(shelf, theme, self.layout_listener(BrowseLayout::Shelf, cx)).flex_none())
+            .child(segment_pill(table, theme, self.layout_listener(BrowseLayout::Table, cx)).flex_none())
     }
 
     fn layout_listener(&self, layout: BrowseLayout, cx: &mut Context<Self>) -> impl Fn(&mut Window, &mut App) + 'static {

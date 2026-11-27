@@ -27,6 +27,7 @@ impl ForgeView {
             context,
             screen,
             issues: Vec::new(),
+            left_steps: Default::default(),
             autosave: AutosavePolicy::default(),
             guide,
             start: StartState::new(kind),
@@ -38,6 +39,7 @@ impl ForgeView {
             grimoire_open: false,
             engine: super::EngineUi::default(),
             strip_preview: None,
+            strip_open: false,
             suggest: SuggestUi::default(),
             focus: cx.focus_handle(),
         };
@@ -57,6 +59,8 @@ impl ForgeView {
     pub fn resume(&mut self, window: &mut Window, cx: &mut Context<Self>) {
         if let ForgeScreen::Resume(saved) = std::mem::replace(&mut self.screen, ForgeScreen::Steps) {
             self.draft = *saved;
+            let current = self.draft.step();
+            self.left_steps = self.draft.steps().iter().copied().filter(|step| *step != current && self.draft.progress(*step).visited).collect();
             self.enter_steps(window, cx);
         }
     }

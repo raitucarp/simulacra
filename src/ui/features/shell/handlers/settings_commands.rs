@@ -87,7 +87,9 @@ impl AppView {
     }
 }
 
-/// "Backup saved to <path>".
+/// "Backup saved in the backups folder: <file>": the file name alone, so the toast breaks at a
+/// space rather than inside a path (Privacy & Data shows where the vault lives).
 fn saved_to(path: &Path) -> String {
-    t!("prefs.ui.backup_saved", path = path.display().to_string()).to_string()
+    let file = path.file_name().map_or_else(|| path.display().to_string(), |name| name.to_string_lossy().into_owned());
+    t!("prefs.ui.backup_saved", path = file).to_string()
 }

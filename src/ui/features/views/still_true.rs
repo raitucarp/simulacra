@@ -7,8 +7,6 @@ use crate::domain::views::still_true::{due_claims, DueClaim};
 use gpui_kit::*;
 use rust_i18n::t;
 
-/// How the view shows when a claim fell due.
-const DATE_FORMAT: &str = "%Y-%m-%d";
 
 pub(super) fn render_still_true(input: &ViewInput<'_>) -> AnyElement {
     let due = due_claims(input.posts.iter().copied(), jiff::Timestamp::now());
@@ -20,7 +18,7 @@ pub(super) fn render_still_true(input: &ViewInput<'_>) -> AnyElement {
 
 fn render_claim(claim: &DueClaim, input: &ViewInput<'_>) -> Stateful<Div> {
     let theme = input.theme;
-    let date = crate::time::local(claim.due).strftime(DATE_FORMAT).to_string();
+    let date = crate::ui::format::date(crate::time::local(claim.due).date());
     let when = div().flex_none().text_size(theme.font_size_xs).text_color(theme.text_muted).child(t!("views.still_true.due", date = date).to_string());
     let text = div().flex_1().min_w_0().truncate().text_size(theme.font_size_sm).text_color(theme.text_primary).child(claim.text.clone());
     let hover = theme.hover_bg;

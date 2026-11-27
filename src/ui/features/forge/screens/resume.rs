@@ -1,4 +1,4 @@
-//! "Resume your unfinished agent?" shown when the forge opens over an autosaved draft.
+//! "Resume your draft?" shown when the forge opens over an autosaved draft.
 
 use super::common::{card, muted, title};
 use super::guide::guide_bubble;

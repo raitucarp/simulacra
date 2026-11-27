@@ -50,7 +50,6 @@ pub fn render_clap_button(post: &PostId, view: &ClapView, on_event: &ReactionAct
         .py(theme.spacing_2xs)
         .rounded(theme.radius_sm)
         .cursor_pointer()
-        .font_family(theme.font_family_mono.clone())
         .text_size(theme.font_size_xs)
         .font_weight(FontWeight::MEDIUM)
         .text_color(colour)
@@ -62,6 +61,8 @@ pub fn render_clap_button(post: &PostId, view: &ClapView, on_event: &ReactionAct
         })
         .on_mouse_up(MouseButton::Left, move |_, window, cx| release(ReactionEvent::ClapRelease(release_id.clone()), window, cx))
         .on_mouse_up_out(MouseButton::Left, move |_, window, cx| release_out(ReactionEvent::ClapRelease(out_id.clone()), window, cx))
-        .child(CLAP)
+        // Q6: the only colour glyph in a row of monochrome icons; at half strength until the
+        // persona claps, so it does not outshout reply and repost.
+        .child(div().when(view.mine == 0, |emoji| emoji.opacity(theme.clap_idle_opacity)).child(CLAP))
         .when(view.total > 0, |button| button.child(view.total.to_string()))
 }

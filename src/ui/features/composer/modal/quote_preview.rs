@@ -24,10 +24,11 @@ pub(super) fn render_quote_preview(target: &AuthoredPost, theme: &ThemeTokens) -
                 .text_color(theme.text_primary)
                 .child(format!("{} {}", target.author.name, target.author.display_handle())),
         )
+        // As a reader says it: no markup, no `[[post_…]]` ids.
         .child(
             div()
                 .text_size(theme.font_size_sm)
                 .text_color(theme.text_secondary)
-                .child(target.content.clone()),
+                .child(crate::domain::post::readable_line(&target.content)),
         )
 }

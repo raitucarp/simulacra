@@ -26,7 +26,7 @@ impl ArgumentPanel {
             EditorMode::New { role, .. } => (*role, tr("thinking.argument.new_title")),
             EditorMode::Node(id) => (self.thread.as_ref()?.map.node(id)?.role, tr("thinking.argument.edit_title")),
         };
-        let heading = div().flex().items_center().gap(theme.inline_gap).child(Icon::new(LucideIcon::Edit).size(theme.icon_size_sm).text_color(theme.accent_brand)).child(div().flex_1().text_size(theme.font_size_xs).font_weight(FontWeight::SEMIBOLD).text_color(theme.text_primary).child(title));
+        let heading = div().flex().items_center().gap(theme.inline_gap).child(Icon::new(LucideIcon::Edit).size(theme.icon_size_sm).text_color(theme.accent_brand_text)).child(div().flex_1().text_size(theme.font_size_xs).font_weight(FontWeight::SEMIBOLD).text_color(theme.text_primary).child(title));
         let close = Button::new(ACTION_IDS[4]).ghost().xsmall().icon(Icon::new(LucideIcon::X)).tooltip(tr("thinking.close")).on_click(cx.listener(|panel, _, _, cx| panel.close_editor(cx)));
         let field = div().flex().items_center().gap(theme.control_gap).child(div().flex_1().min_w_0().child(Input::new(&self.input).small())).child(Button::new(ACTION_IDS[0]).primary().xsmall().label(tr("thinking.save")).on_click(cx.listener(|panel, _, _, cx| panel.save_text(cx))));
         let card = div()

@@ -89,12 +89,13 @@ impl AppView {
         })
     }
 
-    /// The posts recommended to profile `id`, best first (match shown as similarity).
+    /// The posts recommended to profile `id`, best first. The bars show the blended score they
+    /// are ranked by (meaning, then freshness), so they never read out of order.
     pub(crate) fn profile_hits(&self, id: Option<&ProfileId>) -> Rc<[SemanticHit]> {
         let Some(profile) = id.and_then(|id| self.state.user_profiles.iter().find(|p| &p.id == id)) else { return Rc::from([]) };
         let model = self.embedding_config().model;
         cached(&self.recommend.profile, self.recommend_stamp(&model, profile.id.as_str().to_owned()), || {
-            let ranked: Vec<ScoredOwner> = self.recommender(&model).for_profile(profile, PROFILE_LIMIT).into_iter().map(|r| ScoredOwner { owner: EmbeddingOwner::post(&r.post), score: r.similarity, best_chunk: 0 }).collect();
+            let ranked: Vec<ScoredOwner> = self.recommender(&model).for_profile(profile, PROFILE_LIMIT).into_iter().map(|r| ScoredOwner { owner: EmbeddingOwner::post(&r.post), score: r.score, best_chunk: 0 }).collect();
             Rc::from(hits_for(&self.state, &ranked, self.chunk_spec()))
         })
     }
@@ -109,7 +110,7 @@ impl AppView {
     /// The timeline's recommendations: the order switch and the related posts of the post the
     /// inspector shows (the selected one, else the top of the stream).
     pub(super) fn feed_discovery(&self, bind: &Binder) -> FeedDiscovery {
-        let top = || self.feed.stream.rows().post(&self.state, 0).or_else(|| self.state.posts.first()).map(|post| post.id.clone());
+        let top = || self.feed.stream.rows().post(&self.state, 0).or_else(|| self.state.current_network_posts().next()).map(|post| post.id.clone());
         let focused = self.feed.selected_thread_post_id.clone().or_else(top).map(|id| self.state.action_target(&id));
         FeedDiscovery { order: self.recommend.order, on_select_order: Rc::new(bind.with(Self::select_feed_order)), related: self.related_hits(focused.as_ref()) }
     }

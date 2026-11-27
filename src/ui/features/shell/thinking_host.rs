@@ -51,8 +51,8 @@ pub struct ThinkingHost {
     pub argument: Entity<ArgumentPanel>,
     /// The credence popover's resolution note.
     pub note: Entity<InputState>,
-    /// The post whose credence popover is open.
-    pub credence_open: Option<PostId>,
+    /// The post whose credence popover is open, and the pane of the card it opened on.
+    pub credence_open: Option<(PostId, crate::ui::features::thinking::credence::CredencePane)>,
     pub atomic_sheet: Option<AtomicSheet>,
     /// The Calibration view lists only due predictions.
     pub due_only: bool,

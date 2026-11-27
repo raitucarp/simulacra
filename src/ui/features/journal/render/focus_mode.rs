@@ -4,7 +4,7 @@
 
 use super::super::panel::{focus_now_ms, JournalPanel};
 use super::super::text::tr;
-use super::common::{caption, control_row, entrance, ghost_button, line_field, primary_button, progress_bar, surface};
+use super::common::{caption, control_row, entrance, ghost_button, line_field, primary_button, progress_bar, small_button, surface};
 use crate::domain::journal::focus::timer::clock_text;
 use crate::domain::journal::focus::{Outcome, Phase};
 use crate::ui::icons::LucideIcon;
@@ -56,13 +56,19 @@ impl JournalPanel {
         control_row(theme).justify_center().child(pause).child(stop).child(distraction).child(mode)
     }
 
-    /// How did it go: done, partly or not, and one line.
+    /// How did it go: done, partly or not (three equal outlined answers, none pressed on the
+    /// learner), and one line.
     pub(super) fn render_reflection(&self, cx: &mut Context<Self>) -> Div {
         let theme = &self.theme;
         let Some(session) = &self.focus_run.finished else { return div() };
         let summary = t!("journal.focus.ended", minutes = session.focused_minutes, planned = session.planned_minutes).to_string();
         let outcomes = Outcome::ALL.into_iter().enumerate().map(|(i, outcome)| {
-            primary_button((OUTCOME_ID, i), LucideIcon::Check, tr(&format!("journal.outcome.{}", outcome.key()))).on_click(cx.listener(move |this, _, window, cx| this.reflect(Some(outcome), window, cx)))
+            let icon = match outcome {
+                Outcome::Done => LucideIcon::CircleCheck,
+                Outcome::Partly => LucideIcon::Minus,
+                Outcome::NotDone => LucideIcon::CircleX,
+            };
+            small_button((OUTCOME_ID, i), icon, tr(&format!("journal.outcome.{}", outcome.key()))).outline().on_click(cx.listener(move |this, _, window, cx| this.reflect(Some(outcome), window, cx)))
         });
         let skip = ghost_button(SKIP_ID, LucideIcon::X, tr("journal.focus.skip")).on_click(cx.listener(|this, _, window, cx| this.reflect(None, window, cx)));
         surface(theme)

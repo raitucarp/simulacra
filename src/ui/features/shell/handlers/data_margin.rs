@@ -4,9 +4,17 @@
 
 use super::super::view::AppView;
 use crate::domain::post::anchor::{passages, span_text};
+use crate::domain::post::{readable_line, HASHTAG_SIGIL};
 use crate::domain::PostId;
 use crate::ui::features::data::{tr, DataEvent, MarginDialog};
 use gpui_kit::*;
+
+/// A passage as the reader sees it, markup and post links left out; `None` when nothing but
+/// tags (or links) is left, as nobody answers a line of hashtags.
+fn readable_passage(raw: &str) -> Option<String> {
+    let text = readable_line(raw);
+    text.split_whitespace().any(|word| !word.starts_with(HASHTAG_SIGIL)).then_some(text)
+}
 
 impl AppView {
     /// Routes one margin sheet event.
@@ -25,7 +33,7 @@ impl AppView {
 
     fn open_margin(&mut self, id: PostId, window: &mut Window, cx: &mut Context<Self>) {
         let Some(post) = self.state.get_post(&id).filter(|post| !post.is_locked()) else { return };
-        let found: Vec<_> = passages(&post.content).into_iter().map(|range| (range.clone(), span_text(&post.content, range))).collect();
+        let found: Vec<_> = passages(&post.content).into_iter().filter_map(|range| readable_passage(&span_text(&post.content, range.clone())).map(|text| (range, text))).collect();
         if found.is_empty() {
             return;
         }

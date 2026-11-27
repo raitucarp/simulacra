@@ -43,7 +43,11 @@ pub fn fixed_in_image_settings(failure: &IdeasFailure) -> bool {
 /// The subtitle under the sheet's title.
 pub fn subtitle(target: ImageTarget, about: &str) -> String {
     match target {
-        ImageTarget::Avatar => t!("image_ideas.subtitle_avatar", name = about).to_string(),
+        // A profile not named yet reads "An avatar for Unnamed thinker", not "An avatar for".
+        ImageTarget::Avatar => {
+            let name = if about.trim().is_empty() { t!("forge.ui.unnamed").to_string() } else { about.to_string() };
+            t!("image_ideas.subtitle_avatar", name = name).to_string()
+        }
         ImageTarget::Post => t!("image_ideas.subtitle_post", source = about).to_string(),
     }
 }

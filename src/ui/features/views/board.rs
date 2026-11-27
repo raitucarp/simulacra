@@ -1,7 +1,8 @@
 //! The board (W6): one column per state (open, scheduled, delegated, migrated, done,
 //! dropped) holding the to-dos in that state and the task posts beside them. A card shows
-//! its text, its due day and priority; a click opens its post. The columns scroll sideways
-//! when they do not fit.
+//! its text, its due day and priority; a click opens its post. Filled columns share the
+//! width; empty ones are only named under them. The columns scroll sideways when they do
+//! not fit.
 
 use super::common::{empty_note, locked_note, section_heading};
 use super::input::ViewInput;
@@ -21,8 +22,14 @@ pub(super) fn render_board(input: &ViewInput<'_>) -> AnyElement {
         return empty_note("views.board.empty", input.theme);
     }
     let theme = input.theme;
-    let row = div().flex().items_start().gap(theme.control_gap).children(columns.iter().map(|column| render_column(column, input)));
-    div().id(input.id("board")).flex_1().min_h_0().w_full().overflow_scroll().p(theme.panel_padding_compact).child(row).into_any_element()
+    // Empty columns are not drop targets here (a click opens a post), so they give their
+    // width to the filled ones and are named on one line under them.
+    let (filled, empty): (Vec<&BoardColumn>, Vec<&BoardColumn>) = columns.iter().partition(|column| !column.cards.is_empty());
+    let row = div().w_full().flex().items_start().gap(theme.control_gap).children(filled.into_iter().map(|column| render_column(column, input)));
+    let names = empty.iter().map(|column| state_label(column.state)).collect::<Vec<_>>().join(", ");
+    let empty_line = (!empty.is_empty()).then(|| div().text_size(theme.font_size_xs).text_color(theme.text_muted).child(t!("views.board.empty_columns", states = names).to_string()));
+    let board = div().w_full().flex().flex_col().gap(theme.spacing_sm).child(row).children(empty_line);
+    div().id(input.id("board")).flex_1().min_h_0().w_full().overflow_scroll().p(theme.panel_padding_compact).child(board).into_any_element()
 }
 
 fn render_column(column: &BoardColumn, input: &ViewInput<'_>) -> Div {
@@ -30,8 +37,8 @@ fn render_column(column: &BoardColumn, input: &ViewInput<'_>) -> Div {
     let title = format!("{} · {}", state_label(column.state), column.cards.len());
     let head = div().flex().items_center().gap(theme.inline_gap).child(render_symbol_art(SymbolArt::Entry(EntrySymbol::Task, Some(column.state)), theme.symbol_badge_size)).child(section_heading(title, theme));
     div()
-        .flex_none()
-        .w(theme.board_column_width)
+        .flex_1()
+        .min_w(theme.board_column_width)
         .p(theme.spacing_xs)
         .flex()
         .flex_col()

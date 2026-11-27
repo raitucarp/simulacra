@@ -1,5 +1,7 @@
 //! The Arena page: a header with its tabs, the last failure as a notice, then the current tab
-//! as a setup column beside the record on show (stacked below the wide layout class).
+//! as a setup column beside the record on show (stacked below the wide layout class). With
+//! no record open, the saved list sits under the idle note so the space beside a long form
+//! holds the records to open.
 
 mod claims;
 mod debate_setup;
@@ -69,13 +71,13 @@ pub(super) fn two_columns(class: LayoutClass, side: impl IntoElement, main: impl
 }
 
 impl ArenaPanel {
-    /// The last failure, or a missing key, as a quiet notice.
+    /// The last failure of this tab's runs, or a missing key, as a quiet notice.
     fn render_notice(&self) -> Option<Div> {
         let theme = &self.theme;
         let text = match (&self.data.notice, self.data.has_key) {
-            (Some(notice), _) => notice.clone(),
-            (None, false) => super::text::tr("arena.no_key"),
-            (None, true) => return None,
+            (Some((tab, notice)), _) if *tab == self.tab => notice.clone(),
+            (_, false) => super::text::tr("arena.no_key"),
+            (_, true) => return None,
         };
         let row = div()
             .w_full()

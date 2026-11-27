@@ -59,9 +59,12 @@ pub fn render_knowledge_switch(saved: bool, on_event: DataAction, theme: &ThemeT
         segment_pill(segment, theme, move |window, cx| on_event(event.clone(), window, cx))
     };
     let track = segmented_track(theme).child(pill("library", LucideIcon::Library, !saved, DataEvent::ShowLibrary)).child(pill("saved", LucideIcon::Bookmark, saved, DataEvent::ShowSaved));
+    // Centred: it heads both the full-width library and the centred Saved column.
     div()
         .w_full()
         .flex_none()
+        .flex()
+        .justify_center()
         .px(theme.panel_padding_compact)
         .py(theme.spacing_xs)
         .bg(theme.bg_app)

@@ -37,14 +37,16 @@ impl ShortcutSheet {
 }
 
 impl RenderOnce for ShortcutSheet {
-    fn render(self, _: &mut Window, _: &mut App) -> impl IntoElement {
+    fn render(self, window: &mut Window, _: &mut App) -> impl IntoElement {
         let theme = &self.theme;
+        // As wide and tall as the tokens allow, kept inside the window with the modal margin.
+        let (room, inset) = (window.viewport_size(), theme.settings_modal_inset + theme.settings_modal_inset);
         let (on_scrim, on_button) = (self.on_close.clone(), self.on_close);
         let sections = ShortcutGroup::ALL.into_iter().map(|group| render_section(group, theme));
         let card = div()
             .id(CARD_ID)
-            .w(theme.shortcut_sheet_width)
-            .max_h(theme.shortcut_sheet_max_height)
+            .w(theme.shortcut_sheet_width.min(room.width - inset))
+            .max_h(theme.shortcut_sheet_max_height.min(room.height - inset))
             .flex()
             .flex_col()
             .rounded(theme.radius_lg)
@@ -96,7 +98,7 @@ fn render_header(theme: &ThemeTokens, on_close: SheetAction) -> Div {
         .py(theme.card_padding)
         .border_b(theme.border_width_hairline)
         .border_color(theme.border_subtle)
-        .child(div().text_color(theme.accent_brand).child(Icon::new(LucideIcon::Keyboard)))
+        .child(div().text_color(theme.accent_brand_text).child(Icon::new(LucideIcon::Keyboard)))
         .child(title.flex_1())
         .child(close)
 }

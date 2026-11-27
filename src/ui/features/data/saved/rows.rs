@@ -76,7 +76,7 @@ pub(super) fn item_row(view: &SavedView, index: usize, item: &SavedItemView, on_
         .flex()
         .flex_col()
         .gap(theme.spacing_2xs)
-        .child(div().flex().items_center().gap(theme.inline_gap).child(Icon::new(icon).size(theme.icon_size_xs).text_color(theme.accent_brand)).child(div().min_w_0().truncate().text_size(theme.font_size_sm).font_weight(FontWeight::SEMIBOLD).text_color(theme.text_primary).child(item.title.clone())))
+        .child(div().flex().items_center().gap(theme.inline_gap).child(Icon::new(icon).size(theme.icon_size_xs).text_color(theme.accent_brand_text)).child(div().min_w_0().truncate().text_size(theme.font_size_sm).font_weight(FontWeight::SEMIBOLD).text_color(theme.text_primary).child(item.title.clone())))
         .child(div().truncate().text_size(theme.font_size_2xs).text_color(theme.text_muted).child(item.subtitle.clone()))
         .children(view.reorderable.then(|| note_block(view, index, item, on_event, theme)));
     let actions = div().flex_none().flex().gap(theme.spacing_2xs)

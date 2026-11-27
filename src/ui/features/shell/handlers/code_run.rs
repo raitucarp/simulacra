@@ -24,8 +24,9 @@ pub(in crate::ui::features::shell) const OUTPUT_CAP: usize = 64 * 1024;
 pub(super) struct RunAsk {
     pub request: RunRequest,
     pub found: DetectedRuntime,
-    /// Who wrote the post.
-    pub author: String,
+    /// Who wrote the code: the post's author, or `None` when it came in through a capture or
+    /// an import under one of the user's own personas (they did not type it).
+    pub author: Option<String>,
 }
 
 impl AppView {
@@ -39,7 +40,8 @@ impl AppView {
         if !needs_confirm(post, author) {
             return self.start_code_run(request, found, window, cx);
         }
-        let ask = RunAsk { request, found, author: author.name.clone() };
+        let typed_by = (!author.is_human_persona() || post.extras.origin.is_none()).then(|| author.name.clone());
+        let ask = RunAsk { request, found, author: typed_by };
         let (view, theme) = (cx.entity().downgrade(), self.theme.clone());
         window.defer(cx, move |window, cx| super::code_confirm::open_run_confirm(view, ask, theme, window, cx));
     }

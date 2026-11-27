@@ -4,7 +4,8 @@
 //! post per claim. It never blocks posting, and Settings › Reading & Writing turns it off.
 
 use super::{ComposerModalMode, ComposerModalPanel};
-use crate::domain::thinking::atomic::{check_atomicity, split_proposal, AtomicReport};
+use crate::domain::thinking::atomic::findings::score_of;
+use crate::domain::thinking::atomic::{check_atomicity, split_proposal, AtomicReport, Finding};
 use crate::import::segment::SentenceLocale;
 use crate::ui::features::composer::modal::AtomicHintView;
 use gpui_kit::*;
@@ -25,6 +26,15 @@ pub(crate) struct AtomicHintState {
     pub report: Option<(usize, AtomicReport)>,
     pub dismissed: bool,
     task: Option<Task<()>>,
+}
+
+/// The report without "too short": a post is capped at 280 characters and a thread part or a
+/// quick note is short on purpose, so while writing that finding only nags (Q3). The vault
+/// and the Insights checks still report it.
+fn without_length_nag(mut report: AtomicReport) -> AtomicReport {
+    report.findings.retain(|finding| !matches!(finding, Finding::TooShort { .. }));
+    report.score = score_of(&report.findings);
+    report
 }
 
 impl ComposerModalPanel {
@@ -51,8 +61,8 @@ impl ComposerModalPanel {
     fn refresh_atomic_hint(&mut self, cx: &mut Context<Self>) {
         let index = self.active_draft.min(self.drafts.len().saturating_sub(1));
         let text = self.drafts.get(index).map(|slot| slot.input.read(cx).value().to_string()).unwrap_or_default();
-        let report = (text.trim().chars().count() >= MIN_CHECK_CHARS).then(|| check_atomicity(&text, self.atomic.locale));
-        let worth_showing = report.filter(|report| !report.findings.is_empty() || !report.is_atomic());
+        let report = (text.trim().chars().count() >= MIN_CHECK_CHARS).then(|| without_length_nag(check_atomicity(&text, self.atomic.locale)));
+        let worth_showing = report.filter(|report| !report.findings.is_empty() || report.claims.len() > 1);
         self.atomic.report = worth_showing.map(|report| (index, report));
         cx.notify();
     }

@@ -75,3 +75,10 @@ fn families_category_and_embedding() {
     assert_eq!(report.documents, 1);
     assert_eq!(report.activity.kinds.iter().sum::<usize>(), 6);
 }
+
+#[test]
+fn two_clusters_never_share_a_concept_name() {
+    let (mind, ethics) = (crate::domain::insights::sets::NamedSet::new("mind", "#mind", vec![]), crate::domain::insights::sets::NamedSet::new("ethics", "#ethics", vec![]));
+    let counts = vec![vec![(2, &mind), (1, &ethics)], vec![(5, &mind)], vec![(3, &mind)]];
+    assert_eq!(super::families::distinct_labels(&counts), vec!["#ethics".to_string(), "#mind".to_string(), String::new()]);
+}

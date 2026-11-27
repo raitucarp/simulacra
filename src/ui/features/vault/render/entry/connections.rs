@@ -14,8 +14,6 @@ use rust_i18n::t;
 
 /// Most related entries shown.
 const RELATED_LIMIT: usize = 4;
-/// Date format of a backlink.
-const BACKLINK_DATE_FORMAT: &str = "%Y-%m-%d";
 
 fn reason_label(reason: RelatedReason) -> String {
     match reason {
@@ -91,7 +89,7 @@ impl VaultPanel {
             .cursor_pointer()
             .hover(move |s| s.border_color(border))
             .on_click(cx.listener(move |_, _, _, cx| cx.emit(VaultEvent::OpenPost(post.clone()))))
-            .child(meta_line(vec![link.author.clone(), link.created_at.strftime(BACKLINK_DATE_FORMAT).to_string()], theme))
+            .child(meta_line(vec![link.author.clone(), crate::ui::format::date(crate::time::local(link.created_at).date())], theme))
             .child(div().text_size(theme.font_size_sm).line_height(relative(theme.line_height_body)).text_color(theme.text_primary).child(link.excerpt))
             .into_any_element()
     }

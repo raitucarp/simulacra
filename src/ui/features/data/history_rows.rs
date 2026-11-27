@@ -11,7 +11,8 @@ use crate::domain::data::history::{LaneRow, Version, VersionKind};
 use crate::theme::ThemeTokens;
 use crate::ui::features::composer::version_label;
 use gpui_kit::component::button::{Button, ButtonVariants};
-use gpui_kit::component::{Selectable, Sizable};
+use crate::ui::icons::LucideIcon;
+use gpui_kit::component::{Icon, Selectable, Sizable};
 use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::*;
 use rust_i18n::t;
@@ -35,14 +36,15 @@ fn title_line(version: &Version, theme: &ThemeTokens) -> Div {
     div().flex().flex_wrap().items_center().gap(theme.inline_gap).text_size(theme.font_size_xs).child(kind).children(number).children(rendering)
 }
 
-/// The "B" button picking a row as the other side of the comparison (V6), lit on version B.
-fn b_button(index: usize, compared: bool, on_event: &DataAction) -> Button {
+/// The compare button picking a row as the other side of the comparison (V6), lit on that
+/// version. The selected row has none: a version is not compared with itself.
+fn compare_button(index: usize, compared: bool, on_event: &DataAction) -> Button {
     let on_event = on_event.clone();
     Button::new(SharedString::from(format!("{B_ID_PREFIX}{index}")))
         .ghost()
         .xsmall()
         .selected(compared)
-        .label(tr("data.history.side_b"))
+        .icon(Icon::new(LucideIcon::GitCompareArrows))
         .tooltip(tr("data.history.compare_with"))
         .on_click(move |_, window, cx| on_event(DataEvent::CompareWith(index), window, cx))
 }
@@ -72,7 +74,7 @@ fn version_row(index: usize, version: &Version, lanes: (&LaneRow, usize), (selec
         .when(selected, |row| row.bg(theme.accent_brand_subtle))
         .when(!selected, |row| row.hover(move |s| s.bg(hover)))
         .child(main)
-        .child(b_button(index, compared, on_event))
+        .when(!selected, |row| row.child(compare_button(index, compared, on_event)))
 }
 
 /// The list column: its heading and every row.

@@ -139,6 +139,7 @@ impl AppView {
         self.revert_settings_draft(window, cx);
         self.chrome.is_settings_open = true;
         self.chrome.active_settings_tab = SettingsTab::AiIntelligence;
+        window.focus(&self.settings_ui.rail_focus, cx);
     }
 }
 

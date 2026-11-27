@@ -1,6 +1,6 @@
 //! Editor pieces of a draft row: identity line, text area and the first post's attachments.
 
-use super::super::consts::{MODAL_FALLBACK_HANDLE, MODAL_TEXTAREA_WRAPPER_ID, TOPIC_PREFIX};
+use super::super::consts::{MODAL_FALLBACK_HANDLE, MODAL_TEXTAREA_WRAPPER_ID};
 use super::super::format_keys::handle_format_actions;
 use super::super::keys::{is_submit_chord, SubmitPostDraft};
 use super::super::preview::render_preview;
@@ -9,10 +9,10 @@ use super::{ComposerModalView, DraftEditor};
 use gpui_kit::component::input::Textarea;
 use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::*;
-use rust_i18n::t;
 
 impl ComposerModalView {
-    /// Author handle followed by the community / topic hint.
+    /// The author's handle. (A "> Community or topic" hint used to follow it; it looked like a
+    /// picker but chose nothing, so it went: Q4.)
     pub(super) fn identity_line(&self) -> Div {
         let theme = &self.theme;
         let user_handle = self
@@ -31,12 +31,6 @@ impl ComposerModalView {
                     .text_size(theme.font_size_sm)
                     .text_color(theme.text_primary)
                     .child(user_handle),
-            )
-            .child(
-                div()
-                    .text_size(theme.font_size_xs)
-                    .text_color(theme.text_muted)
-                    .child(format!("{TOPIC_PREFIX}{}", t!("composer.community_topic"))),
             )
     }
 

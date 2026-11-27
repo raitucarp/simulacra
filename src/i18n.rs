@@ -1,8 +1,13 @@
 //! Internationalization (i18n) definitions and supported locales.
 
+mod arabic;
+mod backend;
 mod plural;
+mod visual;
 
+pub use backend::VisualArabic;
 pub use plural::{plural_key, plural_key_in, t_count, PluralCategory, COUNT_SEPARATOR};
+pub use visual::visual_order;
 
 use serde::{Deserialize, Serialize};
 
@@ -57,6 +62,12 @@ impl Language {
         all[(idx + 1) % all.len()]
     }
 
+    /// The language's own name as the window draws it (Arabic in visual order, T21).
+    #[must_use]
+    pub fn display_label(&self) -> std::borrow::Cow<'static, str> {
+        visual_order(self.native_label())
+    }
+
     #[must_use]
     pub const fn native_label(&self) -> &'static str {
         match self {
@@ -96,3 +107,5 @@ pub fn set_locale(lang: Language) {
 
 #[cfg(test)]
 mod tests;
+#[cfg(test)]
+mod visual_tests;

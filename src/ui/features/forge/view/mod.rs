@@ -13,6 +13,7 @@ mod handle;
 mod hear;
 mod keys;
 mod lifecycle;
+mod reveal;
 mod state;
 mod suggest;
 
@@ -25,10 +26,11 @@ pub use state::{DescribeStatus, ForgeContext, ForgeOpen, ForgeScreen, GuideState
 
 use crate::domain::portrait::{FormSlot, PortraitSlot};
 use crate::domain::{Palette, Profile};
-use crate::state::forge::{draft_palette, AgentDraft, ValidationIssue};
+use crate::state::forge::{draft_palette, AgentDraft, ForgeStep, ValidationIssue};
 use crate::theme::ThemeTokens;
 use crate::ui::features::forge::logic::AutosavePolicy;
 use gpui_kit::*;
+use std::collections::HashSet;
 use std::path::PathBuf;
 
 /// What the forge asks its host to do.
@@ -63,6 +65,8 @@ pub struct ForgeView {
     pub(crate) screen: ForgeScreen,
     /// Validation of the current draft against the other profiles.
     pub(crate) issues: Vec<ValidationIssue>,
+    /// Steps the user has left at least once: their empty fields are flagged from then on.
+    pub(crate) left_steps: HashSet<ForgeStep>,
     pub(crate) autosave: AutosavePolicy,
     pub(crate) guide: GuideState,
     pub(crate) start: StartState,
@@ -82,6 +86,8 @@ pub struct ForgeView {
     pub(crate) engine: EngineUi,
     /// The step palette hovered in the current step's palette strip (its changes preview).
     pub(crate) strip_preview: Option<&'static Palette>,
+    /// Whether the step palette strips are unfolded (folded to one line by default).
+    pub(crate) strip_open: bool,
     /// Parameter suggestions: the AI request in flight, its values, the step bar status.
     pub(crate) suggest: SuggestUi,
     pub(crate) focus: FocusHandle,

@@ -29,15 +29,20 @@ pub(crate) fn render_overflow_menu(post: &Post, handlers: &PostCardHandlers) -> 
         })
 }
 
-fn build_menu(menu: PopupMenu, [text, link, embed]: [&str; 3], handlers: &PostCardHandlers, window: &mut Window, cx: &mut Context<PopupMenu>) -> PopupMenu {
-    let menu = menu
-        .item(copy_item(LucideIcon::Copy, t!("post.menu_copy_text"), text, t!("post.copied_text")))
+/// The three copy entries, gathered under one "Copy" submenu.
+fn copy_submenu(menu: PopupMenu, [text, link, embed]: &[String; 3]) -> PopupMenu {
+    menu.item(copy_item(LucideIcon::Copy, t!("post.menu_copy_text"), text, t!("post.copied_text")))
         .item(copy_item(LucideIcon::Link2, t!("post.menu_copy_link"), link, t!("post.copied_link")))
         .item(copy_item(LucideIcon::Layers, t!("post.menu_copy_embed"), embed, t!("post.copied_embed")))
-        .separator()
+}
+
+fn build_menu(menu: PopupMenu, [text, link, embed]: [&str; 3], handlers: &PostCardHandlers, window: &mut Window, cx: &mut Context<PopupMenu>) -> PopupMenu {
+    let copies = [text.to_string(), link.to_string(), embed.to_string()];
+    let menu = menu
         .item(action_item(LucideIcon::MessageSquare, t!("post.menu_reply"), &handlers.on_reply))
         .item(action_item(LucideIcon::Edit, t!("post.menu_quote"), &handlers.on_quote))
-        .item(action_item(LucideIcon::Compass, t!("post.menu_find_similar"), &handlers.on_find_similar));
+        .item(action_item(LucideIcon::Compass, t!("post.menu_find_similar"), &handlers.on_find_similar))
+        .submenu_with_icon(Some(Icon::new(LucideIcon::Copy)), t!("post.menu_copy").to_string(), window, cx, move |submenu, _, _| copy_submenu(submenu, &copies));
     let menu = with_learn_submenu(menu, &handlers.learn, window, cx);
     let menu = crate::ui::features::thinking::credence::with_credence_item(menu, handlers.credence.as_ref());
     let menu = crate::ui::features::data::with_data_items(menu, handlers.data.as_ref(), window, cx);

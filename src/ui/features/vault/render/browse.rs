@@ -47,9 +47,11 @@ impl VaultPanel {
 
     fn render_browse_header(&self, compact: bool, cx: &mut Context<Self>) -> impl IntoElement {
         let theme = &self.theme;
+        // Subjects that documents use, not the whole vocabulary ("0 documents · 4 subjects").
+        let used: std::collections::HashSet<_> = self.data.documents.iter().flat_map(|doc| doc.record.subjects.iter()).collect();
         let summary = [
             t_count("vault.count.documents", self.data.documents.len()),
-            t_count("vault.count.subjects", self.data.library.subjects.len()),
+            t_count("vault.count.subjects", used.len()),
             t_count("vault.count.collections", self.data.library.collections_of(&self.data.network_id).len()),
         ]
         .join(META_SEPARATOR);

@@ -41,7 +41,7 @@ pub fn card_title(icon: LucideIcon, title: String, trailing: Option<AnyElement>,
         .flex()
         .items_center()
         .gap(theme.inline_gap)
-        .child(Icon::new(icon).size(theme.icon_size_sm).text_color(theme.accent_brand))
+        .child(Icon::new(icon).size(theme.icon_size_sm).text_color(theme.accent_brand_text))
         .child(div().truncate().text_size(theme.font_size_sm).font_weight(FontWeight::SEMIBOLD).text_color(theme.text_primary).child(title));
     div().w_full().flex().flex_wrap().items_center().gap(theme.control_gap).child(heading).children(trailing)
 }
@@ -78,11 +78,13 @@ pub fn tile_columns(room: Room, count: usize) -> u16 {
     }
 }
 
-/// Charts side by side when the page has room, stacked otherwise.
+/// Charts side by side when the page has room, stacked otherwise. Side by side, the two cards
+/// share the taller one's height (each cell is a row, which stretches its card), so the pair
+/// ends on one line instead of a ragged edge.
 pub fn pair(room: Room, first: impl IntoElement, second: impl IntoElement, theme: &ThemeTokens) -> Div {
-    let cell = |child: AnyElement| div().flex_1().min_w_0().flex().flex_col().child(child);
+    let cell = |child: AnyElement| div().flex_1().min_w_0().flex().child(child);
     let row = div().w_full().flex().gap(theme.section_gap);
-    let row = if room == Room::Narrow { row.flex_col() } else { row.items_start() };
+    let row = if room == Room::Narrow { row.flex_col() } else { row };
     row.child(cell(first.into_any_element())).child(cell(second.into_any_element()))
 }
 

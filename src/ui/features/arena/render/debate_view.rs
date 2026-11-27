@@ -25,15 +25,11 @@ const NEW_ID: &str = "arena-debate-new";
 impl ArenaPanel {
     pub(super) fn render_debate_tab(&self, class: LayoutClass, cx: &mut Context<Self>) -> Div {
         let open = self.open_debate.as_ref().and_then(|id| self.data.debate(id)).cloned();
-        let side = match &open {
-            Some(_) => self.render_new_debate(cx),
-            None => self.render_debate_setup(cx),
-        };
-        let side = div().flex().flex_col().gap(self.theme.section_gap).child(side).child(self.render_saved_debates(cx));
         let main_first = open.is_some();
-        let main = match open {
-            Some(debate) => self.render_debate(&debate, cx),
-            None => self.idle_state("arena.debate.idle_title", "arena.debate.idle_hint"),
+        let (stack, saved) = (div().flex().flex_col().gap(self.theme.section_gap), self.render_saved_debates(cx));
+        let (side, main) = match open {
+            Some(debate) => (stack.child(self.render_new_debate(cx)).child(saved), self.render_debate(&debate, cx)),
+            None => (self.render_debate_setup(cx), stack.child(self.idle_state("arena.debate.idle_title", "arena.debate.idle_hint")).child(saved)),
         };
         two_columns(class, side, main, main_first, &self.theme)
     }

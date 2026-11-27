@@ -32,7 +32,6 @@ pub(crate) fn render_countdown_chip(post: &Post, theme: &ThemeTokens) -> Option<
         .flex()
         .items_center()
         .gap(theme.spacing_2xs)
-        .font_family(theme.font_family_mono.clone())
         .text_size(theme.font_size_2xs)
         .text_color(theme.accent_danger)
         .child(Icon::new(LucideIcon::Timer).size(theme.icon_size_xs))

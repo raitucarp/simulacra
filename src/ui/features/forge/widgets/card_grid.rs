@@ -3,25 +3,18 @@
 //! element state, Enter / Space pick the cell under it, and the cursor cell shows the focus
 //! ring while the grid has keyboard focus. Clicking picks and moves the cursor there.
 
-use super::focus_ring::is_activation;
 use super::grid_cell::GridCell;
+use super::grid_keys::{on_key, CellAction};
 use super::ActionCallback;
-use crate::ui::features::forge::logic::{fit_columns, GridCursor, NavKey};
+use crate::ui::features::forge::logic::fit_columns;
 use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::*;
 use std::rc::Rc;
 
-/// What the key handler needs of each cell.
-struct CellAction {
-    pick: ActionCallback,
-    hover: Option<ActionCallback>,
-    disabled: bool,
-}
-
 /// Focus handle, cursor and last measured width of one grid.
-struct GridFocus {
+pub(super) struct GridFocus {
     handle: FocusHandle,
-    cursor: usize,
+    pub(super) cursor: usize,
     width: Option<Pixels>,
 }
 
@@ -63,28 +56,6 @@ impl CardGrid {
     }
 }
 
-/// Moves the cursor (previewing the cell it lands on) or picks the cell under it.
-fn on_key(focus: &Entity<GridFocus>, event: &KeyDownEvent, columns: usize, cells: &[CellAction], window: &mut Window, cx: &mut App) {
-    let cursor = GridCursor::new(focus.read(cx).cursor, cells.len(), columns);
-    let nav = NavKey::from_key(event.keystroke.key.as_str()).filter(|_| !event.keystroke.modifiers.modified());
-    if let Some(nav) = nav {
-        let moved = cursor.moved(nav).index;
-        focus.update(cx, |state, cx| {
-            state.cursor = moved;
-            cx.notify();
-        });
-        if let Some(hover) = cells.get(moved).and_then(|cell| cell.hover.clone()) {
-            hover(window, cx);
-        }
-        cx.stop_propagation();
-    } else if is_activation(event) {
-        if let Some(cell) = cells.get(cursor.index).filter(|cell| !cell.disabled) {
-            (cell.pick.clone())(window, cx);
-        }
-        cx.stop_propagation();
-    }
-}
-
 /// An invisible layer over the grid that records its width at prepaint (re-rendering on change).
 fn width_probe(focus: Entity<GridFocus>) -> impl IntoElement {
     let record = move |bounds: Bounds<Pixels>, _: &mut Window, cx: &mut App| {
@@ -98,14 +69,15 @@ fn width_probe(focus: Entity<GridFocus>) -> impl IntoElement {
     canvas(record, |_, _, _, _| {}).absolute().top_0().left_0().size_full()
 }
 
-/// The cell at `at`, with its click moving the cursor there before picking.
-fn render_cell(cell: GridCell, at: usize, focused: bool, focus: &Entity<GridFocus>) -> Stateful<Div> {
+/// The cell at `at`, with its click moving the cursor there before picking. In a width-fitted
+/// grid (`fill`) an option card widens to its column, so a row has no empty band on its right.
+fn render_cell(cell: GridCell, at: usize, focused: bool, fill: bool, focus: &Entity<GridFocus>) -> Stateful<Div> {
     let (pick, cursor) = (cell.pick, focus.clone());
     let click: ActionCallback = Rc::new(move |window, cx| {
         cursor.update(cx, |state, _| state.cursor = at);
         pick(window, cx);
     });
-    let element = (cell.build)(focused, click);
+    let element = (cell.build)(focused, click).when(fill && cell.stretches, |card| card.w_full());
     match cell.hover {
         Some(hover) => element.on_hover(move |hovered, window, cx| {
             if *hovered {
@@ -129,11 +101,15 @@ impl RenderOnce for CardGrid {
             (Some(min), Some(width)) => fit_columns(width.as_f32(), min.as_f32(), gap.as_f32()),
             _ => self.columns,
         };
-        let mut cells = self.cells.into_iter().enumerate().map(|(at, cell)| render_cell(cell, at, focused_at == Some(at), &focus)).peekable();
-        let mut headers = self.headers.into_iter();
-        let mut rows = Vec::new();
+        let fill = self.min_cell.is_some();
+        let mut cells = self.cells.into_iter().enumerate().map(|(at, cell)| render_cell(cell, at, focused_at == Some(at), fill, &focus)).peekable();
+        let (mut headers, mut rows) = (self.headers.into_iter(), Vec::new());
         while cells.peek().is_some() {
-            let row = div().flex().gap(gap).when(centered, |row| row.justify_center()).children(cells.by_ref().take(columns).collect::<Vec<_>>());
+            let taken: Vec<Stateful<Div>> = cells.by_ref().take(columns).collect();
+            // Equal slots (empty ones finish the last row) so the columns line up row to row.
+            let empty = if fill { columns.saturating_sub(taken.len()) } else { 0 };
+            let taken = taken.into_iter().map(|cell| if fill { div().flex_1().min_w_0().flex().child(cell).into_any_element() } else { cell.into_any_element() });
+            let row = div().flex().gap(gap).when(centered, |row| row.justify_center()).children(taken).children((0..empty).map(|_| div().flex_1()));
             rows.push(div().flex().flex_col().gap(gap).children(headers.next()).child(row));
         }
         let key_focus = focus.clone();

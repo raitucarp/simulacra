@@ -1,1 +1,0 @@
-(() => { const re = new RegExp(__ARG__); const e=[...document.querySelectorAll('button')].filter(x=>re.test(x.getAttribute('aria-label')||'') || re.test((x.textContent||'').trim())).pop(); if(!e) return null; const r=e.getBoundingClientRect(); return {x: Math.round(r.x+r.width/2), y: Math.round(r.y+r.height/2), dis: e.disabled}; })()

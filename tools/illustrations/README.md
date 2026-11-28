@@ -1,5 +1,9 @@
 # Illustration packs: the generation pipeline
 
+> **Tooling is being rewritten in Rust.** The repository stays pure Rust, so the commands below
+> become `--features codegen` binaries under `src/bin/`. The data files here (`styles/`,
+> `subjects.json`, `packs.json`, `anchors/`) and the pipeline steps stay the same.
+
 Simulacra draws every illustration from a **pack**. **Classic** (the palette-tinted SVG templates in
 `assets/illustrations/`) is always built in and is the fallback for any key a pack does not cover
 or that failed QA. **Flat** is a built-in raster pack (`assets/packs/flat/`, the default); **3D

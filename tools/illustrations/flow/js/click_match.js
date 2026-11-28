@@ -1,1 +1,0 @@
-(() => { const re = new RegExp(__ARG__); const e=[...document.querySelectorAll('button,[role=radio],[role=tab],[role=option],[role=menuitem]')].find(x=>re.test((x.textContent||'').trim()) || re.test(x.getAttribute('aria-label')||'')); if(!e) return 'missing'; e.click(); return (e.textContent||'').trim().slice(0,60); })()

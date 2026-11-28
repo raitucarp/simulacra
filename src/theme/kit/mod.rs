@@ -20,18 +20,18 @@ pub fn kit_theme_config(tokens: &ThemeTokens) -> ThemeConfig {
     colors::apply_statuses(&mut colors, tokens);
     colors::apply_surfaces(&mut colors, tokens);
     colors::apply_charts(&mut colors, tokens);
-    ThemeConfig {
-        name: KIT_THEME_NAME.into(),
-        mode: if tokens.mode.is_dark() { ThemeMode::Dark } else { ThemeMode::Light },
-        font_size: Some(tokens.font_size_root.as_f32()),
-        font_family: Some(tokens.font_family_ui.clone().into()),
-        mono_font_family: Some(tokens.font_family_mono.clone().into()),
-        mono_font_size: Some(tokens.font_size_sm.as_f32()),
-        radius: Some(tokens.radius_sm.as_f32().round() as usize),
-        radius_lg: Some(tokens.radius_md.as_f32().round() as usize),
-        colors,
-        ..ThemeConfig::default()
-    }
+    // `ThemeConfig` is `#[non_exhaustive]` (gpui-kit 0.9): start from the default and assign.
+    let mut config = ThemeConfig::default();
+    config.name = KIT_THEME_NAME.into();
+    config.mode = if tokens.mode.is_dark() { ThemeMode::Dark } else { ThemeMode::Light };
+    config.font_size = Some(tokens.font_size_root.as_f32());
+    config.font_family = Some(tokens.font_family_ui.clone().into());
+    config.mono_font_family = Some(tokens.font_family_mono.clone().into());
+    config.mono_font_size = Some(tokens.font_size_sm.as_f32());
+    config.radius = Some(tokens.radius_sm.as_f32().round() as usize);
+    config.radius_lg = Some(tokens.radius_md.as_f32().round() as usize);
+    config.colors = colors;
+    config
 }
 
 /// Installs the tokens as gpui-component's active theme and refreshes every window.

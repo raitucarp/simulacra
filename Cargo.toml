@@ -52,8 +52,10 @@ image = { version = "0.25", default-features = false, features = ["png", "jpeg",
 # Encrypted snapshots (sb F2): Argon2id key derivation and XChaCha20-Poly1305 sealing from
 # RustCrypto (released versions, pinned), and zeroize (already in the graph) for the
 # passphrase and derived key; rusqlite's online backup restores a verified snapshot.
+# chacha20poly1305's `zeroize` wipes the cipher's copy of the key on drop (always on before 0.11);
+# its default `getrandom` feature supplies the operating system's generator for salts and nonces.
 argon2 = { version = "=0.6.0", features = ["zeroize"] }
-chacha20poly1305 = "=0.10.1"
+chacha20poly1305 = { version = "=0.11.0", features = ["zeroize"] }
 zeroize = "1.8"
 # Video poster frames (L6, docs/decisions/L6-video-poster-frames.md): the freedesktop thumbnail
 # cache is named by an MD5 of the file URI (md-5 is already in the graph through lopdf).

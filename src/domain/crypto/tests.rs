@@ -10,6 +10,20 @@ fn fixed() -> SealParams {
     SealParams { kdf: FAST, salt: [7; SALT_LEN], nonce: [9; NONCE_LEN] }
 }
 
+/// `PLAINTEXT` sealed by Simulacra 0.2.0 (chacha20poly1305 0.10.1) under `PASSWORD`, `fixed()`
+/// and `AAD`. Locked posts and snapshots are stored this way: these bytes must keep opening.
+const SEALED_BY_0_2_0: [u8; 41] = [
+    0xf5, 0x67, 0x39, 0xa8, 0xb1, 0x84, 0xd7, 0xc1, 0x80, 0xc8, 0x36, 0x1b, 0x38, 0x31, 0x75, 0x83, 0x06, 0xbe, 0x42, 0x00, 0x9b,
+    0xa0, 0x60, 0xa3, 0xfd, 0x42, 0x16, 0x3d, 0x80, 0x3e, 0xec, 0x67, 0x5f, 0x36, 0x07, 0xcc, 0x65, 0x0e, 0x2b, 0xe1, 0x4f,
+];
+
+#[test]
+fn opens_and_reproduces_what_0_2_0_sealed() {
+    let opened = open_with(&fixed(), &SEALED_BY_0_2_0, PASSWORD, AAD).expect("opened");
+    assert_eq!(opened.as_slice(), PLAINTEXT);
+    assert_eq!(seal_with(PLAINTEXT, PASSWORD, fixed(), AAD).expect("sealed").ciphertext, SEALED_BY_0_2_0);
+}
+
 #[test]
 fn default_seal_round_trips() {
     let envelope = seal(PLAINTEXT, PASSWORD).expect("sealed");

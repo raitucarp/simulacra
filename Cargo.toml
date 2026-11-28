@@ -18,7 +18,7 @@ required-features = ["codegen"]
 
 [dependencies]
 gpui-kit = "0.8.1"
-rusqlite = { version = "0.41", features = ["bundled", "backup"] }
+rusqlite = { version = "0.43", features = ["bundled", "backup"] }
 tokio = { version = "1", features = ["full"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"

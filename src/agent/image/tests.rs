@@ -59,19 +59,19 @@ async fn openai_images_send_model_size_and_key() {
 #[tokio::test]
 async fn google_imagen_and_gemini_image_models() {
     let imagen = MockServer::start(vec![MockReply::json(json!({ "predictions": [{ "bytesBase64Encoded": PNG_1X1_BASE64 }] }))]);
-    let job_imagen = job(ImageEngine::Google, &imagen.url);
+    let mut job_imagen = job(ImageEngine::Google, &imagen.url);
+    job_imagen.config.model = "imagen-4.0-generate-001".into();
     assert!(generate(&job_imagen, "a heron").await.is_ok());
     let request = &imagen.requests()[0];
-    assert_eq!(request.path, "/imagen-3.0-generate-002:predict");
+    assert_eq!(request.path, "/imagen-4.0-generate-001:predict");
     assert_eq!(request.header("x-goog-api-key"), Some("img-secret"));
     assert_eq!(request.json()["instances"][0]["prompt"], "a heron");
 
     let gemini = MockServer::start(vec![MockReply::json(json!({ "candidates": [{ "content": { "parts": [
         { "text": "here" }, { "inlineData": { "mimeType": "image/png", "data": PNG_1X1_BASE64 } } ] } }] }))]);
-    let mut job_gemini = job(ImageEngine::Google, &gemini.url);
-    job_gemini.config.model = "gemini-image".into();
+    let job_gemini = job(ImageEngine::Google, &gemini.url);
     assert!(generate(&job_gemini, "a heron").await.is_ok());
-    assert_eq!(gemini.requests()[0].path, "/gemini-image:generateContent");
+    assert_eq!(gemini.requests()[0].path, "/gemini-nano-banana-2.1:generateContent", "a blank model is the Gemini image default");
     let _ = std::fs::remove_dir_all(&job_imagen.media_dir);
     let _ = std::fs::remove_dir_all(&job_gemini.media_dir);
 }
@@ -126,4 +126,27 @@ async fn a_negative_prompt_reaches_stable_diffusion_only_when_given() {
     assert_eq!(workflow["3"]["inputs"]["text"], "blur");
     assert_eq!(comfy::comfy_workflow("", "moss", None, 64, 64)["3"]["inputs"]["text"], "blurry, low quality, watermark, text");
     let _ = std::fs::remove_dir_all(&job_a.media_dir);
+}
+
+#[tokio::test]
+async fn a_google_reply_without_an_image_says_why() {
+    let text_only = json!({ "candidates": [{ "content": { "parts": [{ "text": "I cannot draw that." }] }, "finishReason": "STOP" }] });
+    let blocked = json!({ "candidates": [{ "finishReason": "IMAGE_SAFETY" }] });
+    let server = MockServer::start(vec![MockReply::json(text_only), MockReply::json(blocked)]);
+    let job = job(ImageEngine::Google, &server.url);
+    let error = generate(&job, "x").await.expect_err("no image");
+    assert_eq!(error, "Google returned no image: the model answered with text only: I cannot draw that.");
+    let error = generate(&job, "x").await.expect_err("no image");
+    assert_eq!(error, "Google returned no image: the reply was withheld (IMAGE_SAFETY)");
+    assert_eq!(providers::no_image_error(&json!({})), "Google returned no image");
+}
+
+#[test]
+fn image_job_debug_never_prints_the_secret() {
+    let mut job = job(ImageEngine::Google, "https://img.test/v1?key=img-secret");
+    let shown = format!("{job:?}");
+    assert!(!shown.contains("img-secret"), "{shown}");
+    assert!(shown.contains("has_secret: true"), "{shown}");
+    job.secret = " ".into();
+    assert!(format!("{job:#?}").contains("has_secret: false"));
 }

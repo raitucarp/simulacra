@@ -2,6 +2,7 @@
 //! Every builder is pure, so request shapes are golden-tested without a network.
 
 pub(crate) mod anthropic;
+pub(crate) mod finish;
 pub(crate) mod gemini;
 pub(crate) mod openai;
 mod schema;

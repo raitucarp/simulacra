@@ -45,6 +45,7 @@ pub async fn converse(
             request.tool_choice = if emit_tool { ToolChoice::Force(STRUCTURED_OUTPUT_NAME.to_string()) } else { ToolChoice::Disabled };
         }
         let reply = transport.send(&request).await?;
+        merge(&mut sources, reply.sources); // pages the provider's own search grounded it on
         if let Some(emit) = reply.tool_calls.iter().find(|call| call.name == STRUCTURED_OUTPUT_NAME) {
             let answer = Answer::Structured(emit.arguments.clone());
             return Ok(LoopOutcome { answer, request, tools, sources });
@@ -59,15 +60,20 @@ pub async fn converse(
                 None => ToolOutput::error(NO_TOOLS_ERROR),
             };
             tools.push(ToolUse { name: call.name.clone(), summary: summarize(&call.arguments), failed: output.failed });
-            for source in output.sources {
-                if !sources.contains(&source) {
-                    sources.push(source);
-                }
-            }
+            merge(&mut sources, output.sources);
             request.messages.push(ChatMessage::tool_result(call, output.content));
         }
     }
     Err("The tool loop ended without an answer".to_string())
+}
+
+/// Appends each of `more` not listed yet.
+fn merge(sources: &mut Vec<SourceRef>, more: impl IntoIterator<Item = SourceRef>) {
+    for source in more {
+        if !sources.contains(&source) {
+            sources.push(source);
+        }
+    }
 }
 
 /// Compact JSON of the arguments, shortened.

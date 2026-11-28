@@ -10,7 +10,7 @@ use crate::domain::post::SourceKind;
 use serde_json::{json, Value};
 
 fn call(name: &str, arguments: Value) -> ToolCall {
-    ToolCall { id: "c1".into(), name: name.into(), arguments }
+    ToolCall { id: "c1".into(), name: name.into(), arguments, signature: None }
 }
 
 fn open_context() -> ToolContext {

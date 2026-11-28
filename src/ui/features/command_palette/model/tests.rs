@@ -198,3 +198,11 @@ fn semantic_results_form_one_group_by_their_source() {
     assert!(SemanticPhase::Searching { query: "mind".into() }.groups().is_empty());
     assert!(SemanticPhase::Prompt.rows().is_empty() && SemanticPhase::Prompt.query().is_none());
 }
+
+#[test]
+fn prose_matches_only_the_words_as_typed() {
+    let all = items();
+    let found = |query: &str| rank(&all, &parse_query(query), &PaletteHistory::default()).iter().any(|group| group.group == PaletteGroup::Posts);
+    assert!(found("mind graph"), "every word appears as typed, even with words between them");
+    assert!(!found("grph"), "letters strung through a word are noise in a post");
+}

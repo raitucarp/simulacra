@@ -38,7 +38,7 @@ impl AppView {
             let note = if failure.missing_key {
                 Notification::warning(t!("simulation.llm_missing_key").to_string())
             } else {
-                Notification::error(failure.message.clone())
+                Notification::error(t!("simulation.llm_failed_body", error = failure.message).to_string())
             };
             self.toast(ToastKind::AiFailure, note.title(title).id1::<LlmFailureNotice>(failure.provider.id_str()), window, cx);
         }

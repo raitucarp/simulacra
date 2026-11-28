@@ -1,0 +1,85 @@
+---
+title: Spaced repetition
+description: How Review decides what you see each day, why every item is anchored to a source, and what the grades do.
+icon: Repeat
+---
+
+Spaced repetition shows you something again shortly before you would forget it. Each successful recall makes the memory last longer, so the gaps between reviews grow from days to months. Review in Simulacra applies this to what you already have: your posts, other voices' posts and the passages of your vault.
+
+## Built on how memory works
+
+The Review page puts a handful of well-studied effects to work:
+
+| Principle | Where you meet it |
+|---|---|
+| Retrieval practice | Every review is a recall attempt: you answer before you look. |
+| Spacing | Each item is scheduled for the moment your recall is expected to fall to your target. |
+| Desirable difficulty | Multiple choice uses plausible wrong answers; free recall makes you produce the answer. |
+| Interleaving | New and due items, and items from different sources, are mixed in a session. |
+| Elaboration | [Connection maps](/docs/guides/review/connection-maps) ask how ideas connect, not only what they say. |
+| Metacognition | You grade yourself, and you can rate your confidence to see how well it predicts your answers. |
+
+## Every item is anchored
+
+There are no free-floating flashcards. An item is either:
+
+- **anchored** to a post or a vault passage, which is one face, while you wrote the other: a question the source answers (<UiLabel>Add question</UiLabel>) or the answer it prompts (<UiLabel>Add answer</UiLabel>); or
+- **a connection map**: a set of posts, passages and concepts whose connections are recalled as a whole.
+
+Anchoring keeps review honest about its source. A post face always shows the post's current text, so an edited post is reviewed as edited. A deleted post retires its item for good, while its past answers stay in the statistics. A passage is kept as it was quoted when you picked it.
+
+## The memory model
+
+Review schedules items with FSRS, the Free Spaced Repetition Scheduler (version 6, with its published default weights). It tracks three numbers per item:
+
+| Measure | Meaning |
+|---|---|
+| **Stability** | Days until the chance of recall falls to 90%. It grows with each successful review. |
+| **Difficulty** | From 1 to 10: how slowly stability grows for this item. |
+| **Retrievability** | The chance you would recall the item today, falling as time passes since the last review. |
+
+The **desired retention** you choose in **Settings › Learning** (90% by default, 70–99%) sets how far recall may fall before an item is due. Higher retention means shorter intervals and more reviews; lower means fewer reviews and more forgetting. Intervals are whole days, at least one day after a successful review and at most a hundred years.
+
+## Grades
+
+| Grade | Use it when | Effect |
+|---|---|---|
+| Again | You forgot | Stability drops (a lapse for a learnt item); the item comes back three cards later in the same session, at most twice. |
+| Hard | You recalled with real effort | A short interval |
+| Good | You recalled after a moment's thought | The interval for your desired retention |
+| Easy | You recalled at once | A longer interval, always beyond Good |
+
+Some practice grades itself. A multiple-choice answer is Again when wrong, Hard when right but rated a guess, and Good otherwise. A connection map earns Again unless the drawing is exact, then Good, Easy when quick and without corrections, or Hard when slow. A free-recall answer only suggests a grade; you choose.
+
+## An item's life
+
+| State | Meaning |
+|---|---|
+| New | Never reviewed |
+| Learning | Seen but not yet recalled on a later day, or forgotten after being learnt |
+| Young | Recalled at spaced intervals, under 21 days |
+| Mature | An interval of 21 days or more |
+| Suspended | Left out of reviews until you resume it (retired items count here too) |
+
+Editing an item keeps its schedule and history.
+
+## Today's queue
+
+Each review day, the queue holds the learnt items that are due (most overdue first) and new items (oldest first), within two limits from **Settings › Learning**:
+
+- **Daily review limit**: the most items answered per day, new ones included (200 by default).
+- **New cards per day**: how many new items are introduced (20 by default), never more than the review limit.
+
+New items are spread evenly between the reviews, then items from the same post or document are moved apart where possible, so two items on one source rarely follow each other.
+
+A review day starts at 04:00 local time, so a session after midnight still counts towards the evening before.
+
+## Every kind of practice is a review
+
+Session answers, multiple-choice and free-recall answers, connection drills and memory palace walks all update the item's schedule and go into one log. That log feeds the [statistics](/docs/guides/review/statistics), the daily counts, a goal's measured progress and the gap radar's retention.
+
+## Related
+
+- [Review](/docs/guides/review)
+- [Study from your posts](/docs/tutorials/study-from-your-posts)
+- [Learn posts and passages](/docs/guides/review/learn-posts)

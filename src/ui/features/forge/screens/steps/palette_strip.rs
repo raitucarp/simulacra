@@ -1,6 +1,7 @@
 //! The step palette strip above a step's options: illustrated chips of the palettes that only
 //! touch this step. Hovering (or moving the keyboard cursor onto) a chip previews what it would
-//! change; clicking it applies it as one undo step.
+//! change; clicking it applies it as one undo step. The strip is folded to its title line until
+//! asked for, so the step's own fields start near the top of the panel.
 
 use super::super::common::muted;
 use super::super::start::step_group;
@@ -9,13 +10,18 @@ use crate::state::forge::{preview_palette, step_palettes, FieldChange};
 use crate::ui::features::forge::text::tr;
 use crate::ui::features::forge::view::{ForgeHandle, ForgeView};
 use crate::ui::features::forge::widgets::{CardGrid, GridCell, OptionCardSpec};
+use crate::ui::icons::LucideIcon;
 use crate::ui::illustration::{Illustration, IllustrationKind};
+use gpui_kit::component::button::{Button, ButtonVariants};
+use gpui_kit::component::Sizable;
+use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::component::scroll::ScrollableElement;
 use gpui_kit::*;
 
 const STRIP_ID: &str = "forge-palette-strip";
 const STRIP_AREA_ID: &str = "forge-palette-strip-area";
 const STRIP_SCROLL_ID: &str = "forge-palette-strip-scroll";
+const STRIP_TOGGLE_ID: &str = "forge-palette-strip-toggle";
 const CHIP_ID_PREFIX: &str = "forge-step-palette";
 const TITLE_KEY: &str = "forge.palette.ui.strip_title";
 const HINT_KEY: &str = "forge.palette.ui.strip_hint";
@@ -40,6 +46,7 @@ impl ForgeView {
             .pb(theme.spacing_xs)
             .child(CardGrid::new(STRIP_ID, cells, columns, theme.spacing_sm));
         let hovered = self.strip_preview.filter(|p| palettes.iter().any(|shown| shown.key == p.key));
+        let open = self.strip_open;
         Some(
             div()
                 .flex()
@@ -50,11 +57,29 @@ impl ForgeView {
                 .border(theme.border_width_hairline)
                 .border_color(theme.border_subtle)
                 .bg(theme.bg_card)
-                .child(div().text_size(theme.font_size_sm).font_weight(FontWeight::SEMIBOLD).child(tr(TITLE_KEY)))
-                .child(muted(tr(HINT_KEY), theme))
-                .child(div().id(STRIP_AREA_ID).on_hover(move |inside, window, cx| if !*inside { leave(window, cx) }).child(grid))
-                .children(hovered.map(|palette| self.strip_changes(palette))),
+                .child(div().flex().child(self.strip_toggle(palettes.len(), handle)))
+                .when(open, |strip| {
+                    strip
+                        .child(muted(tr(HINT_KEY), theme))
+                        .child(div().id(STRIP_AREA_ID).on_hover(move |inside, window, cx| if !*inside { leave(window, cx) }).child(grid))
+                        .children(hovered.map(|palette| self.strip_changes(palette)))
+                }),
         )
+    }
+
+    /// The title line, folding or unfolding the strip (a button, so Tab reaches it).
+    fn strip_toggle(&self, count: usize, handle: &ForgeHandle) -> Button {
+        let chevron = if self.strip_open { LucideIcon::ChevronDown } else { LucideIcon::ChevronRight };
+        let toggle = handle.act(|this, _, cx| {
+            this.strip_open = !this.strip_open;
+            cx.notify();
+        });
+        Button::new(STRIP_TOGGLE_ID)
+            .ghost()
+            .small()
+            .icon(chevron)
+            .label(format!("{} ({count})", tr(TITLE_KEY)))
+            .on_click(move |_, window, cx| toggle(window, cx))
     }
 
     fn strip_chip(&self, palette: &'static Palette, handle: &ForgeHandle) -> GridCell {

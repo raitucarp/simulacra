@@ -42,8 +42,20 @@ Install [Rust](https://rustup.rs) (stable), then:
 cargo run --release
 ```
 
-On Linux, first install the system libraries listed in
-[.github/scripts/install-linux-deps.sh](.github/scripts/install-linux-deps.sh).
+On Linux, first install the system libraries (Debian and Ubuntu package names, as CI installs them in
+[.github/actions/setup-rust/action.yml](.github/actions/setup-rust/action.yml)):
+
+```bash
+sudo apt-get install -y --no-install-recommends pkg-config clang \
+  libxkbcommon-dev libxkbcommon-x11-dev libwayland-dev libx11-xcb-dev libxcb1-dev \
+  libvulkan-dev libfontconfig1-dev libfreetype-dev libgtk-3-dev libasound2-dev \
+  libssl-dev libzstd-dev
+```
+
+## Documentation
+
+The user guide lives in [docs/](docs/) (Next.js + Fumadocs) and is published to GitHub Pages at
+<https://simulacra.raitucarp.name/>. Run it locally with `npm install` and `npm run dev` in `docs/`.
 
 ## Licenses
 

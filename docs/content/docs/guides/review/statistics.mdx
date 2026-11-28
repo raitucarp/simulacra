@@ -1,0 +1,36 @@
+---
+title: Statistics
+description: The due forecast, true retention against your target, items by state, confidence calibration and the review heatmap.
+icon: ChartColumn
+---
+
+The <UiLabel>Statistics</UiLabel> tab shows how your memory of this network is doing and what is coming. Every chart is computed from your items and the log of your answers, nothing else.
+
+<Screenshot id="review-stats" alt="The Statistics tab in a wide window: four panels in two columns and the review heatmap across the bottom" caption="Two columns in a wide window, one in narrower ones." />
+
+## Open it
+
+Click the <UiLabel>Statistics</UiLabel> tab on the [Review](/docs/guides/review) page, or <UiLabel>Statistics</UiLabel> on a session's summary. Hover a bar or a cell for its exact figures.
+
+## The panels
+
+| Panel | Shows | Caption |
+|---|---|---|
+| <UiLabel>Due in the next 30 days</UiLabel> | One bar per day, today first; overdue items count towards today. Suspended and new items are left out. | "N items come due, N a day on average." |
+| <UiLabel>Retention</UiLabel> | One bar per week for the last 12 weeks: the share of reviews of learnt items that were recalled, with a line at your desired retention. | "You recalled N% of N reviews of learnt items; the target line is N%." Before any learnt item comes back: <UiLabel>Retention appears once learnt cards come back for review.</UiLabel> |
+| <UiLabel>Items by state</UiLabel> | One bar split into <UiLabel>New</UiLabel>, <UiLabel>Learning</UiLabel>, <UiLabel>Young</UiLabel>, <UiLabel>Mature</UiLabel> and <UiLabel>Suspended</UiLabel>, with counts. | <UiLabel>Mature items have an interval of three weeks or more.</UiLabel> |
+| <UiLabel>Confidence calibration</UiLabel> | For <UiLabel>Guessing</UiLabel>, <UiLabel>Unsure</UiLabel> and <UiLabel>Sure</UiLabel>: how often a multiple-choice answer given at that confidence was right ("N% right of N"). | <UiLabel>When you feel sure you should be right far more often than when you guess.</UiLabel> Before any rating: <UiLabel>Rate your confidence in multiple choice to see how well it predicts your answers.</UiLabel> |
+| <UiLabel>Review activity</UiLabel> | A heatmap of answers per day, one column per week (Monday on top), as many recent weeks as fit, up to a year. | The current streak ("N day streak") and "N answers in all". |
+
+## Reading them
+
+- **Retention** counts only reviews of items that were already learnt. Answers to new or relearning items say little about long-term memory, so they are left out. The target line is the **Desired retention** of Settings › Learning: the recall chance each item is scheduled for.
+- **States**: <UiLabel>Learning</UiLabel> covers items seen but not yet recalled on a later day, and items forgotten after being learnt. <UiLabel>Young</UiLabel> items have an interval under 21 days.
+- **The streak** counts consecutive days with at least one answer, ending today, or yesterday while today has none yet.
+- **The heatmap** shades each day by its share of your busiest day.
+
+## Related
+
+- [Spaced repetition](/docs/concepts/spaced-repetition)
+- [Quizzes](/docs/guides/review/quizzes)
+- [Settings](/docs/guides/settings)

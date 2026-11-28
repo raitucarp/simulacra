@@ -1,0 +1,96 @@
+---
+title: Mood and energy
+description: Check in on the affect grid with your energy, sleep and a note, then see your patterns and how they go along with what you do.
+icon: HeartPulse
+---
+
+A check-in takes a few seconds: click where you are on the affect grid, set your energy, save. After a week or so, the Mood tab shows patterns by day, weekday and hour, and careful associations with what you already do in the app.
+
+<Screenshot id="journal-mood" alt="The Mood tab scrolled to your patterns: the mood heat strip, energy by weekday and check-ins by hour charts, and the associations card" caption="The check-in, then your patterns." />
+
+## Open it
+
+Click the <UiLabel>Mood</UiLabel> tab on the [Journal](/docs/guides/journal), or run <UiLabel>Log mood and energy</UiLabel> in the command palette. The same check-in card is on the Today tab.
+
+## Check in
+
+<Screenshot id="journal-checkin" alt="The How are you feeling? card: the affect grid with eight region labels and a chosen point, the energy buttons 1 to 5, sleep, tags and note fields, the support tick and Save check-in" caption="Left to right is unpleasant to pleasant; bottom to top is calm to activated." size="md" />
+
+<Steps>
+<Step>
+### Click the grid
+"Click the grid where you are right now: left to right is unpleasant to pleasant, bottom to top is calm to activated." Beside the grid, a label names the region of your point; before you click it reads <UiLabel>Pick a point on the grid</UiLabel>.
+</Step>
+<Step>
+### Set your energy
+Under <UiLabel>Energy</UiLabel>, click a level from 1 (drained) to 5 (energised). It starts at 3.
+</Step>
+<Step>
+### Add details (optional)
+<UiLabel>Sleep (hours)</UiLabel>, for example `7.5`; <UiLabel>Tags</UiLabel>, for example `work, walk` (commas or spaces, `#` dropped, lowercased); a one-line <UiLabel>Note</UiLabel>.
+</Step>
+<Step>
+### Save
+Click <UiLabel>Save check-in</UiLabel>. It is disabled until you pick a point. The form clears for next time.
+</Step>
+</Steps>
+
+The grid reads your point as one of eight regions around the circle, or <UiLabel>Neutral</UiLabel> near the centre:
+
+| Region | Where |
+|---|---|
+| <UiLabel>Pleased</UiLabel> | pleasant |
+| <UiLabel>Excited</UiLabel> | pleasant and activated |
+| <UiLabel>Alert</UiLabel> | activated |
+| <UiLabel>Tense</UiLabel> | unpleasant and activated |
+| <UiLabel>Upset</UiLabel> | unpleasant |
+| <UiLabel>Low</UiLabel> | unpleasant and calm |
+| <UiLabel>Tired</UiLabel> | calm |
+| <UiLabel>Calm</UiLabel> | pleasant and calm |
+
+### Pointers to support
+
+<Screenshot id="journal-support" alt="A green note with a hand-and-heart icon pointing to friends, family, a doctor or counsellor, and to emergency numbers" caption="Shown only when you tick the box." size="sm" />
+
+Tick <UiLabel>I'd like pointers to support</UiLabel> to see a short note on where to find help: a friend, family, your doctor, a counsellor or therapist, and your local emergency number or a crisis line if you might be in danger. It appears only because you ask; Simulacra never infers it from your mood. The app cannot give medical advice.
+
+## Your patterns
+
+Once you have a check-in, the tab adds:
+
+| Card | Shows |
+|---|---|
+| <UiLabel>Mood over time</UiLabel> | A heat strip of each day's mean mood: green for pleasant, red for unpleasant, stronger for stronger feelings. 12 weeks in a compact window, 26 in wider ones. Hover for "day: mood +0.42, energy 3.5 (2 check-ins)". |
+| <UiLabel>Energy by weekday</UiLabel> | Mean energy for each weekday, Monday first. |
+| <UiLabel>Check-ins by hour</UiLabel> | How many check-ins at each hour of the day, with their mean energy. |
+| <UiLabel>What goes along with your mood</UiLabel> | Associations with your activity (below). |
+| <UiLabel>Recent check-ins</UiLabel> | The latest twelve: region, time, "energy N/5", "slept N h", tags and note (and the support note if you asked for it), each with <UiLabel>Delete</UiLabel>. |
+
+Deleting a check-in asks first: "The check-in is removed for good, and your mood charts stop counting it."
+
+With no check-ins the tab shows <UiLabel>No check-ins yet</UiLabel>: "Check in once or twice a day. After a week, patterns by day and hour start to show."
+
+## Associations
+
+The associations card compares your daily mood and energy with three things the app already knows about your days: <UiLabel>posts written</UiLabel>, <UiLabel>review sessions</UiLabel> (answers more than 30 minutes apart start a new session) and <UiLabel>focus minutes</UiLabel>. Each line is one pair, for example:
+
+> On days with more focus minutes, your energy tended to be higher (a moderate association, r = 0.41, 12 days).
+
+| Line | When |
+|---|---|
+| "not enough days yet (N of 7)" | Fewer than seven days with a check-in |
+| "nothing varied enough to compare yet" | The activity or the mood was the same every day |
+| "was about the same (no clear association…)" | The link is negligible |
+| "tended to be higher / lower (a weak / a moderate / a strong association…)" | Cohen's bands of the correlation r |
+
+"These are associations in your own data, not causes: many things change together, and a few days can mislead. They are not medical advice."
+
+## Feelings from your posts
+
+When a persona of yours posts a feeling, it can also log a check-in here. Turn on **Settings › Reading & Writing › Log my feelings in the journal** (off by default). The check-in takes its point from the feeling's emojis and intensity, its energy from that point, and the feeling's note. Nothing from the journal goes back to the feed.
+
+## Related
+
+- [Journal](/docs/guides/journal)
+- [Focus sessions](/docs/guides/journal/focus)
+- [Privacy](/docs/guides/journal/privacy)

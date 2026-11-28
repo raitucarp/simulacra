@@ -82,6 +82,11 @@ impl IssueKind {
         }
     }
 
+    /// Whether the issue only says a field is still empty (shown once the user moves on).
+    pub const fn is_blank(self) -> bool {
+        matches!(self, Self::NameRequired | Self::HandleRequired | Self::LanguageRequired | Self::BioEmpty | Self::TemplateEmpty | Self::EngineUrlEmpty)
+    }
+
     /// i18n key of the message (interpolate the issue's `args`).
     pub fn message_key(self) -> String {
         format!("{FORGE_I18N_ROOT}.{ISSUE_GROUP}.{}", self.key())

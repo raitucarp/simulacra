@@ -1,0 +1,129 @@
+---
+title: Custom themes
+description: Duplicate a theme to make it your own, recolour its fourteen base colours while watching the contrast checks, and import or export themes as JSON.
+icon: Paintbrush
+---
+
+Every theme is built from fourteen base colours; the app derives all its other colours from them. Bundled themes are read-only, so to change colours you duplicate one and edit the copy.
+
+<Screenshot id="appearance-editor-custom" alt="The CUSTOM THEME card editing Nord (Custom): Duplicate, Reset to preset and Delete, a grid of fourteen colour pickers with their hex values, and the CONTRAST (WCAG 2.1) list" caption="Editing a custom theme." />
+
+## The CUSTOM THEME card
+
+| Part | Bundled theme active | Custom theme active |
+|---|---|---|
+| Status | <UiLabel>Bundled themes are read-only. Duplicate one to edit its colors.</UiLabel> | <UiLabel>Editing …</UiLabel> with the theme's name |
+| Buttons | <UiLabel>Duplicate</UiLabel>, filled: the way to an editable copy | <UiLabel>Duplicate</UiLabel> and <UiLabel>Reset to preset</UiLabel> outlined, <UiLabel>Delete</UiLabel> in red |
+| Colour pickers | Hidden | Fourteen, in two even columns across the card: each swatch, its name and hex value |
+| <UiLabel>CONTRAST (WCAG 2.1)</UiLabel> | Shown | Shown, updated as you pick |
+
+<Screenshot id="appearance-editor-locked" alt="The CUSTOM THEME card on a bundled theme: the read-only message, the Duplicate button and the contrast list" caption="A bundled theme can only be duplicated." size="md" />
+
+## Make a theme your own
+
+<Steps>
+<Step>
+### Start from the closest theme
+
+Click its card in the gallery, for example **Nord**.
+</Step>
+<Step>
+### Duplicate it
+
+Click <UiLabel>Duplicate</UiLabel>. A copy named `Nord (Custom)` appears under **YOUR THEMES** and becomes active.
+</Step>
+<Step>
+### Recolour
+
+Click a colour swatch, pick a colour, and the app redraws with it. The hex value beside the swatch updates.
+</Step>
+<Step>
+### Check the contrast
+
+Watch the contrast list below the pickers. Aim for <UiLabel>AA</UiLabel> or better on every row.
+</Step>
+</Steps>
+
+Every edit is saved at once. Duplicating a custom theme copies its current colours too.
+
+## The fourteen base colours
+
+| Picker | JSON key | Used for |
+|---|---|---|
+| <UiLabel>Background</UiLabel> | `bg` | The app background and the sidebars |
+| <UiLabel>Surface</UiLabel> | `surface` | Cards |
+| <UiLabel>Elevated</UiLabel> | `elevated` | Dialogs, menus and other raised surfaces |
+| <UiLabel>Border</UiLabel> | `border` | Outlines and dividers |
+| <UiLabel>Text</UiLabel> | `fg` | Main text |
+| <UiLabel>Muted text</UiLabel> | `fg_muted` | Secondary text and hints; the Slate tint |
+| <UiLabel>Accent</UiLabel> | `accent` | The brand colour: primary buttons, the active item, focused fields |
+| <UiLabel>Second accent</UiLabel> | `accent_2` | The accent of your personas |
+| <UiLabel>Agent</UiLabel> | `agent` | The accent of agents |
+| <UiLabel>Success</UiLabel> | `success` | Confirmations; the Mint tint |
+| <UiLabel>Warning</UiLabel> | `warning` | Warnings; the Amber tint |
+| <UiLabel>Danger</UiLabel> | `danger` | Errors and destructive actions; the Rose tint |
+| <UiLabel>Info</UiLabel> | `info` | Information and the focus ring; the Sky and Violet tints |
+| <UiLabel>Selection</UiLabel> | `selection` | Selected text |
+
+## Contrast checks
+
+<Screenshot id="appearance-contrast" alt="The contrast list of a Nord copy whose muted text is nearly the background colour: Text on background 10.84:1 AAA, the three Muted text pairs at 1.69:1, 1.90:1 and 1.36:1 each marked Fail, Accent label on accent 10.50:1 AAA" caption="Each pair with its ratio and grade." size="md" />
+
+The list measures the colours you picked, as the WCAG 2.1 contrast ratio (`4.50:1`), and grades each pair:
+
+| Pair | AA from | AAA from |
+|---|---|---|
+| Text on background, on surface, on elevated | 4.5:1 | 7:1 |
+| Muted text on background, on surface, on elevated | 4.5:1 | 7:1 |
+| Accent label on accent (the text on filled buttons) | 3:1 | 4.5:1 |
+
+Below AA the badge reads <UiLabel>Fail</UiLabel>, outlined in red. The grades are advice: nothing stops you from keeping a failing colour.
+
+## Reset or delete
+
+| Button | What it does |
+|---|---|
+| <UiLabel>Reset to preset</UiLabel> | Puts back the colours (and mode) of the bundled theme the custom theme was duplicated from. An imported theme has no bundled origin, so its colours stay. |
+| <UiLabel>Delete</UiLabel> | Deletes the active custom theme at once, without asking. The app switches to the bundled theme it came from, or to Simulacra Midnight. |
+
+## Import and export
+
+<Screenshot id="appearance-transfer" alt="The IMPORT & EXPORT card with Copy JSON, Paste JSON, Save file… and Open file… buttons" caption="IMPORT & EXPORT." size="md" />
+
+| Button | What it does |
+|---|---|
+| <UiLabel>Copy JSON</UiLabel> | Copies the active theme, with your edits, as JSON. Toast: <UiLabel>Theme JSON copied to the clipboard</UiLabel>. |
+| <UiLabel>Paste JSON</UiLabel> | Reads a theme from the clipboard, adds it to your themes and switches to it. Toast: <UiLabel>Imported …</UiLabel>. |
+| <UiLabel>Save file…</UiLabel> | Saves the active theme as a `.json` file named after its id. Toast: <UiLabel>Theme saved</UiLabel>. |
+| <UiLabel>Open file…</UiLabel> | Picks a <UiLabel>Theme JSON</UiLabel> file and imports it like <UiLabel>Paste JSON</UiLabel>. |
+
+A theme file looks like the bundled ones:
+
+```json
+{
+  "id": "nord",
+  "name": "Nord",
+  "mode": "dark",
+  "credit": "Arctic Ice Studio (MIT)",
+  "colors": {
+    "bg": "#2e3440", "surface": "#272c36", "elevated": "#3b4252", "border": "#434c5e",
+    "fg": "#eceff4", "fg_muted": "#a9b0be", "accent": "#88c0d0", "accent_2": "#b48ead",
+    "agent": "#81a1c1", "success": "#a3be8c", "warning": "#ebcb8b", "danger": "#bf616a",
+    "info": "#5e81ac", "selection": "#434c5e"
+  }
+}
+```
+
+- `mode` is `dark` or `light`; `credit` may be left out.
+- All fourteen colours are required, each written `#rgb`, `#rrggbb` or `#rrggbbaa`.
+- An imported theme always gets a fresh id of its own (`custom-1`, `custom-2`, …), so it never replaces another theme.
+
+## Tips and limits
+
+- **Import errors.** A malformed file is refused with <UiLabel>Could not import the theme: …</UiLabel> and the reason, such as an invalid hex colour or a missing colour. An empty clipboard says <UiLabel>The clipboard does not contain text</UiLabel>.
+- **Share a theme** by sending the saved file; the other person uses <UiLabel>Open file…</UiLabel>.
+
+## Related
+
+- [Themes](/docs/guides/appearance/themes)
+- [Typography and layout](/docs/guides/appearance/typography-and-layout)

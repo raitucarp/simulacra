@@ -44,6 +44,7 @@ impl ReviewPanel {
     pub(in crate::ui::features::review) fn show_goals(&mut self, screen: GoalsScreen, cx: &mut Context<Self>) {
         self.learning.tool = super::LearnTool::Goals;
         self.learning.goals = screen;
+        self.learning.goal_tried = false;
         self.show(super::super::panel::Screen::Learn, cx);
     }
 

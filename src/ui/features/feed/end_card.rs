@@ -42,7 +42,7 @@ fn answer_row(end: &EndCard, theme: &ThemeTokens) -> AnyElement {
 
 /// The card closing a feed whose `budget` posts were all read today.
 pub(super) fn render_end_card(budget: u32, end: Option<&EndCard>, theme: &ThemeTokens) -> AnyElement {
-    let icon = div().size(theme.icon_size_2xl).text_color(theme.accent_brand).child(Icon::new(LucideIcon::Moon));
+    let icon = div().size(theme.icon_size_2xl).text_color(theme.accent_brand_text).child(Icon::new(LucideIcon::Moon));
     let title = div().font_family(theme.font_family_display.clone()).text_size(theme.font_size_lg).font_weight(FontWeight::SEMIBOLD).text_color(theme.text_primary).child(t!("feed.end.title").to_string());
     let read = div().text_size(theme.font_size_sm).text_color(theme.text_muted).child(t_count("feed.end.read", budget as usize));
     let question = div().text_size(theme.font_size_md).text_color(theme.text_secondary).child(t!("feed.end.question").to_string());

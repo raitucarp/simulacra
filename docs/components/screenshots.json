@@ -1,0 +1,1662 @@
+{
+ "agent-failure-notice": {
+  "height": 174,
+  "width": 388
+ },
+ "agent-first-reply": {
+  "height": 300,
+  "width": 519
+ },
+ "agent-scheduler-status": {
+  "height": 324,
+  "width": 840
+ },
+ "agent-spend-confirm": {
+  "height": 165,
+  "width": 454
+ },
+ "agent-trigger-dialog": {
+  "height": 301,
+  "width": 450
+ },
+ "appearance-contrast": {
+  "height": 266,
+  "width": 825
+ },
+ "appearance-editor-custom": {
+  "height": 540,
+  "width": 842
+ },
+ "appearance-editor-locked": {
+  "height": 338,
+  "width": 842
+ },
+ "appearance-gallery": {
+  "height": 493,
+  "width": 842
+ },
+ "appearance-icon-download": {
+  "height": 52,
+  "width": 825
+ },
+ "appearance-icon-sets": {
+  "height": 681,
+  "width": 857
+ },
+ "appearance-licences": {
+  "height": 173,
+  "width": 857
+ },
+ "appearance-mode": {
+  "height": 200,
+  "width": 842
+ },
+ "appearance-pane": {
+  "height": 900,
+  "width": 1440
+ },
+ "appearance-reading-comfort": {
+  "height": 164,
+  "width": 842
+ },
+ "appearance-theme-card": {
+  "height": 179,
+  "width": 211
+ },
+ "appearance-title-bar-toggle": {
+  "height": 87,
+  "width": 235
+ },
+ "appearance-transfer": {
+  "height": 97,
+  "width": 842
+ },
+ "appearance-typography": {
+  "height": 290,
+  "width": 842
+ },
+ "arena-claims": {
+  "height": 282,
+  "width": 722
+ },
+ "arena-debate-running": {
+  "height": 489,
+  "width": 724
+ },
+ "arena-debate-setup": {
+  "height": 900,
+  "width": 1440
+ },
+ "arena-debaters": {
+  "height": 302,
+  "width": 428
+ },
+ "arena-lab-compare": {
+  "height": 244,
+  "width": 722
+ },
+ "arena-lab-form": {
+  "height": 797,
+  "width": 452
+ },
+ "arena-lab-results": {
+  "height": 529,
+  "width": 724
+ },
+ "arena-no-key": {
+  "height": 48,
+  "width": 1176
+ },
+ "arena-saved": {
+  "height": 183,
+  "width": 724
+ },
+ "arena-spend-confirm": {
+  "height": 198,
+  "width": 464
+ },
+ "arena-verdict": {
+  "height": 511,
+  "width": 722
+ },
+ "beliefs-empty": {
+  "height": 379,
+  "width": 718
+ },
+ "beliefs-history": {
+  "height": 314,
+  "width": 692
+ },
+ "beliefs-persona": {
+  "height": 183,
+  "width": 718
+ },
+ "beliefs-row-editing": {
+  "height": 199,
+  "width": 692
+ },
+ "beliefs-tab": {
+  "height": 856,
+  "width": 718
+ },
+ "composer-attachments": {
+  "height": 378,
+  "width": 580
+ },
+ "composer-capture-box": {
+  "height": 187,
+  "width": 670
+ },
+ "composer-day-timeline": {
+  "height": 900,
+  "width": 1440
+ },
+ "composer-edit-version": {
+  "height": 335,
+  "width": 584
+ },
+ "composer-feeling-bar": {
+  "height": 420,
+  "width": 580
+ },
+ "composer-footer-tools": {
+  "height": 45,
+  "width": 578
+ },
+ "composer-format-buttons": {
+  "height": 85,
+  "width": 207
+ },
+ "composer-free-compose": {
+  "height": 418,
+  "width": 580
+ },
+ "composer-inbox-tab": {
+  "height": 452,
+  "width": 519
+ },
+ "composer-ink-sheet": {
+  "height": 550,
+  "width": 622
+ },
+ "composer-inline": {
+  "height": 112,
+  "width": 517
+ },
+ "composer-lock-row": {
+  "height": 422,
+  "width": 580
+ },
+ "composer-modal-new": {
+  "height": 900,
+  "width": 1440
+ },
+ "composer-modal-quote": {
+  "height": 399,
+  "width": 580
+ },
+ "composer-modal-reply": {
+  "height": 348,
+  "width": 580
+ },
+ "composer-modal-thread": {
+  "height": 535,
+  "width": 580
+ },
+ "composer-preview": {
+  "height": 348,
+  "width": 580
+ },
+ "composer-schedule-row": {
+  "height": 372,
+  "width": 580
+ },
+ "composer-scheduled-sheet": {
+  "height": 298,
+  "width": 621
+ },
+ "composer-split-into-thread": {
+  "height": 333,
+  "width": 578
+ },
+ "composer-symbol-picker": {
+  "height": 97,
+  "width": 580
+ },
+ "composer-todo-help": {
+  "height": 618,
+  "width": 580
+ },
+ "composer-todo-suggest": {
+  "height": 249,
+  "width": 578
+ },
+ "composer-voice-sheet": {
+  "height": 268,
+  "width": 622
+ },
+ "data-backup-toast": {
+  "height": 92,
+  "width": 398
+ },
+ "data-export-date-range": {
+  "height": 158,
+  "width": 620
+ },
+ "data-export-journal-warning": {
+  "height": 160,
+  "width": 620
+ },
+ "data-export-sheet": {
+  "height": 569,
+  "width": 620
+ },
+ "data-history-sheet": {
+  "height": 676,
+  "width": 620
+ },
+ "data-restore-choose": {
+  "height": 324,
+  "width": 620
+ },
+ "data-restore-verified": {
+  "height": 269,
+  "width": 620
+ },
+ "data-snapshot-sheet": {
+  "height": 449,
+  "width": 620
+ },
+ "data-storage-card": {
+  "height": 164,
+  "width": 842
+ },
+ "engine-credential-picker": {
+  "height": 154,
+  "width": 386
+ },
+ "engine-image": {
+  "height": 748,
+  "width": 419
+ },
+ "engine-model-own": {
+  "height": 746,
+  "width": 419
+ },
+ "engine-output-json": {
+  "height": 746,
+  "width": 419
+ },
+ "engine-request-custom": {
+  "height": 748,
+  "width": 419
+ },
+ "engine-tabs": {
+  "height": 62,
+  "width": 403
+ },
+ "engine-test-call": {
+  "height": 265,
+  "width": 407
+ },
+ "engine-tools": {
+  "height": 746,
+  "width": 419
+ },
+ "forge-appearance": {
+  "height": 698,
+  "width": 419
+ },
+ "forge-appearance-emblem": {
+  "height": 248,
+  "width": 406
+ },
+ "forge-attributes": {
+  "height": 748,
+  "width": 419
+ },
+ "forge-birthsign": {
+  "height": 748,
+  "width": 419
+ },
+ "forge-celebrate": {
+  "height": 525,
+  "width": 388
+ },
+ "forge-daily-life": {
+  "height": 746,
+  "width": 419
+ },
+ "forge-describe": {
+  "height": 366,
+  "width": 319
+ },
+ "forge-disposition": {
+  "height": 748,
+  "width": 419
+ },
+ "forge-embodiment": {
+  "height": 748,
+  "width": 419
+ },
+ "forge-explainer": {
+  "height": 238,
+  "width": 326
+ },
+ "forge-grimoire": {
+  "height": 748,
+  "width": 419
+ },
+ "forge-image-ideas": {
+  "height": 900,
+  "width": 1440
+ },
+ "forge-keyboard-hint": {
+  "height": 251,
+  "width": 326
+ },
+ "forge-mind": {
+  "height": 746,
+  "width": 419
+ },
+ "forge-origin": {
+  "height": 746,
+  "width": 419
+ },
+ "forge-palette-strip": {
+  "height": 407,
+  "width": 407
+ },
+ "forge-rail": {
+  "height": 740,
+  "width": 212
+ },
+ "forge-relationships": {
+  "height": 748,
+  "width": 419
+ },
+ "forge-resume": {
+  "height": 428,
+  "width": 388
+ },
+ "forge-review": {
+  "height": 737,
+  "width": 419
+ },
+ "forge-rhetoric": {
+  "height": 746,
+  "width": 419
+ },
+ "forge-roll": {
+  "height": 442,
+  "width": 319
+ },
+ "forge-save-bar": {
+  "height": 49,
+  "width": 1199
+ },
+ "forge-start": {
+  "height": 900,
+  "width": 1440
+ },
+ "forge-start-preview": {
+  "height": 772,
+  "width": 319
+ },
+ "forge-start-tiles": {
+  "height": 160,
+  "width": 872
+ },
+ "forge-steps-overview": {
+  "height": 900,
+  "width": 1440
+ },
+ "forge-suggest-bar": {
+  "height": 91,
+  "width": 407
+ },
+ "forge-topbar": {
+  "height": 60,
+  "width": 1199
+ },
+ "forge-voice": {
+  "height": 748,
+  "width": 419
+ },
+ "forge-week-strip": {
+  "height": 289,
+  "width": 407
+ },
+ "forge-why-card": {
+  "height": 449,
+  "width": 345
+ },
+ "graph-details-bar": {
+  "height": 69,
+  "width": 1168
+ },
+ "graph-empty": {
+  "height": 770,
+  "width": 1180
+ },
+ "graph-header": {
+  "height": 68,
+  "width": 1192
+ },
+ "graph-legend": {
+  "height": 43,
+  "width": 1166
+ },
+ "graph-mini": {
+  "height": 238,
+  "width": 319
+ },
+ "graph-overview": {
+  "height": 900,
+  "width": 1440
+ },
+ "graph-selected": {
+  "height": 651,
+  "width": 1144
+ },
+ "import-drop-overlay": {
+  "height": 900,
+  "width": 1440
+ },
+ "import-sheet": {
+  "height": 900,
+  "width": 1440
+ },
+ "import-sheet-failed": {
+  "height": 213,
+  "width": 760
+ },
+ "import-sheet-footer": {
+  "height": 50,
+  "width": 760
+ },
+ "import-sheet-header": {
+  "height": 110,
+  "width": 760
+ },
+ "import-sheet-image": {
+  "height": 707,
+  "width": 760
+ },
+ "import-sheet-post-as": {
+  "height": 146,
+  "width": 760
+ },
+ "import-sheet-reading": {
+  "height": 288,
+  "width": 760
+ },
+ "import-sheet-units": {
+  "height": 275,
+  "width": 760
+ },
+ "import-tutorial-sheet": {
+  "height": 720,
+  "width": 760
+ },
+ "insights-activity": {
+  "height": 900,
+  "width": 1440
+ },
+ "insights-calibration": {
+  "height": 763,
+  "width": 1192
+ },
+ "insights-calibration-empty": {
+  "height": 376,
+  "width": 1192
+ },
+ "insights-categories": {
+  "height": 846,
+  "width": 1192
+ },
+ "insights-diversity": {
+  "height": 846,
+  "width": 1192
+ },
+ "insights-embedding": {
+  "height": 692,
+  "width": 1180
+ },
+ "insights-empty": {
+  "height": 381,
+  "width": 1180
+ },
+ "insights-filter-bar": {
+  "height": 104,
+  "width": 1180
+ },
+ "insights-header-tabs": {
+  "height": 112,
+  "width": 1192
+ },
+ "insights-network": {
+  "height": 900,
+  "width": 1440
+ },
+ "insights-network-picked": {
+  "height": 370,
+  "width": 1164
+ },
+ "insights-network-tooltip": {
+  "height": 208,
+  "width": 310
+ },
+ "insights-overview": {
+  "height": 900,
+  "width": 1440
+ },
+ "insights-radar": {
+  "height": 471,
+  "width": 588
+ },
+ "insights-readability": {
+  "height": 832,
+  "width": 1192
+ },
+ "insights-rhythm": {
+  "height": 471,
+  "width": 588
+ },
+ "insights-sets-jaccard": {
+  "height": 178,
+  "width": 1180
+ },
+ "insights-sets-upset": {
+  "height": 434,
+  "width": 1180
+ },
+ "insights-sets-venn": {
+  "height": 509,
+  "width": 1180
+ },
+ "insights-symmetry": {
+  "height": 828,
+  "width": 1192
+ },
+ "insights-tension-card": {
+  "height": 197,
+  "width": 1180
+ },
+ "insights-tensions": {
+  "height": 534,
+  "width": 1192
+ },
+ "insights-timeline": {
+  "height": 874,
+  "width": 1192
+ },
+ "insights-timeline-detail": {
+  "height": 676,
+  "width": 588
+ },
+ "journal-capsule-form": {
+  "height": 355,
+  "width": 968
+ },
+ "journal-capsule-open": {
+  "height": 479,
+  "width": 968
+ },
+ "journal-capsules": {
+  "height": 374,
+  "width": 968
+ },
+ "journal-checkin": {
+  "height": 373,
+  "width": 968
+ },
+ "journal-editor": {
+  "height": 353,
+  "width": 968
+ },
+ "journal-entries": {
+  "height": 900,
+  "width": 1440
+ },
+ "journal-focus-log": {
+  "height": 671,
+  "width": 968
+ },
+ "journal-focus-mode": {
+  "height": 900,
+  "width": 1440
+ },
+ "journal-focus-reflection": {
+  "height": 170,
+  "width": 968
+ },
+ "journal-focus-running": {
+  "height": 205,
+  "width": 968
+ },
+ "journal-focus-setup": {
+  "height": 243,
+  "width": 968
+ },
+ "journal-header": {
+  "height": 142,
+  "width": 968
+ },
+ "journal-mood": {
+  "height": 900,
+  "width": 1440
+ },
+ "journal-support": {
+  "height": 122,
+  "width": 636
+ },
+ "journal-today": {
+  "height": 900,
+  "width": 1440
+ },
+ "lab-beliefs-tab": {
+  "height": 376,
+  "width": 718
+ },
+ "lab-contact-row": {
+  "height": 58,
+  "width": 236
+ },
+ "lab-empty-roster": {
+  "height": 360,
+  "width": 336
+ },
+ "lab-mode-switch": {
+  "height": 66,
+  "width": 243
+ },
+ "lab-overview": {
+  "height": 900,
+  "width": 1440
+ },
+ "lab-persona-card": {
+  "height": 272,
+  "width": 698
+ },
+ "lab-posts-tab": {
+  "height": 856,
+  "width": 740
+ },
+ "lab-profile-card": {
+  "height": 310,
+  "width": 698
+ },
+ "lab-recommended-tab": {
+  "height": 856,
+  "width": 720
+ },
+ "lab-run-status": {
+  "height": 94,
+  "width": 664
+ },
+ "lifecycle-auto-delete-submenu": {
+  "height": 144,
+  "width": 330
+ },
+ "lifecycle-countdown-chip": {
+  "height": 40,
+  "width": 517
+ },
+ "lifecycle-delete-dialog": {
+  "height": 152,
+  "width": 448
+ },
+ "media-gallery": {
+  "height": 356,
+  "width": 517
+ },
+ "media-lightbox": {
+  "height": 900,
+  "width": 1440
+ },
+ "network-create-dialog": {
+  "height": 186,
+  "width": 452
+ },
+ "network-created": {
+  "height": 900,
+  "width": 1440
+ },
+ "network-name-error": {
+  "height": 212,
+  "width": 452
+ },
+ "network-popover": {
+  "height": 255,
+  "width": 260
+ },
+ "network-switcher": {
+  "height": 40,
+  "width": 241
+ },
+ "palette-blank": {
+  "height": 510,
+  "width": 652
+ },
+ "palette-commands-mode": {
+  "height": 510,
+  "width": 652
+ },
+ "palette-empty": {
+  "height": 281,
+  "width": 648
+ },
+ "palette-footer": {
+  "height": 40,
+  "width": 648
+ },
+ "palette-mixed-groups": {
+  "height": 332,
+  "width": 650
+ },
+ "palette-search": {
+  "height": 366,
+  "width": 650
+ },
+ "palette-semantic-mode": {
+  "height": 140,
+  "width": 645
+ },
+ "post-action-bar": {
+  "height": 34,
+  "width": 460
+ },
+ "post-agent-chips": {
+  "height": 181,
+  "width": 517
+ },
+ "post-author-row": {
+  "height": 32,
+  "width": 460
+ },
+ "post-card-anatomy": {
+  "height": 320,
+  "width": 517
+ },
+ "post-checklist": {
+  "height": 256,
+  "width": 517
+ },
+ "post-code-block": {
+  "height": 124,
+  "width": 456
+ },
+ "post-code-confirm": {
+  "height": 305,
+  "width": 448
+ },
+ "post-embed-card": {
+  "height": 252,
+  "width": 517
+ },
+ "post-entry-submenu": {
+  "height": 514,
+  "width": 484
+ },
+ "post-feeling-row": {
+  "height": 37,
+  "width": 517
+ },
+ "post-file-card": {
+  "height": 247,
+  "width": 517
+ },
+ "post-ink-card": {
+  "height": 311,
+  "width": 517
+ },
+ "post-link-card": {
+  "height": 214,
+  "width": 517
+ },
+ "post-locked-card": {
+  "height": 122,
+  "width": 517
+ },
+ "post-monthly-review": {
+  "height": 236,
+  "width": 620
+ },
+ "post-reaction-bar": {
+  "height": 306,
+  "width": 517
+ },
+ "post-reaction-picker": {
+  "height": 387,
+  "width": 380
+ },
+ "post-spoiler": {
+  "height": 29,
+  "width": 460
+ },
+ "post-symbol-face": {
+  "height": 320,
+  "width": 517
+ },
+ "post-symbol-key": {
+  "height": 476,
+  "width": 624
+ },
+ "post-tinted-card": {
+  "height": 178,
+  "width": 518
+ },
+ "post-unlock-sheet": {
+  "height": 212,
+  "width": 620
+ },
+ "post-voice-card": {
+  "height": 150,
+  "width": 517
+ },
+ "review-caught-up": {
+  "height": 306,
+  "width": 920
+ },
+ "review-drill": {
+  "height": 610,
+  "width": 940
+ },
+ "review-drill-result": {
+  "height": 802,
+  "width": 940
+ },
+ "review-empty": {
+  "height": 302,
+  "width": 920
+ },
+ "review-grade-buttons": {
+  "height": 68,
+  "width": 688
+ },
+ "review-header": {
+  "height": 110,
+  "width": 940
+ },
+ "review-items": {
+  "height": 286,
+  "width": 928
+ },
+ "review-learn-badge": {
+  "height": 56,
+  "width": 468
+ },
+ "review-learn-gaps": {
+  "height": 900,
+  "width": 1440
+ },
+ "review-learn-goal-detail": {
+  "height": 900,
+  "width": 1440
+ },
+ "review-learn-goal-new": {
+  "height": 332,
+  "width": 928
+ },
+ "review-learn-goals": {
+  "height": 182,
+  "width": 928
+ },
+ "review-learn-palace-editor": {
+  "height": 900,
+  "width": 1440
+ },
+ "review-learn-palace-list": {
+  "height": 605,
+  "width": 928
+ },
+ "review-learn-palace-walk": {
+  "height": 453,
+  "width": 940
+ },
+ "review-learn-sheet-passages": {
+  "height": 666,
+  "width": 602
+ },
+ "review-learn-sheet-post": {
+  "height": 438,
+  "width": 602
+ },
+ "review-learn-tutor-dialogue": {
+  "height": 650,
+  "width": 928
+ },
+ "review-learn-tutor-start": {
+  "height": 520,
+  "width": 928
+ },
+ "review-learn-tutor-summary": {
+  "height": 429,
+  "width": 932
+ },
+ "review-learn-weekly": {
+  "height": 900,
+  "width": 1440
+ },
+ "review-map-editor": {
+  "height": 819,
+  "width": 928
+ },
+ "review-picker-learn": {
+  "height": 398,
+  "width": 928
+ },
+ "review-picker-map": {
+  "height": 378,
+  "width": 928
+ },
+ "review-post-learn-menu": {
+  "height": 303,
+  "width": 389
+ },
+ "review-quiz-choice": {
+  "height": 608,
+  "width": 704
+ },
+ "review-quiz-done": {
+  "height": 186,
+  "width": 928
+ },
+ "review-quiz-modes": {
+  "height": 182,
+  "width": 928
+ },
+ "review-quiz-order": {
+  "height": 562,
+  "width": 688
+ },
+ "review-quiz-recall": {
+  "height": 526,
+  "width": 704
+ },
+ "review-session-prompt": {
+  "height": 318,
+  "width": 704
+ },
+ "review-session-revealed": {
+  "height": 425,
+  "width": 704
+ },
+ "review-stats": {
+  "height": 900,
+  "width": 1440
+ },
+ "review-summary": {
+  "height": 286,
+  "width": 928
+ },
+ "review-today": {
+  "height": 900,
+  "width": 1440
+ },
+ "search-chips": {
+  "height": 146,
+  "width": 790
+ },
+ "search-feed-order": {
+  "height": 92,
+  "width": 690
+ },
+ "search-indexing-paused": {
+  "height": 94,
+  "width": 264
+ },
+ "search-meaning-fallback": {
+  "height": 368,
+  "width": 654
+ },
+ "search-meaning-prompt": {
+  "height": 124,
+  "width": 646
+ },
+ "search-meaning-results": {
+  "height": 510,
+  "width": 650
+ },
+ "search-page": {
+  "height": 900,
+  "width": 1440
+ },
+ "search-related-thoughts": {
+  "height": 342,
+  "width": 676
+ },
+ "search-results": {
+  "height": 900,
+  "width": 1440
+ },
+ "search-similar-sheet": {
+  "height": 540,
+  "width": 606
+ },
+ "search-tutorial-meaning": {
+  "height": 510,
+  "width": 653
+ },
+ "settings-advanced": {
+  "height": 374,
+  "width": 857
+ },
+ "settings-agents": {
+  "height": 761,
+  "width": 857
+ },
+ "settings-agents-scheduler-status": {
+  "height": 104,
+  "width": 825
+ },
+ "settings-ai-provider": {
+  "height": 481,
+  "width": 857
+ },
+ "settings-ai-requests-budget": {
+  "height": 393,
+  "width": 842
+ },
+ "settings-code": {
+  "height": 762,
+  "width": 857
+ },
+ "settings-compact": {
+  "height": 900,
+  "width": 860
+ },
+ "settings-control-locked": {
+  "height": 58,
+  "width": 825
+ },
+ "settings-control-menu": {
+  "height": 161,
+  "width": 160
+ },
+ "settings-credentials-editor": {
+  "height": 466,
+  "width": 842
+ },
+ "settings-credentials-list": {
+  "height": 224,
+  "width": 842
+ },
+ "settings-embeddings": {
+  "height": 802,
+  "width": 857
+ },
+ "settings-footer-unsaved": {
+  "height": 53,
+  "width": 857
+ },
+ "settings-general": {
+  "height": 659,
+  "width": 857
+ },
+ "settings-images": {
+  "height": 431,
+  "width": 857
+ },
+ "settings-import": {
+  "height": 431,
+  "width": 857
+ },
+ "settings-learning": {
+  "height": 820,
+  "width": 857
+ },
+ "settings-notifications": {
+  "height": 436,
+  "width": 857
+ },
+ "settings-privacy-data": {
+  "height": 859,
+  "width": 857
+ },
+ "settings-rail": {
+  "height": 760,
+  "width": 222
+ },
+ "settings-reading-writing": {
+  "height": 1082,
+  "width": 857
+ },
+ "settings-row-modified": {
+  "height": 58,
+  "width": 825
+ },
+ "settings-search": {
+  "height": 900,
+  "width": 1440
+ },
+ "settings-window": {
+  "height": 900,
+  "width": 1440
+ },
+ "shell-appearance-tooltip": {
+  "height": 83,
+  "width": 231
+ },
+ "shell-cadence-heatmap": {
+  "height": 226,
+  "width": 319
+ },
+ "shell-knowledge-card": {
+  "height": 136,
+  "width": 319
+ },
+ "shell-language-popover": {
+  "height": 418,
+  "width": 220
+ },
+ "shell-layout-compact": {
+  "height": 700,
+  "width": 820
+ },
+ "shell-layout-medium": {
+  "height": 800,
+  "width": 1100
+ },
+ "shell-mini-graph": {
+  "height": 248,
+  "width": 319
+ },
+ "shell-new-menu": {
+  "height": 221,
+  "width": 238
+ },
+ "shell-persona-lab-active": {
+  "height": 862,
+  "width": 1199
+ },
+ "shell-rail-tooltip": {
+  "height": 292,
+  "width": 220
+ },
+ "shell-right-mind-cadence": {
+  "height": 862,
+  "width": 319
+ },
+ "shell-right-vault-telemetry": {
+  "height": 862,
+  "width": 319
+ },
+ "shell-shortcut-sheet": {
+  "height": 639,
+  "width": 1004
+ },
+ "shell-sidebar-expanded": {
+  "height": 862,
+  "width": 241
+ },
+ "shell-sidebar-footer": {
+  "height": 92,
+  "width": 241
+ },
+ "shell-sidebar-pin-toggle": {
+  "height": 110,
+  "width": 282
+ },
+ "shell-sidebar-places": {
+  "height": 320,
+  "width": 241
+ },
+ "shell-sidebar-rail": {
+  "height": 862,
+  "width": 65
+ },
+ "shell-sidebar-sections": {
+  "height": 486,
+  "width": 241
+ },
+ "shell-sparks": {
+  "height": 332,
+  "width": 319
+ },
+ "shell-telemetry-roster": {
+  "height": 191,
+  "width": 319
+ },
+ "shell-title-bar": {
+  "height": 38,
+  "width": 1440
+ },
+ "shell-title-bar-actions": {
+  "height": 38,
+  "width": 300
+ },
+ "shell-toast-confirmation": {
+  "height": 56,
+  "width": 390
+ },
+ "shell-trending-topics": {
+  "height": 206,
+  "width": 319
+ },
+ "shell-user-card": {
+  "height": 54,
+  "width": 241
+ },
+ "shell-user-card-switched": {
+  "height": 54,
+  "width": 241
+ },
+ "shell-window-arabic": {
+  "height": 900,
+  "width": 1440
+ },
+ "shell-window-overview": {
+  "height": 900,
+  "width": 1440
+ },
+ "start-settings-welcome-tour": {
+  "height": 222,
+  "width": 842
+ },
+ "start-splash": {
+  "height": 1032,
+  "width": 1920
+ },
+ "start-tour-agent": {
+  "height": 900,
+  "width": 1440
+ },
+ "start-tour-first-post": {
+  "height": 900,
+  "width": 1440
+ },
+ "start-tour-vault": {
+  "height": 900,
+  "width": 1440
+ },
+ "start-welcome": {
+  "height": 900,
+  "width": 1440
+ },
+ "tasks-filters": {
+  "height": 166,
+  "width": 470
+ },
+ "tasks-page": {
+  "height": 900,
+  "width": 1440
+ },
+ "thinking-actions-menu": {
+  "height": 721,
+  "width": 414
+ },
+ "thinking-argument-editor": {
+  "height": 250,
+  "width": 656
+ },
+ "thinking-argument-empty": {
+  "height": 265,
+  "width": 679
+ },
+ "thinking-argument-list": {
+  "height": 120,
+  "width": 666
+ },
+ "thinking-argument-map": {
+  "height": 438,
+  "width": 679
+ },
+ "thinking-atomic-hint": {
+  "height": 155,
+  "width": 560
+ },
+ "thinking-atomic-sheet": {
+  "height": 599,
+  "width": 560
+ },
+ "thinking-credence-chip": {
+  "height": 138,
+  "width": 491
+ },
+ "thinking-credence-menu": {
+  "height": 395,
+  "width": 159
+ },
+ "thinking-credence-popover-open": {
+  "height": 394,
+  "width": 328
+ },
+ "thinking-credence-popover-resolved": {
+  "height": 253,
+  "width": 328
+ },
+ "thinking-tutorial-calibration": {
+  "height": 680,
+  "width": 1192
+ },
+ "thread-backlinks": {
+  "height": 58,
+  "width": 676
+ },
+ "thread-behind-this-post": {
+  "height": 105,
+  "width": 664
+ },
+ "thread-inspector": {
+  "height": 862,
+  "width": 679
+ },
+ "thread-references-menu": {
+  "height": 178,
+  "width": 231
+ },
+ "tools-actions-choices": {
+  "height": 134,
+  "width": 547
+ },
+ "tools-actions-concept": {
+  "height": 512,
+  "width": 547
+ },
+ "tools-actions-sheet": {
+  "height": 681,
+  "width": 761
+ },
+ "tools-actions-submenu": {
+  "height": 676,
+  "width": 404
+ },
+ "tools-ask-room-answers": {
+  "height": 466,
+  "width": 679
+ },
+ "tools-audience-submenu": {
+  "height": 152,
+  "width": 364
+ },
+ "tools-branch-sheet": {
+  "height": 299,
+  "width": 622
+ },
+ "tools-collection-submenu": {
+  "height": 121,
+  "width": 468
+ },
+ "tools-correction-banner": {
+  "height": 315,
+  "width": 517
+ },
+ "tools-correction-sheet": {
+  "height": 245,
+  "width": 621
+ },
+ "tools-depth-dial": {
+  "height": 234,
+  "width": 358
+ },
+ "tools-distill-chip": {
+  "height": 61,
+  "width": 517
+ },
+ "tools-garden-submenu": {
+  "height": 66,
+  "width": 379
+ },
+ "tools-glossary-hover": {
+  "height": 70,
+  "width": 460
+ },
+ "tools-glossary-sheet": {
+  "height": 306,
+  "width": 622
+ },
+ "tools-history-sheet": {
+  "height": 427,
+  "width": 622
+ },
+ "tools-lens-sheet": {
+  "height": 265,
+  "width": 622
+ },
+ "tools-lens-strip": {
+  "height": 118,
+  "width": 517
+ },
+ "tools-locked-card": {
+  "height": 121,
+  "width": 517
+ },
+ "tools-margin-sheet": {
+  "height": 338,
+  "width": 622
+ },
+ "tools-mind-banner": {
+  "height": 197,
+  "width": 517
+ },
+ "tools-mind-sheet": {
+  "height": 374,
+  "width": 622
+ },
+ "tools-open-question-chip": {
+  "height": 149,
+  "width": 517
+ },
+ "tools-open-questions-page": {
+  "height": 227,
+  "width": 622
+ },
+ "tools-post-menu": {
+  "height": 368,
+  "width": 143
+ },
+ "tools-saved-view": {
+  "height": 900,
+  "width": 1440
+ },
+ "tools-series-sheet": {
+  "height": 299,
+  "width": 622
+ },
+ "tools-still-true-strip": {
+  "height": 203,
+  "width": 517
+ },
+ "tools-translation-line": {
+  "height": 249,
+  "width": 517
+ },
+ "tools-unlock-sheet": {
+  "height": 213,
+  "width": 620
+ },
+ "tools-words-sheet": {
+  "height": 266,
+  "width": 622
+ },
+ "vault-active-filters": {
+  "height": 34,
+  "width": 236
+ },
+ "vault-compact-drawer": {
+  "height": 900,
+  "width": 720
+ },
+ "vault-delete-dialog": {
+  "height": 176,
+  "width": 472
+ },
+ "vault-editor": {
+  "height": 900,
+  "width": 1440
+ },
+ "vault-editor-problems": {
+  "height": 112,
+  "width": 760
+ },
+ "vault-editor-sections": {
+  "height": 800,
+  "width": 760
+ },
+ "vault-empty": {
+  "height": 384,
+  "width": 1199
+ },
+ "vault-entry": {
+  "height": 900,
+  "width": 1440
+ },
+ "vault-entry-citations": {
+  "height": 202,
+  "width": 864
+ },
+ "vault-entry-filing": {
+  "height": 250,
+  "width": 864
+ },
+ "vault-entry-record": {
+  "height": 741,
+  "width": 320
+ },
+ "vault-entry-related": {
+  "height": 160,
+  "width": 864
+ },
+ "vault-entry-title": {
+  "height": 240,
+  "width": 866
+ },
+ "vault-facet-rail": {
+  "height": 676,
+  "width": 231
+ },
+ "vault-no-matches": {
+  "height": 380,
+  "width": 956
+ },
+ "vault-overview": {
+  "height": 900,
+  "width": 1440
+ },
+ "vault-post-sources": {
+  "height": 181,
+  "width": 519
+ },
+ "vault-reader": {
+  "height": 900,
+  "width": 1440
+ },
+ "vault-shelf-card": {
+  "height": 322,
+  "width": 148
+ },
+ "vault-sort-menu": {
+  "height": 182,
+  "width": 159
+ },
+ "vault-sources-sidebar": {
+  "height": 86,
+  "width": 241
+ },
+ "vault-subject-index": {
+  "height": 900,
+  "width": 1440
+ },
+ "vault-subject-tree": {
+  "height": 126,
+  "width": 231
+ },
+ "vault-table": {
+  "height": 172,
+  "width": 956
+ },
+ "vault-toolbar": {
+  "height": 48,
+  "width": 956
+ },
+ "vault-trigger-document": {
+  "height": 299,
+  "width": 448
+ },
+ "vault-tutorial-citation": {
+  "height": 182,
+  "width": 519
+ },
+ "vault-tutorial-entry": {
+  "height": 900,
+  "width": 1440
+ },
+ "view-board": {
+  "height": 662,
+  "width": 692
+ },
+ "view-branches": {
+  "height": 198,
+  "width": 679
+ },
+ "view-cadence-heatmap": {
+  "height": 222,
+  "width": 319
+ },
+ "view-calendar": {
+  "height": 563,
+  "width": 692
+ },
+ "view-day-filter-chip": {
+  "height": 56,
+  "width": 246
+ },
+ "view-feed-end-card": {
+  "height": 193,
+  "width": 517
+ },
+ "view-future": {
+  "height": 218,
+  "width": 692
+ },
+ "view-garden": {
+  "height": 194,
+  "width": 692
+ },
+ "view-glossary": {
+  "height": 156,
+  "width": 692
+ },
+ "view-lens-fan": {
+  "height": 247,
+  "width": 679
+ },
+ "view-mind-changes": {
+  "height": 140,
+  "width": 692
+ },
+ "view-open-questions": {
+  "height": 116,
+  "width": 692
+ },
+ "view-outline": {
+  "height": 230,
+  "width": 679
+ },
+ "view-rapid-log": {
+  "height": 772,
+  "width": 692
+ },
+ "view-raw": {
+  "height": 237,
+  "width": 679
+ },
+ "view-series": {
+  "height": 152,
+  "width": 692
+ },
+ "view-still-true": {
+  "height": 510,
+  "width": 692
+ },
+ "view-switcher-profile": {
+  "height": 34,
+  "width": 696
+ },
+ "view-switcher-thread": {
+  "height": 42,
+  "width": 679
+ }
+}

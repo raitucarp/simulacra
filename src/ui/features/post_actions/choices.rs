@@ -45,7 +45,7 @@ fn audience_chips(sheet: &ActionSheet) -> Vec<(ActionChoice, String, bool)> {
 fn language_chips(sheet: &ActionSheet) -> Vec<(ActionChoice, String, bool)> {
     Language::ALL
         .iter()
-        .map(|language| (ActionChoice::Language(*language), language.native_label().to_string(), sheet.request.language == TargetLanguage::Locale(*language)))
+        .map(|language| (ActionChoice::Language(*language), language.display_label().into_owned(), sheet.request.language == TargetLanguage::Locale(*language)))
         .collect()
 }
 

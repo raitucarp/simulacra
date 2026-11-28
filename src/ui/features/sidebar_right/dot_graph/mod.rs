@@ -2,7 +2,7 @@
 //! wide as the sidebar at a token aspect ratio (no labels), with matching node/edge counts.
 //! Clicking it opens the full graph.
 
-use super::section::{render_divided_section, render_mono_badge, render_section_header, render_section_title};
+use super::section::{render_divided_section, render_count_badge, render_section_header, render_section_title};
 use crate::state::graph::GraphScene;
 use crate::theme::ThemeTokens;
 use crate::ui::features::mind_graph::paint::{Focus, PaintOptions, ScenePainter};
@@ -31,7 +31,7 @@ fn render_graph_header(scene: &GraphScene, theme: &ThemeTokens) -> Div {
             t!("sidebar.mind_graph_title").to_string(),
             theme,
         ),
-        render_mono_badge(counts, theme.accent_agent, theme).rounded(theme.radius_sm),
+        render_count_badge(counts, theme.accent_agent, theme).rounded(theme.radius_sm),
     )
 }
 

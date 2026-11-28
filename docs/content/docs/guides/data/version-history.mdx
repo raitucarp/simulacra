@@ -1,0 +1,80 @@
+---
+title: Version history
+description: How Simulacra keeps every earlier version of your posts and vault documents, how versions are numbered, how to restore a document's old text, and where versions go in backups and exports.
+icon: RotateCcwClock
+---
+
+Nothing you edit is overwritten. Each edit of one of your posts, or of a vault document's text, title or catalogue record, keeps the version it replaces. A post's versions are numbered like software: `v1.0.0` is the original, and each edit moves the number on.
+
+This page covers what versions are and the history of vault documents. The history sheet of a post (comparing, showing an older version, editing from it) is described in [Version history of posts](/docs/guides/post-tools/history).
+
+## How versions are numbered
+
+When you edit a published post, the composer's version row shows the step (`v1.0.0 → v1.0.1`), the part of the number it suggests bumping, and an optional edit note. You can pick another part than the suggestion. See [Edit a post](/docs/guides/composer#edit-a-post).
+
+| Bump | Suggested when | Example |
+|---|---|---|
+| <UiLabel>Patch</UiLabel> | At most three words added and at most three removed: a typo, a swapped word, a missing "not". Changes of letter case, punctuation or spacing alone are a patch. | `v1.0.0 → v1.0.1` |
+| <UiLabel>Minor</UiLabel> | An addition or extension that keeps most of the old text. | `v1.0.1 → v1.1.0` |
+| <UiLabel>Major</UiLabel> | A rewrite: every old word gone, or more than three words and at least half of the old ones removed. | `v1.1.0 → v2.0.0` |
+
+A major bump resets the minor and patch numbers; a minor bump resets the patch. A reply written to an earlier major version of its parent shows a quiet <UiLabel>replied to v1.x</UiLabel>, so readers know it answered an older text.
+
+Editing from an older version (<UiLabel>Edit from this version</UiLabel>) starts a **branch**: the history becomes a tree, drawn with graph lanes like a code history.
+
+## The history of a vault document
+
+A document's history works like a post's, with one difference: instead of choosing which version to show, you **restore** an old one.
+
+<Screenshot id="data-history-sheet" alt="The Version history sheet of a vault document: the VERSIONS list with Current, Earlier version and Original rows, the CHANGES FROM … TO … word diff with a changed title noted, and Close and Restore this version" caption="The history of an edited vault document." />
+
+<Steps>
+<Step>
+### Open it
+
+Open the document in the [Knowledge Vault](/docs/guides/vault) and click <UiLabel>History</UiLabel> on its entry.
+</Step>
+<Step>
+### Pick the version
+
+The sheet, titled <UiLabel>Version history</UiLabel> with the document's title, lists every version newest first. Click a row to make it version A; its <UiLabel>B</UiLabel> button makes another row version B (the current one to start with). The right side shows <UiLabel>CHANGES FROM … TO …</UiLabel>, the words added and removed, and <UiLabel>Title: “…” → “…”</UiLabel> when the title changed.
+</Step>
+<Step>
+### Restore it
+
+Click <UiLabel>Restore this version</UiLabel>. Version A becomes the current text, title and catalogue record again, as a new edit, so the version it replaces is kept too: <UiLabel>Version restored. The one it replaced is kept in the history.</UiLabel>
+</Step>
+</Steps>
+
+<UiLabel>Restore this version</UiLabel> is disabled while version A is the current one. With a single version the sheet says <UiLabel>No earlier versions yet. Every edit keeps the version it replaces.</UiLabel>
+
+## Posts and documents compared
+
+| | Posts | Vault documents |
+|---|---|---|
+| What is versioned | The text, plus its tint, symbols, link and images | The text, the title and the catalogue record |
+| Bump choice and edit note when saving | Yes | No |
+| Going back | <UiLabel>Show this version</UiLabel> (the post shows it; nothing new is written) | <UiLabel>Restore this version</UiLabel> (written as a new edit) |
+| Branches | <UiLabel>Edit from this version</UiLabel> | No |
+| Edit log | Yes | No |
+
+## Where versions go
+
+| | Versions included? |
+|---|---|
+| The vault | Yes, every version, in the database. |
+| <UiLabel>Back up now</UiLabel> and encrypted snapshots | Yes: they copy the whole database. |
+| An export bundle | No: it writes the version each post shows and each document's current text. |
+| A deleted post | Its earlier versions are deleted with it. |
+
+## Tips and limits
+
+- **Real edits only.** Saving a text that differs only by surrounding spaces keeps no new version.
+- **Very large rewrites** are compared as one removal and one addition rather than word by word, so the sheet never stalls.
+- **Your own posts only.** <UiLabel>Edit</UiLabel> is offered on the posts you wrote.
+
+## Related
+
+- [Version history of posts](/docs/guides/post-tools/history)
+- [Composer](/docs/guides/composer)
+- [Your data](/docs/guides/data)

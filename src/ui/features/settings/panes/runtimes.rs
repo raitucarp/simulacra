@@ -1,7 +1,9 @@
 //! Settings › Code › Runtimes (P1, P4): every runtime code blocks may run in, with the version
-//! and place the last detection found and its own switch (usable once code running is on), and
-//! Refresh, which asks each runtime its version again. Nothing is probed until the user asks.
+//! and place the last detection found and its own switch (usable once code running is on; a
+//! runtime the last detection did not find has none), and Refresh, which asks each runtime its
+//! version again. Nothing is probed until the user asks.
 
+use super::super::controls::path::{home_dir, home_relative};
 use super::common::{card, field_title, muted_note, section, section_label, spaced_row};
 use crate::domain::code::{Runtime, RuntimeCache};
 use crate::domain::preferences::CodePrefs;
@@ -11,6 +13,7 @@ use gpui_kit::base::Disableable;
 use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::switch::Switch;
 use gpui_kit::component::Sizable;
+use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::*;
 use rust_i18n::t;
 use std::rc::Rc;
@@ -64,7 +67,7 @@ pub fn render_runtimes(theme: &ThemeTokens, props: RuntimesProps) -> Div {
 fn runtime_row(theme: &ThemeTokens, runtime: Runtime, props: &RuntimesProps) -> Div {
     let cache = &props.cache;
     let detail = match cache.get(runtime) {
-        Some(found) => t!("code.runtimes.found", version = found.version.as_str(), path = found.path.as_str()).to_string(),
+        Some(found) => t!("code.runtimes.found", version = found.version.as_str(), path = home_relative(&found.path, home_dir().as_deref())).to_string(),
         None if cache.probed_at.is_some() => t!("code.runtimes.not_found").to_string(),
         None => String::new(),
     };
@@ -75,5 +78,6 @@ fn runtime_row(theme: &ThemeTokens, runtime: Runtime, props: &RuntimesProps) -> 
         .color(theme.accent_brand)
         .disabled(!props.prefs.enabled)
         .on_click(move |on, window, cx| on_action(RuntimeAction::Switch(runtime, *on), window, cx));
-    div().flex().items_center().gap(theme.spacing_sm).py(theme.spacing_2xs).child(info).child(switch)
+    let missing = cache.probed_at.is_some() && cache.get(runtime).is_none();
+    div().flex().items_center().gap(theme.spacing_sm).py(theme.spacing_2xs).child(info).when(!missing, |row| row.child(switch))
 }

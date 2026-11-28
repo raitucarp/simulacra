@@ -1,0 +1,80 @@
+---
+title: Calibration
+description: See how well the chances you stated on your posts matched what happened, and resolve the predictions that are due.
+icon: ChartScatter
+---
+
+Calibration scores your credences. Each time you give one of your posts a chance of being true and later resolve it, Simulacra learns a little about your judgement: whether things you call 70% likely happen about 70% of the time. This tab shows the result and lists the predictions still open.
+
+<Screenshot id="insights-calibration" alt="The Calibration tab with six key numbers, the calibration curve, the forecast histogram with the Brier decomposition, and the open predictions" caption="Calibration after a handful of resolved predictions." />
+
+## Open it
+
+- The <UiLabel>Calibration</UiLabel> tab of [Insights](/docs/guides/insights), or the palette command <UiLabel>Insights: calibration</UiLabel>.
+- The palette command <UiLabel>Resolve due predictions</UiLabel> opens it with <UiLabel>Due only</UiLabel> switched on.
+
+Calibration uses every credence you have set, in every network. The filter bar is not shown here.
+
+## Key numbers
+
+| Tile | Meaning |
+|---|---|
+| <UiLabel>Resolved</UiLabel> | Predictions resolved true or false: the ones that are scored. |
+| <UiLabel>Open</UiLabel> | Predictions not resolved yet. |
+| <UiLabel>Ambiguous (not scored)</UiLabel> | Resolved as ambiguous: closed, but left out of every score. |
+| <UiLabel>Brier score (lower is better)</UiLabel> | The mean squared distance between what you said and what happened. 0 is perfect; always saying 50% earns 0.25; being sure and wrong every time earns 1. |
+| <UiLabel>Log score (closer to 0 is better)</UiLabel> | The mean base-2 logarithm of the chance you gave to what actually happened. 0 is perfect; always saying 50% earns −1. It punishes confident misses much harder than the Brier score. |
+| <UiLabel>Confidence</UiLabel> | <UiLabel>Overconfident</UiLabel>, <UiLabel>Underconfident</UiLabel> or <UiLabel>Well calibrated</UiLabel>, with the gap in points, such as `+12 pt`. |
+
+The confidence gap is how sure you were, on average, of the side you leaned to, minus how often that side turned out right. A gap within five points counts as well calibrated. Predictions of exactly 50% lean nowhere and are left out of it.
+
+## Calibration curve
+
+Across: the chance you stated. Up: how often those claims came true. The diagonal is perfect calibration. Your forecasts are grouped into tenths (0–10%, 10–20%, …), and each group with at least one forecast is a dot at its mean stated chance and its observed frequency; bigger dots hold more forecasts. The vertical whisker is the 95% Wilson interval: with few forecasts it is long, meaning the dot could easily sit elsewhere.
+
+- Dots **below** the diagonal on the right: things you called likely happened less often than you said (overconfidence).
+- Dots **above** the diagonal on the left: things you called unlikely happened more often than you said.
+
+## Forecasts by stated chance
+
+One column per tenth of stated chance, split into the forecasts that held (success colour) and the ones that failed (danger colour). Hover a column for, for example, "Said 70–80%: 3 of 4 came true".
+
+### Brier score, decomposed
+
+Under the histogram, three bars split the Brier score (Murphy's decomposition):
+
+| Bar | Meaning |
+|---|---|
+| <UiLabel>Reliability (lower is better)</UiLabel> | How far each group's stated chance is from what happened in it. This is the calibration error. |
+| <UiLabel>Resolution (higher is better)</UiLabel> | How much your groups differ from the overall rate of things coming true: whether your forecasts tell cases apart. |
+| <UiLabel>Uncertainty</UiLabel> | How hard the questions were in themselves, whatever you said. |
+
+Brier = reliability − resolution + uncertainty: say 70% when 70% happens, and move away from the base rate when you know more.
+
+## Open predictions
+
+The bottom card lists your open predictions, dated ones first and soonest due first. Each row shows the "resolves by" date (in the warning colour when the date has come, <UiLabel>No date</UiLabel> otherwise), your stated chance, the post's opening words and three buttons: <UiLabel>True</UiLabel>, <UiLabel>False</UiLabel>, <UiLabel>Ambiguous</UiLabel>.
+
+| To | Do this |
+|---|---|
+| Resolve a prediction | Click <UiLabel>True</UiLabel>, <UiLabel>False</UiLabel> or <UiLabel>Ambiguous</UiLabel> on its row. It leaves the list and the scores update. |
+| See only what is due | Turn on the <UiLabel>Due only</UiLabel> chip in the card's title. |
+| Read the post first | Click its opening words to open the post. |
+
+Resolving here leaves no note. To add one ("What happened?"), resolve from the post's credence chip instead; see [Credences and predictions](/docs/guides/thinking/credence).
+
+## Empty states
+
+| You see | Because |
+|---|---|
+| <UiLabel>Nothing resolved yet</UiLabel> | No prediction is resolved true or false. The open predictions are still listed below. |
+| <UiLabel>No open predictions. Set a credence on one of your posts from its “…” menu.</UiLabel> | You have no open credence. |
+| <UiLabel>No predictions are due.</UiLabel> | <UiLabel>Due only</UiLabel> is on and nothing has reached its date. |
+
+<Screenshot id="insights-calibration-empty" alt="Calibration showing Nothing resolved yet above the open predictions" caption="Before any prediction resolves." size="md" />
+
+## Related
+
+- [Credences and predictions](/docs/guides/thinking/credence): setting and resolving a credence.
+- [Beliefs and credence](/docs/concepts/beliefs-and-credence): why proper scores and calibration matter.
+- [Map an argument](/docs/tutorials/map-an-argument): a walk-through that ends here.

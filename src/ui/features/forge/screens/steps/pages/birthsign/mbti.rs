@@ -64,7 +64,7 @@ impl ForgeView {
             .bg(theme.bg_callout)
             .border_l(theme.border_width_threadline)
             .border_color(theme.accent_brand)
-            .child(div().text_size(theme.font_size_sm).font_weight(FontWeight::SEMIBOLD).text_color(theme.accent_brand).child(trait_label(chosen)))
+            .child(div().text_size(theme.font_size_sm).font_weight(FontWeight::SEMIBOLD).text_color(theme.accent_brand_text).child(trait_label(chosen)))
             .children(trait_description(chosen).map(|text| {
                 div().text_size(theme.font_size_xs).text_color(theme.text_primary).line_height(relative(theme.line_height_body)).child(text)
             }))

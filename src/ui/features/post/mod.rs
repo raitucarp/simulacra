@@ -46,6 +46,8 @@ pub use excerpt::resolve_wikilink_excerpt;
 pub use extras::{mood_chip, source_chip, tool_chip, OpenSourceAction};
 pub(crate) use extras_detail::render_extras_detail;
 pub(crate) use attachments::missing_image;
+pub(crate) use branch_chip::what_if_text;
+pub(crate) use voice_card::voice_label;
 pub use host::extract_host_domain;
 pub use item::render_post_item;
 pub use locked::{render_locked_body, render_locked_placeholder, LockControls, LockSource, OpenedText};

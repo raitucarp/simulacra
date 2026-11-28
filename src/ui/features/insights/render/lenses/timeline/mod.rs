@@ -37,9 +37,15 @@ const AXIS_LABEL_SPAN: f32 = 2.0;
 /// Estimated tooltip height used for flipping.
 const TIP_HEIGHT: f32 = 64.0;
 
-/// A short label for the period starting on `day`.
+/// A short label for the period starting on `day` (the chart's axis and rows).
 fn period_label(day: Date, days: usize) -> String {
     if days >= MONTHLY_DAYS { format!("{} {}", month_label(day.month()), day.year()) } else { format!("{} {}", month_label(day.month()), day.day()) }
+}
+
+/// The period starting on `day` inside a sentence beside other dates: a month stays a month,
+/// a shorter period is its first day written the way the settings ask.
+fn period_in_text(day: Date, days: usize) -> String {
+    if days >= MONTHLY_DAYS { period_label(day, days) } else { format_day(day) }
 }
 
 /// Name of phase `phase`.

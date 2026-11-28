@@ -60,11 +60,10 @@ impl ComposerModalView {
                 this.child(render_reply_context(parent, theme))
             })
             .when(self.feeling.is_none(), |this| this.child(self.thread_body())) // 3. Thread: one editor per post, then "Add to thread" (M2: a feeling leaves it aside)
-            .when_some(self.feeling.as_ref(), |this, view| this.child(feeling_row(view, self.callbacks.on_pick_feeling.clone(), self.callbacks.on_feeling_step.clone(), theme))) // 3a. The feeling bar (M2)
+            .when_some(self.feeling.as_ref(), |this, view| this.child(feeling_row(view, self.callbacks.on_pick_feeling.clone(), self.callbacks.on_feeling_step.clone(), self.callbacks.on_submit.clone(), theme))) // 3a. The feeling bar (M2)
             .when_some(self.todo_suggest.as_ref(), |this, view| this.child(todo_suggest_row(view, theme))) // 3b. Completing the to-do word at the cursor (D11)
             .when_some(self.notice.clone(), |this, notice| this.child(self.notice_row(notice))) // 4. Why the thread cannot be posted (or why publishing failed)
-            .child(self.tint_row()) // 5. The container tint of the thread (sb C3)
-            .child(self.symbol_row()) // 5b. The symbols of the first post (S5)
+            .when(self.style_open, |this| this.child(self.tint_row()).child(self.symbol_row())) // 5, 5b. The thread's tint (sb C3) and the first post's symbols (S5), behind "Style"
             .when_some(self.version.as_ref(), |this, view| this.child(version_row(view, theme))) // 5c. The version an edit makes (V3)
             .when_some(self.schedule.as_ref(), |this, view| this.child(schedule_row(view, theme))) // 6. When the thread goes out, while the picker is open (Y3)
             .when_some(self.lock.as_ref(), |this, view| this.child(lock_row(view, theme))) // 6a. The lock password, while the row is open (X3)

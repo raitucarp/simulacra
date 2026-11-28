@@ -18,8 +18,6 @@ const PERCENT_ID: &str = "credence-percent";
 const DUE_ID: &str = "credence-due";
 const OUTCOME_ID: &str = "credence-outcome";
 const BUTTON_IDS: [&str; 4] = ["credence-less", "credence-more", "credence-reopen", "credence-remove"];
-/// Date shown for "resolves by".
-const DAY_FORMAT: &str = "%Y-%m-%d";
 
 /// "70% · resolves by 2026-12-01" (the chip's tooltip).
 pub fn summary(chip: &CredenceChip) -> String {
@@ -28,7 +26,7 @@ pub fn summary(chip: &CredenceChip) -> String {
         None => t!("thinking.credence.summary", percent = chip.percent).to_string(),
     };
     match chip.due.filter(|_| chip.outcome.is_none()) {
-        Some(due) => format!("{base} · {}", t!("thinking.credence.due_on", date = due.strftime(DAY_FORMAT).to_string())),
+        Some(due) => format!("{base} · {}", t!("thinking.credence.due_on", date = crate::ui::format::date(due))),
         None => base,
     }
 }

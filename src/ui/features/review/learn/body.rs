@@ -52,7 +52,7 @@ impl LearnSheet {
             (LearnSource::Document { .. }, None) => None,
         };
         let problem = self.problem.map(|problem| div().text_size(theme.font_size_xs).text_color(theme.accent_danger).child(tr(problem.message_key())));
-        let side = self.side.key();
+        let (side, tip) = (self.side.key(), if matches!(source, LearnSource::Document { .. }) { "tip_passage" } else { "tip" });
         div()
             .flex()
             .flex_col()
@@ -61,7 +61,7 @@ impl LearnSheet {
             .children(preview)
             .child(self.render_sides(cx))
             .child(self.field(tr(&format!("review.learn.{side}.field")), &self.written))
-            .child(self.hint(tr(&format!("review.learn.{side}.tip"))))
+            .child(self.hint(tr(&format!("review.learn.{side}.{tip}"))))
             .child(self.field(tr("review.learn.tags"), &self.tags))
             .children(problem)
             .when(!self.pending.is_empty(), |body| body.child(self.render_pending(cx)))

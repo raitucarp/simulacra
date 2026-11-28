@@ -54,7 +54,7 @@ fn current_task(text: &str, view: &ReviewView, on_event: &DataAction, theme: &Th
     let progress = t!("symbols.review.progress", current = view.position, total = view.total).to_string();
     div().flex().flex_col().gap(theme.spacing_sm)
         .child(div().font_family(theme.font_family_mono.clone()).text_size(theme.font_size_2xs).text_color(theme.text_muted).child(progress))
-        .child(div().p(theme.spacing_sm).rounded(theme.radius_md).border(theme.border_width_hairline).border_color(theme.border_subtle).text_size(theme.font_size_sm).line_clamp(EXCERPT_LINES).text_color(theme.text_primary).child(text.to_string()))
+        .child(div().p(theme.spacing_sm).rounded(theme.radius_md).border(theme.border_width_hairline).border_color(theme.border_subtle).text_size(theme.font_size_sm).line_clamp(EXCERPT_LINES).text_ellipsis().text_color(theme.text_primary).child(text.to_string()))
         .child(div().flex().flex_wrap().gap(theme.spacing_xs).children(buttons))
 }
 

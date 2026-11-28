@@ -4,6 +4,7 @@ use crate::domain::TrendingTopic;
 use crate::theme::ThemeTokens;
 use crate::ui::icons::LucideIcon;
 use gpui_kit::base::StyledExt;
+use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::component::Icon;
 use gpui_kit::*;
 use crate::i18n::t_count;
@@ -15,7 +16,7 @@ fn render_tag_name(topic: &TrendingTopic, theme: &ThemeTokens) -> Div {
         .flex()
         .items_center()
         .gap(theme.spacing_xs)
-        .child(div().w(theme.icon_size_sm).h(theme.icon_size_sm).text_color(theme.accent_brand).child(Icon::new(LucideIcon::Hash)))
+        .child(div().w(theme.icon_size_sm).h(theme.icon_size_sm).text_color(theme.accent_brand_text).child(Icon::new(LucideIcon::Hash)))
         .child(
             div()
                 .text_size(theme.font_size_label)
@@ -36,7 +37,7 @@ fn render_rank_and_tag(topic: &TrendingTopic, rank: usize, theme: &ThemeTokens) 
                 .flex()
                 .flex_col()
                 .child(render_tag_name(topic, theme))
-                .child(div().text_size(theme.font_size_label).text_color(theme.text_muted).child(topic.category.clone())),
+                .when(!topic.category.is_empty(), |this| this.child(div().text_size(theme.font_size_label).text_color(theme.text_muted).child(topic.category.clone()))),
         )
 }
 

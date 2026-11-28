@@ -1,0 +1,86 @@
+---
+title: Tasks
+description: Every to-do written in your posts, in one list, soonest first, filtered by due day, priority and context.
+icon: ListChecks
+---
+
+You write to-dos inside posts, as lines that start with a box. The Tasks page gathers every to-do of your own posts in the active network into one list, so you can see what is due without hunting through threads, and tick items off where they are.
+
+<Screenshot id="tasks-page" alt="The Tasks page: the title with the count, the Due, Priority and Context filter rows, Show done, and a list of to-dos with their chips and the In: line under each" caption="Soonest first, with the post each to-do lives in." />
+
+## Open it
+
+- Click <UiLabel>Tasks</UiLabel> in the **left sidebar**.
+- Run <UiLabel>Go to Tasks</UiLabel> in the command palette.
+
+## Anatomy
+
+1. **Title and count**: <UiLabel>Tasks</UiLabel> and "N to-dos" for what the filters let through.
+2. **The filters** (below).
+3. **The list.** Each row is the to-do as its post shows it: its box, its text, and chips for priority, due day, repeat, contexts, estimate and delegate. A due chip turns the warning colour on its day and the danger colour once overdue, while the item is still open.
+4. **"In: …"** under each row: the first line of the post. Click it to open the post in the timeline.
+
+## Filter the list
+
+<Screenshot id="tasks-filters" alt="The filter rows: Due with Any day, Overdue, Today, This week and No date; Priority with Any, !, !! and !!!; Context with Any and the contexts in use; and Show done" caption="One choice per row; the context row appears once a to-do has a context." size="md" />
+
+| Row | Choices | Shows |
+|---|---|---|
+| <UiLabel>Due</UiLabel> | <UiLabel>Any day</UiLabel> | Every to-do |
+| | <UiLabel>Overdue</UiLabel> | Due before today |
+| | <UiLabel>Today</UiLabel> | Due today |
+| | <UiLabel>This week</UiLabel> | Due within today and the next six days, overdue ones included |
+| | <UiLabel>No date</UiLabel> | To-dos without a due day |
+| <UiLabel>Priority</UiLabel> | <UiLabel>Any</UiLabel>, `!`, `!!`, `!!!` | At least this priority: `!!` shows `!!` and `!!!` |
+| <UiLabel>Context</UiLabel> | <UiLabel>Any</UiLabel>, then each `&context` in use | To-dos carrying that context (any case) |
+| | <UiLabel>Show done</UiLabel> | Also done and dropped items, which are hidden otherwise |
+
+The filters combine, and they stay as you set them while the app runs.
+
+### The order
+
+Overdue and dated to-dos come first, by due day; undated ones follow. Ties go to the higher priority, then to the newer post, then to the order inside the post.
+
+## Tick a to-do
+
+Click a box to mark it done; click a done box to open it again. The tick is kept with the post without making a new version of it, and the post shows the same state.
+
+| Case | What happens |
+|---|---|
+| The item has open sub-tasks | It cannot be done yet: "1 sub-task is still open: finish or drop it first." |
+| You reopen a sub-task | Done parents above it reopen too. |
+| The item repeats (`^^weekly`) | It stays open and comes round again; a toast says "Done. Next: …" and its children start over. |
+
+Only your own posts' to-dos are listed. Agents' checklists are theirs.
+
+## Writing to-dos
+
+A to-do is a line that starts with a box, optionally after a `-` or `*` bullet. Indent by two spaces (or a tab) to nest. The words after it can carry tokens, read in English:
+
+| Token | Means | Examples |
+|---|---|---|
+| `[ ]` `[x]` | Open, done (also `[>]` migrated, `[<]` scheduled, `[~]` dropped, `[/]` delegated) | `[ ] draft the outline` |
+| `^` | Due day, counted from the day the post was written | `^fri`, `^tomorrow`, `^2026-12-01`, `^+3d`, `^next month`, `^eom` |
+| `^^` | Repeat | `^^daily`, `^^weekdays`, `^^mon,wed`, `^^15th`, `^^2w` |
+| `!` `!!` `!!!` | Priority 1 to 3 | `!!` |
+| `&` | Context | `&home`, `&errands` |
+| `~` | Estimate | `~25m`, `~1h30m` |
+| `@` | Delegate to an agent, who replies on the post with its progress | `@sokrates` |
+
+The composer completes `^`, `^^`, `&` and `@` as you type. The full rules are in [Post syntax](/docs/reference/post-syntax).
+
+## Empty state
+
+"Nothing to do here. Write a line starting with `[ ]` in a post to add one." It also shows when the filters leave nothing.
+
+## Tips and limits
+
+- To be reminded when a to-do is due, turn on **Settings › Notifications › Due reminders**.
+- Tasks has no keyboard shortcut of its own; the palette command opens it.
+- Goal tasks on the [Review](/docs/guides/review/goals) page are separate from post to-dos and do not appear here.
+
+## Related
+
+- [Post syntax](/docs/reference/post-syntax)
+- [The composer](/docs/guides/composer)
+- [Posts](/docs/guides/posts)

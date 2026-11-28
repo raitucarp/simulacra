@@ -1,0 +1,17 @@
+{
+  "title": "Review",
+  "icon": "GraduationCap",
+  "pages": [
+    "learn-posts",
+    "sessions",
+    "quizzes",
+    "connection-maps",
+    "items",
+    "statistics",
+    "---Learn tab---",
+    "tutor",
+    "goals",
+    "gap-radar",
+    "memory-palace"
+  ]
+}

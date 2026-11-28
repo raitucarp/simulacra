@@ -53,15 +53,17 @@ pub(super) fn render_divided_section(theme: &ThemeTokens) -> Div {
         .gap(theme.stack_gap)
 }
 
-/// Small hover-tinted mono badge (padding `px_2 py_0p5`) with an accent text color.
-pub(super) fn render_mono_badge(text: String, color: Rgba, theme: &ThemeTokens) -> Div {
+/// Small hover-tinted count badge (padding `px_2 py_0p5`) with an accent text color. Counts are
+/// prose ("66 nodes"), so they take the interface face, not the code face.
+pub(super) fn render_count_badge(text: String, color: Rgba, theme: &ThemeTokens) -> Div {
     div()
         .px(theme.spacing_sm)
         .py(theme.spacing_2xs)
         .bg(theme.hover_bg)
         .border(theme.border_width_hairline)
         .border_color(theme.border)
-        .font_family(theme.font_family_mono.clone())
+        .rounded(theme.radius_sm)
+        .font_family(theme.font_family_ui.clone())
         .text_size(theme.font_size_label)
         .font_medium()
         .text_color(color)

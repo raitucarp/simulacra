@@ -71,6 +71,6 @@ fn render_label(lang: Language, is_active: bool, theme: &ThemeTokens) -> Div {
                 .text_size(theme.font_size_label)
                 .font_medium()
                 .text_color(label_color)
-                .child(lang.native_label()),
+                .child(lang.display_label().to_string()),
         )
 }

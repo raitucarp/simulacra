@@ -12,8 +12,6 @@ pub(super) const WIKILINK_OPEN_TOKEN: &str = "[[";
 /// Token inserted at the cursor by the "insert tag" buttons (the hashtag sigil).
 pub(super) const HASHTAG_TOKEN: &str = "#";
 
-/// Prefix rendered before the community topic label.
-pub(super) const TOPIC_PREFIX: &str = "> ";
 
 /// Quote characters stripped from a manually typed image path.
 pub(super) const PATH_QUOTE_DOUBLE: char = '"';

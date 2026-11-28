@@ -1,0 +1,95 @@
+---
+title: Socratic tutor
+description: A dialogue that asks rather than explains, climbing Bloom's levels, then turns your gaps into review items.
+icon: MessagesSquare
+---
+
+The tutor asks rather than explains. It draws out what you think, probes definitions, asks for examples and counterexamples, puts your own statements side by side, and climbs from remembering to creating. At the end it sums up what you showed and what was missing, and offers review questions for the gaps.
+
+The tutor needs an AI key (Settings › AI & Models). Each of its requests counts toward today's AI budget.
+
+## Open it
+
+On the [Review](/docs/guides/review) page, click the <UiLabel>Learn</UiLabel> tab, then <UiLabel>Tutor</UiLabel> in the sub-switch (<UiLabel>Tutor</UiLabel>, <UiLabel>Goals</UiLabel>, <UiLabel>Gaps</UiLabel>, <UiLabel>Palace</UiLabel>).
+
+<Screenshot id="review-learn-tutor-start" alt="The Socratic tutor start card with a concept field and Start, a Pick a post button, vault document chips, and the Earlier dialogues list below" caption="Choose what to talk about, or resume an earlier dialogue." size="md" />
+
+## Start a dialogue
+
+Choose what the tutor talks about:
+
+| Under | Do this | The tutor reads |
+|---|---|---|
+| <UiLabel>A concept</UiLabel> | Type a concept ("for example free will") and press <Kbd>Enter</Kbd> or click <UiLabel>Start</UiLabel> | Your own posts on that concept |
+| <UiLabel>A post or thread</UiLabel> | Click <UiLabel>Pick a post…</UiLabel>, then <UiLabel>This post</UiLabel> or <UiLabel>Whole thread</UiLabel> on a row | The post, or the thread from its first post |
+| <UiLabel>A vault document</UiLabel> | Click one of the document chips (up to eight are offered) | The document |
+
+What the tutor reads is cut to 4,000 characters and treated as quoted material, never as instructions. The opening question elicits your current view at the bottom rung of the ladder.
+
+<UiLabel>Ask the tutor</UiLabel> on the [gap radar](/docs/guides/review/gap-radar) starts a dialogue on that concept directly.
+
+## The dialogue
+
+<Screenshot id="review-learn-tutor-dialogue" alt="A tutor dialogue: the title, the ladder of six levels, tutor question bubbles with their level and move, the learner's answers with a verdict, and the answer box with Send and Finish and sum up" caption="Each answer is assessed, and the next question adapts." />
+
+1. **The head**: <UiLabel>All dialogues</UiLabel> to go back, the bin (<UiLabel>Delete this dialogue</UiLabel>), the title and what it is on (<UiLabel>On a post</UiLabel>, <UiLabel>On a thread</UiLabel>, <UiLabel>On a passage</UiLabel>, <UiLabel>On a document</UiLabel> or <UiLabel>On a concept</UiLabel>).
+2. **The ladder**: Bloom's six levels, <UiLabel>Remember</UiLabel>, <UiLabel>Understand</UiLabel>, <UiLabel>Apply</UiLabel>, <UiLabel>Analyse</UiLabel>, <UiLabel>Evaluate</UiLabel>, <UiLabel>Create</UiLabel>. Levels you have shown are filled; the level the open question aims at is ringed.
+3. **Tutor bubbles**: each question with its level and move (see below).
+4. **Your bubbles**: each answer under <UiLabel>You</UiLabel>, then its verdict, <UiLabel>Solid</UiLabel>, <UiLabel>Partly there</UiLabel> or <UiLabel>Not yet</UiLabel>, and "Showed: …" for the level it reached.
+5. **The answer box**: "Answer in your own words…", the tip "Think aloud: a rough answer teaches more than none.", <UiLabel>Send</UiLabel> (or <Shortcut keys="Ctrl+Enter" />), and <UiLabel>Finish and sum up</UiLabel> once you have answered at least once.
+
+Only the two latest exchanges show; <UiLabel>Show the earlier questions (N)</UiLabel> opens the rest.
+
+### How the tutor moves
+
+| After your answer | The tutor |
+|---|---|
+| Solid at the current level | Climbs one level |
+| Partly there | Stays, and asks for an example (a definition at the bottom rung) |
+| Not yet | Probes once at the same level; after two misses in a row it steps down a level and asks for an example |
+| A misconception | Answers it with a counterexample, then, if it persists, puts your own statements side by side |
+
+| Move | What the question does |
+|---|---|
+| <UiLabel>Your current view</UiLabel> | Draws out your model before anything else |
+| <UiLabel>Definition</UiLabel> | Asks what a key term means, exactly |
+| <UiLabel>In your own words</UiLabel> | Asks for the idea rephrased |
+| <UiLabel>Example</UiLabel> / <UiLabel>Counterexample</UiLabel> | Asks for a case that fits, or one that breaks the claim |
+| <UiLabel>Tension</UiLabel> | Puts two of your statements side by side |
+| <UiLabel>Application</UiLabel>, <UiLabel>Analysis</UiLabel>, <UiLabel>Judgement</UiLabel>, <UiLabel>Synthesis</UiLabel> | Tests the higher levels |
+
+The dialogue closes by itself after ten answers, or after a solid answer at <UiLabel>Create</UiLabel>.
+
+### While the tutor thinks
+
+| State | Shows | You can |
+|---|---|---|
+| Waiting for a reply | <UiLabel>The tutor is reading your answer…</UiLabel> or <UiLabel>The tutor is summing up…</UiLabel> | <UiLabel>Stop</UiLabel> |
+| A request failed | The reason, for example <UiLabel>The tutor lectured instead of asking.</UiLabel> | <UiLabel>Try again</UiLabel> |
+| Left waiting (for example after a restart) | <UiLabel>This dialogue is waiting for the tutor.</UiLabel> | <UiLabel>Continue</UiLabel> |
+
+The tutor's replies are checked so that it asks rather than lectures: a reply with no question (<UiLabel>The tutor did not ask a question.</UiLabel>), one too long to be a question, or one that cannot be read (<UiLabel>The tutor's reply could not be read.</UiLabel>) is not used.
+
+## The summary
+
+<Screenshot id="review-learn-tutor-summary" alt="The tutor summary: the highest level shown, What you showed, What was missing, and ticked review questions with a Make 3 review items button" caption="What you showed, what was missing, and questions for the gaps." size="md" />
+
+The summary card gives "Highest level shown: …", the lists <UiLabel>What you showed</UiLabel> and <UiLabel>What was missing</UiLabel>, and under <UiLabel>Review the gaps</UiLabel> one review question per gap, all ticked. Untick the ones you do not want and click <UiLabel>Make N review items</UiLabel>. Each becomes a review item anchored to the dialogue's source (the post, the thread's first post, or the passage or document), so you meet it again when it is due.
+
+A typed concept has no source to anchor items to. The summary says so and offers <UiLabel>Write a post</UiLabel>: write about the concept, then learn that post.
+
+## Earlier dialogues
+
+The <UiLabel>Earlier dialogues</UiLabel> list (up to twelve) shows each dialogue's title and a line such as "On a post · Answers so far: 4 · Understand", or <UiLabel>Finished</UiLabel>. Click one to resume it where it stopped.
+
+## Tips and limits
+
+- An answer is kept up to 2,000 characters. Blank answers are ignored.
+- <UiLabel>Delete this dialogue</UiLabel> removes it at once, without asking.
+- Tutor dialogues count towards a goal's progress when they work on the goal's material.
+
+## Related
+
+- [Goals and the weekly review](/docs/guides/review/goals)
+- [Gap radar](/docs/guides/review/gap-radar)
+- [AI engines](/docs/concepts/ai-engines)

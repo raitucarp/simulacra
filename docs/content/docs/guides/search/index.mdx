@@ -1,0 +1,124 @@
+---
+title: Search
+description: Find posts by their words, their meaning and their filters on the Search page, and keep the searches you repeat.
+icon: Search
+---
+
+The Search page finds posts of the active network. Words find the posts that hold them, filters narrow the list, a minus sign leaves things out, and, when search by meaning is set up, posts that say the same thing in other words join the list.
+
+<Screenshot id="search-results" alt="The Search page with the query the -from:architect, a count of results, filter chips, and result rows with matching words highlighted" caption="Results with their matching words marked." />
+
+To search the vault's documents instead, use the search field of the [Knowledge Vault](/docs/guides/vault#search-the-vault); to search posts and documents together by meaning, use [search by meaning](/docs/guides/search/meaning-search).
+
+## Open it
+
+- Click <UiLabel>Search</UiLabel> in the left sidebar.
+- Run <UiLabel>Search posts</UiLabel> from the command palette (<Shortcut keys="Ctrl+K" />).
+
+The cursor lands in the field, and the page keeps your query while you visit other screens.
+
+<Screenshot id="search-page" alt="The empty Search page: the title, the field with its placeholder, the filter chips, and an illustration with Search your posts" />
+
+## Anatomy
+
+1. **Title and count**: <UiLabel>Search</UiLabel>, and "12 results" once you type.
+2. **Field**: the query, with its syntax as the placeholder. The cross clears it.
+3. **Filters row**: the filters of your query as chips, then quick filters you can add, then <UiLabel>Include old versions</UiLabel>.
+4. **Saved row**: your saved searches and <UiLabel>Save search</UiLabel>, when there is anything to show.
+5. **Meaning note**: why meaning did not help this search, when it could not.
+6. **Results**: one row per post: author, handle, day, how it was found, and the passage that matched with the matching words marked.
+
+## Write a query
+
+| You type | It finds |
+|---|---|
+| `starter recipe` | Posts holding both words. The last word may be the start of a longer word, so `recip` already works while you type. |
+| `"quiet harbour"` | Posts holding the phrase, words in that order. |
+| `-burnt` | Leaves out posts holding the word (or a word starting with it). |
+| `-"old idea"` | Leaves out posts holding the phrase. |
+| `from:sam` | Posts whose author's handle or name contains "sam". `from:@sam` works too; quote names with spaces: `from:"Sam Lee"`. |
+| `kind:question` | Posts of a kind: `standard`, `feeling` or `question`. |
+| `symbol:task` | Posts carrying a symbol: an entry (`task`), an entry in a state (`task_done`), a signifier (`priority`) or a custom symbol's name. |
+| `tint:amber` | Posts with a tint. |
+| `has:image` | Posts with images. Also `has:file`, `has:code` (inline or fenced code) and `has:todo`. |
+| `is:open` | Posts whose entry or a to-do is open. Also `is:done` (the entry is done, or every to-do is done or dropped), `is:scheduled` (the journal state, not posts waiting to be published), `is:archived` and `is:locked`. |
+| `before:2026-12-01` | Posts written before that day. |
+| `after:last-week` | Posts written on or after that day. |
+| `-from:bot` | Any filter can be negated. |
+
+Rules worth knowing:
+
+- Words and phrases ignore letter case and accents. Words shorter than two letters are ignored.
+- Filter names (`from`, `has`, ...) and the values of `has:` and `is:` ignore case.
+- `before:` and `after:` take a day as `YYYY-MM-DD`, or `today`, `yesterday`, `last-week`, `last-month` or `last-year`. Any other value leaves the filter out.
+- An unknown filter (`colour:red`), an unknown `has:` or `is:` value, or an empty value is searched as plain words instead.
+- A query of filters only lists every matching post, newest first.
+- Straight and curly quotes both work; an unclosed quote runs to the end of the query.
+
+See [Post syntax](/docs/reference/post-syntax) for symbols, tints and to-dos.
+
+## Use filter chips
+
+<Screenshot id="search-chips" alt="The Filters row with a -from:architect chip, quick filters has:image to is:locked and Include old versions, then a Saved row with a from:sokrates chip and Save search" />
+
+The chips are the query syntax itself, so they teach it as you go:
+
+- Each filter in your query appears as a highlighted chip ending in ×, negated ones with a leading minus (`-from:bot ×`). Click it to take that filter out of the query.
+- Quick filters (`has:image`, `has:file`, `has:code`, `has:todo`, `is:open`, `is:done`, `is:archived`, `is:locked`) add themselves to the query when clicked. A quick filter already in the query moves to the active chips.
+- <UiLabel>Include old versions</UiLabel> also searches the earlier versions of edited posts. A post found only that way is listed after the others, marked <UiLabel>in an earlier version</UiLabel>, with the passage from that version.
+
+## Move through results
+
+| Key | Action |
+|---|---|
+| <Kbd>↓</Kbd> / <Kbd>↑</Kbd> | Select the next or previous result (wrapping around). |
+| <Kbd>Enter</Kbd> | Open the selected result. |
+
+The first result is selected after each search. Opening a result (with <Kbd>Enter</Kbd> or a click) switches to the timeline with that post selected.
+
+Results are ranked by how well their words match. When search by meaning is on, posts found by meaning are merged into the same list, and a post found both ways rises; one found by meaning alone is marked <UiLabel>by meaning</UiLabel>. The page lists up to 100 results.
+
+## Save a search
+
+<Steps>
+<Step>
+### Type the query
+
+Write the query you want to keep.
+</Step>
+<Step>
+### Save it
+
+Click <UiLabel>Save search</UiLabel> in the <UiLabel>Saved</UiLabel> row. A chip named after the query appears first in the row.
+</Step>
+<Step>
+### Use it later
+
+Click the chip to run the query again; it is highlighted while its query is in the field. Click the × beside it to forget it.
+</Step>
+</Steps>
+
+Saved searches are kept in your vault, newest first, up to 24 (saving another drops the oldest). Saving a query that is already saved moves it to the front. A saved query is read again each time you run it.
+
+## Messages
+
+| Message | Meaning |
+|---|---|
+| <UiLabel>Search your posts</UiLabel> | Nothing typed yet. |
+| <UiLabel>Nothing found</UiLabel> | No post matches. Try fewer words or remove a filter. |
+| <UiLabel>Search by meaning is off in Settings, so these are word matches.</UiLabel> | Meaning is switched off in Settings › Embeddings. |
+| <UiLabel>No embedding key is set, so these are word matches.</UiLabel> | The embedding provider needs a key. |
+| <UiLabel>Nothing is indexed by meaning yet, so these are word matches.</UiLabel> | Nothing has been embedded with the current model yet. |
+| A provider message ending in <UiLabel>Showing word matches instead.</UiLabel> | The meaning request failed; see [search by meaning](/docs/guides/search/meaning-search#when-indexing-stops). |
+
+## Tips and limits
+
+- Search covers the active network's published and archived posts. Scheduled posts stay out until they are published.
+- A locked post is never found by its words or meaning, since its text is sealed; `is:locked` still lists it.
+- Search stays fast on large networks: a test with 100 000 posts answers typical queries in tens of milliseconds. See [Search by meaning, explained](/docs/concepts/meaning-search#how-fast-it-is).
+
+## Related
+
+- [Search by meaning](/docs/guides/search/meaning-search)
+- [Find similar](/docs/guides/search/find-similar)
+- [Keyboard shortcuts](/docs/reference/keyboard-shortcuts)

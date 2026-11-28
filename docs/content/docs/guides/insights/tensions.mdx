@@ -1,0 +1,86 @@
+---
+title: Tensions
+description: Find posts and vault passages that may contradict each other, read the AI's verdict, and reconcile, resolve or dismiss each pair.
+icon: Zap
+---
+
+Tensions looks through a network's posts and vault documents for pairs that seem to disagree: the same topic, opposite claims. It is a prompt to think again, not a judge. You decide what each pair means: reply to reconcile it, mark it resolved, or dismiss it.
+
+<Screenshot id="insights-tensions" alt="The Tensions tab with a header counting pairs, the Scan again button, and two pair cards, each with its two sides side by side" caption="Pairs that may be in tension, each with its verdict (here Not checked)." />
+
+## Open it
+
+| Way | Scope |
+|---|---|
+| The <UiLabel>Tensions</UiLabel> tab of [Insights](/docs/guides/insights), or the palette's <UiLabel>Insights: tensions</UiLabel> | The whole network. |
+| A post's "…" menu › <UiLabel>Actions</UiLabel> › <UiLabel>Find tensions with this post</UiLabel> | Only pairs that include that post. |
+
+Opening the tab starts a scan when your posts or vault have changed since the last one (or the focus changed); otherwise it shows the last result. The filter bar is not shown here: the finder looks at the active network as a whole.
+
+## Anatomy
+
+1. **Header card.** The count (<UiLabel>3 pairs may be in tension</UiLabel>), or <UiLabel>Looking for tensions…</UiLabel> while it works, and <UiLabel>Scan again</UiLabel>.
+2. **Focus chip.** When you came from a post, <UiLabel>Around: …</UiLabel> with the post's opening words and a ×. Click it to drop the focus and search the whole stream.
+3. **Notice**, when the finder works with less than meaning and AI (see [Modes](#modes)), or when the last check failed.
+4. **One card per pair**, best candidates first.
+
+## A pair card
+
+<Screenshot id="insights-tension-card" alt="One tension card with two posts side by side, a verdict badge with its reason or signals, and three actions" caption="One pair: two texts, a verdict and what to do about it." size="md" />
+
+| Part | What it shows |
+|---|---|
+| Two sides | Side by side (stacked on a narrow page): each is a post, with its author's name, or a passage of a vault document, with the document's title. Click a side to open it. |
+| Verdict | A badge and one sentence. <UiLabel>Contradicts</UiLabel> comes from the AI with its reason. <UiLabel>Not checked</UiLabel> means no AI verdict yet; the line then lists the surface signals that made it a candidate, such as <UiLabel>one side negates the other</UiLabel> or a word pair like `always / never`. |
+| <UiLabel>Reply to reconcile</UiLabel> | Opens the composer: quoting one side (a post) and asking "How does this fit with [[the other]]?", or, for two passages, a new thread naming both. Edit and post it like any other thought. |
+| <UiLabel>Mark resolved</UiLabel> | You have reconciled it (by a reply, an edit or a decision). The pair leaves the list. |
+| <UiLabel>Dismiss</UiLabel> | Not a real tension. It is never shown again for these texts. |
+
+## How pairs are found
+
+<Steps>
+<Step>
+### Same topic
+
+A contradiction first needs a shared subject. Each post or passage with an embedding takes its eight nearest items in meaning (a similarity of at least 0.55). Items without an embedding pair up when they share at least two content words.
+</Step>
+<Step>
+### Opposite polarity
+
+Each pair is read for signs of opposition on the surface: one side is negated and the other is not, the two sides use the opposite ends of a word pair (true / false, increase / decrease), or opposite quantifiers (always / never, all / none, must / must not). The vocabulary covers English, Indonesian, German, French, Spanish and Portuguese.
+</Step>
+<Step>
+### Ranking
+
+The score adds the shared topic (45%) and the strength of the opposition (55%). A pair is kept only when it shows some opposition, or when its two sides are so close in meaning (0.85 or more) that a quiet disagreement is plausible.
+</Step>
+<Step>
+### AI check
+
+With an AI key, unchecked candidates go to the model four pairs at a time, up to three batches per scan; the rest wait for the next scan. The model answers <UiLabel>Contradicts</UiLabel>, <UiLabel>Compatible</UiLabel> or <UiLabel>Unrelated</UiLabel> with a one-sentence reason. Pairs judged compatible or unrelated are hidden.
+</Step>
+</Steps>
+
+Every verdict, resolution and dismissal is remembered by a fingerprint of both texts. Edit either text and the pair counts as new, so a stale verdict or dismissal never sticks to changed words.
+
+## Modes
+
+| Notice | Mode |
+|---|---|
+| None | Meaning and AI: candidates by meaning, each checked by the AI. |
+| <UiLabel>Without embeddings, these pairs are found by shared words; the AI still checks each one.</UiLabel> | No embeddings available: candidates by shared words, still checked. |
+| <UiLabel>Without embeddings or an AI key, these pairs are found by words alone and are not checked. Add a key in Settings › AI & Models for meaning and verdicts.</UiLabel> | No AI key: candidates by words and signals only, all <UiLabel>Not checked</UiLabel>. |
+
+The finder works offline. An AI check is one request per batch of four pairs and counts toward the daily AI budget; with <UiLabel>Ask before spending</UiLabel> on, <UiLabel>Scan again</UiLabel> asks first.
+
+## Tips and limits
+
+- The finder considers the 1,500 most recent posts of the active network (skipping plain reposts and empty posts) and the first 400 passages of its vault documents.
+- After a scan finds nothing, the tab shows <UiLabel>No tensions found</UiLabel>; scan again after you write more.
+- Without an AI key, <UiLabel>Reply to reconcile</UiLabel>, <UiLabel>Mark resolved</UiLabel> and <UiLabel>Dismiss</UiLabel> still work on unchecked pairs.
+
+## Related
+
+- [Thinking tools](/docs/guides/thinking): the other ways to look harder at your thoughts.
+- [Beliefs and credence](/docs/concepts/beliefs-and-credence): tensions as prompts for revision.
+- [AI engines](/docs/concepts/ai-engines): keys and budgets.

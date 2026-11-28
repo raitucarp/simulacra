@@ -41,7 +41,7 @@ fn status_badge(item: &RailItem, theme: &ThemeTokens) -> Option<Div> {
 impl ForgeView {
     pub(super) fn step_rail(&self, handle: &ForgeHandle) -> impl IntoElement {
         let theme = &self.theme;
-        let items: Vec<Stateful<Div>> = rail_items(&self.draft, &self.issues).iter().map(|item| self.rail_entry(item, handle)).collect();
+        let items: Vec<Stateful<Div>> = rail_items(&self.draft, &self.shown_issues()).iter().map(|item| self.rail_entry(item, handle)).collect();
         div()
             .id(RAIL_ID)
             .w_full()

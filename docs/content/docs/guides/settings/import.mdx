@@ -1,0 +1,31 @@
+---
+title: Import
+description: "The defaults of the import sheet: the unit documents are cut into, who the posts are from, the largest file accepted and whether the original file is kept."
+icon: Archive
+---
+
+**Import** sets what the [import sheet](/docs/guides/vault/import) starts with when you bring a book, a PDF or any other file into the vault. You can still change the unit and the author in the sheet for each import.
+
+<Screenshot id="settings-import" alt="Settings › Import with the SPLITTING card (Split documents by Paragraph, Post imports as Yourself) and the FILES card (Largest file 50 MB, Keep the original file on)" caption="Settings › Import." size="md" />
+
+## SPLITTING
+
+| Setting | Control | Options | Default | What it does |
+|---|---|---|---|---|
+| <UiLabel>Split documents by</UiLabel> | Chips | <UiLabel>Paragraph</UiLabel>, <UiLabel>Sentence</UiLabel>, <UiLabel>Chapter</UiLabel> | Paragraph | The unit an imported document is cut into, one post each. |
+| <UiLabel>Post imports as</UiLabel> | Chips | <UiLabel>Yourself</UiLabel>, <UiLabel>Pseudonym</UiLabel>, <UiLabel>Anonymous</UiLabel> | Yourself | The identity imported passages are posted under. |
+
+## FILES
+
+| Setting | Control | Range | Default | What it does |
+|---|---|---|---|---|
+| <UiLabel>Largest file</UiLabel> | Stepper (step 5) | 1 to 1,024 MB | `50 MB` | Bigger files are refused before reading, with <UiLabel>the file is …, larger than the … import limit</UiLabel>. |
+| <UiLabel>Keep the original file</UiLabel> | Switch | | On | Store a copy of the source file in the vault next to its posts, in the media folder's `imports` folder. |
+
+Passages are also cut to the [post length limit](/docs/guides/settings/reading-writing).
+
+## Related
+
+- [Import a file](/docs/guides/vault/import)
+- [Import formats](/docs/reference/import-formats)
+- [Storage and backups](/docs/guides/data/storage-and-backups)

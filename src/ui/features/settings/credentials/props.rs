@@ -28,7 +28,7 @@ impl CredentialRowView {
         Self {
             id: credential.id.clone(),
             kind: credential.kind,
-            label: credential.label.clone(),
+            label: credential.shown_label(),
             masked_secret: credential.masked_secret(),
             endpoint: credential.endpoint.clone(),
         }

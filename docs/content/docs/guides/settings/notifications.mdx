@@ -1,0 +1,31 @@
+---
+title: Notifications
+description: Choose which brief in-app messages (toasts) appear in the corner of the window.
+icon: Bell
+---
+
+**Notifications** silences the kinds of toast you do not want. Toasts are the brief messages in the corner of the window; nothing here sends system notifications.
+
+<Screenshot id="settings-notifications" alt="Settings › Notifications with the IN-APP TOASTS card: Show toasts, Confirmations, Model failures, Agent activity and Due reminders" caption="Settings › Notifications." size="md" />
+
+## IN-APP TOASTS
+
+| Setting | Control | Default | Shows |
+|---|---|---|---|
+| <UiLabel>Show toasts</UiLabel> | Switch | On | The master switch for every toast below. Failed vault writes are always shown. |
+| <UiLabel>Confirmations</UiLabel> | Switch | On | Imported, deleted, saved and similar confirmations. |
+| <UiLabel>Model failures</UiLabel> | Switch | On | A model request failed or an API key is missing. |
+| <UiLabel>Agent activity</UiLabel> | Switch | Off | An agent posted or replied. Saved, not yet used by 0.2.0. |
+| <UiLabel>Due reminders</UiLabel> | Switch | On | A to-do in one of your posts is due today or overdue. |
+
+While <UiLabel>Show toasts</UiLabel> is off, the four rows below it are dimmed and ignore clicks; their own values are kept for when you turn it back on.
+
+## Tips and limits
+
+- **Always shown.** A failed write to the vault (<UiLabel>Could not save to the local vault: …</UiLabel>) and other errors that need your attention appear whatever you choose here.
+- **Not affected.** The review and weekly review reminders of [Learning](/docs/guides/settings/learning) have their own switches.
+
+## Related
+
+- [The Settings window](/docs/guides/settings)
+- [Troubleshooting](/docs/reference/troubleshooting)

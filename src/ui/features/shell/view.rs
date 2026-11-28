@@ -23,7 +23,7 @@ use super::arena_host::ArenaHost;
 use super::thinking_host::ThinkingHost;
 use super::data_host::DataHost;
 use crate::i18n::Language;
-use crate::state::AppState;
+use crate::state::{AppState, NavigationTab};
 use crate::theme::ThemeTokens;
 use crate::ui::features::command_palette::PaletteHost;
 use crate::ui::features::composer::ComposerModalPanel;
@@ -106,7 +106,9 @@ pub struct ChromeState {
     /// Unsaved provider/model picks of the open settings modal.
     pub settings_draft: SettingsDraft,
     pub is_workspace_open: bool,
-    pub is_right_sidebar_open: bool,
+    /// The right panel column per place where the user toggled it; elsewhere it follows the
+    /// default (see `AppView::is_right_panel_shown`).
+    pub right_panel_choices: Vec<(NavigationTab, bool)>,
     /// The right panel's drawer is open (compact layout class, where it is not a column).
     pub is_right_drawer_open: bool,
     pub right_sidebar_tab: RightSidebarTab,
@@ -115,7 +117,7 @@ pub struct ChromeState {
 }
 
 impl ChromeState {
-    /// Initial chrome: open right column, every menu closed.
+    /// Initial chrome: the right column at its defaults, every menu closed.
     pub(super) fn new(current_language: Language) -> Self {
         Self {
             current_language,
@@ -124,7 +126,7 @@ impl ChromeState {
             active_settings_tab: SettingsTab::General,
             settings_draft: SettingsDraft::default(),
             is_workspace_open: false,
-            is_right_sidebar_open: true,
+            right_panel_choices: Vec::new(),
             is_right_drawer_open: false,
             right_sidebar_tab: RightSidebarTab::MindCadence,
             is_onboarding_open: false,

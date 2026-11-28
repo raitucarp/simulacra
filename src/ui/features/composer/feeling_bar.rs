@@ -77,8 +77,21 @@ fn label(text: String, theme: &ThemeTokens) -> Div {
     div().flex_none().text_size(theme.font_size_xs).text_color(theme.text_muted).child(text)
 }
 
+/// The note field, posting the feeling on Ctrl/Cmd+Enter like the draft above it (P2).
+fn note_field(note: &Entity<InputState>, on_submit: ModalActionCallback) -> Div {
+    div()
+        .capture_key_down(move |event: &KeyDownEvent, window, cx| {
+            if super::keys::is_submit_chord(&event.keystroke) {
+                window.prevent_default();
+                cx.stop_propagation();
+                on_submit(window, cx);
+            }
+        })
+        .child(Input::new(note).small())
+}
+
 /// The bar: picked emojis and intensity, the note, then the search and the grid.
-pub(super) fn feeling_row(view: &FeelingView, on_pick: EmojiCallback, on_step: IntensityCallback, theme: &ThemeTokens) -> Div {
+pub(super) fn feeling_row(view: &FeelingView, on_pick: EmojiCallback, on_step: IntensityCallback, on_submit: ModalActionCallback, theme: &ThemeTokens) -> Div {
     let picked = view.emojis.iter().enumerate().map(|(index, glyph)| emoji_cell(SharedString::from(format!("{PICKED_ID}-{index}")), glyph, &on_pick, theme));
     let top = div().flex().items_center().gap(theme.control_gap).child(label(t!("composer.feeling.label").to_string(), theme)).child(div().flex().children(picked)).child(div().flex_1()).child(label(t!("composer.feeling.intensity").to_string(), theme)).child(steps(view.intensity, &on_step));
     let cells = offered_emoji(&view.query).into_iter().enumerate().map(|(index, glyph)| emoji_cell(SharedString::from(format!("{CELL_ID}-{index}")), &glyph, &on_pick, theme));
@@ -94,7 +107,7 @@ pub(super) fn feeling_row(view: &FeelingView, on_pick: EmojiCallback, on_step: I
         .border_t(theme.border_width_hairline)
         .border_color(theme.border_subtle)
         .child(top)
-        .child(Input::new(&view.note).small())
+        .child(note_field(&view.note, on_submit))
         .child(Input::new(&view.search).small().cleanable(true))
         .child(grid)
         .children(problem)

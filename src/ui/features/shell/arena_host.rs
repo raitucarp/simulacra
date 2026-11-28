@@ -10,7 +10,7 @@ use crate::domain::arena::lab::Experiment;
 use crate::domain::beliefs::{BeliefBook, BeliefSettings, BeliefSource};
 use crate::domain::ProfileId;
 use crate::state::AppState;
-use crate::ui::features::arena::{ArenaData, ArenaPanel, RunState};
+use crate::ui::features::arena::{ArenaData, ArenaPanel, ArenaTab, RunState};
 use crate::ui::features::beliefs::BeliefsPanel;
 use crate::ui::features::roster::ProfileTab;
 use gpui_kit::*;
@@ -58,7 +58,8 @@ pub struct ArenaHost {
     pub run: Option<ArenaRun>,
     /// Bumped for every request, so a stale reply is dropped.
     pub ticket: u64,
-    pub notice: Option<String>,
+    /// Why the last request failed, and the tab whose run it was (shown only there).
+    pub notice: Option<(ArenaTab, String)>,
     pub updates: HashMap<u64, PendingUpdate>,
     pub belief_notice: Option<String>,
     pub profile_tab: ProfileTab,

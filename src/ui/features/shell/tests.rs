@@ -73,6 +73,17 @@ mod settings_draft {
         assert_eq!(draft.view(&saved).provider, saved.provider);
         assert_eq!(draft.view(&saved).model, saved.model);
     }
+
+    #[test]
+    fn a_picked_provider_shows_its_own_key_or_none() {
+        use crate::agent::credentials::{Credential, CredentialKind, CredentialStore};
+        let (saved, mut store) = (saved(), CredentialStore::default());
+        assert_eq!(super::super::settings_draft::provider_key(&saved, &store, saved.provider), "saved-key");
+        let openai = || super::super::settings_draft::provider_key(&saved, &store, LlmProvider::OpenAi);
+        assert_eq!(openai(), "", "another provider's key is never carried over");
+        store.upsert(Credential::new(CredentialKind::OpenAi, "Mine", "sk-openai", ""));
+        assert_eq!(super::super::settings_draft::provider_key(&saved, &store, LlmProvider::OpenAi), "sk-openai");
+    }
 }
 
 mod credential_form {

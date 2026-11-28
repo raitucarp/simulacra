@@ -34,7 +34,10 @@ impl ReviewPanel {
     /// Creates the typed goal and opens it.
     fn create_goal(&mut self, window: &mut Window, cx: &mut Context<Self>) {
         let draft = self.goal_draft(cx);
-        let Some(goal) = new_goal(&draft, self.data.network_id.clone(), GoalId::generate(), self.data.today, jiff::Timestamp::now()) else { return cx.notify() };
+        let Some(goal) = new_goal(&draft, self.data.network_id.clone(), GoalId::generate(), self.data.today, jiff::Timestamp::now()) else {
+            self.learning.goal_tried = true;
+            return cx.notify();
+        };
         take_text(&self.learn_fields.goal_title, window, cx);
         take_text(&self.learn_fields.goal_why, window, cx);
         self.learning.goals = GoalsScreen::Goal(goal.id.clone());
@@ -52,11 +55,10 @@ impl ReviewPanel {
             }))
         }).collect::<Vec<_>>();
         let draft = self.goal_draft(cx);
-        let problem = goal_problem(&draft, self.data.today).map(|problem| caption(tr(problem.message_key()), theme).text_color(theme.warning));
+        let problem = goal_problem(&draft, self.data.today).filter(|_| self.learning.goal_tried).map(|problem| caption(tr(problem.message_key()), theme).text_color(theme.warning));
         let create = Button::new(CREATE_ID).primary().small().icon(Icon::new(LucideIcon::Check)).label(tr("learning.goals.create")).on_click(cx.listener(|this, _, window, cx| this.create_goal(window, cx)));
         let cancel = Button::new(CANCEL_ID).ghost().small().label(tr("learning.cancel")).on_click(cx.listener(|this, _, _, cx| this.show_goals(GoalsScreen::List, cx)));
         surface(theme)
-            .max_w(theme.review_card_max_width)
             .child(block_title(LucideIcon::Target, theme.accent_brand, tr("learning.goals.new"), theme))
             .child(section_label(tr("learning.goals.title_label"), theme))
             .child(control_row(theme).child(framed_input(&self.learn_fields.goal_title, theme)))

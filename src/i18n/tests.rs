@@ -50,7 +50,7 @@ const COUNT_LABEL_BASES: &[&str] = &[
     "feed.show_more_replies", "sidebar.posts_count", "sidebar.doc_count", "sidebar.member_count",
     "sidebar.member_agents", "cadence.badge", "cadence.day_posts", "post.refs_open_thread",
     "post.scheduled.published", "data.scheduled.count", "post.auto_archived", "post.auto_deleted",
-    "composer.free_posts",
+    "composer.free_posts", "thinking.atomic.hint",
 ];
 
 #[test]

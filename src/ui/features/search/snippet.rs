@@ -1,4 +1,4 @@
-//! The passage a result shows (Q4): the post's text on one line, cut to a window that opens
+//! The passage a result shows (Q4): the post's text on one plain line, cut to a window that opens
 //! a little before its first match, with every matching word marked.
 
 use crate::domain::document::query::MIN_TERM_CHARS;
@@ -44,9 +44,10 @@ fn runs(text: &str) -> Vec<Range<usize>> {
     out
 }
 
-/// The passage of `content` for `query` (see the module rules).
+/// The passage of `content` for `query` (see the module rules), read as plain text: no
+/// markup and no `[[post_…]]` ids.
 pub fn snippet(content: &str, query: &PostQuery) -> Snippet {
-    let line = content.split_whitespace().collect::<Vec<_>>().join(" ");
+    let line = crate::domain::post::readable_line(content);
     let (words, phrases) = wanted(query);
     let marks: Vec<Range<usize>> = runs(&line)
         .into_iter()

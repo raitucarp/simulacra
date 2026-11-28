@@ -1,0 +1,39 @@
+---
+title: The finite feed
+description: Give the stream a daily budget; once you have read that many posts it ends with a closing question instead of scrolling on.
+icon: Hourglass
+---
+
+An endless feed rewards scrolling, not thinking. With a **daily feed budget**, the stream shows a set number of posts a day and then ends with a closing card: "What did you learn today?" Your answer goes out as a one-line post.
+
+<Screenshot id="view-feed-end-card" alt="The closing card at the end of the stream, titled That is today's feed, with a count of posts read, the question What did you learn today?, a one-line field and a Post button" caption="The end of today's feed." size="md" />
+
+## Turn it on
+
+Set **Settings › Reading & Writing › Daily feed budget** (under <UiLabel>FEED</UiLabel>) to a number of posts a day, in steps of 10 up to 500. It starts at <UiLabel>No limit</UiLabel>, which keeps the feed endless.
+
+## How posts are counted
+
+- Each post counts once, the first time the stream shows it that day. Scrolling back over it, or seeing it again later, costs nothing.
+- **Your own posts never count**, so the feed always shows them.
+- Posts already shown today stay in the stream after the budget is spent.
+- The tally belongs to one local day, is saved as it grows (so a restart does not reset it), and starts afresh the next day.
+- While you search the stream, the budget does not apply.
+
+## The closing card
+
+Once the budget is spent, the stream ends with a card:
+
+1. **"That is today's feed"**, and "You have read your 50 posts for today."
+2. **"What did you learn today?"** and a field, "One line about something you learned".
+3. <UiLabel>Post</UiLabel> (or <Kbd>Enter</Kbd>) publishes your answer as an ordinary post, collapsed onto one line and cut to 140 characters. The toast says "Posted. See you tomorrow."
+
+For the rest of the day the card shows your answer, "Today you learned: …", which you can click to open.
+
+## Related
+
+<Cards>
+<Card title="The day filter" href="/docs/guides/views/day-filter" description="Narrow the stream to one day." />
+<Card title="Settings" href="/docs/guides/settings" description="Daily feed budget and the other reading settings." />
+<Card title="Journal" href="/docs/guides/journal" description="A longer daily reflection." />
+</Cards>

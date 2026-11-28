@@ -45,7 +45,7 @@ fn render_provider_section(
         spaced_row().child(section_label(theme, t!("settings.provider_title").to_string())).child(
             div()
                 .text_size(theme.font_size_hint)
-                .text_color(theme.accent_brand)
+                .text_color(theme.accent_brand_text)
                 .child(t!("settings.provider_active", provider = active_provider).to_string()),
         ),
         div()

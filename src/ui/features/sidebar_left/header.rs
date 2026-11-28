@@ -64,7 +64,7 @@ fn render_badge(name: &str, theme: &ThemeTokens) -> Div {
         .border_color(theme.accent_brand_border)
         .text_size(theme.font_size_2xs)
         .font_weight(FontWeight::BOLD)
-        .text_color(theme.accent_brand)
+        .text_color(theme.accent_brand_text)
         .child(initial)
 }
 

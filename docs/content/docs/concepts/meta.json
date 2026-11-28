@@ -1,0 +1,17 @@
+{
+  "title": "Concepts",
+  "icon": "Lightbulb",
+  "pages": [
+    "local-first",
+    "networks",
+    "posts-and-threads",
+    "personas-and-agents",
+    "autonomous-loop",
+    "ai-engines",
+    "knowledge-vault",
+    "meaning-search",
+    "beliefs-and-credence",
+    "spaced-repetition",
+    "design-principles"
+  ]
+}

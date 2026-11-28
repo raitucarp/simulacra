@@ -41,11 +41,20 @@ impl CredenceChip {
     }
 }
 
+/// Where a card sits. A post open in the Thread Inspector also shows in the feed: its popover
+/// opens on the card it was asked from, not on both (two popovers each closed the other).
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum CredencePane {
+    #[default]
+    Feed,
+    Inspector,
+}
+
 /// Something done with a post's credence.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum CredenceEvent {
-    /// Open the popover (the "…" menu's "Set a credence").
-    Open(PostId),
+    /// Open the popover on the post's card in that pane (the "…" menu's "Set a credence").
+    Open(PostId, CredencePane),
     Close,
     SetPercent(PostId, u8),
     /// Move the percentage by this many points.
@@ -67,6 +76,7 @@ pub struct CredenceControls {
     pub chip: Option<CredenceChip>,
     /// The popover is open on this card.
     pub open: bool,
+    pub pane: CredencePane,
     /// The resolution note field (one, shared: only one popover is open at a time).
     pub note: Entity<InputState>,
     pub on_event: CredenceAction,
@@ -77,8 +87,10 @@ pub struct CredenceControls {
 pub struct CredenceSource {
     /// Chips of the posts that carry a credence, by post id.
     pub chips: Rc<HashMap<String, CredenceChip>>,
-    /// The post whose popover is open.
-    pub open: Option<PostId>,
+    /// The post whose popover is open, and the pane of its card.
+    pub open: Option<(PostId, CredencePane)>,
+    /// The pane these cards sit in.
+    pub pane: CredencePane,
     pub note: Entity<InputState>,
     pub on_event: CredenceAction,
 }
@@ -89,10 +101,16 @@ impl CredenceSource {
         CredenceControls {
             post_id: post.clone(),
             chip: self.chips.get(post.as_str()).cloned(),
-            open: self.open.as_ref() == Some(post),
+            open: self.open.as_ref().is_some_and(|(id, pane)| id == post && *pane == self.pane),
+            pane: self.pane,
             note: self.note.clone(),
             on_event: self.on_event.clone(),
         }
+    }
+
+    /// The same source for the cards of `pane`.
+    pub fn in_pane(&self, pane: CredencePane) -> Self {
+        Self { pane, ..self.clone() }
     }
 }
 

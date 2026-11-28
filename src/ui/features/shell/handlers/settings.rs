@@ -1,6 +1,7 @@
 //! Settings and theme handlers: tabs, theme palette, LLM provider/model and persistence.
 //! Provider and model picks live in `chrome.settings_draft` until Save; closing reverts them.
 
+use super::super::settings_draft::provider_key;
 use super::super::view::AppView;
 use crate::agent::LlmProvider;
 use crate::theme::ThemeSettings;
@@ -41,10 +42,13 @@ impl AppView {
         cx.notify();
     }
 
-    /// Picks a provider in the draft and resets the model input to the provider default.
+    /// Picks a provider in the draft, resets the model input to the provider default and shows
+    /// that provider's stored key (never the previous provider's).
     pub(crate) fn select_provider(&mut self, provider: LlmProvider, window: &mut Window, cx: &mut Context<Self>) {
         let def_model = self.chrome.settings_draft.select_provider(&self.state.llm_settings, provider);
+        let key = provider_key(&self.state.llm_settings, &self.state.credentials, provider);
         self.llm_inputs.model.update(cx, |st, cx| st.set_value(def_model, window, cx));
+        self.llm_inputs.api_key.update(cx, |st, cx| st.set_value(key, window, cx));
         cx.notify();
     }
 
@@ -74,6 +78,7 @@ impl AppView {
     /// Closes the modal, discarding unsaved provider/model picks and typed values.
     pub(crate) fn close_settings(&mut self, window: &mut Window, cx: &mut Context<Self>) {
         self.revert_settings_draft(window, cx);
+        self.cancel_credential(window, cx);
         self.settings_ui.confirm_reset = false;
         self.chrome.is_settings_open = false;
         cx.notify();

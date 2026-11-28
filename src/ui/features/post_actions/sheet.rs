@@ -59,6 +59,7 @@ pub fn render_actions_sheet(inputs: SheetInputs<'_>) -> Stateful<Div> {
         .flex_col()
         .items_center()
         .pt(theme.palette_top_offset)
+        .pb(theme.palette_top_offset)
         .on_mouse_down(MouseButton::Left, move |_, window, cx| dismiss(SheetEvent::Close, window, cx))
         .child(card)
 }
@@ -69,7 +70,9 @@ fn render_card(theme: &ThemeTokens) -> Stateful<Div> {
         .id(CARD_ID)
         .w(theme.post_actions_sheet_width)
         .max_w_full()
+        // Tall enough for the whole rail; a short window caps it, keeping the scrim margins.
         .h(theme.post_actions_sheet_max_height)
+        .max_h_full()
         .flex()
         .flex_col()
         .overflow_hidden()
@@ -104,7 +107,7 @@ fn render_header(source: &str, on_event: SheetAction, theme: &ThemeTokens) -> Di
         .py(theme.spacing_sm)
         .border_b(theme.border_width_hairline)
         .border_color(theme.border_subtle)
-        .child(Icon::new(LucideIcon::WandSparkles).size(theme.icon_size_sm).text_color(theme.accent_brand))
+        .child(Icon::new(LucideIcon::WandSparkles).size(theme.icon_size_sm).text_color(theme.accent_brand_text))
         .child(titles)
         .child(close)
 }

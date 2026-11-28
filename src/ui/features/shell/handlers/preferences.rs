@@ -43,6 +43,7 @@ impl AppView {
             self.chrome.current_language = current.general.language;
             crate::i18n::set_locale(current.general.language);
         }
+        crate::ui::format::set_clock(crate::ui::format::Clock::of(&current.general));
         self.scheduler.queue.set_max_in_flight(current.agents.max_concurrent as usize);
         if current.embeddings.provider != previous.embeddings.provider {
             self.settings_ui.sync_inputs(&current, window, cx);
@@ -70,6 +71,7 @@ impl AppView {
         if !self.chrome.is_settings_open {
             self.revert_settings_draft(window, cx);
             self.chrome.is_settings_open = true;
+            window.focus(&self.settings_ui.rail_focus, cx);
         }
         self.chrome.active_settings_tab = tab;
         self.settings_ui.confirm_reset = false;

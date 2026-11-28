@@ -42,24 +42,31 @@ fn actions(pane: &AppearancePanel, handle: &PanelHandle, editable: bool) -> Div 
         let run = act(handle, action);
         Button::new(id).small().label(label).on_click(move |_, window, cx| run(window, cx))
     };
+    // Duplicate is the way forward from a read-only theme; on a custom one it sits level with
+    // Reset, and only Delete stands out, in red.
+    let duplicate = button(DUPLICATE_BUTTON_ID, t!("appearance.duplicate").to_string(), AppearancePanel::duplicate);
     let buttons = div()
         .flex()
         .gap(theme.spacing_xs)
-        .child(button(DUPLICATE_BUTTON_ID, t!("appearance.duplicate").to_string(), AppearancePanel::duplicate).primary())
+        .child(if editable { duplicate.outline() } else { duplicate.primary() })
         .when(editable, |row| {
-            row.child(button(RESET_BUTTON_ID, t!("appearance.reset").to_string(), AppearancePanel::reset).ghost())
+            row.child(button(RESET_BUTTON_ID, t!("appearance.reset").to_string(), AppearancePanel::reset).outline())
                 .child(button(DELETE_BUTTON_ID, t!("appearance.delete").to_string(), AppearancePanel::delete_active).danger())
         });
     spaced_row().gap(theme.spacing_md).child(div().flex_1().child(muted_note(theme, status))).child(buttons)
 }
 
-/// Two-column grid of labelled color pickers with hex readouts.
+/// Columns of the color grid: two even halves of the card.
+const COLOR_COLUMNS: u16 = 2;
+
+/// Two-column grid of labelled color pickers with hex readouts, filling the card.
 fn color_grid(pickers: &[(PaletteColorKey, Entity<ColorPickerState>)], colors: &PaletteColors, theme: &ThemeTokens) -> Div {
     let fields = pickers.iter().map(|(key, state)| {
         let label_key = format!("{COLOR_I18N_PREFIX}{}", key.id());
         let label = t!(label_key.as_str()).to_string();
         div()
-            .w(theme.color_field_width)
+            .w_full()
+            .min_w_0()
             .flex()
             .items_center()
             .gap(theme.spacing_sm)
@@ -74,5 +81,5 @@ fn color_grid(pickers: &[(PaletteColorKey, Entity<ColorPickerState>)], colors: &
                     .child(to_hex(key.get(colors))),
             )
     });
-    div().flex().flex_wrap().gap(theme.spacing_sm).children(fields)
+    div().w_full().grid().grid_cols(COLOR_COLUMNS).gap_x(theme.section_gap).gap_y(theme.spacing_sm).children(fields)
 }

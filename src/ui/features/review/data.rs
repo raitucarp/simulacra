@@ -2,6 +2,7 @@
 //! day, the limits and retention of Settings › Learning, and the posts and document titles
 //! the items and maps refer to (a post face is drawn from its current text and author).
 
+use crate::domain::post::readable_line;
 use crate::domain::review::queue::{plan_today, DailyLimits, TodayPlan};
 use crate::domain::review::schedule::Policy;
 use crate::domain::review::{ItemId, ReviewEntry, ReviewItem};
@@ -16,6 +17,17 @@ use std::rc::Rc;
 pub struct PostView {
     pub post: Post,
     pub author: Profile,
+    /// The posts its `[[post_…]]` links point at, so a link reads as their opening words.
+    pub linked: Vec<Post>,
+}
+
+impl PostView {
+    /// `post` as `state` holds it: its author and the posts it links to.
+    pub fn of(state: &crate::state::AppState, post: &Post) -> Self {
+        let targets = crate::domain::post::wikilink_targets(&crate::domain::post::tokenize_post_body(&post.content));
+        let linked = targets.iter().filter_map(|target| state.get_post_by_id(target.trim())).cloned().collect();
+        Self { post: post.clone(), author: state.author_of(post).clone(), linked }
+    }
 }
 
 /// Posts by id.
@@ -63,9 +75,10 @@ impl ReviewData {
         self.posts.get(id)
     }
 
-    /// A post's current text (none once deleted).
+    /// A post's current text as a reader says it, without markup or `[[post_…]]` links (none
+    /// once deleted).
     pub fn post_text(&self, id: &str) -> Option<String> {
-        self.posts.get(id).map(|view| view.post.content.clone())
+        self.posts.get(id).map(|view| readable_line(&view.post.content))
     }
 
     pub fn document_title(&self, id: &str) -> Option<&String> {

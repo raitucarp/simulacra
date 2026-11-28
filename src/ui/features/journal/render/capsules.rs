@@ -1,6 +1,7 @@
 //! The Capsules tab: the form while writing one (note, images, opening day), the opened
-//! capsule being read, then every capsule: ready ones first, sealed ones with only their
-//! day and how long is left (their contents stay hidden), opened ones last.
+//! capsule being read, then every capsule as one row of the same shape: ready ones first (the
+//! one filled button), sealed ones with only their day and how long is left (their contents
+//! stay hidden), opened ones last.
 
 use super::super::panel::{JournalFields, JournalPanel};
 use super::super::text::{capsule_state_label, day_label, tr};
@@ -10,7 +11,6 @@ use crate::domain::journal::capsule::notify::in_list_order;
 use crate::domain::journal::capsule::{CapsuleState, SealProblem, TimeCapsule};
 use crate::i18n::t_count;
 use crate::ui::icons::LucideIcon;
-use crate::ui::illustration::{EmptyKey, Illustration};
 use gpui_kit::*;
 
 const WRITE_ID: &str = "journal-capsule-write";
@@ -69,16 +69,17 @@ impl JournalPanel {
         let mut facts = vec![capsule_state_label(state, capsule.opens_on)];
         facts.extend((capsule.attachment_count() > 0).then(|| t_count("journal.capsule.images", capsule.attachment_count())));
         let id = capsule.id.clone();
-        let open = (!matches!(state, CapsuleState::Sealed { .. })).then(|| {
-            let label = if state == CapsuleState::Opened { tr("journal.capsule.read") } else { tr("journal.capsule.open") };
-            primary_button((OPEN_ID, index), LucideIcon::MailOpen, label).on_click(cx.listener(move |this, _, window, cx| this.open_capsule(&id, window, cx)))
-        });
+        let open = match state {
+            CapsuleState::Sealed { .. } => None,
+            CapsuleState::Ready => Some(primary_button((OPEN_ID, index), LucideIcon::MailOpen, tr("journal.capsule.open"))),
+            CapsuleState::Opened => Some(ghost_button((OPEN_ID, index), LucideIcon::MailOpen, tr("journal.capsule.read"))),
+        }
+        .map(|button| button.on_click(cx.listener(move |this, _, window, cx| this.open_capsule(&id, window, cx))));
         let delete_id = capsule.id.clone();
         let delete = ghost_button((DELETE_ID, index), LucideIcon::Trash, tr("journal.entry.delete")).on_click(self.confirm_delete(DeleteKind::Capsule, delete_id, cx));
-        let art = matches!(state, CapsuleState::Sealed { .. }).then(|| Illustration::empty(EmptyKey::CapsuleSealed).width(theme.art_compact_width));
         let border = if state == CapsuleState::Ready { theme.accent_dialectic_border } else { theme.border_subtle };
         surface(theme)
             .border_color(border)
-            .child(control_row(theme).children(art).child(div().flex_1().min_w_0().flex().flex_col().gap(theme.spacing_xs).child(block_title(icon, colour, title, theme)).child(caption(facts.join(crate::i18n::COUNT_SEPARATOR), theme))).children(open).child(delete))
+            .child(control_row(theme).child(div().flex_1().min_w_0().flex().flex_col().gap(theme.spacing_xs).child(block_title(icon, colour, title, theme)).child(caption(facts.join(crate::i18n::COUNT_SEPARATOR), theme))).children(open).child(delete))
     }
 }

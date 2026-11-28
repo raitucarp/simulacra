@@ -33,7 +33,7 @@ fn render_entry(index: usize, entry: &FutureEntry, input: &ViewInput<'_>) -> Sta
     let line = theme.font_size_sm * theme.line_height_body;
     let day = div().flex_none().w(theme.view_gutter_width).text_size(theme.font_size_xs).font_family(theme.font_family_mono.clone()).text_color(theme.text_muted).child(entry.day.day().to_string());
     let (mark, locked): (AnyElement, bool) = match entry.item {
-        FutureItem::Post { locked } => (Icon::new(LucideIcon::CalendarClock).size(theme.symbol_outline_size).text_color(theme.accent_brand).into_any_element(), locked),
+        FutureItem::Post { locked } => (Icon::new(LucideIcon::CalendarClock).size(theme.symbol_outline_size).text_color(theme.accent_brand_text).into_any_element(), locked),
         FutureItem::Todo { state, .. } => (render_symbol_art(SymbolArt::Entry(EntrySymbol::Task, Some(state)), theme.symbol_outline_size).into_any_element(), false),
     };
     let text = match locked {

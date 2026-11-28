@@ -32,7 +32,7 @@ const GRAPH_EDGE_MIX: f32 = 0.3;
 /// (opaque, so text drawn in the same color vanishes into it).
 const SPOILER_FILL_MIX: f32 = 0.5;
 /// Foreground alpha of the tint under a revealed spoiler.
-const SPOILER_REVEALED_ALPHA: f32 = 0.06;
+const SPOILER_REVEALED_ALPHA: f32 = 0.12;
 
 /// Background layers, borders, hover/pressed overlays, inputs and scrollbars.
 pub(super) fn apply_surfaces(t: &mut ThemeTokens, palette: &ThemePalette) {

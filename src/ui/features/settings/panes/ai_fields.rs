@@ -24,7 +24,7 @@ pub(super) fn render_api_key_section(
             t!("settings.api_key_label", provider = active_provider).to_string(),
             t!("settings.api_key_note").to_string(),
         ))
-        .child(settings_input(api_key_input, theme))
+        .child(settings_input(api_key_input, theme).mask_toggle())
 }
 
 /// Custom endpoint URL label and input (Custom provider only).
@@ -41,7 +41,7 @@ pub(super) fn render_model_section(
     preset_chips: Vec<Stateful<Div>>,
 ) -> Div {
     field_group(theme)
-        .child(field_header(theme, t!("settings.model_label").to_string(), t!("settings.model_hint").to_string()))
+        .child(field_title(theme, t!("settings.model_label").to_string()))
         .child(settings_input(model_input, theme))
         .child(
             div()

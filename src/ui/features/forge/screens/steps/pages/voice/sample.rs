@@ -9,6 +9,7 @@ use crate::ui::features::forge::view::{ForgeHandle, ForgeView, HearStatus};
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::button::Button;
 use gpui_kit::component::Disableable;
+use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::*;
 
 const LIVE_KEY: &str = "forge.ui.voice.live_title";
@@ -64,7 +65,7 @@ impl ForgeView {
             .items_baseline()
             .gap(theme.spacing_xs)
             .child(div().text_size(theme.font_size_sm).font_weight(FontWeight::SEMIBOLD).text_color(theme.text_primary).child(self.display_name()))
-            .child(div().text_size(theme.font_size_xs).text_color(theme.text_muted).child(profile.display_handle()));
+            .when(!profile.handle.trim().is_empty(), |row| row.child(div().text_size(theme.font_size_xs).text_color(theme.text_muted).child(profile.display_handle())));
         let body = div()
             .p(theme.card_padding)
             .rounded(theme.radius_lg)

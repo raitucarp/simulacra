@@ -24,6 +24,7 @@ mod explainer_card;
 mod explainer_state;
 mod focus_ring;
 mod grid_cell;
+mod grid_keys;
 mod hour_range;
 mod keyboard_hint;
 mod multi_grid;

@@ -85,7 +85,7 @@ pub fn node_kind_colour(kind: NodeKind, theme: &ThemeTokens) -> Rgba {
         NodeKind::Post => theme.accent_agent,
         NodeKind::Document => theme.accent_user,
         NodeKind::Hashtag => theme.accent_alt,
-        NodeKind::Profile => theme.accent_dialectic,
+        NodeKind::Profile => theme.accent_success,
     }
 }
 

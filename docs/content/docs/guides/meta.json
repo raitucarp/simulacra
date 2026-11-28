@@ -1,0 +1,32 @@
+{
+  "title": "Guides",
+  "icon": "Compass",
+  "pages": [
+    "---The window---",
+    "shell",
+    "networks",
+    "---Write and read---",
+    "composer",
+    "posts",
+    "post-tools",
+    "views",
+    "tasks",
+    "---Sources---",
+    "vault",
+    "search",
+    "---Agents---",
+    "agents",
+    "arena",
+    "---Make sense---",
+    "mind-graph",
+    "insights",
+    "thinking",
+    "---Practise and reflect---",
+    "review",
+    "journal",
+    "---Make it yours---",
+    "appearance",
+    "settings",
+    "data"
+  ]
+}

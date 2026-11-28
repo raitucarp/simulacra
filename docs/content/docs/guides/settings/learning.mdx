@@ -1,0 +1,50 @@
+---
+title: Learning
+description: How many review items you answer a day, how many new ones join, the recall you aim for, the daily and weekly reminders, and the language you are learning.
+icon: GraduationCap
+---
+
+**Learning** sets the pace of [Review](/docs/guides/review): the daily limits of the queue, the target recall the scheduler plans for, and two gentle reminders.
+
+<Screenshot id="settings-learning" alt="Settings › Learning with the REVIEWS, REMINDER, WEEKLY REVIEW and LANGUAGES cards" caption="Settings › Learning." />
+
+## REVIEWS
+
+| Setting | Control | Range | Default | What it does |
+|---|---|---|---|---|
+| <UiLabel>Daily review limit</UiLabel> | Stepper (step 10) | 10 to 2,000 / day | `200 / day` | The most items answered per day, new ones included. |
+| <UiLabel>New cards per day</UiLabel> | Stepper (step 5) | 0 to 500 / day | `20 / day` | Items introduced for the first time each day. Never more than the daily review limit: a higher value is lowered to it. |
+| <UiLabel>Desired retention</UiLabel> | Stepper | 70% to 99% | `90%` | How likely you want to be to remember an item when it is due. Higher means more reviews. |
+
+See [Spaced repetition](/docs/concepts/spaced-repetition) for how retention shapes the schedule.
+
+## REMINDER
+
+| Setting | Control | Range | Default | What it does |
+|---|---|---|---|---|
+| <UiLabel>Review reminder</UiLabel> | Switch | | Off | Once a day, at or after the hour below, a notice says how many items wait (`3 items are waiting for review.`). Nothing shows when none are due. |
+| <UiLabel>Remind me at</UiLabel> | Stepper | `00:00` to `23:00` | `09:00` | The local hour of the reminder. Dimmed while the reminder is off. |
+
+## WEEKLY REVIEW
+
+| Setting | Control | Range or options | Default | What it does |
+|---|---|---|---|---|
+| <UiLabel>Weekly review reminder</UiLabel> | Switch | | Off | Once a week a notice says <UiLabel>Time for your weekly review: open Review, then Learn, then Goals.</UiLabel> |
+| <UiLabel>Weekly review day</UiLabel> | Menu | Monday to Sunday | Sunday | The day of the week the reminder shows. Dimmed while the reminder is off. |
+| <UiLabel>Remind me at</UiLabel> | Stepper | `00:00` to `23:00` | `18:00` | The local hour of the weekly reminder. Dimmed while the reminder is off. |
+
+## LANGUAGES
+
+| Setting | Control | Options | Default | What it does |
+|---|---|---|---|---|
+| <UiLabel>Language I am learning</UiLabel> | Menu | The ten interface languages, by their own names | Español | Posts can be shown in this language, and words of them sent to review. |
+
+## Tips and limits
+
+- Reminders appear only while Simulacra is running; they are in-app notices, not system notifications.
+- The Review page repeats your limits under its tiles; see [Review](/docs/guides/review).
+
+## Related
+
+- [Review](/docs/guides/review)
+- [Spaced repetition](/docs/concepts/spaced-repetition)

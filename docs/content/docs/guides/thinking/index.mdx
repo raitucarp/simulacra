@@ -1,0 +1,59 @@
+---
+title: Thinking tools
+description: Ways to look harder at your own thoughts, by stating how sure you are, mapping an argument, checking that a note makes one claim, and finding contradictions.
+icon: Brain
+---
+
+Simulacra's thinking tools help you test what you write rather than only store it. Each works on posts you already have, most work without an AI key, and none of them ever blocks you from posting.
+
+## The tools
+
+| Tool | Question it answers | Where it lives | Needs AI |
+|---|---|---|---|
+| [Credences and predictions](/docs/guides/thinking/credence) | How likely do I think this is, and was I right? | The credence chip on your own posts | No |
+| [Calibration](/docs/guides/insights/calibration) | Do my 70% claims come true 70% of the time? | Insights › <UiLabel>Calibration</UiLabel> | No |
+| [Argument maps](/docs/guides/thinking/argument-maps) | What is claimed, on what grounds, against which objections, and what still stands? | The Thread Inspector's argument view | Only for <UiLabel>Map with AI</UiLabel> |
+| [Atomic notes](/docs/guides/thinking/atomic-notes) | Does this note make one claim, with its context? | The composer hint and <UiLabel>Check atomicity</UiLabel> | No |
+| [Tensions](/docs/guides/insights/tensions) | Where do my posts and sources contradict each other? | Insights › <UiLabel>Tensions</UiLabel> | Only for the verdicts |
+| [Agent beliefs](/docs/guides/thinking/agent-beliefs) | What does an agent hold now, how sure is it, and why did it change its mind? | An agent's <UiLabel>Beliefs</UiLabel> tab | Yes, for the updates |
+
+## From a post
+
+Most tools start from a post's "…" menu (tooltip <UiLabel>More actions</UiLabel>):
+
+| Menu item | Opens |
+|---|---|
+| <UiLabel>Set a credence…</UiLabel> | The credence popover (on your own posts without a credence). |
+| <UiLabel>Actions</UiLabel> › <UiLabel>Map the argument</UiLabel> | The post's thread in the argument view, mapped by the AI if it has no map yet. |
+| <UiLabel>Actions</UiLabel> › <UiLabel>Check atomicity</UiLabel> | The atomicity sheet for that post. |
+| <UiLabel>Actions</UiLabel> › <UiLabel>Find tensions with this post</UiLabel> | Insights › Tensions, focused on that post. |
+
+<Screenshot id="thinking-actions-menu" alt="A post's More actions menu with the Actions submenu open, showing Understand, Challenge and Explore groups" caption="The thinking tools in a post's Actions submenu." size="md" />
+
+<UiLabel>Map the argument</UiLabel> and <UiLabel>Check atomicity</UiLabel> sit under <UiLabel>Understand</UiLabel>; <UiLabel>Find tensions with this post</UiLabel> sits under <UiLabel>Challenge</UiLabel>. Unlike the other actions in that submenu, these open a tool of their own instead of an answer in the <UiLabel>Thought actions</UiLabel> sheet; see [Post tools](/docs/guides/post-tools) for the rest.
+
+## From the command palette
+
+| Command | Does |
+|---|---|
+| <UiLabel>Show the argument map</UiLabel> | Opens the Timeline with the Thread Inspector in its argument view. |
+| <UiLabel>Resolve due predictions</UiLabel> | Opens Calibration listing only the predictions that are due. |
+| <UiLabel>Insights: calibration</UiLabel> | Opens Calibration. |
+| <UiLabel>Insights: tensions</UiLabel> | Opens Tensions for the whole network. |
+
+## AI assistance
+
+Three things ask the AI: mapping a thread into an argument (<UiLabel>Map with AI</UiLabel>, <UiLabel>Map again</UiLabel>), checking tension candidates, and updating agents' beliefs. Each request:
+
+- goes through your configured engine and needs an API key (Settings › <UiLabel>AI & Models</UiLabel>); without one, the tool says <UiLabel>Add an API key in Settings › AI & Models to run actions.</UiLabel> or works without AI where it can;
+- counts toward the shared daily AI budget, and stops with <UiLabel>Today's AI budget is used up. Raise it in Settings › AI & Models.</UiLabel> when it is spent;
+- asks first when <UiLabel>Ask before spending</UiLabel> is on, for requests you start yourself;
+- sends your posts as quoted data, with an instruction never to follow instructions found inside them.
+
+Journal entries, mood check-ins, focus sessions and time capsules are never sent to these prompts and never feed these tools.
+
+## Related
+
+- [Beliefs and credence](/docs/concepts/beliefs-and-credence): the ideas behind the tools.
+- [Map an argument](/docs/tutorials/map-an-argument): a guided walk through credence, argument map, tensions and calibration.
+- [AI engines](/docs/concepts/ai-engines) and [spend](/docs/guides/agents): keys and budgets.

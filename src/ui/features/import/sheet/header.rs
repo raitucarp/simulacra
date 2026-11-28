@@ -22,9 +22,11 @@ impl ImportSheet {
         self.session.loaded.as_ref().map_or(FormatFamily::Unknown, |file| file.doc.format.family())
     }
 
-    /// `EPUB · 1.2 MB · 135 chapters · 2,450 paragraphs`.
-    fn facts_line(&self) -> String {
-        let Some(file) = self.session.loaded.as_ref() else { return t!("import.reading_hint").to_string() };
+    /// `EPUB · 1.2 MB · 135 chapters · 2,450 paragraphs`; `None` until the file is read (the
+    /// body says it is being read, or why it could not be: saying "large books take a few
+    /// seconds" here too doubled it, and stayed after a failure).
+    fn facts_line(&self) -> Option<String> {
+        let file = self.session.loaded.as_ref()?;
         let doc = &file.doc;
         let mut facts = vec![family_label(doc.format.family()), doc.format.label().to_string(), file_size(doc.facts.size_bytes)];
         if doc.format.family().has_text() && doc.sections.len() > 1 {
@@ -33,7 +35,7 @@ impl ImportSheet {
         if doc.format.family().has_text() {
             facts.push(t!("import.count.paragraphs", count = doc.paragraph_count()).to_string());
         }
-        facts.join(FACT_SEPARATOR)
+        Some(facts.join(FACT_SEPARATOR))
     }
 
     pub(super) fn header(&self) -> Div {
@@ -49,7 +51,7 @@ impl ImportSheet {
             .flex_col()
             .gap(theme.spacing_2xs)
             .child(div().text_size(theme.font_size_lg).font_weight(FontWeight::BOLD).text_color(theme.text_primary).truncate().child(self.session.file_name.clone()))
-            .child(div().text_size(theme.font_size_xs).text_color(theme.text_muted).child(self.facts_line()))
+            .children(self.facts_line().map(|facts| div().text_size(theme.font_size_xs).text_color(theme.text_muted).child(facts)))
             .children(notes);
         div()
             .flex_none()

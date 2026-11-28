@@ -74,7 +74,7 @@ impl RenderOnce for NumberSlider {
             .items_center()
             .justify_between()
             .child(name)
-            .child(div().text_size(theme.font_size_xs).font_weight(FontWeight::SEMIBOLD).text_color(theme.accent_brand).child(shown));
+            .child(div().text_size(theme.font_size_xs).font_weight(FontWeight::SEMIBOLD).text_color(theme.accent_brand_text).child(shown));
         let keys_id = SharedString::from(format!("{}-{KEYS_SUFFIX}", self.id));
         let slider = keyboard_slider(keys_id, &binding, (self.value, self.range), false, theme, self.on_change.clone());
         let band = self.hint.as_ref().map(|hint| hint.footer(&self.id, theme));

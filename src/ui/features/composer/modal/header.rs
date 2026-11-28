@@ -1,4 +1,5 @@
-//! Modal header: cancel action, mode title and the "more options" menu.
+//! Modal header: cancel action, mode title over who will see the post, and the "more options"
+//! menu.
 
 use super::super::consts::{MODAL_CANCEL_BTN_ID, MODAL_MORE_BTN_ID};
 use super::{ComposerModalView, ModalActionCallback};
@@ -22,15 +23,22 @@ impl ComposerModalView {
             .items_center()
             .justify_between()
             .child(self.cancel_button())
-            .child(
-                div()
-                    .font_family(theme.font_family_display.clone())
-                    .font_weight(FontWeight::BOLD)
-                    .text_size(theme.font_size_base)
-                    .text_color(theme.text_primary)
-                    .child(self.title_text()),
-            )
+            .child(self.title_block())
             .child(self.more_options_button())
+    }
+
+    /// The mode title over the audience line ("Visible to members of this network"), which the
+    /// crowded footer used to cut to "…".
+    fn title_block(&self) -> Div {
+        let theme = &self.theme;
+        let title = div()
+            .font_family(theme.font_family_display.clone())
+            .font_weight(FontWeight::BOLD)
+            .text_size(theme.font_size_base)
+            .text_color(theme.text_primary)
+            .child(self.title_text());
+        let audience = div().text_size(theme.font_size_2xs).text_color(theme.text_muted).child(t!("composer.post_options").to_string());
+        div().flex().flex_col().items_center().child(title).child(audience)
     }
 
     fn cancel_button(&self) -> Stateful<Div> {

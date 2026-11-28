@@ -1,0 +1,52 @@
+---
+title: Cards and outline
+description: The Thread Inspector's default cards, and the outline that shows a whole thread as foldable text bullets you can walk with the keyboard.
+icon: ListTree
+---
+
+**Cards** is the default view: every post of the thread as a full card, with avatars, media, reactions and its <Kbd>…</Kbd> menu. When a thread grows long, the **outline** shows the same thread as nested, text-only bullets you can fold and walk with the arrow keys.
+
+<Screenshot id="view-outline" alt="The Thread Inspector in outline view: a toolbar with Collapse all, Expand all and a keyboard hint, over nested bullets each with an author name and the post's text" caption="The outline of a thread in the Thread Inspector." />
+
+## Switch between them
+
+- Pick <UiLabel>Show as cards</UiLabel> or <UiLabel>Show as outline</UiLabel> from the Thread Inspector's <UiLabel>View</UiLabel> menu.
+- Or run <UiLabel>Toggle the outline view</UiLabel> from the command palette (<Shortcut keys="Ctrl+Shift+P" />). It swaps cards and outline; from any other view it returns to cards.
+
+The outline is offered in the Thread Inspector only, not on profiles.
+
+## Read the outline
+
+Each bullet is one post: a chevron (or a dot for a post without replies), the post's symbol when it has one, its author's name and its text. The bullet takes the post's tint. Replies sit under the post they answer, oldest first. The post you selected is in the accent colour.
+
+A folded branch shows how many posts it hides, such as "+4".
+
+The toolbar holds <UiLabel>Collapse all</UiLabel>, <UiLabel>Expand all</UiLabel> and a reminder of the keys: "↑ ↓ move · ← → fold · Enter opens".
+
+## The keyboard
+
+Switching to the outline gives it the keyboard. The keys work only while the outline has focus.
+
+| Key | Does |
+|---|---|
+| <Kbd>↑</Kbd> / <Kbd>↓</Kbd> | Move the cursor to the previous or next visible bullet |
+| <Kbd>←</Kbd> | Fold the branch, or move to its parent |
+| <Kbd>→</Kbd> | Unfold the branch, or move to its first reply |
+| <Kbd>Enter</Kbd> | Open the post under the cursor |
+| <Kbd>Home</Kbd> / <Kbd>End</Kbd> | Jump to the first or last bullet |
+
+With the mouse: click a chevron to fold or unfold, click a row to put the cursor there, double-click a row to open the post.
+
+Opening a post selects it in the Thread Inspector and keeps the outline focused, so you can keep walking. Folded branches and the cursor are remembered per thread until you quit.
+
+## Cards
+
+In Cards, the Thread Inspector shows the selected post in full with its thread around it, the [depth dial](/docs/guides/post-tools/ai-post-actions#the-depth-dial) and margin notes under it, and the rest of the conversation. See [Threads](/docs/guides/posts) for everything a card holds.
+
+## Related
+
+<Cards>
+<Card title="Timeline views" href="/docs/guides/views" description="Every view and where it is offered." />
+<Card title="The post menu" href="/docs/guides/post-tools" description="What a card's … menu offers." />
+<Card title="Keyboard shortcuts" href="/docs/reference/keyboard-shortcuts" description="Every chord in one table." />
+</Cards>

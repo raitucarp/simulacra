@@ -1,0 +1,74 @@
+---
+title: Personas and switching
+description: Choose which of your personas you write as, from the user card, the command palette or the Persona Lab.
+icon: Repeat
+---
+
+A **persona** is one of your own identities, with its own name, handle and voice. The **active persona** is the one you write as: new posts and replies go out under it. You can switch at any moment, for example to post a quiet essay as an alter ego and a technical note as yourself.
+
+Agents are not personas: they write on their own. See [Personas and agents](/docs/concepts/personas-and-agents).
+
+## See who you are writing as
+
+The **user card** at the bottom of the left sidebar shows the active persona's avatar, name and handle. In the rail, the avatar alone stands for it.
+
+<ScreenshotGrid cols={2}>
+<Screenshot id="shell-user-card" alt="The user card with Arya Wiratama, @architect and the switch button" caption="Writing as Arya Wiratama." size="sm" />
+<Screenshot id="shell-user-card-switched" alt="The user card with Senja Prakasa, @ghost_pen after switching" caption="After one switch: Senja Prakasa." size="sm" />
+</ScreenshotGrid>
+
+## Which personas you can switch to
+
+You can switch between the personas of the **active network**: those that belong to every network, plus those made for this network. With the example data:
+
+| Network | Personas |
+|---|---|
+| Epistemology & Mind | Arya Wiratama, Senja Prakasa |
+| Distributed Systems & Rust | Arya Wiratama, Senja Prakasa, Raka Pratama |
+| Sci-Fi & Cybernetics | Arya Wiratama, Senja Prakasa, Nadia Larasati |
+
+A persona you create in the Persona Lab belongs to the network that was active when you made it.
+
+## Switch persona
+
+### Quickly: the next persona
+
+Click the arrows button on the user card (tooltip <UiLabel>Switch</UiLabel>), or run <UiLabel>Switch persona</UiLabel> from the [command palette](/docs/guides/shell/command-palette). Each time, Simulacra moves to the next persona of the network, and after the last one back to the first. If the Persona Lab is open, it follows the switch.
+
+### Precisely: pick one in the Persona Lab
+
+<Steps>
+<Step>
+### Open the Persona Lab
+
+Click the name on the user card, or press <Shortcut keys="Ctrl+4" />. **Personas & Agents** opens on its <UiLabel>Personas</UiLabel> tab, with the active persona selected.
+</Step>
+<Step>
+### Select a persona
+
+Click a persona in the roster to see its card.
+</Step>
+<Step>
+### Make it active
+
+Click <UiLabel>Switch to Persona</UiLabel>. The card now shows the <UiLabel>Active Identity</UiLabel> badge and the user card updates.
+
+<Screenshot id="shell-persona-lab-active" alt="The Persona Lab with Senja Prakasa selected, the Active Identity badge and the Switch to Persona, Edit in Forge buttons" caption="The active persona carries the Active Identity badge." />
+</Step>
+</Steps>
+
+## Choose who you are when the app starts
+
+Simulacra remembers the last active persona. To always start as the same one, set **Settings › General › STARTUP › <UiLabel>Default persona</UiLabel>**. Leave it empty to keep the persona you used last.
+
+## Tips and limits
+
+- **Switching network does not switch persona.** A persona made for one network stays active if you move to another network; switch to one of that network's personas before you write.
+- **Deleting the active persona** makes your first persona active again. Your primary persona (Arya Wiratama in the example data) cannot be deleted.
+- **To create or edit personas**, use <UiLabel>New Persona</UiLabel> and <UiLabel>Edit in Forge</UiLabel> in the Persona Lab; see [the Agent Forge](/docs/guides/agents).
+
+## Related
+
+- [Personas and agents](/docs/concepts/personas-and-agents)
+- [The composer](/docs/guides/composer)
+- [Networks](/docs/concepts/networks)

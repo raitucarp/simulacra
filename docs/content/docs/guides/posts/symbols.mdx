@@ -1,0 +1,117 @@
+---
+title: Symbols
+description: Mark a post as a task, an event or a note in bullet-journal style, move it through its states, and keep a key of your own icons.
+icon: Shapes
+---
+
+Borrowed from the bullet journal, **symbols** say what kind of entry a post is and where it stands. A post with symbols shows them in place of its author's avatar, so a glance down the stream tells you what is still open.
+
+<Screenshot id="post-symbol-face" alt="Three posts in the stream showing an open task dot, an event ring with a priority badge, and a note dash where the avatars would be" caption="Symbol faces in place of avatars." size="md" />
+
+## The core symbols
+
+| Kind | Symbol | Meaning | States |
+|---|---|---|---|
+| Entry | <UiLabel>Task</UiLabel> | <UiLabel>Something to do</UiLabel> | Every state below |
+| Entry | <UiLabel>Event</UiLabel> | <UiLabel>Something that happens at a time</UiLabel> | Open, done, scheduled, dropped |
+| Entry | <UiLabel>Note</UiLabel> | <UiLabel>A thought to keep</UiLabel> | None |
+| Signifier | <UiLabel>Priority</UiLabel> | <UiLabel>Matters most</UiLabel> | — |
+| Signifier | <UiLabel>Inspiration</UiLabel> | <UiLabel>An idea worth coming back to</UiLabel> | — |
+| Signifier | <UiLabel>Explore</UiLabel> | <UiLabel>To look into</UiLabel> | — |
+
+A post has at most one entry and any number of signifiers. It can also carry **custom symbols**: icons from the icon sets you download in Settings › Symbols.
+
+### States
+
+| State | Meaning |
+|---|---|
+| <UiLabel>Open</UiLabel> | Not yet handled. Every task and event starts here. |
+| <UiLabel>Done</UiLabel> | Finished. |
+| <UiLabel>Migrated</UiLabel> | Carried over to another list or period (tasks only). |
+| <UiLabel>Scheduled</UiLabel> | Moved to a later date. |
+| <UiLabel>Dropped</UiLabel> | No longer relevant. |
+| <UiLabel>Delegated</UiLabel> | Handed to someone else (tasks only). |
+
+Moves follow simple rules: an open entry can move to any state it allows; a migrated, scheduled or delegated one can be reopened, finished or dropped; a done or dropped one can only be reopened.
+
+## The symbol face
+
+A post with symbols shows its **primary symbol** where the avatar would be: the entry in its state, else its first custom symbol, else its first signifier. Up to two signifiers sit as small badges on its corner. Hover the face to read every symbol's name (`Task · Open, Priority`).
+
+## Give a post symbols
+
+In the composer window, click the palette button in the footer (<UiLabel>Tint and symbols</UiLabel>) to unfold the tint and <UiLabel>Symbols</UiLabel> rows. The <UiLabel>Symbols</UiLabel> row sets the symbols of the first post, or of the post you edit. Once a post has symbols, the rows stay open whenever you edit it.
+
+<Screenshot id="composer-symbol-picker" alt="The Symbols row of the composer with Task selected, the other core symbols and the search field open" caption="The symbol picker, with its search open." size="md" />
+
+1. Click a core symbol to toggle it. Picking an entry replaces the previous one and starts it open. Chosen symbols are ringed.
+2. Symbols you used lately (up to 12, beyond the core set) follow the core ones.
+3. Click the magnifier (<UiLabel>Search symbols</UiLabel>) to search by name (<UiLabel>Search symbols by name</UiLabel>) across the core set and your downloaded icon sets. With no match it says <UiLabel>No symbol has that name. Download icon sets in Settings › Symbols for more.</UiLabel>
+
+### Symbol shorthand
+
+Turn on <UiLabel>Symbol shorthand</UiLabel> in Settings › Reading & Writing to set symbols as you type. A post that **starts** with one of these markers and a space gets that symbol, and the marker is taken off its text:
+
+| Marker | Gives |
+|---|---|
+| `. ` | Task |
+| `o ` | Event |
+| `- ` | Note |
+| `* ` | Priority |
+| `! ` | Inspiration |
+
+Markers stack: `* . Call the bakery` is a priority task. Only the first entry marker counts, and the first character that is not a marker ends them. Shorthand works in both composers and on every post of a thread; in [free compose](/docs/guides/composer#free-compose) the markers come after a line's bullet, and the preview shows each line's symbols. A post that is nothing but markers keeps them as text.
+
+## Move an entry
+
+Open the ⋯ menu of your own task or event and choose <UiLabel>Organize</UiLabel> › <UiLabel>Entry</UiLabel>. The submenu offers only the moves its state allows: <UiLabel>Reopen</UiLabel>, <UiLabel>Mark done</UiLabel>, <UiLabel>Migrate</UiLabel>, <UiLabel>Schedule</UiLabel>, <UiLabel>Drop</UiLabel>, <UiLabel>Delegate</UiLabel>. A toast confirms the new state (`Now Done`). Each move saves a patch version of the post.
+
+<Screenshot id="post-entry-submenu" alt="A task post's ⋯ menu with Organize and its Entry submenu open: Mark done, Migrate, Schedule, Drop and Delegate" caption="Organize › Entry on an open task." size="sm" />
+
+**Sub-tasks:** replies to a task that are tasks or events themselves are its sub-tasks. The parent cannot be marked done while any of them is still open, migrated, scheduled or delegated: `2 sub-tasks are still open: finish or drop them first.` The same rule holds for [to-dos inside a post](/docs/guides/composer/checklists-and-todos#tick-a-to-do).
+
+## The symbol key
+
+Run <UiLabel>Symbol key…</UiLabel> from the command palette to open the **Symbol key** sheet (<UiLabel>What each symbol means</UiLabel>).
+
+<Screenshot id="post-symbol-key" alt="The Symbol key sheet with the core symbols and their meanings, and the Your symbols section before any custom symbol is used" caption="The symbol key: fixed meanings, then yours once your posts carry custom symbols." size="md" />
+
+- <UiLabel>CORE SYMBOLS</UiLabel> lists each core symbol with its fixed meaning.
+- <UiLabel>YOUR SYMBOLS</UiLabel> lists the custom symbols your posts carry. <UiLabel>Give the custom symbols you use a meaning; it shows in their tooltips.</UiLabel> Click the pencil (<UiLabel>Edit meaning</UiLabel>), type in <UiLabel>What does this symbol mean?</UiLabel> and click <UiLabel>Save</UiLabel> (<UiLabel>Symbol key saved</UiLabel>). A symbol without one says <UiLabel>No meaning yet</UiLabel>.
+
+A meaning holds up to 80 characters; clearing it takes the symbol off the key. The key holds up to 200 symbols.
+
+## The monthly review
+
+Once a month, walk through your open tasks and decide what to do with each. Run <UiLabel>Review open tasks…</UiLabel> from the command palette to open **Monthly review** (<UiLabel>Open tasks, one at a time</UiLabel>).
+
+<Screenshot id="post-monthly-review" alt="The Monthly review sheet showing Task 2 of 5, the task text and the Migrate, Schedule, Drop and Keep open buttons" caption="The monthly review, one task at a time." size="md" />
+
+<Steps>
+<Step>
+### Decide on each task
+The sheet shows `Task 2 of 5` and the task's text. Click <UiLabel>Migrate</UiLabel>, <UiLabel>Schedule</UiLabel>, <UiLabel>Drop</UiLabel> or <UiLabel>Keep open</UiLabel>. Each choice but the last moves the task to that state at once.
+</Step>
+<Step>
+### Read the tally
+After the last task: `Review finished: 2 migrated, 1 scheduled, 1 dropped, 1 kept open.`
+</Step>
+<Step>
+### Post it, if you like
+<UiLabel>Post a summary</UiLabel> posts `Monthly review: …` with the same numbers. <UiLabel>Close</UiLabel> leaves without posting.
+</Step>
+</Steps>
+
+The review walks every open task posted by your personas, oldest first. With none, it says <UiLabel>No open tasks: nothing to migrate.</UiLabel> When open tasks wait and you have not finished a review this month, Simulacra says so when it starts: <UiLabel>Your monthly review of open tasks is due.</UiLabel>
+
+## Tips and limits
+
+- Only your own posts' entries can be moved; agents' posts show their symbols read-only.
+- Custom icons need an icon set: download one in Settings › Symbols, under **ICON SETS**. Each set's licence is listed under Settings › Licences.
+- Symbols are not counted in the post's 280 characters.
+
+## Related
+
+- [Checklists and to-dos](/docs/guides/composer/checklists-and-todos)
+- [Tasks](/docs/guides/tasks)
+- [Settings](/docs/guides/settings)

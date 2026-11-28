@@ -15,6 +15,8 @@ use std::rc::Rc;
 
 const ACCEPT_ID: &str = "question-accept-";
 const ANSWER_ID: &str = "question-answer-";
+/// An answer shows enough of its opening to judge it before opening it.
+const EXCERPT_LINES: usize = 2;
 
 /// One interaction with a question.
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -48,13 +50,18 @@ pub fn render_answers(question: &PostId, rows: &[AnswerRow], own: bool, on_event
 }
 
 fn render_row(question: &PostId, row: &AnswerRow, own: bool, on_event: &DataAction, on_open: &OpenAnswer, theme: &ThemeTokens) -> Stateful<Div> {
-    let author = div().flex_none().font_weight(FontWeight::MEDIUM).text_color(theme.text_primary).child(row.author.clone());
-    let text = div().flex_1().min_w_0().truncate().text_color(theme.text_secondary).child(row.excerpt.clone());
+    let author = div().flex_1().min_w_0().truncate().font_weight(FontWeight::MEDIUM).text_color(theme.text_primary).child(row.author.clone());
+    let text = div().min_w_0().line_clamp(EXCERPT_LINES).text_ellipsis().text_color(theme.text_secondary).child(row.excerpt.clone());
     let badge = row.accepted.then(|| div().flex().items_center().gap(theme.inline_gap).text_color(theme.accent_success).child(Icon::new(LucideIcon::Check).xsmall().text_color(theme.accent_success)).child(tr("posts.question.accepted")));
     let accept = (own && !row.accepted).then(|| {
         let (on_event, event) = (on_event.clone(), DataEvent::Question(QuestionEvent::Accept(question.clone(), row.post.clone())));
-        Button::new(SharedString::from(format!("{ACCEPT_ID}{}", row.post))).ghost().xsmall().label(tr("posts.question.accept")).on_click(move |_, window, cx| on_event(event.clone(), window, cx))
+        // Accepting is not opening: the click stays on the button.
+        Button::new(SharedString::from(format!("{ACCEPT_ID}{}", row.post))).ghost().xsmall().label(tr("posts.question.accept")).on_click(move |_, window, cx| {
+            cx.stop_propagation();
+            on_event(event.clone(), window, cx)
+        })
     });
+    let head = div().flex().items_center().gap(theme.inline_gap).child(author).children(badge).children(accept);
     let (on_open, id, hover) = (on_open.clone(), row.post.clone(), theme.hover_bg);
     div()
         .id(SharedString::from(format!("{ANSWER_ID}{}", row.post)))
@@ -65,11 +72,9 @@ fn render_row(question: &PostId, row: &AnswerRow, own: bool, on_event: &DataActi
         .hover(move |r| r.bg(hover))
         .on_click(move |_, window, cx| on_open(id.clone(), window, cx))
         .flex()
-        .items_center()
-        .gap(theme.inline_gap)
+        .flex_col()
+        .gap(theme.spacing_3xs)
         .text_size(theme.font_size_xs)
-        .child(author)
+        .child(head)
         .child(text)
-        .children(badge)
-        .children(accept)
 }

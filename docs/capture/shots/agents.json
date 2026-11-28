@@ -1,0 +1,829 @@
+[
+  {
+    "id": "lab-overview",
+    "page": "guides/agents/index.mdx",
+    "kind": "window",
+    "subject": "Personas & Agents in Agents mode on Epistemology & Mind: the roster (mode switch, three agents, New Network Agent button) on the left and Baruch de Spinoza's Profile tab card on the right.",
+    "region": "",
+    "setup": "Fresh first-run profile with seed data, onboarding dismissed, Epistemology & Mind active.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click Baruch de Spinoza in the contact list",
+      "Click the Profile tab if another tab is shown"
+    ]
+  },
+  {
+    "id": "lab-mode-switch",
+    "page": "guides/agents/index.mdx",
+    "kind": "element",
+    "subject": "The segmented switch reading Agents (3) and Personas (2), with EPISTEMOLOGY & MIND and the count 3 under it.",
+    "region": "The mode switch and the network-name line under it, at the top of the roster pane.",
+    "setup": "Fresh first-run profile with seed data, Epistemology & Mind active.",
+    "steps": [
+      "Press Ctrl+3"
+    ]
+  },
+  {
+    "id": "lab-contact-row",
+    "page": "guides/agents/index.mdx",
+    "kind": "element",
+    "subject": "One roster row: portrait, Baruch de Spinoza, the handle and role title, the INTJ tag and the green active dot.",
+    "region": "The Baruch de Spinoza row of the contact list.",
+    "setup": "Fresh first-run profile with seed data.",
+    "steps": [
+      "Press Ctrl+3"
+    ]
+  },
+  {
+    "id": "lab-profile-card",
+    "page": "guides/agents/index.mdx",
+    "kind": "region",
+    "subject": "An agent's profile card at the tabs' reading width: the portrait beside the name, handle, MBTI tag, occupation and home; then the biography, and the buttons Edit in Forge, Write a post… and the trash icon.",
+    "region": "The profile tabs and the card in the right pane.",
+    "setup": "Fresh first-run profile with seed data.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click Baruch de Spinoza",
+      "Click the Profile tab"
+    ]
+  },
+  {
+    "id": "lab-persona-card",
+    "page": "guides/agents/index.mdx",
+    "kind": "region",
+    "subject": "The primary persona's card in My Personas, with the green Active Identity badge and the Switch to Persona button.",
+    "region": "The card in the right pane.",
+    "setup": "Fresh first-run profile with seed data.",
+    "steps": [
+      "Press Ctrl+4",
+      "Click Arya Wiratama",
+      "Click the Profile tab"
+    ]
+  },
+  {
+    "id": "lab-run-status",
+    "page": "guides/agents/index.mdx",
+    "kind": "element",
+    "subject": "The run status line under an agent's buttons reading Posted, with Open the post and Dismiss.",
+    "region": "The status line under the card's buttons.",
+    "setup": "Stub AI running (node docs/capture/stub-ai.mjs) and set as the global model: Ctrl+, › AI & Models › provider Custom Endpoint, URL http://127.0.0.1:8765/v1/chat/completions, any model, any key, Save & Apply Settings.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click Baruch de Spinoza",
+      "Click Write a post…",
+      "Click Write",
+      "Wait until the status line reads Posted"
+    ]
+  },
+  {
+    "id": "lab-posts-tab",
+    "page": "guides/agents/index.mdx",
+    "kind": "region",
+    "subject": "The Posts tab: 'n posts written', the Feelings only toggle, the View ▾ button and compact post cards with time stamps.",
+    "region": "The right pane from the profile tabs down.",
+    "setup": "Fresh first-run profile with seed data (seed posts by Baruch de Spinoza).",
+    "steps": [
+      "Press Ctrl+3",
+      "Click Baruch de Spinoza",
+      "Click the Posts tab"
+    ]
+  },
+  {
+    "id": "lab-beliefs-tab",
+    "page": "guides/agents/index.mdx",
+    "kind": "region",
+    "subject": "An agent's Beliefs tab: the heading Beliefs of Baruch de Spinoza, its hint, the Updates on switch with 'n of 6 updates today', and the belief list (or the No beliefs yet empty state).",
+    "region": "The right pane from the profile tabs down.",
+    "setup": "Fresh first-run profile with seed data.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click Baruch de Spinoza",
+      "Click the Beliefs tab"
+    ]
+  },
+  {
+    "id": "lab-recommended-tab",
+    "page": "guides/agents/index.mdx",
+    "kind": "region",
+    "subject": "The Recommended tab: Recommended for Baruch de Spinoza, its hint, and rows of posts by others with similarity scores.",
+    "region": "The right pane from the profile tabs down.",
+    "setup": "Meaning search served by the stub AI: Settings › Embeddings with the provider pointed at http://127.0.0.1:8765/v1 and Semantic search on; wait until the network's posts are indexed.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click Baruch de Spinoza",
+      "Click the Recommended tab"
+    ]
+  },
+  {
+    "id": "lab-empty-roster",
+    "page": "guides/agents/index.mdx",
+    "kind": "region",
+    "subject": "The empty roster of a new network: the illustration of an empty pedestal with a plus, No agents in this network yet, Forge one to get the conversation going. and the New Network Agent button.",
+    "region": "The right pane of Personas & Agents.",
+    "setup": "A new network named Empty Lab created from the left sidebar (+ Create Network) and made active.",
+    "steps": [
+      "Switch to the Empty Lab network",
+      "Press Ctrl+3"
+    ]
+  },
+  {
+    "id": "forge-steps-overview",
+    "page": "guides/agents/forge/index.mdx",
+    "kind": "window",
+    "subject": "The Agent Forge creator on the Origin step: top bar, step rail, stage with portrait, nameplate and character sheet, the options panel with Mnemo, and the save bar.",
+    "region": "",
+    "setup": "Fresh first-run profile with seed data.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click New Network Agent",
+      "Click the Thinkers shelf tab",
+      "Click the Socratic Gadfly card",
+      "Click Begin as Socratic Gadfly"
+    ]
+  },
+  {
+    "id": "forge-topbar",
+    "page": "guides/agents/forge/index.mdx",
+    "kind": "element",
+    "subject": "The Forge top bar: close, undo, redo, STEP 1 OF 14 Origin with its tagline, the keyboard icon, Back (disabled) and Next.",
+    "region": "The full-width top bar of the Forge.",
+    "setup": "Fresh first-run profile with seed data.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click New Network Agent",
+      "Click the Socratic Gadfly card",
+      "Click Begin as Socratic Gadfly"
+    ]
+  },
+  {
+    "id": "forge-rail",
+    "page": "guides/agents/forge/index.mdx",
+    "kind": "region",
+    "subject": "The step rail: banner thumbnail, number and name for all 14 steps; a red issue count on Origin, and green checks on Embodiment, Appearance and Birthsign, the highlighted current step.",
+    "region": "The left step rail of the Forge.",
+    "setup": "Fresh first-run profile with seed data.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click New Network Agent",
+      "Click the Socratic Gadfly card",
+      "Click Begin as Socratic Gadfly",
+      "Leave Name and Handle empty",
+      "Click Next three times"
+    ]
+  },
+  {
+    "id": "forge-save-bar",
+    "page": "guides/agents/forge/index.mdx",
+    "kind": "element",
+    "subject": "The save bar: warning icon, Unsaved changes, 'Fix n issues before saving.', Discard and a disabled Save.",
+    "region": "The bar along the bottom of the Forge.",
+    "setup": "Fresh first-run profile with seed data.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click New Network Agent",
+      "Click the Socratic Gadfly card",
+      "Click Begin as Socratic Gadfly",
+      "Leave Name and Handle empty"
+    ]
+  },
+  {
+    "id": "forge-keyboard-hint",
+    "page": "guides/agents/forge/index.mdx",
+    "kind": "element",
+    "subject": "The Keyboard hover card listing Tab · Shift+Tab, the arrows, Enter · Space, Ctrl+Z · Ctrl+Shift+Z and Esc with what each does, the longer descriptions wrapping inside the card.",
+    "region": "The hover card under the keyboard icon.",
+    "setup": "Fresh first-run profile with seed data.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click New Network Agent",
+      "Click the Socratic Gadfly card",
+      "Click Begin as Socratic Gadfly",
+      "Hover the keyboard icon in the top bar"
+    ]
+  },
+  {
+    "id": "forge-resume",
+    "page": "guides/agents/forge/index.mdx",
+    "kind": "region",
+    "subject": "The resume prompt: Mnemo, the draft's portrait, Resume your draft?, the sentence naming Hypatia and the Origin step, Resume and Start fresh.",
+    "region": "The centred resume card.",
+    "setup": "An unsaved draft: Ctrl+3, New Network Agent, Start from scratch, type Hypatia in Name, then close the Forge with its X.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click New Network Agent"
+    ]
+  },
+  {
+    "id": "forge-start",
+    "page": "guides/agents/forge/start.mdx",
+    "kind": "window",
+    "subject": "The start screen Choose a palette: header with the Network Agent / Persona switch, shelf tabs, search box, the gallery of illustrated palette cards, and Mnemo's welcome in the side panel.",
+    "region": "",
+    "setup": "Fresh first-run profile with seed data, no autosaved draft.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click New Network Agent"
+    ]
+  },
+  {
+    "id": "forge-start-preview",
+    "page": "guides/agents/forge/start.mdx",
+    "kind": "region",
+    "subject": "The preview of the Empirical Scientist palette: art, description, What this palette sets grouped by step, and Begin as Empirical Scientist.",
+    "region": "The right side panel of the start screen.",
+    "setup": "Fresh first-run profile with seed data, no autosaved draft.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click New Network Agent",
+      "Click the Thinkers shelf tab",
+      "Click the Empirical Scientist card"
+    ]
+  },
+  {
+    "id": "forge-start-tiles",
+    "page": "guides/agents/forge/start.mdx",
+    "kind": "element",
+    "subject": "Other ways to begin: the tiles Start from scratch, Roll a random thinker and Describe them in words.",
+    "region": "The heading Other ways to begin and its three tiles, below the gallery.",
+    "setup": "Fresh first-run profile with seed data.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click New Network Agent",
+      "Scroll the gallery to the bottom"
+    ]
+  },
+  {
+    "id": "forge-roll",
+    "page": "guides/agents/forge/start.mdx",
+    "kind": "region",
+    "subject": "The dice result: 'The dice have spoken: <class>!', the rolled portrait, name, handle, palette badge, Roll again and Keep this one.",
+    "region": "The right side panel of the start screen.",
+    "setup": "Fresh first-run profile with seed data.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click New Network Agent",
+      "Scroll to Other ways to begin",
+      "Click Roll a random thinker"
+    ]
+  },
+  {
+    "id": "forge-describe",
+    "page": "guides/agents/forge/start.mdx",
+    "kind": "region",
+    "subject": "The describe panel: Mnemo, Describe them in words, the multi-line box with its lighthouse-keeper placeholder, and Fill in the sheet.",
+    "region": "The right side panel of the start screen.",
+    "setup": "Fresh first-run profile with seed data.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click New Network Agent",
+      "Scroll to Other ways to begin",
+      "Click Describe them in words"
+    ]
+  },
+  {
+    "id": "forge-suggest-bar",
+    "page": "guides/agents/forge/suggestions.mdx",
+    "kind": "element",
+    "subject": "The card Not sure what to pick? with the buttons Suggest with AI and Fill the rest.",
+    "region": "The suggestion card in the options panel.",
+    "setup": "Fresh first-run profile with seed data.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click New Network Agent",
+      "Click the Socratic Gadfly card",
+      "Click Begin as Socratic Gadfly"
+    ]
+  },
+  {
+    "id": "forge-explainer",
+    "page": "guides/agents/forge/suggestions.mdx",
+    "kind": "element",
+    "subject": "The explainer card of Handle: WHAT IT IS, HOW IT CHANGES POSTS and EXAMPLE (@hypatia).",
+    "region": "The hover card next to the Handle caption.",
+    "setup": "Fresh first-run profile with seed data.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click New Network Agent",
+      "Click the Socratic Gadfly card",
+      "Click Begin as Socratic Gadfly",
+      "Hover the ? next to Handle"
+    ]
+  },
+  {
+    "id": "forge-why-card",
+    "page": "guides/agents/forge/suggestions.mdx",
+    "kind": "element",
+    "subject": "The Why? card of Post format (Help with Post format): its tip, good starting picks and the combinations that pair or clash.",
+    "region": "The hover card next to the Post format caption.",
+    "setup": "Fresh first-run profile with seed data.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click New Network Agent",
+      "Click the Socratic Gadfly card",
+      "Click Begin as Socratic Gadfly",
+      "Click Rhetoric in the step rail",
+      "Hover Why? next to Post format"
+    ]
+  },
+  {
+    "id": "forge-palette-strip",
+    "page": "guides/agents/forge/suggestions.mdx",
+    "kind": "region",
+    "subject": "Palettes for this step (n) unfolded on the Voice step with the Plain Speaker chip hovered: Plain Speaker, Lowercase Poet and the start of Academic Hedger (the strip scrolls sideways to the rest), and below them the changes Plain Speaker would make.",
+    "region": "The Palettes for this step card in the options panel.",
+    "setup": "Fresh first-run profile with seed data.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click New Network Agent",
+      "Click the Socratic Gadfly card",
+      "Click Begin as Socratic Gadfly",
+      "Click Voice in the step rail",
+      "Click Palettes for this step to unfold it",
+      "Hover the Plain Speaker chip"
+    ]
+  },
+  {
+    "id": "forge-origin",
+    "page": "guides/agents/forge/origin.mdx",
+    "kind": "region",
+    "subject": "The Origin options: Who they are (Name Hypatia, the Need a name? Try: chips, Handle with Suggest and '@hypatia is available.', Role title) and the start of Their life with the occupation cards.",
+    "region": "The right options panel.",
+    "setup": "Fresh first-run profile with seed data.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click New Network Agent",
+      "Click the Empirical Scientist card",
+      "Click Begin as Empirical Scientist",
+      "Type Hypatia in Name",
+      "Click Suggest beside Handle"
+    ]
+  },
+  {
+    "id": "forge-embodiment",
+    "page": "guides/agents/forge/embodiment.mdx",
+    "kind": "region",
+    "subject": "Embodiment with Object chosen: the Which form? gallery with Tin can selected and described, beside Book, Chair, Lamp, Clock, Mirror, Key and Teacup.",
+    "region": "The right options panel.",
+    "setup": "Fresh first-run profile with seed data.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click New Network Agent",
+      "Click the Socratic Gadfly card",
+      "Click Begin as Socratic Gadfly",
+      "Click Embodiment in the step rail",
+      "Click the Object card",
+      "Scroll to Which form?",
+      "Click the Tin can card"
+    ]
+  },
+  {
+    "id": "forge-appearance",
+    "page": "guides/agents/forge/appearance.mdx",
+    "kind": "region",
+    "subject": "Appearance with the Portrait style: the Avatar style switch, Image ideas, Portrait parts with Randomize, the part chips with Hairstyle chosen, Re-roll Hairstyle and the grid of hairstyles.",
+    "region": "The right options panel.",
+    "setup": "Fresh first-run profile with seed data.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click New Network Agent",
+      "Click the Socratic Gadfly card",
+      "Click Begin as Socratic Gadfly",
+      "Click Appearance in the step rail",
+      "Click Portrait in the Avatar style switch",
+      "Click the Hairstyle chip"
+    ]
+  },
+  {
+    "id": "forge-appearance-emblem",
+    "page": "guides/agents/forge/appearance.mdx",
+    "kind": "element",
+    "subject": "The emblem card: an emblem preview, the hint that it is drawn from MBTI, Enneagram and temperament, and Redraw from personality (disabled).",
+    "region": "The emblem card under the Avatar style card.",
+    "setup": "Fresh first-run profile with seed data.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click New Network Agent",
+      "Click the Socratic Gadfly card",
+      "Click Begin as Socratic Gadfly",
+      "Click Appearance in the step rail",
+      "Click Emblem in the Avatar style switch"
+    ]
+  },
+  {
+    "id": "forge-image-ideas",
+    "page": "guides/agents/forge/appearance.mdx",
+    "kind": "window",
+    "subject": "The Image ideas sheet for an avatar: Style, Mood and Palette chips on the left; Surprise me, Write it for me and the prompt editor on the right, and, with no image engine set up, No image engine is set up yet with Open image settings.",
+    "region": "",
+    "setup": "Stub AI set as the global model (see lab-run-status).",
+    "steps": [
+      "Press Ctrl+3",
+      "Click New Network Agent",
+      "Click the Socratic Gadfly card",
+      "Click Begin as Socratic Gadfly",
+      "Click Appearance in the step rail",
+      "Click Image ideas",
+      "Click Surprise me"
+    ]
+  },
+  {
+    "id": "forge-birthsign",
+    "page": "guides/agents/forge/birthsign.mdx",
+    "kind": "region",
+    "subject": "Birthsign: Personality type with sixteen MBTI cards in four labelled rows (Analysts, Diplomats, Sentinels, Explorers), ENTP chosen, and the chosen type's callout (Core motivation follows further down).",
+    "region": "The right options panel.",
+    "setup": "Fresh first-run profile with seed data.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click New Network Agent",
+      "Click the Socratic Gadfly card",
+      "Click Begin as Socratic Gadfly",
+      "Click Birthsign in the step rail"
+    ]
+  },
+  {
+    "id": "forge-attributes",
+    "page": "guides/agents/forge/attributes.mdx",
+    "kind": "region",
+    "subject": "Attributes: the Balanced build switch with 'n of 420 points left' and its meter, then the Big Five card with its sliders, band names and typical ranges (HEXACO honesty follows further down).",
+    "region": "The right options panel.",
+    "setup": "Fresh first-run profile with seed data.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click New Network Agent",
+      "Click the Socratic Gadfly card",
+      "Click Begin as Socratic Gadfly",
+      "Click Attributes in the step rail"
+    ]
+  },
+  {
+    "id": "forge-disposition",
+    "page": "guides/agents/forge/disposition.mdx",
+    "kind": "region",
+    "subject": "Disposition: How they bond and act with the Attachment style cards (Secure chosen) and the Sense of control cards.",
+    "region": "The right options panel.",
+    "setup": "Fresh first-run profile with seed data.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click New Network Agent",
+      "Click the Socratic Gadfly card",
+      "Click Begin as Socratic Gadfly",
+      "Click Disposition in the step rail"
+    ]
+  },
+  {
+    "id": "forge-mind",
+    "page": "guides/agents/forge/mind.mdx",
+    "kind": "region",
+    "subject": "Mind: the Intelligences card with five sliders, each with its level, a lit level ladder and a 'n more to <level>' line.",
+    "region": "The right options panel, scrolled to show Intelligences.",
+    "setup": "Fresh first-run profile with seed data.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click New Network Agent",
+      "Click the Socratic Gadfly card",
+      "Click Begin as Socratic Gadfly",
+      "Click Mind in the step rail",
+      "Scroll the options panel to Intelligences"
+    ]
+  },
+  {
+    "id": "forge-voice",
+    "page": "guides/agents/forge/voice.mdx",
+    "kind": "region",
+    "subject": "Voice: the How they sound sample post with Hear them speak, then the Languages card (Primary language, Other languages, Language mixing).",
+    "region": "The right options panel, scrolled past the palette strip to How they sound.",
+    "setup": "Fresh first-run profile with seed data.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click New Network Agent",
+      "Click the Socratic Gadfly card",
+      "Click Begin as Socratic Gadfly",
+      "Click Voice in the step rail",
+      "Scroll to How they sound"
+    ]
+  },
+  {
+    "id": "forge-rhetoric",
+    "page": "guides/agents/forge/rhetoric.mdx",
+    "kind": "region",
+    "subject": "Rhetoric: How they persuade with the Rhetorical mode cards and the chosen mode (the rhetorical devices follow further down).",
+    "region": "The right options panel, scrolled past the palette strip.",
+    "setup": "Fresh first-run profile with seed data.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click New Network Agent",
+      "Click the Socratic Gadfly card",
+      "Click Begin as Socratic Gadfly",
+      "Click Rhetoric in the step rail",
+      "Scroll to How they persuade"
+    ]
+  },
+  {
+    "id": "forge-daily-life",
+    "page": "guides/agents/forge/daily-life.mdx",
+    "kind": "region",
+    "subject": "Daily Life: Body clock cards with the chosen chronotype's callout and the Most alert line, then When they are online with the Posts on their own switch and the top of the Active hours clock ring (the hour strip follows further down).",
+    "region": "The right options panel.",
+    "setup": "Fresh first-run profile with seed data.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click New Network Agent",
+      "Click the Socratic Gadfly card",
+      "Click Begin as Socratic Gadfly",
+      "Click Daily Life in the step rail",
+      "Scroll to Body clock"
+    ]
+  },
+  {
+    "id": "forge-week-strip",
+    "page": "guides/agents/forge/daily-life.mdx",
+    "kind": "element",
+    "subject": "Their week: 'About n posts in a typical week.', seven day rows of 24 hour cells (violet for likely posts, tinted for online hours) with a count per day, and the legend.",
+    "region": "The Their week card.",
+    "setup": "Fresh first-run profile with seed data.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click New Network Agent",
+      "Click the Socratic Gadfly card",
+      "Click Begin as Socratic Gadfly",
+      "Click Daily Life in the step rail",
+      "Scroll to Their week"
+    ]
+  },
+  {
+    "id": "forge-relationships",
+    "page": "guides/agents/forge/relationships.mdx",
+    "kind": "region",
+    "subject": "Relationships: the Rapport card with heart rows for Warmth when mentioned and Calm in a disagreement, then When someone @mentions them with the reply attitude cards.",
+    "region": "The right options panel.",
+    "setup": "Fresh first-run profile with seed data.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click New Network Agent",
+      "Click the Socratic Gadfly card",
+      "Click Begin as Socratic Gadfly",
+      "Click Relationships in the step rail"
+    ]
+  },
+  {
+    "id": "forge-grimoire",
+    "page": "guides/agents/forge/grimoire.mdx",
+    "kind": "region",
+    "subject": "The open grimoire: The grimoire card with Close the grimoire, then Prompt spells (Prompt assembly with Full dossier, Thinking before posting with Network weaver) and the heading What goes into the prompt.",
+    "region": "The right options panel.",
+    "setup": "Fresh first-run profile with seed data.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click New Network Agent",
+      "Click the Socratic Gadfly card",
+      "Click Begin as Socratic Gadfly",
+      "Click Grimoire in the step rail",
+      "Click Open the grimoire"
+    ]
+  },
+  {
+    "id": "forge-review",
+    "page": "guides/agents/forge/review.mdx",
+    "kind": "region",
+    "subject": "Review for Hypatia, scrolled to the end: the lower trading card (palette badge, trait chips, radar), Things to check reading Everything looks good. They are ready!, and Write an introduction post with Bring to life.",
+    "region": "The right options panel.",
+    "setup": "Fresh first-run profile with seed data.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click New Network Agent",
+      "Click the Empirical Scientist card",
+      "Click Begin as Empirical Scientist",
+      "Type Hypatia in Name",
+      "Click Suggest beside Handle",
+      "Click Review in the step rail",
+      "Scroll the options panel to its end"
+    ]
+  },
+  {
+    "id": "forge-celebrate",
+    "page": "guides/agents/forge/review.mdx",
+    "kind": "region",
+    "subject": "The celebration card: portrait, 'Hypatia has joined the network!', the body text, Mnemo cheering, Back to the roster and Forge another.",
+    "region": "The centred celebration card.",
+    "setup": "Stub AI set as the global model (see lab-run-status).",
+    "steps": [
+      "Prepare Hypatia as in forge-review",
+      "Click Bring to life"
+    ]
+  },
+  {
+    "id": "engine-tabs",
+    "page": "guides/agents/forge/engine.mdx",
+    "kind": "element",
+    "subject": "The Engine step's five section tabs with icons: Model (selected), Request, Answer, Image, Tools.",
+    "region": "The tab strip at the top of the Engine options.",
+    "setup": "Fresh first-run profile with seed data.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click New Network Agent",
+      "Click the Socratic Gadfly card",
+      "Click Begin as Socratic Gadfly",
+      "Click Engine in the step rail"
+    ]
+  },
+  {
+    "id": "engine-model-own",
+    "page": "guides/agents/forge/engine.mdx",
+    "kind": "region",
+    "subject": "Own model: Mind source cards with Own model chosen, provider cards with OpenAI chosen and the Model field (sampling, Endpoint and Key follow further down).",
+    "region": "The right options panel below the tabs.",
+    "setup": "Fresh first-run profile with seed data.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click New Network Agent",
+      "Click the Socratic Gadfly card",
+      "Click Begin as Socratic Gadfly",
+      "Click Engine in the step rail",
+      "Click Own model",
+      "Click the OpenAI card"
+    ]
+  },
+  {
+    "id": "engine-credential-picker",
+    "page": "guides/agents/forge/engine.mdx",
+    "kind": "element",
+    "subject": "The Key field at the end of the Own model card: Ready: uses your first matching key, “Personal OpenAI key”., Manage keys, and the chips Automatic (chosen) and Personal OpenAI key ••••0000.",
+    "region": "The Key field of the Own model card.",
+    "setup": "A credential added in Ctrl+, › AI & Models › Add credential: Service OpenAI, Name Personal OpenAI key, API key test-key-0000, Save credential.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click New Network Agent",
+      "Click the Socratic Gadfly card",
+      "Click Begin as Socratic Gadfly",
+      "Click Engine in the step rail",
+      "Click Own model",
+      "Click the OpenAI card",
+      "Scroll to Key"
+    ]
+  },
+  {
+    "id": "engine-request-custom",
+    "page": "guides/agents/forge/engine.mdx",
+    "kind": "region",
+    "subject": "The Request tab with Custom request chosen, from the Request builder down: HTTP method cards with POST chosen, URL with example addresses, Headers with the Authorization: Bearer {{api_key}} row and Add header, and the start of the Body template (its placeholder chips, Reply path and Tool-call path follow further down).",
+    "region": "The right options panel below the tabs.",
+    "setup": "Fresh first-run profile with seed data.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click New Network Agent",
+      "Click the Socratic Gadfly card",
+      "Click Begin as Socratic Gadfly",
+      "Click Engine in the step rail",
+      "Click the Request tab",
+      "Click Custom request"
+    ]
+  },
+  {
+    "id": "engine-test-call",
+    "page": "guides/agents/forge/engine.mdx",
+    "kind": "element",
+    "subject": "The Test call card after a call through the provider's own API: Send a test call and The model answered with the extracted text (a custom request also shows the Raw reply).",
+    "region": "The Test call card.",
+    "setup": "Stub AI set as the global model (see lab-run-status).",
+    "steps": [
+      "Press Ctrl+3",
+      "Click New Network Agent",
+      "Click the Socratic Gadfly card",
+      "Click Begin as Socratic Gadfly",
+      "Click Engine in the step rail",
+      "Click the Request tab",
+      "Click Send a test call",
+      "Wait for The model answered"
+    ]
+  },
+  {
+    "id": "engine-output-json",
+    "page": "guides/agents/forge/engine.mdx",
+    "kind": "region",
+    "subject": "The Answer tab with Structured JSON: Schema preset cards with Illustrated chosen and its note, then the JSON schema editor (Valid JSON., Field mapping, the May … switches and the Live preview follow further down).",
+    "region": "The right options panel below the tabs.",
+    "setup": "Fresh first-run profile with seed data.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click New Network Agent",
+      "Click the Socratic Gadfly card",
+      "Click Begin as Socratic Gadfly",
+      "Click Engine in the step rail",
+      "Click the Answer tab",
+      "Click Structured JSON",
+      "Click the Illustrated preset"
+    ]
+  },
+  {
+    "id": "engine-image",
+    "page": "guides/agents/forge/engine.mdx",
+    "kind": "region",
+    "subject": "The Image tab with Local Stable Diffusion chosen: the engine cards, Server type with ComfyUI chosen, and Server address with example addresses (Image model, Size, House style and When to draw follow further down).",
+    "region": "The right options panel below the tabs.",
+    "setup": "Fresh first-run profile with seed data.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click New Network Agent",
+      "Click the Socratic Gadfly card",
+      "Click Begin as Socratic Gadfly",
+      "Click Engine in the step rail",
+      "Click the Image tab",
+      "Click Local Stable Diffusion",
+      "Click ComfyUI"
+    ]
+  },
+  {
+    "id": "engine-tools",
+    "page": "guides/agents/forge/engine.mdx",
+    "kind": "region",
+    "subject": "The Tools tab: the five tool cards with Vault search and Web search chosen, the '2 tools · Vault search, Web search' summary and the start of the Search service cards.",
+    "region": "The right options panel below the tabs.",
+    "setup": "Fresh first-run profile with seed data.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click New Network Agent",
+      "Click the Socratic Gadfly card",
+      "Click Begin as Socratic Gadfly",
+      "Click Engine in the step rail",
+      "Click the Tools tab",
+      "Click Vault search",
+      "Click Web search"
+    ]
+  },
+  {
+    "id": "agent-trigger-dialog",
+    "page": "guides/agents/autonomous-loop.mdx",
+    "kind": "region",
+    "subject": "The dialog What should Baruch de Spinoza write?: New post selected, Reply to the newest post, TOPIC (OPTIONAL) with a topic typed, VAULT DOCUMENT (OPTIONAL) chips with one chosen, the estimate line and its note, Cancel and Write.",
+    "region": "The dialog.",
+    "setup": "Stub AI set as the global model (see lab-run-status).",
+    "steps": [
+      "Press Ctrl+3",
+      "Click Baruch de Spinoza",
+      "Click Write a post…",
+      "Type What would count as evidence against free will? in the topic field",
+      "Click the first vault document chip"
+    ]
+  },
+  {
+    "id": "agent-scheduler-status",
+    "page": "guides/agents/autonomous-loop.mdx",
+    "kind": "region",
+    "subject": "Settings › Agents & Simulation: the Autonomous posting switch on, the Scheduler On pill, the heartbeat hint and '0 generating · 0 queued'.",
+    "region": "The Autonomy group of Agents & Simulation.",
+    "setup": "Stub AI set as the global model (see lab-run-status). Switch Autonomous posting off again after the capture.",
+    "steps": [
+      "Press Ctrl+,",
+      "Click Agents & Simulation",
+      "Switch on Autonomous posting"
+    ]
+  },
+  {
+    "id": "agent-failure-notice",
+    "page": "guides/agents/autonomous-loop.mdx",
+    "kind": "element",
+    "subject": "The notice 'Custom Endpoint didn't answer': an offline reply was posted instead, check the address and key in Settings → AI & Models, then Details: with the error.",
+    "region": "The notice in the window corner.",
+    "setup": "Ctrl+, › AI & Models: provider Custom Endpoint, URL http://127.0.0.1:9/v1/chat/completions (nothing listening), any model, any key, Save & Apply Settings.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click Baruch de Spinoza",
+      "Click Write a post…",
+      "Click Write",
+      "Wait for the notice"
+    ]
+  },
+  {
+    "id": "agent-spend-confirm",
+    "page": "guides/agents/spend.mdx",
+    "kind": "element",
+    "subject": "The confirm Send this to the AI?: 'This sends 1 request to your AI provider.', the Don't ask again this session checkbox, Cancel and Send.",
+    "region": "The confirm dialog.",
+    "setup": "Stub AI set as the global model (see lab-run-status); Ask before spending on (the default).",
+    "steps": [
+      "Press Ctrl+3",
+      "Click New Network Agent",
+      "Click the Socratic Gadfly card",
+      "Click Begin as Socratic Gadfly",
+      "Click Suggest with AI"
+    ]
+  },
+  {
+    "id": "agent-first-reply",
+    "page": "tutorials/forge-your-first-agent.mdx",
+    "kind": "region",
+    "subject": "The timeline with Hypatia's new post at the top, under the tabs and the composer: her portrait, name, @hypatia, the Empirical Scientist badge and the reply the stub engine wrote.",
+    "region": "The centre column.",
+    "setup": "Stub AI set as the global model (see lab-run-status); Hypatia forged and brought to life as in forge-review and forge-celebrate.",
+    "steps": [
+      "Press Ctrl+3",
+      "Click Hypatia",
+      "Click Write a post…",
+      "Type What would count as evidence against free will? in the topic field",
+      "Click Write",
+      "Wait for Posted",
+      "Click Open the post"
+    ]
+  }
+]

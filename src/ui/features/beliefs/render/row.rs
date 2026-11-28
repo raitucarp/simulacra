@@ -1,6 +1,6 @@
 //! One belief: the proposition and its credence (as a number and a bar), the sparkline of
-//! its history, where it came from (a link) and when it last changed, and the controls: pin,
-//! edit, forget, and the revision log.
+//! its history and where it came from (a link) on one line, then when it last changed with the
+//! controls beside it: pin, edit, forget, and the revision log.
 
 use super::super::data::BeliefRow;
 use super::super::events::BeliefsEvent;
@@ -58,7 +58,7 @@ impl BeliefsPanel {
             .id(id(SOURCE_PREFIX, index))
             .cursor_pointer()
             .text_size(theme.font_size_xs)
-            .text_color(theme.accent_brand)
+            .text_color(theme.accent_brand_text)
             .hover(|style| style.underline())
             .on_click(move |_, _, cx| {
                 let _ = entity.update(cx, |_, cx| cx.emit(BeliefsEvent::OpenSource(source.clone())));
@@ -77,19 +77,18 @@ impl BeliefsPanel {
         let pinned = belief.pinned.then(|| gpui_kit::component::Icon::new(LucideIcon::Pin).size(theme.icon_size_xs).text_color(theme.accent_dialectic));
         let meta = div()
             .flex()
-            .flex_wrap()
             .items_center()
             .gap(theme.control_gap)
             .child(value_bar(belief.credence.unit(), theme.belief_credence_width, color, theme))
             .child(sparkline(row.series.clone(), color, theme))
-            .child(self.source_link(index, row, cx))
-            .child(caption(stamp(belief.updated_at), theme));
-        let body = match editing {
-            Some(edit) => self.render_edit(&edit, cx),
-            None => self.row_controls(index, row, cx),
+            .child(div().flex_1().min_w_0().overflow_hidden().child(self.source_link(index, row, cx)));
+        let footer = div().flex().flex_wrap().items_center().justify_between().gap(theme.control_gap).child(caption(stamp(belief.updated_at), theme));
+        let (footer, edit) = match editing {
+            Some(edit) => (footer, Some(self.render_edit(&edit, cx))),
+            None => (footer.child(self.row_controls(index, row, cx)), None),
         };
         let history = (self.expanded.as_ref() == Some(&belief.id)).then(|| self.render_history(row));
         let head = div().w_full().flex().items_start().gap(theme.control_gap).children(pinned).child(text).child(value);
-        crate::ui::features::arena::kit::surface(theme).gap(theme.spacing_xs).child(head).child(meta).child(body).children(history)
+        crate::ui::features::arena::kit::surface(theme).gap(theme.spacing_xs).child(head).child(meta).child(footer).children(edit).children(history)
     }
 }

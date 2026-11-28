@@ -24,6 +24,7 @@ fn bar_column(index: usize, region: &Region, sets: &[NamedSet], scale: LinearSca
         .id(ElementId::NamedInteger("insights-upset".into(), index as u64))
         .w(theme.insights_upset_cell)
         .flex_none()
+        .px(theme.spacing_2xs)
         .h_full()
         .flex()
         .flex_col()
@@ -58,14 +59,22 @@ pub fn upset_matrix(sets: &[NamedSet], regions: &[Region], on_open: ColumnClick,
     div().id("insights-upset-scroll").w_full().overflow_x_scroll().child(div().flex().flex_col().gap(theme.spacing_xs).child(header).children(rows))
 }
 
-/// The Jaccard similarity of every pair of sets, as a shaded table.
+/// A column of the Jaccard table: as wide as the card allows, between a value's and a tile's width.
+fn jaccard_column(theme: &ThemeTokens) -> Div {
+    div().flex_1().min_w(theme.insights_rank_value_width).max_w(theme.insights_tile_width)
+}
+
+/// The Jaccard similarity of every pair of sets, as a shaded table with the sets named over
+/// its columns as well as beside its rows.
 pub fn jaccard_table(sets: &[NamedSet], theme: &ThemeTokens) -> Stateful<Div> {
     let matrix = jaccard_matrix(sets);
     let cell = |value: f64| {
         let text = if value >= 0.995 { theme.on_accent } else { theme.text_primary };
-        div().w(theme.insights_rank_value_width).flex_none().py(theme.spacing_3xs).flex().justify_center().rounded(theme.radius_xs).bg(sequential(value as f32, theme)).text_size(theme.font_size_2xs).text_color(text).child(percent(value))
+        jaccard_column(theme).py(theme.spacing_3xs).flex().justify_center().rounded(theme.radius_xs).bg(sequential(value as f32, theme)).text_size(theme.font_size_2xs).text_color(text).child(percent(value))
     };
     let label = |text: &str| div().w(theme.insights_upset_label_width).flex_none().truncate().text_size(theme.font_size_xs).text_color(theme.text_secondary).child(text.to_string());
+    let heading = |text: &str| jaccard_column(theme).flex().justify_center().overflow_hidden().child(div().truncate().text_size(theme.font_size_2xs).text_color(theme.text_muted).child(text.to_string()));
+    let header = div().flex().items_center().gap(theme.spacing_3xs).child(label("")).children(sets.iter().map(|set| heading(&set.label)));
     let rows = sets.iter().zip(&matrix).map(|(set, row)| div().flex().items_center().gap(theme.spacing_3xs).child(label(&set.label)).children(row.iter().map(|v| cell(*v))));
-    div().id("insights-jaccard-scroll").w_full().overflow_x_scroll().child(div().flex().flex_col().gap(theme.spacing_3xs).children(rows))
+    div().id("insights-jaccard-scroll").w_full().overflow_x_scroll().child(div().w_full().flex().flex_col().gap(theme.spacing_3xs).child(header).children(rows))
 }

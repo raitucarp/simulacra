@@ -1,0 +1,44 @@
+---
+title: Rapid log and raw text
+description: Read a thread or a profile as short bullets grouped by day, or as the plain text it was written in, ready to copy.
+icon: NotebookText
+---
+
+Two views strip the cards away. The **rapid log** reads like a bullet journal: one short line per post, grouped by day. **Raw text** shows exactly what was typed, marks and links included, with one button to copy it all.
+
+## Rapid log
+
+<Screenshot id="view-rapid-log" alt="The rapid log view with day headings and one bullet per post, some bullets drawn as task and note symbols" caption="A profile's posts as a rapid log." size="md" />
+
+Pick <UiLabel>Show as a rapid log</UiLabel> from a <UiLabel>View</UiLabel> menu.
+
+- **Days** read newest first, each under its weekday and date (in the date format of Settings › General); within a day, posts read in the order they were written.
+- **Bullets.** A post with [symbols](/docs/guides/tasks) uses its main symbol as its bullet, with its signifiers in front of it. Any other post gets a plain "•".
+- **Text.** Each post as one line of reading text: formatting marks, `[[post_…]]` links and embeds are left out, and each to-do shows only its words, so "[ ] finish the draft ^fri !!" reads "finish the draft". To-dos are separated by " · ". The raw view below shows everything as written.
+
+Click a line to open its post. With no posts the view says "No posts to log yet."
+
+## Raw text
+
+<Screenshot id="view-raw" alt="The raw text view with a count of posts and a Copy all button above blocks of monospaced text, each under an author and time line" caption="Raw text shows the marks, links and tags as typed." size="md" />
+
+Pick <UiLabel>Show as raw text</UiLabel> from a <UiLabel>View</UiLabel> menu.
+
+- **The toolbar** counts the posts ("12 posts") and holds <UiLabel>Copy all</UiLabel>.
+- **Each block** starts with "Author · 2026-11-23 09:30" in a fixed format, then the post's text exactly as written, line by line, in a monospaced font.
+
+<UiLabel>Copy all</UiLabel> puts every block on the clipboard, each as its heading line and its text, with a blank line between posts. Use it to paste a thread into another app or a plain-text note.
+
+With no posts the view says "No posts to show as text yet."
+
+## Locked posts
+
+Both views show a locked post as "Locked post". <UiLabel>Copy all</UiLabel> copies that line in its place, never the sealed text.
+
+## Related
+
+<Cards>
+<Card title="Timeline views" href="/docs/guides/views" description="Every view and where it is offered." />
+<Card title="Calendar and future log" href="/docs/guides/views/calendar-and-future-log" description="Posts by date, past and ahead." />
+<Card title="Post syntax" href="/docs/reference/post-syntax" description="What the marks in raw text mean." />
+</Cards>

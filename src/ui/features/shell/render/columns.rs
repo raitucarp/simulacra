@@ -41,7 +41,7 @@ impl AppView {
 
     /// Resizable layout of the left sidebar, the center panel and (without the forge, outside
     /// the compact class) the right sidebar.
-    pub(super) fn render_columns(&self, class: LayoutClass) -> impl IntoElement {
+    pub(super) fn render_columns(&self, class: LayoutClass, window_width: Pixels) -> impl IntoElement {
         let (layout_id, width, min, max) = self.left_column(class);
         let t = &self.theme;
         let columns = persisted_h_resizable(layout_id, t)
@@ -56,7 +56,7 @@ impl AppView {
         let (right, right_min, right_max) = class.right_sidebar_size(t);
         columns.pane(
             SplitPane::sized(right, right_min..right_max)
-                .visible(self.chrome.is_right_sidebar_open)
+                .visible(self.is_right_panel_shown(window_width))
                 .child(self.panels.cached(ShellSection::RightSidebar)),
         )
     }

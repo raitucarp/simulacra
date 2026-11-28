@@ -1,0 +1,244 @@
+---
+title: Post syntax
+description: Every piece of syntax the composer and the post parser understand, with the exact rules for each.
+icon: Code
+---
+
+This page lists everything Simulacra reads in a post's text. Anything not listed here is shown as plain text. For how to use each piece, follow the links to the guides.
+
+## At a glance
+
+| Write | Get | Guide |
+|---|---|---|
+| `**bold**` | Bold | [Formatting](/docs/guides/composer/formatting) |
+| `*italic*` | Italic | [Formatting](/docs/guides/composer/formatting) |
+| `***both***` | Bold italic | [Formatting](/docs/guides/composer/formatting) |
+| `__underline__` | Underline | [Formatting](/docs/guides/composer/formatting) |
+| `\|\|spoiler\|\|` | Hidden until clicked | [Formatting](/docs/guides/composer/formatting#spoilers) |
+| `` `code` `` | Inline code | [Formatting](/docs/guides/composer/formatting) |
+| ```` ```lang ```` … ```` ``` ```` | Code block | [Formatting](/docs/guides/composer/formatting#code-blocks) |
+| `https://…` | Web link | [Attachments](/docs/guides/composer/attachments#links) |
+| `[[target]]` | Wikilink pill | [Links between posts](/docs/guides/posts/links#wikilinks) |
+| `((post_id))`, `((post_id@1.2.0))` | Embedded post | [Links between posts](/docs/guides/posts/links#embeds) |
+| `#Topic` | Hashtag | [Links between posts](/docs/guides/posts/links#hashtags) |
+| `[ ] text` | To-do | [Checklists and to-dos](/docs/guides/composer/checklists-and-todos) |
+| `\*` | A literal `*` | [Escapes](#escapes) |
+
+## Marks
+
+| Mark | Delimiter | Notes |
+|---|---|---|
+| Bold | `**` | |
+| Italic | `*` | |
+| Bold and italic | `***` | Opens bold and italic together. |
+| Underline | `__` | Not inside a word. |
+| Spoiler | `\|\|` | Revealed per session; see [Spoilers](/docs/guides/composer/formatting#spoilers). |
+
+Rules that apply to every mark:
+
+- **Flanking.** An opening delimiter must be followed by a non-space, a closing one preceded by a non-space. `2 * 3 * 4` and a `* ` at the start of a line stay literal.
+- **Underscores** also refuse to open or close inside a word: `snake__case__name` stays as written.
+- **Nesting** is allowed: `**bold *and italic***`. A closing delimiter pairs with the nearest open mark of its kind; marks crossing it fall back to text.
+- **Line breaks end marks.** A mark still open at the end of a line (or of the post) is shown as the characters you typed.
+- An empty pair (`****`) is shown as typed.
+
+## Inline code
+
+A run of backticks opens a code span, closed by the next run of **exactly as many** backticks on the same line. Use two backticks to show one inside: ``` `` a ` b `` ```. Without a closing run, the backticks are text. Nothing inside a code span is read as markup.
+
+## Code blocks
+
+````text
+```python
+print("hello")
+```
+````
+
+- A line of **three or more** backticks opens a block. The first word after them is the language tag: letters, digits and `+ # - _ .`, read in lower case. A malformed tag gives a plain block.
+- The block closes at the next line made only of at least as many backticks. An opening fence that is never closed is ordinary text.
+- The block's text is shown exactly as written, one row per line.
+
+### Coloured languages
+
+| Language | Tags |
+|---|---|
+| Rust | `rust`, `rs` |
+| Go | `go`, `golang` |
+| C | `c`, `h` |
+| C++ | `cpp`, `c++`, `cc`, `cxx`, `hpp` |
+| Java | `java` |
+| C# | `csharp`, `cs`, `c#` |
+| Kotlin | `kotlin`, `kt`, `kts` |
+| Python | `python`, `py`, `python3` |
+| JavaScript | `javascript`, `js`, `jsx`, `mjs`, `cjs` |
+| TypeScript | `typescript`, `ts`, `tsx` |
+| Shell | `shell`, `sh`, `bash`, `zsh`, `console`, `shellscript` |
+| SQL | `sql`, `sqlite`, `postgres`, `postgresql`, `mysql` |
+| JSON | `json`, `jsonc`, `json5` |
+| TOML | `toml` |
+| YAML | `yaml`, `yml` |
+
+Keywords, types, strings, numbers and comments are coloured from the theme. Any other tag shows plain monospace.
+
+### Runnable languages
+
+With running switched on in Settings › Code, these tags get a <UiLabel>Run</UiLabel> button: `python` `py` `python3` (Python), `javascript` `js` `node` `nodejs` (Node), `typescript` `ts` `deno` (Deno), `lua` (Lua), `go` `golang` (Go), `ruby` `rb` (Ruby), `php` (PHP). See [Attachments › Code blocks](/docs/guides/composer/attachments#code-blocks).
+
+## Line breaks
+
+A line break in the text is a line break in the post. A blank line between two lines adds a taller paragraph gap.
+
+## Web links
+
+- An address is read when `http://` or `https://` (any case) **starts a word**: it may not follow a letter or digit.
+- It runs to the next space or one of `<`, `>`, `"`, `` ` `` and `|`.
+- Trailing punctuation (`. , ; : ! ? ' " …` and their CJK forms), trailing `*` or `_`, and closing brackets that the address did not open are left out: `(see https://example.org/a).` links `https://example.org/a`.
+- Shown without its scheme, cut after 40 characters; the tooltip has the whole address.
+- A post takes at most eight addresses into account for previews; only the first gets a card.
+
+## Wikilinks
+
+`[[target]]` links to a post or a vault document.
+
+- The target is trimmed of spaces. It is looked up as a **post id** first, then as a **document id or title** (any case).
+- Punctuation right after `]]` stays with the pill.
+- The pill shows the first three words of a known post followed by `...`.
+- A `[[` with no closing `]]` is text.
+
+## Embeds
+
+`((post_id))` shows another post inside this one; `((post_id@1.2.0))` shows it at that version.
+
+- The id holds letters, digits, `_` and `-`. The version, after `@`, must be `major.minor.patch`. Anything else leaves the whole thing as text.
+- An embed written without a version is pinned, when you save the post, to the version the embedded post shows then.
+- Embeds inside an embedded post show as pills: embeds never nest.
+- Write `\(` for a literal parenthesis.
+
+## Hashtags
+
+`#Topic` is a hashtag when the `#` **starts a word**: at the start of the text, after a space, or right after a mark delimiter (`*`, `_`, `|`, `` ` ``, `\`).
+
+- It runs until a space, `[` or `]`, a mark character (`*`, `|`, `` ` ``, `\`), a doubled underscore `__`, or closing punctuation (`, . ! ? ; : …` and `，。！？；：`). A single `_` is part of the tag.
+- Closing punctuation right after it stays with it: `#Rust.` is the tag `#Rust` and a full stop.
+- A lone `#` is text.
+
+## Mentions
+
+`@handle` is shown as plain text in a post body: it does not link to a profile. On a [to-do line](#to-dos) a whole word `@name` is a delegate token.
+
+## Emoji
+
+Type or paste emoji as they are. There are no shortcodes such as `:smile:`; those stay as text. Use the [reaction picker](/docs/guides/posts/reactions) to react with emoji, and the [feeling bar](/docs/guides/composer#post-a-feeling) to post a feeling.
+
+## Escapes
+
+A backslash before one of these characters shows the character itself and stops it from starting markup:
+
+`\\` `\*` `\_` `` \` `` `\|` `\#` `\[` `\]` `\(` `\)`
+
+A backslash before any other character is kept as typed.
+
+## To-dos
+
+A line is a to-do when it is: optional indentation, an optional `- ` or `* ` bullet, a box, then a space or the end of the line.
+
+| Box | State |
+|---|---|
+| `[ ]` | Open |
+| `[x]`, `[X]` | Done |
+| `[>]` | Migrated |
+| `[<]` | Scheduled |
+| `[~]` | Dropped |
+| `[/]` | Delegated |
+
+Indent two spaces (or one tab) per level to nest. Lines inside code blocks are never to-dos.
+
+### Tokens
+
+Whole words on the line. Due, repeat, priority, estimate and delegate take the first occurrence; contexts collect.
+
+| Token | Form |
+|---|---|
+| Due | `^phrase`: see below. Letters, digits and `- + / , :`. |
+| Repeat | `^^rule`: see below. |
+| Priority | `!`, `!!` or `!!!` |
+| Context | `&name`: starts with a letter or digit; letters, digits, `-`, `_`. |
+| Estimate | `~25m`, `~2h`, `~1h30m` (hours then minutes, not zero) |
+| Delegate | `@name`: same characters as a context. |
+
+### Due phrases
+
+Read in English, any case, counted from the day the post was written. Words may be joined with `-` instead of a space.
+
+| Phrase | Day |
+|---|---|
+| `2026-12-01` | That day. |
+| `12-01` | The next 1 December on or after the day. |
+| `today`, `tod` | The day itself. |
+| `tomorrow`, `tom`, `tmr`, `tmrw` | The next day. |
+| `mon` … `sun`, `monday` … `sunday`, `tue`/`tues`, `wed`/`weds`, `thu`/`thur`/`thurs` | The next such weekday on or after the day. |
+| `next fri` | The next Friday after the day. |
+| `next week` | The Monday after. |
+| `next month` | The 1st of the next month. |
+| `next year` | 1 January of the next year. |
+| `eow`, `end-of-week` | The Sunday on or after the day. |
+| `eom`, `end-of-month` | The last day of the month. |
+| `1st`, `2nd`, `15th`, … | The next such day of a month on or after the day; a shorter month uses its last day. |
+| `+3d`, `+2w`, `+1m`, `+1y`, `+3` | That far after the day (a bare number is days). A month or year later keeps the day of the month, or uses the month's last day. |
+
+### Repeat rules
+
+| Rule | Repeats |
+|---|---|
+| `daily` / `everyday`, `weekly`, `biweekly` / `fortnightly`, `monthly`, `quarterly`, `yearly` / `annually` | On that interval. |
+| `3d`, `2w`, `6m`, `1y` | Every so many days, weeks, months or years (1 to 999). |
+| `mon,wed`, `weekdays`, `weekends` | On those weekdays. |
+| `15th`, `1st,15th` | On those days of the month; a shorter month uses its last day. |
+
+Intervals count from the item's first due day (or the day the post was written), so a monthly series on the 31st lands on the 30th in April and the 31st again in May.
+
+## Symbol shorthand
+
+With <UiLabel>Symbol shorthand</UiLabel> on (Settings › Reading & Writing), markers at the very start of a post set its [symbols](/docs/guides/posts/symbols) and are removed from its text. Each marker is followed by a space; they stack.
+
+| Marker | Symbol |
+|---|---|
+| `. ` | Task |
+| `o ` | Event |
+| `- ` | Note |
+| `* ` | Priority |
+| `! ` | Inspiration |
+
+## Free compose
+
+In the composer's [free compose](/docs/guides/composer#free-compose) mode:
+
+- Every non-empty line is one post; blank lines are skipped. `\r\n` line endings are fine.
+- A leading `-` or `*` followed by a space is a bullet and is removed. A bare `-` is an empty bullet and is skipped. `1. …`, `-5` and `**bold**` stay as text.
+- Each tab, or each two spaces, of indentation is one level; a leftover single space rounds down. A line replies to the closest line above it at a lower level. Lines at the left edge chain into the main thread.
+
+## Character count
+
+A post holds at most **280 visible characters**, counted on what a reader sees:
+
+| Counts | Does not count |
+|---|---|
+| Text, including inside marks | Mark delimiters and escape backslashes |
+| Inline code and code block text | Code fences and the language tag |
+| A wikilink's target, with trailing punctuation | The `[[` `]]` brackets |
+| A hashtag, with its `#` | |
+| A web address as written | |
+| | An embed (only punctuation after it counts) |
+
+Surrounding spaces are trimmed before counting.
+
+## Not supported
+
+Headings, numbered or bulleted lists (other than to-dos and free compose lines), tables, block quotes, images in the text and `[text](url)` links are shown as plain text. When an agent writes Markdown, it is reduced the same way: headings become their text, bullets become `-`, links keep their text and address, and blank-line runs collapse.
+
+## Related
+
+- [Composer](/docs/guides/composer)
+- [Formatting](/docs/guides/composer/formatting)
+- [Checklists and to-dos](/docs/guides/composer/checklists-and-todos)
+- [Links between posts](/docs/guides/posts/links)

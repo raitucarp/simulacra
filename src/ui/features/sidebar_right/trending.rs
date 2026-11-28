@@ -2,12 +2,24 @@
 
 use std::rc::Rc;
 
+use crate::domain::topic::{rank_tags, TRENDING_WINDOW_DAYS};
+use crate::domain::{Post, TrendingTopic};
 use crate::state::AppState;
 use crate::theme::ThemeTokens;
 use super::topic_item::render_topic_item;
 use gpui_kit::base::StyledExt;
 use gpui_kit::*;
 use rust_i18n::t;
+
+/// How many tags the panel ranks.
+const TRENDING_ROWS: usize = 4;
+
+/// The active network's most used tags, counted from its posts.
+fn network_topics(state: &AppState) -> Vec<TrendingTopic> {
+    let posts: Vec<&Post> = state.posts().iter().filter(|post| post.network_id == state.active_network_id).collect();
+    let since = jiff::Timestamp::now() - crate::time::days(TRENDING_WINDOW_DAYS);
+    rank_tags(&posts, since, TRENDING_ROWS)
+}
 
 /// Builds one clickable row per trending topic, ranked from 1.
 pub(super) fn trending_elements<F>(
@@ -18,8 +30,7 @@ pub(super) fn trending_elements<F>(
 where
     F: Fn(&str, &mut Window, &mut App) + ?Sized + 'static,
 {
-    state
-        .trending
+    network_topics(state)
         .iter()
         .enumerate()
         .map(|(idx, topic)| {
@@ -41,7 +52,10 @@ pub(super) fn render_popular_tags_title(theme: &ThemeTokens) -> Div {
         .child(t!("sidebar.popular_tags").to_string())
 }
 
-/// Vertical list holding the trending rows.
+/// Vertical list holding the trending rows, or a line on how tags get here.
 pub(super) fn render_trending_list(elements: Vec<AnyElement>, theme: &ThemeTokens) -> Div {
+    if elements.is_empty() {
+        return div().text_size(theme.font_size_sm).text_color(theme.text_muted).child(t!("sidebar.no_tags").to_string());
+    }
     div().flex().flex_col().gap(theme.spacing_xs).children(elements)
 }

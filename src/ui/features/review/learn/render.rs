@@ -84,7 +84,7 @@ impl LearnSheet {
             .py(theme.spacing_sm)
             .border_b(theme.border_width_hairline)
             .border_color(theme.border_subtle)
-            .child(Icon::new(LucideIcon::GraduationCap).size(theme.icon_size_sm).text_color(theme.accent_brand))
+            .child(Icon::new(LucideIcon::GraduationCap).size(theme.icon_size_sm).text_color(theme.accent_brand_text))
             .child(div().flex_1().min_w_0().text_size(theme.font_size_sm).font_weight(FontWeight::SEMIBOLD).text_color(theme.text_primary).child(title))
             .child(close)
     }

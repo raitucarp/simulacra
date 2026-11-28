@@ -1,0 +1,60 @@
+---
+title: Media viewer
+description: Look at a post's images full size, step through them with the arrow keys and read their descriptions.
+icon: Image
+---
+
+Click an image on any post card and it opens in the **media viewer** (lightbox): the image as large as the window allows, its description, and the post's other images one key press away.
+
+<Screenshot id="media-lightbox" alt="The media viewer showing one image fitted to the window, the close button top right, previous and next buttons at the edges and the caption 2 of 3 with the image description" caption="The second of three images, with its description." />
+
+## Open it
+
+Click any image in a post: a single image, a tile of a gallery, or an attached image file. The viewer opens on that image and takes the keyboard.
+
+## Anatomy
+
+| Part | Where | What it does |
+|---|---|---|
+| Image | Centre | Fitted to the window, keeping its shape, on the app background. |
+| <UiLabel>Close</UiLabel> | Top right | Closes the viewer. |
+| <UiLabel>Previous image</UiLabel> / <UiLabel>Next image</UiLabel> | Left and right edges | Step through the post's images. Shown only when the post has more than one. |
+| Caption | Bottom | `2 of 3` when there are several images, and the image's description (alt text) when it has one. Hidden when there is neither. |
+
+## Keys
+
+| Key | Action |
+|---|---|
+| <Kbd>Esc</Kbd> | Close |
+| <Kbd>←</Kbd> | Previous image |
+| <Kbd>→</Kbd> | Next image |
+
+Stepping **wraps around**: next from the last image goes to the first. A click anywhere outside the buttons also closes the viewer.
+
+## Galleries on the card
+
+How a post lays out its images before you open them:
+
+- **One image** shows at its own shape; a tall image is sized by height.
+- **Two to four images** form a two-column grid of tiles, cropped to fill.
+- An image with a description wears an <UiLabel>ALT</UiLabel> badge in its corner.
+- An image that cannot be loaded shows a placeholder and <UiLabel>This image could not be loaded.</UiLabel>
+
+<Screenshot id="media-gallery" alt="A post with a three-image grid, one tile wearing the ALT badge" caption="A three-image gallery. The ALT badge marks a described image." size="md" />
+
+Feed cards draw a cached thumbnail when one exists; the viewer always shows the original file.
+
+## Write good descriptions
+
+Add a description when you attach an image, in the <UiLabel>Description (alt text)</UiLabel> field under it in the composer ([Attachments › Images](/docs/guides/composer/attachments#images)). It is what the viewer shows under the image, and it tells anyone who cannot see the picture what it holds.
+
+## Tips and limits
+
+- The viewer shows the images of one post at a time, at most four.
+- Videos, audio and other files do not open in the viewer: their cards have <UiLabel>Open</UiLabel> or <UiLabel>Play</UiLabel>, which use your system's apps.
+- Link preview images open the linked page, not the viewer.
+
+## Related
+
+- [Attachments](/docs/guides/composer/attachments)
+- [Post cards](/docs/guides/posts)

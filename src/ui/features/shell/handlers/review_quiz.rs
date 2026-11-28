@@ -4,6 +4,7 @@
 
 use super::super::review_host::{learning_policy, review_today};
 use super::super::view::AppView;
+use crate::domain::post::readable_line;
 use crate::domain::review::quiz::{build_choice, mix_seed, piece_text, prose_paragraphs, sentence_window, shuffled, thread_line, ChoiceSources, OrderPuzzle, QuizKind, SourceVectors, PIECE_CHARS};
 use crate::domain::review::{Anchor, Policy, ReviewItem};
 use crate::domain::PostId;
@@ -45,9 +46,9 @@ impl AppView {
         self.review.deck.of_network(&self.state.active_network_id).items
     }
 
-    /// An item's answer, its post read as it reads now (shortened for an option).
+    /// An item's answer, its post read as it reads now, as plain text (shortened for an option).
     fn quiz_answer(&self, item: &ReviewItem) -> String {
-        piece_text(&item.answer_text(&|id| self.state.get_post_by_id(id).map(|post| post.content.clone())), PIECE_CHARS)
+        piece_text(&item.answer_text(&|id| self.state.get_post_by_id(id).map(|post| readable_line(&post.content))), PIECE_CHARS)
     }
 
     fn choice_quiz(&self, seed: u64) -> QuizContent {
@@ -87,7 +88,7 @@ impl AppView {
         match anchor {
             Anchor::Post { id } => {
                 let line = thread_line(self.state.posts(), &PostId::new(id.clone()));
-                let pieces = line.iter().map(|post| piece_text(&post.content, PIECE_CHARS)).collect();
+                let pieces = line.iter().map(|post| piece_text(&readable_line(&post.content), PIECE_CHARS)).collect();
                 OrderPuzzle::new(t!("review.order.thread_title").to_string(), pieces, seed)
             }
             Anchor::Passage { document_id, .. } => {

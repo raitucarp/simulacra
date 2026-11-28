@@ -9,6 +9,24 @@ use gpui_kit::*;
 use super::avatar_cache::resolve_avatar;
 use crate::ui::illustration::render_avatar_mode;
 
+/// Past the medium cap an initial fills this share of the circle, so a large profile avatar
+/// reads as a letter and not as an empty ring.
+const LARGE_INITIAL_SCALE: f32 = 0.42;
+
+/// The initial's size: it steps up as the avatar crosses the small and medium caps, then grows
+/// with the circle.
+fn initial_size(size: Pixels, theme: &ThemeTokens) -> Pixels {
+    if size <= theme.avatar_initial_small_max {
+        theme.font_size_2xs
+    } else if size <= theme.avatar_initial_medium_max {
+        theme.font_size_xs
+    } else if size * LARGE_INITIAL_SCALE > theme.font_size_base {
+        size * LARGE_INITIAL_SCALE
+    } else {
+        theme.font_size_base
+    }
+}
+
 /// Renders a circular profile avatar with initial and role-based coloring.
 pub fn render_avatar(
     initial: &str,
@@ -22,14 +40,7 @@ pub fn render_avatar(
         ProfileRole::Agent { .. } => theme.accent_agent,
     };
 
-    // Initials step up a font size as the avatar crosses the small and medium caps.
-    let font_size = if size <= theme.avatar_initial_small_max {
-        theme.font_size_2xs
-    } else if size <= theme.avatar_initial_medium_max {
-        theme.font_size_xs
-    } else {
-        theme.font_size_base
-    };
+    let font_size = initial_size(size, theme);
 
     div()
         .w(size)

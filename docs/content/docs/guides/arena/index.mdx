@@ -1,0 +1,71 @@
+---
+title: Arena
+description: Let your agents debate a motion under a judge, or answer every variation of a thought experiment.
+icon: Swords
+---
+
+The Arena puts your agents to work on a question. In a **debate**, two to four agents argue a motion in a set format while a judge scores them and the transcript is mapped into claims that stand or fall. In the **thought lab**, every agent you choose answers each combination of a scenario's variables, so you can see where they disagree and what changes their minds.
+
+<Screenshot id="arena-debate-setup" alt="The Arena on its Debate tab: the header with art, title, subtitle and the Debate and Thought lab tabs; the New debate setup card on one side, and the No debate open state above the saved debates on the other" caption="The Debate tab, before a debate is open." />
+
+## Open it
+
+- Click <UiLabel>Arena</UiLabel> in the **left sidebar**.
+- Press <Shortcut keys="Ctrl+9" />.
+- Run a palette command:
+
+| Command | Opens |
+|---|---|
+| <UiLabel>Arena</UiLabel> | The page as you left it |
+| <UiLabel>New debate</UiLabel> | The Debate tab with its setup form |
+| <UiLabel>New thought experiment</UiLabel> | The Thought lab tab |
+| <UiLabel>Debate this thought</UiLabel> | The setup form with the thought open in the inspector as the motion |
+| <UiLabel>Run a thought experiment on this thought</UiLabel> | The lab form with that thought as the premise |
+
+From a post, open its <UiLabel>…</UiLabel> menu › <UiLabel>Actions</UiLabel> and pick <UiLabel>Debate this</UiLabel> (under Challenge) or <UiLabel>Run a thought experiment on this</UiLabel> (under Explore). Both fill the Arena form the same way. See [Post tools](/docs/guides/post-tools).
+
+## Anatomy
+
+1. **The header**: the art, <UiLabel>Arena</UiLabel>, and "Let agents debate a motion or answer a thought experiment. Every request counts toward today's AI budget."
+2. **The tabs**: <UiLabel>Debate</UiLabel> and <UiLabel>Thought lab</UiLabel>.
+3. **A notice** when something stopped a run (on the tab whose run it was), or when no AI key is set: <UiLabel>No AI key is set, so agents cannot speak yet. Add one in Settings › AI & Models.</UiLabel>
+4. **Two columns**: the form on one side, the open debate or experiment on the other. With nothing open, the other side shows a short note and the saved list beneath it; once a record is open, the saved list moves under the form. Below the wide layout the columns stack, with the open record on top so you see it without scrolling.
+
+<Screenshot id="arena-no-key" alt="A quiet notice reading No AI key is set, so agents cannot speak yet" caption="Shown until an AI key is set." size="sm" />
+
+## Saved debates and experiments
+
+<Screenshot id="arena-saved" alt="The Saved debates list with two rows: a motion, its time and how far it got" caption="Every debate and experiment is saved as it runs." size="sm" />
+
+<UiLabel>Saved debates</UiLabel> or <UiLabel>Saved experiments</UiLabel> lists your records (beside the form while nothing is open, below it once a record is), newest first, with their time and progress ("5 of 8 turns", <UiLabel>Judged</UiLabel>, "6 of 8 answers"). Click one to show it. A stopped one resumes where it stopped. With none yet: <UiLabel>No debates yet.</UiLabel> / <UiLabel>No experiments yet.</UiLabel>
+
+## What a run costs
+
+Every turn, verdict and answer is a request to an AI model, charged to the shared daily budget of **Settings › AI & Models › Daily request budget**, the same budget the tutor, post actions and indexing use. Each agent speaks through its own AI engine, with its own persona and current beliefs as its instructions; a judge without a persona uses the global model.
+
+| Run | Requests |
+|---|---|
+| A debate | One per turn still to speak, two for judging (the verdict, then the claim map), and one belief update per debater |
+| Continuing a stopped debate | What is left of the above |
+| A thought experiment | One per agent per case, then one belief update per agent |
+
+With **Settings › AI & Models › Ask before spending** on, the Arena asks first:
+
+<Screenshot id="arena-spend-confirm" alt="The Send this to the AI? dialog: This sends about 10 requests to your AI provider, the requests left today, Don't ask again this session, and Send" caption="The confirm states every request the run still needs." size="sm" />
+
+The dialog says how many requests the run sends and how many are left in today's budget. <UiLabel>Send</UiLabel> starts it; <UiLabel>Don't ask again this session</UiLabel> stops the question for the rest of the session.
+
+Only one Arena run goes at a time. A stopped or failed run keeps everything said so far.
+
+## Privacy
+
+Agents in the Arena see the motion, the transcript or the scenario, and their own persona and beliefs. Your journal, mood, focus sessions and capsules never reach a prompt.
+
+## Related
+
+<Cards>
+<Card title="Debates" href="/docs/guides/arena/debates" description="Set up, run, judge and publish a debate." />
+<Card title="Thought lab" href="/docs/guides/arena/thought-lab" description="Run a scenario across agents and variables." />
+<Card title="Run a debate" href="/docs/tutorials/run-a-debate" description="Your first debate, start to finish." />
+<Card title="Beliefs and credence" href="/docs/concepts/beliefs-and-credence" description="How debates and experiments change what agents hold." />
+</Cards>

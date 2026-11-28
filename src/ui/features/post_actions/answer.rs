@@ -1,5 +1,6 @@
 //! The right pane: the action's title and hint, its choices, then the answer (or the state
-//! of the run) in a scrollable area, and the answer's buttons.
+//! of the run) in a scrollable area with the answer's buttons right under it, not pinned to
+//! the bottom of the sheet with a blank gap above them.
 
 use super::blocks::render_blocks;
 use super::choices::render_choices;
@@ -33,7 +34,7 @@ pub(super) fn render_answer_pane(inputs: &SheetInputs<'_>) -> Div {
         .flex()
         .flex_col()
         .gap(theme.spacing_3xs)
-        .child(div().flex().items_center().gap(theme.inline_gap).text_size(theme.font_size_sm).font_weight(FontWeight::SEMIBOLD).text_color(theme.text_primary).child(Icon::new(kind_icon(kind)).size(theme.icon_size_sm).text_color(theme.accent_brand)).child(kind_title(kind)))
+        .child(div().flex().items_center().gap(theme.inline_gap).text_size(theme.font_size_sm).font_weight(FontWeight::SEMIBOLD).text_color(theme.text_primary).child(Icon::new(kind_icon(kind)).size(theme.icon_size_sm).text_color(theme.accent_brand_text)).child(kind_title(kind)))
         .child(div().text_size(theme.font_size_2xs).text_color(theme.text_muted).child(kind_hint(kind)));
     let body = div()
         .id(SCROLL_ID)
@@ -46,10 +47,9 @@ pub(super) fn render_answer_pane(inputs: &SheetInputs<'_>) -> Div {
         .flex_col()
         .gap(theme.stack_gap)
         .children(sheet.hits.as_ref().map(|hits| render_concept_hits(hits, &inputs.on_event, theme)))
-        .child(render_status(&sheet.status, &inputs.on_event, theme));
-    pane.child(div().p(theme.panel_padding).flex().flex_col().gap(theme.stack_gap).child(heading).children(render_choices(inputs)))
-        .child(body)
-        .children(sheet.output().map(|_| render_footer(&inputs.on_event, theme)))
+        .child(render_status(&sheet.status, &inputs.on_event, theme))
+        .children(sheet.output().map(|_| render_footer(&inputs.on_event, theme)));
+    pane.child(div().p(theme.panel_padding).flex().flex_col().gap(theme.stack_gap).child(heading).children(render_choices(inputs))).child(body)
 }
 
 /// The answer, or what is happening instead.

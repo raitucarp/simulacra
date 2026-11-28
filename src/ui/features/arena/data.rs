@@ -5,6 +5,7 @@
 use crate::domain::arena::debate::Debate;
 use crate::domain::arena::lab::Experiment;
 use crate::domain::arena::ArenaId;
+use crate::ui::features::arena::ArenaTab;
 use crate::domain::embedding::{BudgetLimits, DailyUsage};
 use crate::domain::{PostId, ProfileId};
 
@@ -58,8 +59,8 @@ pub struct ArenaData {
     pub debates: Vec<Debate>,
     pub experiments: Vec<Experiment>,
     pub run: RunState,
-    /// Why the last request failed, as the user reads it.
-    pub notice: Option<String>,
+    /// Why the last request failed, as the user reads it, and the tab whose run it was.
+    pub notice: Option<(ArenaTab, String)>,
     pub has_key: bool,
     pub usage: DailyUsage,
     pub limits: Option<BudgetLimits>,

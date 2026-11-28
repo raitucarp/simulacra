@@ -1,6 +1,6 @@
 //! Header, subtitle, level colors and legend around the cadence grid.
 
-use super::section::{render_mono_badge, render_section_header, render_section_title};
+use super::section::{render_count_badge, render_section_header, render_section_title};
 use crate::domain::activity::{ActivityHeatmap, MAX_ACTIVITY_LEVEL};
 use crate::theme::ThemeTokens;
 use crate::ui::features::day_filter::day_summary;
@@ -31,7 +31,7 @@ pub(super) fn render_heatmap_header(total: usize, theme: &ThemeTokens) -> Div {
             t!("sidebar.thought_cadence_title").to_string(),
             theme,
         ),
-        render_mono_badge(t_count("cadence.badge", total), theme.accent_success, theme)
+        render_count_badge(t_count("cadence.badge", total), theme.accent_success, theme)
             .rounded(theme.radius_full),
     )
 }
@@ -41,7 +41,7 @@ pub(super) fn render_subtitle(heatmap: &ActivityHeatmap, selected: Option<Date>,
         Some(day) => day_summary(day, heatmap.count_on(day)),
         None => t!("cadence.hint").to_string(),
     };
-    div().font_family(theme.font_family_mono.clone()).text_size(theme.font_size_label).text_color(theme.text_muted).child(subtitle)
+    div().text_size(theme.font_size_label).text_color(theme.text_muted).child(subtitle)
 }
 
 fn legend_swatch(color: Rgba, theme: &ThemeTokens) -> Div {

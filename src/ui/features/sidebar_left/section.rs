@@ -62,7 +62,7 @@ fn render_header(section: SidebarSection, is_collapsed: bool, total: usize, call
         .on_click(move |_, window, cx| on_click(section, window, cx))
         .child(Icon::new(chevron).size(theme.icon_size_xs))
         .child(div().flex_1().min_w_0().truncate().text_size(theme.font_size_2xs).font_weight(FontWeight::BOLD).child(t!(section.title_key()).to_string()))
-        .when(total > 0, |row| row.child(div().font_family(theme.font_family_mono.clone()).text_size(theme.font_size_2xs).child(total.to_string())))
+        .when(total > 0, |row| row.child(div().text_size(theme.font_size_2xs).child(total.to_string())))
 }
 
 fn render_show_all(section: SidebarSection, is_showing_all: bool, total: usize, callbacks: &SidebarCallbacks, theme: &ThemeTokens) -> Stateful<Div> {

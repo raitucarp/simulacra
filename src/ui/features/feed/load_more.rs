@@ -33,7 +33,6 @@ pub(crate) fn render_load_more(
         .child(render_load_more_button(total - shown, theme, on_load_more))
         .child(
             div()
-                .font_family(theme.font_family_mono.clone())
                 .text_size(theme.font_size_2xs)
                 .text_color(theme.text_muted)
                 .child(t!("feed.window_summary", shown = shown, total = total).to_string()),

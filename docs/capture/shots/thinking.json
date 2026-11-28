@@ -1,0 +1,589 @@
+[
+  {
+    "id": "graph-overview",
+    "page": "guides/mind-graph/index.mdx",
+    "kind": "window",
+    "subject": "The full Mind Graph view of the Epistemology & Mind demo network: header with 'Topological Mind Graph' and the node/link counters, the legend row, the canvas with every post, the two vault documents, the hashtags and the profiles (unlabelled at this size), and the details bar reading 'Select a node to see how it connects.'",
+    "region": "",
+    "setup": "Demo profile (docs/capture/demo): Epistemology & Mind active with four months of posts, AI and embeddings on the local stub.",
+    "steps": [
+      "In the left sidebar under NETWORKS, click Epistemology & Mind if it is not active",
+      "Press Ctrl+5",
+      "Wait one second for the layout to appear",
+      "Move the pointer off the canvas"
+    ]
+  },
+  {
+    "id": "graph-header",
+    "page": "guides/mind-graph/index.mdx",
+    "kind": "element",
+    "subject": "The Mind Graph header row: the title 'Topological Mind Graph', its subtitle, and the two mono counters 'N Nodes' and 'N Links' on the right.",
+    "region": "The header row above the legend card only.",
+    "setup": "Same as graph-overview.",
+    "steps": ["Press Ctrl+5"]
+  },
+  {
+    "id": "graph-legend",
+    "page": "guides/mind-graph/index.mdx",
+    "kind": "element",
+    "subject": "The legend row: four coloured swatches with counts ('Thoughts · 41', 'Grounding Docs · 2', 'Semantic Tags · 18', 'Profiles · 5' on the demo profile), and the hint 'Drag to pan · Scroll to zoom · Click a node to select, double-click to open' on the right.",
+    "region": "The legend row at the top of the graph card only.",
+    "setup": "Same as graph-overview.",
+    "steps": ["Press Ctrl+5"]
+  },
+  {
+    "id": "graph-selected",
+    "page": "guides/mind-graph/index.mdx",
+    "kind": "region",
+    "subject": "The canvas with Arya Wiratama's post 'Exploring how language constructs…' selected: a ring around its node and its label, its neighbours (its author, Sokrates's reply, Spinoza's quote, its tags) at full strength with accent-coloured links, and all other nodes faded. At this size only the selected node is labelled.",
+    "region": "The graph canvas only (not the header or the details bar).",
+    "setup": "Same as graph-overview.",
+    "steps": [
+      "Press Ctrl+5",
+      "Hover the thought nodes until the label 'Exploring how language constructs…' shows, and click that node",
+      "Move the pointer off the canvas"
+    ]
+  },
+  {
+    "id": "graph-details-bar",
+    "page": "guides/mind-graph/index.mdx",
+    "kind": "element",
+    "subject": "The details bar with a thought selected: kind swatch, 'Thoughts', the post's opening words, 'N Links', and the buttons 'Open in timeline' and 'Reset view'.",
+    "region": "The details bar under the canvas only.",
+    "setup": "Same as graph-selected.",
+    "steps": [
+      "Press Ctrl+5",
+      "Click the Thoughts node labelled 'Exploring how language constructs…'",
+      "Move the pointer off the canvas"
+    ]
+  },
+  {
+    "id": "graph-empty",
+    "page": "guides/mind-graph/index.mdx",
+    "kind": "region",
+    "subject": "The Mind Graph of a network with no posts or documents: the illustration with 'Nothing to map yet. Share a thought to grow the graph.' and its hint about wikilinks and tags.",
+    "region": "The graph card (legend, canvas and details bar).",
+    "setup": "A new, empty network named 'Empty Lab' (Ctrl+K, Create network, type the name, Create); the scene reuses it when it already exists.",
+    "steps": [
+      "In the left sidebar, open the network switcher and click Empty Lab",
+      "Press Ctrl+5"
+    ]
+  },
+  {
+    "id": "graph-mini",
+    "page": "guides/mind-graph/index.mdx",
+    "kind": "element",
+    "subject": "The MIND GRAPH section of the right sidebar: the share icon, the title 'MIND GRAPH', the badge 'N nodes · N edges' and the small unlabelled graph canvas.",
+    "region": "The MIND GRAPH section of the right sidebar only.",
+    "setup": "Demo profile (docs/capture/demo): Epistemology & Mind active with four months of posts, AI and embeddings on the local stub. The right sidebar is hidden by default at 1440 px wide.",
+    "steps": [
+      "Press Ctrl+1",
+      "Click the right-panel toggle in the title bar to show the right sidebar",
+      "The Mind & Cadence tab is open by default"
+    ]
+  },
+  {
+    "id": "insights-overview",
+    "page": "guides/insights/overview.mdx",
+    "kind": "window",
+    "subject": "Insights on its Overview tab for Epistemology & Mind over all time: header 'Insights' with '41 posts · 5 authors · 2 documents' (demo profile), the twelve tabs, the filter bar with All time selected, six key-number tiles in two rows of three, and the four cards Posts over time, Kinds of posts, Most influential, Largest concepts.",
+    "region": "",
+    "setup": "Demo profile (docs/capture/demo): Epistemology & Mind active with four months of posts, AI and embeddings on the local stub.",
+    "steps": [
+      "Press Ctrl+7",
+      "Click the Overview tab",
+      "In the filter bar, next to Period, click All time",
+      "Wait until the Updating… badge disappears"
+    ]
+  },
+  {
+    "id": "insights-header-tabs",
+    "page": "guides/insights/index.mdx",
+    "kind": "element",
+    "subject": "The Insights header: title, subtitle with post/author/document counts, and the row of twelve tabs with Overview active, each with its icon and full name (Embedding map, Concept timeline, Viewpoint diversity).",
+    "region": "The header block (title row and tabs) only.",
+    "setup": "Same as insights-overview.",
+    "steps": ["Press Ctrl+7", "Click the Overview tab", "Next to Period, click All time"]
+  },
+  {
+    "id": "insights-filter-bar",
+    "page": "guides/insights/index.mdx",
+    "kind": "element",
+    "subject": "The filter bar card: Period (7 days, 30 days, 90 days, Year, All time with All time selected), Who (Everyone, Agents, Personas), Networks (This network, All networks), Kinds (Thoughts, Replies, Quotes, Reposts, Captured, all on) and Authors (Everyone plus the network's authors).",
+    "region": "The filter bar card only.",
+    "setup": "Same as insights-overview.",
+    "steps": ["Press Ctrl+7", "Next to Period, click All time"]
+  },
+  {
+    "id": "insights-empty",
+    "page": "guides/insights/index.mdx",
+    "kind": "region",
+    "subject": "The Insights empty state: the filter bar (All time selected) and under it the illustration, 'Nothing to chart yet' and 'Write or import a few posts, or widen the period and the filters.', in a new network without posts.",
+    "region": "The filter bar and the empty state below it.",
+    "setup": "Same as graph-empty: the new, empty network 'Empty Lab' is active.",
+    "steps": [
+      "In the left sidebar, open the network switcher and click Empty Lab",
+      "Press Ctrl+7",
+      "Click the Overview tab",
+      "Next to Period, click All time"
+    ]
+  },
+  {
+    "id": "insights-network",
+    "page": "guides/insights/network.mdx",
+    "kind": "window",
+    "subject": "The Network tab scrolled to its Network card: Fit to view, the Graph/Measure/Colour by chips (Everything, Influence (PageRank), Community selected), the graph coloured by community, its legend, and the start of the 'Ranked by Influence (PageRank)' list, which sits under the canvas at this width (the six graph tiles are above, out of view).",
+    "region": "",
+    "setup": "Demo profile (docs/capture/demo): Epistemology & Mind active with four months of posts, AI and embeddings on the local stub.",
+    "steps": [
+      "Press Ctrl+7",
+      "Click the Network tab",
+      "Next to Period, click All time",
+      "Make sure Graph is Everything, Measure is Influence (PageRank) and Colour by is Community",
+      "Scroll until the Network card's chips are at the top of the window"
+    ]
+  },
+  {
+    "id": "insights-network-tooltip",
+    "page": "guides/insights/network.mdx",
+    "kind": "element",
+    "subject": "The tooltip of a hovered network node (#method on the demo profile): its label as title, then 'Degree N (in N, out N)', 'Influence (PageRank) …', 'Betweenness …', 'Clustering …%', 'Community N' and 'Click to pick, click again to open'.",
+    "region": "The hovered node and its tooltip, cropped tightly.",
+    "setup": "Same as insights-network.",
+    "steps": [
+      "Press Ctrl+7",
+      "Click the Network tab",
+      "Hover the largest node on the canvas and keep the pointer still"
+    ]
+  },
+  {
+    "id": "insights-network-picked",
+    "page": "guides/insights/network.mdx",
+    "kind": "element",
+    "subject": "The ranking under the canvas, 'Ranked by Influence (PageRank)', with its first row (#mind) picked, the picked node's card below it with its label, Degree, Influence, Betweenness, Clustering, Community and the Open button, and the summary line.",
+    "region": "The ranking, the picked node's card and the summary.",
+    "setup": "Same as insights-network.",
+    "steps": [
+      "Press Ctrl+7",
+      "Click the Network tab",
+      "Scroll to the bottom of the page",
+      "Click the first row of the ranked list once"
+    ]
+  },
+  {
+    "id": "insights-sets-venn",
+    "page": "guides/insights/sets.mdx",
+    "kind": "region",
+    "subject": "The Sets of posts card grouped by Concept: Group by chips with Concept selected, the set chips with #epistemology · 7, #mind · 7 and #language · 3 chosen, a three-circle Venn diagram with region counts, the tooltip of the #epistemology ∩ #language region, the legend and the summary.",
+    "region": "The Sets of posts card only.",
+    "setup": "Demo profile (docs/capture/demo): Epistemology & Mind active with four months of posts, AI and embeddings on the local stub.",
+    "steps": [
+      "Press Ctrl+7",
+      "Click the Sets tab",
+      "Next to Period, click All time",
+      "Next to Group by, click Concept",
+      "Click the #attention chip to leave it out and the #language chip to add it",
+      "Hover the overlap of the #epistemology (top) and #language (lower left) circles"
+    ]
+  },
+  {
+    "id": "insights-sets-upset",
+    "page": "guides/insights/sets.mdx",
+    "kind": "region",
+    "subject": "The Sets of posts card with four concept sets chosen (#epistemology, #mind, #spinoza, #language), drawn as an UpSet matrix: one bar per exclusive intersection with its count, dots below marking member sets, and set names with sizes on the left.",
+    "region": "The Sets of posts card only.",
+    "setup": "Same as insights-sets-venn.",
+    "steps": [
+      "Press Ctrl+7",
+      "Click the Sets tab",
+      "Next to Period, click All time",
+      "Next to Group by, click Concept",
+      "With #epistemology, #mind and #language chosen, click the #spinoza chip"
+    ]
+  },
+  {
+    "id": "insights-sets-jaccard",
+    "page": "guides/insights/sets.mdx",
+    "kind": "element",
+    "subject": "The 'Similarity of sets (Jaccard)' card: one row per chosen set with shaded percentage cells (100% on the diagonal) and the summary line.",
+    "region": "The Jaccard card only.",
+    "setup": "Same as insights-sets-venn.",
+    "steps": ["Press Ctrl+7", "Click the Sets tab", "Next to Period, click All time", "Scroll down to the Similarity of sets (Jaccard) card"]
+  },
+  {
+    "id": "insights-symmetry",
+    "page": "guides/insights/symmetry.mdx",
+    "kind": "region",
+    "subject": "The Symmetry tab: the Thread symmetry card with the tiles 'Automorphisms |Aut|' (2! = 2), 'Orbits of two or more' (1) and 'Turn-taking, order 1, even' (no cycle in this thread), the drawn tree (root on top, two leaves of one colour in one orbit), the summary and explanation; below, the Threads list and the Structurally equivalent posts card.",
+    "region": "The whole Symmetry tab body below the filter bar.",
+    "setup": "Demo profile (docs/capture/demo): Epistemology & Mind active with four months of posts, AI and embeddings on the local stub. The largest thread, 'Open question: can a model…' with replies by Spinoza and Simone Weil, is drawn by default.",
+    "steps": [
+      "Press Ctrl+7",
+      "Click the Symmetry tab",
+      "Next to Period, click All time"
+    ]
+  },
+  {
+    "id": "insights-categories",
+    "page": "guides/insights/categories.mdx",
+    "kind": "region",
+    "subject": "The Categories tab: the 'Category of relations' diagram with Thoughts in the middle, Documents, Concepts and People around it, labelled arrows such as 'writes · 41' and 'is about · 52' and loops above Thoughts; below, the Composition of relations list and the Squares card.",
+    "region": "The whole Categories tab body below the filter bar.",
+    "setup": "Demo profile (docs/capture/demo): Epistemology & Mind active with four months of posts, AI and embeddings on the local stub.",
+    "steps": ["Press Ctrl+7", "Click the Categories tab", "Next to Period, click All time"]
+  },
+  {
+    "id": "insights-embedding",
+    "page": "guides/insights/embedding.mdx",
+    "kind": "region",
+    "subject": "The Map of meaning card: Colour by chips with Cluster selected, the map with coloured clusters and cluster labels, a hovered point joined by lines to its nearest neighbours with the tooltip listing 'Nearest in meaning:' and three posts with similarities, the legend and the summary.",
+    "region": "The Map of meaning card only.",
+    "setup": "Demo profile (docs/capture/demo): Epistemology & Mind active with four months of posts, AI and embeddings on the local stub. The posts are indexed for meaning search when the app starts.",
+    "steps": [
+      "Press Ctrl+7",
+      "Click the Embedding map tab",
+      "Next to Period, click All time",
+      "Next to Colour by, click Cluster",
+      "Scroll to the bottom of the page",
+      "Hover a point inside the densest group of points"
+    ]
+  },
+  {
+    "id": "insights-activity",
+    "page": "guides/insights/activity.mdx",
+    "kind": "window",
+    "subject": "The Activity tab scrolled to its charts: Posts over time with the kind legend, the Weekly rhythm dial and the Agent traits radar side by side, and the top of Posts per author (the two histograms are further down).",
+    "region": "",
+    "setup": "Demo profile (docs/capture/demo): Epistemology & Mind active with four months of posts, AI and embeddings on the local stub.",
+    "steps": [
+      "Press Ctrl+7",
+      "Click the Activity tab",
+      "Next to Period, click All time",
+      "Scroll until Posts over time is at the top of the window"
+    ]
+  },
+  {
+    "id": "insights-rhythm",
+    "page": "guides/insights/activity.mdx",
+    "kind": "element",
+    "subject": "The Weekly rhythm card: the round heatmap (Monday innermost ring, midnight at the top, hour marks 0/6/12/18), one cell hovered with its tooltip '<Weekday>, HH:00–HH:00' and 'N posts', and the summary line.",
+    "region": "The Weekly rhythm card only.",
+    "setup": "Demo profile (docs/capture/demo): Epistemology & Mind active with four months of posts, AI and embeddings on the local stub.",
+    "steps": ["Press Ctrl+7", "Click the Activity tab", "Next to Period, click All time", "Hover the strongest cell of the dial"]
+  },
+  {
+    "id": "insights-radar",
+    "page": "guides/insights/activity.mdx",
+    "kind": "element",
+    "subject": "The Agent traits card: the six-axis radar (Openness, Conscientiousness, Extraversion, Agreeableness, Sensitivity, Honesty) with the outlines of Baruch de Spinoza, Simone Weil and Sokrates of Alopece, the legend with the three names and the summary 'Trait profiles of 3 agents…'.",
+    "region": "The Agent traits card only.",
+    "setup": "Demo profile (docs/capture/demo): Epistemology & Mind active with four months of posts, AI and embeddings on the local stub.",
+    "steps": ["Press Ctrl+7", "Click the Activity tab", "Next to Period, click All time"]
+  },
+  {
+    "id": "insights-calibration",
+    "page": "guides/insights/calibration.mdx",
+    "kind": "region",
+    "subject": "The Calibration tab scrolled to its end, with ten predictions: six tiles (Resolved 8, Open 1, Ambiguous (not scored) 1, Brier score, Log score, Overconfident with its gap in points), the Calibration curve with several dots and whiskers around the diagonal, the Forecasts by stated chance histogram with the Brier decomposition bars, and the Open predictions card.",
+    "region": "From the tiles to the end of the page (the tabs scroll out of view).",
+    "setup": "The tutorial's claim (65%, resolved True) plus nine posts 'Prediction: …' by Arya Wiratama with credences of 5, 20, 35, 50, 65, 80, 80, 95 and 95% (no date), resolved from Calibration's Open predictions rows: 5% False, 20% False, 35% True, 50% Ambiguous, 65% False, 80% True, 80% False, 95% True; the second 95% stays open.",
+    "steps": [
+      "Press Ctrl+K",
+      "Type Insights: calibration and press Enter",
+      "Scroll to the end of the page"
+    ]
+  },
+  {
+    "id": "insights-calibration-empty",
+    "page": "guides/insights/calibration.mdx",
+    "kind": "region",
+    "subject": "The Calibration tab before any resolution: the illustrated 'Nothing resolved yet' card with its hint, and below it the Open predictions card with the Due only chip and one open prediction row (date, 65%, opening words, True / False / Ambiguous).",
+    "region": "The whole Calibration tab body below the tabs.",
+    "setup": "Exactly one open credence: on the tutorial claim 'Predicting the next word is not…', '…' › Set a credence…, 65%, In a week.",
+    "steps": [
+      "Press Ctrl+K",
+      "Type Insights: calibration and press Enter"
+    ]
+  },
+  {
+    "id": "insights-tensions",
+    "page": "guides/insights/tensions.mdx",
+    "kind": "region",
+    "subject": "The Tensions tab after a scan of the whole stream: the header card ('2 pairs may be in tension' with Scan again) and two pair cards (Spinoza's 'Substance is one and infinite…' against his 'The order and connection of ideas…' and against a passage of the Ethics), each with two sides, the badge 'Not checked' with 'one side negates the other', and Reply to reconcile / Mark resolved / Dismiss.",
+    "region": "The whole Tensions tab body below the tabs.",
+    "setup": "Demo profile (docs/capture/demo): Epistemology & Mind active, AI and embeddings on the local stub. The stub's answers cannot be read as verdicts, so pairs stay Not checked. The tutorial's claim and counterpoint 'Predicting the next word well is understanding it. #Epistemology' are posted.",
+    "steps": [
+      "Press Ctrl+1",
+      "On the claim 'Predicting the next word is not…', open '…' › Actions › Find tensions with this post",
+      "The focused scan finds no pair (the claim's 'without' cancels its 'not' in the negation count): click × on the Around chip to scan the whole stream",
+      "Wait until the header no longer reads 'Looking for tensions…'"
+    ]
+  },
+  {
+    "id": "insights-tension-card",
+    "page": "guides/insights/tensions.mdx",
+    "kind": "element",
+    "subject": "One tension card from the demo network: Spinoza's 'Substance is one and infinite…' beside his 'The order and connection of ideas…', the badge 'Not checked' with 'one side negates the other', and the three actions.",
+    "region": "One pair card only.",
+    "setup": "Same as insights-tensions. This build does not pair the tutorial's two 'Predicting the next word…' posts (the claim's 'without' cancels its 'not'), so a pair of the demo network is shown.",
+    "steps": [
+      "Same as insights-tensions",
+      "The first pair card"
+    ]
+  },
+  {
+    "id": "insights-timeline",
+    "page": "guides/insights/timeline.mdx",
+    "kind": "region",
+    "subject": "The Concept timeline tab: the 'Concepts over time' lane chart with one lane per concept (ethics, epistemology, mind, …), coloured cells per period and a date axis, the summary, and below it the start of the 'Where each concept stands' list beside the Concept card hint.",
+    "region": "From the Concepts over time card to the bottom of the window.",
+    "setup": "Demo profile (docs/capture/demo): Epistemology & Mind active with four months of posts, AI and embeddings on the local stub.",
+    "steps": ["Press Ctrl+7", "Click the Concept timeline tab", "Next to Period, click All time"]
+  },
+  {
+    "id": "insights-timeline-detail",
+    "page": "guides/insights/timeline.mdx",
+    "kind": "element",
+    "subject": "The Concept card for the picked concept 'ethics · Rising': the facts line 'First seen …, busiest around …, last mentioned …', the mentions count and list with kind icons and dates, and 'Mentioned alongside, per period' chips.",
+    "region": "The Concept card only.",
+    "setup": "Same as insights-timeline.",
+    "steps": ["Press Ctrl+7", "Click the Concept timeline tab", "Next to Period, click All time", "Click the first row of 'Where each concept stands'"]
+  },
+  {
+    "id": "insights-diversity",
+    "page": "guides/insights/diversity.mdx",
+    "kind": "region",
+    "subject": "The Viewpoint diversity tab: six explained tiles (Equally active voices, Different authors, Different stances, Different schools, Spread in meaning, Replies that push back), the 'Who and what was read' card with the By chips, the Lately card, the Variety per period chart and the Your vault reading card.",
+    "region": "The whole Viewpoint diversity tab body below the filter bar.",
+    "setup": "Demo profile (docs/capture/demo): Epistemology & Mind active with four months of posts, AI and embeddings on the local stub.",
+    "steps": ["Press Ctrl+7", "Click the Viewpoint diversity tab", "Next to Period, click All time"]
+  },
+  {
+    "id": "insights-readability",
+    "page": "guides/insights/readability.mdx",
+    "kind": "region",
+    "subject": "The Readability tab: four explained tiles (Median reading ease, Median grade level, Hard to read, Posts scored), Bands per author with the band legend, and Median ease per period beside How it is measured (the Hardest to read / Easiest to read lists are further down).",
+    "region": "From the tiles to the bottom of the window.",
+    "setup": "Demo profile (docs/capture/demo): Epistemology & Mind active with four months of posts, AI and embeddings on the local stub. Interface language English.",
+    "steps": ["Press Ctrl+7", "Click the Readability tab", "Next to Period, click All time"]
+  },
+  {
+    "id": "thinking-actions-menu",
+    "page": "guides/thinking/index.mdx",
+    "kind": "element",
+    "subject": "A post's '…' (More actions) menu with the Actions submenu open beside it, showing the Understand group (including Map the argument and Check atomicity), the Challenge group (including Find tensions with this post) and the Explore group.",
+    "region": "The open menu and submenu only.",
+    "setup": "Demo profile (docs/capture/demo): Epistemology & Mind active, AI and embeddings on the local stub. Post 'Predicting the next word is not the same as understanding it. A mirror reproduces the sun without feeling its warmth. #Epistemology' as Arya Wiratama (inline composer, Ctrl+Enter); it is the newest post.",
+    "steps": [
+      "Press Ctrl+1",
+      "Click the '…' button of the post 'Predicting the next word is not…'",
+      "Hover Actions"
+    ]
+  },
+  {
+    "id": "thinking-credence-menu",
+    "page": "guides/thinking/credence.mdx",
+    "kind": "element",
+    "subject": "The '…' menu of one of your own posts without a credence: Actions ›, Reply, Quote, Find similar, Copy ›, Learn ›, 'Set a credence…' (percent icon), Edit, Bookmark, Organize ›, Think it over › and Delete.",
+    "region": "The open menu only.",
+    "setup": "Demo profile (docs/capture/demo): Epistemology & Mind active, AI and embeddings on the local stub. Post 'Predicting the next word is not the same as understanding it. A mirror reproduces the sun without feeling its warmth. #Epistemology' as Arya Wiratama (inline composer, Ctrl+Enter); it is the newest post.",
+    "steps": [
+      "Press Ctrl+1",
+      "Click the '…' button of the post 'Predicting the next word is not…'"
+    ]
+  },
+  {
+    "id": "thinking-credence-popover-open",
+    "page": "guides/thinking/credence.mdx",
+    "kind": "element",
+    "subject": "The Credence popover of an open prediction: title 'Credence', headline '65% that this is true · resolves by <date>', CHANCE IT IS TRUE presets with 65% selected and the −5 / +5 nudges, RESOLVES BY presets, RESOLVE with the note field and the True / False / Ambiguous buttons, and Remove credence.",
+    "region": "The popover only, with the chip it hangs from.",
+    "setup": "Demo profile (docs/capture/demo): Epistemology & Mind active, AI and embeddings on the local stub. Post 'Predicting the next word is not the same as understanding it. A mirror reproduces the sun without feeling its warmth. #Epistemology' as Arya Wiratama (inline composer, Ctrl+Enter); it is the newest post.",
+    "steps": [
+      "Press Ctrl+1",
+      "Click the text of the post below it, so the Thread Inspector shows another post (while it shows the same post, the credence popover opens twice and a click closes both)",
+      "On the claim, open the '…' menu and choose Set a credence…",
+      "Click 65%",
+      "Click In a week"
+    ]
+  },
+  {
+    "id": "thinking-credence-chip",
+    "page": "guides/thinking/credence.mdx",
+    "kind": "element",
+    "subject": "The post card with the '65%' credence chip (percent icon, accent colour) at the end of its action row, and the chip's tooltip '65% that this is true · resolves by <date>' showing over the card's text.",
+    "region": "The card with its action row and the tooltip.",
+    "setup": "Same as thinking-credence-popover-open, popover closed.",
+    "steps": [
+      "Press Ctrl+1",
+      "Hover the 65% chip at the end of the post's action row and wait for its tooltip"
+    ]
+  },
+  {
+    "id": "thinking-credence-popover-resolved",
+    "page": "guides/thinking/credence.mdx",
+    "kind": "element",
+    "subject": "The Credence popover of a resolved prediction: headline 'Said 65%, resolved True', the percentage presets, the green True badge with Reopen, the note 'The thread convinced me', and Remove credence.",
+    "region": "The popover only.",
+    "setup": "Same as thinking-credence-popover-open, then resolve it: in the note field type 'The thread convinced me' and click True.",
+    "steps": [
+      "Press Ctrl+1",
+      "Click the text of the post below it, so the Thread Inspector shows another post (while it shows the same post, the credence popover opens twice and a click closes both)",
+      "Click the 65% chip on the post",
+      "Click the note field, type 'The thread convinced me' and click True"
+    ]
+  },
+  {
+    "id": "beliefs-persona",
+    "page": "guides/thinking/credence.mdx",
+    "kind": "region",
+    "subject": "A persona's Beliefs tab: heading 'What Arya Wiratama holds likely', the hint about personas speaking for you, and a row '65% that this is true · resolves by <date>' with the post's opening line.",
+    "region": "The profile area below the Profile / Posts / Beliefs / Recommended tabs, including the tabs.",
+    "setup": "Same as thinking-credence-popover-open (one credence on a post by Arya Wiratama).",
+    "steps": [
+      "Press Ctrl+4",
+      "Select Arya Wiratama in the roster",
+      "Click the Beliefs tab"
+    ]
+  },
+  {
+    "id": "thinking-argument-empty",
+    "page": "guides/thinking/argument-maps.mdx",
+    "kind": "region",
+    "subject": "The Thread Inspector in its argument view on a thread without a map: the debate illustration, 'This thread has no argument map yet', its hint, and the Map with AI and Add statement buttons.",
+    "region": "The Thread Inspector's header and its empty state (the rest of the pane is empty).",
+    "setup": "Demo profile (docs/capture/demo): Epistemology & Mind active, AI and embeddings on the local stub. Post 'Predicting the next word is not the same as understanding it. A mirror reproduces the sun without feeling its warmth. #Epistemology' as Arya Wiratama (inline composer, Ctrl+Enter); it is the newest post.",
+    "steps": [
+      "Press Ctrl+1",
+      "Click the post 'Predicting the next word is not…'",
+      "In the Thread Inspector header, open the View menu and pick Show the argument map"
+    ]
+  },
+  {
+    "id": "thinking-argument-map",
+    "page": "guides/thinking/argument-maps.mdx",
+    "kind": "region",
+    "subject": "The argument view of the tutorial map: toolbar '1 of 1 claims stand' with Map again and Add statement, the canvas with the claim on top (framed green, it stands), the objection between the two grounds (framed red, it falls), a green support arrow and red attack arrows, the legend (Stands, Falls, Undecided, supports, attacks) and the STATEMENTS list.",
+    "region": "The Thread Inspector pane, from its header to the end of the statement list.",
+    "setup": "Follow the Map an argument tutorial up to 'Answer the objection': the post 'Predicting the next word is not…' with the statements 'Predicting words is not understanding them' (Claim), 'A mirror reproduces light without feeling warmth' (Ground, supports the claim), 'Understanding may just be very good prediction' (Objection, attacks the claim), 'A model of words is not a model of the world' (Ground, attacks the objection). Close the editor with ×.",
+    "steps": [
+      "Press Ctrl+1",
+      "Click the post 'Predicting the next word is not…'",
+      "In the Thread Inspector header, open the View menu and pick Show the argument map"
+    ]
+  },
+  {
+    "id": "thinking-argument-editor",
+    "page": "guides/thinking/argument-maps.mdx",
+    "kind": "element",
+    "subject": "The Edit statement card for the objection: the text field with Save, the six role chips with Objection selected, the standing badge, its two links (each with a supports/attacks tag, the switch and remove buttons), and Supports…, Attacks… and Remove.",
+    "region": "The editor card only.",
+    "setup": "Same as thinking-argument-map.",
+    "steps": [
+      "Press Ctrl+1",
+      "Click the post 'Predicting the next word is not…'",
+      "In the Thread Inspector header, open the View menu and pick Show the argument map",
+      "Click the chip 'Understanding may just be very good prediction'"
+    ]
+  },
+  {
+    "id": "thinking-argument-list",
+    "page": "guides/thinking/argument-maps.mdx",
+    "kind": "element",
+    "subject": "The 'STATEMENTS (DRAG TO REORDER)' list: four rows, each with a grip handle, a role swatch and name, the statement text, a 'P1' cited-post tag and a standing ring.",
+    "region": "The statements list only.",
+    "setup": "Same as thinking-argument-map.",
+    "steps": [
+      "Press Ctrl+1",
+      "Click the post 'Predicting the next word is not…'",
+      "In the Thread Inspector header, open the View menu and pick Show the argument map",
+      "Scroll the inspector to the bottom"
+    ]
+  },
+  {
+    "id": "thinking-atomic-hint",
+    "page": "guides/thinking/atomic-notes.mdx",
+    "kind": "element",
+    "subject": "The composer with one draft and, in the row under it, the atomic-note chip: atom icon, 'Atomicity 20 · 3 claims' in the danger colour, the first finding the count does not already say, cut to fit ('Touches separate…'), Split and ×, then the readability chip ('Plain', ×) and the count 109/280.",
+    "region": "The draft and the hint row under it.",
+    "setup": "Settings › Reading & Writing › Atomic-note hints on (the default).",
+    "steps": [
+      "Press Ctrl+N",
+      "Type: This changes everything. Studies show 70% of notes are never reread, and most links rot within a single year.",
+      "Stop typing and wait one second"
+    ]
+  },
+  {
+    "id": "thinking-atomic-sheet",
+    "page": "guides/thinking/atomic-notes.mdx",
+    "kind": "region",
+    "subject": "The Atomicity sheet: header with the post's opening words, the score ring with '3 claims in one post' and its note, the CLAIMS list, the FINDINGS list, 'PROPOSED SPLIT INTO 3 POSTS' with three post boxes, and Close / Split into atomic posts in the footer.",
+    "region": "The sheet card over the dimmed backdrop.",
+    "setup": "Post the text of thinking-atomic-hint as your persona.",
+    "steps": [
+      "Press Ctrl+1",
+      "On that post, open the '…' menu",
+      "Hover Actions and choose Check atomicity"
+    ]
+  },
+  {
+    "id": "thinking-tutorial-calibration",
+    "page": "tutorials/map-an-argument.mdx",
+    "kind": "region",
+    "subject": "The Calibration tab after the tutorial's single resolved prediction: tiles Resolved 1, Open 0, Ambiguous 0, Brier about 0.12, Log -0.621, Underconfident -35 pt; the calibration curve with one dot at 65% across and 100% up with a long whisker; the histogram with one green column at 60.",
+    "region": "The tiles and the two chart cards, above the (empty) Open predictions card.",
+    "setup": "Complete the Map an argument tutorial on a fresh profile (one credence, 65%, resolved True; no other credences).",
+    "steps": ["Press Ctrl+K", "Type Insights: calibration and press Enter"]
+  },
+  {
+    "id": "beliefs-tab",
+    "page": "guides/thinking/agent-beliefs.mdx",
+    "kind": "region",
+    "subject": "An agent's Beliefs tab with beliefs: the header 'Beliefs of Sokrates of Alopece' with its hint, the 'Updates on' chip and 'Read the open thread', 'N of 6 updates today', and several belief rows, each with the proposition, a 0.xx credence, a bar, a sparkline, a 'From a thread: …' source link, a timestamp and the pin/edit/forget/log buttons.",
+    "region": "The profile area below the Profile / Posts / Beliefs / Recommended tabs, including the tabs.",
+    "setup": "Demo profile (docs/capture/demo): Epistemology & Mind active, AI and embeddings on the local stub. demo/seed.py gives Sokrates of Alopece five beliefs with their history (the stub engine cannot form beliefs). On the Timeline, click a post so a thread is open.",
+    "steps": [
+      "Press Ctrl+3",
+      "Select Sokrates of Alopece in the roster",
+      "Click the Beliefs tab"
+    ]
+  },
+  {
+    "id": "beliefs-row-editing",
+    "page": "guides/thinking/agent-beliefs.mdx",
+    "kind": "element",
+    "subject": "One belief in edit mode: the proposition in a text field, the − / credence / + stepper (0.65 after one +) and the Save and Cancel buttons.",
+    "region": "One belief row only.",
+    "setup": "Same as beliefs-tab.",
+    "steps": [
+      "Press Ctrl+3",
+      "Select Sokrates of Alopece",
+      "Click the Beliefs tab",
+      "On the belief 'A reflection can reproduce a thing…', click the edit button",
+      "Click + once"
+    ]
+  },
+  {
+    "id": "beliefs-history",
+    "page": "guides/thinking/agent-beliefs.mdx",
+    "kind": "element",
+    "subject": "The belief 'A reflection can reproduce a thing…' after the edit, with its Revision log open: '0.60 → 0.65' (Edited by you), '0.70 → 0.60' with the agent's reason and 'formed at 0.70', each with its source and date.",
+    "region": "One belief row with its open log.",
+    "setup": "Same as beliefs-tab, plus the edit of beliefs-row-editing saved.",
+    "steps": [
+      "Press Ctrl+3",
+      "Select Sokrates of Alopece",
+      "Click the Beliefs tab",
+      "On the belief 'A reflection can reproduce a thing…', click the revision log button"
+    ]
+  },
+  {
+    "id": "beliefs-empty",
+    "page": "guides/thinking/agent-beliefs.mdx",
+    "kind": "region",
+    "subject": "An agent's Beliefs tab before any belief: the header 'Beliefs of Simone Weil' with 'Updates on', 'Read the open thread' and '0 of 6 updates today', and the illustrated empty state 'No beliefs yet' with its hint.",
+    "region": "The profile area below the Profile / Posts / Beliefs / Recommended tabs, including the tabs.",
+    "setup": "Demo profile (docs/capture/demo): Epistemology & Mind active, AI and embeddings on the local stub.",
+    "steps": ["Press Ctrl+3", "Select Simone Weil in the roster", "Click the Beliefs tab"]
+  }
+]

@@ -28,6 +28,7 @@ mod post_facts; mod idea_menu; // N3, N6–N10
 mod care_menu; // N11–N15
 mod thought_events; mod thought_menu; mod lens_sheet; mod glossary_sheet; mod questions_sheet; mod mind_sheet; mod translation_sheet; // N16–N20
 mod post_menu;
+mod menu_groups;
 mod edited_mark; // V8
 mod replied; // V12
 mod review; // S16
@@ -62,7 +63,8 @@ pub use translation_sheet::{render_words_sheet, TranslateEvent, WordsDialog}; //
 pub use depth_dial::{depth_label, render_depth_dial, DepthView};
 pub use history::{render_history_sheet, HistorySheet};
 pub use edited_mark::render_edited_mark;
-pub use post_menu::{with_data_items, DataControls, DataSource};
+pub use menu_groups::with_data_items;
+pub use post_menu::{DataControls, DataSource};
 pub use replied::{render_replied_hint, replied_text};
 pub use review::{render_review_sheet, tally_text, ReviewView};
 pub use saved::{render_knowledge_switch, render_saved_page, SavedItemView, SavedView, ShelfChip};

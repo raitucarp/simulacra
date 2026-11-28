@@ -43,6 +43,8 @@ pub struct SettingsData {
     pub ai_dirty: bool,
     /// "Reset all settings" was clicked once and waits for the confirming click.
     pub confirm_reset: bool,
+    /// An embedding run is going: only then can Stop indexing stop something.
+    pub indexing: bool,
 }
 
 /// Text inputs owned by the shell.

@@ -70,7 +70,7 @@ fn render_text(badge: &IndexingBadge, theme: &ThemeTokens) -> Div {
         .flex_col()
         .gap(theme.spacing_3xs)
         .child(div().text_size(theme.font_size_xs).text_color(theme.text_primary).child(title))
-        .children(reason.map(|reason| div().text_size(theme.font_size_2xs).text_color(theme.text_muted).line_clamp(2).child(reason)))
+        .children(reason.map(|reason| div().text_size(theme.font_size_2xs).text_color(theme.text_muted).child(reason))) // the whole reason: cut at two lines it lost its advice mid-word
         .children(fraction.map(|fraction| progress_bar(fraction, theme)))
 }
 

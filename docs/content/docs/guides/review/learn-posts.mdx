@@ -1,0 +1,129 @@
+---
+title: Learn posts and passages
+description: Add a question or an answer to any post, or learn sentences and paragraphs of a vault document.
+icon: CircleQuestionMark
+---
+
+Nothing in Review is a free-floating flashcard. You pick a source, a post or a passage of a vault document, and write the other face yourself: a question the source answers, or the answer the source prompts. The review then always shows the source itself, never a copy.
+
+## Question or answer
+
+| You choose | The source is | You write | In a review you see |
+|---|---|---|---|
+| <UiLabel>Add question</UiLabel> | the answer | <UiLabel>Your question</UiLabel> | your question, then recall the post |
+| <UiLabel>Add answer</UiLabel> | the prompt | <UiLabel>Your answer</UiLabel> | the post, then recall your answer |
+
+Use <UiLabel>Add question</UiLabel> when the post says something you want to be able to produce; use <UiLabel>Add answer</UiLabel> when the post asks or names something and you want to remember your response to it. Write in your own words: rephrasing is itself a step of learning.
+
+## Ways in
+
+| From | Do this |
+|---|---|
+| A post in the stream | Open its <UiLabel>…</UiLabel> menu › <UiLabel>Learn</UiLabel> › <UiLabel>Add question</UiLabel> or <UiLabel>Add answer</UiLabel>. |
+| The thought open in the inspector | Run <UiLabel>Learn the open thought</UiLabel> in the command palette. With no thought open, it opens the post picker. |
+| The Review page | Click <UiLabel>Pick posts to learn</UiLabel> in the header, then <UiLabel>Add question</UiLabel> or <UiLabel>Add answer</UiLabel> on a post. |
+| A vault entry | Open the entry in the [Knowledge Vault](/docs/guides/vault) and click <UiLabel>Learn passages</UiLabel> under its title. |
+
+<Screenshot id="review-post-learn-menu" alt="A post's … menu with the Learn submenu open: Add question, Add answer and Learn this thread's connections" caption="The Learn submenu of a post that is not being learnt yet." size="md" />
+
+### The Learn submenu
+
+| Item | Shown when | What it does |
+|---|---|---|
+| <UiLabel>Add question</UiLabel> | the post is not being learnt | Opens the learn sheet with the post as the answer. |
+| <UiLabel>Add answer</UiLabel> | the post is not being learnt | Opens the learn sheet with the post as the prompt. |
+| <UiLabel>Edit review</UiLabel> | the post is being learnt | Opens its item in the learn sheet. |
+| <UiLabel>Stop learning</UiLabel> | the post is being learnt | Removes the item at once; a toast confirms that its past answers stay in the statistics. |
+| <UiLabel>Learn this thread's connections</UiLabel> | always | Seeds a [connection map](/docs/guides/review/connection-maps) from the post's thread. |
+
+A post keeps one item. Asking to learn a post that already has one opens that item for editing.
+
+### The learning indicator
+
+<Screenshot id="review-learn-badge" alt="A small chip with a graduation cap reading New on a post card" caption="A post in review carries a small chip saying where it stands." size="sm" />
+
+| Chip | Meaning |
+|---|---|
+| <UiLabel>New</UiLabel> | Not reviewed yet |
+| <UiLabel>Due</UiLabel> | Due today or overdue |
+| "In N d" | Due in N days |
+| <UiLabel>Paused</UiLabel> | Suspended under [Items](/docs/guides/review/items) |
+
+## The learn sheet
+
+<Screenshot id="review-learn-sheet-post" alt="The Learn this post sheet: the post as it reads in the stream, the Add question and Add answer switch, the question field, tags and the footer" caption="Learning a post: the post itself is one face, you write the other." size="md" />
+
+The sheet opens over the page with a scrim. Its title says what you are doing: <UiLabel>Learn this post</UiLabel>, <UiLabel>Learn passages</UiLabel> or <UiLabel>Edit review</UiLabel>.
+
+1. **The source**, drawn exactly as the stream shows it (avatar, name, handle, time and body), or the chosen passage as a quote with the document's title and place ("Chapter 1 · ¶ 3 · sentence 2").
+2. **The switch** <UiLabel>Add question</UiLabel> / <UiLabel>Add answer</UiLabel> decides which face the source is. The tip under the field restates it, naming a passage as "the passage".
+3. **<UiLabel>Your question</UiLabel>** or **<UiLabel>Your answer</UiLabel>**: "Write it in your own words".
+4. **<UiLabel>Tags</UiLabel>**: comma separated, for example `ethics, Spinoza`. A leading `#` is dropped and repeats are removed. Tags show on the item and help multiple choice find plausible wrong answers.
+5. **The footer**: <UiLabel>Suggest with AI</UiLabel>, its status line, <UiLabel>Add another passage</UiLabel> (documents only) and <UiLabel>Save</UiLabel>.
+
+Close the sheet with its close button (<UiLabel>Close</UiLabel>), <Kbd>Esc</Kbd>, or a click on the scrim. Nothing is saved until you click <UiLabel>Save</UiLabel>; a toast then says how many items were saved.
+
+### Suggest with AI
+
+<UiLabel>Suggest with AI</UiLabel> asks your configured AI engine for the face you are writing: one question about the source's main idea, or the short answer a learner should recall. The text sent is the post (or the chosen passage), cut to 4,000 characters, and the reply is asked for in your interface language.
+
+| Status | Meaning |
+|---|---|
+| <UiLabel>Writing a suggestion…</UiLabel> | The request is on its way; the button is disabled. |
+| <UiLabel>Suggestion added. Edit it before saving.</UiLabel> | The suggestion is in the field. It is never saved on its own. |
+| <UiLabel>Add an AI key in Settings › AI & Models to get suggestions.</UiLabel> | No key is set. |
+| <UiLabel>The AI's reply could not be read. Try again.</UiLabel> / <UiLabel>The AI did not suggest anything usable.</UiLabel> | The reply was unusable. |
+
+## Learn passages of a document
+
+<Screenshot id="review-learn-sheet-passages" alt="The Learn passages sheet on a vault document, with the Sentences and Paragraphs switch, the passage list, a chosen passage with its question, and one passage waiting to be saved" caption="A document offers its sentences or paragraphs; several passages can be saved at once." size="md" />
+
+<Steps>
+<Step>
+### Open the document's passages
+In the vault, open an entry and click <UiLabel>Learn passages</UiLabel>. The sheet lists the document's prose: headings are dropped, quote and list markers removed.
+</Step>
+<Step>
+### Pick a passage
+Choose <UiLabel>Sentences</UiLabel> or <UiLabel>Paragraphs</UiLabel>, then click a passage under "Pick a passage of …". Up to 400 of each are offered. The chosen passage appears as a quote at the top.
+</Step>
+<Step>
+### Write its question or answer
+Set the switch and write the other face, with tags if you like.
+</Step>
+<Step>
+### Add more, then save
+<UiLabel>Add another passage</UiLabel> moves the passage to <UiLabel>Passages to save (N)</UiLabel> and clears the field for the next one. Remove one with its <UiLabel>Remove</UiLabel> button. <UiLabel>Save</UiLabel> saves the list, plus the fields when they hold something.
+</Step>
+</Steps>
+
+A passage is kept as it was quoted when you picked it, with its place in the document.
+
+## The post picker
+
+<Screenshot id="review-picker-learn" alt="The Pick posts to learn screen with a search field and post rows, each with Add question and Add answer buttons" caption="The picker in learn mode." size="md" />
+
+<UiLabel>Pick posts to learn</UiLabel> lists the active network's posts, newest first (instant reposts left out), up to 80 rows at a time. Type in <UiLabel>Search</UiLabel> to keep only posts holding every word you type, in their text, author name or handle; "No post matches." says when none do.
+
+Each row offers <UiLabel>Add question</UiLabel> and <UiLabel>Add answer</UiLabel>, or <UiLabel>Learning · edit</UiLabel> when the post already has an item. The tab you opened it from stays lit, and the back button returns there (<UiLabel>Back to today</UiLabel>, <UiLabel>Back to Learn</UiLabel>, <UiLabel>Back to statistics</UiLabel> or <UiLabel>Back to items</UiLabel>). Rows show posts as plain text, without markup or links to other posts.
+
+## Problems the sheet reports
+
+| Message | Fix |
+|---|---|
+| <UiLabel>Write the question first.</UiLabel> | Fill <UiLabel>Your question</UiLabel>. |
+| <UiLabel>Write the answer first.</UiLabel> | Fill <UiLabel>Your answer</UiLabel>. |
+| <UiLabel>Pick a passage first.</UiLabel> | Choose a sentence or paragraph of the document. |
+
+## Tips and limits
+
+- Editing an item rewrites its faces and tags but keeps its schedule and history.
+- Words of a post's translation can be sent to review too: each becomes an item on that post, tagged `vocabulary` and with its language, the post being the answer. Set the language in **Settings › Learning › Language I am learning**.
+- The [tutor](/docs/guides/review/tutor) can also make items from the gaps of a dialogue, anchored to its source.
+
+## Related
+
+- [The review session](/docs/guides/review/sessions)
+- [Items](/docs/guides/review/items)
+- [Spaced repetition](/docs/concepts/spaced-repetition)
+- [The post menu](/docs/guides/post-tools)

@@ -24,7 +24,9 @@ pub(super) fn render(
     let hover_border = chrome.border_strong;
     div()
         .id(SharedString::from(format!("{CARD_ID_PREFIX}{}", palette.id)))
-        .w(chrome.theme_preview_card_width)
+        .flex_1()
+        .flex_basis(chrome.theme_preview_card_width)
+        .min_w(chrome.theme_preview_card_width)
         .flex()
         .flex_col()
         .rounded(chrome.radius_lg)

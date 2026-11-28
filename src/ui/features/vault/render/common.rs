@@ -66,7 +66,7 @@ pub fn badge(icon: LucideIcon, label: String, theme: &ThemeTokens) -> Div {
         .bg(theme.accent_brand_subtle)
         .text_size(theme.font_size_2xs)
         .font_weight(FontWeight::SEMIBOLD)
-        .text_color(theme.accent_brand)
+        .text_color(theme.accent_brand_text)
         .child(Icon::new(icon).size(theme.icon_size_xs))
         .child(label)
 }

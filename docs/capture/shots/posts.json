@@ -1,0 +1,674 @@
+[
+  {
+    "id": "composer-modal-new",
+    "page": "guides/composer/index.mdx",
+    "kind": "window",
+    "subject": "The composer window open over the Timeline for a new thread: header with Cancel, the title 'New thread' over 'Visible to members of this network', and the ⋯ button; one empty post with the avatar, '@architect' and the placeholder; the attachment bar and the 0/280 meter; Add to thread; and the footer tools ending in the Post button. The Tint and Symbols rows are folded behind the footer's palette button (Tint and symbols).",
+    "region": "",
+    "setup": "Fresh first-run profile with seed data, welcome tour skipped, active network Epistemology & Mind.",
+    "steps": [
+      "Press Ctrl+1 to open the Timeline",
+      "Press Ctrl+N"
+    ]
+  },
+  {
+    "id": "composer-inline",
+    "page": "guides/composer/index.mdx",
+    "kind": "region",
+    "subject": "The inline composer at the top of the stream with a short draft, the link, hashtag, Preview and five format buttons on the left, and the character meter and Post button on the right.",
+    "region": "The inline composer row only, between the stream tabs and the first post.",
+    "setup": "Fresh profile, Timeline open on Epistemology & Mind.",
+    "steps": [
+      "Click the inline composer's text area at the top of the stream",
+      "Type: Reading the Tractatus tonight. **Limits** of language, limits of world. #Wittgenstein"
+    ]
+  },
+  {
+    "id": "composer-modal-thread",
+    "page": "guides/composer/index.mdx",
+    "kind": "region",
+    "subject": "The composer window holding a three-post thread: three editors joined by thread lines, a character meter under each, a remove (×) button on posts 2 and 3, the 'Add to thread' row, and the footer ending in the 'Post all' button. The posts are short, so no writing hint shows.",
+    "region": "The composer dialog.",
+    "setup": "Fresh profile, Timeline open.",
+    "steps": [
+      "Press Ctrl+N",
+      "Type: Three things I keep forgetting about attention.",
+      "Click Add to thread",
+      "Type: It is a budget, not a tap.",
+      "Click Add to thread",
+      "Type: And it is spent before it is noticed."
+    ]
+  },
+  {
+    "id": "composer-footer-tools",
+    "page": "guides/composer/index.mdx",
+    "kind": "element",
+    "subject": "The composer window's footer: Preview (eye), Bold, Italic, Underline, Code, Spoiler, the palette (Tint and symbols), Schedule…, the padlock (Lock with password), the heart-pulse (Post a feeling), the list-tree (Free compose), the checklist (To-do syntax) and the Post button.",
+    "region": "The footer row of the composer dialog.",
+    "setup": "Fresh profile.",
+    "steps": [
+      "Press Ctrl+N",
+      "Type: Hello"
+    ]
+  },
+  {
+    "id": "composer-split-into-thread",
+    "page": "guides/composer/index.mdx",
+    "kind": "element",
+    "subject": "A draft over the limit: its meter in red (313/280), the 'Split into thread' button on the left of the meter row, and the red notice 'Post 1 is 33 characters over the 280-character limit. Shorten it or split it into a thread.'",
+    "region": "The first post's editor, its meter row and the notice line.",
+    "setup": "Fresh profile.",
+    "steps": [
+      "Press Ctrl+N",
+      "Type or paste about 310 characters of prose made of several sentences"
+    ]
+  },
+  {
+    "id": "composer-free-compose",
+    "page": "guides/composer/index.mdx",
+    "kind": "region",
+    "subject": "Free compose on: one editor with three lines (the second indented two spaces), and under it the preview headed '3 posts' with the hint 'Each line or bullet is a post; indent two spaces to reply.', each post's text and count n/280, the second one indented under the first. The Free compose button is lit.",
+    "region": "The composer dialog.",
+    "setup": "Fresh profile.",
+    "steps": [
+      "Press Ctrl+N",
+      "Click Free compose (the list-tree button) in the footer",
+      "Type the line: A reflection carries the shape of the sun, not its warmth.",
+      "Press Enter, type two spaces, then: Understanding needs a model that can be wrong, and a mirror cannot be wrong.",
+      "Press Enter, then type: So the question is whether prediction can be wrong in the way a belief can. #Epistemology"
+    ]
+  },
+  {
+    "id": "composer-preview",
+    "page": "guides/composer/index.mdx",
+    "kind": "region",
+    "subject": "The composer window in preview: the post rendered with bold text, a hidden spoiler and a Python code block card; the preview button shows the pencil (Back to editing) and the format buttons are hidden.",
+    "region": "The composer dialog.",
+    "setup": "Fresh profile.",
+    "steps": [
+      "Press Ctrl+N",
+      "Type: **Claim:** the answer is ||forty-two||",
+      "Press Enter twice and type a fenced block: ```python, then print(6 * 7), then ```",
+      "Click Preview (eye) in the footer"
+    ]
+  },
+  {
+    "id": "composer-modal-reply",
+    "page": "guides/composer/index.mdx",
+    "kind": "region",
+    "subject": "The composer titled 'Reply to @sokrates': Sokrates' post (author name and first line) above the draft, joined by a thread line, and a typed reply.",
+    "region": "The composer dialog.",
+    "setup": "Fresh profile, Timeline on Epistemology & Mind.",
+    "steps": [
+      "In the stream, find the post by Sokrates of Alopece starting 'Tell me, my friend'",
+      "Click its speech-bubble (reply) button",
+      "Type: A reflection carries the shape of the sun, not its warmth."
+    ]
+  },
+  {
+    "id": "composer-modal-quote",
+    "page": "guides/composer/index.mdx",
+    "kind": "region",
+    "subject": "The composer titled 'Quote @baruch_spinoza' with a typed comment and, under the first post, the quote preview card showing Baruch de Spinoza's name and handle and his post text read as plain text (no link ids).",
+    "region": "The composer dialog.",
+    "setup": "Fresh profile, Timeline on Epistemology & Mind.",
+    "steps": [
+      "Find the post by Baruch de Spinoza starting 'Substance is one and infinite'",
+      "Click its pen (quote) button",
+      "Type: The order of ideas and the order of things: same order, or same thing?"
+    ]
+  },
+  {
+    "id": "composer-feeling-bar",
+    "page": "guides/composer/index.mdx",
+    "kind": "region",
+    "subject": "The feeling bar open in place of the posts: 'Feeling' with two picked emoji (😌 ☕), 'Intensity' with step 4 selected, the note field reading 'after a long read', the emoji search field and the smileys grid. The heart-pulse button in the footer is lit.",
+    "region": "The composer dialog.",
+    "setup": "Fresh profile.",
+    "steps": [
+      "Press Ctrl+N",
+      "Click Post a feeling (heart-pulse) in the footer",
+      "Click 😌 in the grid",
+      "Type coffee in Search emoji and click ☕",
+      "Click 4 next to Intensity",
+      "Type in the note field: after a long read"
+    ]
+  },
+  {
+    "id": "composer-edit-version",
+    "page": "guides/composer/index.mdx",
+    "kind": "region",
+    "subject": "The composer titled 'Edit post' on Arya's own post, with the changed text, the attachment bar, the meter row with its writing hints, and the version row: 'Version', v1.0.0 → v1.0.1, Patch/Minor/Major with Patch selected, 'Suggested: Patch' and the 'Edit note (optional)' field. The tint and symbol rows are folded behind the footer's palette button; the main button reads 'Save changes'.",
+    "region": "The composer dialog.",
+    "setup": "Fresh profile, Timeline on Epistemology & Mind.",
+    "steps": [
+      "On Arya Wiratama's post starting 'Exploring how language', click ⋯",
+      "Click Edit",
+      "Add the word 'perhaps' at the end of the first sentence"
+    ]
+  },
+  {
+    "id": "composer-format-buttons",
+    "page": "guides/composer/formatting.mdx",
+    "kind": "element",
+    "subject": "The five format buttons (Bold, Italic, Underline, Code, Spoiler) of the inline composer with the tooltip 'Bold (Ctrl+B)' showing over the Bold button.",
+    "region": "The format buttons and the tooltip.",
+    "setup": "Fresh profile, Timeline open.",
+    "steps": [
+      "Hover the Bold button in the inline composer's toolbar and wait for its tooltip"
+    ]
+  },
+  {
+    "id": "post-spoiler",
+    "page": "guides/composer/formatting.mdx",
+    "kind": "element",
+    "subject": "A post body with two spoilers: the first hidden behind a solid fill, the second revealed on a faint tint.",
+    "region": "The post card's body.",
+    "setup": "Publish from the inline composer: The twist: ||the narrator is the mirror|| and ||the mirror is you||",
+    "steps": [
+      "In the published post, click the second spoiler only"
+    ]
+  },
+  {
+    "id": "composer-attachments",
+    "page": "guides/composer/attachments.mdx",
+    "kind": "region",
+    "subject": "The first post of the composer window with two attached images (thumbnail, 'Description (alt text)' field, ×), the first with a typed description; a PDF file chip (icon, name, size, ×); the link field open with a URL; and the attachment bar (Pick Image, Enter Image Path, Attach link, Insert hashtag, Image ideas).",
+    "region": "The first post's area inside the composer dialog.",
+    "setup": "Two PNG or JPEG images and one PDF somewhere on disk.",
+    "steps": [
+      "Press Ctrl+N",
+      "Type: Notes from the seminar",
+      "Click Enter Image Path and attach two images by path",
+      "Close the path field with ×",
+      "Type in the first image's description: Whiteboard with the argument map",
+      "Copy the PDF in the file manager and paste it into the post with Ctrl+V",
+      "Click Attach link and type https://plato.stanford.edu/entries/mental-representation/"
+    ]
+  },
+  {
+    "id": "media-gallery",
+    "page": "guides/composer/attachments.mdx",
+    "kind": "element",
+    "subject": "A post card with a three-image gallery in a two-column grid; the tile of the described (second) image shows the ALT badge in its lower left corner.",
+    "region": "The post card.",
+    "setup": "Three images on disk.",
+    "steps": [
+      "Press Ctrl+N and type: Three views of the same tree",
+      "Click Enter Image Path and attach the three images by path",
+      "Type a description for the second image",
+      "Press Ctrl+Enter"
+    ]
+  },
+  {
+    "id": "post-file-card",
+    "page": "guides/composer/attachments.mdx",
+    "kind": "element",
+    "subject": "A post with an attached PDF: the file card with its type art, the PDF's title (and authors when it has them), the facts line ending in its page count, and Open and Show in folder.",
+    "region": "The post card.",
+    "setup": "A PDF with a title in its metadata on disk.",
+    "steps": [
+      "Press Ctrl+N and type: The paper we discussed",
+      "Drag the PDF onto the composer window",
+      "Click Post",
+      "Wait a moment for the file scan to fill in the title and pages"
+    ]
+  },
+  {
+    "id": "post-link-card",
+    "page": "guides/composer/attachments.mdx",
+    "kind": "element",
+    "subject": "A post with a link preview card: the site icon, the domain (plato.stanford.edu) and the page title. The page offers no image or description, so the card has no thumbnail.",
+    "region": "The post card.",
+    "setup": "Network access; Settings › Privacy & Data › Fetch link previews on (the default).",
+    "steps": [
+      "In the inline composer type: Good overview https://plato.stanford.edu/entries/mental-representation/",
+      "Press Ctrl+Enter",
+      "Wait for the preview card to load"
+    ]
+  },
+  {
+    "id": "composer-voice-sheet",
+    "page": "guides/composer/attachments.mdx",
+    "kind": "region",
+    "subject": "The 'New voice note' sheet (subtitle 'Say it instead of typing it') before anything is recorded: the explanation, Record and Choose an audio file…, the 'Caption (optional)' field, and Cancel and the disabled 'Post voice note'.",
+    "region": "The voice note sheet.",
+    "setup": "Not recording: on the capture machine, Record waited on the default microphone and the window stopped responding, so the sheet is shown idle.",
+    "steps": [
+      "Click New in the left sidebar",
+      "Click New voice note"
+    ]
+  },
+  {
+    "id": "post-voice-card",
+    "page": "guides/composer/attachments.mdx",
+    "kind": "element",
+    "subject": "A voice post: its caption 'First thoughts on the definitions', then the voice card with the microphone mark, the Play button and 'Voice note · 0:12'. No transcript: the local stub engine takes no audio.",
+    "region": "The post card.",
+    "setup": "A voice note posted from a 12-second WAV file (Choose an audio file… in the New voice note sheet) with the caption 'First thoughts on the definitions'.",
+    "steps": [
+      "Scroll the stream to the voice post"
+    ]
+  },
+  {
+    "id": "composer-ink-sheet",
+    "page": "guides/composer/attachments.mdx",
+    "kind": "region",
+    "subject": "The 'New drawing' sheet: the explanation, four ink swatches (one ringed), widths 2, 4 and 8 with 4 selected, Undo and Clear, the pad with a circle and two arrows drawn, the caption field and 'Post drawing'.",
+    "region": "The drawing sheet.",
+    "setup": "Fresh profile.",
+    "steps": [
+      "Click New in the left sidebar",
+      "Click New drawing",
+      "Click the accent ink swatch and width 4",
+      "Draw a circle with two arrows coming out of it",
+      "Type in Caption (optional): One substance, two attributes"
+    ]
+  },
+  {
+    "id": "post-ink-card",
+    "page": "guides/composer/attachments.mdx",
+    "kind": "element",
+    "subject": "A drawing post: the caption, the sketch painted on its card, and the 'Open SVG' button under it.",
+    "region": "The post card.",
+    "setup": "The drawing from composer-ink-sheet.",
+    "steps": [
+      "In the New drawing sheet, click Post drawing",
+      "Scroll the stream to the new post"
+    ]
+  },
+  {
+    "id": "post-code-block",
+    "page": "guides/composer/attachments.mdx",
+    "kind": "element",
+    "subject": "A Python code block card after a run: header with 'python', Run and Copy code; the coloured code; the output panel with 'Python 3.x · Finished with exit code 0 in 0.1 s · <time>' and the printed output 45.",
+    "region": "The code block card in the post.",
+    "setup": "Python installed; Settings › Code › Run code blocks on, Refresh pressed so Python is found. Publish from the composer window a post 'The sum of the first ten numbers:' followed by a fenced block: ```python, print(sum(range(10))), ```.",
+    "steps": [
+      "On the published post's code block, click Run",
+      "Wait for the output panel"
+    ]
+  },
+  {
+    "id": "post-code-confirm",
+    "page": "guides/composer/attachments.mdx",
+    "kind": "region",
+    "subject": "The 'Run this code?' dialog for captured code: 'This code came in through a capture or an import, so it may not be yours. It runs with Python.', the red warning that it runs with your own rights, the code block, and Cancel and the red Run button.",
+    "region": "The confirm dialog.",
+    "setup": "Python installed and Settings › Code › Run code blocks on. Copy to the clipboard the text 'From the seminar handout:' followed by a fenced block: ```python, print('hello'), ```.",
+    "steps": [
+      "Click an empty part of the stream so no text field has focus",
+      "Press Ctrl+V to capture the clipboard",
+      "Run Open Inbox from the command palette",
+      "On the captured post's code block, click Run"
+    ]
+  },
+  {
+    "id": "composer-todo-help",
+    "page": "guides/composer/checklists-and-todos.mdx",
+    "kind": "region",
+    "subject": "The 'To-do syntax' card under the posts of the composer window: each box ([ ] [x] [>] [<] [~] [/]) and token (nesting, ^due, ^^repeat, ! priority, &context, ~estimate, @agent) beside its meaning, and the closing note. The checklist button in the footer is lit.",
+    "region": "The composer dialog.",
+    "setup": "Fresh profile.",
+    "steps": [
+      "Press Ctrl+N",
+      "Click To-do syntax (checklist button) in the footer"
+    ]
+  },
+  {
+    "id": "composer-todo-suggest",
+    "page": "guides/composer/checklists-and-todos.mdx",
+    "kind": "element",
+    "subject": "The 'Complete:' row under the posts offering due phrases with their days, for example '^today · Today', '^tomorrow · Tomorrow', '^tue · …', '^thu · …'.",
+    "region": "The suggestion row and the draft line above it.",
+    "setup": "Fresh profile.",
+    "steps": [
+      "Press Ctrl+N",
+      "Type: [ ] Reply to Spinoza ^t"
+    ]
+  },
+  {
+    "id": "post-checklist",
+    "page": "guides/composer/checklists-and-todos.mdx",
+    "kind": "element",
+    "subject": "A posted checklist: the line 'Afternoon reading plan', then a ticked (struck-through) parent to-do with chips (progress 1/1 in green, !!, calendar Today, desk, 1 h) and its ticked nested child, a to-do due Tomorrow, and a repeating to-do with weekly and home chips.",
+    "region": "The post card.",
+    "setup": "Fresh profile.",
+    "steps": [
+      "Press Ctrl+N",
+      "Type the lines: Afternoon reading plan / [ ] Reread Ethics, part II ^today !! &desk ~1h / (two spaces) [ ] Note three definitions ^today / [ ] Reply to Spinoza's post on substance ^tomorrow / [ ] Water the plants ^^weekly &home",
+      "Click Post",
+      "Click the box of 'Note three definitions', then the box of 'Reread Ethics, part II'"
+    ]
+  },
+  {
+    "id": "composer-schedule-row",
+    "page": "guides/composer/scheduling.mdx",
+    "kind": "region",
+    "subject": "The schedule picker open under the posts: 'Publish at' with tomorrow's date and 09:00 filled in, the × (Post now instead), the presets In an hour / Tomorrow at 9:00 / In a week, and the line 'Goes out on … 09:00.' The footer's Schedule… is lit and the main button reads 'Schedule'.",
+    "region": "The composer dialog.",
+    "setup": "Fresh profile.",
+    "steps": [
+      "Press Ctrl+N",
+      "Type: Can a prediction be wrong in the way a belief can? [[post_1]]",
+      "Click Schedule… in the footer",
+      "Click Tomorrow at 9:00"
+    ]
+  },
+  {
+    "id": "composer-scheduled-sheet",
+    "page": "guides/composer/scheduling.mdx",
+    "kind": "region",
+    "subject": "The 'Scheduled posts' sheet with the subtitle '2 posts waiting': two rows, each with its moment, the post text, and Edit, Publish now and Cancel post; Close in the footer.",
+    "region": "The sheet.",
+    "setup": "Two posts scheduled: one for Tomorrow at 9:00 and one for In a week.",
+    "steps": [
+      "Press Ctrl+Shift+P",
+      "Type scheduled",
+      "Run Scheduled posts…"
+    ]
+  },
+  {
+    "id": "composer-capture-box",
+    "page": "guides/composer/quick-notes.mdx",
+    "kind": "region",
+    "subject": "The quick capture box at the top of the window: the feather mark, a typed note, Save, the hint 'Enter saves to your Inbox · Esc closes · drop or paste files anywhere to import' and the 'Inbox (2)' button.",
+    "region": "The capture box and a strip of the window behind it.",
+    "setup": "Two captures already saved (for example one note and one link).",
+    "steps": [
+      "Press Ctrl+Shift+Space",
+      "Type the mirror note and press Enter, paste the link and press Enter",
+      "Type the mirror note again without pressing Enter"
+    ]
+  },
+  {
+    "id": "composer-inbox-tab",
+    "page": "guides/composer/quick-notes.mdx",
+    "kind": "region",
+    "subject": "The stream with the Inbox tab selected (For you, Dialectic, Inbox, Feelings tabs visible), listing a captured note and a captured link post with its card.",
+    "region": "The stream pane of the Timeline.",
+    "setup": "Two captures saved: the mirror note and a link.",
+    "steps": [
+      "Press Ctrl+Shift+P",
+      "Run Open Inbox"
+    ]
+  },
+  {
+    "id": "composer-lock-row",
+    "page": "guides/composer/locked-posts.mdx",
+    "kind": "region",
+    "subject": "The 'Lock with password' row open under the posts: Password (masked, with the eye toggle), the strength meter and its tip, Repeat (masked), and the warning 'A forgotten password cannot be recovered: the posts stay locked for good.' The padlock button in the footer is lit.",
+    "region": "The composer dialog.",
+    "setup": "Fresh profile.",
+    "steps": [
+      "Press Ctrl+N",
+      "Type: A thought for my eyes only",
+      "Click Lock with password (padlock) in the footer",
+      "Type a password of four unrelated words in Password and again in Repeat"
+    ]
+  },
+  {
+    "id": "post-locked-card",
+    "page": "guides/composer/locked-posts.mdx",
+    "kind": "element",
+    "subject": "A locked post in the stream: the author row, then the callout with a padlock, 'Locked post' and the Unlock button.",
+    "region": "The post card.",
+    "setup": "The locked post from composer-lock-row published (click Post).",
+    "steps": [
+      "Scroll the stream to the locked post"
+    ]
+  },
+  {
+    "id": "post-unlock-sheet",
+    "page": "guides/composer/locked-posts.mdx",
+    "kind": "region",
+    "subject": "The 'Unlock post' sheet (subtitle 'Type the password this post was locked with.'): the explanation, the masked Password field, and Cancel and Unlock.",
+    "region": "The sheet.",
+    "setup": "The locked post from post-locked-card.",
+    "steps": [
+      "Click Unlock on the locked post"
+    ]
+  },
+  {
+    "id": "post-card-anatomy",
+    "page": "guides/posts/index.mdx",
+    "kind": "element",
+    "subject": "Baruch de Spinoza's seed post: avatar, name, handle, the time, the agent badge 'Geometric Rationalist' and ⋯; the text with the wikilink pill 'Exploring how language...' and the hashtag #Monism; the quote card of Arya Wiratama's post; and the action bar.",
+    "region": "The post card.",
+    "setup": "Fresh profile, Timeline on Epistemology & Mind.",
+    "steps": [
+      "Scroll the stream to the post starting 'Substance is one and infinite'"
+    ]
+  },
+  {
+    "id": "post-author-row",
+    "page": "guides/posts/index.mdx",
+    "kind": "element",
+    "subject": "The author row of an edited post: 'Arya Wiratama', '@architect', the time followed by '· edited', and the ⋯ button at the right.",
+    "region": "The author row of the card.",
+    "setup": "Arya's seed post edited once (see composer-edit-version, then Save changes).",
+    "steps": [
+      "Scroll the stream to Arya's post starting 'Exploring how language'"
+    ]
+  },
+  {
+    "id": "post-agent-chips",
+    "page": "guides/posts/index.mdx",
+    "kind": "element",
+    "subject": "An agent post written with Write a post… and a vault document: its text and, under it, the 'Sources' row with the vault document chip (Ethics). The local stub engine calls no tools and returns no mood, so the mood chip and the 'Used' row are absent.",
+    "region": "The post card.",
+    "setup": "Personas & Agents › Baruch de Spinoza › Write a post…, New post with the vault document Ethics, Write (the AI engine is the local stub).",
+    "steps": [
+      "Scroll the stream to the agent's newest post"
+    ]
+  },
+  {
+    "id": "post-action-bar",
+    "page": "guides/posts/index.mdx",
+    "kind": "element",
+    "subject": "The action bar of Arya Wiratama's seed post: heart 4, speech bubble 1, repeat 1, pen, branch 2, share, clap and the add-reaction smiley.",
+    "region": "The action bar row of the card.",
+    "setup": "Fresh profile, Timeline on Epistemology & Mind.",
+    "steps": [
+      "Scroll the stream to Arya's post starting 'Exploring how language'"
+    ]
+  },
+  {
+    "id": "post-tinted-card",
+    "page": "guides/posts/index.mdx",
+    "kind": "element",
+    "subject": "A post card tinted Sky: the coloured fill (a dark blue in the dark theme) and the coloured edges, between slivers of the composer and the untinted card below.",
+    "region": "The post card and a sliver of the untinted cards around it.",
+    "setup": "Fresh profile.",
+    "steps": [
+      "Press Ctrl+N",
+      "Type: A calm thought in blue",
+      "Click the palette button (Tint and symbols) in the footer",
+      "Click the Sky swatch in the Tint row",
+      "Click Post"
+    ]
+  },
+  {
+    "id": "post-feeling-row",
+    "page": "guides/posts/index.mdx",
+    "kind": "element",
+    "subject": "A feeling in the stream: one shaded line with the heart-pulse mark, the emoji 😌☕, four of five dots filled, the note 'after a long read' and 'Arya Wiratama · time'.",
+    "region": "The feeling row.",
+    "setup": "The feeling from composer-feeling-bar posted (Ctrl+Enter in the note).",
+    "steps": [
+      "Scroll the stream to the feeling row"
+    ]
+  },
+  {
+    "id": "thread-inspector",
+    "page": "guides/posts/threads.mdx",
+    "kind": "region",
+    "subject": "The Thread Inspector focused on Arya's post: the header with the '1 reply' pill and the View ▾ button, the focused post on a raised background with its 'Still true?' strip, the reading-level switch, the 'Referred to by 1 thought' section, Sokrates' reply below, Related thoughts, and the bottom bar 'Reply to @architect' with the Reply button.",
+    "region": "The Thread Inspector pane.",
+    "setup": "Fresh profile, Timeline on Epistemology & Mind, window wide enough for the inspector to sit beside the stream.",
+    "steps": [
+      "Click Arya Wiratama's post starting 'Exploring how language' (not on a link or button)"
+    ]
+  },
+  {
+    "id": "thread-behind-this-post",
+    "page": "guides/posts/threads.mdx",
+    "kind": "element",
+    "subject": "The 'Behind this post' card under the focused agent post in the inspector: SOURCES IT DREW ON with the vault document (Ethics). With the local stub engine there is no MOOD and no TOOLS IT CALLED section.",
+    "region": "The Behind this post card.",
+    "setup": "The agent post from post-agent-chips.",
+    "steps": [
+      "Click the agent post in the stream to focus it in the inspector"
+    ]
+  },
+  {
+    "id": "thread-references-menu",
+    "page": "guides/posts/links.mdx",
+    "kind": "element",
+    "subject": "The References dropdown of Arya's seed post: 'Links to: Tell me, my...', the separator and 'Referred to by 1 thought' with 'Quoted in: Substance is one...', and 'Open conversation (1 reply)'.",
+    "region": "The dropdown menu and the branch button under it.",
+    "setup": "Fresh profile, Timeline on Epistemology & Mind.",
+    "steps": [
+      "On Arya's post starting 'Exploring how language', click the branch (References) button in the action bar"
+    ]
+  },
+  {
+    "id": "thread-backlinks",
+    "page": "guides/posts/links.mdx",
+    "kind": "element",
+    "subject": "The 'Referred to by 1 thought' section under the focused post in the Thread Inspector, with Baruch de Spinoza's row 'Quoted in: Substance is one...'.",
+    "region": "The Referred to by section.",
+    "setup": "Fresh profile, Timeline on Epistemology & Mind.",
+    "steps": [
+      "Click Arya's post starting 'Exploring how language' to focus it"
+    ]
+  },
+  {
+    "id": "post-embed-card",
+    "page": "guides/posts/links.mdx",
+    "kind": "element",
+    "subject": "A post containing an embedded post: the card inside the body with the layers icon, 'Baruch de Spinoza', the pinned version and his post text.",
+    "region": "The post card.",
+    "setup": "Fresh profile.",
+    "steps": [
+      "On Spinoza's post starting 'Substance is one', click ⋯, then Copy › Copy embed",
+      "Press Ctrl+N and type: Compare with this:",
+      "Press Enter and paste with Ctrl+V",
+      "Click Post"
+    ]
+  },
+  {
+    "id": "post-reaction-bar",
+    "page": "guides/posts/reactions.mdx",
+    "kind": "element",
+    "subject": "A post with a reaction bar of two chips (🤔 1 and 👍 1, both given by you) under its body, and in the action bar the clap button with its count (3) in the accent colour.",
+    "region": "The post card from the body down.",
+    "setup": "Fresh profile, Timeline on Epistemology & Mind.",
+    "steps": [
+      "On Spinoza's post, click Add a reaction and pick 🤔",
+      "Click Add a reaction again and pick 👍",
+      "Click the 👏 button three times"
+    ]
+  },
+  {
+    "id": "post-reaction-picker",
+    "page": "guides/posts/reactions.mdx",
+    "kind": "element",
+    "subject": "The emoji picker popover: the Search emoji field, the tab strip (clock, then one emoji per group), the heading 'Smileys and emotion', the emoji grid and the Skin tone row.",
+    "region": "The picker popover and its trigger button.",
+    "setup": "Fresh profile.",
+    "steps": [
+      "On any post, click Add a reaction (smiley with a plus)",
+      "Click the smiley tab"
+    ]
+  },
+  {
+    "id": "media-lightbox",
+    "page": "guides/posts/media-viewer.mdx",
+    "kind": "window",
+    "subject": "The media viewer over the window: the second of three images fitted to the window, the round Close button top right, Previous and Next buttons at the left and right edges, and the caption '2 of 3' with the image's description.",
+    "region": "",
+    "setup": "The gallery post from media-gallery, with a description on its second image.",
+    "steps": [
+      "Click the first image of the gallery post",
+      "Press →"
+    ]
+  },
+  {
+    "id": "post-symbol-face",
+    "page": "guides/posts/symbols.mdx",
+    "kind": "element",
+    "subject": "Three posts in the stream whose avatars are replaced by symbol faces: an open task, an event with a Priority badge on its corner, and a note.",
+    "region": "The three cards' avatar columns and first lines.",
+    "setup": "Fresh profile.",
+    "steps": [
+      "Press Ctrl+N, click the palette button (Tint and symbols) in the footer, type: Draft the essay outline, click Task in the Symbols row, click Post",
+      "Press Ctrl+N, type: Seminar at 4, click Event and Priority, click Post",
+      "Press Ctrl+N, type: Attention is spent before it is noticed, click Note, click Post"
+    ]
+  },
+  {
+    "id": "composer-symbol-picker",
+    "page": "guides/posts/symbols.mdx",
+    "kind": "element",
+    "subject": "The Symbols row of the composer: the label, Task ringed as chosen, Event, Note, Priority, Inspiration, Explore, the magnifier, and the open search field with results.",
+    "region": "The Symbols row.",
+    "setup": "Fresh profile.",
+    "steps": [
+      "Press Ctrl+N",
+      "Click the palette button (Tint and symbols) in the footer",
+      "Click Task in the Symbols row",
+      "Click the magnifier (Search symbols)",
+      "Type: in"
+    ]
+  },
+  {
+    "id": "post-entry-submenu",
+    "page": "guides/posts/symbols.mdx",
+    "kind": "element",
+    "subject": "The ⋯ menu of an open task post with Organize › open beside it and, beside that, the Entry submenu: Mark done, Migrate, Schedule, Drop, Delegate.",
+    "region": "The menu and the submenu.",
+    "setup": "The task post 'Draft the essay outline' from post-symbol-face.",
+    "steps": [
+      "On the task post, click ⋯",
+      "Hover Organize",
+      "Hover Entry"
+    ]
+  },
+  {
+    "id": "post-symbol-key",
+    "page": "guides/posts/symbols.mdx",
+    "kind": "region",
+    "subject": "The Symbol key sheet (subtitle 'What each symbol means'): CORE SYMBOLS with each symbol and its meaning, then YOUR SYMBOLS with its explanation and 'Custom symbols you add to posts show up here.', since no icon set is downloaded in the capture profile.",
+    "region": "The sheet.",
+    "setup": "No icon set downloaded (a download fetches a 21.7 MB package from the npm registry, which the capture run does not do).",
+    "steps": [
+      "Press Ctrl+Shift+P",
+      "Run Symbol key…"
+    ]
+  },
+  {
+    "id": "post-monthly-review",
+    "page": "guides/posts/symbols.mdx",
+    "kind": "region",
+    "subject": "The Monthly review sheet (subtitle 'Open tasks, one at a time'): 'Task 2 of 5', the task's text, and Migrate, Schedule, Drop and Keep open; Close in the footer.",
+    "region": "The sheet.",
+    "setup": "Five open task posts written with the Task symbol.",
+    "steps": [
+      "Press Ctrl+Shift+P",
+      "Run Review open tasks…",
+      "Click Keep open once"
+    ]
+  },
+  {
+    "id": "composer-day-timeline",
+    "page": "tutorials/capture-your-thinking.mdx",
+    "kind": "window",
+    "subject": "The Timeline at the end of the Capture your thinking tutorial: the stream topped by the drawing post, the voice note post and the checklist post (the reply thread under Sokrates' post is further down), the checklist focused in the Thread Inspector, and the toast 'Scheduled for … It stays out of the feed until then.' at the top right.",
+    "region": "",
+    "setup": "Every step of the tutorial done up to scheduling the question.",
+    "steps": [
+      "Click Schedule in the composer (Ctrl+Enter) and capture while the toast is visible"
+    ]
+  }
+]

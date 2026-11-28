@@ -1,5 +1,6 @@
-//! The palace editor: the route of rooms (move, remove, add one of a kind), the selected
-//! room's scene with its numbered loci, and the selected locus's panel.
+//! The palace editor: the route of rooms (move, remove, add one of a kind) beside the selected
+//! room's scene with its numbered loci, both as tall as the taller, and the selected locus's
+//! panel across the full width below them.
 
 use super::super::super::panel::ReviewPanel;
 use super::super::super::render::common::{block_title, caption, control_row, surface};
@@ -90,8 +91,10 @@ impl ReviewPanel {
         let head = surface(theme).child(control_row(theme).child(back).child(div().flex_1()).child(walk)).child(div().font_family(theme.font_family_display.clone()).text_size(theme.font_size_lg).font_weight(FontWeight::BOLD).text_color(theme.text_primary).child(palace.name.clone()));
         let room = self.learning.palace_room.as_ref().and_then(|id| palace.room(id)).or_else(|| palace.rooms.first());
         let side = if class.is_compact() { Pixels::ZERO } else { theme.learning_side_width };
-        let main = room.map(|room| div().flex_1().min_w(side).flex().flex_col().gap(theme.section_gap).child(self.scene_card(room, class, cx)).child(self.render_locus_panel(palace, room, cx)));
-        let body = div().w_full().flex().flex_wrap().items_start().gap(theme.section_gap).child(div().when(class.is_compact(), |d| d.w_full()).when(!class.is_compact(), |d| d.w(theme.learning_side_width)).child(self.route_card(palace, cx))).children(main);
-        div().w_full().flex().flex_col().gap(theme.section_gap).child(head).child(body)
+        let route = div().flex().when(class.is_compact(), |d| d.w_full()).when(!class.is_compact(), |d| d.w(theme.learning_side_width).flex_none()).child(self.route_card(palace, cx).flex_1());
+        let scene = room.map(|room| div().flex_1().min_w(side).flex().child(self.scene_card(room, class, cx).flex_1()));
+        let locus = room.map(|room| self.render_locus_panel(palace, room, cx));
+        let row = div().w_full().flex().flex_wrap().gap(theme.section_gap).child(route).children(scene);
+        div().w_full().flex().flex_col().gap(theme.section_gap).child(head).child(row).children(locus)
     }
 }

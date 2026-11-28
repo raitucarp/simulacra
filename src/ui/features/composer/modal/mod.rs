@@ -81,8 +81,8 @@ pub struct ModalCallbacks {
     pub on_toggle_symbol_search: ModalActionCallback,
     /// Switches free compose on or off (T2).
     pub on_toggle_free: ModalActionCallback,
-    /// Opens or closes the to-do syntax help card (D1).
-    pub on_toggle_todo_help: ModalActionCallback,
+    /// Opens or closes the to-do syntax help card (D1), and folds or unfolds the tint and symbol rows.
+    pub on_toggle_todo_help: ModalActionCallback, pub on_toggle_style: ModalActionCallback,
     /// Opens or closes "Lock with password" (X3).
     pub on_toggle_lock: ModalActionCallback,
     /// Opens or closes the feeling bar, picks an emoji and an intensity (M2).
@@ -128,8 +128,8 @@ pub struct ComposerModalView {
     pub version: Option<super::version_picker::VersionView>,
     /// The preview of the split while composing freely (T2).
     pub free: Option<super::free_compose::FreeComposeView>,
-    /// The to-do syntax help card is open (D1).
-    pub todo_help: bool,
+    /// The to-do syntax help card is open (D1); the tint and symbol rows are unfolded.
+    pub todo_help: bool, pub style_open: bool,
     /// What the to-do word at the cursor could be (D11); `None` while there is nothing to offer.
     pub todo_suggest: Option<super::todo_suggest::TodoSuggestView>,
     pub callbacks: ModalCallbacks,

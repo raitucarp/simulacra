@@ -4,6 +4,7 @@
 
 use super::super::labels::{tr, verdict_colour, verdict_label};
 use super::{RequestAction, TensionRow, ThinkingRequest};
+use crate::domain::post::readable_line;
 use crate::domain::thinking::tensions::{SideKind, TensionSide};
 use crate::theme::ThemeTokens;
 use crate::ui::icons::LucideIcon;
@@ -46,7 +47,16 @@ fn side(slot: u64, side: &TensionSide, on_request: &RequestAction, theme: &Theme
         .hover(|s| s.border_color(theme.accent_brand_border))
         .on_click(send(on_request, request))
         .child(label)
-        .child(div().text_size(theme.font_size_xs).line_height(relative(theme.line_height_body)).text_color(theme.text_primary).line_clamp(SIDE_LINES).child(side.text.clone()))
+        .child(div().text_size(theme.font_size_xs).line_height(relative(theme.line_height_body)).text_color(theme.text_primary).line_clamp(SIDE_LINES).text_ellipsis().child(shown_text(side)))
+}
+
+/// A side's text as a reader would say it: a post without links to other posts or to-do
+/// markup, a passage without the `#` marks of its headings.
+fn shown_text(side: &TensionSide) -> String {
+    match side.kind {
+        SideKind::Post => readable_line(&side.text),
+        SideKind::Passage => side.text.split_whitespace().filter(|word| !word.chars().all(|c| c == '#')).collect::<Vec<_>>().join(" "),
+    }
 }
 
 /// The verdict line: the AI's verdict and reason, or the signals that made it a candidate.

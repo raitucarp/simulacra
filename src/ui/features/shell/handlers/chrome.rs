@@ -18,13 +18,16 @@ impl AppView {
         cx.notify();
     }
 
-    /// Shows or hides the right panel: its drawer in the compact layout, else its column.
+    /// Shows or hides the right panel: its drawer in the compact layout, else its column on
+    /// the current place (remembered per place).
     pub(crate) fn toggle_right_sidebar(&mut self, window: &mut Window, cx: &mut Context<Self>) {
-        let chrome = &mut self.chrome;
         if LayoutClass::of_window(window, &self.theme).is_compact() {
-            chrome.is_right_drawer_open = !chrome.is_right_drawer_open;
+            self.chrome.is_right_drawer_open = !self.chrome.is_right_drawer_open;
         } else {
-            chrome.is_right_sidebar_open = !chrome.is_right_sidebar_open;
+            let shown = self.is_right_panel_shown(window.viewport_size().width);
+            let tab = self.state.active_tab;
+            self.chrome.right_panel_choices.retain(|(place, _)| *place != tab);
+            self.chrome.right_panel_choices.push((tab, !shown));
         }
         cx.notify();
     }
@@ -43,13 +46,17 @@ impl AppView {
         cx.notify();
     }
 
-    /// Toggles the settings modal, closing the other menus.
+    /// Toggles the settings modal, closing the other menus. An opened modal takes the keyboard
+    /// focus (its rail), so Escape closes it at once.
     pub(crate) fn toggle_settings(&mut self, window: &mut Window, cx: &mut Context<Self>) {
         self.revert_settings_draft(window, cx);
         let chrome = &mut self.chrome;
         chrome.is_settings_open = !chrome.is_settings_open;
         chrome.is_lang_menu_open = false;
         chrome.is_workspace_open = false;
+        if chrome.is_settings_open {
+            window.focus(&self.settings_ui.rail_focus, cx);
+        }
         cx.notify();
     }
 

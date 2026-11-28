@@ -76,7 +76,7 @@ pub(super) fn guide_bubble(moment: GuideMoment, theme: &ThemeTokens) -> Div {
         .flex()
         .flex_col()
         .gap(theme.spacing_2xs)
-        .child(div().text_size(theme.font_size_xs).font_weight(FontWeight::BOLD).text_color(theme.accent_brand).child(tr(NAME_KEY)))
+        .child(div().text_size(theme.font_size_xs).font_weight(FontWeight::BOLD).text_color(theme.accent_brand_text).child(tr(NAME_KEY)))
         .child(
             div()
                 .text_size(theme.font_size_sm)

@@ -50,7 +50,8 @@ jobs:
           fi
           changed=$(git diff --name-only "origin/$BASE_REF...HEAD")
           echo "$changed"
-          if echo "$changed" | grep -qvE '(\.md$|^LICENSE)'; then
+          # The docs site (docs/) has its own workflow (docs.yml); its changes need no Rust build.
+          if echo "$changed" | grep -qvE '(\.md$|^LICENSE|^docs/|^\.github/workflows/docs\.yml$)'; then
             echo "code=true" >> "$GITHUB_OUTPUT"
           else
             echo "Only documentation changed; the build and tests are skipped."

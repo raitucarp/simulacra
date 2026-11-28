@@ -2,7 +2,7 @@
 
 use super::super::dot_graph::{render_mini_graph, OpenGraphCallback};
 use super::super::heatmap::{render_clickable_heatmap, ClickDayCallback, HeatmapParams};
-use super::super::spark_feed::render_random_spark_feed_with_lookup;
+use super::super::spark_feed::{pick_sparks, render_random_spark_feed_with_lookup, MAX_SPARK_FEED_ITEMS};
 use super::super::trending::{render_popular_tags_title, render_trending_list};
 use crate::domain::activity::ActivityHeatmap;
 use crate::domain::Post;
@@ -33,6 +33,7 @@ fn padded_row(theme: &ThemeTokens) -> Div {
 
 /// Dot graph, cadence heatmap and spark feed.
 pub(super) fn render_mind_cadence_pane(params: MindPaneParams<'_>, theme: &ThemeTokens) -> Div {
+    let sparks = todays_sparks(&params);
     div()
         .w_full()
         .flex_1()
@@ -49,7 +50,13 @@ pub(super) fn render_mind_cadence_pane(params: MindPaneParams<'_>, theme: &Theme
             },
             theme,
         )))
-        .child(render_random_spark_feed_with_lookup(params.posts, params.state, theme))
+        .child(render_random_spark_feed_with_lookup(&sparks, params.state, theme))
+}
+
+/// Today's sparks from the active network.
+fn todays_sparks<'a>(params: &MindPaneParams<'a>) -> Vec<&'a Post> {
+    let today = crate::time::days_from_ce(crate::time::local_now().date());
+    pick_sparks(params.posts, &params.state.active_network_id, today, MAX_SPARK_FEED_ITEMS)
 }
 
 fn divided_block(theme: &ThemeTokens) -> Div {

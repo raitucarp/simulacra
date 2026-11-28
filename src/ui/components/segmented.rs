@@ -40,6 +40,7 @@ pub fn segment_pill(
     div()
         .id(segment.id)
         .flex_1()
+        .min_w_0()
         .py(theme.spacing_xs)
         .px(theme.spacing_xs)
         .rounded(theme.radius_sm)
@@ -58,6 +59,7 @@ pub fn segment_pill(
         .on_click(move |_, w, cx| on_click(w, cx))
         .child(
             Icon::new(segment.icon)
+                .flex_none()
                 .size(theme.font_size_xs)
                 .text_color(if active { segment.active_icon_color } else { theme.text_muted }),
         )

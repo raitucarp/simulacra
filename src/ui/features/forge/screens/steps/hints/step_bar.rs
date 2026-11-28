@@ -1,7 +1,7 @@
 //! The step's suggestion bar: "Suggest with AI" for every suggestible field of the page, "Fill
 //! the rest" with the catalog's defaults, and what the last of them did.
 
-use super::super::super::common::{card, message, muted};
+use super::super::super::common::{card, message};
 use crate::state::forge::suggest::ai::SuggestScope;
 use crate::state::forge::ForgeStep;
 use crate::ui::features::forge::text::{tr, tr_count, tr_with};
@@ -57,7 +57,7 @@ impl ForgeView {
         let ask = handle.act(move |this, _, cx| this.request_suggestions(SuggestScope::Step(step), cx));
         let stop = handle.act(|this, _, cx| this.cancel_suggestions(cx));
         let fill_rest = handle.act(|this, _, cx| this.fill_rest(cx));
-        let suggest = Button::new(SUGGEST_ID).small().outline().icon(LucideIcon::Sparkles).label(tr(SUGGEST_KEY)).loading(running);
+        let suggest = Button::new(SUGGEST_ID).small().outline().icon(LucideIcon::Sparkles).label(tr(SUGGEST_KEY)).tooltip(tr(BODY_KEY)).loading(running);
         let suggest = suggest.on_click(move |_, w, cx| ask(w, cx));
         let stop = running.then(|| Button::new(STOP_ID).small().ghost().icon(LucideIcon::CircleStop).label(tr(STOP_KEY)).on_click(move |_, w, cx| stop(w, cx)));
         let fill = Button::new(FILL_ID).small().ghost().icon(LucideIcon::WandSparkles).label(tr(FILL_KEY)).tooltip(tr(FILL_TOOLTIP_KEY));
@@ -90,12 +90,10 @@ impl ForgeView {
             .text_color(theme.text_primary)
             .child(Icon::new(LucideIcon::Lightbulb).size(theme.font_size_sm).text_color(theme.accent_dialectic))
             .child(tr(TITLE_KEY));
-        let body = muted(tr(BODY_KEY), theme).text_size(theme.font_size_xs);
         Some(
             card(theme)
                 .gap(theme.spacing_sm)
                 .child(title)
-                .child(body)
                 .child(self.suggest_buttons(step, handle))
                 .children(self.suggest_status_lines())
                 .children(self.result_buttons(handle)),

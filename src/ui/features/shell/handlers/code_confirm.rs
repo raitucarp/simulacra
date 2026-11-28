@@ -16,7 +16,10 @@ use std::rc::Rc;
 /// Opens the confirm; Run starts the run through `view`, anything else drops it.
 pub(super) fn open_run_confirm(view: WeakEntity<AppView>, ask: RunAsk, theme: ThemeTokens, window: &mut Window, cx: &mut App) {
     let RunAsk { request, found, author } = ask;
-    let intro = t!("code.confirm.from", author = author.as_str(), runtime = found.runtime.label()).to_string();
+    let intro = match &author {
+        Some(author) => t!("code.confirm.from", author = author.as_str(), runtime = found.runtime.label()).to_string(),
+        None => t!("code.confirm.captured", runtime = found.runtime.label()).to_string(),
+    };
     let pending = Rc::new(RefCell::new(Some((request, found))));
     window.open_alert_dialog(cx, move |alert, _, _| {
         let (code, lang) = pending.borrow().as_ref().map(|(request, found)| (request.code.clone(), found.runtime.key())).unwrap_or_default();

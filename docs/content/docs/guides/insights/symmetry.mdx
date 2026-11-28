@@ -1,0 +1,59 @@
+---
+title: Symmetry
+description: See how symmetric your reply threads are, which posts play interchangeable roles, and how the turn of speech rotates among authors.
+icon: GitBranch
+---
+
+Symmetry looks at the shape of conversations with a little group theory. A thread whose branches repeat each other is symmetric; posts that sit in the graph the same way play the same role; and "who answers whom most" reveals whether a thread is a duel, a round or a monologue.
+
+<Screenshot id="insights-symmetry" alt="The Symmetry tab with three tiles, a drawn reply tree coloured by orbit, the thread list and equivalent posts" caption="A reply thread drawn by orbit, with its symmetry numbers." />
+
+## Thread symmetry
+
+The top card draws one reply thread, the largest by default.
+
+| Tile | Meaning |
+|---|---|
+| <UiLabel>Automorphisms \|Aut\|</UiLabel> | How many ways the thread's posts can be rearranged without changing its shape (who replies to whom, with the same root). Written as a product of factorials and its value, for example `2!·2! = 4`; a very large value is shown as a power of ten. `1` means no symmetry at all. |
+| <UiLabel>Orbits of two or more</UiLabel> | Groups of posts that can trade places in such a rearrangement. |
+| Turn-taking | The authors' rotation in cycle notation, such as `(Arya Sokrates)`, labelled <UiLabel>Turn-taking, order N, even</UiLabel> or <UiLabel>odd</UiLabel>. |
+
+**The drawing.** Each dot is a post, the root at the top and one row per reply depth; leaves spread evenly in reading order, and each parent sits centred over its replies. Posts in the same orbit share a colour; posts that cannot trade places with anyone are grey. Hover a dot for its author and opening words; click it to open the post.
+
+The summary reads "Posts: N, reply depth: D. Rearrangements of its posts that keep its shape: X. Groups of interchangeable posts: K." The drawing takes about a tile's width per leaf and sits centred, so a small thread stays compact.
+
+### How to read turn-taking
+
+Each author of the thread is mapped to the author they reply to most often. Following that map from anyone ends in a cycle, and the cycles are what the tile shows:
+
+| Cycle | Reads as |
+|---|---|
+| `(a b)` | A duel: a and b answer each other. |
+| `(a b c)` | A round: a answers b, b answers c, c answers a. |
+| `(a)` | An author who mostly answers themselves. |
+
+The order is how many turns it takes until everyone is back where they started (the least common multiple of the cycle lengths); even or odd is the permutation's parity. Authors who reply into a cycle without being on one are not part of the notation.
+
+## Threads
+
+The <UiLabel>Threads</UiLabel> card lists up to twelve of the largest threads with at least three posts, each by the opening words of its latest post, with its number of symmetries as the value. Click a row to draw that thread above. The choice is remembered.
+
+## Structurally equivalent posts
+
+This card groups posts that sit in the reply-and-quote graph in the same way: same kind of post, connected to the same kinds of posts, in the same pattern, as far as one can tell by repeatedly comparing neighbourhoods (colour refinement). Up to six groups are listed, largest first, each with its size and up to three posts; click a post to open it.
+
+The summary gives the number of groups among the connected posts, and the card says how far to trust it:
+
+- **Exact for threads.** A reply thread is a tree, and its symmetries and orbits are computed exactly.
+- **An estimate elsewhere.** Posts in different groups surely play different roles; posts in one group usually, but not provably, play the same role.
+
+## Tips and limits
+
+- Only threads of three or more posts are analysed. Without one, the tab shows <UiLabel>No threads yet</UiLabel>.
+- Threads are made of the posts that pass the filter: leaving <UiLabel>Replies</UiLabel> out under <UiLabel>Kinds</UiLabel>, or narrowing the period, can break a thread into pieces.
+- A quote joins the equivalence graph but not a thread: threads follow replies only.
+
+## Related
+
+- [Network](/docs/guides/insights/network): the whole graph's structure.
+- [Posts and threads](/docs/concepts/posts-and-threads).

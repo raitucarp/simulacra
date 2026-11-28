@@ -47,7 +47,7 @@ fn row(caps_key: &str, action_key: &str, theme: &ThemeTokens) -> Div {
         .items_center()
         .gap(theme.spacing_sm)
         .child(caps)
-        .child(div().text_size(theme.font_size_xs).text_color(theme.text_secondary).line_height(relative(theme.line_height_body)).child(tr(action_key)))
+        .child(div().flex_1().min_w_0().text_size(theme.font_size_xs).text_color(theme.text_secondary).line_height(relative(theme.line_height_body)).child(tr(action_key)))
 }
 
 fn card(theme: &ThemeTokens) -> Div {

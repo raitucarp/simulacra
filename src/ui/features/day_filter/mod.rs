@@ -30,9 +30,10 @@ pub fn month_label(month: i8) -> String {
     t!(MONTH_KEYS[idx]).to_string()
 }
 
-/// Localized short date, e.g. "Nov 16, 2026".
+/// `date` written the way the General settings ask ("2026-11-16" by default), like every
+/// other date on screen.
 pub fn format_day(date: Date) -> String {
-    t!("cadence.date", month = month_label(date.month()), day = date.day(), year = date.year()).to_string()
+    crate::ui::format::date(date)
 }
 
 /// "N posts on <date>" summary for a heatmap day.

@@ -1,0 +1,156 @@
+---
+title: Import documents
+description: Bring books, PDFs, word-processor files, web pages and data into the vault, and optionally post their passages to the timeline.
+icon: FileUp
+---
+
+Import turns any file into a vault document. Simulacra reads the file on your computer, recognises its format, fills in what it can of the catalogue record, and shows the import sheet, where you check the details and decide whether its passages also become posts.
+
+<Screenshot id="import-sheet" alt="The import sheet over the window: an e-book card and file name, a DETAILS block, POST AS, SPLIT INTO with a list of paragraphs, and the Just add to vault and Create posts buttons" caption="The import sheet for an EPUB, split into paragraphs." />
+
+## Ways to import
+
+| Way | How |
+|---|---|
+| <UiLabel>Import file</UiLabel> | The vault header (or the empty vault), the left sidebar's <UiLabel>New</UiLabel> menu, the button beside the timeline tabs, and the command palette. Opens the system file picker titled <UiLabel>Import files</UiLabel>; you can pick several files. |
+| <Shortcut keys="Ctrl+O" /> | The same picker, from anywhere. |
+| <UiLabel>Add Document</UiLabel> | The right sidebar's <UiLabel>Vault & Telemetry</UiLabel> tab. Opens the same picker. |
+| Drop files | Drag files from your file manager anywhere onto the window. |
+| Paste files | Copy files in your file manager, then press <Shortcut keys="Ctrl+V" /> while no text field has focus. |
+| Command line | Start Simulacra with file names: `simulacra book.epub`. |
+
+<Screenshot id="import-drop-overlay" alt="A dimmed window with a card reading Drop to import and Books, PDFs, documents, pages, data, images: any file" caption="Drag files over the window and drop them anywhere." />
+
+While you drag files over the window, the card <UiLabel>Drop to import</UiLabel> appears. If the post composer is open, it takes the dropped files as attachments instead.
+
+Several files open one after another: the next file's sheet opens when you finish or close the current one.
+
+## Import a file
+
+<Steps>
+<Step>
+### Wait for it to be read
+
+<Screenshot id="import-sheet-reading" alt="The import sheet while a large file is read: Reading and the file name, Large books take a few seconds. You can keep working., and a Cancel button" size="md" />
+
+The sheet opens at once and reads the file in the background: <UiLabel>Reading book.epub…</UiLabel>. Large books take a few seconds, and you can keep working. <UiLabel>Cancel</UiLabel> stops the read and closes the sheet.
+</Step>
+<Step>
+### Check what was found
+
+<Screenshot id="import-sheet-header" alt="The sheet header: an e-book illustration, the file name, and a facts line reading E-book · EPUB, the size, the chapters and the paragraphs" size="md" />
+
+The header shows a card for the format family, the file name, and a line of facts: family, format, size, the number of chapters (when there are several) and paragraphs. Notes from the reader appear below in the warning colour, such as <UiLabel>12 pages have no text layer (scanned pages) and were skipped.</UiLabel> See [Import formats](/docs/reference/import-formats#notes-in-the-sheet) for every note.
+</Step>
+<Step>
+### Correct the details
+
+Under <UiLabel>DETAILS</UiLabel>, the fields are filled from the file:
+
+| Field | Filled from | Notes |
+|---|---|---|
+| <UiLabel>Title</UiLabel> | The file's own title, else the file name | Underscores and hyphens of a file name become spaces. |
+| <UiLabel>Authors</UiLabel> | The file's creators | Names separated by commas. |
+| <UiLabel>Language</UiLabel> | The file's language tag | For example `en` or `de`. It also chooses the rules for splitting sentences. |
+| <UiLabel>Date</UiLabel> | The file's date | A year or a date. |
+
+Publisher, description and identifiers the file carries are kept too, though the sheet does not show them. A date, language or identifier the catalogue cannot read is left out of the record rather than blocking the import. You can complete the record later with <UiLabel>Edit</UiLabel> on the entry.
+</Step>
+<Step>
+### Finish: vault only, or posts too
+
+<Screenshot id="import-sheet-footer" alt="The sheet footer: a summary of passages, posts and threads, with Just add to vault and Create posts" size="md" />
+
+- <UiLabel>Just add to vault</UiLabel> stores the document and nothing else. A notice says <UiLabel>Added “Title” to the vault.</UiLabel>
+- <UiLabel>Create posts</UiLabel> stores the document and publishes the selected passages as posts (below). A notice says <UiLabel>Imported “Title” as 1012 posts.</UiLabel> and the timeline opens on <UiLabel>For you</UiLabel>.
+
+The new document goes to the top of the vault, catalogued with type, creators, date, publisher, language, identifier and abstract from the file, and <UiLabel>Imported</UiLabel> with the file name as its source.
+</Step>
+</Steps>
+
+## Turn passages into posts
+
+The lower half of the sheet chooses what becomes posts and who posts them. Nothing is posted unless you click <UiLabel>Create posts</UiLabel>.
+
+### Split into
+
+<Screenshot id="import-sheet-units" alt="SPLIT INTO with Chapters, Paragraphs and Sentences, a selected count with Select all and Select none, a row of chapter chips, and a list of paragraphs with checkboxes" />
+
+| Choice | One passage per | Example position |
+|---|---|---|
+| <UiLabel>Chapters</UiLabel> | Chapter, its paragraphs joined | "Section II" |
+| <UiLabel>Paragraphs</UiLabel> | Paragraph (the default) | "Section II · ¶12" |
+| <UiLabel>Sentences</UiLabel> | Sentence | "Section II · ¶12 · sentence 2" |
+
+Headings never become passages. The default comes from Settings › Import › <UiLabel>Split documents by</UiLabel>. Changing the split selects every passage again.
+
+### Choose passages
+
+- The count reads "980 of 980 selected". <UiLabel>Select all</UiLabel> and <UiLabel>Select none</UiLabel> do what they say.
+- When the file has more than one chapter with text, a row of chapter chips appears; a chip selects exactly that chapter's passages. Chapters without a title read "Chapter 3".
+- Each row of the list shows the passage's position and its first line (line breaks shown as " / "). Click a row to select or clear it.
+
+### Post as
+
+<Screenshot id="import-sheet-post-as" alt="POST AS with You, Anonymous and Pseudonym, Pseudonym chosen, a Pen name field and the hint Posts appear under a pen name" size="md" />
+
+| Choice | Posts appear under |
+|---|---|
+| <UiLabel>You</UiLabel> | Your active profile. |
+| <UiLabel>Anonymous</UiLabel> | One shared anonymous account. |
+| <UiLabel>Pseudonym</UiLabel> | A pen name typed in the field that appears. A name you used before is reused. |
+
+The default comes from Settings › Import › <UiLabel>Post imports as</UiLabel>.
+
+### What gets posted
+
+- Each selected passage becomes a post. A passage longer than your post length limit (Settings › Reading & Writing › <UiLabel>Post length limit</UiLabel>) becomes a thread of several posts.
+- Every post cites the new document with a source chip naming the place it came from, such as "Ethics · Part I: Of God · ¶3" (chapters without a title read "§2"). The document's entry counts them as posts linking here.
+- Posts keep the reading order of the file.
+- The footer sums it up before you commit: "980 passages → 1012 posts, 28 of them threads". With nothing selected it reads <UiLabel>Nothing selected: the file only goes into the vault.</UiLabel>
+
+<UiLabel>Create posts</UiLabel> stays disabled until at least one passage is selected and, for a pseudonym, a name is typed.
+
+## Files without text
+
+<Screenshot id="import-sheet-image" alt="The sheet for a PNG image: an image card, the note An image of 1600 × 900 pixels: only its details are kept., and No text to post. The file goes into the vault with its details." size="md" />
+
+Images, audio and video have no text to post. The sheet says <UiLabel>No text to post. The file goes into the vault with its details.</UiLabel>, and <UiLabel>Just add to vault</UiLabel> stores a Media document whose text is a one-line description of the file (title, format, media type, size and checksum). Archives list their file names; unrecognised files keep the readable text found inside them. See [Import formats](/docs/reference/import-formats).
+
+## Keep the original file
+
+With Settings › Import › <UiLabel>Keep the original file</UiLabel> on (the default), a copy of the source file is stored in the `imports` folder of your media folder, named by its checksum, so the same file is stored once. If the copy fails, a warning says <UiLabel>The original file was not kept: reason</UiLabel> and the import goes ahead.
+
+## When a file cannot be opened
+
+<Screenshot id="import-sheet-failed" alt="The sheet showing Could not open this file: the file is 2.0 MB, larger than the 1.0 MB import limit, with both buttons disabled" size="md" />
+
+| Message | Cause | What to do |
+|---|---|---|
+| <UiLabel>Could not open this file:</UiLabel> "the file is 80.0 MB, larger than the 50.0 MB import limit" | The file is over Settings › Import › <UiLabel>Largest file</UiLabel> (50 MB unless changed). It is refused before being read. | Raise the limit (1 to 1024 MB) or split the file. |
+| <UiLabel>Could not open this file:</UiLabel> followed by a system message | The file could not be read (moved, locked or not permitted). | Check the file and try again. |
+| <UiLabel>The import failed: reason</UiLabel> | Storing the document or posts failed. | Try again; see [Troubleshooting](/docs/reference/troubleshooting). |
+
+A file that is damaged, encrypted or in an unsupported variant of its format is not refused: it opens as an unrecognised file, with a note saying why, so it still enters the vault with its details.
+
+## Import settings
+
+| Setting (Settings › Import) | What it does | Default |
+|---|---|---|
+| <UiLabel>Split documents by</UiLabel> | The split the sheet opens with: Paragraph, Sentence or Chapter | Paragraph |
+| <UiLabel>Post imports as</UiLabel> | Who the sheet posts as | You |
+| <UiLabel>Largest file</UiLabel> | Bigger files are refused before reading | 50 MB |
+| <UiLabel>Keep the original file</UiLabel> | Store a copy of the source file | On |
+
+## Tips and limits
+
+- Clicking outside the sheet closes it, discarding what you set. Use <UiLabel>Close</UiLabel> (the cross) for the same.
+- Importing the same file twice makes two documents; the <UiLabel>Checksum</UiLabel> row of their records shows they hold the same text.
+- A Markdown thread you exported comes back with its formatting, and an exported locked post stays sealed.
+- Imported posts are ordinary posts: edit, archive or delete them like any other.
+
+## Related
+
+- [Import formats](/docs/reference/import-formats): every format and what is read from it.
+- [Ground a network in a book](/docs/tutorials/ground-a-network-in-a-book): an import from start to finish.
+- [Documents](/docs/guides/vault/documents): editing the record after import.

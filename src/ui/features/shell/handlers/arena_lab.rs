@@ -12,7 +12,7 @@ use crate::domain::arena::lab::{cell_prompt, cells, parse_cell_answer, scenario_
 use crate::domain::arena::ArenaId;
 use crate::domain::post_actions::ActionFailureKind;
 use crate::domain::ProfileId;
-use crate::ui::features::arena::RunState;
+use crate::ui::features::arena::{ArenaTab, RunState};
 use gpui_kit::*;
 
 impl AppView {
@@ -44,7 +44,7 @@ impl AppView {
             return self.update_beliefs_from_experiment(&experiment, cx);
         };
         let Some(profile) = self.profile_of(&agent).cloned() else {
-            return self.arena_failed(ActionFailure::local(ActionFailureKind::Rejected));
+            return self.arena_failed_on(ArenaTab::Lab, ActionFailure::local(ActionFailureKind::Rejected));
         };
         let grid = cells(&experiment.scenario);
         let user = cell_prompt(&experiment.scenario, &grid[cell], &self.language_of(Some(&profile)));
@@ -56,7 +56,7 @@ impl AppView {
                 self.arena.run = Some(ArenaRun { ticket, cancel, state: RunState::Answering(experiment.id.clone()), step });
                 self.spawn_arena_call(call, ticket, Self::finish_cell, cx);
             }
-            Err(failure) => self.arena_failed(failure),
+            Err(failure) => self.arena_failed_on(ArenaTab::Lab, failure),
         }
     }
 
@@ -71,7 +71,7 @@ impl AppView {
                 }
                 self.advance_experiment(&id, cx);
             }
-            Err(failure) => self.arena_failed(failure),
+            Err(failure) => self.arena_failed_on(ArenaTab::Lab, failure),
         }
         self.arena_changed(cx);
     }

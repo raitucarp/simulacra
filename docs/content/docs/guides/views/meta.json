@@ -1,0 +1,16 @@
+{
+  "title": "Timeline views",
+  "icon": "LayoutGrid",
+  "pages": [
+    "cards-and-outline",
+    "rapid-log-and-raw",
+    "calendar-and-future-log",
+    "board",
+    "garden-and-series",
+    "branches-and-lens-fan",
+    "claim-views",
+    "---The stream---",
+    "day-filter",
+    "finite-feed"
+  ]
+}

@@ -1,0 +1,595 @@
+[
+  {
+    "id": "settings-window",
+    "page": "guides/settings/index.mdx",
+    "kind": "window",
+    "subject": "The Settings dialog over the main window, open on General: the category rail (search box, sixteen categories with General highlighted, lock footer 'Local Epistemic Sovereignty'), the header with the General illustration, title and description, the LANGUAGE & REGION and STARTUP cards, and the footer 'Changes are saved as you make them.' with Close.",
+    "region": "",
+    "setup": "",
+    "steps": [
+      "Press Ctrl+,"
+    ]
+  },
+  {
+    "id": "settings-rail",
+    "page": "guides/settings/index.mdx",
+    "kind": "region",
+    "subject": "The category rail alone: 'Search settings…' box, the sixteen category buttons from General to Advanced with their icons (General active), and the lock footer.",
+    "region": "The left rail of the Settings dialog, from the search box to the footer.",
+    "setup": "",
+    "steps": [
+      "Press Ctrl+,"
+    ]
+  },
+  {
+    "id": "settings-row-modified",
+    "page": "guides/settings/index.mdx",
+    "kind": "element",
+    "subject": "The 'Autosave drafts every' row showing 45 s in its stepper, with the small reset-to-default arrow button before the stepper.",
+    "region": "The single 'Autosave drafts every' row in the DRAFTS card.",
+    "setup": "Afterwards click the reset arrow to put it back to 30 s.",
+    "steps": [
+      "Press Ctrl+,",
+      "Click Reading & Writing in the rail",
+      "In DRAFTS, click + on 'Autosave drafts every' three times (30 s → 45 s)"
+    ]
+  },
+  {
+    "id": "settings-control-menu",
+    "page": "guides/settings/index.mdx",
+    "kind": "element",
+    "subject": "The Startup screen menu open, with Timeline ticked, then Knowledge Vault, Mind Graph and Agent Lab.",
+    "region": "The Startup screen menu button and its open menu.",
+    "setup": "",
+    "steps": [
+      "Press Ctrl+,",
+      "In STARTUP, click the 'Timeline' menu button of Startup screen"
+    ]
+  },
+  {
+    "id": "settings-control-locked",
+    "page": "guides/settings/index.mdx",
+    "kind": "element",
+    "subject": "The Telemetry row with its green lock badge 'Always off'.",
+    "region": "The Telemetry row of the PRIVACY card.",
+    "setup": "",
+    "steps": [
+      "Press Ctrl+,",
+      "Click Privacy & Data in the rail",
+      "Scroll to the PRIVACY card"
+    ]
+  },
+  {
+    "id": "settings-footer-unsaved",
+    "page": "guides/settings/index.mdx",
+    "kind": "element",
+    "subject": "The Settings footer with the amber dot, 'Unsaved provider changes', Close and the primary 'Save & Apply Settings' button.",
+    "region": "The footer bar of the Settings dialog.",
+    "setup": "Do not save; close Settings afterwards to discard the change.",
+    "steps": [
+      "Press Ctrl+,",
+      "Click AI & Models in the rail",
+      "Click the OpenAI provider button"
+    ]
+  },
+  {
+    "id": "settings-search",
+    "page": "guides/settings/index.mdx",
+    "kind": "window",
+    "subject": "Settings searching for 'key': header 'Search results' and 'Matching settings: 5', results grouped under AI & Models (Provider and default model, Credentials, each with Show in AI & Models), Notifications (Model failures), Shortcuts (Keyboard shortcuts) and Advanced (Reset all settings) with 'key' highlighted, count badges beside those categories in the rail and the other categories dimmed.",
+    "region": "",
+    "setup": "",
+    "steps": [
+      "Press Ctrl+,",
+      "Click the 'Search settings…' box",
+      "Type key"
+    ]
+  },
+  {
+    "id": "settings-compact",
+    "page": "guides/settings/index.mdx",
+    "kind": "window",
+    "subject": "Settings in a compact window: a thin icon-only rail, the search box above the header in the content column, the General category.",
+    "region": "",
+    "setup": "Main window narrower than 900 px (the medium breakpoint), for example 860 × 900.",
+    "steps": [
+      "Resize the window to 860 px wide",
+      "Press Ctrl+,"
+    ]
+  },
+  {
+    "id": "settings-general",
+    "page": "guides/settings/general.mdx",
+    "kind": "region",
+    "subject": "The General category body: LANGUAGE & REGION (Interface language menu English, Date format chips, Time format chips, Number format menu, First day of the week chips) and STARTUP (Default persona 'Last used', Startup screen 'Timeline', Welcome tour 'Show again').",
+    "region": "The header and body of the Settings content column.",
+    "setup": "",
+    "steps": [
+      "Press Ctrl+,"
+    ]
+  },
+  {
+    "id": "settings-reading-writing",
+    "page": "guides/settings/reading-writing.mdx",
+    "kind": "region",
+    "subject": "The Reading & Writing body: POSTS (Post length limit 280 chars, Split long drafts into a thread, Post as chips, Archive posts automatically 'Never', Symbol shorthand, Log my feelings in the journal), DRAFTS, LINKS & TAGS and FEED (Daily feed budget 'No limit').",
+    "region": "The Settings content column, scrolled so POSTS is at the top; a second capture of the lower cards may be stitched.",
+    "setup": "",
+    "steps": [
+      "Press Ctrl+,",
+      "Click Reading & Writing in the rail"
+    ]
+  },
+  {
+    "id": "settings-ai-provider",
+    "page": "guides/settings/ai-and-models.mdx",
+    "kind": "region",
+    "subject": "The AI & Models provider pane as the demo profile has it: 'SELECT LLM PROVIDER' with 'Active: Custom Endpoint', six provider buttons in two rows (Google Gemini with '★ Recommended'; Custom Endpoint selected), 'Custom Endpoint API Key' with 'Stays on this computer', the key drawn as dots with the eye button at the end of the field, 'Custom Endpoint URL' (the local stub engine), 'Model Identifier' (no hint beside it) stub-thinker and the 'Presets:' chip default-model.",
+    "region": "The top of the AI & Models content column, header included.",
+    "setup": "The demo profile's capture stub engine (Custom Endpoint); nothing typed.",
+    "steps": [
+      "Press Ctrl+,",
+      "Click AI & Models in the rail"
+    ]
+  },
+  {
+    "id": "settings-ai-requests-budget",
+    "page": "guides/settings/ai-and-models.mdx",
+    "kind": "region",
+    "subject": "The REQUESTS card (Request timeout 60 s, Retries 2×) and the DAILY BUDGET card (Daily request budget No limit, Daily token cap No limit, Ask before spending on).",
+    "region": "The REQUESTS and DAILY BUDGET cards.",
+    "setup": "",
+    "steps": [
+      "Press Ctrl+,",
+      "Click AI & Models in the rail",
+      "Scroll down past CREDENTIALS"
+    ]
+  },
+  {
+    "id": "settings-credentials-list",
+    "page": "guides/settings/credentials.mdx",
+    "kind": "region",
+    "subject": "The CREDENTIALS card with Add credential in its header, the note, the demo profile's 'Local engine' row (Custom Endpoint · ••••cret and its address) and a test 'Personal OpenAI key' row (OpenAI · ••••0000), each with pencil and bin icons.",
+    "region": "The CREDENTIALS section of AI & Models.",
+    "setup": "Add credential, chip OpenAI, Name 'Personal OpenAI key', API key test-0000 (a fake test value), Save credential. Remove it again afterwards with its bin icon.",
+    "steps": [
+      "Press Ctrl+,",
+      "Click AI & Models in the rail",
+      "Scroll to CREDENTIALS"
+    ]
+  },
+  {
+    "id": "settings-credentials-editor",
+    "page": "guides/settings/credentials.mdx",
+    "kind": "region",
+    "subject": "The open credential form under the list: Service chips (Google Gemini, OpenAI, Anthropic, OpenRouter, Groq, Custom Endpoint, Brave Search, Tavily, HTTP) with OpenAI filled, Name 'Personal OpenAI key', an API key field reading 'Paste the API key' with its eye button, Endpoint (optional) with its placeholder, Cancel and Save credential.",
+    "region": "The CREDENTIALS section with the form open.",
+    "setup": "Click Cancel (or fill the API key with a fake test value and save) afterwards.",
+    "steps": [
+      "Press Ctrl+,",
+      "Click AI & Models in the rail",
+      "Scroll to CREDENTIALS",
+      "Click Add credential",
+      "Click the OpenAI chip",
+      "Type Personal OpenAI key in Name"
+    ]
+  },
+  {
+    "id": "settings-embeddings",
+    "page": "guides/settings/embeddings.mdx",
+    "kind": "region",
+    "subject": "The Embeddings body as the demo profile has it: MODEL (Embedding provider 'Custom', Embedding model stub-embed, Local server address http://127.0.0.1:8765/v1, Vector size 256 dims, each with its reset arrow), CHUNKING (512 tokens, 64 tokens) and INDEX (Semantic search on, Rebuild, and Stop disabled since nothing is being indexed).",
+    "region": "The Settings content column of Embeddings.",
+    "setup": "",
+    "steps": [
+      "Press Ctrl+,",
+      "Click Embeddings in the rail"
+    ]
+  },
+  {
+    "id": "settings-images",
+    "page": "guides/settings/images.mdx",
+    "kind": "region",
+    "subject": "The Images body: ENGINE (Default image engine 'No images', Image size 'Square', Style prefix with placeholder 'e.g. watercolor, soft light') and AVATARS (Draw avatars automatically off).",
+    "region": "The Settings content column of Images.",
+    "setup": "",
+    "steps": [
+      "Press Ctrl+,",
+      "Click Images in the rail"
+    ]
+  },
+  {
+    "id": "settings-agents",
+    "page": "guides/settings/agents-and-simulation.mdx",
+    "kind": "region",
+    "subject": "The Agents & Simulation body: AUTONOMY (Autonomous posting off, the 'Scheduler Off' status pill and lines, Rate limit 12 / hour, Concurrent generations 1 at once), QUIET HOURS (switch off, dimmed Quiet from 22:00 and Quiet until 07:00) and REPLIES (6 deep).",
+    "region": "The Settings content column of Agents & Simulation.",
+    "setup": "",
+    "steps": [
+      "Press Ctrl+,",
+      "Click Agents & Simulation in the rail"
+    ]
+  },
+  {
+    "id": "settings-agents-scheduler-status",
+    "page": "guides/settings/agents-and-simulation.mdx",
+    "kind": "element",
+    "subject": "The scheduler status block: green 'Scheduler On' pill, the explanation ending 'Checked every 60s, one generation at a time.', and the queue line '0 generating · 0 queued'.",
+    "region": "The scheduler status rows inside the AUTONOMY card.",
+    "setup": "The demo profile's stub engine (Custom Endpoint). Turn Autonomous posting off again afterwards.",
+    "steps": [
+      "Press Ctrl+,",
+      "Click Agents & Simulation in the rail",
+      "Turn on Autonomous posting"
+    ]
+  },
+  {
+    "id": "settings-learning",
+    "page": "guides/settings/learning.mdx",
+    "kind": "region",
+    "subject": "The Learning body: REVIEWS (200 / day, 20 / day, 90%), REMINDER (switch off, dimmed Remind me at 09:00), WEEKLY REVIEW (switch off, dimmed Sunday and 18:00) and LANGUAGES (Language I am learning 'Español').",
+    "region": "The Settings content column of Learning.",
+    "setup": "",
+    "steps": [
+      "Press Ctrl+,",
+      "Click Learning in the rail"
+    ]
+  },
+  {
+    "id": "settings-import",
+    "page": "guides/settings/import.mdx",
+    "kind": "region",
+    "subject": "The Import body: SPLITTING (Split documents by chips with Paragraph chosen, Post imports as chips with Yourself chosen) and FILES (Largest file 50 MB, Keep the original file on).",
+    "region": "The Settings content column of Import.",
+    "setup": "",
+    "steps": [
+      "Press Ctrl+,",
+      "Click Import in the rail"
+    ]
+  },
+  {
+    "id": "settings-privacy-data",
+    "page": "guides/settings/privacy-and-data.mdx",
+    "kind": "region",
+    "subject": "The Privacy & Data body: STORAGE (Database and Media folder paths in monospace, starting with … and ending in the vault folder and file, with Open folder), MAINTENANCE (Back up now, Export, Create snapshot, Restore, Clear) and PRIVACY (Fetch link previews on, Include journal in search off, Telemetry 'Always off').",
+    "region": "The Settings content column of Privacy & Data.",
+    "setup": "",
+    "steps": [
+      "Press Ctrl+,",
+      "Click Privacy & Data in the rail"
+    ]
+  },
+  {
+    "id": "settings-notifications",
+    "page": "guides/settings/notifications.mdx",
+    "kind": "region",
+    "subject": "The Notifications body: the IN-APP TOASTS card with Show toasts on, Confirmations on, Model failures on, Agent activity off, Due reminders on.",
+    "region": "The Settings content column of Notifications.",
+    "setup": "",
+    "steps": [
+      "Press Ctrl+,",
+      "Click Notifications in the rail"
+    ]
+  },
+  {
+    "id": "settings-code",
+    "page": "guides/settings/code.mdx",
+    "kind": "region",
+    "subject": "The Code body: RUNNING CODE (Run code blocks off, Time limit 10 s) and RUNTIMES (the note, 'Checked …' with Refresh, and rows Node, Deno, Python, Lua, Go with version and path (the home folder written ~) and their switches dimmed, then Ruby and PHP reading 'Not found' with no switch).",
+    "region": "The Settings content column of Code.",
+    "setup": "At least one runtime installed on the capture machine (for example Python).",
+    "steps": [
+      "Press Ctrl+,",
+      "Click Code in the rail",
+      "Click Refresh and wait until it no longer reads Checking…"
+    ]
+  },
+  {
+    "id": "settings-advanced",
+    "page": "guides/settings/shortcuts-and-advanced.mdx",
+    "kind": "region",
+    "subject": "The Advanced body: DIAGNOSTICS (Log level 'Warnings', Developer options off) and RESET with the red filled button 'Click again to reset'.",
+    "region": "The Settings content column of Advanced.",
+    "setup": "Do not click a second time; close Settings afterwards.",
+    "steps": [
+      "Press Ctrl+,",
+      "Click Advanced in the rail",
+      "Click Reset all once"
+    ]
+  },
+  {
+    "id": "appearance-pane",
+    "page": "guides/appearance/index.mdx",
+    "kind": "window",
+    "subject": "Settings open on Appearance: READING COMFORT card, then APPEARANCE MODE (Dark, Light, System chips, hint, Dark theme and Light theme menus) and the top of the THEME GALLERY.",
+    "region": "",
+    "setup": "",
+    "steps": [
+      "Click the palette icon (Appearance) in the left sidebar footer"
+    ]
+  },
+  {
+    "id": "appearance-mode",
+    "page": "guides/appearance/index.mdx",
+    "kind": "region",
+    "subject": "The APPEARANCE MODE card: Dark (chosen), Light and System chips, the hint 'System follows your computer's light or dark setting and switches with it.', 'Dark theme' menu showing Simulacra Midnight and 'Light theme' menu showing Graphite Light.",
+    "region": "The APPEARANCE MODE section label and card.",
+    "setup": "",
+    "steps": [
+      "Click the palette icon (Appearance) in the left sidebar footer"
+    ]
+  },
+  {
+    "id": "appearance-title-bar-toggle",
+    "page": "guides/appearance/index.mdx",
+    "kind": "element",
+    "subject": "The title bar's appearance button (moon icon) with its tooltip 'Appearance: Dark (click for Light)'.",
+    "region": "The toggle and its tooltip in the title bar.",
+    "setup": "",
+    "steps": [
+      "Close Settings if open",
+      "Hover the moon button in the title bar"
+    ]
+  },
+  {
+    "id": "appearance-reading-comfort",
+    "page": "guides/appearance/index.mdx",
+    "kind": "region",
+    "subject": "The READING COMFORT card: Reading width chips Narrow, Comfortable (chosen), Wide, and the Reduce motion switch off.",
+    "region": "The READING COMFORT section label and card.",
+    "setup": "",
+    "steps": [
+      "Click the palette icon (Appearance) in the left sidebar footer"
+    ]
+  },
+  {
+    "id": "appearance-gallery",
+    "page": "guides/appearance/themes.mdx",
+    "kind": "region",
+    "subject": "The THEME GALLERY: the search field 'Search themes by name or author…', All / Dark / Light chips (All chosen), 'BUNDLED THEMES' and the first rows of preview cards, sharing each row evenly to the right edge of the pane, with Simulacra Midnight outlined and marked Active.",
+    "region": "The THEME GALLERY section.",
+    "setup": "",
+    "steps": [
+      "Click the palette icon (Appearance) in the left sidebar footer",
+      "Scroll to THEME GALLERY"
+    ]
+  },
+  {
+    "id": "appearance-theme-card",
+    "page": "guides/appearance/themes.mdx",
+    "kind": "element",
+    "subject": "The Simulacra Midnight gallery card: the mini post by Socrates-GPT (@socrates · 2m, 'Knowledge is a conversation that refuses to end.', dialectic chip, Post button) and the footer with name, Active badge and credit 'Simulacra'.",
+    "region": "One gallery card.",
+    "setup": "",
+    "steps": [
+      "Click the palette icon (Appearance) in the left sidebar footer",
+      "Scroll to THEME GALLERY"
+    ]
+  },
+  {
+    "id": "appearance-editor-locked",
+    "page": "guides/appearance/custom-themes.mdx",
+    "kind": "region",
+    "subject": "The CUSTOM THEME card on a bundled theme: 'Bundled themes are read-only. Duplicate one to edit its colors.', the Duplicate button, and the CONTRAST (WCAG 2.1) list with ratios and grade badges.",
+    "region": "The CUSTOM THEME section.",
+    "setup": "A bundled theme active (Simulacra Midnight).",
+    "steps": [
+      "Click the palette icon (Appearance) in the left sidebar footer",
+      "Scroll to CUSTOM THEME"
+    ]
+  },
+  {
+    "id": "appearance-editor-custom",
+    "page": "guides/appearance/custom-themes.mdx",
+    "kind": "region",
+    "subject": "The CUSTOM THEME card editing 'Nord (Custom)': 'Editing Nord (Custom)', Duplicate and Reset to preset outlined and Delete in red, the fourteen colour pickers in two even columns across the card with labels (Background … Selection) and hex values, and the contrast list.",
+    "region": "The CUSTOM THEME section.",
+    "setup": "Delete the custom theme afterwards (Delete).",
+    "steps": [
+      "Click the palette icon (Appearance) in the left sidebar footer",
+      "Click the Nord card in the gallery",
+      "Click Duplicate",
+      "Scroll to CUSTOM THEME"
+    ]
+  },
+  {
+    "id": "appearance-contrast",
+    "page": "guides/appearance/custom-themes.mdx",
+    "kind": "element",
+    "subject": "The CONTRAST (WCAG 2.1) list of the Nord copy with Muted text set to #4c566a: the Text rows AAA, the three Muted text rows with red-outlined Fail badges, Accent label on accent AAA.",
+    "region": "The contrast rows of the CUSTOM THEME card.",
+    "setup": "A custom theme (duplicate Nord) whose Muted text colour is set to #4c566a (close to the background). A pale accent does not fail: the label on it turns dark by itself. Delete it afterwards.",
+    "steps": [
+      "Click the palette icon (Appearance) in the left sidebar footer",
+      "Click the Nord card",
+      "Click Duplicate",
+      "Click the Muted text swatch, type #4c566a in its hex field and press Enter",
+      "Scroll to CONTRAST (WCAG 2.1)"
+    ]
+  },
+  {
+    "id": "appearance-typography",
+    "page": "guides/appearance/typography-and-layout.mdx",
+    "kind": "region",
+    "subject": "The TYPOGRAPHY & LAYOUT card as rows divided by hairlines, each name on the left and its chips on the right: Font family chips (Segoe UI chosen, Calibri, Georgia, Verdana, Trebuchet MS), Text size (Small, Default, Large), Density (Compact, Comfortable, Cozy), Corners (Sharp, Default, Round), and the Panel layout row with its hint and Reset layout.",
+    "region": "The TYPOGRAPHY & LAYOUT section.",
+    "setup": "",
+    "steps": [
+      "Click the palette icon (Appearance) in the left sidebar footer",
+      "Scroll to TYPOGRAPHY & LAYOUT"
+    ]
+  },
+  {
+    "id": "appearance-transfer",
+    "page": "guides/appearance/custom-themes.mdx",
+    "kind": "element",
+    "subject": "The IMPORT & EXPORT card with Copy JSON, Paste JSON, Save file… and Open file… buttons.",
+    "region": "The IMPORT & EXPORT section.",
+    "setup": "",
+    "steps": [
+      "Click the palette icon (Appearance) in the left sidebar footer",
+      "Scroll to the bottom of the pane"
+    ]
+  },
+  {
+    "id": "appearance-icon-sets",
+    "page": "guides/appearance/icon-sets.mdx",
+    "kind": "region",
+    "subject": "Settings › Symbols with no set downloaded yet: the ICON SETS card with its note ('Each download fetches the icon package once (21.7 MB) …'), and set rows from 'Outline icons · set 1' ('MPL-2.0 · 288 icons · 243 KB') to 'Line icons · set 10', each with Download.",
+    "region": "The Settings content column of Symbols, header included.",
+    "setup": "No icon set downloaded (the capture does not download from the npm registry).",
+    "steps": [
+      "Press Ctrl+,",
+      "Click Symbols in the rail"
+    ]
+  },
+  {
+    "id": "appearance-icon-download",
+    "page": "guides/appearance/icon-sets.mdx",
+    "kind": "element",
+    "subject": "One set row, 'Line icons · set 10' ('ISC · 1541 icons · 775 KB'), with its Download button (before a download; the capture does not download from the npm registry).",
+    "region": "The downloading set row.",
+    "setup": "No download is started.",
+    "steps": [
+      "Press Ctrl+,",
+      "Click Symbols in the rail"
+    ]
+  },
+  {
+    "id": "appearance-licences",
+    "page": "guides/appearance/icon-sets.mdx",
+    "kind": "region",
+    "subject": "Settings › Licences with no set downloaded: the ICON SETS card with the single line 'No icon set is downloaded yet. Sets you download in Symbols are listed here with their licences.'",
+    "region": "The Settings content column of Licences.",
+    "setup": "No icon set downloaded.",
+    "steps": [
+      "Press Ctrl+,",
+      "Click Licences in the rail"
+    ]
+  },
+  {
+    "id": "data-storage-card",
+    "page": "guides/data/storage-and-backups.mdx",
+    "kind": "element",
+    "subject": "The STORAGE card: Database row with its monospace path starting with … and ending in the vault folder and simulacra.db, and Open folder; Media folder row with its path ending in the vault folder and media, and Open folder.",
+    "region": "The STORAGE card of Privacy & Data.",
+    "setup": "",
+    "steps": [
+      "Press Ctrl+,",
+      "Click Privacy & Data in the rail"
+    ]
+  },
+  {
+    "id": "data-backup-toast",
+    "page": "guides/data/storage-and-backups.mdx",
+    "kind": "element",
+    "subject": "The success toast 'Backup saved in the backups folder: simulacra-YYYYMMDD-HHMMSS.db', breaking after the colon: the file name alone, no path.",
+    "region": "The toast in the window corner.",
+    "setup": "",
+    "steps": [
+      "Press Ctrl+,",
+      "Click Privacy & Data in the rail",
+      "Click Back up now"
+    ]
+  },
+  {
+    "id": "data-export-sheet",
+    "page": "guides/data/export.mdx",
+    "kind": "region",
+    "subject": "The Export bundle sheet: title and subtitle, WHAT TO EXPORT with Everything chosen in the segmented track, ALSO INCLUDE with two unticked rows, WILL BE WRITTEN with nine counts and the green 'Never included: credentials, API keys and AI provider settings.', then Cancel and Export….",
+    "region": "The export sheet.",
+    "setup": "",
+    "steps": [
+      "Press Ctrl+K",
+      "Type export bundle",
+      "Press Enter"
+    ]
+  },
+  {
+    "id": "data-export-date-range",
+    "page": "guides/data/export.mdx",
+    "kind": "element",
+    "subject": "The Date range scope: From and To fields holding the last 30 days and the chips Last 7 days, Last 30 days, Last 90 days, Last 365 days.",
+    "region": "The WHAT TO EXPORT section with Date range chosen.",
+    "setup": "",
+    "steps": [
+      "Press Ctrl+K",
+      "Type export bundle",
+      "Press Enter",
+      "Click Date range"
+    ]
+  },
+  {
+    "id": "data-export-journal-warning",
+    "page": "guides/data/export.mdx",
+    "kind": "element",
+    "subject": "ALSO INCLUDE with 'Include private journal' ticked and the amber warning that the journal is written into the bundle unencrypted.",
+    "region": "The ALSO INCLUDE section.",
+    "setup": "",
+    "steps": [
+      "Press Ctrl+K",
+      "Type export bundle",
+      "Press Enter",
+      "Click Include private journal"
+    ]
+  },
+  {
+    "id": "data-snapshot-sheet",
+    "page": "guides/data/snapshots.mdx",
+    "kind": "region",
+    "subject": "The Encrypted snapshot sheet: the explanation, PASSPHRASE with a masked passphrase, the four-part meter reading Strong and its tip, the repeat field filled, the amber 'If you lose this passphrase…' notice, Cancel and an enabled Create snapshot….",
+    "region": "The snapshot sheet.",
+    "setup": "Then Create snapshot… saves it to a temp folder for the restore shots.",
+    "steps": [
+      "Press Ctrl+K",
+      "Type encrypted snapshot",
+      "Press Enter",
+      "Type lantern orbit pickle granite meadow quiver in Passphrase (six words read Strong; four read Fair)",
+      "Type the same in Type it again"
+    ]
+  },
+  {
+    "id": "data-restore-choose",
+    "page": "guides/data/snapshots.mdx",
+    "kind": "region",
+    "subject": "The Restore snapshot sheet on its first step: the explanation, SNAPSHOT FILE with Choose file… and a .simsnap file name, the 'Passphrase of the snapshot' field, the verify hint, Cancel and Verify.",
+    "region": "The restore sheet.",
+    "setup": "The snapshot made in data-snapshot-sheet (passphrase 'lantern orbit pickle granite meadow quiver'), in a temp folder.",
+    "steps": [
+      "Press Ctrl+K",
+      "Type restore snapshot",
+      "Press Enter",
+      "Click Choose file… and pick the snapshot"
+    ]
+  },
+  {
+    "id": "data-restore-verified",
+    "page": "guides/data/snapshots.mdx",
+    "kind": "region",
+    "subject": "The Restore snapshot sheet after Verify: the green 'Verified. Snapshot from …: N posts, N profiles, N documents.' notice, the amber replace warning, Cancel and the red 'Restore and restart' button.",
+    "region": "The restore sheet.",
+    "setup": "Same snapshot as data-restore-choose. Click Cancel afterwards, not Restore and restart.",
+    "steps": [
+      "Press Ctrl+K",
+      "Type restore snapshot",
+      "Press Enter",
+      "Click Choose file… and pick the snapshot",
+      "Type lantern orbit pickle granite meadow quiver",
+      "Click Verify and wait"
+    ]
+  },
+  {
+    "id": "data-history-sheet",
+    "page": "guides/data/version-history.mdx",
+    "kind": "region",
+    "subject": "The Version history sheet of a vault document: the document title as subtitle, the VERSIONS list newest first (Current, Earlier version v1.1.0, Original v1.0.0 with their until … times), the Original row highlighted with no compare button, and the compare buttons (two crossing arrows) on the other rows, lit on Current, CHANGES FROM v1.0.0 TO Current with '+9 words −0 words', the Title: “…” → “…” note and the word diff with the added first sentence in green, then Close and Restore this version.",
+    "region": "The history sheet.",
+    "setup": "A vault document edited twice: in the Knowledge Vault open the Tractatus Logico-Philosophicus entry, click Edit, add ' (Ogden translation)' to its title and save; click Edit again, add 'Whereof one cannot speak, thereof one must be silent.' as a new first paragraph of its text and save.",
+    "steps": [
+      "Press Ctrl+2",
+      "Open the Tractatus Logico-Philosophicus entry",
+      "Click History on the entry",
+      "Click the Original row (A)"
+    ]
+  }
+]

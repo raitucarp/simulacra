@@ -1,0 +1,846 @@
+[
+  {
+    "id": "review-today",
+    "page": "guides/review/index.mdx",
+    "kind": "window",
+    "subject": "The Review page on its Today tab: header with title, counts line '0 due · 4 new today · 4 items', Pick posts to learn and New connection map, the four tabs (Today active); the Today card with the three tiles (0 due for review, 4 new to learn, 0 answered today), the limits caption, Start review (4) with the Space key-cap hint; the Quiz yourself card with three tiles.",
+    "region": "",
+    "setup": "Active network: Epistemology & Mind. Four review items in Epistemology & Mind: Baruch de Spinoza's post 'Substance is one and infinite…' learnt with Learn › Add question (question 'According to Spinoza, how does the order of ideas relate to the order of things?', tags 'Spinoza, substance'); Sokrates of Alopece's reply 'Tell me, my friend: if a bronze mirror…' learnt with Learn › Add answer (answer 'A reflection repeats the form of the light without the experience of it.'); and two sentences of the vault entry 'Ethics' learnt with Learn passages, each with a question. ",
+    "steps": [
+      "Press Ctrl+6",
+      "Click the Today tab"
+    ]
+  },
+  {
+    "id": "review-header",
+    "page": "guides/review/index.mdx",
+    "kind": "element",
+    "subject": "The Review header: title Review, the counts line, the ghost buttons Pick posts to learn and New connection map, and the segmented tabs Today, Learn, Statistics, Items.",
+    "region": "The header block only (title row and tab track).",
+    "setup": "Active network: Epistemology & Mind. Four review items in Epistemology & Mind: Baruch de Spinoza's post 'Substance is one and infinite…' learnt with Learn › Add question (question 'According to Spinoza, how does the order of ideas relate to the order of things?', tags 'Spinoza, substance'); Sokrates of Alopece's reply 'Tell me, my friend: if a bronze mirror…' learnt with Learn › Add answer (answer 'A reflection repeats the form of the light without the experience of it.'); and two sentences of the vault entry 'Ethics' learnt with Learn passages, each with a question. ",
+    "steps": [
+      "Press Ctrl+6"
+    ]
+  },
+  {
+    "id": "review-empty",
+    "page": "guides/review/index.mdx",
+    "kind": "region",
+    "subject": "The empty state 'Nothing to learn yet' with its illustration, hint text, and the buttons Pick posts to learn, New connection map and Put in order.",
+    "region": "The empty-state block under the tabs.",
+    "setup": "Active network: Epistemology & Mind (demo profile), before any post is learnt: no review items.",
+    "steps": [
+      "Press Ctrl+6",
+      "Click the Today tab"
+    ]
+  },
+  {
+    "id": "review-caught-up",
+    "page": "guides/review/index.mdx",
+    "kind": "region",
+    "subject": "The 'All caught up' state: illustration, the line saying when the next items come due ('1 item comes due in 1 day.'), the caption 'Want more practice? Quizzes don't count against today's limits.' and the Multiple choice and Put in order buttons.",
+    "region": "The caught-up block above the Quiz yourself card.",
+    "setup": "Active network: Epistemology & Mind. Four review items learnt through the UI: Baruch de Spinoza's post 'Substance is one and infinite…' (Learn › Add question, 'According to Spinoza, how does the order of ideas relate to the order of things?', tags 'Spinoza, substance'), Sokrates of Alopece's reply 'Tell me, my friend: if a bronze mirror…' (Learn › Add answer, 'A reflection repeats the form of the light without the experience of it.') and two sentences of the vault entry Ethics (Learn passages, each with a question). The session of review-summary finished (one item graded Again, then Good when it came back; the rest Good).",
+    "steps": [
+      "Press Ctrl+6",
+      "Click Start review (4)",
+      "For each item press Space, then 3",
+      "Click Back to today"
+    ]
+  },
+  {
+    "id": "review-post-learn-menu",
+    "page": "guides/review/learn-posts.mdx",
+    "kind": "element",
+    "subject": "A post's … menu (on its Thread Inspector card) with the Learn submenu open, showing Add question, Add answer, a separator, and Learn this thread's connections; the post's text shows behind the menus.",
+    "region": "The open menu and submenu only.",
+    "setup": "Active network: Epistemology & Mind. Fresh first-run profile.",
+    "steps": [
+      "Press Ctrl+1",
+      "Open Spinoza's post with the palette (type 'Substance is one', Enter): it opens in the Thread Inspector",
+      "Click the … of its card in the Thread Inspector",
+      "Hover Learn"
+    ]
+  },
+  {
+    "id": "review-learn-badge",
+    "page": "guides/review/learn-posts.mdx",
+    "kind": "element",
+    "subject": "The small learn indicator chip on a stream card (graduation cap and 'New'), at the right of the author row beside the … button; the persona badge wraps to the next line.",
+    "region": "The chip with a little of the post card's meta row around it.",
+    "setup": "Active network: Epistemology & Mind. Spinoza's post 'Substance is one and infinite…' learnt with Add question and not yet reviewed.",
+    "steps": [
+      "Press Ctrl+1",
+      "Scroll to Spinoza's post"
+    ]
+  },
+  {
+    "id": "review-learn-sheet-post",
+    "page": "guides/review/learn-posts.mdx",
+    "kind": "region",
+    "subject": "The Learn this post sheet over the scrim: header with the graduation cap and title, the post as the stream shows it, the switch Add question / Add answer (Add question active), the field Your question filled, the tip 'The post is the answer…', Tags 'Spinoza, substance', and the footer with Suggest with AI and Save.",
+    "region": "The sheet only.",
+    "setup": "Active network: Epistemology & Mind. Fresh first-run profile.",
+    "steps": [
+      "Press Ctrl+1",
+      "Open Spinoza's post with the palette ('Substance is one')",
+      "Thread Inspector card › … › Learn › Add question",
+      "Type 'According to Spinoza, how does the order of ideas relate to the order of things?'",
+      "Click Tags and type 'Spinoza, substance'"
+    ]
+  },
+  {
+    "id": "review-learn-sheet-passages",
+    "page": "guides/review/learn-posts.mdx",
+    "kind": "region",
+    "subject": "The Learn passages sheet on the vault entry Ethics, its body scrolled a little: the Sentences / Paragraphs switch, the sentence list with the second chosen sentence highlighted, that sentence as a quoted callout with the title and place, the Add question / Add answer switch, the question field filled, the tip 'The passage is the answer…', Tags, and 'Passages to save (1)' with the first passage's question and its remove button; footer with Suggest with AI, Add another passage and Save.",
+    "region": "The sheet only.",
+    "setup": "Active network: Epistemology & Mind. Fresh first-run profile.",
+    "steps": [
+      "Press Ctrl+2",
+      "Open the entry Ethics",
+      "Click Learn passages",
+      "Click 'By substance I understand…' and type a question",
+      "Click Add another passage",
+      "Click 'A mode is an affection…' and type a question",
+      "Scroll the sheet body down a little"
+    ]
+  },
+  {
+    "id": "review-picker-learn",
+    "page": "guides/review/learn-posts.mdx",
+    "kind": "region",
+    "subject": "The 'Pick posts to learn' screen: title and hint, the Search field with 'order', and three post rows (author name and handle, two lines of text), two with Add question and Add answer, Spinoza's 'Substance is one and infinite…' showing 'Learning · edit'; the footer with Back to today (the Today tab stays lit).",
+    "region": "The picker card.",
+    "setup": "Active network: Epistemology & Mind. Four review items learnt through the UI: Baruch de Spinoza's post 'Substance is one and infinite…' (Learn › Add question, 'According to Spinoza, how does the order of ideas relate to the order of things?', tags 'Spinoza, substance'), Sokrates of Alopece's reply 'Tell me, my friend: if a bronze mirror…' (Learn › Add answer, 'A reflection repeats the form of the light without the experience of it.') and two sentences of the vault entry Ethics (Learn passages, each with a question).",
+    "steps": [
+      "Press Ctrl+6",
+      "Click Pick posts to learn",
+      "Type 'order' in Search"
+    ]
+  },
+  {
+    "id": "review-session-prompt",
+    "page": "guides/review/sessions.mdx",
+    "kind": "region",
+    "subject": "A session item at its prompt: progress '0 of 4 · 4 left' with the bar and End; the item card with 'Question · #Spinoza · #substance', the written question in large type, and Open the post at the foot; below, Show answer with the Space key cap and 'Try to recall it before you look.'",
+    "region": "The centre column of the Review page.",
+    "setup": "Active network: Epistemology & Mind. Four review items in Epistemology & Mind: Baruch de Spinoza's post 'Substance is one and infinite…' learnt with Learn › Add question (question 'According to Spinoza, how does the order of ideas relate to the order of things?', tags 'Spinoza, substance'); Sokrates of Alopece's reply 'Tell me, my friend: if a bronze mirror…' learnt with Learn › Add answer (answer 'A reflection repeats the form of the light without the experience of it.'); and two sentences of the vault entry 'Ethics' learnt with Learn passages, each with a question. ",
+    "steps": [
+      "Press Ctrl+6",
+      "Click Start review (4)",
+      "If the first item is not the Spinoza question, press Space and 3 until it shows"
+    ]
+  },
+  {
+    "id": "review-session-revealed",
+    "page": "guides/review/sessions.mdx",
+    "kind": "region",
+    "subject": "The same item revealed: the question above a divider, Spinoza's post below it as the stream shows it, and the four grade buttons with key caps 1–4, labels and intervals.",
+    "region": "The centre column of the Review page.",
+    "setup": "Active network: Epistemology & Mind. Four review items in Epistemology & Mind: Baruch de Spinoza's post 'Substance is one and infinite…' learnt with Learn › Add question (question 'According to Spinoza, how does the order of ideas relate to the order of things?', tags 'Spinoza, substance'); Sokrates of Alopece's reply 'Tell me, my friend: if a bronze mirror…' learnt with Learn › Add answer (answer 'A reflection repeats the form of the light without the experience of it.'); and two sentences of the vault entry 'Ethics' learnt with Learn passages, each with a question. ",
+    "steps": [
+      "Press Ctrl+6",
+      "Click Start review (4)",
+      "Press Space"
+    ]
+  },
+  {
+    "id": "review-grade-buttons",
+    "page": "guides/review/sessions.mdx",
+    "kind": "element",
+    "subject": "The row of four grade buttons: 1 Again (red), 2 Hard (amber), 3 Good (green), 4 Easy (blue), each with its interval under it.",
+    "region": "The grade button row only.",
+    "setup": "Active network: Epistemology & Mind. Four review items in Epistemology & Mind: Baruch de Spinoza's post 'Substance is one and infinite…' learnt with Learn › Add question (question 'According to Spinoza, how does the order of ideas relate to the order of things?', tags 'Spinoza, substance'); Sokrates of Alopece's reply 'Tell me, my friend: if a bronze mirror…' learnt with Learn › Add answer (answer 'A reflection repeats the form of the light without the experience of it.'); and two sentences of the vault entry 'Ethics' learnt with Learn passages, each with a question. ",
+    "steps": [
+      "Press Ctrl+6",
+      "Click Start review (4)",
+      "Press Space"
+    ]
+  },
+  {
+    "id": "review-summary",
+    "page": "guides/review/sessions.mdx",
+    "kind": "region",
+    "subject": "The Session complete card: tiles items reviewed, recalled on the first try, to relearn; the bar split by grade with its legend; the tomorrow caption and the tip; buttons Back to today, Statistics and Free recall.",
+    "region": "The summary card.",
+    "setup": "Active network: Epistemology & Mind. Four review items in Epistemology & Mind: Baruch de Spinoza's post 'Substance is one and infinite…' learnt with Learn › Add question (question 'According to Spinoza, how does the order of ideas relate to the order of things?', tags 'Spinoza, substance'); Sokrates of Alopece's reply 'Tell me, my friend: if a bronze mirror…' learnt with Learn › Add answer (answer 'A reflection repeats the form of the light without the experience of it.'); and two sentences of the vault entry 'Ethics' learnt with Learn passages, each with a question. ",
+    "steps": [
+      "Press Ctrl+6",
+      "Click Start review (4)",
+      "Press Space then 3 for the first item, Space then 1 for the second, then Space and 3 until the summary shows"
+    ]
+  },
+  {
+    "id": "review-quiz-modes",
+    "page": "guides/review/quizzes.mdx",
+    "kind": "element",
+    "subject": "The Quiz yourself card: title with the lightbulb, the caption on retrieval, and the three tiles Multiple choice, Free recall and Put in order with their descriptions.",
+    "region": "The Quiz yourself card only.",
+    "setup": "Active network: Epistemology & Mind. Four review items in Epistemology & Mind: Baruch de Spinoza's post 'Substance is one and infinite…' learnt with Learn › Add question (question 'According to Spinoza, how does the order of ideas relate to the order of things?', tags 'Spinoza, substance'); Sokrates of Alopece's reply 'Tell me, my friend: if a bronze mirror…' learnt with Learn › Add answer (answer 'A reflection repeats the form of the light without the experience of it.'); and two sentences of the vault entry 'Ethics' learnt with Learn passages, each with a question. ",
+    "steps": [
+      "Press Ctrl+6",
+      "Click the Today tab",
+      "Scroll to the Quiz yourself card"
+    ]
+  },
+  {
+    "id": "review-quiz-choice",
+    "page": "guides/review/quizzes.mdx",
+    "kind": "region",
+    "subject": "A multiple-choice question after a wrong pick: progress 'Question 1 of 4 · 0 right', the item card, the confidence chips with Unsure selected, four plain-text options (no [[post_1]] link) with the right one green and ticked and the picked one red and crossed, and 'Not quite: the right answer is marked.' with Next and the Space key cap.",
+    "region": "The centre column of the Review page.",
+    "setup": "Active network: Epistemology & Mind. Four review items in Epistemology & Mind: Baruch de Spinoza's post 'Substance is one and infinite…' learnt with Learn › Add question (question 'According to Spinoza, how does the order of ideas relate to the order of things?', tags 'Spinoza, substance'); Sokrates of Alopece's reply 'Tell me, my friend: if a bronze mirror…' learnt with Learn › Add answer (answer 'A reflection repeats the form of the light without the experience of it.'); and two sentences of the vault entry 'Ethics' learnt with Learn passages, each with a question. ",
+    "steps": [
+      "Press Ctrl+6",
+      "Click Multiple choice",
+      "Click Unsure",
+      "Press the number of a wrong option"
+    ]
+  },
+  {
+    "id": "review-quiz-recall",
+    "page": "guides/review/quizzes.mdx",
+    "kind": "region",
+    "subject": "A free-recall result: progress 'Item 1 of 4' with Finish, the item card (whichever item comes first), the verdict for that item ('Close: a small slip' for a written answer, 'Compare it with the source in your own words' for a whole post), 'You wrote: …', the expected answer face, the caption 'How well did you know it? The outlined grade is a suggestion.' and the four grade buttons with the suggested one outlined.",
+    "region": "The centre column of the Review page.",
+    "setup": "Active network: Epistemology & Mind. Four review items in Epistemology & Mind: Baruch de Spinoza's post 'Substance is one and infinite…' learnt with Learn › Add question (question 'According to Spinoza, how does the order of ideas relate to the order of things?', tags 'Spinoza, substance'); Sokrates of Alopece's reply 'Tell me, my friend: if a bronze mirror…' learnt with Learn › Add answer (answer 'A reflection repeats the form of the light without the experience of it.'); and two sentences of the vault entry 'Ethics' learnt with Learn passages, each with a question. ",
+    "steps": [
+      "Press Ctrl+6",
+      "Click Free recall",
+      "Type the first item's answer with one word left out and press Enter"
+    ]
+  },
+  {
+    "id": "review-quiz-order",
+    "page": "guides/review/quizzes.mdx",
+    "kind": "region",
+    "subject": "A checked ordering puzzle 'A passage from Ethics': the instructions, 3 to 7 pieces with up and down arrows, green borders on pieces in place and red ones with 'belongs at N', the score line and Another one.",
+    "region": "The puzzle card.",
+    "setup": "Active network: Epistemology & Mind. Four review items learnt through the UI: Baruch de Spinoza's post 'Substance is one and infinite…' (Learn › Add question, 'According to Spinoza, how does the order of ideas relate to the order of things?', tags 'Spinoza, substance'), Sokrates of Alopece's reply 'Tell me, my friend: if a bronze mirror…' (Learn › Add answer, 'A reflection repeats the form of the light without the experience of it.') and two sentences of the vault entry Ethics (Learn passages, each with a question).",
+    "steps": [
+      "Press Ctrl+6",
+      "Click Put in order",
+      "Move one piece up or down",
+      "Click Check order"
+    ]
+  },
+  {
+    "id": "review-quiz-done",
+    "page": "guides/review/quizzes.mdx",
+    "kind": "region",
+    "subject": "The end of a multiple-choice quiz: trophy title Multiple choice, the score 'N of 4 right', the calibration line 'Right when: …', the done tip, and Go again and Back to today.",
+    "region": "The closing card.",
+    "setup": "Active network: Epistemology & Mind. Four review items in Epistemology & Mind: Baruch de Spinoza's post 'Substance is one and infinite…' learnt with Learn › Add question (question 'According to Spinoza, how does the order of ideas relate to the order of things?', tags 'Spinoza, substance'); Sokrates of Alopece's reply 'Tell me, my friend: if a bronze mirror…' learnt with Learn › Add answer (answer 'A reflection repeats the form of the light without the experience of it.'); and two sentences of the vault entry 'Ethics' learnt with Learn passages, each with a question. ",
+    "steps": [
+      "Press Ctrl+6",
+      "Click Multiple choice",
+      "For each question click a confidence chip, press a number, then press Space"
+    ]
+  },
+  {
+    "id": "review-picker-map",
+    "page": "guides/review/connection-maps.mdx",
+    "kind": "region",
+    "subject": "The 'Pick posts for a connection map' screen, searched for 'order': three Spinoza posts, all ticked (tinted rows with a check), and the footer with Back to items and 'Create map (3 posts)'.",
+    "region": "The picker card.",
+    "setup": "Active network: Epistemology & Mind. Four review items learnt through the UI: Baruch de Spinoza's post 'Substance is one and infinite…' (Learn › Add question, 'According to Spinoza, how does the order of ideas relate to the order of things?', tags 'Spinoza, substance'), Sokrates of Alopece's reply 'Tell me, my friend: if a bronze mirror…' (Learn › Add answer, 'A reflection repeats the form of the light without the experience of it.') and two sentences of the vault entry Ethics (Learn passages, each with a question).",
+    "steps": [
+      "Press Ctrl+6",
+      "Click New connection map",
+      "Type 'order' in Search",
+      "Click each of the three rows"
+    ]
+  },
+  {
+    "id": "review-map-editor",
+    "page": "guides/review/connection-maps.mdx",
+    "kind": "region",
+    "subject": "The New connection map editor, scrolled to show it whole: title field ('Selected posts'), the intro, the relation field with the One-way chip, the concept field with Add, the canvas with four points on a ring (three post chips, each with two whole lines of text, and the #monism concept the shared hashtag added) joined by two lines, the lists Connections (2) and Points (4) with their buttons, the footer line, Cancel and Save map.",
+    "region": "The editor card.",
+    "setup": "Active network: Epistemology & Mind. Four review items learnt through the UI: Baruch de Spinoza's post 'Substance is one and infinite…' (Learn › Add question, 'According to Spinoza, how does the order of ideas relate to the order of things?', tags 'Spinoza, substance'), Sokrates of Alopece's reply 'Tell me, my friend: if a bronze mirror…' (Learn › Add answer, 'A reflection repeats the form of the light without the experience of it.') and two sentences of the vault entry Ethics (Learn passages, each with a question).",
+    "steps": [
+      "Press Ctrl+6",
+      "Click New connection map",
+      "Type 'order' in Search",
+      "Click each of the three rows",
+      "Click Create map (3 posts)",
+      "Scroll down"
+    ]
+  },
+  {
+    "id": "review-drill",
+    "page": "guides/review/connection-maps.mdx",
+    "kind": "region",
+    "subject": "A map drill in a session: progress '0 of 1 · 1 left' and End, the map title, the instructions, the four points scattered with two connections drawn in the brand colour, '2 connections drawn', Clear, Check and the Space key cap (the map has no named relations, so no relation chips).",
+    "region": "The centre column of the Review page.",
+    "setup": "Active network: Epistemology & Mind. The map of review-map-editor saved (the last post joined to #monism: four points, three connections) after the session of review-summary, so it is the only item due.",
+    "steps": [
+      "Press Ctrl+6",
+      "Click Start review (1)",
+      "Click two points, then two others"
+    ]
+  },
+  {
+    "id": "review-drill-result",
+    "page": "guides/review/connection-maps.mdx",
+    "kind": "region",
+    "subject": "The checked drill: green, red and curved amber lines over the points; 'N of N connections right, N wrong.', 'Precision N% · recall N%', the legend Right / Wrong / Missing, the mistake lines, 'Graded Again', the why caption and Continue.",
+    "region": "The centre column of the Review page.",
+    "setup": "As review-drill.",
+    "steps": [
+      "Press Ctrl+6",
+      "Click Start review (1)",
+      "Draw two connections, one of them wrong",
+      "Click Check",
+      "Scroll down"
+    ]
+  },
+  {
+    "id": "review-items",
+    "page": "guides/review/items.mdx",
+    "kind": "region",
+    "subject": "The Items tab: '4 items, next due first' and four rows, each with its prompt, the meta line (kind · state · tags) and the edit, suspend and delete icon buttons; one row dimmed and reading Suspended.",
+    "region": "The Items card.",
+    "setup": "Active network: Epistemology & Mind. Four review items learnt through the UI: Baruch de Spinoza's post 'Substance is one and infinite…' (Learn › Add question, 'According to Spinoza, how does the order of ideas relate to the order of things?', tags 'Spinoza, substance'), Sokrates of Alopece's reply 'Tell me, my friend: if a bronze mirror…' (Learn › Add answer, 'A reflection repeats the form of the light without the experience of it.') and two sentences of the vault entry Ethics (Learn passages, each with a question). The session of review-summary finished; the last row suspended from its row.",
+    "steps": [
+      "Press Ctrl+6",
+      "Click the Items tab",
+      "Click the suspend button of the last row"
+    ]
+  },
+  {
+    "id": "review-stats",
+    "page": "guides/review/statistics.mdx",
+    "kind": "window",
+    "subject": "The Statistics tab in the wide layout: Due in the next 30 days and Retention side by side, Items by state and Confidence calibration side by side, and Review activity with the streak below.",
+    "region": "",
+    "setup": "Active network: Epistemology & Mind. Four review items learnt through the UI: Baruch de Spinoza's post 'Substance is one and infinite…' (Learn › Add question, 'According to Spinoza, how does the order of ideas relate to the order of things?', tags 'Spinoza, substance'), Sokrates of Alopece's reply 'Tell me, my friend: if a bronze mirror…' (Learn › Add answer, 'A reflection repeats the form of the light without the experience of it.') and two sentences of the vault entry Ethics (Learn passages, each with a question). One finished session and one multiple-choice quiz with confidence ratings today (the scene's earlier steps).",
+    "steps": [
+      "Press Ctrl+6",
+      "Click the Statistics tab"
+    ]
+  },
+  {
+    "id": "review-learn-tutor-start",
+    "page": "guides/review/tutor.mdx",
+    "kind": "region",
+    "subject": "The Socratic tutor start card (title, intro, A concept field with Start, A post or thread with Pick a post…, A vault document with the chips Ethics and Tractatus Logico-Philosophicus) and the Earlier dialogues card below with two dialogues, with the Learn sub-switch above them.",
+    "region": "The tutor column with the Learn sub-switch above it.",
+    "setup": "Active network: Epistemology & Mind. Two tutor dialogues on Spinoza's posts, one waiting for an answer and one finished; demo/seed.py (seed_practice) adds it to the demo profile.",
+    "steps": [
+      "Press Ctrl+6",
+      "Click the Learn tab",
+      "Click Tutor"
+    ]
+  },
+  {
+    "id": "review-learn-tutor-dialogue",
+    "page": "guides/review/tutor.mdx",
+    "kind": "region",
+    "subject": "A dialogue in progress: All dialogues and the delete button, the title and 'On a post', the six-rung ladder with one rung filled and one ringed, two tutor bubbles with level · move, one learner bubble with its verdict, and the answer box with Send, the Ctrl + Enter key caps and Finish and sum up.",
+    "region": "The tutor column.",
+    "setup": "Active network: Epistemology & Mind. A tutor dialogue on Spinoza's post 'Substance is one and infinite…' with one answered question (Solid, Showed: Remember) and the next question open; demo/seed.py (seed_practice) adds it to the demo profile. (The capture stub answers in prose, so a live dialogue never gets its assessments.)",
+    "steps": [
+      "Press Ctrl+6",
+      "Click the Learn tab",
+      "Click Tutor",
+      "Click the dialogue 'Substance is one and infinite…' under Earlier dialogues"
+    ]
+  },
+  {
+    "id": "review-learn-tutor-summary",
+    "page": "guides/review/tutor.mdx",
+    "kind": "region",
+    "subject": "A finished dialogue's Summary card: 'Highest level shown: Understand', What you showed, What was missing, Review the gaps with its hint and two ticked questions, and 'Make 2 review items'.",
+    "region": "The summary card.",
+    "setup": "Active network: Epistemology & Mind. A finished tutor dialogue on Spinoza's post 'The order and connection of ideas…' with its summary; demo/seed.py (seed_practice) adds it to the demo profile. (The stub cannot write the JSON summary.)",
+    "steps": [
+      "Press Ctrl+6",
+      "Click the Learn tab",
+      "Click Tutor",
+      "Click the dialogue 'The order and connection of ideas…' under Earlier dialogues"
+    ]
+  },
+  {
+    "id": "review-learn-goals",
+    "page": "guides/review/goals.mdx",
+    "kind": "region",
+    "subject": "The Learning goals card with Weekly review and New goal in its header and two goal cards, each with title, why, forecast badge, progress track with time tick and the numbers line.",
+    "region": "The goals column.",
+    "setup": "Active network: Epistemology & Mind. Four review items in Epistemology & Mind: Baruch de Spinoza's post 'Substance is one and infinite…' learnt with Learn › Add question (question 'According to Spinoza, how does the order of ideas relate to the order of things?', tags 'Spinoza, substance'); Sokrates of Alopece's reply 'Tell me, my friend: if a bronze mirror…' learnt with Learn › Add answer (answer 'A reflection repeats the form of the light without the experience of it.'); and two sentences of the vault entry 'Ethics' learnt with Learn passages, each with a question. Two goals: 'Understand the Ethics' (1 month) and 'Read the Tractatus' (3 months).",
+    "steps": [
+      "Press Ctrl+6",
+      "Click the Learn tab",
+      "Click Goals"
+    ]
+  },
+  {
+    "id": "review-learn-goal-new",
+    "page": "guides/review/goals.mdx",
+    "kind": "region",
+    "subject": "The New goal form: What do you want to learn? filled with 'Understand the Ethics', Why does it matter? filled, the horizon chips 2 weeks / 1 month (selected) / 3 months / 6 months, the target date line, Create goal and Cancel; no problem line before Create is clicked.",
+    "region": "The form card.",
+    "setup": "Active network: Epistemology & Mind. Fresh first-run profile.",
+    "steps": [
+      "Press Ctrl+6",
+      "Click the Learn tab",
+      "Click Goals",
+      "Click New goal",
+      "Type 'Understand the Ethics'",
+      "Type 'To lead the reading group in spring' in Why does it matter?"
+    ]
+  },
+  {
+    "id": "review-learn-goal-detail",
+    "page": "guides/review/goals.mdx",
+    "kind": "window",
+    "subject": "A goal's detail at the top of the page: All goals, Gap radar, Mark reached and delete; the title, why, forecast badge, progress track and target line; the six Measured progress tiles in two rows of three; the Tasks card with two tasks (one ticked) and the add field; the top of the Linked material card with the chips Concept · substance, Document · Ethics and Post · Substance is one… (the sections to add more continue below the fold).",
+    "region": "",
+    "setup": "Active network: Epistemology & Mind. Four review items in Epistemology & Mind: Baruch de Spinoza's post 'Substance is one and infinite…' learnt with Learn › Add question (question 'According to Spinoza, how does the order of ideas relate to the order of things?', tags 'Spinoza, substance'); Sokrates of Alopece's reply 'Tell me, my friend: if a bronze mirror…' learnt with Learn › Add answer (answer 'A reflection repeats the form of the light without the experience of it.'); and two sentences of the vault entry 'Ethics' learnt with Learn passages, each with a question. The goal 'Understand the Ethics' with the concept 'substance', the document Ethics and Spinoza's post linked, and two tasks, one ticked.",
+    "steps": [
+      "Press Ctrl+6",
+      "Click the Learn tab",
+      "Click Goals",
+      "Click the goal 'Understand the Ethics'"
+    ]
+  },
+  {
+    "id": "review-learn-weekly",
+    "page": "guides/review/goals.mdx",
+    "kind": "window",
+    "subject": "The Weekly review at the top of the page: All goals, the title, the date range and intro, step 1 What I learnt this week with five tiles, Recalled, You wrote and the concept chips, and the tops of step 2 What is due and step 3 Where the gaps are (step 4 Next actions continues below the fold).",
+    "region": "",
+    "setup": "Active network: Epistemology & Mind. Four review items in Epistemology & Mind: Baruch de Spinoza's post 'Substance is one and infinite…' learnt with Learn › Add question (question 'According to Spinoza, how does the order of ideas relate to the order of things?', tags 'Spinoza, substance'); Sokrates of Alopece's reply 'Tell me, my friend: if a bronze mirror…' learnt with Learn › Add answer (answer 'A reflection repeats the form of the light without the experience of it.'); and two sentences of the vault entry 'Ethics' learnt with Learn passages, each with a question. One finished session today and the goal 'Understand the Ethics'.",
+    "steps": [
+      "Press Ctrl+6",
+      "Click the Learn tab",
+      "Click Goals",
+      "Click Weekly review"
+    ]
+  },
+  {
+    "id": "review-learn-gaps",
+    "page": "guides/review/gap-radar.mdx",
+    "kind": "window",
+    "subject": "The Knowledge-gap radar: title and intro, scope chips (All concepts and a goal), the six-axis radar with the Average and the selected concept and its summary line, and the Weakest concepts list with gap bars, the weakest dimension and the four action buttons per row.",
+    "region": "",
+    "setup": "Active network: Epistemology & Mind. Four review items in Epistemology & Mind: Baruch de Spinoza's post 'Substance is one and infinite…' learnt with Learn › Add question (question 'According to Spinoza, how does the order of ideas relate to the order of things?', tags 'Spinoza, substance'); Sokrates of Alopece's reply 'Tell me, my friend: if a bronze mirror…' learnt with Learn › Add answer (answer 'A reflection repeats the form of the light without the experience of it.'); and two sentences of the vault entry 'Ethics' learnt with Learn passages, each with a question. The goal 'Understand the Ethics' with the concept 'substance' linked.",
+    "steps": [
+      "Press Ctrl+6",
+      "Click the Learn tab",
+      "Click Gaps"
+    ]
+  },
+  {
+    "id": "review-learn-palace-list",
+    "page": "guides/review/memory-palace.mdx",
+    "kind": "region",
+    "subject": "The palace column: one palace card ('My childhood home', room thumbnails, '2 rooms · 2 of 10 places filled', Edit, Walk through and delete) above the Memory palace card (Name field, Build palace, First room chips Hall to Stairwell and the Hall preview).",
+    "region": "The palace column.",
+    "setup": "Active network: Epistemology & Mind. Four review items in Epistemology & Mind: Baruch de Spinoza's post 'Substance is one and infinite…' learnt with Learn › Add question (question 'According to Spinoza, how does the order of ideas relate to the order of things?', tags 'Spinoza, substance'); Sokrates of Alopece's reply 'Tell me, my friend: if a bronze mirror…' learnt with Learn › Add answer (answer 'A reflection repeats the form of the light without the experience of it.'); and two sentences of the vault entry 'Ethics' learnt with Learn passages, each with a question. A palace 'My childhood home' with a Hall and a Library, one review item and one post placed.",
+    "steps": [
+      "Press Ctrl+6",
+      "Click the Learn tab",
+      "Click Palace"
+    ]
+  },
+  {
+    "id": "review-learn-palace-editor",
+    "page": "guides/review/memory-palace.mdx",
+    "kind": "window",
+    "subject": "The palace editor scrolled to its end: All palaces and Walk through; the Route card with two numbered rooms, their up, down and remove buttons, and the Add a room chips, as tall as the Hall scene beside it with five numbered markers (1 and 2 filled, 2 selected); below them across the full width, the place panel 'Place 2: Mirror' with Post placed here, the text, 'Image: a giant mirror reflecting the whole sky', the cue field, Image ideas and Empty this place.",
+    "region": "",
+    "setup": "Active network: Epistemology & Mind. The palace 'My childhood home' with a Hall and a Library; the Spinoza question at the Hall's Door and Spinoza's post at its Mirror, each with a cue (built through the UI in the same step).",
+    "steps": [
+      "Press Ctrl+6",
+      "Click the Learn tab",
+      "Click Palace",
+      "Click Edit on 'My childhood home'",
+      "Click marker 2 in the Hall scene"
+    ]
+  },
+  {
+    "id": "review-learn-palace-walk",
+    "page": "guides/review/memory-palace.mdx",
+    "kind": "region",
+    "subject": "A palace walk at a revealed stop: 'Place 1 of 2', the progress bar and End walk, the scope chips Every place / Only what is due, the room scene with only the current marker, 'Hall · Door', 'Image: …', the placed item's faces and the four grade buttons.",
+    "region": "The walk view.",
+    "setup": "Active network: Epistemology & Mind. Four review items in Epistemology & Mind: Baruch de Spinoza's post 'Substance is one and infinite…' learnt with Learn › Add question (question 'According to Spinoza, how does the order of ideas relate to the order of things?', tags 'Spinoza, substance'); Sokrates of Alopece's reply 'Tell me, my friend: if a bronze mirror…' learnt with Learn › Add answer (answer 'A reflection repeats the form of the light without the experience of it.'); and two sentences of the vault entry 'Ethics' learnt with Learn passages, each with a question. The palace of review-learn-palace-editor, with the Spinoza review item placed at the Hall's Door with a cue.",
+    "steps": [
+      "Press Ctrl+6",
+      "Click the Learn tab",
+      "Click Palace",
+      "Click Walk through",
+      "Press Space"
+    ]
+  },
+  {
+    "id": "journal-today",
+    "page": "guides/journal/index.mdx",
+    "kind": "window",
+    "subject": "The Journal page on its Today tab: the header (notebook art, title, today's date with '1 day in a row', the lock with the privacy note, the five tabs), the ready time capsule banner with Open, the Today's prompt callout with Write about it, Another prompt and the three template buttons, the How are you feeling? check-in card and the top of the Focus card.",
+    "region": "",
+    "setup": "Demo profile with two weeks of journal history before today (entries yesterday, check-ins, focus sessions, a capsule ready to open); demo/seed.py (seed_practice) adds it to the demo profile.",
+    "steps": [
+      "Press Ctrl+8",
+      "Click the Today tab"
+    ]
+  },
+  {
+    "id": "journal-header",
+    "page": "guides/journal/index.mdx",
+    "kind": "element",
+    "subject": "The Journal header: art, title Journal, today's date with '2 days in a row', the lock and privacy note, and the tabs Today, Journal, Mood, Focus, Capsules.",
+    "region": "The header block only.",
+    "setup": "Journal entries written yesterday (seeded) and today (the Evening review of journal-editor, saved).",
+    "steps": [
+      "Press Ctrl+8"
+    ]
+  },
+  {
+    "id": "journal-entries",
+    "page": "guides/journal/entries.mdx",
+    "kind": "window",
+    "subject": "The Journal tab: New entry and the three template buttons, the Days written heat strip with the tiles Days written, Current run and Longest run and the gentle caption, then the search card with 'Entries: 3' and three entry rows with Edit, Turn into a post and Delete.",
+    "region": "",
+    "setup": "Two entries yesterday (demo/seed.py (seed_practice) adds it to the demo profile) and today's Evening review.",
+    "steps": [
+      "Press Ctrl+8",
+      "Click the Journal tab"
+    ]
+  },
+  {
+    "id": "journal-editor",
+    "page": "guides/journal/entries.mdx",
+    "kind": "region",
+    "subject": "The entry editor on an Evening review: the date and 'Not saved yet', the text field with the four section headings, the links hint, and Save, Preview, Turn into a post and Close.",
+    "region": "The editor card.",
+    "setup": "Demo profile; today's first entry.",
+    "steps": [
+      "Press Ctrl+8",
+      "Click the Journal tab",
+      "Click Evening review"
+    ]
+  },
+  {
+    "id": "journal-checkin",
+    "page": "guides/journal/mood.mdx",
+    "kind": "region",
+    "subject": "The How are you feeling? card: the hint, the affect grid with eight region labels and a chosen point in the pleasant-calm quadrant, the region name 'Calm', Energy 1 to 5 with 4 selected, Sleep, Tags and Note fields, the support tick and Save check-in.",
+    "region": "The check-in card.",
+    "setup": "Demo profile; no check-in today yet.",
+    "steps": [
+      "Press Ctrl+8",
+      "Click the Mood tab",
+      "Click the lower right part of the grid",
+      "Click energy 4",
+      "Type '7.5' in Sleep"
+    ]
+  },
+  {
+    "id": "journal-support",
+    "page": "guides/journal/mood.mdx",
+    "kind": "element",
+    "subject": "The support pointer shown after ticking I'd like pointers to support: a green note with a hand-and-heart icon.",
+    "region": "The tick and the note.",
+    "setup": "Demo profile; the check-in of journal-checkin.",
+    "steps": [
+      "Press Ctrl+8",
+      "Click the Mood tab",
+      "Click I'd like pointers to support"
+    ]
+  },
+  {
+    "id": "journal-mood",
+    "page": "guides/journal/mood.mdx",
+    "kind": "window",
+    "subject": "The Mood tab scrolled to the patterns: the Mood over time heat strip at the top, the Energy by weekday and Check-ins by hour charts, and What goes along with your mood with its caveat and sentences (Recent check-ins continue below).",
+    "region": "",
+    "setup": "Check-ins on fifteen days, with posts written and focus sessions on some of them; demo/seed.py (seed_practice) adds it to the demo profile.",
+    "steps": [
+      "Press Ctrl+8",
+      "Click the Mood tab",
+      "Scroll so the charts and associations show"
+    ]
+  },
+  {
+    "id": "journal-focus-setup",
+    "page": "guides/journal/focus.mdx",
+    "kind": "region",
+    "subject": "The Focus session card: What will you finish? filled with 'Draft the introduction', Length chips 25 min (selected), 50 min, 90 min and Custom, Working on chips (Nothing linked, Today's review, A goal, document chips), the hint and Start.",
+    "region": "The setup card.",
+    "setup": "Demo profile.",
+    "steps": [
+      "Press Ctrl+8",
+      "Click the Focus tab",
+      "Type 'Draft the introduction'"
+    ]
+  },
+  {
+    "id": "journal-focus-running",
+    "page": "guides/journal/focus.mdx",
+    "kind": "region",
+    "subject": "A running session: the intention, the large countdown, the progress bar, 'of 25 min', and Pause, End now, 'Distractions: 0' and Focus mode.",
+    "region": "The running card.",
+    "setup": "Demo profile.",
+    "steps": [
+      "Press Ctrl+8",
+      "Click the Focus tab",
+      "Type 'Draft the introduction'",
+      "Click Start",
+      "Wait a few seconds"
+    ]
+  },
+  {
+    "id": "journal-focus-mode",
+    "page": "guides/journal/focus.mdx",
+    "kind": "window",
+    "subject": "Focus mode: the window empty except for the timer card in the centre (intention, large countdown, bar, and the buttons with Leave focus mode).",
+    "region": "",
+    "setup": "Demo profile.",
+    "steps": [
+      "Press Ctrl+8",
+      "Click the Focus tab",
+      "Click Start",
+      "Click Focus mode"
+    ]
+  },
+  {
+    "id": "journal-focus-reflection",
+    "page": "guides/journal/focus.mdx",
+    "kind": "region",
+    "subject": "How did it go?: 'You focused for N of 25 minutes.', the one-line field, the outlined Done, Partly and Not done buttons, and Skip.",
+    "region": "The reflection card.",
+    "setup": "Demo profile.",
+    "steps": [
+      "Press Ctrl+8",
+      "Click the Focus tab",
+      "Click Start",
+      "Wait one minute",
+      "Click End now"
+    ]
+  },
+  {
+    "id": "journal-focus-log",
+    "page": "guides/journal/focus.mdx",
+    "kind": "region",
+    "subject": "The Sessions card: tiles Sessions, Time focused and Intentions met; the 14-day chart; the four latest sessions with intention, facts and reflection, Open on the linked ones.",
+    "region": "The log card.",
+    "setup": "Three past focus sessions (one on Today's review, Done; one on the Ethics, Partly; one Not done; demo/seed.py (seed_practice) adds it to the demo profile) and today's session of journal-focus-reflection, Done.",
+    "steps": [
+      "Press Ctrl+8",
+      "Click the Focus tab",
+      "Scroll down"
+    ]
+  },
+  {
+    "id": "journal-capsule-form",
+    "page": "guides/journal/capsules.mdx",
+    "kind": "region",
+    "subject": "A note to your future self: the hint, the note field with text, the opening day field with '30' and 'opens on …' below, '1 image', Add images, Seal and Cancel.",
+    "region": "The form card.",
+    "setup": "Demo profile; the image demo/media/attachments/demo-capsule-sky.png (drawn by demo/seed.py) to attach.",
+    "steps": [
+      "Press Ctrl+8",
+      "Click the Capsules tab",
+      "Click Write to your future self",
+      "Type a short note",
+      "Type 30 in the opening day field",
+      "Click Add images and choose one image"
+    ]
+  },
+  {
+    "id": "journal-capsules",
+    "page": "guides/journal/capsules.mdx",
+    "kind": "region",
+    "subject": "The Capsules tab list: Write to your future self, a ready capsule with Open, two sealed capsules with a lock, 'From …' and 'Sealed, N days left · opens on …', and an opened one with a quiet Read; every row the same shape, each with Delete.",
+    "region": "The capsule list.",
+    "setup": "Capsules: one ready (sealed for 1 day yesterday, with an image), one sealed for a year and one opened (demo/seed.py (seed_practice) adds it to the demo profile), and the 30-day capsule of journal-capsule-form.",
+    "steps": [
+      "Press Ctrl+8",
+      "Click the Capsules tab"
+    ]
+  },
+  {
+    "id": "journal-capsule-open",
+    "page": "guides/journal/capsules.mdx",
+    "kind": "region",
+    "subject": "An opened capsule: 'From …' and 'Sealed for N days', the note and an image thumbnail, Then and now with its prompt, the reply field, Save reply, Turn into a post and Close.",
+    "region": "The opened capsule card.",
+    "setup": "A capsule with an image sealed for 1 day yesterday, ready today; demo/seed.py (seed_practice) adds it to the demo profile.",
+    "steps": [
+      "Press Ctrl+8",
+      "Click the Capsules tab",
+      "Click Open on the ready capsule"
+    ]
+  },
+  {
+    "id": "tasks-page",
+    "page": "guides/tasks/index.mdx",
+    "kind": "window",
+    "subject": "The Tasks page: title Tasks with '14 to-dos', the Due, Priority and Context rows and Show done, then the list soonest first: each to-do with its box and chips (priority, due, context, estimate) and 'In: …' under it (overdue ones from the demo checklists first, then the Reading plan's).",
+    "region": "",
+    "setup": "Active network: Epistemology & Mind (the demo profile already has three checklist posts). A post by Arya Wiratama typed in the composer: 'Reading plan' / '[ ] Finish Ethics part I ^today !! &reading ~1h' / '[ ] Notes on the Tractatus ^fri &reading' / '  [ ] Propositions 1-3 ^fri' / '[ ] Reply to Sokrates ^tomorrow !' / '[ ] Buy notebook &errands' / '[x] Index the vault'.",
+    "steps": [
+      "Click Tasks in the left sidebar"
+    ]
+  },
+  {
+    "id": "tasks-filters",
+    "page": "guides/tasks/index.mdx",
+    "kind": "element",
+    "subject": "The filter rows: Due (Any day selected, Overdue, Today, This week, No date), Priority (Any, !, !!, !!!), Context (Any, reading, errands, writing, seminar, email) and Show done.",
+    "region": "The filter block only.",
+    "setup": "Active network: Epistemology & Mind. A post by Arya Wiratama in Epistemology & Mind with this body (one item per line, the sub-item indented by two spaces): 'Reading plan' / '[ ] Finish Ethics part I ^today !! &reading ~1h' / '[ ] Notes on the Tractatus ^fri &reading' / '  [ ] Propositions 1–3 ^fri' / '[ ] Reply to Sokrates ^tomorrow !' / '[ ] Buy notebook &errands' / '[x] Index the vault'. ",
+    "steps": [
+      "Click Tasks in the left sidebar"
+    ]
+  },
+  {
+    "id": "arena-debate-setup",
+    "page": "guides/arena/index.mdx",
+    "kind": "window",
+    "subject": "The Arena on the Debate tab: header with art, title, subtitle and the Debate / Thought lab tabs; on one side the New debate card (Motion filled, Format chips with Oxford selected and its hint, Debaters, Rounds, Moderator, Judge, Start debate); on the other the No debate open art state with Saved debates below it.",
+    "region": "",
+    "setup": "Active network: Epistemology & Mind. AI on the capture stub (demo profile). Motion typed: 'Symbol prediction is isomorphic to human cognitive modelling.'",
+    "steps": [
+      "Press Ctrl+9",
+      "Click the Debate tab",
+      "Type the motion in Motion"
+    ]
+  },
+  {
+    "id": "arena-no-key",
+    "page": "guides/arena/index.mdx",
+    "kind": "element",
+    "subject": "The quiet notice 'No AI key is set, so agents cannot speak yet. Add one in Settings › AI & Models.'",
+    "region": "The notice under the header.",
+    "setup": "Demo profile with the Custom Endpoint API key cleared in Settings › AI & Models (this throw-away profile only).",
+    "steps": [
+      "Settings › AI & Models: clear the API key field, Save & Apply",
+      "Press Ctrl+9"
+    ]
+  },
+  {
+    "id": "arena-saved",
+    "page": "guides/arena/index.mdx",
+    "kind": "element",
+    "subject": "The Saved debates card with a stopped debate ('3 of 6 turns') and a judged one ('Judged'), each with its time.",
+    "region": "The saved list card.",
+    "setup": "A debate stopped after three of six turns and a judged one; demo/seed.py (seed_practice) adds it to the demo profile. (The stub cannot judge a debate.)",
+    "steps": [
+      "Press Ctrl+9",
+      "Click the Debate tab",
+      "Scroll to Saved debates"
+    ]
+  },
+  {
+    "id": "arena-spend-confirm",
+    "page": "guides/arena/index.mdx",
+    "kind": "element",
+    "subject": "The 'Send this to the AI?' dialog: 'This sends about 10 requests to your AI provider.', the requests left today, Don't ask again this session, and Send.",
+    "region": "The dialog only.",
+    "setup": "Demo profile (Ask before spending on); Settings › AI & Models › Daily request budget raised to 100 a day; the setup of arena-debaters filled in.",
+    "steps": [
+      "Press Ctrl+9",
+      "Fill the setup as in arena-debaters",
+      "Click Start debate"
+    ]
+  },
+  {
+    "id": "arena-debaters",
+    "page": "guides/arena/debates.mdx",
+    "kind": "element",
+    "subject": "The Debaters section with the hint, one row per agent: Sokrates of Alopece on For, Baruch de Spinoza on Against, Simone Weil unseated; then Rounds with − 2 +, Moderator chips (None, Simone Weil selected) and Judge chips (Global model selected).",
+    "region": "From Debaters down to Judge.",
+    "setup": "Demo profile (AI on the capture stub); the motion of arena-debate-setup.",
+    "steps": [
+      "Press Ctrl+9",
+      "Click For on Sokrates of Alopece",
+      "Click Against on Baruch de Spinoza",
+      "Click Simone Weil under Moderator"
+    ]
+  },
+  {
+    "id": "arena-debate-running",
+    "page": "guides/arena/debates.mdx",
+    "kind": "region",
+    "subject": "An open debate while it runs: the Motion card with 'Oxford · Rounds: 2 · Turn N of 6 · … is speaking', Stop and the disabled Delete; the Transcript with the moderator's opening and the debaters' turns so far (speaker, side badge, role · round, threadline) and the italic '… is speaking…' line.",
+    "region": "The open debate column.",
+    "setup": "The debate of arena-debaters started. For the capture the AI endpoint points at a slow local relay in front of the stub (the scene writes and starts it), since the stub answers a whole debate in a fraction of a second.",
+    "steps": [
+      "Press Ctrl+9",
+      "Start the debate of arena-debaters",
+      "Click Send",
+      "Wait until two turns have landed"
+    ]
+  },
+  {
+    "id": "arena-verdict",
+    "page": "guides/arena/debates.mdx",
+    "kind": "region",
+    "subject": "The Verdict card of a judged debate: 'Judged by Global model on evidence, reasoning, responsiveness and charity.', the summary, 'For leads on points', and two score cards with side badge, 'N of 40', four criterion bars and a note.",
+    "region": "The verdict card.",
+    "setup": "A judged debate ('Understanding is nothing more than very good prediction.', Sokrates for, Spinoza against, Simone Weil moderating) with its verdict and claim map; demo/seed.py (seed_practice) adds it to the demo profile. (The stub answers in prose, never the JSON the judge reads.)",
+    "steps": [
+      "Press Ctrl+9",
+      "Click the judged debate under Saved debates",
+      "Scroll to Verdict"
+    ]
+  },
+  {
+    "id": "arena-claims",
+    "page": "guides/arena/debates.mdx",
+    "kind": "region",
+    "subject": "The Which claims still stand card: the hint and four claims with Stands, Contested (two) and Defeated badges and their speakers.",
+    "region": "The claims card.",
+    "setup": "The judged debate of arena-verdict.",
+    "steps": [
+      "Press Ctrl+9",
+      "Click the judged debate under Saved debates",
+      "Scroll to Which claims still stand"
+    ]
+  },
+  {
+    "id": "arena-lab-form",
+    "page": "guides/arena/thought-lab.mdx",
+    "kind": "region",
+    "subject": "The Thought experiment form with The trolley problem preset selected: preset chips, Title, premise, two variables (each a name with its values below, separated by |, shown in full), Add variable and Remove variable, Question, Agents to ask with two chips selected, the preview line, Run and Save; the whole form fits the window with Run in view.",
+    "region": "The form card.",
+    "setup": "Active network: Epistemology & Mind. An AI engine configured in Settings › AI & Models (the capture stub docs/capture/stub-ai.mjs as a Custom Endpoint works). ",
+    "steps": [
+      "Press Ctrl+9",
+      "Click the Thought lab tab",
+      "Click The trolley problem",
+      "Click Sokrates of Alopece and Baruch de Spinoza under Agents to ask"
+    ]
+  },
+  {
+    "id": "arena-lab-results",
+    "page": "guides/arena/thought-lab.mdx",
+    "kind": "region",
+    "subject": "The experiment on show: its title and question, '8 of 8 answers', Publish summary, Run again and Delete, and the Answers card: four cases by two agents with Yes / No / Undecided badges and one-line verdicts.",
+    "region": "The experiment column.",
+    "setup": "The trolley problem answered by Sokrates of Alopece and Baruch de Spinoza; demo/seed.py (seed_practice) adds it to the demo profile. (The stub's prose answers all read Undecided.)",
+    "steps": [
+      "Press Ctrl+9",
+      "Click the Thought lab tab",
+      "Click the experiment under Saved experiments"
+    ]
+  },
+  {
+    "id": "arena-lab-compare",
+    "page": "guides/arena/thought-lab.mdx",
+    "kind": "region",
+    "subject": "The Compare card: 'The agents disagree on 2 of 4 cases.', Agreement with the pair line and its bar, What changes answers with one line and bar per variable, and the hint.",
+    "region": "The Compare card.",
+    "setup": "The experiment of arena-lab-results.",
+    "steps": [
+      "Press Ctrl+9",
+      "Click the Thought lab tab",
+      "Click the experiment under Saved experiments",
+      "Scroll to Compare"
+    ]
+  }
+]

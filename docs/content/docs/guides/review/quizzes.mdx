@@ -1,0 +1,109 @@
+---
+title: Quizzes
+description: Multiple choice with confidence, free recall typed from memory, and putting a thread or passage back in order.
+icon: ListOrdered
+---
+
+Quizzes are extra practice beside the daily session. Retrieving an answer strengthens memory more than rereading it, and each quiz adds a different kind of difficulty: telling close look-alikes apart, producing an answer from nothing, or rebuilding a line of thought.
+
+<Screenshot id="review-quiz-modes" alt="The Quiz yourself card with three tiles: Multiple choice, Free recall and Put in order" caption="The three modes, on the Today tab." size="md" />
+
+## Start a quiz
+
+Click a tile in the <UiLabel>Quiz yourself</UiLabel> card on the <UiLabel>Today</UiLabel> tab. The <UiLabel>All caught up</UiLabel> state, the empty page and the session summary offer quiz buttons too.
+
+A multiple-choice or free-recall quiz asks up to ten of your items: the learnt items you are least likely to recall today come first, then new ones, in a shuffled order. Suspended and retired items and connection maps are left out.
+
+| Mode | Needs | Otherwise |
+|---|---|---|
+| <UiLabel>Multiple choice</UiLabel> | At least two posts or passages you are learning, with different answers | <UiLabel>Not enough material yet</UiLabel> with the reason |
+| <UiLabel>Free recall</UiLabel> | At least one post or passage you are learning | the same |
+| <UiLabel>Put in order</UiLabel> | A thread of three posts or more, or a vault document of a few sentences | the same |
+
+Every quiz has a progress row with <UiLabel>Finish</UiLabel>, which returns to Today at any point. Answers already given are kept.
+
+## Multiple choice
+
+<Screenshot id="review-quiz-choice" alt="A multiple-choice question after an answer: the confidence chips, four options with the right one ticked green and the picked wrong one crossed red, and the Next button" caption="Rate your confidence, pick, then see the right answer." />
+
+<Steps>
+<Step>
+### Rate how sure you are (optional)
+Under <UiLabel>How sure are you?</UiLabel>, pick <UiLabel>Guessing</UiLabel>, <UiLabel>Unsure</UiLabel> or <UiLabel>Sure</UiLabel> before you answer.
+</Step>
+<Step>
+### Pick an option
+Read the prompt, then click one of the four options or press <Kbd>1</Kbd>–<Kbd>4</Kbd>.
+</Step>
+<Step>
+### See the result and move on
+The right option turns green; a wrong pick turns red and the line reads "Not quite: the right answer is marked." Press <Kbd>Space</Kbd> or <Kbd>Enter</Kbd>, or click <UiLabel>Next</UiLabel>.
+</Step>
+</Steps>
+
+The wrong options are other items' answers, chosen to be plausible: first those sharing a tag with the question, then those whose source is closest in meaning (when the [meaning index](/docs/concepts/meaning-search) has embedded them), then those of a similar length. Post answers read as plain text (no markup or links to other posts) and are shortened to about 220 characters.
+
+How a multiple-choice answer is graded:
+
+| Your answer | Grade logged |
+|---|---|
+| Wrong | Again |
+| Right, rated <UiLabel>Guessing</UiLabel> | Hard |
+| Right, rated otherwise or not rated | Good |
+
+Recognising is easier than recalling, so a quiz never earns Easy.
+
+## Free recall
+
+<Screenshot id="review-quiz-recall" alt="A free-recall result: the verdict, what you wrote, the expected answer and four grade buttons with the suggested one outlined" caption="Type the answer, compare, then grade yourself." />
+
+<Steps>
+<Step>
+### Type the answer
+The prompt shows above a text field (<UiLabel>Type the answer…</UiLabel>). Press <Kbd>Enter</Kbd> or click <UiLabel>Check</UiLabel>.
+</Step>
+<Step>
+### Compare
+The verdict line appears with "You wrote: …" and the expected answer. Spelling and accents are forgiven: case, accents, punctuation and spacing are ignored, and a typo or two still counts as close.
+</Step>
+<Step>
+### Grade yourself
+Press <Kbd>1</Kbd>–<Kbd>4</Kbd> or click a grade. The outlined grade is only a suggestion. The field clears for the next item.
+</Step>
+</Steps>
+
+| Verdict | When | Suggested grade |
+|---|---|---|
+| <UiLabel>Exactly right</UiLabel> | The answers match after normalising | Good |
+| <UiLabel>Close: a small slip</UiLabel> | At least 80% alike | Hard |
+| <UiLabel>Not the expected answer</UiLabel> | Less alike, or nothing typed | Again |
+| <UiLabel>Compare it with the source in your own words</UiLabel> | The expected answer is longer than 120 characters (a whole post) | Good |
+
+## Put in order
+
+<Screenshot id="review-quiz-order" alt="An ordering puzzle after Check order: pieces with green and red borders, a belongs at caption on misplaced ones, and the score line" caption="Move each piece until the order is right, then check." />
+
+The puzzle takes 3 to 7 pieces: the posts of a thread (a post's parents, then the earliest reply at each step), or consecutive sentences of a vault document. Threads and documents you are learning are tried first, then any of the network. The title says which: <UiLabel>A thread</UiLabel> or "A passage from …".
+
+1. Move a piece with its up and down arrows.
+2. Click <UiLabel>Check order</UiLabel>. Pieces in place turn green; misplaced ones turn red with "belongs at N".
+3. The score reads "N of N in place, N neighbours in the right order.", or "Perfect: all N in place." Neighbour pairs give credit for a run that is only shifted.
+4. <UiLabel>Another one</UiLabel> draws a new puzzle. The progress row counts "Solved N of N".
+
+Ordering trains how ideas connect rather than what they say; it is not graded against your items.
+
+## The end of a quiz
+
+<Screenshot id="review-quiz-done" alt="The end of a multiple-choice quiz: the score, the confidence calibration line, a tip and the Go again and Back to today buttons" caption="The score, your calibration and a way to go again." size="md" />
+
+The closing card gives the score ("7 of 10 right" or "6 of 10 recalled"), a calibration line when you rated confidence ("Right when: Guessing 33% · Unsure 60% · Sure 90%"), and a tip on why the mode works. <UiLabel>Go again</UiLabel> starts a fresh quiz of the same mode; <UiLabel>Back to today</UiLabel> leaves.
+
+## Tips and limits
+
+- Multiple-choice and free-recall answers are applied to the items' schedules and logged like session answers, so they appear in [Statistics](/docs/guides/review/statistics). Your confidence ratings build its <UiLabel>Confidence calibration</UiLabel> chart.
+- A well calibrated learner is right far more often when sure than when guessing. If "Sure" and "Guessing" score alike, slow down before you answer.
+
+## Related
+
+- [The review session](/docs/guides/review/sessions)
+- [Spaced repetition](/docs/concepts/spaced-repetition)

@@ -26,7 +26,7 @@ impl ReviewPanel {
     pub(in crate::ui::features::review) fn render_tutor(&self, cx: &mut Context<Self>) -> AnyElement {
         match self.open_session() {
             Some(session) => self.render_dialogue(session, cx).into_any_element(),
-            None => div().w_full().max_w(self.theme.review_card_max_width).flex().flex_col().gap(self.theme.section_gap).child(self.render_tutor_start(cx)).child(self.render_sessions(cx)).into_any_element(),
+            None => div().w_full().flex().flex_col().gap(self.theme.section_gap).child(self.render_tutor_start(cx)).child(self.render_sessions(cx)).into_any_element(),
         }
     }
 

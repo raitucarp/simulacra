@@ -85,7 +85,7 @@ fn caption(label: String, description: Option<String>, selected: bool, theme: &T
     let title = div()
         .text_size(theme.font_size_sm)
         .font_weight(if selected { FontWeight::BOLD } else { FontWeight::SEMIBOLD })
-        .text_color(if selected { theme.accent_brand } else { theme.text_primary })
+        .text_color(if selected { theme.accent_brand_text } else { theme.text_primary })
         .child(label);
     let body = description.map(|text| {
         div()

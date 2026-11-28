@@ -38,14 +38,15 @@ impl LlmInputs {
     /// Creates the inputs pre-filled from the persisted LLM settings.
     pub(super) fn new(state: &AppState, window: &mut Window, cx: &mut App) -> Self {
         let settings = &state.llm_settings;
-        let mut input = |value: &str, placeholder: String| {
+        let mut input = |value: &str, placeholder: String, masked: bool| {
             let value = value.to_string();
-            cx.new(|cx| InputState::new(window, cx).default_value(value).placeholder(placeholder))
+            cx.new(|cx| InputState::new(window, cx).masked(masked).default_value(value).placeholder(placeholder))
         };
         Self {
-            api_key: input(&settings.api_key, t!("settings.api_key_placeholder").to_string()),
-            model: input(&settings.model, t!("settings.model_placeholder").to_string()),
-            endpoint: input(&settings.custom_endpoint, LLM_ENDPOINT_PLACEHOLDER.to_string()),
+            // The key is drawn as dots until its eye button shows it.
+            api_key: input(&settings.api_key, t!("settings.api_key_placeholder").to_string(), true),
+            model: input(&settings.model, t!("settings.model_placeholder").to_string(), false),
+            endpoint: input(&settings.custom_endpoint, LLM_ENDPOINT_PLACEHOLDER.to_string(), false),
             credential: CredentialInputs::new(window, cx),
         }
     }

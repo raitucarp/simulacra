@@ -28,7 +28,7 @@ pub(super) fn document_file(index: usize, file: &FileRef, family: FormatFamily, 
         .flex()
         .flex_col()
         .gap(theme.spacing_2xs)
-        .children(title.map(|title| div().text_size(theme.font_size_md).font_weight(FontWeight::SEMIBOLD).text_color(theme.text_primary).line_clamp(TITLE_LINES).child(title)))
+        .children(title.map(|title| div().text_size(theme.font_size_md).font_weight(FontWeight::SEMIBOLD).text_color(theme.text_primary).line_clamp(TITLE_LINES).text_ellipsis().child(title)))
         .children((!creators.is_empty()).then(|| div().text_size(theme.font_size_xs).text_color(theme.text_secondary).truncate().child(creators)))
         .child(file_text(index, file, family, size_line, theme));
     let art = Illustration::asset(family_art(family), IllustrationKind::TraitCard).width(theme.file_card_art_width);

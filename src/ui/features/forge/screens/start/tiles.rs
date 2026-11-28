@@ -50,7 +50,7 @@ fn tile(id: &'static str, icon: LucideIcon, title_key: &str, body_key: &str, the
         .hover(move |style| style.bg(hover_bg))
         .on_click(move |_, window, cx| click(window, cx))
         .keyboard_stop(theme, on_click)
-        .child(div().text_color(theme.accent_brand).child(Icon::new(icon).size(theme.font_size_xl)))
+        .child(div().text_color(theme.accent_brand_text).child(Icon::new(icon).size(theme.font_size_xl)))
         .child(div().text_size(theme.font_size_md).font_weight(FontWeight::SEMIBOLD).child(tr(title_key)))
         .child(div().text_size(theme.font_size_xs).text_color(theme.text_muted).child(tr(body_key)))
 }

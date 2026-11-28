@@ -54,8 +54,8 @@ impl ReviewPanel {
                 .cursor_pointer()
                 .hover(|row| row.bg(theme.hover_bg))
                 .on_click(move |_, window, cx| pick(id.clone(), window, cx))
-                .child(Icon::new(LucideIcon::Plus).size(theme.icon_size_xs).text_color(theme.accent_brand))
-                .child(div().flex_1().min_w_0().text_size(theme.font_size_xs).text_color(theme.text_primary).line_clamp(PROMPT_LINES).child(self.item_line(item)))
+                .child(Icon::new(LucideIcon::Plus).size(theme.icon_size_xs).text_color(theme.accent_brand_text))
+                .child(div().flex_1().min_w_0().text_size(theme.font_size_xs).text_color(theme.text_primary).line_clamp(PROMPT_LINES).text_ellipsis().child(self.item_line(item)))
                 .child(div().flex_none().text_size(theme.font_size_2xs).text_color(theme.text_muted).child(kind_label(item.subject.key())))
         });
         let empty = items.is_empty().then(|| caption(tr("learning.items.none"), theme));

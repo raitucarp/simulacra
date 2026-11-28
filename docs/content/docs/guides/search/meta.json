@@ -1,0 +1,9 @@
+{
+  "title": "Search",
+  "icon": "Search",
+  "pages": [
+    "meaning-search",
+    "find-similar",
+    "recommendations"
+  ]
+}

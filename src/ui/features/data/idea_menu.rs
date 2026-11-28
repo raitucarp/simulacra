@@ -1,10 +1,9 @@
-//! N7–N10: the items of the user's own post in its "…" menu: re-pin a drifted quote (N7), ask
-//! the room (N9), add it to a series or leave one (N10), and who may read it (N8: everyone,
-//! only the user, or chosen agents).
+//! N7, N8, N10: the items of the user's own post under "Organize" in its "…" menu: re-pin a
+//! drifted quote (N7), add it to a series or leave one (N10), and who may read it (N8:
+//! everyone, only the user, or chosen agents). Asking the room (N9) sits under "Think it over".
 
 use super::events::DataEvent;
 use super::post_menu::{item, DataControls};
-use super::question::QuestionEvent;
 use super::quote_sheet::QuoteEvent;
 use super::series_sheet::SeriesEvent;
 use super::text::tr;
@@ -43,9 +42,6 @@ pub(super) fn with_idea_items(menu: PopupMenu, controls: &DataControls, window: 
     let mut menu = menu;
     if controls.facts.repinnable {
         menu = menu.item(item(tr("posts.pinned.repin"), LucideIcon::Quote, DataEvent::Quote(QuoteEvent::Repin(post.clone())), &controls.on_event));
-    }
-    if !controls.locked && !controls.facts.asked {
-        menu = menu.item(item(tr("posts.question.menu"), LucideIcon::HelpCircle, DataEvent::Question(QuestionEvent::Ask(post.clone())), &controls.on_event)); // N9
     }
     menu = match &controls.facts.series {
         Some(title) => menu.item(item(t!("posts.series.leave", title = title.clone()).to_string(), LucideIcon::ListOrdered, DataEvent::Series(SeriesEvent::Leave(post.clone())), &controls.on_event)),

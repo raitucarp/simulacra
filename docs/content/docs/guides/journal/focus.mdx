@@ -1,0 +1,79 @@
+---
+title: Focus sessions
+description: Name one thing to finish, run a timer, park distractions in the Inbox, and reflect on how it went.
+icon: Timer
+---
+
+A focus session is a timer with an intention. You say what you will finish, pick a length, and work; distractions go to the Inbox without stopping the clock, and focus mode hides everything else. At the end you say how it went in one line.
+
+<Screenshot id="journal-focus-setup" alt="The Focus session card: What will you finish?, length chips 25, 50 and 90 min and Custom, Working on chips, the hint and Start" caption="Set up a session." size="md" />
+
+## Open it
+
+Click the <UiLabel>Focus</UiLabel> tab on the [Journal](/docs/guides/journal), click <UiLabel>Start a focus session</UiLabel> on the Today tab, or run <UiLabel>Start a focus session</UiLabel> in the command palette.
+
+## Set up and start
+
+<Steps>
+<Step>
+### Name the intention
+Under <UiLabel>What will you finish?</UiLabel>, write "One concrete thing, e.g. draft the introduction". It is optional; a session without one is called <UiLabel>Focus</UiLabel>.
+</Step>
+<Step>
+### Pick a length
+Under <UiLabel>Length</UiLabel>, choose 25 min (a pomodoro), 50 min (a deep block) or 90 min (an ultradian cycle), or <UiLabel>Custom</UiLabel> and type the minutes, 1 to 240.
+</Step>
+<Step>
+### Link what you work on (optional)
+Under <UiLabel>Working on</UiLabel>, choose <UiLabel>Nothing linked</UiLabel>, <UiLabel>Today's review</UiLabel>, <UiLabel>A goal</UiLabel> (then type its name under <UiLabel>Goal</UiLabel>), the thought open in the inspector ("This thought: …") or one of up to three vault documents.
+</Step>
+<Step>
+### Start
+Click <UiLabel>Start</UiLabel>. It is disabled while a custom length is missing or out of range.
+</Step>
+</Steps>
+
+## While it runs
+
+<Screenshot id="journal-focus-running" alt="A running focus session: the intention, a large countdown, a progress bar, of 25 min, and the Pause, End now, Distractions: 0 and Focus mode buttons" caption="The clock counts down to the planned length." size="md" />
+
+| Control | What it does |
+|---|---|
+| <UiLabel>Pause</UiLabel> / <UiLabel>Resume</UiLabel> | Stops and restarts the clock; the line under the bar reads <UiLabel>Paused</UiLabel>. |
+| <UiLabel>End now</UiLabel> | Ends the session early and asks for the reflection. |
+| "Distractions: N" | Opens quick capture so you can note the distraction in the Inbox; the session keeps running and the count goes up. |
+| <UiLabel>Focus mode</UiLabel> / <UiLabel>Leave focus mode</UiLabel> | Hides the feed and side panels and shows the timer alone, larger, in the middle of the window. |
+
+The session ends by itself at its planned length. The clock is measured from the wall clock, so a slow repaint never loses time. If the computer sleeps for more than two minutes, the timer pauses at the moment it went to sleep and reads <UiLabel>Paused while the computer was asleep</UiLabel>, so the sleep is not counted as focus; click <UiLabel>Resume</UiLabel> to go on.
+
+<Screenshot id="journal-focus-mode" alt="Focus mode: an otherwise empty window with the intention, the countdown, the progress bar and the session buttons in the centre" caption="Focus mode hides everything but the timer." />
+
+## Reflect
+
+<Screenshot id="journal-focus-reflection" alt="How did it go? with You focused for 1 of 25 minutes, a one-line field and the outlined Done, Partly and Not done buttons beside Skip" caption="One line on how it went." size="md" />
+
+When the session ends it is saved at once, then <UiLabel>How did it go?</UiLabel> asks for the outcome: "You focused for N of N minutes." Type one line in "One line: what happened?" and click <UiLabel>Done</UiLabel>, <UiLabel>Partly</UiLabel> or <UiLabel>Not done</UiLabel> (three equal buttons, so none nudges your answer), or <UiLabel>Skip</UiLabel>. Either way the form clears and focus mode switches off.
+
+## The session log
+
+<Screenshot id="journal-focus-log" alt="The Sessions card: three tiles, a chart of focus minutes per day over two weeks, and the latest sessions with their outcome and an Open button" caption="Totals, the last two weeks, and every session." size="md" />
+
+| Part | Shows |
+|---|---|
+| <UiLabel>Sessions</UiLabel> | How many sessions you ran, ended early or not |
+| <UiLabel>Time focused</UiLabel> | Total focus time |
+| <UiLabel>Intentions met</UiLabel> | Share of reflected sessions marked Done (<UiLabel>None yet</UiLabel> before any) |
+| The chart | Focus minutes per day over the last 14 days |
+| The list | The latest twelve sessions: intention, day, "N of N min", outcome (or <UiLabel>No reflection</UiLabel>), distractions, the reflection, and <UiLabel>Open</UiLabel> for a linked post, document or today's review ("Goal: …" for a goal) |
+
+With no sessions the tab shows <UiLabel>No focus sessions yet</UiLabel>: "Name one thing to finish, pick a length and start. Your sessions and how they went collect here."
+
+## Tips and limits
+
+- Focus minutes feed the associations on the [Mood](/docs/guides/journal/mood) tab.
+- The session stays private like the rest of the journal. Distractions you capture go to the Inbox like any quick capture.
+
+## Related
+
+- [Journal](/docs/guides/journal)
+- [Review](/docs/guides/review): link a session to today's review

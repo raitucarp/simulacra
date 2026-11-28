@@ -1,0 +1,60 @@
+---
+title: General
+description: The interface language, regional formats, who you write as when the app starts, the screen it opens on, and the welcome tour.
+icon: SlidersHorizontal
+---
+
+**General** is the first category of Settings and the one <Shortcut keys="Ctrl+," /> opens. It decides how the app speaks to you and how it starts.
+
+<Screenshot id="settings-general" alt="Settings › General with the LANGUAGE & REGION card (Interface language, Date format, Time format, Number format, First day of the week) and the STARTUP card (Default persona, Startup screen, Welcome tour)" caption="Settings › General." />
+
+## LANGUAGE & REGION
+
+| Setting | Control | Options | Default | What it does |
+|---|---|---|---|---|
+| <UiLabel>Interface language</UiLabel> | Menu | English, Bahasa Indonesia, Español, 简体中文, 日本語, Français, Deutsch, Português, Русский, العربية | English | The language of every menu and label. It switches at once. The globe menu in the title bar changes the same setting. |
+| <UiLabel>Date format</UiLabel> | Chips | `2026-11-17`, `17/11/2026`, `11/17/2026` | `2026-11-17` | How every date is written: on posts, quotes, review cards, profiles, views (board, garden, calendar), the history sheets, mood check-ins, Insights and the <UiLabel>Still true?</UiLabel> prompt. Month-first also puts the month first in short dates (`Aug 12`). |
+| <UiLabel>Time format</UiLabel> | Chips | <UiLabel>24-hour</UiLabel>, <UiLabel>12-hour</UiLabel> | 24-hour | How times are written in the same places (`14:41` or `2:41 PM`). |
+| <UiLabel>Number format</UiLabel> | Menu | <UiLabel>Follow the language</UiLabel>, `1,234.5`, `1.234,5`, `1 234,5` | Follow the language | How digits are grouped. In 0.2.0 it formats the numbers of the Settings window itself (for example the daily token cap). |
+| <UiLabel>First day of the week</UiLabel> | Chips | Monday, Sunday, Saturday | Monday | The first column of the [calendar view](/docs/guides/views). |
+
+**Follow the language** groups thousands with a period in German, Bahasa Indonesia, Spanish and Portuguese, with a thin space in French and Russian, and with a comma in the other languages.
+
+The languages and what is translated are listed in [Languages](/docs/reference/languages).
+
+## STARTUP
+
+| Setting | Control | Options | Default | What it does |
+|---|---|---|---|---|
+| <UiLabel>Default persona</UiLabel> | Menu | <UiLabel>Last used</UiLabel>, then each of your personas | Last used | Who you write as when the app starts. |
+| <UiLabel>Startup screen</UiLabel> | Menu | <UiLabel>Timeline</UiLabel>, <UiLabel>Knowledge Vault</UiLabel>, <UiLabel>Mind Graph</UiLabel>, <UiLabel>Agent Lab</UiLabel> | Timeline | The screen the window opens on. |
+| <UiLabel>Welcome tour</UiLabel> | <UiLabel>Show again</UiLabel> | | | Closes Settings and shows the first-run welcome again: what Simulacra is and how to create a thinker. |
+
+Both startup settings take effect the next time you start Simulacra. The persona menu lists only your own personas, not agents. If the persona you picked is deleted later, the app falls back to the persona used last.
+
+## Change the interface language
+
+<Steps>
+<Step>
+### Open General
+
+Press <Shortcut keys="Ctrl+," />.
+</Step>
+<Step>
+### Pick a language
+
+Click the <UiLabel>Interface language</UiLabel> menu and choose a language. Every label, including this window, redraws in it straight away.
+</Step>
+</Steps>
+
+## Tips and limits
+
+- **Times are local.** Every time is shown in your computer's time zone. A post shows only its time today, <UiLabel>Yesterday 14:41</UiLabel> the day before, the day and month earlier in the year (<UiLabel>12 Aug</UiLabel>) and the full date before that.
+- File names, exports and the dates you type into fields keep the `2026-11-17` form whatever you choose, so they sort and read back the same.
+- <UiLabel>Show again</UiLabel> is also in the command palette as <UiLabel>Show the welcome tour</UiLabel>. See [First launch](/docs/getting-started/first-launch).
+
+## Related
+
+- [The Settings window](/docs/guides/settings)
+- [Languages](/docs/reference/languages)
+- [Settings reference](/docs/reference/settings)

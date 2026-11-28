@@ -37,7 +37,7 @@ impl AppView {
 
     /// The waiting posts as the sheet lists them, soonest first.
     pub(in crate::ui::features::shell) fn scheduled_rows(&self) -> Vec<ScheduledRow> {
-        let row = |post: &crate::domain::Post| ScheduledRow { id: post.id.clone(), text: post.content.clone(), publish_at: post.lifecycle.publish_at };
+        let row = |post: &crate::domain::Post| ScheduledRow { id: post.id.clone(), text: crate::domain::post::readable_line(&post.content), publish_at: post.lifecycle.publish_at };
         self.state.scheduled_posts().iter().map(row).collect()
     }
 

@@ -3,8 +3,6 @@
 use jiff::Timestamp;
 use rust_i18n::t;
 
-/// Local date and time as the history and restore sheets show them.
-const TIME_FORMAT: &str = "%Y-%m-%d %H:%M";
 /// A local date.
 const DATE_FORMAT: &str = "%Y-%m-%d";
 
@@ -18,7 +16,7 @@ pub fn format_date(at: Timestamp) -> String {
     crate::time::local(at).strftime(DATE_FORMAT).to_string()
 }
 
-/// `at` in local time.
+/// `at` in local time, as the date and clock settings write it.
 pub fn format_time(at: Timestamp) -> String {
-    crate::time::local(at).strftime(TIME_FORMAT).to_string()
+    crate::ui::format::date_time(at)
 }

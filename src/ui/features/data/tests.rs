@@ -103,7 +103,7 @@ fn an_edited_post_wears_its_version_badge() {
         on_event: Rc::new(|_, _, _| {}),
     };
     let edited = DataControls { version: Some(crate::domain::data::history::SemVer::new(1, 2, 0)), ..source.controls(&PostId::new("p1"), true) };
-    assert_eq!(edited.edited_mark().as_deref(), Some("v1.2.0"));
+    assert_eq!(edited.edited_mark(), Some(tr("data.edited")), "the card says edited, not the version number");
     let unnumbered = source.controls(&PostId::new("p1"), true);
     assert_eq!(unnumbered.edited_mark(), Some(tr("data.edited")), "an edit without a number still shows");
     let fresh = DataControls { version: Some(crate::domain::data::history::SemVer::ORIGINAL), ..source.controls(&PostId::new("p2"), true) };

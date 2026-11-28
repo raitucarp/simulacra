@@ -44,14 +44,16 @@ impl FreeComposeView {
 }
 
 /// The footer toggle, lit while composing freely.
+/// The footer toggle: an icon like the other footer tools, its name and what it does on hover.
+/// With its label it pushed the footer past the dialog's width ("Free compos").
 pub(super) fn free_button(on: bool, on_toggle: FreeToggle) -> Button {
+    let tooltip = format!("{}: {}", t!("composer.free_compose"), t!("composer.free_compose_hint"));
     Button::new(TOGGLE_ID)
         .ghost()
         .small()
         .selected(on)
         .icon(Icon::new(LucideIcon::ListTree))
-        .tooltip(t!("composer.free_compose_hint").to_string())
-        .label(t!("composer.free_compose").to_string())
+        .tooltip(tooltip)
         .on_click(move |_, window, cx| on_toggle(window, cx))
 }
 

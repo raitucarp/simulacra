@@ -8,7 +8,6 @@ use crate::ui::features::vault::editor::fields::TextField;
 use crate::ui::features::vault::panel::VaultPanel;
 use crate::ui::features::vault::text::problem_message;
 use gpui_kit::component::input::Input;
-use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::*;
 
 /// The record field a text field is validated as.
@@ -25,6 +24,11 @@ fn validated_as(field: TextField) -> Option<RecordField> {
 
 /// A label above `control`, an optional hint, and the problem in the danger color.
 pub fn labelled(label: String, hint: Option<String>, problem: Option<FieldProblem>, control: impl IntoElement, theme: &ThemeTokens) -> Div {
+    // A problem takes the hint's place: the two said nearly the same thing one under the other.
+    let note = match problem {
+        Some(p) => Some(div().text_size(theme.font_size_xs).text_color(theme.accent_danger).child(problem_message(p))),
+        None => hint.map(|hint| div().text_size(theme.font_size_2xs).text_color(theme.text_muted).child(hint)),
+    };
     div()
         .flex()
         .flex_col()
@@ -33,8 +37,7 @@ pub fn labelled(label: String, hint: Option<String>, problem: Option<FieldProble
         .min_w_0()
         .child(div().text_size(theme.font_size_xs).font_weight(FontWeight::SEMIBOLD).text_color(theme.text_secondary).child(label))
         .child(control)
-        .when_some(hint, |f, hint| f.child(div().text_size(theme.font_size_2xs).text_color(theme.text_muted).child(hint)))
-        .when_some(problem, |f, p| f.child(div().text_size(theme.font_size_xs).text_color(theme.accent_danger).child(problem_message(p))))
+        .children(note)
 }
 
 /// An inset frame around an input, outlined in the danger color while it has a problem.

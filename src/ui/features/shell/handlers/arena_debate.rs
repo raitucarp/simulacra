@@ -10,7 +10,7 @@ use crate::agent::post_actions::{ActionFailure, CancelToken};
 use crate::domain::arena::debate::{setup_problem, turn_prompt, Debate, DebateSetup, Phase, Slot, TURN_ANSWER_TOKENS};
 use crate::domain::arena::ArenaId;
 use crate::domain::post_actions::ActionFailureKind;
-use crate::ui::features::arena::RunState;
+use crate::ui::features::arena::{ArenaTab, RunState};
 use gpui_kit::*;
 
 impl AppView {
@@ -74,10 +74,15 @@ impl AppView {
         }
     }
 
-    /// Ends the run with `failure` said on the page (a stop says nothing).
+    /// Ends a debate run with `failure` said on the page (a stop says nothing).
     pub(super) fn arena_failed(&mut self, failure: ActionFailure) {
+        self.arena_failed_on(ArenaTab::Debate, failure);
+    }
+
+    /// Ends the run of `tab` with `failure` said on that tab only.
+    pub(super) fn arena_failed_on(&mut self, tab: ArenaTab, failure: ActionFailure) {
         self.arena.run = None;
-        self.arena.notice = (failure.kind != ActionFailureKind::Cancelled).then(|| failure_message(&failure));
+        self.arena.notice = (failure.kind != ActionFailureKind::Cancelled).then(|| (tab, failure_message(&failure)));
     }
 
     /// Keeps `debate` in memory (newest first) and queues it for the vault.

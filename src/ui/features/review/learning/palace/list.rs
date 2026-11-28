@@ -65,6 +65,6 @@ impl ReviewPanel {
         let theme = &self.theme;
         let palaces = &self.data.learning.records.palaces;
         let cards: Vec<Div> = palaces.iter().enumerate().map(|(index, palace)| self.palace_card(index, palace, cx)).collect();
-        div().w_full().max_w(theme.review_card_max_width).flex().flex_col().gap(theme.section_gap).children(cards).child(self.palace_form(cx))
+        div().w_full().flex().flex_col().gap(theme.section_gap).children(cards).child(self.palace_form(cx))
     }
 }

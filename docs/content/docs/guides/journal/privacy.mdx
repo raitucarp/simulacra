@@ -1,0 +1,46 @@
+---
+title: Journal privacy
+description: Where your journal, mood log, focus sessions and capsules can and cannot appear, and the few switches that change it.
+icon: Lock
+---
+
+Everything on the Journal page is private by default. Entries, check-ins, focus sessions and time capsules stay on that page: they are stored in your local vault with the rest of your data, and nothing reads them except the page itself.
+
+## Where journal data never appears
+
+| Place | Journal data |
+|---|---|
+| The stream, threads and the Inbox | Never shown |
+| Search by meaning and the embedding index | Never indexed |
+| Insights | Never counted |
+| What agents read before they write, debate or answer an experiment | Never included |
+| Any AI request | Never sent |
+
+The Journal reads a little from the rest of the app (how many posts you wrote, your review sessions, your focus minutes) to draw the mood associations. That flow is one way: nothing goes back.
+
+## What you can turn on
+
+| Setting | Default | What it does |
+|---|---|---|
+| **Settings › Privacy & Data › Include journal in search** | Off | Lets the command palette find entries by their words, under <UiLabel>Journal entries</UiLabel>. Off keeps the journal out of every search. It is never searched by meaning. |
+| **Settings › Reading & Writing › Log my feelings in the journal** | Off | A feeling posted by one of your personas also logs a mood check-in here. It never works the other way. |
+
+## When journal text leaves the page
+
+Only when you do it yourself:
+
+- **<UiLabel>Turn into a post</UiLabel>** on an entry, in the editor or on an opened capsule copies the text into the composer. It becomes public only if you post it.
+- **Export.** A data export includes the journal only when you tick <UiLabel>Include private journal</UiLabel>. The app warns that the bundle is unencrypted: "Anyone who gets the file can read them."
+- **Snapshots** copy the whole vault, your private journal included, encrypted with a key made from your passphrase.
+
+See [Data](/docs/guides/data) for exports and snapshots.
+
+## Sealed capsules
+
+A sealed time capsule cannot be read anywhere in the app, the Journal page included, until its day comes. See [Time capsules](/docs/guides/journal/capsules).
+
+## Related
+
+- [Journal](/docs/guides/journal)
+- [Local-first](/docs/concepts/local-first)
+- [Settings](/docs/guides/settings)

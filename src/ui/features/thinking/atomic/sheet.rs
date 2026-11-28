@@ -86,7 +86,7 @@ fn body(sheet: &AtomicSheet, theme: &ThemeTokens) -> Stateful<Div> {
 pub fn render_atomic_sheet(sheet: &AtomicSheet, on_event: SheetAction, theme: &ThemeTokens) -> Stateful<Div> {
     let (dismiss, close, split) = (on_event.clone(), on_event.clone(), on_event);
     let header = div().flex().items_center().gap(theme.inline_gap).px(theme.card_padding).py(theme.spacing_sm).border_b(theme.border_width_hairline).border_color(theme.border_subtle)
-        .child(Icon::new(LucideIcon::Atom).size(theme.icon_size_sm).text_color(theme.accent_brand))
+        .child(Icon::new(LucideIcon::Atom).size(theme.icon_size_sm).text_color(theme.accent_brand_text))
         .child(div().flex_1().min_w_0().flex().flex_col().gap(theme.spacing_3xs).child(div().text_size(theme.font_size_sm).font_weight(FontWeight::SEMIBOLD).text_color(theme.text_primary).child(tr("thinking.atomic.title"))).child(div().truncate().text_size(theme.font_size_2xs).text_color(theme.text_muted).child(sheet.source.clone())));
     let footer = div().flex().justify_end().gap(theme.control_gap).px(theme.card_padding).py(theme.spacing_sm).border_t(theme.border_width_hairline).border_color(theme.border_subtle)
         .child(Button::new(BUTTON_IDS[1]).ghost().small().label(tr("thinking.close")).on_click(move |_, w, cx| close(AtomicSheetEvent::Close, w, cx)))

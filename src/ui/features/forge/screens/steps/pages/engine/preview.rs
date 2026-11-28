@@ -111,7 +111,7 @@ fn image_line(prompt: String, theme: &ThemeTokens) -> Div {
         .bg(theme.bg_elevated)
         .text_size(theme.font_size_xs)
         .text_color(theme.text_secondary)
-        .child(div().text_color(theme.accent_brand).child(Icon::new(LucideIcon::Image).size(theme.font_size_sm)))
+        .child(div().text_color(theme.accent_brand_text).child(Icon::new(LucideIcon::Image).size(theme.font_size_sm)))
         .child(div().flex_1().min_w_0().child(format!("{} {prompt}", tr(IMAGE_KEY))))
 }
 

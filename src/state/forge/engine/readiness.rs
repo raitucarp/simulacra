@@ -30,14 +30,14 @@ impl CredentialStatus {
 pub fn credential_status(store: &CredentialStore, id: Option<&str>, kind: Option<CredentialKind>) -> CredentialStatus {
     if let Some(id) = id {
         return match store.get(id) {
-            Some(cred) if cred.has_secret() || kind.is_none() => CredentialStatus::Ready { label: cred.label.clone(), chosen: true },
+            Some(cred) if cred.has_secret() || kind.is_none() => CredentialStatus::Ready { label: cred.shown_label(), chosen: true },
             Some(_) => CredentialStatus::Missing,
             None => CredentialStatus::Gone,
         };
     }
     let Some(kind) = kind else { return CredentialStatus::NotNeeded };
     match store.first_of(kind).filter(|cred| cred.has_secret()) {
-        Some(cred) => CredentialStatus::Ready { label: cred.label.clone(), chosen: false },
+        Some(cred) => CredentialStatus::Ready { label: cred.shown_label(), chosen: false },
         None => CredentialStatus::Missing,
     }
 }

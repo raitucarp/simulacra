@@ -1,0 +1,55 @@
+---
+title: Items
+description: Every item you are learning in the network, with edit, suspend, resume and stop learning.
+icon: Layers
+---
+
+The <UiLabel>Items</UiLabel> tab lists everything you are learning in the active network, so you can fix a question, pause an item for a while, or stop learning it.
+
+<Screenshot id="review-items" alt="The Items tab: a count line and item rows, each with its prompt, kind, due date and tags, and edit, suspend and delete buttons; one suspended row is dimmed" caption="Next due first; suspended and retired items are dimmed and listed last." />
+
+## Open it
+
+Click the <UiLabel>Items</UiLabel> tab on the [Review](/docs/guides/review) page. The post picker and the map editor return here when you leave them.
+
+## Anatomy
+
+The caption reads "N items, next due first". Each row shows:
+
+1. **The headline**: the item's prompt (two lines at most), or the map's title for a connection map.
+2. **The meta line**: kind (<UiLabel>Question</UiLabel>, <UiLabel>Answer</UiLabel> or <UiLabel>Connections</UiLabel>) · state · tags. The state is <UiLabel>New</UiLabel>, <UiLabel>Due today</UiLabel>, "N days overdue", "In N days", <UiLabel>Suspended</UiLabel> or <UiLabel>Post deleted</UiLabel>.
+3. **The buttons**, shown as icons with hover text:
+
+| Button | What it does |
+|---|---|
+| <UiLabel>Edit</UiLabel> | Opens the learn sheet on the item, or the map editor for a map. The schedule is kept. |
+| <UiLabel>Suspend (leave out of reviews)</UiLabel> | Takes the item out of sessions and quizzes until you resume it. |
+| <UiLabel>Resume reviews</UiLabel> | Puts a suspended item back. |
+| <UiLabel>Stop learning</UiLabel> | Asks <UiLabel>Stop learning this?</UiLabel> first, then removes the item. |
+
+The order is: active items (learnt ones by due date, then new ones), then suspended items, then retired ones. Up to 400 rows are listed.
+
+## Stop learning an item
+
+<Steps>
+<Step>
+### Click Stop learning
+Click the bin icon on the item's row.
+</Step>
+<Step>
+### Confirm
+The dialog explains: "It leaves your reviews. The post or passage stays, and its past answers stay in the statistics." Click <UiLabel>Stop learning</UiLabel>.
+</Step>
+</Steps>
+
+The post or passage itself is never touched. To learn it again, add a new question or answer; it starts as new.
+
+## Retired items
+
+When you delete a post, its item is retired: it reads <UiLabel>Post deleted</UiLabel>, is dimmed, and never comes back in a review. It stays listed, and its past answers stay in the statistics; remove it with <UiLabel>Stop learning</UiLabel> if you like. Retired items have no edit or suspend button.
+
+## Related
+
+- [Learn posts and passages](/docs/guides/review/learn-posts)
+- [Connection maps](/docs/guides/review/connection-maps)
+- [Statistics](/docs/guides/review/statistics)

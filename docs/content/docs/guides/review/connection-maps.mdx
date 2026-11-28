@@ -1,0 +1,104 @@
+---
+title: Connection maps
+description: Recall how ideas connect, not only what they say, by redrawing a map of posts, passages and concepts.
+icon: Share2
+---
+
+A connection map is one review item made of points (posts, vault passages and concepts) and the connections between them. In a review you see the points scattered with no lines, and redraw the connections from memory. It succeeds only when the structure is reproduced exactly, because what you are training is the web, not the pieces.
+
+## Make a map
+
+Every map starts from structure that already exists, so you only edit it.
+
+| Start from | How | What is seeded |
+|---|---|---|
+| Posts you pick | <UiLabel>New connection map</UiLabel> on the Review header, or the palette command <UiLabel>New connection map</UiLabel> | The posts, joined by replies, quotes, wikilinks and cited posts |
+| A thread | A post's <UiLabel>…</UiLabel> menu › <UiLabel>Learn</UiLabel> › <UiLabel>Learn this thread's connections</UiLabel> | The thread from its first post, joined by replies; titled "Thread: …" |
+| A vault entry | <UiLabel>Learn connections</UiLabel> under the entry's title in the vault | The entry, its related entries (joined to it and to each other where related) and up to three posts that link to it; titled "Around …" |
+
+From posts or a thread, hashtags shared by two posts or more become up to three concept points, joined to the posts that carry them.
+
+### Pick posts for a map
+
+<Screenshot id="review-picker-map" alt="The Pick posts for a connection map screen with three rows ticked and the Create map (3 posts) button" caption="Click rows to gather posts, in the order you pick them." size="md" />
+
+Click a row to add or remove it; picked rows are tinted and ticked. A map holds at most 12 points. <UiLabel>Create map (N posts)</UiLabel> needs at least two and opens the editor.
+
+## The map editor
+
+<Screenshot id="review-map-editor" alt="The connection map editor: title field, points on a ring joined by lines, the One-way chip, relation and concept fields, and the lists of connections and points" caption="Click two points to join or separate them." />
+
+1. **<UiLabel>Title</UiLabel>**: "What these ideas are about". Left blank, the map is called <UiLabel>Connection map</UiLabel>.
+2. **The canvas.** Points sit on a ring in order, colour-coded like the [Mind Graph](/docs/guides/mind-graph): posts by author and up to two lines of their opening words (as plain text), passages by document title (<UiLabel>The whole document</UiLabel> for a document point), concepts by name. Click one point, then another: unjoined points are joined, joined ones are separated. The first point stays highlighted until you click the second.
+3. **<UiLabel>One-way</UiLabel>**: new connections run from the first point clicked to the second, drawn with an arrowhead.
+4. **<UiLabel>Relation of new connections (optional)</UiLabel>**: a name such as `causes` or `contradicts`, given to each connection you draw next and printed on its line.
+5. **<UiLabel>Add a concept</UiLabel>** with <UiLabel>Add</UiLabel> (or <Kbd>Enter</Kbd>): a new concept point, unless the name is blank, already present or the map is full.
+6. **<UiLabel>Connections (N)</UiLabel>** lists every connection as "A — B" or "A → B", with its relation. <UiLabel>Change direction</UiLabel> cycles undirected → one way → the other way → undirected; <UiLabel>Remove connection</UiLabel> deletes it.
+7. **<UiLabel>Points (N)</UiLabel>** lists every point; <UiLabel>Remove point</UiLabel> drops it with its connections.
+8. **<UiLabel>Save map</UiLabel>** ("A saved map comes back for review like any item.") or <UiLabel>Cancel</UiLabel>. Both return to <UiLabel>Items</UiLabel>.
+
+A map cannot be saved until it passes three checks:
+
+| Message | Rule |
+|---|---|
+| <UiLabel>A map needs at least three points.</UiLabel> | 3 to 12 points |
+| <UiLabel>A map needs at least two connections.</UiLabel> | 2 connections or more |
+| <UiLabel>Every point needs at least one connection.</UiLabel> | A point with no connection would be a free guess in the drill |
+
+To change a saved map later, click <UiLabel>Edit</UiLabel> on its row under [Items](/docs/guides/review/items). Its schedule is kept.
+
+## The drill
+
+When a map comes up in a session, its points are scattered on one ring (two for larger maps) in an order that changes every review, so the layout never gives the structure away.
+
+<Screenshot id="review-drill" alt="A map drill: scattered points with two learner-drawn connections, the count of connections drawn, and the Clear and Check buttons" caption="Connect the points as you remember them." />
+
+<Steps>
+<Step>
+### Draw
+Click one point, then another, to connect them. Click a connected pair again to take the connection back.
+</Step>
+<Step>
+### Name relations if the map has them
+Under <UiLabel>Relation of new connections</UiLabel>, pick <UiLabel>No relation</UiLabel> or one of the map's relations before drawing.
+</Step>
+<Step>
+### Check
+Click <UiLabel>Check</UiLabel> or press <Kbd>Space</Kbd>. <UiLabel>Clear</UiLabel> wipes the drawing first if you want to start over.
+</Step>
+</Steps>
+
+<Screenshot id="review-drill-result" alt="A checked drill: green, red and curved amber lines over the points, the score, precision and recall, the mistakes, and the Graded Again line with Continue" caption="Green is right, red is wrong, and the curved amber lines were missing." />
+
+The result block shows:
+
+- the headline: <UiLabel>Exact: your connections match the map 100%.</UiLabel>, or "N of N connections right, N wrong.";
+- "Precision N% · recall N%": how much of what you drew was right, and how much of the map you drew;
+- the legend <UiLabel>Right</UiLabel>, <UiLabel>Wrong</UiLabel>, <UiLabel>Missing</UiLabel>, and up to six mistakes ("A — B: wrong direction", "not in the map", "wrong relation", "missing");
+- "Graded …" and <UiLabel>Continue</UiLabel>.
+
+A drawn connection is right when it joins the same two points as a map connection, runs the same way when that one is one-way, and carries the same relation when that one is named.
+
+### How a drawing is graded
+
+You do not pick the grade: the drawing earns it.
+
+| Drawing | Grade |
+|---|---|
+| Anything wrong or missing | Again: the map comes back in this session |
+| Exact, at most 12 seconds per connection and no connection taken back | Easy |
+| Exact, more than 45 seconds per connection | Hard |
+| Exact otherwise | Good |
+
+After the check, <UiLabel>Continue</UiLabel> or any of <Kbd>1</Kbd>–<Kbd>4</Kbd> moves on with the earned grade. <Kbd>Space</Kbd> does not, so one press cannot both check and skip the result.
+
+## Tips and limits
+
+- A map is never retired: when a post it uses is deleted, that point drops out of the drill.
+- Keep relations for the connections where the kind matters; every named relation must be recalled exactly.
+
+## Related
+
+- [The review session](/docs/guides/review/sessions)
+- [Spaced repetition](/docs/concepts/spaced-repetition)
+- [Mind Graph](/docs/guides/mind-graph)

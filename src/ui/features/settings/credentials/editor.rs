@@ -26,9 +26,9 @@ pub(super) fn render_editor(theme: &ThemeTokens, editor: &CredentialEditorView, 
         .border_t(theme.border_width_hairline)
         .border_color(theme.border)
         .child(render_kind_chips(theme, editor.kind, props))
-        .child(input_field(theme, t!("settings.credentials_label").to_string(), String::new(), &editor.label))
-        .child(input_field(theme, t!("settings.credentials_secret").to_string(), secret_hint, &editor.secret))
-        .child(input_field(theme, t!("settings.credentials_endpoint").to_string(), String::new(), &editor.endpoint))
+        .child(input_field(theme, t!("settings.credentials_label").to_string(), String::new(), text_input(&editor.label, theme)))
+        .child(input_field(theme, t!("settings.credentials_secret").to_string(), secret_hint, text_input(&editor.secret, theme).mask_toggle()))
+        .child(input_field(theme, t!("settings.credentials_endpoint").to_string(), String::new(), text_input(&editor.endpoint, theme)))
         .child(
             div()
                 .flex()
@@ -64,9 +64,12 @@ fn render_kind_chips(theme: &ThemeTokens, chosen: CredentialKind, props: &Creden
         .child(div().flex().flex_wrap().gap(theme.spacing_xs).children(chips))
 }
 
+/// A full-width single-line input at the settings field height.
+fn text_input(state: &Entity<InputState>, theme: &ThemeTokens) -> Input {
+    Input::new(state).w_full().h(theme.settings_input_height).text_size(theme.font_size_label)
+}
+
 /// A labelled single-line input.
-fn input_field(theme: &ThemeTokens, title: String, hint: String, state: &Entity<InputState>) -> Div {
-    field_group(theme)
-        .child(field_header(theme, title, hint))
-        .child(Input::new(state).w_full().h(theme.settings_input_height).text_size(theme.font_size_label))
+fn input_field(theme: &ThemeTokens, title: String, hint: String, input: Input) -> Div {
+    field_group(theme).child(field_header(theme, title, hint)).child(input)
 }

@@ -1,0 +1,79 @@
+---
+title: Embeddings
+description: Choose where posts and documents are turned into vectors for search by meaning, which model and vector size to use, how text is chunked, and rebuild or stop the index.
+icon: Brain
+---
+
+**Embeddings** configures search by meaning. Every post and vault document is cut into chunks, and each chunk is turned into a vector by an embedding model; searching by meaning compares those vectors. See [Meaning search](/docs/concepts/meaning-search) for the idea.
+
+<Screenshot id="settings-embeddings" alt="Settings › Embeddings with the MODEL card (provider Custom, model stub-embed, the local server address, Vector size 256 dims, each with its reset arrow), the CHUNKING card and the INDEX card with Rebuild and Stop" caption="Settings › Embeddings." />
+
+## MODEL
+
+| Setting | Control | Range or options | Default | What it does |
+|---|---|---|---|---|
+| <UiLabel>Embedding provider</UiLabel> | Menu | <UiLabel>Gemini</UiLabel>, <UiLabel>Local server</UiLabel>, <UiLabel>OpenAI</UiLabel>, <UiLabel>Custom</UiLabel> | Gemini | The service that turns text into vectors. |
+| <UiLabel>Embedding model</UiLabel> | Text | | `gemini-embedding-001` | The model id. Blank means the provider's default. |
+| <UiLabel>Local server address</UiLabel> | Text | | blank (`http://localhost:11434`) | Where a local embedding server listens. A custom service uses it too. Dimmed unless the provider is Local server or Custom. |
+| <UiLabel>Vector size</UiLabel> | Stepper (step 128) | 128 to 3072 dims | `768 dims` | How many numbers each vector holds. Smaller is lighter; a change rebuilds the index. |
+
+| Provider | Default model | Key | Address |
+|---|---|---|---|
+| Gemini | `gemini-embedding-001` | A Google Gemini credential, or the provider pane's key when Gemini is the AI provider | The Gemini API |
+| Local server | `embeddinggemma` (Google's Gemma embedding model) | None | <UiLabel>Local server address</UiLabel> |
+| OpenAI | `text-embedding-3-small` | An OpenAI credential | `https://api.openai.com/v1`, or the credential's endpoint |
+| Custom | `text-embedding-3-small` | A Custom Endpoint credential | <UiLabel>Local server address</UiLabel> |
+
+Switching the provider moves a model still at the old provider's default to the new provider's default. A model id you typed yourself stays.
+
+## CHUNKING
+
+| Setting | Control | Range | Default | What it does |
+|---|---|---|---|---|
+| <UiLabel>Chunk size</UiLabel> | Stepper (step 64) | 128 to 4096 tokens | `512 tokens` | How much text goes into one vector. |
+| <UiLabel>Chunk overlap</UiLabel> | Stepper (step 16) | 0 to 1024 tokens | `64 tokens` | Text shared by neighbouring chunks. It is never more than half a chunk. |
+
+## INDEX
+
+| Setting | Control | Default | What it does |
+|---|---|---|---|
+| <UiLabel>Semantic search</UiLabel> | Switch | On | Find posts and documents by meaning as well as by words. Off stops indexing and searching by meaning. |
+| <UiLabel>Rebuild the index</UiLabel> | <UiLabel>Rebuild</UiLabel> | | Embeds every post and document again with the current model. A toast says <UiLabel>Rebuilding the index with …</UiLabel>. |
+| <UiLabel>Stop indexing</UiLabel> | <UiLabel>Stop</UiLabel> | | Stops the embedding that is running. <UiLabel>Rebuild</UiLabel> resumes it. The button is disabled while nothing is being indexed. |
+
+## Use a local embedding server
+
+<Steps>
+<Step>
+### Start the server
+
+Run a local embedding server that serves `embeddinggemma` and answers `POST /api/embed`, by default on `http://localhost:11434`.
+</Step>
+<Step>
+### Pick Local server
+
+In Settings › Embeddings, set <UiLabel>Embedding provider</UiLabel> to <UiLabel>Local server</UiLabel>. The model changes to `embeddinggemma` and <UiLabel>Local server address</UiLabel> becomes editable.
+</Step>
+<Step>
+### Set the address if it differs
+
+Type the server's address if it is not `http://localhost:11434`.
+</Step>
+<Step>
+### Rebuild
+
+Click <UiLabel>Rebuild</UiLabel>. With the server on this computer, the text of your posts and documents no longer leaves it to be embedded.
+</Step>
+</Steps>
+
+## Tips and limits
+
+- **Embedding requests count against the daily AI budget** of Settings › AI & Models. When it is spent, indexing pauses with <UiLabel>Today's AI budget is used up, so indexing paused.</UiLabel>
+- **Request timeout and retries** of Settings › AI & Models apply to embedding requests too.
+- **Errors** such as a missing or rejected key, an unknown model or an unreachable server are listed in [Troubleshooting](/docs/reference/troubleshooting).
+
+## Related
+
+- [Search](/docs/guides/search)
+- [Meaning search](/docs/concepts/meaning-search)
+- [Credentials](/docs/guides/settings/credentials)

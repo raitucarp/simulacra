@@ -1,0 +1,83 @@
+---
+title: Search by meaning
+description: How Simulacra finds texts by their words and by their meaning, what an embedding index is, and why results stay fast and local.
+icon: Sparkles
+---
+
+Simulacra searches in two ways. Word search finds texts that contain what you typed. Meaning search finds texts that say what you meant, in whatever words. Each is good at something the other misses, so the app uses both, and on the Search page it merges them into one list.
+
+## Searching by words
+
+Word search matches the words you type against the words of each text, then ranks the matches with BM25, the classic ranking that rewards rare words and many matches in a short text.
+
+| Where | How it reads your words |
+|---|---|
+| The [Search page](/docs/guides/search) | Posts are kept in a full-text index in your local database. Every word must match; the last word may be the start of a longer one, since you are probably still typing it. Accents are ignored. |
+| The [vault's search field](/docs/guides/vault#search-the-vault) | Documents are indexed by title, creators, subjects, abstract and text, weighted in that order. Every word must match, each as the start of a word. |
+| The agents' <UiLabel>Vault search</UiLabel> tool and the word-match fallback | Texts are cut into short passages and ranked in memory, ignoring very common English words. |
+
+Words are precise and need no setup, but they miss a passage about "impressions of the senses" when you ask "where do ideas come from".
+
+## Searching by meaning
+
+An embedding model turns a text into a vector: a list of numbers (768 by default) that places it in a space where texts with similar meaning lie close together. Comparing two vectors gives their similarity, shown in the app as a bar from 0 % to 100 %. Texts pointing in opposite directions count as unrelated.
+
+To search by meaning, Simulacra embeds every post and document once, embeds your query when you ask, and returns the texts whose vectors are closest to it.
+
+### Chunks
+
+A whole book in one vector would blur every idea in it together. So long texts are cut into chunks: whole sentences are packed up to the chunk size (512 tokens by default, a token being about four characters), and each chunk repeats the last sentences of the one before (up to 64 tokens) so an idea that straddles a boundary is not lost. A sentence longer than a chunk is cut between words.
+
+A document is embedded with its title, which helps short chunks keep their context. Where the model supports it, passages and queries are embedded for their different roles (a stored passage and a search question), which improves retrieval.
+
+A text's score is the score of its closest chunk, and that chunk is the passage the results show. To find items similar to a whole post or document, its chunks are averaged into one vector first.
+
+### The index
+
+Every vector is stored in your local database and held in memory while the app runs (about 30 MB for 10 000 chunks of 768 numbers). Searching works in two regimes:
+
+- **Up to 2048 chunks per model**, every vector is compared with the query. This is exact and, at this size, as fast as anything cleverer.
+- **Beyond that**, a navigable graph (HNSW, built with the USearch library) finds candidate neighbours in well under a millisecond, approximately. The candidates are then scored again exactly, so the order of what you see is exact and repeatable.
+
+One graph is kept per model, because vectors from different models live in different spaces and are never compared. Changing the model, provider or vector size therefore re-embeds everything.
+
+### Keeping the index current
+
+You never run indexing by hand. Whenever posts or documents change, Simulacra compares them with what is stored:
+
+- each chunk carries a fingerprint of its text, its title and the provider settings, so unchanged chunks are skipped and only edits are sent again;
+- chunks of deleted items, and chunks past the new end of a shortened text, are removed;
+- new work is queued and sent in batches of 32 chunks, one batch at a time, each checked against your daily AI budget;
+- a failure pauses the queue with the reason instead of retrying forever, and nothing already embedded is lost. Stopping or rebuilding starts a new run, and any answer still arriving from the old one is ignored.
+
+## Words and meaning together
+
+On the Search page, a query runs by words at once and, once you pause typing, by meaning too. The two rankings are merged by reciprocal rank fusion: a post at rank *r* of a list earns 1 / (60 + *r*), and its score is the sum over both lists. Ranks are merged rather than raw scores, because a word score and a similarity are on different scales. A post found both ways rises above posts found only one way. Filters then narrow the merged list.
+
+When meaning is unavailable (switched off, no key, nothing indexed, or a failed request), every surface falls back to words and says so, so a search never silently returns nothing.
+
+## How fast it is
+
+Search was measured on a test vault of 100 000 posts with 10 000 earlier versions (an optimised build on Windows 11, one run). Each query asked for 100 results, filters included:
+
+| Query | Results | Time |
+|---|---|---|
+| A common word | 100 | 27.6 ms |
+| A rare word | 4 | 0.4 ms |
+| Two words | 4 | 0.5 ms |
+| A phrase in 5 % of posts | 100 | 18.9 ms |
+| A short prefix | 100 | 19.3 ms |
+| A word with `has:todo` | 26 | 2.4 ms |
+| Filters only (`has:code is:open`) | 100 | 21.8 ms |
+
+Two decisions came from these runs. Only the last word is read as a prefix: with every word a prefix, two words sharing common beginnings took 750 ms in the index alone. And scheduled posts are left out through an index on post status, which took a rare word from 20 ms to under 1 ms. One known limit remains: a prefix that begins nearly every word of every post can take about 0.8 s, which real prose does not do.
+
+## What leaves your computer
+
+Word search, the vault search and the indexes all stay local. Search by meaning needs an embedding model: with a local server, nothing leaves your computer; with Gemini, OpenAI or a custom service, the text of your posts and documents is sent once to be embedded, and each query is sent when you search. The vectors come back and are stored locally. See [Local first](/docs/concepts/local-first).
+
+## Related
+
+- [Search by meaning guide](/docs/guides/search/meaning-search)
+- [Search page](/docs/guides/search)
+- [The Knowledge Vault](/docs/concepts/knowledge-vault)

@@ -48,7 +48,7 @@ fn skill_bar(point: &RadarPoint, cfg: &AgentConfig, theme: &ThemeTokens) -> Div 
                 .justify_between()
                 .text_size(theme.font_size_xs)
                 .child(div().text_color(theme.text_secondary).child(tr(&point.label_key)))
-                .child(div().text_color(theme.accent_brand).font_weight(FontWeight::SEMIBOLD).child(level)),
+                .child(div().text_color(theme.accent_brand_text).font_weight(FontWeight::SEMIBOLD).child(level)),
         )
         .child(
             div()

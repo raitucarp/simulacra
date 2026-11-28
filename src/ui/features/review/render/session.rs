@@ -99,7 +99,7 @@ impl ReviewPanel {
             .text_size(theme.font_size_xs)
             .text_color(theme.text_muted)
             .cursor_pointer()
-            .hover(|chip| chip.text_color(theme.accent_brand))
+            .hover(|chip| chip.text_color(theme.accent_brand_text))
             .on_click(cx.listener(move |_, _, _, cx| cx.emit(ReviewEvent::OpenAnchor(anchor.clone()))))
             .child(Icon::new(LucideIcon::ExternalLink).size(theme.icon_size_xs))
             .child(label)

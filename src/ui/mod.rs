@@ -4,6 +4,7 @@ pub mod assets;
 pub mod atoms;
 pub mod components;
 pub mod features;
+pub mod format;
 pub mod icons;
 pub mod illustration;
 pub mod keymap;

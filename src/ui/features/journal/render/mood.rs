@@ -16,8 +16,6 @@ use rust_i18n::t;
 const DELETE_ID: &str = "journal-checkin-delete";
 /// Check-ins listed under the charts.
 const RECENT_CHECKINS: usize = 12;
-/// How a check-in's time is shown.
-const TIME_FORMAT: &str = "%Y-%m-%d %H:%M";
 
 impl JournalPanel {
     pub(super) fn render_mood(&self, class: LayoutClass, cx: &mut Context<Self>) -> impl IntoElement {
@@ -37,7 +35,7 @@ impl JournalPanel {
 
     fn checkin_row(&self, index: usize, checkin: &MoodCheckin, cx: &mut Context<Self>) -> Div {
         let theme = &self.theme;
-        let mut facts = vec![checkin.at.strftime(TIME_FORMAT).to_string(), t!("journal.mood.energy_value", value = checkin.energy).to_string()];
+        let mut facts = vec![format!("{} {}", crate::ui::format::date(checkin.at.date()), crate::ui::format::time_of_day(&checkin.at)), t!("journal.mood.energy_value", value = checkin.energy).to_string()];
         facts.extend(checkin.sleep_hours.map(|h| t!("journal.mood.sleep_value", hours = format!("{h:.1}")).to_string()));
         facts.extend(checkin.tags.iter().map(|tag| format!("#{tag}")));
         let id = checkin.id.clone();

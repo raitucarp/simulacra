@@ -17,6 +17,16 @@ pub fn nice_ticks(max: f64, count: usize) -> Vec<f64> {
     (0..=steps).map(|i| i as f64 * step).collect()
 }
 
+/// [`nice_ticks`] for counts: steps of at least one, so no tick falls between two whole
+/// numbers (a chart of 2 posts reads 0, 1, 2 rather than 0, 0.5, 1, 1.5, 2).
+pub fn count_ticks(max: f64, count: usize) -> Vec<f64> {
+    let ticks = nice_ticks(max, count);
+    if ticks.get(1).is_some_and(|step| *step >= 1.0) {
+        return ticks;
+    }
+    (0..=max.ceil().max(1.0) as usize).map(|i| i as f64).collect()
+}
+
 /// A short label: integers as is, thousands as `k`, millions as `M`, small values with one
 /// or two decimals.
 pub fn compact(value: f64) -> String {

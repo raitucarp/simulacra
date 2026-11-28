@@ -22,6 +22,8 @@ const RADAR_ID: &str = "learning-goal-radar";
 const DELETE_ID: &str = "learning-goal-delete";
 const TASK_ID_PREFIX: &str = "learning-goal-task-";
 const NONE: &str = "–";
+/// Columns of the measured-progress tiles.
+const GOAL_TILE_COLUMNS: u16 = 3;
 
 impl ReviewPanel {
     fn goal_tiles(&self, view: &GoalView) -> Div {
@@ -35,7 +37,8 @@ impl ReviewPanel {
             (p.best_level.map_or_else(|| NONE.to_string(), level_label), tr("learning.goals.tile.level"), theme.accent_dialectic),
             (percent(p.score), tr("learning.goals.tile.score"), forecast_color(view.forecast, theme)),
         ];
-        control_row(theme).children(tiles.into_iter().map(|(value, label, color)| count_tile(value, label, color, theme)))
+        // Two even rows of three, whatever the width (five fit a row at 920 px and left one alone).
+        div().w_full().grid().grid_cols(GOAL_TILE_COLUMNS).gap(theme.control_gap).children(tiles.into_iter().map(|(value, label, color)| count_tile(value, label, color, theme)))
     }
 
     fn goal_tasks(&self, goal: &Goal, cx: &mut Context<Self>) -> Div {
@@ -85,7 +88,6 @@ impl ReviewPanel {
             .child(caption(format!("{} · {expected}", self.target_line(view)), theme));
         div()
             .w_full()
-            .max_w(theme.review_card_max_width)
             .flex()
             .flex_col()
             .gap(theme.section_gap)

@@ -7,7 +7,7 @@ use crate::domain::insights::embedding::EmbeddingMap;
 use crate::domain::insights::facts::{AuthorFacts, PostFacts, PostKind};
 use crate::domain::insights::sets::{NamedSet, SetDimension};
 use crate::domain::Post;
-use std::collections::{BTreeMap, HashMap};
+use std::collections::{BTreeMap, HashMap, HashSet};
 
 /// Sets kept per family (the largest ones).
 pub const SETS_PER_FAMILY: usize = 12;
@@ -83,9 +83,27 @@ pub(super) fn attach_embedding(report: &mut InsightsReport, input: &InsightsInpu
         input.vectors.iter().filter_map(|(id, v)| index.get(id.as_str()).map(|&i| ((id.clone(), v.clone()), i))).unzip();
     report.embedding = EmbeddingMap::build(items);
     let concepts = report.families.iter().find(|(d, _)| *d == SetDimension::Concept).map(|(_, s)| s.clone()).unwrap_or_default();
-    report.cluster_labels = report.embedding.cluster_members().iter().map(|members| {
+    let counts: Vec<Vec<(usize, &NamedSet)>> = report.embedding.cluster_members().iter().map(|members| {
         let in_cluster = |set: &NamedSet| members.iter().filter(|&&m| set.members.binary_search(&(posts[m] as u32)).is_ok()).count();
-        concepts.iter().map(|s| (in_cluster(s), s)).filter(|(c, _)| *c > 0).max_by_key(|(c, s)| (*c, std::cmp::Reverse(s.key.clone()))).map(|(_, s)| s.label.clone()).unwrap_or_default()
+        concepts.iter().map(|s| (in_cluster(s), s)).filter(|(c, _)| *c > 0).collect()
     }).collect();
+    report.cluster_labels = distinct_labels(&counts);
     report.embedding_posts = posts;
+}
+
+/// One label per cluster from its posts' concepts (`counts`: posts per concept, per cluster).
+/// The strongest pairs choose first and each concept names one cluster, so two clusters never
+/// share a name; a cluster whose concepts are all taken stays unnamed (shown by its number).
+pub(super) fn distinct_labels(counts: &[Vec<(usize, &NamedSet)>]) -> Vec<String> {
+    let mut pairs: Vec<(usize, usize, &NamedSet)> = counts.iter().enumerate().flat_map(|(cluster, row)| row.iter().map(move |(n, set)| (*n, cluster, *set))).collect();
+    pairs.sort_by(|a, b| b.0.cmp(&a.0).then_with(|| a.2.key.cmp(&b.2.key)).then(a.1.cmp(&b.1)));
+    let mut labels = vec![String::new(); counts.len()];
+    let mut used = HashSet::new();
+    for (_, cluster, set) in pairs {
+        if labels[cluster].is_empty() && !used.contains(&set.key) {
+            used.insert(set.key.clone());
+            labels[cluster] = set.label.clone();
+        }
+    }
+    labels
 }

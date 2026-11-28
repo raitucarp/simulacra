@@ -1,8 +1,10 @@
-//! A command button; "Reset all settings" is destructive and asks for a second click.
+//! A command button; "Reset all settings" is destructive and asks for a second click, and
+//! "Stop indexing" is disabled while nothing is being indexed.
 
 use super::super::catalog::{SettingRow, SettingsCommand};
 use super::super::row::{element_id_of, RowContext};
 use crate::ui::icons::LucideIcon;
+use gpui_kit::base::Disableable;
 use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::{Icon, Sizable};
 use gpui_kit::*;
@@ -39,8 +41,10 @@ pub(super) fn render(ctx: &RowContext, row: SettingRow, command: SettingsCommand
     let on_command = ctx.actions.on_command.clone();
     let confirming = command.is_destructive() && ctx.data.confirm_reset;
     let text = if confirming { t!("prefs.ui.confirm_reset").to_string() } else { label(command) };
+    let idle = command == SettingsCommand::CancelReindex && !ctx.data.indexing;
     let button = Button::new(element_id_of(row, BUTTON_PART))
         .small()
+        .disabled(idle)
         .icon(Icon::new(icon(command)).size(ctx.theme.icon_size_sm))
         .label(text)
         .on_click(move |_, window, cx| on_command(command, window, cx));

@@ -1,4 +1,4 @@
-//! The card's quiet "edited" mark (V8): the version a post shows, opening its history.
+//! The card's quiet "edited" mark (V8), opening the post's history.
 
 use super::events::DataEvent;
 use super::post_menu::DataControls;
@@ -9,7 +9,7 @@ use gpui_kit::*;
 
 const EDITED_ID_PREFIX: &str = "post-edited-";
 
-/// The quiet version badge of an edited post (V8), opening its history; `None` before any edit.
+/// The quiet "edited" mark of an edited post (V8), opening its history; `None` before any edit.
 pub fn render_edited_mark(controls: &DataControls, theme: &ThemeTokens) -> Option<AnyElement> {
     let text = controls.edited_mark()?;
     let (on_event, post) = (controls.on_event.clone(), controls.post_id.clone());
@@ -18,7 +18,6 @@ pub fn render_edited_mark(controls: &DataControls, theme: &ThemeTokens) -> Optio
         .id(SharedString::from(format!("{EDITED_ID_PREFIX}{post}")))
         .flex_none()
         .cursor_pointer()
-        .font_family(theme.font_family_mono.clone())
         .text_size(theme.font_size_2xs)
         .text_color(theme.text_muted)
         .hover(move |style| style.text_color(hover))

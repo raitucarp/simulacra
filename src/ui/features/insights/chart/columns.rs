@@ -4,7 +4,7 @@
 //! click per column.
 
 use super::scale::{BandScale, LinearScale};
-use super::ticks::{compact, nice_ticks};
+use super::ticks::{compact, count_ticks, nice_ticks};
 use crate::theme::ThemeTokens;
 use crate::ui::components::measured_width;
 use gpui_kit::component::tooltip::Tooltip;
@@ -87,13 +87,13 @@ impl ColumnChart {
     }
 
     /// Labels under every `stride`-th column, each spanning its `stride` columns so it is
-    /// never cut to one narrow slot.
+    /// never cut to one narrow slot; a last label with fewer columns left than that is left out.
     fn label_row(&self, stride: usize) -> Div {
         let theme = &self.theme;
         let count = self.columns.len().max(1);
         let cells = (0..self.columns.len()).step_by(stride.max(1)).map(|i| {
             let span = stride.min(count - i) as f32 / count as f32;
-            let text = self.labels.get(i).cloned().unwrap_or_default();
+            let text = if stride > 1 && count - i < stride { String::new() } else { self.labels.get(i).cloned().unwrap_or_default() };
             let cell = div().w(relative(span)).flex_none().overflow_hidden().whitespace_nowrap().text_size(theme.font_size_2xs).text_color(theme.text_muted);
             if stride == 1 { cell.flex().justify_center().child(text) } else { cell.child(text) }
         });
@@ -106,7 +106,8 @@ impl RenderOnce for ColumnChart {
         let (measured, probe) = measured_width(self.id.clone(), window, cx);
         let theme = self.theme.clone();
         let max = self.columns.iter().map(Column::total).fold(0.0, f64::max);
-        let ticks = nice_ticks(max, TICK_COUNT);
+        let counts = self.columns.iter().flat_map(|c| &c.segments).all(|(value, _)| value.fract() == 0.0);
+        let ticks = if counts { count_ticks(max, TICK_COUNT) } else { nice_ticks(max, TICK_COUNT) };
         let top = ticks.last().copied().unwrap_or(1.0);
         let scale = LinearScale::new((0.0, top), (0.0, 1.0));
         let plot_width = measured.map_or(theme.insights_tile_width, |w| w - theme.insights_axis_width).as_f32();

@@ -14,6 +14,7 @@ mod beliefs;
 mod beliefs_material;
 mod capture;
 mod chrome;
+mod right_panel;
 mod commands;
 mod composer_modal;
 mod composer_locked; // X3
@@ -47,6 +48,7 @@ mod data_shelf;
 mod data_snapshot;
 mod entry_state; // S7
 mod todos; // D6: ticking to-dos
+mod escape;
 mod image_ideas;
 mod image_ideas_apply;
 mod image_ideas_open;

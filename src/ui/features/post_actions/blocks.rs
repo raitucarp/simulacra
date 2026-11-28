@@ -48,7 +48,7 @@ fn bulleted(content: Div, theme: &ThemeTokens) -> Div {
         .flex()
         .items_start()
         .gap(theme.inline_gap)
-        .child(div().flex_none().text_color(theme.accent_brand).child(BULLET))
+        .child(div().flex_none().text_color(theme.accent_brand_text).child(BULLET))
         .child(content.flex_1().min_w_0())
 }
 

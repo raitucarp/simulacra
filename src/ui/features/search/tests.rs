@@ -28,6 +28,7 @@ fn a_long_post_opens_near_its_first_match_on_a_word() {
     assert!(found.text.trim_start_matches('…').starts_with(|c: char| c.is_alphanumeric()), "cut at a word");
     let short = snippet("line one\n\nline   two", &PostQuery::parse("two"));
     assert_eq!(short.text, "line one line two");
+    assert_eq!(snippet("Same order. [[post_1]] #Monism", &PostQuery::parse("order")).text, "Same order. #Monism");
 }
 
 #[test]

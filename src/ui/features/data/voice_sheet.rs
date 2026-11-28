@@ -68,8 +68,7 @@ fn take_row(dialog: &VoiceDialog, on_event: &DataAction, theme: &ThemeTokens) ->
         return row.child(live).child(button("data-voice-stop", LucideIcon::CircleStop, "posts.voice.stop", on_event, VoiceEvent::Stop).primary());
     }
     if let Some(note) = &dialog.note {
-        let length = note.duration_ms.map(|ms| format!(" · {}", duration_label(ms))).unwrap_or_default();
-        let take = div().flex_1().min_w_0().truncate().child(format!("{}{length}", note.file_name()));
+        let take = div().flex_1().min_w_0().truncate().child(crate::ui::features::post::voice_label(note));
         return row.child(Icon::new(LucideIcon::Volume2).small().text_color(theme.text_muted)).child(take).child(button("data-voice-discard", LucideIcon::X, "posts.voice.discard", on_event, VoiceEvent::Discard).ghost());
     }
     if dialog.storing {

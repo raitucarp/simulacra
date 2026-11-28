@@ -17,6 +17,7 @@ pub(crate) fn distill_text(post: &Post) -> Option<String> {
 /// The chip; `None` on a post never distilled.
 pub(super) fn render_distill_chip(post: &Post, theme: &ThemeTokens) -> Option<Div> {
     let text = distill_text(post)?;
-    let chip = div().flex().items_center().gap(theme.inline_gap).text_size(theme.font_size_2xs).text_color(theme.text_muted).child(Icon::new(LucideIcon::BookMarked).xsmall().text_color(theme.text_muted)).child(div().min_w_0().truncate().child(text));
+    // Capped at the mark line's width, so a long document title ends in an ellipsis.
+    let chip = div().max_w_full().min_w_0().overflow_hidden().flex().items_center().gap(theme.inline_gap).text_size(theme.font_size_2xs).text_color(theme.text_muted).child(Icon::new(LucideIcon::BookMarked).xsmall().text_color(theme.text_muted)).child(div().min_w_0().truncate().child(text));
     Some(chip)
 }

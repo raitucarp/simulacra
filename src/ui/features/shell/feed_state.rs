@@ -29,6 +29,8 @@ pub struct FeedState {
     pub day: crate::domain::finite_feed::FeedDay,
     /// N4: the closing card's one-line answer.
     pub learned_input: Entity<InputState>,
+    /// The interface language the inputs' placeholders were written in.
+    pub labels: crate::i18n::Language,
 }
 
 impl FeedState {
@@ -55,7 +57,19 @@ impl FeedState {
             search_input,
             day: super::feed_budget::load_feed_day(state.db.as_ref()),
             learned_input: cx.new(|cx| InputState::new(window, cx).placeholder(t!("feed.end.placeholder").to_string())),
+            labels: state.preferences().general.language,
         }
+    }
+
+    /// Rewrites the inputs' placeholders in `language` (the interface language changed).
+    pub(super) fn relabel(&mut self, language: crate::i18n::Language, window: &mut Window, cx: &mut Context<AppView>) {
+        if self.labels == language {
+            return;
+        }
+        self.labels = language;
+        self.composer_input.update(cx, |input, cx| input.set_placeholder(t!("composer.placeholder").to_string(), window, cx));
+        self.search_input.update(cx, |input, cx| input.set_placeholder(t!("sidebar.search_placeholder").to_string(), window, cx));
+        self.learned_input.update(cx, |input, cx| input.set_placeholder(t!("feed.end.placeholder").to_string(), window, cx));
     }
 
     /// The isolated inline composer view, submitting through [`AppView::submit_post_content`].

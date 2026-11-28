@@ -15,8 +15,6 @@ use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::*;
 use rust_i18n::t;
 
-/// How the strip shows when the post was written.
-const DATE_FORMAT: &str = "%Y-%m-%d";
 
 /// Whether the strip asks about `post` now (`own`: the user wrote it).
 pub(crate) fn asks_still_true(post: &Post, own: bool, now: jiff::Timestamp) -> bool {
@@ -32,22 +30,23 @@ fn button(post: &Post, part: &str, icon: LucideIcon, label: &str, event: DataEve
 pub(super) fn render_still_true_strip(post: &Post, theme: &ThemeTokens, handlers: &PostCardHandlers) -> Option<Div> {
     let data = handlers.data.as_ref().filter(|data| asks_still_true(post, data.own, jiff::Timestamp::now()))?;
     let (id, on_event) = (post.id.clone(), &data.on_event);
-    let written = crate::time::local(post.created_at).strftime(DATE_FORMAT).to_string();
+    let written = crate::ui::format::date(crate::time::local_date(post.created_at));
     let question = div().flex_1().min_w_0().text_color(theme.text_primary).child(t!("posts.still_true.ask", date = written).to_string());
     let checking = data.ideas.rechecking.as_ref() == Some(&id);
+    // The question has the whole width; the answers sit on their own row under it, so a narrow
+    // column never squeezes the question to a word per line.
+    let ask = div().flex().items_center().gap(theme.inline_gap).child(Icon::new(LucideIcon::RotateCcwClock).small().text_color(theme.accent_brand_text)).child(question);
     let row = div()
         .flex()
         .flex_wrap()
         .items_center()
         .gap(theme.inline_gap)
-        .child(Icon::new(LucideIcon::RotateCcwClock).small().text_color(theme.accent_brand))
-        .child(question)
         .child(button(post, "confirm", LucideIcon::CircleCheck, "posts.still_true.confirm", DataEvent::Check(CheckEvent::Confirm(id.clone())), on_event))
         .child(button(post, "revise", LucideIcon::Pencil, "posts.still_true.revise", DataEvent::EditPost(id.clone()), on_event))
         .child(button(post, "retract", LucideIcon::CircleX, "posts.still_true.retract", DataEvent::Correction(CorrectionEvent::Open(id.clone(), CorrectionKind::Retracted)), on_event))
         .when(!checking, |row| row.child(button(post, "ask", LucideIcon::Sparkles, "posts.still_true.ask_ai", DataEvent::Check(CheckEvent::Recheck(id.clone())), on_event)));
     let verdict = data.ideas.rechecks.iter().find(|(post, _)| post == &id).map(|(_, text)| div().text_color(theme.text_muted).child(text.clone()));
     let note = checking.then(|| div().text_color(theme.text_muted).child(t!("posts.still_true.checking").to_string()));
-    let strip = div().w_full().flex().flex_col().gap(theme.spacing_3xs).px(theme.spacing_sm).py(theme.spacing_xs).rounded(theme.radius_md).bg(theme.bg_callout).text_size(theme.font_size_xs).child(row).children(verdict).children(note);
+    let strip = div().w_full().flex().flex_col().gap(theme.spacing_3xs).px(theme.spacing_sm).py(theme.spacing_xs).rounded(theme.radius_md).bg(theme.bg_callout).text_size(theme.font_size_xs).child(ask).child(row).children(verdict).children(note);
     Some(strip)
 }

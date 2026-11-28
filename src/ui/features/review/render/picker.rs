@@ -6,6 +6,7 @@ use super::super::events::{PickerMode, ReviewEvent};
 use super::super::panel::{Picker, ReviewPanel, Screen};
 use super::super::text::tr;
 use super::common::{block_title, caption, control_row, surface};
+use crate::domain::post::readable_line;
 use crate::domain::review::quiz::piece_text;
 use crate::domain::review::AnchorSide;
 use crate::i18n::t_count;
@@ -61,7 +62,7 @@ impl ReviewPanel {
             .flex_col()
             .gap(theme.spacing_3xs)
             .child(div().truncate().text_size(theme.font_size_xs).font_weight(FontWeight::SEMIBOLD).text_color(theme.text_primary).child(format!("{} {}", view.author.name, view.author.handle)))
-            .child(div().text_size(theme.font_size_xs).text_color(theme.text_secondary).line_clamp(ROW_LINES).child(piece_text(&view.post.content, ROW_CHARS)));
+            .child(div().text_size(theme.font_size_xs).text_color(theme.text_secondary).line_clamp(ROW_LINES).text_ellipsis().child(piece_text(&readable_line(&view.post.content), ROW_CHARS)));
         let row = div()
             .id(ElementId::NamedInteger(ROW_ID_PREFIX.into(), index as u64))
             .flex()
@@ -80,7 +81,7 @@ impl ReviewPanel {
                 .cursor_pointer()
                 .hover(|row| row.bg(theme.hover_bg))
                 .on_click(cx.listener(move |this, _, _, cx| this.toggle_picked(id.clone(), cx)))
-                .when(picked, |row| row.child(Icon::new(LucideIcon::Check).size(theme.icon_size_sm).text_color(theme.accent_brand))),
+                .when(picked, |row| row.child(Icon::new(LucideIcon::Check).size(theme.icon_size_sm).text_color(theme.accent_brand_text))),
             PickerMode::Learn => row.child(self.learn_buttons(index, view, cx)),
             PickerMode::Tutor | PickerMode::Place | PickerMode::Link => row.child(self.learning_picker_buttons(picker.mode, index, view, cx)),
         }
@@ -105,12 +106,15 @@ impl ReviewPanel {
 
     fn picker_footer(&self, picker: &Picker, cx: &mut Context<Self>) -> impl IntoElement {
         let theme = &self.theme;
-        let (back_label, back_to) = match picker.mode {
-            PickerMode::Tutor | PickerMode::Place | PickerMode::Link => ("learning.back", Screen::Learn),
-            PickerMode::Learn | PickerMode::Map => ("review.back_items", Screen::Items),
+        let back_to = picker.from;
+        let back_label = match back_to {
+            Screen::Today => "review.back_today",
+            Screen::Learn => "learning.back",
+            Screen::Stats => "review.back_stats",
+            _ => "review.back_items",
         };
         let back = Button::new(BACK_ID).ghost().small().icon(Icon::new(LucideIcon::ArrowLeft)).label(tr(back_label))
-            .on_click(cx.listener(move |this, _, _, cx| this.show(back_to, cx)));
+            .on_click(cx.listener(move |this, _, _, cx| this.open_tab(back_to, cx)));
         let row = control_row(theme).child(back).child(div().flex_1());
         match picker.mode {
             PickerMode::Learn | PickerMode::Tutor | PickerMode::Place | PickerMode::Link => row,

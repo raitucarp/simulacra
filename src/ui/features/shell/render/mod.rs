@@ -31,8 +31,7 @@ impl Render for AppView {
         self.sync_views(window, cx);
         let bind = Binder::new(cx);
         let class = LayoutClass::of_window(window, &self.theme);
-        let columns = self.journal_focus_view().unwrap_or_else(|| self.render_columns(class).into_any_element());
-
+        let columns = self.journal_focus_view().unwrap_or_else(|| self.render_columns(class, window.viewport_size().width).into_any_element());
         let root = div()
             .w_full()
             .h_full()
@@ -42,6 +41,7 @@ impl Render for AppView {
             .key_context(SHELL_KEY_CONTEXT)
             .track_focus(&self.palette.shell_focus)
             .on_action(cx.listener(Self::on_run_command))
+            .on_key_down(cx.listener(Self::on_shell_key))
             .flex()
             .flex_col();
         self.with_import_listeners(self.with_activity_listeners(root, cx), cx) // X4: activity keeps unlocked posts open
@@ -85,6 +85,7 @@ impl AppView {
         self.sync_thinking(cx);
         self.sync_lenses(cx); // sb F3
         self.sync_forge_theme(cx);
+        self.feed.relabel(self.chrome.current_language, window, cx);
     }
 
     /// The learn sheet, while open (sb C1b).

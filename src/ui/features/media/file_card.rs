@@ -19,8 +19,6 @@ use gpui_kit::{div, AnyElement, App, Div, FontWeight, InteractiveElement, IntoEl
 use rust_i18n::t;
 use std::path::PathBuf;
 
-/// How a file's date is written on its card.
-const DATE_FORMAT: &str = "%Y-%m-%d";
 
 /// What the file cards of one post share: the post, the media cache and the actions.
 pub(super) struct FileHost<'a> {
@@ -91,7 +89,7 @@ pub(super) fn card_frame(index: usize, theme: &ThemeTokens) -> Stateful<Div> {
 
 /// `PDF · 1.2 MB · 2026-11-02`, then `detail` when there is one.
 pub(super) fn file_meta(file: &FileRef, kind: &str, detail: Option<String>) -> String {
-    let date = file.modified.map(|at| crate::time::local(at).strftime(DATE_FORMAT).to_string());
+    let date = file.modified.map(|at| crate::ui::format::date(crate::time::local(at).date()));
     [Some(kind.to_string()), Some(file_size(file.size)), date, detail].into_iter().flatten().collect::<Vec<_>>().join(META_SEPARATOR)
 }
 

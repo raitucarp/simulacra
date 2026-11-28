@@ -23,7 +23,7 @@ pub(crate) fn shown_translation<'a>(post: &'a Post, handlers: &PostCardHandlers)
 
 /// The native name of the language whose locale code is `code`.
 pub(crate) fn language_name(code: &str) -> String {
-    Language::ALL.into_iter().find(|language| language.code() == code).map_or_else(|| code.to_string(), |language| language.native_label().to_string())
+    Language::ALL.into_iter().find(|language| language.code() == code).map_or_else(|| code.to_string(), |language| language.display_label().into_owned())
 }
 
 /// The translation in place of the body; `None` when the post shows as written.
@@ -40,7 +40,7 @@ fn button(post: &Post, part: &str, icon: LucideIcon, label: String, event: Trans
 /// The line naming the language shown (or that it is being translated); `None` otherwise.
 pub(super) fn render_translation_line(post: &Post, theme: &ThemeTokens, handlers: &PostCardHandlers) -> Option<Div> {
     let data = handlers.data.as_ref().filter(|_| !post.is_locked())?;
-    let line = div().flex().flex_wrap().items_center().gap(theme.inline_gap).text_size(theme.font_size_2xs).text_color(theme.text_muted).child(Icon::new(LucideIcon::Languages).xsmall().text_color(theme.accent_brand));
+    let line = div().flex().flex_wrap().items_center().gap(theme.inline_gap).text_size(theme.font_size_2xs).text_color(theme.text_muted).child(Icon::new(LucideIcon::Languages).xsmall().text_color(theme.accent_brand_text));
     if data.ideas.translating.as_ref() == Some(&post.id) {
         return Some(line.child(t!("posts.translation.translating").to_string()));
     }

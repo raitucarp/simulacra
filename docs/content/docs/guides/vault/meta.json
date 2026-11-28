@@ -1,0 +1,10 @@
+{
+  "title": "Knowledge Vault",
+  "icon": "BookOpen",
+  "pages": [
+    "documents",
+    "catalogue",
+    "import",
+    "grounding"
+  ]
+}

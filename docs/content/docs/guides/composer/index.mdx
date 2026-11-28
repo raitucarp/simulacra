@@ -1,0 +1,178 @@
+---
+title: Composer
+description: Write a thought, a reply, a quote or a whole thread, with the inline composer on the Timeline or the full composer window.
+icon: PenLine
+---
+
+Every post starts in a composer. Simulacra has two: the **inline composer** at the top of the Timeline for a quick single thought, and the **composer window** (a modal dialog) for threads, replies, quotes, attachments, scheduling and everything else.
+
+<Screenshot id="composer-modal-new" alt="The composer window open on a new thread with one empty post" caption="The composer window, opened with Ctrl+N." />
+
+## Open it
+
+| To write… | Do this |
+|---|---|
+| A single thought | Type in the inline composer at the top of the Timeline's stream. |
+| A new thread | Press <Shortcut keys="Ctrl+N" />, pick <UiLabel>New thread</UiLabel> in the left sidebar's <UiLabel>New</UiLabel> menu, or run <UiLabel>New thread</UiLabel> from the command palette. |
+| A reply | Click the reply (speech bubble) button on a post, <UiLabel>Reply</UiLabel> in its ⋯ menu, or <UiLabel>Reply</UiLabel> in the Thread Inspector's bottom bar. |
+| A quote | Click the quote (pen) button on a post, or <UiLabel>Quote</UiLabel> in its ⋯ menu. |
+| A change to your own post | <UiLabel>Edit</UiLabel> in the post's ⋯ menu (see [Post tools](/docs/guides/post-tools)). |
+
+Posts go out as your **active persona**: the avatar and handle at the top of each draft show who that is. Switch personas before you write (see [Personas and agents](/docs/concepts/personas-and-agents)).
+
+## The inline composer
+
+<Screenshot id="composer-inline" alt="The inline composer with a short draft, the toolbar and the character meter" caption="The inline composer sits between the stream tabs and the stream." />
+
+1. **Avatar** of the active persona, with a thread line under it.
+2. **Text area**. It grows as you type. <Kbd>Enter</Kbd> starts a new line; <Shortcut keys="Ctrl+Enter" /> posts.
+3. **Toolbar**, left to right:
+   - <UiLabel>Link a thought ([[)</UiLabel> inserts `[[` at the cursor so you can [link a post or a vault document](/docs/guides/posts/links).
+   - <UiLabel>Insert hashtag (#)</UiLabel> inserts `#`. Both start a new word: a space is added first when the cursor sits right after a word.
+   - <UiLabel>Preview</UiLabel> (eye) shows the draft as it will read in the feed. While previewing, the button becomes <UiLabel>Back to editing</UiLabel> (pencil).
+   - The five [format buttons](/docs/guides/composer/formatting): <UiLabel>Bold</UiLabel>, <UiLabel>Italic</UiLabel>, <UiLabel>Underline</UiLabel>, <UiLabel>Code</UiLabel>, <UiLabel>Spoiler</UiLabel>. They are hidden while you preview.
+4. **Character meter**, `count/280`. It turns amber near the limit and red past it.
+5. <UiLabel>Post</UiLabel>. It stays off while the draft is empty or too long.
+
+When a post cannot go out, a red line under the text area says why (for example, how many characters it is over). The line clears as soon as you edit. A published post is scrolled into view and focused in the Thread Inspector.
+
+The inline composer writes one post with no attachments. For anything more, open the composer window.
+
+## The composer window
+
+<Screenshot id="composer-modal-thread" alt="The composer window holding a three-post thread with a meter under each post and Add to thread under the last" caption="A thread of three posts. Each post has its own meter." />
+
+From top to bottom:
+
+| Part | What it does |
+|---|---|
+| **Header** | <UiLabel>Cancel</UiLabel> closes the window and throws the drafts away. The title says what you are writing: <UiLabel>New thread</UiLabel>, `Reply to @handle`, `Quote @handle` or <UiLabel>Edit post</UiLabel>, and under it who will see the post: <UiLabel>Visible to members of this network</UiLabel>. The ⋯ button (<UiLabel>More options</UiLabel>) opens a menu: <UiLabel>Add to thread</UiLabel>, <UiLabel>Attach link</UiLabel>, <UiLabel>Pick Image</UiLabel>, <UiLabel>Insert hashtag (#)</UiLabel>. |
+| **Reply context** | In a reply, the post you answer: its author and first line, joined to your draft by a thread line. |
+| **Posts** | One editor per post of the thread. Each shows your handle. The first post's placeholder asks what is on your mind; later posts say <UiLabel>Say more...</UiLabel>. |
+| **Attachment bar** | Under the first post only: <UiLabel>Pick Image</UiLabel>, <UiLabel>Enter Image Path</UiLabel>, <UiLabel>Attach link</UiLabel>, <UiLabel>Insert hashtag (#)</UiLabel> and <UiLabel>Image ideas</UiLabel>. See [Attachments](/docs/guides/composer/attachments). |
+| **Meter row** | Under each post: the character meter, <UiLabel>Split into thread</UiLabel> when the post is too long, and <UiLabel>Remove this post</UiLabel> (×) on every post but the first. When the atomic-note hint and the readability meter show too, the notes wrap onto a second line rather than squeeze one another. |
+| <UiLabel>Add to thread</UiLabel> | Adds an empty post at the end. It is off until the last post has text. |
+| **Notice** | A red line saying why the thread cannot go out yet, or why publishing failed. |
+| <UiLabel>Tint</UiLabel> | Folded until you click the palette button in the footer (<UiLabel>Tint and symbols</UiLabel>), or while the thread has a tint or symbols. A colour for the posts' cards: <UiLabel>No tint</UiLabel>, <UiLabel>Amber</UiLabel>, <UiLabel>Rose</UiLabel>, <UiLabel>Sky</UiLabel>, <UiLabel>Mint</UiLabel>, <UiLabel>Violet</UiLabel> or <UiLabel>Slate</UiLabel>. The tint goes on every post of the thread. |
+| <UiLabel>Symbols</UiLabel> | Unfolds with the tint row. Marks the first post as a task, event or note, or with a signifier. See [Symbols](/docs/guides/posts/symbols). |
+| **Footer** | Preview, the format buttons, <UiLabel>Tint and symbols</UiLabel>, <UiLabel>Schedule…</UiLabel>, <UiLabel>Lock with password</UiLabel>, <UiLabel>Post a feeling</UiLabel>, <UiLabel>Free compose</UiLabel> and <UiLabel>To-do syntax</UiLabel>, then the main button, which always stays in view. |
+
+<Screenshot id="composer-footer-tools" alt="The footer of the composer window with its tool buttons and the Post button" caption="The footer tools act on the post that last had the cursor." size="md" />
+
+The main button reads <UiLabel>Post</UiLabel> for one post, <UiLabel>Post all</UiLabel> for a thread, <UiLabel>Schedule</UiLabel> or <UiLabel>Schedule all</UiLabel> once a moment is picked, and <UiLabel>Save changes</UiLabel> while editing. <Shortcut keys="Ctrl+Enter" /> in any post does the same. Clicking outside the window closes it like <UiLabel>Cancel</UiLabel>.
+
+Toolbar buttons, the format shortcuts and <UiLabel>Insert hashtag (#)</UiLabel> act on the post that last had the cursor.
+
+## Write a thread
+
+<Steps>
+<Step>
+### Write the first post
+Press <Shortcut keys="Ctrl+N" /> and write. Links, images and files you attach belong to this first post.
+</Step>
+<Step>
+### Add the next posts
+Click <UiLabel>Add to thread</UiLabel> under the last post (or in the ⋯ menu). The new post gets the cursor. Remove a post with its ×.
+</Step>
+<Step>
+### Fix posts that are too long
+A post over 280 visible characters shows <UiLabel>Split into thread</UiLabel>. Click it to cut the post into several that fit, at sentence ends where possible, then at word breaks.
+</Step>
+<Step>
+### Post the thread
+Click <UiLabel>Post all</UiLabel>. Each post replies to the one before it, so they read as one conversation.
+</Step>
+</Steps>
+
+<Screenshot id="composer-split-into-thread" alt="A post over the limit with a red meter and the Split into thread button" caption="A post over the limit offers to split itself." size="md" />
+
+### Notices
+
+The red notice line explains why the main button is off, or what was left out:
+
+| Notice | Fix |
+|---|---|
+| `Post 2 is empty. Write something or remove it.` | Type in that post or remove it. The first post may be empty when it carries a link, image or file. |
+| `Post 1 is 12 characters over the 280-character limit. Shorten it or split it into a thread.` | Shorten it, or click <UiLabel>Split into thread</UiLabel>. |
+| `A post holds up to 4 images.` / `A post holds up to 8 files.` | The extra attachments were left out. |
+| A schedule, lock or feeling problem | Shown in its own row; see below. |
+
+A single untouched empty post shows no notice. A quote always needs some text of your own, even with an attachment.
+
+## Free compose
+
+<UiLabel>Free compose</UiLabel> (the list-tree button in the footer; hover it for its name) turns the thread into one text box where every line is a post: handy for pouring out an outline and posting it as a tree of replies.
+
+<Screenshot id="composer-free-compose" alt="Free compose with indented lines and the live preview of the posts they make" caption="The preview under the text shows every post and its length." />
+
+- Every non-empty line is one post; blank lines are skipped.
+- A line may start with a `-` or `*` bullet followed by a space; the bullet is dropped. Numbered lines (`1. …`) stay as written.
+- Indent a line (two spaces or a tab per level) to make it a reply to the line it sits under. Lines at the left edge follow each other as the main thread.
+- The preview under the text says how many posts the text makes (`3 posts`) and lists each one, indented under its parent, with its own `count/280`. A line over the limit is marked red and offers <UiLabel>Split this line</UiLabel>, which cuts it into lines that fit and keeps its indentation and bullet.
+- Turning free compose on joins the thread's posts into lines; turning it off splits the lines back into separate posts.
+
+Free compose is not offered while editing a post. With <UiLabel>Symbol shorthand</UiLabel> on (Settings › Reading & Writing), the preview also reads each line's leading symbol markers; see [Symbols](/docs/guides/posts/symbols).
+
+## Preview
+
+<UiLabel>Preview</UiLabel> shows every post through the same renderer as the feed: marks, spoilers, code blocks, links and checklists. An empty draft says <UiLabel>Nothing to preview yet</UiLabel>. Click <UiLabel>Back to editing</UiLabel> to return; the cursor goes back to the post you were in.
+
+<Screenshot id="composer-preview" alt="The composer window in preview mode showing bold text, a spoiler and a code block" caption="Preview renders the draft the way the feed will." />
+
+## Reply and quote
+
+- **Reply**: the post you answer is shown above your draft. Your reply joins its conversation. A thread you write as a reply hangs under that post.
+- **Quote**: a card of the quoted post appears under your first post. Your post shows that card in the feed, and the quoted post lists it in its references.
+
+<ScreenshotGrid cols={2}>
+<Screenshot id="composer-modal-reply" alt="The composer window replying to Sokrates, with his post shown above the draft" caption="Reply mode." size="sm" />
+<Screenshot id="composer-modal-quote" alt="The composer window quoting a post, with the quoted card under the draft" caption="Quote mode." size="sm" />
+</ScreenshotGrid>
+
+## Post a feeling
+
+<UiLabel>Post a feeling</UiLabel> (heart-pulse button) swaps the thread editors for a feeling bar. A feeling is a one-line post: a few emoji, how strongly you feel it and an optional note.
+
+<Screenshot id="composer-feeling-bar" alt="The feeling bar with two emoji picked, intensity 4 and a short note" caption="The feeling bar replaces the posts while it is open." />
+
+1. Pick up to three emoji from the grid (smileys first) or search with <UiLabel>Search emoji</UiLabel>. Click a picked emoji to drop it.
+2. Set <UiLabel>Intensity</UiLabel> from 1 to 5 (3 to start).
+3. Add <UiLabel>A few words (optional)</UiLabel>, at most 80 characters.
+4. Click <UiLabel>Post</UiLabel>, or press <Shortcut keys="Ctrl+Enter" /> in the note.
+
+The bar explains what is missing: <UiLabel>Pick at least one emoji.</UiLabel>, `Pick at most 3 emojis.` or `Keep the note to 80 characters.` Feelings show in the stream as a shaded one-line row with a heart-pulse mark, the emoji, five intensity dots, the note, and who felt it when. Conversations with a feeling gather in the stream's <UiLabel>Feelings</UiLabel> tab. With <UiLabel>Log my feelings in the journal</UiLabel> on (Settings › Reading & Writing), each feeling also adds a mood check-in to your private [Journal](/docs/guides/journal).
+
+## Edit a post
+
+<UiLabel>Edit</UiLabel> in the ⋯ menu of one of your own posts opens the composer on its text, titled <UiLabel>Edit post</UiLabel>, with one editor and its tint and symbols. A published post can also change its link, images and files.
+
+<Screenshot id="composer-edit-version" alt="The composer editing a post, with the version row showing v1.0.0 to v1.0.1 and the bump buttons" caption="Editing a published post makes a new version." />
+
+The **version row** shows <UiLabel>Version</UiLabel> `v1.0.0 → v1.0.1`, the <UiLabel>Patch</UiLabel>, <UiLabel>Minor</UiLabel> and <UiLabel>Major</UiLabel> buttons with the one your changes suggest (`Suggested: Patch`), and an <UiLabel>Edit note (optional)</UiLabel>. Editing an older version says <UiLabel>You are editing an older version: saving starts a new branch.</UiLabel> <UiLabel>Save changes</UiLabel> keeps the earlier version in the post's history.
+
+While editing, <UiLabel>Add to thread</UiLabel>, <UiLabel>Free compose</UiLabel>, <UiLabel>Post a feeling</UiLabel> and the lock toggle are not offered. A scheduled post keeps its moment ([Scheduling](/docs/guides/composer/scheduling)); a locked post asks for its password again ([Locked posts](/docs/guides/composer/locked-posts)).
+
+## Writing hints
+
+Two quiet helpers appear in the row under the post you are typing in, after a short pause, beside the character count. The row is always there, so nothing moves when they appear. Neither ever blocks posting, and each has a × to hide it for this composition.
+
+- **Atomic-note hint** (from 24 characters): the score and how many claims it found, the first finding (all of them on hover), and <UiLabel>Split</UiLabel> to turn one post into one post per claim. See [Thinking tools](/docs/guides/thinking).
+- **Readability meter** (from 40 characters): a bar and the band, such as <UiLabel>Very easy</UiLabel>, scored with the formula of your reading language. Hover it for the ease, the formula and its source. See [Insights](/docs/guides/insights).
+
+Turn them off with <UiLabel>Atomic-note hints</UiLabel> and <UiLabel>Readability meter</UiLabel> in Settings › Reading & Writing.
+
+## Tips and limits
+
+- A post holds at most **280 visible characters**. Markup does not count: `**bold**` counts as 4, a `[[link]]` counts as its target, an embed counts as nothing. See [Post syntax](/docs/reference/post-syntax).
+- Links, images and files go on the first post of a thread; the tint goes on every post.
+- Closing the window (with <UiLabel>Cancel</UiLabel> or a click outside it) discards the drafts.
+- Dropping files on the window while it is open attaches them; when it is closed, dropped files go to the import sheet instead.
+
+## Related
+
+<Cards>
+<Card title="Formatting" href="/docs/guides/composer/formatting" description="Bold, italic, underline, code and spoilers, and their shortcuts." />
+<Card title="Attachments" href="/docs/guides/composer/attachments" description="Images, files, links, voice notes, drawings and code." />
+<Card title="Post syntax" href="/docs/reference/post-syntax" description="Everything the post parser understands." />
+<Card title="Posts and threads" href="/docs/concepts/posts-and-threads" description="Why posts are short and how threads hang together." />
+</Cards>

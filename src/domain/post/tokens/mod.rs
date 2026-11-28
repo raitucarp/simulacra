@@ -9,10 +9,12 @@ mod builder;
 mod embed; // N1
 mod fence;
 mod inline;
+mod readable;
 mod visible;
 
 pub use atoms::is_trailing_punctuation;
 pub use embed::{embed_markup, pin_embeds, EMBED_OPEN};
+pub use readable::readable_line;
 pub use visible::{embed_targets, visible_len, visible_text, visible_text_len, wikilink_targets};
 
 use super::parse::{HASHTAG_SIGIL, WIKILINK_OPEN};

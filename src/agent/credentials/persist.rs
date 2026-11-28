@@ -9,6 +9,18 @@ pub const DEFAULT_CREDENTIAL_ID: &str = "cred_default";
 /// Label of the credential mirroring the global key.
 const DEFAULT_CREDENTIAL_LABEL: &str = "Global default";
 
+impl Credential {
+    /// The name shown for the credential: the default one, while it keeps its stored name,
+    /// reads as the main AI key in the interface language.
+    pub fn shown_label(&self) -> String {
+        if self.id == DEFAULT_CREDENTIAL_ID && self.label == DEFAULT_CREDENTIAL_LABEL {
+            rust_i18n::t!("settings.credentials_default_label").to_string()
+        } else {
+            self.label.clone()
+        }
+    }
+}
+
 impl CredentialStore {
     /// Loads the store. The first load of an older vault (no credentials row) migrates the
     /// legacy global API key into [`DEFAULT_CREDENTIAL_ID`] and saves the result. A corrupt

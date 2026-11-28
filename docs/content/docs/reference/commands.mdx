@@ -1,0 +1,161 @@
+---
+title: Commands
+description: Every command of the command palette with its title, its search words, its shortcut and what it does.
+icon: SquareTerminal
+---
+
+Every command the [command palette](/docs/guides/shell/command-palette) offers, grouped by what it is for. **Search words** are extra words the palette matches besides the title (in the interface language). A shortcut is shown where the command has one; see [Keyboard shortcuts](/docs/reference/keyboard-shortcuts).
+
+Commands that act on **the open thought** use the thread selected in the Thread Inspector.
+
+## Screens
+
+Listed under <UiLabel>Screens</UiLabel>. Each one opens a place of the app.
+
+| Command | Shortcut | Search words | Opens |
+|---|---|---|---|
+| <UiLabel>Go to Timeline</UiLabel> | <Shortcut keys="Ctrl+1" /> | home, feed, stream, posts | The Timeline. |
+| <UiLabel>Go to Knowledge Vault</UiLabel> | <Shortcut keys="Ctrl+2" /> | documents, sources, library, grounding | The Knowledge Vault. |
+| <UiLabel>Go to Personas & Agents</UiLabel> | <Shortcut keys="Ctrl+3" /> | agents, roster, members, lab | Personas & Agents, on the network's agents. |
+| <UiLabel>Go to My Personas</UiLabel> | <Shortcut keys="Ctrl+4" /> | personas, identity, profile, me | The Persona Lab, with your active persona selected. |
+| <UiLabel>Go to Mind Graph</UiLabel> | <Shortcut keys="Ctrl+5" /> | graph, network, map, connections | The Mind Graph, fitted to the view. |
+| <UiLabel>Go to Review</UiLabel> | <Shortcut keys="Ctrl+6" /> | review, flashcards, spaced repetition, study, quiz, memory, cards | The Review page. |
+| <UiLabel>Go to Insights</UiLabel> | <Shortcut keys="Ctrl+7" /> | insights, charts, analytics, statistics, data, visualization, graphs | The Insights page. |
+| <UiLabel>Go to Journal</UiLabel> | <Shortcut keys="Ctrl+8" /> | journal, diary, private, self, reflection, mood, focus, capsule | The Journal. |
+| <UiLabel>Go to Arena</UiLabel> | <Shortcut keys="Ctrl+9" /> | arena, debate, thought experiment, agents, argue, judge, lab | The Arena. |
+| <UiLabel>Go to Tasks</UiLabel> | | tasks, to-dos, checklist, due, priority, context | The Tasks page. |
+| <UiLabel>Search posts</UiLabel> | | search, find, query, filter, words, meaning | The Search page. |
+
+## Create and import
+
+| Command | Shortcut | Search words | Does |
+|---|---|---|---|
+| <UiLabel>New thread</UiLabel> | <Shortcut keys="Ctrl+N" /> | post, write, compose, thought | Opens the composer for a new thread. |
+| <UiLabel>New note</UiLabel> | <Shortcut keys="Ctrl+Shift+Space" /> | capture, jot, quick note, idea | Opens quick capture, which saves to your Inbox. |
+| <UiLabel>Import file</UiLabel> | <Shortcut keys="Ctrl+O" /> | upload, document, add source, vault | Picks files to import. |
+| <UiLabel>Open Inbox</UiLabel> | | inbox, captures, quick notes, unsorted | Opens the Timeline on its <UiLabel>Inbox</UiLabel> tab: what you captured. |
+| <UiLabel>New agent</UiLabel> | | create, forge, thinker, character | Opens the Agent Forge on a new draft. |
+| <UiLabel>Create network</UiLabel> | | workspace, new network, space | Asks for a name and creates a network. |
+
+## Network and identity
+
+| Command | Shortcut | Search words | Does |
+|---|---|---|---|
+| <UiLabel>Switch network</UiLabel> | | workspace, change network, space | Opens or closes the network menu. |
+| <UiLabel>Switch persona</UiLabel> | | identity, change user, account | Switches to your next persona in this network. |
+| <UiLabel>Pin or unpin the open thread</UiLabel> | | bookmark, favorite, keep, sidebar | Pins the open thread to the sidebar, or unpins it. |
+
+## Preferences and window
+
+| Command | Shortcut | Search words | Does |
+|---|---|---|---|
+| <UiLabel>Open settings</UiLabel> | <Shortcut keys="Ctrl+," /> | preferences, options, configuration, ai, model | Opens Settings on General. |
+| <UiLabel>Appearance</UiLabel> | | theme, colors, dark, light, font | Opens Settings on Appearance. |
+| <UiLabel>Toggle navigation sidebar</UiLabel> | <Shortcut keys="Ctrl+B" /> | collapse, expand, rail, left panel | Expands or folds the left sidebar. |
+| <UiLabel>Toggle insights panel</UiLabel> | <Shortcut keys="Ctrl+Alt+B" /> | right panel, cadence, telemetry | Shows or hides the right sidebar. |
+| <UiLabel>Keyboard shortcuts</UiLabel> | <Shortcut keys="Ctrl+/" /> | keys, hotkeys, help, bindings | Shows or hides the shortcut sheet. |
+| <UiLabel>Show the welcome tour</UiLabel> | | onboarding, intro, help, guide | Shows Mnemo's first-run welcome again. |
+
+Two commands run only from their shortcuts and have no row in the palette:
+
+| Command | Shortcut | Does |
+|---|---|---|
+| <UiLabel>Search everything</UiLabel> | <Shortcut keys="Ctrl+P" />, <Shortcut keys="Ctrl+K" /> | Opens the palette. |
+| <UiLabel>Run a command</UiLabel> | <Shortcut keys="Ctrl+Shift+P" /> | Opens the palette on commands only. |
+
+## Search and the open thought
+
+| Command | Shortcut | Search words | Does |
+|---|---|---|---|
+| <UiLabel>Search by meaning</UiLabel> | <Shortcut keys="Ctrl+Shift+K" /> | semantic, meaning, similar, embedding, concept, question | Opens the palette in meaning mode. |
+| <UiLabel>Find similar to the open thought</UiLabel> | | related, nearby, like this, meaning, semantic | Finds thoughts close in meaning to the open one; without one, opens meaning mode. |
+| <UiLabel>Learn the open thought</UiLabel> | | learn, question, answer, remember, spaced repetition, study, review | Opens the learn sheet on the open thought (or its card, if you already learn it); without one, opens Review and asks what to learn. |
+| <UiLabel>New connection map</UiLabel> | | connections, map, graph, links, structure, recall, study | Opens Review and asks what to map. |
+| <UiLabel>Actions on the open thought</UiLabel> | | steelman, explain, translate, summarise, socratic, analogy, premise, concept, bias, crux, counterexample | Opens the AI actions sheet for the open thought. |
+| <UiLabel>Toggle the outline view</UiLabel> | | outline, bullets, tree, thread, collapse, expand, text only | Switches the Thread Inspector between its outline and its usual view. |
+| <UiLabel>Image ideas for an avatar</UiLabel> | | picture, image, avatar, portrait, prompt, draw, generate, art, illustration | Image prompt ideas for the Forge draft, the selected profile, or you. |
+
+See [Search](/docs/guides/search), [Review](/docs/guides/review) and [AI post actions](/docs/guides/post-tools).
+
+## Insights
+
+Each opens the Insights page on one view.
+
+| Command | Search words |
+|---|---|
+| <UiLabel>Insights: overview</UiLabel> | overview, key numbers, summary, dashboard, charts |
+| <UiLabel>Insights: network</UiLabel> | network, graph theory, influence, pagerank, betweenness, communities, centrality, clustering |
+| <UiLabel>Insights: sets</UiLabel> | sets, venn, upset, intersection, union, jaccard, overlap |
+| <UiLabel>Insights: symmetry</UiLabel> | symmetry, group theory, automorphisms, orbits, permutation, cycles |
+| <UiLabel>Insights: categories</UiLabel> | category theory, morphisms, composition, diagram, commutative squares |
+| <UiLabel>Insights: embedding map</UiLabel> | embedding, meaning, map, clusters, projection, similar, scatter |
+| <UiLabel>Insights: activity</UiLabel> | activity, timeline, rhythm, hours, weekdays, authors, histogram, radar, traits |
+| <UiLabel>Insights: calibration</UiLabel> | calibration, credence, prediction, forecast, brier, probability, confidence |
+| <UiLabel>Insights: tensions</UiLabel> | tensions, contradiction, conflict, inconsistent, disagree, opposite, dialectic |
+| <UiLabel>Insights: concept timeline</UiLabel> | concepts, timeline, trends, topics, over time, dormant, rising, peak |
+| <UiLabel>Insights: viewpoint diversity</UiLabel> | diversity, viewpoints, stances, schools, entropy, simpson, variety, perspectives, echo |
+| <UiLabel>Insights: readability</UiLabel> | readability, reading ease, flesch, grade level, lix, plain language, difficulty |
+
+See [Insights](/docs/guides/insights).
+
+## Thinking
+
+| Command | Search words | Does |
+|---|---|---|
+| <UiLabel>Resolve due predictions</UiLabel> | resolve, due, prediction, credence, forecast, outcome, true, false | Opens Insights on calibration, showing only predictions that are due. |
+| <UiLabel>Show the argument map</UiLabel> | argument, map, toulmin, claim, premise, objection, reasoning, debate | Opens the Timeline with the Thread Inspector on its argument map. |
+
+See [Thinking tools](/docs/guides/thinking) and [Beliefs and credence](/docs/concepts/beliefs-and-credence).
+
+## Journal
+
+Each opens the Journal.
+
+| Command | Search words | Does |
+|---|---|---|
+| <UiLabel>New journal entry</UiLabel> | journal, entry, write, diary, prompt, reflect, today | Starts a new entry. |
+| <UiLabel>Log mood and energy</UiLabel> | mood, energy, feeling, check-in, affect, sleep | Opens the mood tab. |
+| <UiLabel>Start a focus session</UiLabel> | focus, timer, session, work interval, deep work, intention | Opens the focus tab. |
+| <UiLabel>New time capsule</UiLabel> | capsule, future self, letter, sealed, note, later | Starts a letter to your future self. |
+
+See [Journal](/docs/guides/journal).
+
+## Arena
+
+| Command | Search words | Does |
+|---|---|---|
+| <UiLabel>New debate</UiLabel> | debate, motion, oxford, lincoln douglas, socratic, argue, agents | Opens the Arena on a new debate. |
+| <UiLabel>New thought experiment</UiLabel> | thought experiment, scenario, trolley, lab, variables, agents | Opens the Arena's lab. |
+| <UiLabel>Debate this thought</UiLabel> | debate, motion, argue, open thought, agents, for, against | A new debate with the open thought as its motion; without one, a new debate. |
+| <UiLabel>Run a thought experiment on this thought</UiLabel> | thought experiment, scenario, lab, open thought, agents | The lab with the open thought as its premise; without one, the lab. |
+
+See [Arena](/docs/guides/arena) and [Run a debate](/docs/tutorials/run-a-debate).
+
+## Saved, export and snapshots
+
+| Command | Search words | Does |
+|---|---|---|
+| <UiLabel>Open collection…</UiLabel> | collection, saved, bookmarks, shelf, reading list, open | Shows your saved items. |
+| <UiLabel>Bookmark this post</UiLabel> | bookmark, save, keep, mark, post, favourite | Bookmarks the open thought; without one, says <UiLabel>Open a post in the inspector first.</UiLabel> |
+| <UiLabel>Export bundle…</UiLabel> | export, zip, markdown, csv, json, download, portable, bundle | Opens the export dialog. |
+| <UiLabel>Encrypted snapshot…</UiLabel> | snapshot, encrypt, backup, passphrase, seal, secure | Opens the encrypted snapshot dialog. |
+| <UiLabel>Restore snapshot…</UiLabel> | restore, snapshot, backup, recover, decrypt | Opens the restore dialog. |
+
+See [Data](/docs/guides/data) and [Back up and restore](/docs/tutorials/back-up-and-restore).
+
+## Posts and tasks
+
+| Command | Search words | Does |
+|---|---|---|
+| <UiLabel>Scheduled posts…</UiLabel> | scheduled, queue, later, publish, pending, timer | Shows the queue of posts waiting to be published. |
+| <UiLabel>Symbol key…</UiLabel> | symbols, legend, key, meaning, bullet journal | Shows the legend of the post symbols. |
+| <UiLabel>Review open tasks…</UiLabel> | review, migrate, monthly, tasks, bullet journal, schedule, drop | Opens the monthly review of open tasks. |
+| <UiLabel>New voice note</UiLabel> | voice, audio, record, microphone, memo, dictate, speak | Records or picks a voice note to post. |
+| <UiLabel>New drawing</UiLabel> | ink, draw, sketch, pen, doodle, handwriting, svg | Opens a canvas to draw a post by hand. |
+| <UiLabel>Open questions</UiLabel> | questions, unanswered, open, answered, resolve | Lists every question still open. |
+
+See [Posts](/docs/guides/posts), [Tasks](/docs/guides/tasks) and [Post syntax](/docs/reference/post-syntax).
+
+## Other palette results
+
+Besides commands, the palette finds this network's agents and personas, posts and vault documents, your journal entries (when allowed in **Settings › Privacy & Data**) and every category of Settings. See [What it searches](/docs/guides/shell/command-palette#what-it-searches).

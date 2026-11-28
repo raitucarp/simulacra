@@ -87,10 +87,14 @@ impl InsightsPanel {
             Some(floating_tooltip(&frame, self.pointer, tooltip_card(author, vec![post.excerpt.clone()], theme), TIP_HEIGHT, theme))
         });
         let (parents, posts) = (thread.parents.clone(), thread.posts.clone());
+        // A tile's width per leaf, centred: a small thread no longer spreads across the card.
+        let leaves = (0..parents.len()).filter(|v| !parents.contains(&Some(*v))).count().max(1);
         let canvas = div()
             .id("insights-thread-tree")
             .relative()
             .w_full()
+            .max_w(theme.insights_tile_width * leaves as f32)
+            .mx_auto()
             .h(theme.insights_tree_height)
             .cursor_pointer()
             .on_mouse_move(cx.listener(move |p, e: &MouseMoveEvent, _, cx| p.tree_move((e.position.x.as_f32(), e.position.y.as_f32()), &parents, cx)))

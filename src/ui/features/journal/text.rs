@@ -19,7 +19,7 @@ pub fn tr(key: &str) -> String {
 /// A day as "Mon 2 Mar 2026" in the user's language (numbers and month as figures).
 pub fn day_label(day: Date) -> String {
     let weekday = tr(&format!("journal.weekday.{}", day.weekday().to_monday_zero_offset()));
-    t!("journal.day_format", weekday = weekday, date = day.strftime("%Y-%m-%d").to_string()).to_string()
+    t!("journal.day_format", weekday = weekday, date = crate::ui::format::date(day)).to_string()
 }
 
 pub fn region_label(region: AffectRegion) -> String {

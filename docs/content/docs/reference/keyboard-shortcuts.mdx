@@ -1,0 +1,109 @@
+---
+title: Keyboard shortcuts
+description: Every keyboard shortcut in Simulacra, grouped as on the in-app shortcut sheet, with where each one works.
+icon: Keyboard
+---
+
+These are the bindings of the app's keymap, in the sections and order of the shortcut sheet (<Shortcut keys="Ctrl+/" />). The names are the sheet's own. On macOS, <Kbd>⌘</Kbd> replaces <Kbd>Ctrl</Kbd> and <Kbd>Alt</Kbd> is shown as <Kbd>⌥</Kbd>, except where a row says otherwise. How scopes work is explained in [Keyboard](/docs/guides/shell/keyboard).
+
+**Where** names the scope: *Main window* works anywhere in the window, even while you type; the others work only in that part of the app.
+
+## General
+
+| Action | Keys | Where |
+|---|---|---|
+| <UiLabel>Search everything</UiLabel> | <Shortcut keys="Ctrl+P" />, <Shortcut keys="Ctrl+K" /> | Main window |
+| <UiLabel>Run a command</UiLabel> | <Shortcut keys="Ctrl+Shift+P" /> | Main window |
+| <UiLabel>Search by meaning</UiLabel> | <Shortcut keys="Ctrl+Shift+K" /> | Main window |
+| <UiLabel>Keyboard shortcuts</UiLabel> | <Shortcut keys="Ctrl+/" /> | Main window |
+| <UiLabel>Open settings</UiLabel> | <Shortcut keys="Ctrl+," /> | Main window |
+| <UiLabel>Close this sheet</UiLabel> | <Kbd>Esc</Kbd> | Shortcut sheet |
+| <UiLabel>Close the image viewer</UiLabel> | <Kbd>Esc</Kbd> | Image viewer |
+| <UiLabel>Previous image</UiLabel> | <Kbd>←</Kbd> | Image viewer |
+| <UiLabel>Next image</UiLabel> | <Kbd>→</Kbd> | Image viewer |
+
+## Navigation
+
+| Action | Keys | Where |
+|---|---|---|
+| <UiLabel>Toggle navigation sidebar</UiLabel> | <Shortcut keys="Ctrl+B" /> | Main window (in the composer, <Shortcut keys="Ctrl+B" /> is Bold) |
+| <UiLabel>Toggle insights panel</UiLabel> | <Shortcut keys="Ctrl+Alt+B" /> | Main window |
+| <UiLabel>Go to Timeline</UiLabel> | <Shortcut keys="Ctrl+1" /> | Main window |
+| <UiLabel>Go to Knowledge Vault</UiLabel> | <Shortcut keys="Ctrl+2" /> | Main window |
+| <UiLabel>Go to Personas & Agents</UiLabel> | <Shortcut keys="Ctrl+3" /> | Main window |
+| <UiLabel>Go to My Personas</UiLabel> | <Shortcut keys="Ctrl+4" /> | Main window |
+| <UiLabel>Go to Mind Graph</UiLabel> | <Shortcut keys="Ctrl+5" /> | Main window |
+| <UiLabel>Review</UiLabel> | <Shortcut keys="Ctrl+6" /> | Main window |
+| <UiLabel>Insights</UiLabel> | <Shortcut keys="Ctrl+7" /> | Main window |
+| <UiLabel>Journal</UiLabel> | <Shortcut keys="Ctrl+8" /> | Main window |
+| <UiLabel>Arena</UiLabel> | <Shortcut keys="Ctrl+9" /> | Main window |
+
+<UiLabel>Toggle insights panel</UiLabel> shows or hides the right sidebar (its drawer below 900 px).
+
+## Writing
+
+| Action | Keys | Where |
+|---|---|---|
+| <UiLabel>New thread</UiLabel> | <Shortcut keys="Ctrl+N" /> | Main window |
+| <UiLabel>New note</UiLabel> | <Shortcut keys="Ctrl+Shift+Space" /> | Main window |
+| <UiLabel>Import file</UiLabel> | <Shortcut keys="Ctrl+O" /> | Main window |
+| <UiLabel>Publish the draft</UiLabel> | <Shortcut keys="Ctrl+Enter" /> | Composer |
+| <UiLabel>Bold</UiLabel> | <Shortcut keys="Ctrl+B" /> | Composer |
+| <UiLabel>Italic</UiLabel> | <Shortcut keys="Ctrl+I" /> | Composer |
+| <UiLabel>Underline</UiLabel> | <Shortcut keys="Ctrl+U" /> | Composer |
+| <UiLabel>Code</UiLabel> | <Shortcut keys="Ctrl+E" /> | Composer |
+| <UiLabel>Spoiler</UiLabel> | <Shortcut keys="Ctrl+Shift+S" /> | Composer |
+
+The formatting keys apply a mark to the selected text. See [the composer](/docs/guides/composer) and [post syntax](/docs/reference/post-syntax).
+
+## Command palette
+
+| Action | Keys | Where |
+|---|---|---|
+| <UiLabel>Previous result</UiLabel> | <Kbd>↑</Kbd> | Palette search field |
+| <UiLabel>Next result</UiLabel> | <Kbd>↓</Kbd> | Palette search field |
+| <UiLabel>Open the selected result</UiLabel> | <Kbd>Enter</Kbd> | Palette search field |
+| <UiLabel>Close the palette</UiLabel> | <Kbd>Esc</Kbd> | Palette search field |
+| <UiLabel>Next group</UiLabel> | <Kbd>Tab</Kbd> | Palette search field |
+| <UiLabel>Previous group</UiLabel> | <Shortcut keys="Shift+Tab" mac={false} /> | Palette search field |
+
+Two prefixes change what the palette searches: `>` for commands only, `?` for search by meaning. See [Command palette](/docs/guides/shell/command-palette).
+
+## Agent Forge
+
+| Action | Keys | Where |
+|---|---|---|
+| <UiLabel>Undo</UiLabel> | <Shortcut keys="Ctrl+Z" /> | Agent Forge |
+| <UiLabel>Redo</UiLabel> | <Shortcut keys="Ctrl+Shift+Z" />, <Shortcut keys="Ctrl+Y" mac={false} /> | Agent Forge (<Shortcut keys="Ctrl+Y" mac={false} /> is Ctrl on macOS too) |
+| <UiLabel>Close a hint, then the forge</UiLabel> | <Kbd>Esc</Kbd> | Agent Forge |
+
+See [the Agent Forge](/docs/guides/agents).
+
+## Review
+
+| Action | Keys | Where |
+|---|---|---|
+| <UiLabel>Show the answer, or go to the next question</UiLabel> | <Kbd>Space</Kbd>, <Kbd>Enter</Kbd> | A review card |
+| <UiLabel>Grade: Again (or pick option 1)</UiLabel> | <Kbd>1</Kbd> | A review card |
+| <UiLabel>Grade: Hard (or pick option 2)</UiLabel> | <Kbd>2</Kbd> | A review card |
+| <UiLabel>Grade: Good (or pick option 3)</UiLabel> | <Kbd>3</Kbd> | A review card |
+| <UiLabel>Grade: Easy (or pick option 4)</UiLabel> | <Kbd>4</Kbd> | A review card |
+
+In a quiz, the number keys pick the answer option instead. See [Review](/docs/guides/review).
+
+## Keys not on the sheet
+
+| Keys | Where | What they do |
+|---|---|---|
+| <Shortcut keys="Ctrl+V" /> | Main window, no text field focused | Paste anywhere: imports copied files, posts a copied image, captures copied text to your Inbox. |
+| <Kbd>Enter</Kbd> / <Kbd>Esc</Kbd> | Quick capture | Save to your Inbox / close. |
+| <Kbd>Esc</Kbd> | Main window | Closes the language or network menu, then the import sheet, then the Atomicity sheet; in the Knowledge Vault, leaves the reader or the add/edit form (like its Cancel) and closes the facet drawer. |
+| <Kbd>↑</Kbd> <Kbd>↓</Kbd> | Thread Inspector, outline view | Previous / next row. |
+| <Kbd>←</Kbd> <Kbd>→</Kbd> | Thread Inspector, outline view | Fold / unfold. |
+| <Kbd>Enter</Kbd> | Thread Inspector, outline view | Open the row. |
+| <Kbd>Home</Kbd> / <Kbd>End</Kbd> | Thread Inspector, outline view | First / last row. |
+| <Kbd>Tab</Kbd>, then <Kbd>Enter</Kbd> or <Kbd>Space</Kbd> | Left sidebar | Move to a place, section or item; open it. |
+
+## Commands without a shortcut
+
+Every other command, such as <UiLabel>Switch network</UiLabel>, <UiLabel>Go to Tasks</UiLabel> or <UiLabel>Search posts</UiLabel>, runs from the [command palette](/docs/guides/shell/command-palette). They are all listed in the [commands reference](/docs/reference/commands).

@@ -17,7 +17,6 @@ use rust_i18n::t;
 const ROW_ID: &str = "calibration-row";
 const OUTCOME_ID: &str = "calibration-outcome";
 const EXCERPT_ID: &str = "calibration-excerpt";
-const DAY_FORMAT: &str = "%Y-%m-%d";
 const PERCENT: f64 = 100.0;
 
 /// `(value, label, colour)` of each key figure.
@@ -64,7 +63,7 @@ pub fn prediction_list(data: &CalibrationData, on_request: &RequestAction, theme
 }
 
 fn prediction_row(index: usize, row: &PredictionRow, on_request: &RequestAction, theme: &ThemeTokens) -> Stateful<Div> {
-    let due = row.due.map_or_else(|| tr("thinking.credence.no_date"), |d| d.strftime(DAY_FORMAT).to_string());
+    let due = row.due.map_or_else(|| tr("thinking.credence.no_date"), crate::ui::format::date);
     let due_colour = if row.is_due { theme.warning } else { theme.text_muted };
     let outcomes = Outcome::ALL.iter().enumerate().map(|(o, outcome)| {
         let (on_request, request) = (on_request.clone(), ThinkingRequest::ResolvePrediction(row.post_id.clone(), *outcome));
@@ -83,7 +82,7 @@ fn prediction_row(index: usize, row: &PredictionRow, on_request: &RequestAction,
         .rounded(theme.radius_sm)
         .hover(|r| r.bg(theme.hover_bg))
         .child(div().flex_none().flex().items_center().gap(theme.spacing_xs).text_size(theme.font_size_2xs).text_color(due_colour).child(Icon::new(LucideIcon::CalendarClock).size(theme.icon_size_xs)).child(due))
-        .child(div().flex_none().text_size(theme.font_size_xs).font_weight(FontWeight::SEMIBOLD).text_color(theme.accent_brand).child(format!("{}%", row.percent)))
+        .child(div().flex_none().text_size(theme.font_size_xs).font_weight(FontWeight::SEMIBOLD).text_color(theme.accent_brand_text).child(format!("{}%", row.percent)))
         .child(
             div()
                 .id(ElementId::NamedInteger(EXCERPT_ID.into(), index as u64))

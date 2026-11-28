@@ -1,0 +1,91 @@
+---
+title: Keyboard
+description: Open the sheet of every shortcut, understand where each shortcut works, and move around the window without the mouse.
+icon: Keyboard
+---
+
+Most of Simulacra can be driven from the keyboard. The **shortcut sheet** lists every binding, and the same chords appear next to commands in the palette, the <UiLabel>New</UiLabel> menu and the sidebar's tooltips.
+
+<Screenshot id="shell-shortcut-sheet" alt="The Keyboard shortcuts sheet with all six sections in two rows of three: General, Navigation, Writing, then Command palette, Agent Forge and Review" caption="The shortcut sheet. In a narrower window its sections wrap into two columns and the sheet scrolls." />
+
+## Open the shortcut sheet
+
+| How | |
+|---|---|
+| <Shortcut keys="Ctrl+/" /> | From anywhere in the main window. Press it again to close. |
+| Keyboard icon | In the left sidebar's footer. |
+| Command palette | <UiLabel>Keyboard shortcuts</UiLabel>. |
+| Settings | **Settings › Shortcuts**, <UiLabel>Open shortcut sheet</UiLabel>. Settings closes first. |
+
+Close it with <Kbd>Esc</Kbd>, the close button or a click on the dimmed area around it.
+
+## Read the sheet
+
+The header says <UiLabel>Keyboard shortcuts</UiLabel> and <UiLabel>Every shortcut in Simulacra. Press Esc to close.</UiLabel>. Below it, six sections:
+
+| Section | What is in it |
+|---|---|
+| <UiLabel>General</UiLabel> | The palette, the sheet, settings and the image viewer. |
+| <UiLabel>Navigation</UiLabel> | The sidebars and the screens, <Shortcut keys="Ctrl+1" /> to <Shortcut keys="Ctrl+9" />. |
+| <UiLabel>Writing</UiLabel> | New thread, quick note, import, publishing and text formatting. |
+| <UiLabel>Command palette</UiLabel> | Moving through the palette's results. |
+| <UiLabel>Agent Forge</UiLabel> | Undo, redo and closing the forge. |
+| <UiLabel>Review</UiLabel> | Revealing and grading review cards. |
+
+Each row names the action and shows its keys. When one action has two chords, both are shown, such as <Shortcut keys="Ctrl+P" /> and <Shortcut keys="Ctrl+K" /> for <UiLabel>Search everything</UiLabel>. The full list is in the [keyboard shortcuts reference](/docs/reference/keyboard-shortcuts).
+
+## Ctrl on Windows and Linux, ⌘ on macOS
+
+These docs write shortcuts the Windows way. On macOS, Simulacra uses <Kbd>⌘</Kbd> wherever Windows and Linux use <Kbd>Ctrl</Kbd>, and shows <Kbd>Alt</Kbd> as <Kbd>⌥</Kbd>. So <Shortcut keys="Ctrl+Alt+B" /> is <Kbd>⌘</Kbd><Kbd>⌥</Kbd><Kbd>B</Kbd> on a Mac. The sheet always shows the keys of the system you are on.
+
+One exception: the Agent Forge's second redo chord, <Shortcut keys="Ctrl+Y" mac={false} />, is <Kbd>Ctrl</Kbd> on every system.
+
+## Where a shortcut works
+
+Every shortcut belongs to a **scope**, the part of the window where it is active:
+
+| Scope | Active | Examples |
+|---|---|---|
+| Main window | Anywhere in the main window, including while you type | <Shortcut keys="Ctrl+K" />, <Shortcut keys="Ctrl+N" />, <Shortcut keys="Ctrl+1" /> |
+| Text field | While a text field has the cursor | <Shortcut keys="Ctrl+Enter" />, <Shortcut keys="Ctrl+I" /> |
+| Agent Forge | While the forge is open | <Shortcut keys="Ctrl+Z" />, <Kbd>Esc</Kbd> |
+| Command palette | In the palette's search field | <Kbd>↑</Kbd>, <Kbd>Tab</Kbd>, <Kbd>Esc</Kbd> |
+| Shortcut sheet | While the sheet is open | <Kbd>Esc</Kbd> |
+| Image viewer | While an image is open full size | <Kbd>←</Kbd>, <Kbd>→</Kbd>, <Kbd>Esc</Kbd> |
+| Review | On a review card waiting to be revealed or graded | <Kbd>Space</Kbd>, <Kbd>1</Kbd> to <Kbd>4</Kbd> |
+
+When two scopes use the same keys, **the inner one wins**. <Shortcut keys="Ctrl+B" /> is the clearest case:
+
+- In the composer, <Shortcut keys="Ctrl+B" /> makes the selection **bold**.
+- In any other text field, which has no formatting, the keys pass through and toggle the left sidebar.
+- With no text field focused, it toggles the left sidebar.
+
+The same rule lets the palette's arrows, <Kbd>Enter</Kbd>, <Kbd>Tab</Kbd> and <Kbd>Esc</Kbd> work while you type in its field.
+
+## Without the mouse
+
+- **Focus stays reachable.** When nothing has the keyboard, for example after a menu or overlay closes, the window takes it back, so the main-window shortcuts always work.
+- **The sidebar is keyboard-friendly.** Press <Kbd>Tab</Kbd> to move through the places, section headers and items of the left sidebar; <Kbd>Enter</Kbd> or <Kbd>Space</Kbd> opens the one with the focus ring.
+- **Shortcuts are shown where you need them.** Commands in the palette show their chord on the right; the <UiLabel>New</UiLabel> menu lists one per item; the rail's tooltips name the place and its shortcut; the composer's format buttons say, for example, <UiLabel>Bold (Ctrl+B)</UiLabel>.
+
+## Keys not on the sheet
+
+A few keys work in one place only and are not listed on the sheet:
+
+| Keys | Where | What they do |
+|---|---|---|
+| <Shortcut keys="Ctrl+V" /> | Main window, no text field focused | **Paste anywhere**: copied files are imported, a copied image becomes an image post, copied text becomes a captured post in your Inbox. |
+| <Kbd>Enter</Kbd>, <Kbd>Esc</Kbd> | Quick capture (<Shortcut keys="Ctrl+Shift+Space" />) | Save to your Inbox; close. |
+| <Kbd>↑</Kbd> <Kbd>↓</Kbd> <Kbd>←</Kbd> <Kbd>→</Kbd> <Kbd>Enter</Kbd> <Kbd>Home</Kbd> <Kbd>End</Kbd> | The Thread Inspector's outline view | Move, fold, unfold, open, first, last. |
+
+## Tips and limits
+
+- **Bindings are fixed.** There is no editor to change or add shortcuts.
+- **<Shortcut keys="Ctrl+4" />** opens your personas, which live under the **Personas & Agents** place; it has no row of its own in the sidebar.
+- **<UiLabel>Tasks</UiLabel> and <UiLabel>Search</UiLabel>** have no shortcut; open them from the sidebar or the palette.
+
+## Related
+
+- [Keyboard shortcuts reference](/docs/reference/keyboard-shortcuts)
+- [Command palette](/docs/guides/shell/command-palette)
+- [The composer](/docs/guides/composer)

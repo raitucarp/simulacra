@@ -50,6 +50,7 @@ impl AppView {
             query: self.settings_ui.query(cx),
             ai_dirty,
             confirm_reset: self.settings_ui.confirm_reset,
+            indexing: self.semantic.queue.progress().is_some(),
         }
     }
 

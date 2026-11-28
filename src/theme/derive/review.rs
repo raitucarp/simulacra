@@ -24,6 +24,6 @@ pub(super) fn apply_review_layout(t: &mut ThemeTokens) {
 pub(super) fn apply_review_map_layout(t: &mut ThemeTokens) {
     set_tokens!(t {
         review_learn_sheet_width: px(600.0), review_map_height: px(440.0), review_map_point_width: px(168.0),
-        review_map_point_height: px(58.0), review_map_label_width: px(112.0), review_map_edge_width: px(2.0),
+        review_map_point_height: px(66.0), review_map_label_width: px(112.0), review_map_edge_width: px(2.0),
     });
 }

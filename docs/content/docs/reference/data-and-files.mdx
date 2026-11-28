@@ -1,0 +1,128 @@
+---
+title: Data and files
+description: Where Simulacra keeps your vault on Windows, macOS and Linux, every file and folder beside it, the environment variables it reads, and how an old vault is carried over.
+icon: FolderTree
+---
+
+Your vault is one SQLite database file, `simulacra.db`, in a `simulacra` folder of your user data directory. Everything else Simulacra stores sits in folders beside it, so the whole vault can be copied or moved as one folder.
+
+## Where the vault is
+
+| System | Vault folder | Usually |
+|---|---|---|
+| Windows | `%APPDATA%\simulacra\` | `C:\Users\<you>\AppData\Roaming\simulacra\` |
+| macOS | `~/Library/Application Support/simulacra/` | `/Users/<you>/Library/Application Support/simulacra/` |
+| Linux | `$XDG_DATA_HOME/simulacra/` | `~/.local/share/simulacra/` when `XDG_DATA_HOME` is not set |
+
+The folder is created on first start. If none of these locations can be worked out (the environment variable is missing), the vault is `simulacra.db` in the folder Simulacra was started from.
+
+To see the exact path, open **Settings › Privacy & Data**: the <UiLabel>Database</UiLabel> row shows it, and <UiLabel>Open folder</UiLabel> opens it.
+
+## What is in the folder
+
+<Files>
+  <Folder name="simulacra" defaultOpen>
+    <File name="simulacra.db" />
+    <File name="simulacra.db-wal" />
+    <File name="simulacra.db-shm" />
+    <File name="simulacra.db.pre-restore" />
+    <Folder name="backups">
+      <File name="simulacra-20261117-210455.db" />
+    </Folder>
+    <Folder name="avatars">
+      <File name="profile-id.png" />
+    </Folder>
+    <Folder name="symbols">
+      <File name="index.json" />
+      <Folder name="set-id">
+        <File name="LICENCE.txt" />
+        <File name="icon-name.svg" />
+      </Folder>
+    </Folder>
+    <Folder name="media" defaultOpen>
+      <File name="img_….png" />
+      <Folder name="attachments" />
+      <Folder name="previews" />
+      <Folder name="thumbs" />
+      <Folder name="posters" />
+      <Folder name="imports" />
+      <Folder name="voice" />
+      <Folder name="ink" />
+      <Folder name="captures" />
+    </Folder>
+  </Folder>
+</Files>
+
+| Path | What it holds |
+|---|---|
+| `simulacra.db` | The vault: networks, profiles, agents, posts and their versions, documents and their catalogue, review items, journal, reactions, embeddings, settings, themes, credentials. |
+| `simulacra.db-wal`, `simulacra.db-shm` | SQLite's write-ahead log and its index, part of the database while it is open. Copy them with the database, or quit Simulacra before copying. |
+| `simulacra.db.pre-restore` | Your previous vault, kept when you restored a snapshot (time-stamped when an earlier copy exists). |
+| `simulacra.db.restore` | A verified snapshot waiting for <UiLabel>Restore and restart</UiLabel>; deleted on cancel. |
+| `backups/` | Copies made with <UiLabel>Back up now</UiLabel>, named `simulacra-YYYYMMDD-HHMMSS.db`. |
+| `avatars/` | Photos you picked as avatars, one per profile, so a moved vault keeps them. |
+| `symbols/` | Downloaded icon sets, one folder per set with its `LICENCE.txt`, and `index.json` listing what is installed. |
+| `media/` | Generated images (`img_….png`, `.jpg` or `.webp`) at its top level. |
+| `media/attachments/` | Images attached to posts, stored once per content. |
+| `media/previews/` | Link-preview images, scaled down to at most 720 pixels. |
+| `media/thumbs/` | Feed thumbnails of large images, at most 1280 pixels. |
+| `media/posters/` | Video poster frames your system made. |
+| `media/imports/` | Kept originals of imported files (when <UiLabel>Keep the original file</UiLabel> is on). |
+| `media/voice/` | Voice notes. |
+| `media/ink/` | Drawings, as SVG. |
+| `media/captures/` | Images captured into the Inbox. |
+
+Files in `attachments`, `voice`, `ink` and `captures` are named by a checksum of their content, so the same file is stored once.
+
+## Environment variables
+
+| Variable | Effect |
+|---|---|
+| `SIMULACRA_DB_PATH` | The full path of the database to use, taken as is. Its folder is not created for you, and no old vault is copied. The `media`, `avatars`, `symbols` and `backups` folders go beside that file. Use it to keep a second vault, try a backup, or run a scratch vault. |
+| `APPDATA` (Windows), `HOME` (macOS), `XDG_DATA_HOME` and `HOME` (Linux) | Decide the default vault folder, as in the table above. |
+| `XDG_CACHE_HOME` (Linux) | Where Simulacra looks for the video thumbnails your file manager already made (`~/.cache` when unset). |
+| `SIMULACRA_IMPORT_TIMING` | Set to anything to print how long each stage of an import took, as `simulacra: import … took … ms`, to the standard error output. |
+| `SIMULACRA_RENDER_STATS` | In debug builds only, prints how often each view is drawn. |
+
+Set the variable in a terminal, then start Simulacra from that same terminal:
+
+<Tabs items={['Windows', 'macOS and Linux']}>
+<Tab value="Windows">
+
+In PowerShell:
+
+```powershell
+$env:SIMULACRA_DB_PATH = "D:\vaults\scratch\simulacra.db"
+& "<path to simulacra.exe>"
+```
+
+</Tab>
+<Tab value="macOS and Linux">
+
+```bash
+export SIMULACRA_DB_PATH="$HOME/vaults/scratch/simulacra.db"
+<path to the simulacra program>
+```
+
+From a source checkout, `SIMULACRA_DB_PATH=… cargo run --release` does the same.
+
+</Tab>
+</Tabs>
+
+Create the folder first; with the variable set, Simulacra does not create it.
+
+## An older vault in the start folder
+
+Early versions kept `simulacra.db` in the folder the program was started from. On a start where no vault exists yet in the user data folder but `./simulacra.db` does, Simulacra **copies** it there (with its `-wal` file, if any) and uses the copy. The old file is never moved or deleted; remove it yourself once you have checked the copy. With `SIMULACRA_DB_PATH` set, nothing is copied.
+
+## What is not in the vault folder
+
+- **The program.** Installing, updating or removing Simulacra leaves the vault alone.
+- **Code runs.** Each run of a code block uses a fresh folder in the system's temporary folder, deleted afterwards.
+- **Without a vault.** If the vault cannot be opened, Simulacra runs on example data for that session and saves nothing; media then goes to a `simulacra-media` folder in the system's temporary folder.
+
+## Related
+
+- [Storage and backups](/docs/guides/data/storage-and-backups)
+- [Encrypted snapshots](/docs/guides/data/snapshots)
+- [Troubleshooting](/docs/reference/troubleshooting)

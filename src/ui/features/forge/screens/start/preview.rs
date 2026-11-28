@@ -72,7 +72,7 @@ fn change_row(change: &FieldChange, theme: &ThemeTokens) -> Div {
         .child(div().text_color(theme.text_secondary).child(tr(&change.label_key)))
         .child(div().text_color(theme.text_muted).line_through().child(value_text(&change.before)))
         .child(div().text_color(theme.text_muted).child(ARROW))
-        .child(div().text_color(theme.accent_brand).child(value_text(&change.after)))
+        .child(div().text_color(theme.accent_brand_text).child(value_text(&change.after)))
 }
 
 /// The changes of one step under its name ("+N more" past the first few).

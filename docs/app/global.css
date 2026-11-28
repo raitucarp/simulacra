@@ -1,0 +1,62 @@
+@import 'tailwindcss';
+@import 'fumadocs-ui/css/neutral.css';
+@import 'fumadocs-ui/css/preset.css';
+
+@source '../node_modules/fumadocs-ui/dist/**/*.js';
+
+/* Simulacra's violet accent on Fumadocs' neutral palette: quiet surfaces, one accent colour. */
+@theme {
+  --color-fd-primary: hsl(262, 83%, 58%);
+  --color-fd-primary-foreground: hsl(0, 0%, 100%);
+  --color-fd-ring: hsl(262, 83%, 66%);
+  --color-fd-background: hsl(240, 10%, 99%);
+  --color-fd-card: hsl(240, 9%, 97%);
+  --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+.dark {
+  --color-fd-primary: hsl(258, 90%, 72%);
+  --color-fd-primary-foreground: hsl(250, 30%, 8%);
+  --color-fd-ring: hsl(258, 90%, 72%);
+  --color-fd-background: hsl(240, 8%, 5%);
+  --color-fd-card: hsl(240, 6%, 8%);
+  --color-fd-muted: hsl(240, 5%, 11%);
+  --color-fd-popover: hsl(240, 6%, 9%);
+  --color-fd-secondary: hsl(240, 5%, 12%);
+}
+
+/* Compact reading rhythm: slightly smaller body text and tighter vertical spacing than the defaults. */
+.prose {
+  font-size: 15px;
+  line-height: 1.68;
+}
+.prose :where(h2) {
+  margin-top: 2.1em;
+  margin-bottom: 0.7em;
+}
+.prose :where(h3) {
+  margin-top: 1.6em;
+  margin-bottom: 0.5em;
+}
+.prose :where(p, ul, ol) {
+  margin-top: 0.75em;
+  margin-bottom: 0.75em;
+}
+.prose :where(li) {
+  margin-top: 0.25em;
+  margin-bottom: 0.25em;
+}
+.prose :where(table) {
+  font-size: 14px;
+}
+.prose :where(td, th) {
+  padding-top: 0.45em;
+  padding-bottom: 0.45em;
+}
+
+/* Long tables scroll sideways on phones instead of squeezing their columns. */
+.prose :where(table) {
+  display: block;
+  overflow-x: auto;
+  max-width: 100%;
+}

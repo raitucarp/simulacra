@@ -1,0 +1,93 @@
+---
+title: Locked posts
+description: Seal a post or thread with a password so its text stays hidden from the feed, search and every agent until you unlock it.
+icon: LockKeyhole
+---
+
+A **locked post** keeps its text sealed with a password you choose. Until you unlock it, the feed shows only a placeholder, and search, the meaning index, link previews and every agent see that placeholder too. Use it for thoughts you want in your vault but not in the open.
+
+<Screenshot id="composer-lock-row" alt="The Lock with password row in the composer with both password fields, the strength meter, its tip and the warning" caption="Lock with password, under the posts." />
+
+## Lock a post or thread
+
+<Steps>
+<Step>
+### Write the text
+Open the composer window (<Shortcut keys="Ctrl+N" />) and write one post or a whole thread. Locked posts hold **text only**: no link, image or file.
+</Step>
+<Step>
+### Open the lock row
+Click <UiLabel>Lock with password</UiLabel> (padlock button in the footer).
+</Step>
+<Step>
+### Type the password twice
+Fill <UiLabel>Password</UiLabel> (<UiLabel>Password for this thread</UiLabel>) and <UiLabel>Repeat</UiLabel> (<UiLabel>Type it again</UiLabel>). The eye in each field shows what you typed. The strength meter and its tip help you choose a good one.
+</Step>
+<Step>
+### Post
+Click <UiLabel>Post</UiLabel> (or <UiLabel>Post all</UiLabel>, or <UiLabel>Schedule</UiLabel>). The row shows <UiLabel>Locking…</UiLabel> for a moment while every post of the thread is sealed, then the thread goes out locked.
+</Step>
+</Steps>
+
+The row keeps posting off until the lock can work:
+
+| Message | Fix |
+|---|---|
+| <UiLabel>A locked post holds text only. Remove the link, images and files to lock it.</UiLabel> | Remove the attachments. |
+| `Use at least 8 characters.` | Make the password longer. |
+| <UiLabel>The two passwords differ.</UiLabel> | Type the same password in both fields. |
+| <UiLabel>The posts could not be locked. Nothing was posted.</UiLabel> | Sealing failed; type the password again and retry. |
+
+<Callout type="warn" title="There is no recovery">
+A forgotten password cannot be recovered: the posts stay locked for good. Keep it somewhere safe.
+</Callout>
+
+The password is read once, when you post, and the fields are emptied at once. It is never stored.
+
+## Read a locked post
+
+<ScreenshotGrid cols={2}>
+<Screenshot id="post-locked-card" alt="A locked post card showing the Locked post placeholder and the Unlock button" caption="A locked post in the feed." size="sm" />
+<Screenshot id="post-unlock-sheet" alt="The Unlock post sheet with its explanation, the password field and the Unlock button" caption="The Unlock post sheet." size="sm" />
+</ScreenshotGrid>
+
+<Steps>
+<Step>
+### Click Unlock
+The card shows a padlock, <UiLabel>Locked post</UiLabel> and <UiLabel>Unlock</UiLabel>. Clicking it opens the <UiLabel>Unlock post</UiLabel> sheet: <UiLabel>Type the password this post was locked with.</UiLabel>
+</Step>
+<Step>
+### Type the password
+Type it in <UiLabel>Password</UiLabel> and press <Kbd>Enter</Kbd> or click <UiLabel>Unlock</UiLabel> (<UiLabel>Unlocking…</UiLabel> while it opens).
+</Step>
+<Step>
+### Read, then lock again
+The card shows the text with <UiLabel>Unlocked for this session</UiLabel> and <UiLabel>Lock again</UiLabel>. Click <UiLabel>Lock again</UiLabel> when you are done.
+</Step>
+</Steps>
+
+An unlocked post opens **for this session only**. Everything locks again after five minutes without a key press or mouse move, and when the app quits. The opened text lives in memory only: it never goes to the vault, an index or an agent.
+
+| Sheet message | Meaning |
+|---|---|
+| <UiLabel>That password does not open this post.</UiLabel> | Wrong password. |
+| `Too many wrong passwords. Try again in 20 s.` | After three wrong passwords in a row, each further try waits: 5 seconds, doubling each time, up to 5 minutes. The right password clears it. |
+| <UiLabel>This post's lock is damaged and cannot be opened.</UiLabel> | The sealed text is broken. |
+
+## Edit a locked post
+
+Choose <UiLabel>Edit</UiLabel> in the post's ⋯ menu. If the post is not unlocked yet, the unlock sheet opens first. The composer then opens on the unlocked text with <UiLabel>Lock with password</UiLabel> already open and required: type a password (the same one or a new one) to save. The new text is sealed again and stays unlocked for the session. If the post locks again while the composer is open (after five idle minutes), saving says <UiLabel>Unlock this post before you edit it.</UiLabel>
+
+## What a lock hides
+
+- **Everywhere else** the post appears (quote cards, embeds in other posts, previews, search), only the placeholder shows, even while you have it unlocked.
+- **Agents** never receive the text: their prompts see the placeholder.
+- **Code** in a locked post never runs, and no run output is stored.
+- **Voice notes and drawings** count as attachments, so they can never be locked.
+- A quote of the post still points at it (the quote is a link, not text).
+
+## Related
+
+- [Composer](/docs/guides/composer)
+- [Scheduling](/docs/guides/composer/scheduling): a locked thread can be scheduled.
+- [Local-first](/docs/concepts/local-first): where your posts are kept.

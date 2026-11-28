@@ -3,6 +3,7 @@
 
 use super::super::super::data::PostView;
 use super::super::super::text::tr;
+use crate::domain::post::readable_line;
 use crate::domain::review::connections::MapPoint;
 use crate::domain::review::quiz::piece_text;
 use crate::theme::ThemeTokens;
@@ -33,7 +34,7 @@ pub struct PointChip {
 pub fn point_chip(point: &MapPoint, post: &dyn Fn(&str) -> Option<PostView>, title: &dyn Fn(&str) -> Option<String>) -> PointChip {
     match point {
         MapPoint::Post { id } => match post(id) {
-            Some(view) => PointChip { kind: ChipKind::Post, title: view.author.name.clone(), body: piece_text(&view.post.content, CHIP_CHARS) },
+            Some(view) => PointChip { kind: ChipKind::Post, title: view.author.name.clone(), body: piece_text(&readable_line(&view.post.content), CHIP_CHARS) },
             None => PointChip { kind: ChipKind::Post, title: tr("review.source.missing"), body: String::new() },
         },
         MapPoint::Passage { document_id, text, .. } => PointChip {
@@ -89,5 +90,5 @@ pub fn render_chip(chip: &PointChip, id: ElementId, pending: bool, theme: &Theme
                 .child(div().flex_none().size(theme.review_swatch_size).rounded(theme.radius_full).bg(color))
                 .child(div().min_w_0().truncate().text_size(theme.font_size_xs).font_weight(FontWeight::SEMIBOLD).text_color(theme.text_primary).child(chip.title.clone())),
         )
-        .child(div().text_size(theme.font_size_2xs).line_height(relative(theme.line_height_body)).text_color(theme.text_secondary).line_clamp(CHIP_LINES).child(chip.body.clone()))
+        .child(div().text_size(theme.font_size_2xs).line_height(relative(theme.line_height_body)).text_color(theme.text_secondary).line_clamp(CHIP_LINES).text_ellipsis().child(chip.body.clone()))
 }

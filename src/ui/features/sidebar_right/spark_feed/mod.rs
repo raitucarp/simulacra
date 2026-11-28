@@ -1,6 +1,11 @@
 //! Scrollable random sparks (serendipitous thoughts) discovery feed.
 
 mod item;
+mod pick;
+#[cfg(test)]
+mod tests;
+
+pub use pick::pick_sparks;
 
 use super::section::{render_section_header, render_section_title};
 use crate::domain::Post;
@@ -48,23 +53,22 @@ fn render_feed_header(theme: &ThemeTokens) -> Div {
     render_section_header(title, render_scroll_badge(theme)).px(theme.panel_padding_compact)
 }
 
-/// Renders a scrollable feed of random / serendipitous thoughts from the database.
+/// Renders a scrollable feed of the first thoughts of `posts` (no network filter).
 pub fn render_random_spark_feed(posts: &[Post], theme: &ThemeTokens) -> impl IntoElement {
     let bounded_lookup = &posts[..posts.len().min(MAX_GRAPH_SCAN_WINDOW)];
-    render_random_spark_feed_with_lookup(posts, bounded_lookup, theme)
+    // Instant reposts carry no thought of their own, so they never surface as sparks.
+    let sparks: Vec<&Post> = posts.iter().filter(|post| !post.is_instant_repost()).take(MAX_SPARK_FEED_ITEMS).collect();
+    render_random_spark_feed_with_lookup(&sparks, bounded_lookup, theme)
 }
 
-/// Renders a scrollable feed of random / serendipitous thoughts using an O(1) `PostLookup`.
+/// Renders the scrollable feed of `sparks` (see [`pick_sparks`]) using an O(1) `PostLookup`.
 pub fn render_random_spark_feed_with_lookup<L: PostLookup>(
-    posts: &[Post],
+    sparks: &[&Post],
     lookup: L,
     theme: &ThemeTokens,
 ) -> Div {
-    // Instant reposts carry no thought of their own, so they never surface as sparks.
-    let spark_elements: Vec<Stateful<Div>> = posts
+    let spark_elements: Vec<Stateful<Div>> = sparks
         .iter()
-        .filter(|post| !post.is_instant_repost())
-        .take(MAX_SPARK_FEED_ITEMS)
         .enumerate()
         .map(|(idx, post)| item::render_spark_item(idx, post, lookup, theme))
         .collect();

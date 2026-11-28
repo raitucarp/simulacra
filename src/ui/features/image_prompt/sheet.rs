@@ -99,7 +99,7 @@ fn header(sheet: &IdeasSheet, on_event: IdeasAction, theme: &ThemeTokens) -> Div
         .py(theme.spacing_sm)
         .border_b(theme.border_width_hairline)
         .border_color(theme.border_subtle)
-        .child(Icon::new(LucideIcon::Sparkles).size(theme.icon_size_sm).text_color(theme.accent_brand))
+        .child(Icon::new(LucideIcon::Sparkles).size(theme.icon_size_sm).text_color(theme.accent_brand_text))
         .child(titles)
         .child(close)
 }

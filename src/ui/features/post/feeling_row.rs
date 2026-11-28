@@ -1,7 +1,7 @@
 //! A feeling in the feed (M3): one line, set apart from thoughts by a callout tint and a
 //! heart-pulse mark: the emojis, the intensity as five pips, the note, and who felt it when.
 
-use super::consts::{META_SEPARATOR, POST_ITEM_ID_PREFIX, TIME_FORMAT};
+use super::consts::{META_SEPARATOR, POST_ITEM_ID_PREFIX};
 use super::controls::PostCardHandlers;
 use crate::domain::post::{Intensity, PostKind};
 use crate::domain::{Post, Profile};
@@ -28,9 +28,9 @@ pub fn feeling_line(kind: &PostKind, theme: &ThemeTokens) -> Option<Div> {
 pub fn render_feeling_row(post: &Post, author: &Profile, theme: &ThemeTokens, is_focused: bool, handlers: &PostCardHandlers) -> Option<impl IntoElement> {
     let line = feeling_line(&post.kind, theme)?;
     let on_select = handlers.on_select.clone();
-    let when = post.created_at.strftime(TIME_FORMAT).to_string();
-    let who = div().flex_none().text_size(theme.font_size_xs).text_color(theme.text_muted).child(format!("{}{META_SEPARATOR}{when}", author.name));
-    let mark = Icon::new(LucideIcon::HeartPulse).xsmall().text_color(theme.accent_brand);
+    let when = crate::ui::format::post_stamp(post.created_at);
+    let who = div().flex_none().text_size(theme.font_size_xs).text_color(theme.text_muted).child(format!("{} {META_SEPARATOR} {when}", author.name));
+    let mark = Icon::new(LucideIcon::HeartPulse).xsmall().text_color(theme.accent_brand_text);
     let background = if is_focused { theme.hover_bg } else { theme.bg_callout };
     Some(
         div()

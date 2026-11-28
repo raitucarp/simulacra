@@ -1,0 +1,27 @@
+{
+  "title": "Post tools",
+  "icon": "Ellipsis",
+  "pages": [
+    "ai-post-actions",
+    "---Keep claims honest---",
+    "still-true",
+    "retract-and-correct",
+    "changed-my-mind",
+    "open-questions",
+    "---Ask agents---",
+    "ask-the-room",
+    "lenses",
+    "---Shape and connect---",
+    "glossary-and-terms",
+    "translations",
+    "margin-and-branches",
+    "garden-and-series",
+    "---Keep and share---",
+    "distill-to-vault",
+    "bookmarks-and-collections",
+    "who-can-read",
+    "history",
+    "lifecycle",
+    "locked-posts"
+  ]
+}

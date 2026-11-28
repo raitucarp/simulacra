@@ -23,7 +23,7 @@ pub(super) fn profile_tabs(active: ProfileTab, is_agent: bool, theme: &ThemeToke
         segment_pill(segment, theme, move |window, cx| on_switch(tab, window, cx))
     };
     segmented_track(theme)
-        .max_w(theme.forge_trading_card_width)
+        .max_w(theme.reader_measure_narrow_width)
         .child(pill(ProfileTab::Profile, PROFILE_ID, LucideIcon::User, "beliefs.tab.profile"))
         .child(pill(ProfileTab::Posts, POSTS_ID, LucideIcon::List, "roster.posts.tab"))
         .child(pill(ProfileTab::Beliefs, BELIEFS_ID, LucideIcon::Brain, "beliefs.tab.beliefs"))

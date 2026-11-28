@@ -1,0 +1,102 @@
+---
+title: Entries
+description: Write daily entries from rotating prompts or templates, link posts and documents, search them, and see your written days.
+icon: Feather
+---
+
+Entries are free Markdown writing, one or more per day. A prompt or a template gets you started; the heat strip and your runs show how often you write, without ever scolding you for a day off.
+
+<Screenshot id="journal-entries" alt="The Journal tab: New entry and template buttons, the Days written heat strip with three tiles, the search field and a list of entries" caption="Every entry, newest first, with the search and the heat strip." />
+
+## Write an entry
+
+<Steps>
+<Step>
+### Start it
+Pick one:
+- <UiLabel>Write about it</UiLabel> on the Today tab: a new entry answering today's prompt, which shows above the text.
+- <UiLabel>New entry</UiLabel> on the Journal tab: a blank entry.
+- A template button: <UiLabel>Morning page</UiLabel>, <UiLabel>Evening review</UiLabel> or <UiLabel>Weekly review</UiLabel>.
+- The palette command <UiLabel>New journal entry</UiLabel>.
+</Step>
+<Step>
+### Write
+The editor opens on the Journal tab with the text field focused: "Write freely. Markdown works; link a post or a vault document with `[[` and its id or title `]]`."
+</Step>
+<Step>
+### Save
+Click <UiLabel>Save</UiLabel>. The status beside the date changes from <UiLabel>Not saved yet</UiLabel> to <UiLabel>Saved</UiLabel>, and the editor stays open. <UiLabel>Close</UiLabel> saves and closes.
+</Step>
+</Steps>
+
+<Screenshot id="journal-editor" alt="The entry editor on an Evening review: the date and Not saved yet status, the section headings in the text field, the links hint and the Save, Preview, Turn into a post and Close buttons" caption="An entry started from the Evening review template." />
+
+An entry with nothing but spaces is not kept. Editing an entry keeps its day and creation time.
+
+### Editor buttons
+
+| Button | What it does |
+|---|---|
+| <UiLabel>Save</UiLabel> | Saves the entry; the editor stays on it |
+| <UiLabel>Preview</UiLabel> / <UiLabel>Write</UiLabel> | Shows the text as it reads, with `[[links]]` as pills, or goes back to editing |
+| <UiLabel>Turn into a post</UiLabel> | Opens the composer with the selected text, or the whole entry with no selection |
+| <UiLabel>Close</UiLabel> | Saves, then closes the editor |
+
+In the preview, a `[[post id]]` or `[[document title]]` pill opens that post or vault entry. The pill shows the post's opening words or the document's title.
+
+<UiLabel>Turn into a post</UiLabel> copies the text into the composer on a new thread. Nothing is published until you post it there, as the persona you choose; the entry itself stays private.
+
+## Prompts
+
+Prompts come from research on reflective writing. Each kind has two wordings; every prompt comes once in a cycle of twelve days, in a shuffled order, and two days in a row never share one.
+
+| Kind | Tradition | Example |
+|---|---|---|
+| <UiLabel>Expressive writing</UiLabel> | Writing about thoughts and feelings (Pennebaker) | "What has been weighing on you lately? Write freely for a few minutes without correcting anything." |
+| <UiLabel>Gratitude</UiLabel> | Counting blessings (Emmons and McCullough) | "Name three things that went well today, and why each of them happened." |
+| <UiLabel>If-then plan</UiLabel> | Implementation intentions (Gollwitzer) | "Which obstacle do you expect this week? Write: if it shows up, then I will…" |
+| <UiLabel>What I learnt</UiLabel> | Noticing what was learnt | "Which idea changed your mind a little today?" |
+| <UiLabel>What surprised me</UiLabel> | Noticing surprise | "What turned out differently from what you predicted?" |
+| <UiLabel>Best possible self</UiLabel> | The best possible self (King) | "Write about your best possible self in one area: work, relationships or health." |
+
+<UiLabel>Another prompt</UiLabel> on the Today tab shows the next prompt for the rest of the day.
+
+## Templates
+
+A template starts the entry with headed sections to fill in:
+
+| Template | Sections |
+|---|---|
+| <UiLabel>Morning page</UiLabel> | Today's intention · Three priorities · I'm grateful for |
+| <UiLabel>Evening review</UiLabel> | What went well · What I learnt · What surprised me · Tomorrow: if … then I will … |
+| <UiLabel>Weekly review</UiLabel> | Highlights of the week · Lessons · What I'd change · Next week's intention |
+
+## Find an entry
+
+Type in <UiLabel>Search your journal</UiLabel>. Only entries holding every word you type are listed (any case, any order), with a short excerpt around the first match. The count reads "Entries: N"; "No entry has all of those words." when none match. An empty search lists every entry, newest first.
+
+Each row shows the entry's first line as its title, the day and the word count, with <UiLabel>Edit</UiLabel>, <UiLabel>Turn into a post</UiLabel> and <UiLabel>Delete</UiLabel>. Delete asks first: "The entry leaves your journal for good."
+
+Entries can also be found from the command palette, under <UiLabel>Journal entries</UiLabel>, but only after you turn on **Settings › Privacy & Data › Include journal in search**. See [Privacy](/docs/guides/journal/privacy).
+
+## Days written
+
+The <UiLabel>Days written</UiLabel> strip shows one square per day, in week columns with Monday on top: 12 weeks in a compact window, 26 in wider ones. Hover a square for "day: N words". Beside it:
+
+| Tile | Counts |
+|---|---|
+| <UiLabel>Days written</UiLabel> | Distinct days with an entry |
+| <UiLabel>Current run</UiLabel> | Consecutive days ending today, or yesterday while today is still open |
+| <UiLabel>Longest run</UiLabel> | Your longest run of consecutive days |
+
+"Runs are just a record. Skipping a day is fine; come back whenever it helps." Today without an entry yet never breaks the current run.
+
+## Empty state
+
+With no entries the tab shows <UiLabel>Your journal is empty</UiLabel>: "A few minutes a day is enough. Start from today's prompt or a template." with <UiLabel>Write about it</UiLabel>.
+
+## Related
+
+- [Journal](/docs/guides/journal)
+- [Privacy](/docs/guides/journal/privacy)
+- [The composer](/docs/guides/composer)

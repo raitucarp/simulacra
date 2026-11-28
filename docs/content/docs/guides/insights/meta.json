@@ -1,0 +1,18 @@
+{
+  "title": "Insights",
+  "icon": "ChartColumn",
+  "pages": [
+    "overview",
+    "network",
+    "sets",
+    "symmetry",
+    "categories",
+    "embedding",
+    "activity",
+    "calibration",
+    "tensions",
+    "timeline",
+    "diversity",
+    "readability"
+  ]
+}

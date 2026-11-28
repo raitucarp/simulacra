@@ -1,0 +1,55 @@
+---
+title: Version history
+description: Every version of an edited post as a tree, a word-by-word comparison of any two, and which version the post shows.
+icon: RotateCcwClock
+---
+
+Editing a post never throws its old text away. Each save keeps the version it replaces, so an edited post carries its whole history: you can compare any two versions word by word, show an older one again, or start a new edit from it.
+
+<Screenshot id="tools-history-sheet" alt="The Version history sheet with a VERSIONS tree on the left, a word diff headed CHANGES FROM on the right, an EDIT LOG below, and Close, Edit from this version and Show this version buttons" caption="The history of a post edited twice." />
+
+## Open it
+
+- Click the quiet "edited" mark in the card's header (tooltip "This post was edited. Open its history.").
+- Or click <Kbd>…</Kbd> › <UiLabel>Organize</UiLabel> › <UiLabel>History (N)</UiLabel>, where N counts the earlier versions.
+
+Both appear only once the post has been edited. To edit it, use <Kbd>…</Kbd> › <UiLabel>Edit</UiLabel>; see [the composer](/docs/guides/composer).
+
+## Anatomy
+
+1. **Title.** <UiLabel>Version history</UiLabel>, with the post's opening words.
+2. **<UiLabel>VERSIONS</UiLabel>.** Every version as a tree, the newest edit first, with lanes on the left where an edit started from an older version. Each row says <UiLabel>Current</UiLabel>, <UiLabel>Earlier version</UiLabel> or <UiLabel>Original</UiLabel>, its version number, and "now" or "until" the time it was replaced. A depth-dial rendering is marked "Simpler rendering" or "Expert rendering".
+3. **The comparison.** "CHANGES FROM A TO B" with words added and removed ("+12 words", "−3 words"), and notes when the tint, the symbols, or the link and images changed.
+4. **<UiLabel>EDIT LOG</UiLabel>.** Each edit with its kind (<UiLabel>Patch</UiLabel>, <UiLabel>Minor</UiLabel> or <UiLabel>Major</UiLabel>, or <UiLabel>Original</UiLabel>), its time and its note ("No note" when you left none).
+5. **Buttons.** <UiLabel>Close</UiLabel>, <UiLabel>Edit from this version</UiLabel> and <UiLabel>Show this version</UiLabel>.
+
+## Compare two versions
+
+The sheet opens comparing the most recent earlier version (A) with the current one (B).
+
+- Click a row to make it **A**.
+- Click another row's compare button (two crossing arrows, tooltip <UiLabel>Compare with this version</UiLabel>) to make it **B**. The button is lit on version B, and the selected row (A) has none: a version is not compared with itself.
+
+If A and B ever end up the same version, the sheet says "Pick two different versions: click one row, then the compare button of another."
+
+## Show an older version, or edit from it
+
+| Button | What it does |
+|---|---|
+| <UiLabel>Show this version</UiLabel> | The post shows version A from now on. Every other version is kept: "Now showing v1.0.0. Every other version is kept." |
+| <UiLabel>Edit from this version</UiLabel> | Opens the composer on version A's text. Saving adds a new version that branches from A in the tree. |
+
+Both are disabled while A is the version the post already shows.
+
+## Tips and limits
+
+- Replies remember which version they answered. Once the parent post moves on to a new major version, the reply says "replied to v1.0.0".
+- An embed copied with <UiLabel>Copy embed</UiLabel> is pinned to the version shown when you copied it.
+- A [Still true?](/docs/guides/post-tools/still-true) check restarts from the newest edit.
+
+## Related
+
+<Cards>
+<Card title="The composer" href="/docs/guides/composer" description="Edit a post and choose its version bump." />
+<Card title="Posts and threads" href="/docs/concepts/posts-and-threads" description="What a post keeps." />
+</Cards>

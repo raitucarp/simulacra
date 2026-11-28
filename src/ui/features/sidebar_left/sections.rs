@@ -20,15 +20,18 @@ const RAIL_PIN_ID_PREFIX: &str = "sidebar-rail-pin-";
 pub(super) fn render_sections(state: &AppState, sidebar: &SidebarState, callbacks: &SidebarCallbacks, theme: &ThemeTokens) -> Vec<Div> {
     SidebarSection::ALL
         .into_iter()
-        .map(|section| {
-            let rows = section_rows(section, state, sidebar).into_iter().map(|row| render_item_row(row, callbacks, theme)).collect();
+        .filter_map(|section| {
+            let rows: Vec<_> = section_rows(section, state, sidebar).into_iter().map(|row| render_item_row(row, callbacks, theme)).collect();
+            if rows.is_empty() && section.hides_when_empty() {
+                return None;
+            }
             let view = SectionView {
                 section,
                 is_collapsed: sidebar.prefs.is_collapsed(section),
                 is_showing_all: sidebar.is_showing_all(section),
                 rows,
             };
-            render_section(view, callbacks, theme)
+            Some(render_section(view, callbacks, theme))
         })
         .collect()
 }

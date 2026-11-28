@@ -61,6 +61,7 @@ Tests marked `#[ignore]` are manual tools:
 |---|---|
 | Search at 100,000 posts (see [Q7](/docs/reference/design-decisions#q7-search-at-100-000-posts)) | `cargo test --lib state::search::bench -- --ignored --nocapture` |
 | Write avatar previews as PNG files | `SIMULACRA_PREVIEW_DIR=<folder> cargo test --lib render_avatar_previews -- --ignored` |
+| Live model suite against the real Gemini API: text, structured output, engine jobs, post actions, tutor, arena and embeddings (tier A), tools, Google Search grounding, custom requests and the OpenAI-compatible endpoint (B), images and audio (C, opt-in), real error classification (D). Needs `GEMINI_API_KEY`; `SIMULACRA_LIVE_TIERS` (default `a,b,d`, or `all`), `SIMULACRA_LIVE_MODEL`, `SIMULACRA_LIVE_IMAGE_MODEL`, `SIMULACRA_LIVE_EMBED_MODEL` and `SIMULACRA_LIVE_AUDIO` (an audio file) adjust it. Writes `target/live-report.md`; see `tests/live/README.md` | `cargo live` |
 
 To regenerate the emoji table from Unicode's `emoji-test.txt`:
 

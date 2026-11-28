@@ -44,7 +44,7 @@ impl CustomTransport {
     pub fn parse(&self, reply: &Value) -> Result<ChatReply, String> {
         let text = value_text(reply, &self.request.reply_path).unwrap_or_default().trim().to_string();
         let tool_calls = value_at(reply, &self.request.tool_call_path).map(openai::parse_tool_calls).unwrap_or_default();
-        let parsed = ChatReply { text, tool_calls };
+        let parsed = ChatReply { text, tool_calls, ..ChatReply::default() };
         if parsed.is_empty() {
             return Err(EMPTY_CUSTOM_REPLY.to_string());
         }

@@ -1,7 +1,7 @@
 //! The HTTP client for LLM providers and its provider dispatch.
 
 use super::chat::{ChatReply, ChatRequest};
-use super::wire::{anthropic, gemini, openai, ErrorLabels};
+use super::wire::{anthropic, finish, gemini, openai, ErrorLabels};
 use super::{LlmFailure, LlmProvider, LlmSettings};
 use serde_json::Value;
 use std::time::Duration;
@@ -95,9 +95,11 @@ impl LlmClient {
                 (request.json(&openai::body(&self.settings, req)), &openai::OPENAI_ERRORS, openai::parse)
             }
         };
-        let reply = parse(&send_json(request, labels).await?);
+        let json = send_json(request, labels).await?;
+        let reply = parse(&json);
         if reply.is_empty() {
-            return Err(labels.empty.to_string());
+            let reason = finish::empty_reason(self.settings.provider, &json);
+            return Err(reason.map_or_else(|| labels.empty.to_string(), |reason| format!("{}: {reason}", labels.empty)));
         }
         Ok(reply)
     }

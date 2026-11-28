@@ -1,3 +1,4 @@
+mod gemini;
 mod wire;
 
 use super::provider::PROVIDER_META;
@@ -26,10 +27,10 @@ fn provider_ids_round_trip_case_insensitively() {
 #[test]
 fn provider_metadata_matches_published_values() {
     let expected = [
-        ("gemini", "Google Gemini", "gemini-1.5-flash", 3),
+        ("gemini", "Google Gemini", "gemini-4-hydrogen", 5),
         ("openai", "OpenAI", "gpt-4o-mini", 3),
-        ("anthropic", "Anthropic", "claude-3-5-sonnet-20241022", 2),
-        ("openrouter", "OpenRouter", "google/gemini-flash-1.5", 3),
+        ("anthropic", "Anthropic", "claude-sonnet-5-5", 3),
+        ("openrouter", "OpenRouter", "google/gemini-2.5-flash", 3),
         ("groq", "Groq", "llama-3.3-70b-versatile", 2),
         ("custom", "Custom Endpoint", "default-model", 1),
     ];
@@ -46,10 +47,23 @@ fn provider_metadata_matches_published_values() {
 fn default_settings_values() {
     let settings = LlmSettings::default();
     assert_eq!(settings.provider, LlmProvider::Gemini);
-    assert_eq!(settings.model, "gemini-1.5-flash");
+    assert_eq!(settings.model, "gemini-4-hydrogen");
     assert!(settings.api_key.is_empty() && settings.custom_endpoint.is_empty());
     assert_eq!(settings.temperature, 0.7);
-    assert_eq!(settings.max_tokens, 300);
+    assert_eq!(settings.max_tokens, 1024, "room for thinking models (300 was spent before any answer)");
+}
+
+#[test]
+fn settings_debug_never_prints_the_key() {
+    let settings = LlmSettings {
+        api_key: "AIzaDEBUGSECRET42".into(),
+        custom_endpoint: "https://x.test/v1?key=AIzaDEBUGSECRET42".into(),
+        ..LlmSettings::default()
+    };
+    let shown = format!("{settings:?} {settings:#?}");
+    assert!(!shown.contains("DEBUGSECRET"), "{shown}");
+    assert!(shown.contains("has_api_key: true") && shown.contains("gemini-4-hydrogen"), "{shown}");
+    assert!(format!("{:?}", LlmSettings::default()).contains("has_api_key: false"));
 }
 
 #[tokio::test]

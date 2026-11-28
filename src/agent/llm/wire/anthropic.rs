@@ -114,9 +114,10 @@ pub(crate) fn parse(reply: &Value) -> ChatReply {
                 id: block["id"].as_str().unwrap_or_default().to_string(),
                 name: block["name"].as_str().unwrap_or_default().to_string(),
                 arguments: block["input"].clone(),
+                signature: None,
             }),
             _ => {}
         }
     }
-    ChatReply { text: texts.join("").trim().to_string(), tool_calls }
+    ChatReply { text: texts.join("").trim().to_string(), tool_calls, ..ChatReply::default() }
 }

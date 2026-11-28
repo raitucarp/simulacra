@@ -136,26 +136,43 @@ def configure(aspect, n_out):
 
 
 SEARCH = 'input[placeholder="Search assets"]'
+PICKER_BUTTON = '[aria-label="Add ingredients to the prompt box"]'
+
+
+def picker_state():
+    """("open" | "closed", search box shown). The button's icon reads "close" while the picker
+    counts as open, even when Escape has hidden its contents."""
+    icon = ev("(document.querySelector(%s)||{}).textContent" % json.dumps(PICKER_BUTTON)) or ''
+    return ('open' if 'close' in icon else 'closed'), bool(ev("!!document.querySelector(%s)" % json.dumps(SEARCH)))
+
+
+def toggle_picker():
+    """The picker button needs a real click (element.click() does nothing)."""
+    r = js('rect_of.js', '^Add ingredients')
+    click_xy(r['x'], r['y'])
 
 
 def open_picker():
-    """Open the "Add ingredients" asset picker (it needs a real click, not element.click())."""
-    if not ev("!!document.querySelector(%s)" % json.dumps(SEARCH)):
-        r = js('rect_of.js', '^Add ingredients')
-        click_xy(r['x'], r['y'])
+    for _ in range(3):
+        state, shown = picker_state()
+        if shown:
+            return
+        if state == 'open':                         # open but hidden: close it first
+            toggle_picker(); time.sleep(1)
+        toggle_picker()
         for _ in range(20):
             time.sleep(0.4)
-            if ev("!!document.querySelector(%s)" % json.dumps(SEARCH)):
-                break
-        else:
-            raise RuntimeError('the asset picker did not open')
+            if picker_state()[1]:
+                return
+    raise RuntimeError('the asset picker did not open')
 
 
 def close_picker():
     for _ in range(3):
-        if not ev("!!document.querySelector(%s)" % json.dumps(SEARCH)):
+        state, shown = picker_state()
+        if state == 'closed' and not shown:
             return
-        key('Escape'); time.sleep(0.6)
+        toggle_picker(); time.sleep(0.8)
 
 
 def picker_rows(name):

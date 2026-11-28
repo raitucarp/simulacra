@@ -1,0 +1,13 @@
+{
+  "coverage": {},
+  "description": "Solid shapes without outlines and soft two-tone shading.",
+  "id": "flat",
+  "name": "Flat",
+  "samples": [
+    "guide/cheer",
+    "spot/ideas",
+    "empty/no_posts"
+  ],
+  "style": "flat",
+  "version": "1.0.0"
+}

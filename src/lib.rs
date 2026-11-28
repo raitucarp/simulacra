@@ -15,6 +15,7 @@ pub mod i18n;
 pub mod icons;
 pub mod import;
 pub mod media;
+pub mod packs; // WS5: illustration packs (archives, store, downloads)
 pub mod prelude;
 pub mod runner; // epic P: running code on this computer
 pub mod state;

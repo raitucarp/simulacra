@@ -1,0 +1,11 @@
+# Generated or downloaded: rebuild with the commands in README.md (catalog.yaml comes from
+# build_catalog.py, which reads subjects.json, styles/ and packs.json).
+# (anchors/ holds the chosen style anchors, anchors/<pack>-N.jpg, and IS tracked.)
+refs/
+refs-magenta/
+sheets/
+inbox/
+out/
+__pycache__/
+!anchors/
+catalog.yaml

@@ -5,4 +5,5 @@ mod defaults;
 mod fields;
 mod format;
 mod migration;
+mod packs; // WS5
 mod serde_roundtrip;

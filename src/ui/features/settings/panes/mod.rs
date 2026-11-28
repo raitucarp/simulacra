@@ -6,6 +6,7 @@ mod ai_fields;
 mod appearance;
 pub(super) mod common;
 mod engine;
+mod illustration_packs; // WS5
 mod licences; // S13
 mod runtimes; // P1
 mod symbol_sets; // S13
@@ -13,6 +14,8 @@ mod symbol_sets; // S13
 pub(super) use ai::render_ai_pane;
 pub use appearance::{AppearanceEvent, AppearancePanel};
 pub(super) use engine::render_scheduler_status;
+pub(super) use illustration_packs::render_illustration_packs;
+pub use illustration_packs::{pack_error_text, DownloadableView, IllustrationPacksProps, PackAction, PackCallback, PackCardView};
 pub(super) use licences::render_licences;
 pub(super) use runtimes::render_runtimes;
 pub use runtimes::{checked_label, RuntimeAction, RuntimeCallback, RuntimesProps};

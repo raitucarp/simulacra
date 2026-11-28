@@ -48,6 +48,9 @@ impl AppView {
         if current.embeddings.provider != previous.embeddings.provider {
             self.settings_ui.sync_inputs(&current, window, cx);
         }
+        if current.appearance.illustration_pack != previous.appearance.illustration_pack {
+            self.sync_illustration_pack(cx); // WS5: drawn from the new pack at once
+        }
         if current.agents.autonomous_posting != previous.agents.autonomous_posting {
             self.on_scheduler_switched(current.agents.autonomous_posting, window, cx);
         }

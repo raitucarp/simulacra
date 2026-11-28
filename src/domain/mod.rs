@@ -25,6 +25,7 @@ pub mod image_prompt;
 pub mod media;
 pub mod ids;
 pub mod network;
+pub mod packs; // WS5: illustration packs
 pub mod palette;
 pub mod preferences;
 pub mod portrait;

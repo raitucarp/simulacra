@@ -60,6 +60,9 @@ impl SplashView {
         settings.apply_appearance(PaletteMode::of_window(window.appearance()));
         let theme = settings.tokens();
         let _ = crate::ui::illustration::set_active_palette(&settings.effective_palette().colors);
+        if let Ok(db) = database.as_ref() {
+            let _ = crate::ui::illustration::configure_packs(&crate::packs::packs_dir_for(&db.path()), &db.load_preferences().appearance.illustration_pack); // WS5
+        }
         crate::theme::sync_kit_theme(&theme, cx);
         cx.on_next_frame(window, Self::advance);
         Self { theme, boot: Boot::Opened(database), phase: SplashPhase::Showing, shown_at: Instant::now() }

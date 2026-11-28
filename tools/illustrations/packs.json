@@ -1,0 +1,30 @@
+{
+  "clay3d": {
+    "description": "Matte modeling clay with chunky rounded forms and soft studio light.",
+    "name": "3D clay",
+    "samples": ["guide/cheer", "spot/ideas", "empty/no_posts"],
+    "style": "clay3d",
+    "version": "1.0.0"
+  },
+  "cozy": {
+    "description": "Hand-painted gouache with soft brush grain and warm, muted colors.",
+    "name": "Cozy",
+    "samples": ["guide/cheer", "spot/ideas", "empty/no_posts"],
+    "style": "cozy",
+    "version": "1.0.0"
+  },
+  "flat": {
+    "description": "Solid shapes without outlines and soft two-tone shading.",
+    "name": "Flat",
+    "samples": ["guide/cheer", "spot/ideas", "empty/no_posts"],
+    "style": "flat",
+    "version": "1.0.0"
+  },
+  "isometric": {
+    "description": "True isometric scenes in flat color planes with thin navy outlines.",
+    "name": "Isometric",
+    "samples": ["guide/cheer", "spot/ideas", "empty/no_posts"],
+    "style": "isometric",
+    "version": "1.0.0"
+  }
+}

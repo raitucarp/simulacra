@@ -25,6 +25,7 @@ impl AppView {
             .ai(self.ai_pane_props(bind))
             .credentials(self.credentials_pane_props(bind))
             .symbols(self.symbol_sets_props(bind), self.licence_views()) // S13
+            .packs(self.illustration_packs_props(bind)) // WS5
             .code(self.runtimes_props(bind)) // P1
         })
     }

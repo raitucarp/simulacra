@@ -38,6 +38,7 @@ mod render;
 mod scheduler_state;
 mod reactions_host; // epic R
 mod symbols_host; // epic S
+mod packs_host; // WS5
 mod tasks_host; // D9
 mod search_host; // Q4
 mod code_host; // P1

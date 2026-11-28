@@ -38,6 +38,7 @@ const GENERAL: &[SettingsGroup] = &[
 const APPEARANCE: &[SettingsGroup] = &[
     group("reading", &[Theme(ThemeScale::Density), Theme(ThemeScale::FontSize), Field(F::Appearance(App::ReadingWidth)), Field(F::Appearance(App::ReducedMotion))]),
     group("themes", &[Embedded(Pane::Themes)]),
+    group("illustrations", &[Embedded(Pane::IllustrationPacks)]), // WS5
 ];
 const WRITING: &[SettingsGroup] = &[
     group("posts", &[Field(F::Writing(Wrt::PostLengthLimit)), Field(F::Writing(Wrt::AutoSplitThreads)), Field(F::Writing(Wrt::DefaultIdentity)), Field(F::Writing(Wrt::AutoArchive)), Field(F::Writing(Wrt::SymbolShorthand)), Field(F::Writing(Wrt::FeelingCheckins))]),

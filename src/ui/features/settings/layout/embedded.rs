@@ -16,6 +16,7 @@ pub(in crate::ui::features::settings) struct EmbeddedPanes {
     pub symbols: Option<super::super::panes::SymbolSetsProps>,
     pub licences: Option<Vec<super::super::panes::LicenceView>>,
     pub runtimes: Option<super::super::panes::RuntimesProps>, // P1
+    pub packs: Option<super::super::panes::IllustrationPacksProps>, // WS5
 }
 
 impl EmbeddedPanes {
@@ -33,6 +34,7 @@ impl EmbeddedPanes {
             EmbeddedPane::SymbolSets => self.symbols.take().map(|props| super::super::panes::render_symbol_sets(theme, props).into_any_element()),
             EmbeddedPane::Licences => self.licences.take().map(|licences| super::super::panes::render_licences(theme, &licences).into_any_element()),
             EmbeddedPane::Runtimes => self.runtimes.take().map(|props| super::super::panes::render_runtimes(theme, props).into_any_element()),
+            EmbeddedPane::IllustrationPacks => self.packs.take().map(|props| super::super::panes::render_illustration_packs(theme, props).into_any_element()),
             EmbeddedPane::SchedulerStatus => Some(render_scheduler_status(theme, &self.scheduler).into_any_element()),
         }
     }

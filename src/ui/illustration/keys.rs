@@ -20,6 +20,19 @@ pub enum IllustrationKind {
 }
 
 impl IllustrationKind {
+    /// The family of the illustration key `key` (`empty/no_posts`), from its folder.
+    pub fn of_key(key: &str) -> Self {
+        match key.split('/').next().unwrap_or_default() {
+            "steps" | "vault" => Self::Step,
+            "classes" | "palettes" => Self::Class,
+            "guide" => Self::Guide,
+            "empty" => Self::Empty,
+            "portrait" | "forms" => Self::Portrait,
+            "symbols" | "garden" => Self::Symbol,
+            _ => Self::TraitCard,
+        }
+    }
+
     /// Template canvas (viewBox width, height) in SVG units.
     pub const fn canvas(self) -> (f32, f32) {
         match self {

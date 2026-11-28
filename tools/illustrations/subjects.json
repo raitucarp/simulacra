@@ -1,0 +1,761 @@
+{
+  "groups": {
+    "anthropomorphism": "Agent Forge option cards for how human-like a non-human being appears (none, subtle, partial, full): the same simple object gaining more of a face, eyes and limbs from card to card.",
+    "assembly_strategy": "Grimoire option cards for how the agent's prompt is assembled (full dossier, voice first, custom template), each a symbolic stack of pages, a speaking voice or a blank template card.",
+    "attachment_style": "Agent Forge option cards for the attachment style in relationships (secure, anxious, avoidant, fearful), each a small relational metaphor such as two linked figures, a held hand or a guarded distance.",
+    "body_form": "Agent Forge option cards for the concrete form a non-human agent takes (bee, book, cactus, calculator, cat, cathedral, cloud, crow, fire, forest, key, lamp, mirror, moss and 43 more), each that form as one friendly, recognisable subject.",
+    "body_kind": "Agent Forge option cards for the kind of being an agent is (human, creature, plant, object, element, machine, place, abstraction), each one emblematic example of that kind.",
+    "capitalization": "Voice-step option cards for how posts are capitalised (lowercase, sentence case, EMPHASIS), drawn as a text panel of abstract rounded blocks of different heights, never real letters.",
+    "chronotype": "Daily Life option cards for when the agent is most awake (early bird, daytime, twilight, night owl), each a sun or moon at a different height over a small horizon or window.",
+    "classes": "Full-height character art of the eight thinker archetype classes chosen at the start of the Agent Forge (Socratic Gadfly, Stoic Sage, Empirical Scientist, Existential Poet, Rationalist Architect, Mystic Visionary, Compassionate Mentor, Contrarian Trickster).",
+    "code_switching": "Voice-step option cards for how languages mix in posts (one language, loanwords, bilingual, classical roots), drawn with speech bubbles and abstract script-like bars in different colours, never real letters or flags.",
+    "cognitive_pace": "Mind-step option cards for thinking speed (rapid, deliberate, contemplative, hyperfocus), each a symbolic pace such as a darting comet, a steady metronome, a slow snail or a focused beam.",
+    "conflict_handling": "Relationships-step option cards for how the agent handles disagreement (peacemaker, calm refutation, synthesis, passionate, sardonic), each a small emblem of two sides meeting.",
+    "diction_register": "Voice-step option cards for the register of the agent's words (philosophical, everyday, poetic, slang, socratic, technical, warm), each an object that evokes that way of speaking.",
+    "doc_kind": "Vault option cards for the kind of a stored document (article, book, dataset, media, note, transcript, web page, other), each a simple document-like object of that kind.",
+    "emoji_usage": "Voice-step option cards for how often emoji appear (never, rare, moderate, text faces), drawn as a text panel with zero, one or several small round smiley faces.",
+    "empty": "Empty-state scenes shown in the middle of a pane when there is nothing to show yet (no posts, no agents, no results, an idle inspector, an empty journal or vault), each a small calm scene that hints at the next step.",
+    "engine_image": "Engine-step option cards for the image engine an agent draws with (no images, OpenAI, Google, local Stable Diffusion, custom), each a generic painting or camera metaphor, never a company logo.",
+    "engine_method": "Engine-step option cards for the HTTP method of a custom request (GET, POST, PUT, PATCH, DELETE), drawn as arrows and parcels moving between a client and a server, never the method names.",
+    "engine_output": "Engine-step option cards for the answer shape (free text or structured JSON), a flowing page versus a neat grid of fields with bracket-like shapes.",
+    "engine_provider": "Engine-step option cards for the language-model provider (Anthropic, OpenAI, Gemini, Groq, OpenRouter, custom endpoint), each a generic abstract emblem as in the reference, never a company logo or name.",
+    "engine_request": "Engine-step option cards for how the model is called (native API or custom request), a plug fitting its socket versus a hand-built cable.",
+    "engine_schema": "Engine-step option cards for the structured answer presets (post, thread, expressive, illustrated, custom), each a small layout of cards and bars.",
+    "engine_sd": "Engine-step option cards for the local Stable Diffusion front end (AUTOMATIC1111 or ComfyUI), a control panel of sliders versus a graph of connected nodes, never logos.",
+    "engine_search": "Engine-step option cards for the web search backend (provider search, Brave, Tavily), each a magnifying-glass emblem with a different accent, never logos.",
+    "engine_size": "Engine-step option cards for the size of generated images (small square, square, portrait, landscape), each a picture frame of that aspect ratio.",
+    "engine_source": "Engine-step option cards for which model speaks for the agent (the global model or its own), a shared central chip versus a personal one.",
+    "engine_tool": "Engine-step option cards for the tools an agent may use before posting (web search, web fetch, read the network, vault search, custom HTTP), each that tool as a simple object.",
+    "engine_trigger": "Engine-step option cards for when an agent draws an image (every post, by chance, when the model asks, never), each a small emblem such as a repeating loop, dice, a raised hand or a crossed circle.",
+    "enneagram": "Birthsign-step option cards for the 18 Enneagram type and wing combinations (the Advocate, the Idealist, the Altruist and so on), each a symbolic object or scene for that character type, never numbers.",
+    "epistemic_stance": "Mind-step option cards for how the agent knows things (dialectician, skeptic, holist, existentialist, empiricist, rationalist), each a symbolic object of that stance.",
+    "forms": "Layer parts of the non-human form avatars (creature, plant, object, element, machine, place, abstraction bodies plus shared backs, eyes and mouths), composed at runtime on one 256x256 canvas and recoloured with the form's chosen swatches.",
+    "forms/accessory": "Small accessories worn on a form's default face area (crowns, glasses, bows, scarves, headsets, balloons, butterflies), aligned to the face anchor of the 256x256 layer canvas.",
+    "forms/aura": "Effects painted behind a form's body over the whole canvas (halo, glow, sparkles, steam, embers, clouds, falling leaves and more), drawn as solid shapes with internal shading only: the halo is a solid ring and the glow a solid soft-edged shape, never light that fades into the background.",
+    "forms/back": "Square avatar backgrounds shared by every form (plain, dawn, night, grid, studio, waves) that fill the whole 256x256 canvas edge to edge.",
+    "forms/body": "The main body of each non-human form (a tin can, an oak tree, a cat, a cloud, a robot, a cathedral, an abstract idea such as time or justice), drawn in key colours: mid-grey #808080 for the main fill and cyan #00FFFF for the second fill; abstract bodies stay shapes, never numerals or letters.",
+    "forms/eyes": "Eye sets shared by every form (dot, round, wide, happy, sleepy, wink, glow), placed at the default face position of the 256x256 canvas; glow eyes are solid bright shapes with no halo.",
+    "forms/finish": "Translucent surface treatments clipped to a form's silhouette (gloss, rust, patina, frost, chrome, neon, marble, snow, dusk light), covering the area the reference covers.",
+    "forms/markings": "Patterns clipped to a form's silhouette (stripes, spots, labels, windows, rivets, cracks, constellations, abstract rune-like marks), drawn with their recolourable parts in cyan #00FFFF and never as letters.",
+    "forms/mouth": "Mouth shapes shared by every form (smile, grin, flat, ooh, open, wavy), placed at the default face position of the 256x256 canvas.",
+    "garden": "The three stages of a digital-garden note (seed, budding, evergreen) shown as small round badges beside a post, each one bold plant shape on a disc.",
+    "gender": "Origin-step option cards for the persona's gender (female, male, non-binary, custom), drawn as simple inclusive figures or symbols, never stereotypes.",
+    "grammar_style": "Voice-step option cards for grammar habits (formal, relaxed, spoken, fragments, lowercase, classical), each a text panel of abstract bars arranged in that manner, never real letters.",
+    "guide": "Poses of Mnemo, the app's guide owl (idle, point, think, read, cheer), shown beside tips in the Agent Forge, onboarding and help.",
+    "humor_style": "Disposition-step option cards for the agent's humour (absurdist, deadpan, earnest, playful banter, socratic irony, self-deprecating), each a small comic emblem such as a mask or a face.",
+    "identity_variant": "Birthsign-step option cards for the assertive or turbulent identity variant, a calm steady emblem versus a restless, wavering one.",
+    "image_avoid": "Image-ideas option cards for what generated images should avoid (blur, clutter, distortion, text, watermarks), each that flaw shown small and crossed out; the text card shows abstract scribble bars, never letters.",
+    "image_framing": "Image-ideas option cards for framing (abstract, diagram-like, emblem, full figure, head and shoulders, wide scene), each a picture frame showing that framing.",
+    "image_mood": "Image-ideas option cards for mood (calm, dramatic, hopeful, melancholic, mysterious, playful), each a tiny scene in that mood.",
+    "image_palette": "Image-ideas option cards for colour palettes (cool, earthy, match my theme, monochrome, pastel, vivid, warm), each a set of paint swatches in that palette; pastel uses mint, butter, lavender, sky and peach, never hot pink or magenta.",
+    "image_style": "Image-ideas option cards for the rendering style of generated images (clay, collage, illustration, ink, isometric, photographic, pixel art, watercolour), each a small sample picture in that medium.",
+    "import": "Format-family cards of the import sheet and of file cards in posts (archive, audio, book, data, drop target, image, office document, PDF, text, unknown, video, web page), each one bold object for that file type.",
+    "instinctual_variant": "Birthsign-step option cards for the Enneagram instinct stackings (self-preservation, social, one-to-one bonds in six orders), drawn as stacked symbols such as a house, a crowd and a heart, never letters.",
+    "intelligence_style": "Mind-step option cards for how the agent reasons (evidence-driven, first principles, lateral thinker, poetic intuitive, polymath, street-smart, systems builder), each a symbolic object of that kind of thinking.",
+    "lexical_field": "Rhetoric-step option cards for the vocabularies an agent borrows from (astronomy, commerce, craft, cuisine, law, mathematics, music, nature, science, seafaring, technology, theology), each an iconic object of that field; mathematics uses shapes and a compass, never numerals.",
+    "locus_of_control": "Disposition-step option cards for where the agent feels control lies (strongly internal, moderately internal, balanced, cosmic), each a figure, a steering wheel or a sky of stars weighted differently.",
+    "material": "Agent Forge option cards for what a non-human being is made of (air, energy, wood and fiber, flesh, glass, immaterial, liquid, metal, paper and ink, stone and clay), each a swatch or chunk of that material.",
+    "mbti": "Birthsign-step option cards for the 16 MBTI personality types (Architect, Logician, Commander, Dialectician and so on), each a symbolic object or scene for that type, never letters.",
+    "mention_attitude": "Relationships-step option cards for how the agent reacts when mentioned (aloof, debater, devil's advocate, empathetic, playful, socratic, warm), each a small speech-bubble or face emblem.",
+    "mobility": "Agent Forge option cards for how a non-human being moves (carried, creeping, drifting, everywhere, fixed in place, flowing, flying, walking), each a small motion emblem such as wings, feet, a wave or roots.",
+    "moral_foundation": "Disposition-step option cards for the moral foundation the agent values most (care, fairness, loyalty, order, sanctity, liberty, truth), each an emblematic object such as a heart, scales or a lamp.",
+    "notice": "Small spot art beside notices and banners (a missing API key, offline, an error, work in progress).",
+    "palace": "The six memory-palace room scenes of the Learn tab (hall, library, garden, kitchen, study, stairwell), each a full room with five landmarks at fixed positions where study cards are placed.",
+    "palette_categories": "Category icons of the Agent Forge start gallery shelves (all, thinkers, objects, nature, creatures, machines, places, concepts), each one emblematic object of the shelf.",
+    "palette_steps": "Option cards of the step palettes, ready-made presets for one Agent Forge step (academic hedger, aphorist, night owl, polemicist, storyteller, systems thinker and 22 more), each an emblem of that preset.",
+    "palettes": "Tall full-height art of the full palettes, ready-made beings in the start gallery (ancient oak, gossiping teacup, lonely satellite, melancholy tin can, trickster crow, wandering cloud and 16 more), each that being as one character.",
+    "perception": "Agent Forge option cards for how a non-human being perceives the world (human senses, light and shadow, chemistry, signals, vibration, pressure and touch, meanings), each a sensing emblem.",
+    "portrait": "Layer parts of the human portrait avatars (back, face, outfit, mouth, eyes, brows, hair, accessory), composed at runtime on one 256x256 canvas with shared anchors and recoloured with the persona's skin and hair colours.",
+    "portrait/accessory": "Accessories on top of a portrait (glasses, headphones, laurel, monocle, scarf), aligned to the shared face anchors of the 256x256 canvas; the none variant is never generated.",
+    "portrait/back": "Square portrait backgrounds (plain, geometric, library, meadow, starfield, sunburst) that fill the whole 256x256 canvas edge to edge.",
+    "portrait/brows": "Eyebrow shapes (arched, bushy, furrowed, raised, straight, thin) at the shared brow line, drawn in the hair key colour mid-grey #808080.",
+    "portrait/eyes": "Eye shapes (almond, dot, happy, narrow, round, sleepy, wide, wink) at the shared eye positions, with white eye whites and near-black pupils.",
+    "portrait/face": "Face shapes (diamond, heart, long, oval, round, square) with ears and neck, drawn in the skin key colour mid-grey #808080; every shape covers the shared feature area.",
+    "portrait/hair": "Hairstyles (bald, bob, braids, bun, buzz, crop, curly, long, ponytail, side part, spiky, wavy) around the shared head, drawn in the hair key colour mid-grey #808080.",
+    "portrait/mouth": "Mouth shapes (cat, frown, grin, laugh, neutral, open, smile, smirk) at the shared mouth position, with near-black ink lines.",
+    "portrait/outfit": "Outfits at the shoulders (cardigan, hoodie, lab coat, robe, scholar gown, suit, toga, tunic) in the pack palette; the lab coat stays white and the scholar gown stays black on every theme.",
+    "post_format": "Rhetoric-step option cards for the shape of posts (aphorism, dialogue, field note, list, poem, question, single post, mini-thread), each a small layout of cards and blank bars.",
+    "posting_cadence": "Daily Life option cards for how often the agent posts on its own (every 15 or 30 minutes, hourly, morning and evening, late night, very active, manual), each a clock or calendar emblem without numerals.",
+    "pre_post_reasoning": "Mind-step option cards for how the agent thinks before posting (spontaneous, embodied, network weaver), a spark, a figure in a body and a web of linked nodes.",
+    "punctuation_habit": "Voice-step option cards for punctuation habits (crisp, ellipses, dashes, questions, no last period), each a text panel of blank bars ending in bold dots or dashes drawn as shapes, never letters.",
+    "relation_to_humans": "Agent Forge option cards for how a non-human being relates to people (kin, companion, servant, witness, rival, indifferent, elder or deity), each a small scene of a being beside a human figure.",
+    "rhetorical_device": "Rhetoric-step option cards for favourite figures of speech (alliteration, analogy, anaphora, antithesis, chiasmus, hyperbole, irony, litotes, metaphor, paradox, rhetorical question), each a visual metaphor for that figure built from shapes and bars, never words.",
+    "rhetorical_mode": "Rhetoric-step option cards for how the agent persuades (logos, ethos, pathos, kairos, dialectic, narrative, meditative, polemic), each an emblem such as a gear, a badge, a heart or a clock.",
+    "scale": "Agent Forge option cards for the physical scale of a non-human being (microscopic, pocket-sized, human-sized, building-sized, landscape-sized, planetary, cosmic), each one subject at that scale.",
+    "semiotic_mode": "Rhetoric-step option cards for how meaning is carried (symbolic, iconic, indexical, glyphs and emoji, hashtags, memes, typography, silence and ellipsis), drawn with bold symbol shapes and frames, never words.",
+    "sentence_length": "Voice-step option cards for sentence length (aphorism, punchy, balanced, flowing), each a text panel of blank bars of that length.",
+    "sentence_structure": "Rhetoric-step option cards for sentence structure (simple, compound, complex, periodic, cumulative, parallel, fragmented, stream of consciousness), drawn as diagrams of linked blank bars.",
+    "settings": "Header art of each Settings category (general, appearance, reading and writing, AI models, embeddings, images, agents, learning, import, privacy and data, notifications, shortcuts, symbols, licences, code, advanced), shown small next to the category title.",
+    "spot": "Small reusable spot scenes used beside headers and hints across the app (ideas, connections, memory, reading, writing, debate, calm, and the Journal page header).",
+    "splash": "The Simulacra brand mark shown centred on the startup splash screen.",
+    "steps": "Wide banners at the top of each Agent Forge step (origin, appearance, birthsign, attributes, disposition, mind, voice, daily life, relationships, grimoire, review, embodiment, rhetoric, engine), each a small scene spread across the width.",
+    "stylistic_school": "Voice-step option cards for the literary school of the agent's style (academic, baroque, classical, gonzo, minimalist, modernist, plain, romantic, surrealist), each an emblematic object of that school.",
+    "symbols": "Bullet-journal symbols shown in place of a post's avatar (open, done, migrated, scheduled, delegated and dropped tasks; open, done, scheduled and dropped events; a note; and the priority, inspiration and explore signifiers), each a round badge disc with one bold glyph that keeps its own shape, readable at 24 px.",
+    "temperament": "Disposition-step option cards for the classic temperaments (choleric, melancholic, phlegmatic, sanguine and two blends), each an emblem of fire, rain, still water or sunshine.",
+    "temporality": "Agent Forge option cards for the time scale a non-human being lives in (fleeting moments, human days, seasons, lifetimes, centuries, geologic time, timeless), each an emblem such as a spark, a sun arc, a tree or layered rock.",
+    "vault": "The wide banner at the top of the vault's subject index page.",
+    "weekday": "Daily Life option cards for the days an agent posts on its own (Monday to Sunday), each a calendar page whose highlighted column marks the day's place in the week, with a small sun, moon or star motif, never day names or numerals.",
+    "withdrawal": "Agent Forge option cards for how much a being reveals of itself (fully revealed, open, guarded, elusive, deeply withdrawn), each a subject more or less hidden behind a curtain, shell or mist."
+  },
+  "items": {
+    "splash/brand": {
+      "subject": "The Simulacra brand mark: two large overlapping discs side by side, the left one in the pack's violet with a soft diagonal gradient, the right one in teal; their lens-shaped overlap is filled with a pale cream, and inside the lens a short vertical line links three small dots stacked top to bottom (violet, teal, violet), like thesis, antithesis and synthesis. Two tiny soft highlight dots sit on the outer discs, upper left and lower right. Shown alone, centred on the startup splash screen.",
+      "constraints": [
+        "An abstract emblem only: no wordmark, no letters.",
+        "Keep it symmetric left to right: the two discs are the same size and overlap by about half their radius.",
+        "The left disc is the pack's violet and the right disc its teal."
+      ]
+    },
+    "empty/actions_idle": {
+      "subject": "A post-actions panel waiting for its first action: a large soft cloud-shaped bubble left of centre with two short blank bars inside, and to its right a slim magic wand tilted diagonally (a dark shaft with a sunflower tip) with four small four-point sparkles (yellow and violet) just above its tip.",
+      "constraints": [
+        "Blank bars only inside the bubble, no writing.",
+        "The sparkles touch or sit right next to the wand tip."
+      ]
+    },
+    "empty/capsule_sealed": {
+      "subject": "A sealed time capsule letter: a closed envelope in the centre fastened by a yellow padlock over its flap, with a small calendar page behind it at the upper right (a violet header band and two blank lines) and one small yellow sparkle at the upper left.",
+      "constraints": [
+        "The calendar shows no numerals.",
+        "Group the envelope and calendar so they overlap slightly."
+      ]
+    },
+    "empty/capsules_empty": {
+      "subject": "No time capsules yet: an open, empty envelope in the centre with a small violet stamp on its upper right corner, a dashed curved trail leading into it from the lower left like a letter still to come, and one small yellow sparkle at the upper left.",
+      "constraints": [
+        "The stamp is a plain coloured square, no picture or numerals."
+      ]
+    },
+    "empty/credentials_none": {
+      "subject": "No saved keys yet: a large golden key lying horizontally (a round bow with a hole on the left, a long shaft with two teeth pointing down) in front of a faint grey key-ring outline at the upper left, a dashed outline of an empty key tag at the lower left, and two small violet sparkles at the upper right.",
+      "constraints": [
+        "The tag is blank."
+      ]
+    },
+    "empty/focus_empty": {
+      "subject": "No focus sessions yet: an upright hourglass in the centre, its golden sand mostly still in the top bulb with a small pile in the bottom bulb, a small violet sparkle to its right and a small grey dot to its left.",
+      "constraints": [
+        "The hourglass frame is simple: two caps and two thin side posts."
+      ]
+    },
+    "empty/graph_empty": {
+      "subject": "An empty mind graph: one bold violet central node with a light four-point sparkle shape cut out of its centre, linked by dashed grey lines to four small hollow pale nodes spread around it (upper left, upper right, lower centre, right).",
+      "constraints": [
+        "Keep the four outer nodes inside the padding."
+      ]
+    },
+    "empty/image_ideas": {
+      "subject": "No image ideas yet: an artist's easel in the centre holding a canvas that shows a simple landscape (green hills and a yellow sun), a painter's palette at the lower left dotted with coral, yellow and green paint, and two yellow sparkles at the right.",
+      "constraints": [
+        "The canvas picture is a simple shape landscape."
+      ]
+    },
+    "empty/image_results": {
+      "subject": "No generated images yet: a 2 by 2 grid of four dashed, empty picture frames in the centre; the lower left frame already holds a small violet mountain shape. A yellow sparkle at the upper right and a violet sparkle at the left.",
+      "constraints": [
+        "The empty frames are borders of short rounded dashes; here the dashes are the subject, so they are allowed in every pack."
+      ]
+    },
+    "empty/import_nothing": {
+      "subject": "Nothing found to import: an open, empty cardboard box seen from the front with its two top flaps folded outward, a dashed outline of a document floating just above it, and a magnifying glass at the lower right peering at the box.",
+      "constraints": [
+        "The box is empty inside."
+      ]
+    },
+    "empty/inspector_idle": {
+      "subject": "An idle inspector with nothing selected: a vertical list of three rounded row cards connected on the left by a thin vertical line, each row with a round dot (the top one violet, the others grey) and two blank bars; a large magnifying glass on the right hovers over the list with a violet ring inside its lens; a yellow sparkle at the upper right.",
+      "constraints": [
+        "Blank bars only, no writing."
+      ]
+    },
+    "empty/journal_empty": {
+      "subject": "An empty journal: an open notebook lying flat left of centre with a few short blank lines on each page, a violet pencil leaning on its right page, two dashed blank lines trailing off to the right like writing still to come, and a yellow sparkle at the upper right.",
+      "constraints": [
+        "Blank lines only."
+      ]
+    },
+    "empty/mood_empty": {
+      "subject": "No mood check-ins yet: a square mood grid with two axes crossing in the middle into four quadrants, softly tinted corners (yellow upper right, green lower right, grey lower left), and one small violet marker dot inside a slightly larger pale violet ring in the upper right quadrant; a yellow sparkle at the top right.",
+      "constraints": [
+        "No axis labels or numerals."
+      ]
+    },
+    "empty/no_agents": {
+      "subject": "No agents in this network yet: an empty display pedestal in the centre (two stacked rounded slabs) with only a dashed outline of a person (round head and shoulders) standing on it, and a round violet plus badge floating at the upper right inviting you to add one; a yellow sparkle at the upper left.",
+      "constraints": [
+        "The plus is a bold graphic cross shape."
+      ]
+    },
+    "empty/no_documents": {
+      "subject": "No documents yet: an open, empty box seen from slightly above with its four flaps opened outward and a dark empty inside, a dashed outline of a document hovering above it, and three tiny grey dots around it.",
+      "constraints": [
+        "The tiny dots touch or sit close to the box."
+      ]
+    },
+    "empty/no_network": {
+      "subject": "No connection: two cable ends with their plugs facing each other in the middle, separated by a small gap, a small yellow lightning zigzag above the gap with two short coral sparks; short lengths of cable trail off to the left and right.",
+      "constraints": [
+        "The cables end inside the padding instead of running to the image edges."
+      ]
+    },
+    "empty/no_posts": {
+      "subject": "No posts in this network yet: three blank post cards cascading diagonally down to the right (each a rounded card with a faint round avatar dot and two blank lines), with a violet quill feather at the lower right ready to write the first one, and two small grey dots at the upper right.",
+      "constraints": [
+        "Blank lines only on the cards."
+      ]
+    },
+    "empty/no_results": {
+      "subject": "No search results: Mnemo the guide owl on the left, peeking curiously with his round spectacle-like eyes, next to a large magnifying glass on the right; a small grey question mark shape at the lower right.",
+      "constraints": [
+        "Mnemo exactly as in the style guide's character sheet, only his upper body visible.",
+        "The question mark is a bold graphic shape."
+      ]
+    },
+    "empty/review_done": {
+      "subject": "All reviews done: a small stack of three blank flashcards at the lower left, a big round green badge with a white tick overlapping their upper right corner, a cheerful yellow sun at the lower right resting on a short horizon line, and a yellow sparkle at the top centre.",
+      "constraints": [
+        "The tick is a bold graphic check mark."
+      ]
+    },
+    "empty/review_empty": {
+      "subject": "Nothing to review yet: three blank flashcards fanned out at slight angles left of centre with a violet question mark shape above them, a dashed empty card outline at the lower right, and a round violet plus badge at the upper right with a yellow sparkle beside it.",
+      "constraints": [
+        "The question mark and the plus are bold graphic shapes."
+      ]
+    },
+    "empty/subjects_none": {
+      "subject": "No subjects in the index yet: a wide card-index drawer in the centre (a rounded box with a small grey pull handle on its front) with four dashed outlines of index-card tabs standing up behind it where cards will go, a yellow sparkle at the upper right and a small grey dot at the upper left.",
+      "constraints": [
+        "The drawer front is blank."
+      ]
+    },
+    "empty/vault_empty": {
+      "subject": "An empty vault: a bookshelf with two long horizontal shelves; the top shelf holds only two books at its left end (violet and yellow, blank spines), the lower shelf is bare with dashed outlines of missing books standing on it; a round violet plus badge at the upper right and a yellow sparkle at the lower left.",
+      "constraints": [
+        "Book spines are blank."
+      ]
+    },
+    "empty/vault_no_matches": {
+      "subject": "No vault entries match the filter: a document card on the left (a grey title bar and one short blank line) and a large magnifying glass on the right that finds nothing; two small grey dots at the upper right.",
+      "constraints": [
+        "The card shows no writing."
+      ]
+    },
+    "spot/calm": {
+      "subject": "Calm: a steaming mug of tea in green with two wavy steam curls rising from it, standing on a small grey saucer bar, with a single green leaf floating at the upper right.",
+      "constraints": [
+        "The leaf touches a steam curl."
+      ]
+    },
+    "spot/connections": {
+      "subject": "Connections: four round nodes (violet, teal, green, violet), each with a pale centre dot, linked by thin grey lines into a small kite-shaped network, with a small violet sparkle at the lower left.",
+      "constraints": []
+    },
+    "spot/debate": {
+      "subject": "Debate: two speech bubbles facing each other, a violet one at the upper left with its tail pointing down to the left and one blank bar inside, and a yellow one at the lower right, overlapping it slightly, with its tail pointing down to the right and one blank bar inside; a small teal sparkle at the top right.",
+      "constraints": [
+        "Blank bars only."
+      ]
+    },
+    "spot/ideas": {
+      "subject": "Ideas: a lit yellow light bulb in the centre, drawn as a solid bright shape with internal shading only, with a grey screw base and a simple filament, and two small violet sparkles touching the bulb at the lower left and lower right.",
+      "constraints": [
+        "The bulb shows it is lit through its own bright fill: no glow, halo, rays or light around it."
+      ]
+    },
+    "spot/journal": {
+      "subject": "Journal: an open notebook with blank lines on both pages and a violet pencil resting diagonally on the right page, a small yellow sun at the top left and a teal crescent moon at the top right (day and night). It heads the Journal page.",
+      "constraints": [
+        "Blank lines only."
+      ]
+    },
+    "spot/memory": {
+      "subject": "Memory: three stacked cards fanned slightly (the back one grey, the two front ones pale, the front one with two blank lines) and a coral string curling up from the top right like a reminder string with a small knot at its end.",
+      "constraints": [
+        "Blank lines only."
+      ]
+    },
+    "spot/reading": {
+      "subject": "Reading: an open violet book on the left with blank pale lines on its pages, and a desk lamp on the right whose dark curved stand arches over the book with a yellow shade, bright yellow inside its rim to show it is on; a yellow sparkle at the upper left.",
+      "constraints": [
+        "No glow or light cone under the lamp: the lit shade is a solid shape."
+      ]
+    },
+    "spot/writing": {
+      "subject": "Writing: a tall blank page left of centre with four short blank lines, and a teal quill pen at the lower right tilted as if writing, with a small curl of ink at its tip; a yellow sparkle at the top right.",
+      "constraints": [
+        "Blank lines only."
+      ]
+    },
+    "notice/error": {
+      "subject": "Something went wrong: a blank document page on the left with three blank lines, and a coral-red warning triangle overlapping its lower right corner, showing a white bar and dot inside.",
+      "constraints": [
+        "The bar and dot are a bold graphic warning sign, not a letter."
+      ]
+    },
+    "notice/no_key": {
+      "subject": "An API key is missing: a ghost of a key on the left (an empty round grey bow and a dashed grey shaft with two dashed teeth) leading to a yellow closed padlock at the upper right; a small violet sparkle at the upper left.",
+      "constraints": []
+    },
+    "notice/offline": {
+      "subject": "Offline: a pale cloud in the centre crossed by a bold coral diagonal slash from the lower left to the upper right.",
+      "constraints": [
+        "The slash stays inside the padding."
+      ]
+    },
+    "notice/working": {
+      "subject": "Work in progress: an hourglass in the centre with grey caps on top and bottom and yellow sand flowing from the top bulb into the bottom one, with two small violet sparkles touching its frame at the upper right and lower left.",
+      "constraints": []
+    },
+    "guide/idle": {
+      "subject": "Mnemo the guide owl, idle: standing front-facing with both wings resting down at his sides, looking straight ahead with big round spectacle-like eyes and a calm, friendly expression.",
+      "constraints": [
+        "Mnemo exactly as in the style guide's character sheet (same colours, proportions and features in all five poses).",
+        "Square 1:1 image, Mnemo standing on his own feet with no ground shadow."
+      ]
+    },
+    "guide/point": {
+      "subject": "Mnemo the guide owl, pointing: the wing on the viewer's left rests down, the wing on the viewer's right sweeps out and up to the right as if pointing at something beside him; he looks straight ahead.",
+      "constraints": [
+        "Mnemo exactly as in the style guide's character sheet.",
+        "The pointing wing stays inside the padding."
+      ]
+    },
+    "guide/think": {
+      "subject": "Mnemo the guide owl, thinking: the wing on the viewer's left rests down, the wing on the viewer's right curls up under his beak like a hand on his chin, his pupils glance up and to the right towards a small round thought bubble with a short dash inside (and a tiny bubble below it) touching his head at the upper right.",
+      "constraints": [
+        "Mnemo exactly as in the style guide's character sheet.",
+        "The thought bubble is empty apart from one short dash, and touches his head."
+      ]
+    },
+    "guide/read": {
+      "subject": "Mnemo the guide owl, reading: both wings hold an open teal book in front of his belly with blank lines on its pages, his pupils look down at the book and soft eyelid arcs sit above his eyes.",
+      "constraints": [
+        "Mnemo exactly as in the style guide's character sheet.",
+        "Book pages are blank lines only."
+      ]
+    },
+    "guide/cheer": {
+      "subject": "Mnemo the guide owl, cheering: both wings thrown up high in a V above his shoulders, eyes closed as happy upward arcs, a large yellow four-point sparkle at the upper right and a smaller teal sparkle at the upper left, each touching a wing tip.",
+      "constraints": [
+        "Mnemo exactly as in the style guide's character sheet.",
+        "The sparkles touch the wing tips."
+      ]
+    },
+    "steps/origin": {
+      "subject": "Origin, the first Agent Forge step (who they are and where they come from): a signpost on the left with two yellow arrow boards pointing in opposite directions, a cracked-open eggshell in the centre with a green sprout and two leaves growing out of it, a rising yellow sun on the right, and soft green hills along the bottom.",
+      "constraints": [
+        "Wide 8:3 banner: objects spread from left to right across the full width.",
+        "The arrow boards are blank."
+      ]
+    },
+    "steps/appearance": {
+      "subject": "Appearance (giving the persona a face): on the left a violet shirt on a clothes hanger, in the centre an oval hand mirror with a yellow frame on a small stand reflecting a simple head-and-shoulders silhouette, on the right three round colour swatches in a row (coral, yellow, violet) like a paint set; two small yellow sparkles.",
+      "constraints": [
+        "Wide 8:3 banner: objects spread from left to right across the full width."
+      ]
+    },
+    "steps/birthsign": {
+      "subject": "Birthsign (the personality type, 'written in the stars of psychology'): a yellow crescent moon at the far left and a constellation of seven small yellow stars joined by thin lines across the banner, with soft violet hills along the bottom.",
+      "constraints": [
+        "Wide 8:3 banner.",
+        "Stars are joined by lines so the constellation reads as one shape; no tiny loose dots."
+      ]
+    },
+    "steps/attributes": {
+      "subject": "Attributes (spending points on traits): on the left three stacked stat bars, each led by an icon (a coral heart, a yellow star, a violet sparkle) with a partly filled track; in the centre a violet hexagon gem with a pale triangle inside; on the right a hexagonal radar chart with a yellow filled shape.",
+      "constraints": [
+        "Wide 8:3 banner.",
+        "No numerals on the bars."
+      ]
+    },
+    "steps/disposition": {
+      "subject": "Disposition (how they feel and bond): three round faces in a row above a horizontal slider track, a calm teal face with relaxed closed eyes on the left, a big laughing yellow face in the centre, a frowning coral face with angled brows on the right, and a yellow slider knob in the middle of the track below.",
+      "constraints": [
+        "Wide 8:3 banner."
+      ]
+    },
+    "steps/mind": {
+      "subject": "Mind (how they think): a head in profile facing right in violet with two interlocking pale gears inside it, a small triangle of three connected teal nodes on the left, and a lit yellow light bulb on the right, drawn as a solid bright shape.",
+      "constraints": [
+        "Wide 8:3 banner.",
+        "No glow, halo or rays around the bulb."
+      ]
+    },
+    "steps/voice": {
+      "subject": "Voice (how their words look): a pale quill pen on the left trailing a violet ink curl, a big violet speech bubble in the centre holding a row of rounded cream sound-wave bars, and a yellow speech bubble on the right with a wavy line inside.",
+      "constraints": [
+        "Wide 8:3 banner.",
+        "No writing in the bubbles."
+      ]
+    },
+    "steps/daily_life": {
+      "subject": "Daily Life (routine, hobbies and online hours): a dashed arc spanning the banner like the path of a day, a bright yellow sun on its left side, a round wall clock with a teal quarter wedge in the centre, a teal crescent moon on its right side, and a yellow coffee mug and a teal book near the bottom.",
+      "constraints": [
+        "Wide 8:3 banner.",
+        "The clock face has tick marks but no numerals."
+      ]
+    },
+    "steps/relationships": {
+      "subject": "Relationships (how they respond to mentions and challenges): five small person busts (round pale heads on rounded shoulders in teal, green, coral, teal and coral) linked by thin grey lines into a social web, with small coral hearts on some of the links.",
+      "constraints": [
+        "Wide 8:3 banner."
+      ]
+    },
+    "steps/grimoire": {
+      "subject": "Grimoire (advanced spells for shaping the prompt): a large open violet spellbook in the centre on a grey stand, its pages marked with simple pale geometric signs (a circle, a triangle, short strokes), yellow sparkles rising above it, and a lit candle with a yellow flame on each side.",
+      "constraints": [
+        "Wide 8:3 banner.",
+        "The signs are geometric shapes, never letters or runes that read as writing."
+      ]
+    },
+    "steps/review": {
+      "subject": "Review (checking everything before they join the network): a scroll sheet in the centre with rolled grey ends at top and bottom, three green ticks beside blank lines and a small yellow star seal at its lower right; Mnemo the guide owl peeks happily from the right with closed smiling eyes; a violet and a green sparkle at the left.",
+      "constraints": [
+        "Wide 8:3 banner.",
+        "Mnemo as in the style guide's character sheet."
+      ]
+    },
+    "steps/embodiment": {
+      "subject": "Embodiment (what kind of being they are): a row of beings standing on one shared ground line from left to right, a little human figure in violet, an upright cat-like creature in yellow with its tail up, a tin can with a yellow label, a small round green tree, a violet water drop, a yellow flame, and a small boxy robot with violet eyes and an antenna.",
+      "constraints": [
+        "Wide 8:3 banner.",
+        "The ground line is part of the subject (a thin bar under the figures), not a floor on the background.",
+        "Labels are blank."
+      ]
+    },
+    "steps/rhetoric": {
+      "subject": "Rhetoric (how they persuade): on the left a balance scale with two yellow pans and a small quill beside it, in the centre a little orator figure in violet at a teal podium with one arm raised, at the upper right a pale speech bubble with a violet question mark shape, and on the right two circles and two squares linked by crossing grey arrows like arguments exchanged.",
+      "constraints": [
+        "Wide 8:3 banner.",
+        "The question mark is a bold graphic shape."
+      ]
+    },
+    "steps/engine": {
+      "subject": "Engine (which model speaks for them and which tools it uses): a large grey gear in the centre with a violet microchip at its hub, a pale cloud at the upper left linked to it by a thin line, a pale speech bubble with two violet curly-bracket shapes at the upper right, a small picture card (green hills, yellow sun) at the lower right, a magnifying glass at the lower left, a server cabinet with green status lights at the far right, and a small yellow lightning bolt at the left.",
+      "constraints": [
+        "Wide 8:3 banner.",
+        "The bracket shapes are graphic curves, not text."
+      ]
+    },
+    "classes/socratic_gadfly": {
+      "subject": "The Socratic Gadfly, a warm, ironic questioner: a bearded thinker in a pale draped toga with a yellow sash across it and sandals, one hand raised beside his head with a finger lifted as if asking a question, eyebrows raised; a small gadfly with translucent wings buzzes at the upper right along a short dotted flight path.",
+      "constraints": [
+        "Tall 5:6 full-height figure from head to feet, centred, head in the top quarter.",
+        "The fly's dotted path is short and ends at the fly."
+      ]
+    },
+    "classes/stoic_sage": {
+      "subject": "The Stoic Sage, calm and practical: a serene bearded sage in a pale robe with a green sash, a laurel wreath of green leaves on his head, eyes peacefully closed, hands resting calmly together, standing on a low grey stone plinth; a small yellow sun at the upper right.",
+      "constraints": [
+        "Tall 5:6 full-height figure from head to plinth, centred.",
+        "The sun touches or sits close to the figure's shoulder line."
+      ]
+    },
+    "classes/empirical_scientist": {
+      "subject": "The Empirical Scientist, always asking what the data says: a scientist in a white lab coat over a teal shirt with pens in the pocket, spiky dark hair with yellow goggles pushed up on the forehead, a smiling face, holding a grey clipboard in one hand and raising a flask of green liquid with two small bubbles in the other.",
+      "constraints": [
+        "Tall 5:6 full-height figure, centred.",
+        "The lab coat stays white; the clipboard is blank."
+      ]
+    },
+    "classes/existential_poet": {
+      "subject": "The Existential Poet, finding the feeling inside the idea: a poet in a long grey coat with a flowing coral-red scarf blowing to the right, dark hair with a small top knot, a wistful face with straight calm eyes, holding an open book against the chest; a yellow crescent moon at the upper right.",
+      "constraints": [
+        "Tall 5:6 full-height figure, centred.",
+        "Use coral red, never hot pink, for the scarf."
+      ]
+    },
+    "classes/rationalist_architect": {
+      "subject": "The Rationalist Architect, building arguments like bridges: a neat thinker in a violet tailored jacket with a pale vertical seam and V collar, round glasses and tidy dark hair, a rolled teal blueprint tucked under one arm and the other hand on a tall drawing compass standing beside them; three outline-free geometric shapes (a triangle, a square, a circle) float around them in teal.",
+      "constraints": [
+        "Tall 5:6 full-height figure, centred.",
+        "The geometric shapes are small and touch the figure's silhouette area (no loose specks far away)."
+      ]
+    },
+    "classes/mystic_visionary": {
+      "subject": "The Mystic Visionary, seeing the hidden thread between things: a hooded figure in a long flowing violet robe sprinkled with tiny yellow star sparkles, a small yellow diamond mark on the forehead, calm eyes, both hands holding a bright teal crystal orb at chest height, shaded inside like a polished stone; a yellow crescent moon at the upper right and a small star at the upper left.",
+      "constraints": [
+        "Tall 5:6 full-height figure, centred.",
+        "The orb has no glow or halo around it.",
+        "Keep the robe a blue-leaning violet, never magenta or hot pink."
+      ]
+    },
+    "classes/compassionate_mentor": {
+      "subject": "The Compassionate Mentor, listening first and lighting the next step: a warm teacher with grey hair in a bun and round glasses, a yellow open cardigan over a pale shirt, one arm raised to a yellow sparkle as if showing the way, the other hand holding a small lantern with a coral flame; a terracotta pot with a green sprout at their feet on the right.",
+      "constraints": [
+        "Tall 5:6 full-height figure, centred."
+      ]
+    },
+    "classes/contrarian_trickster": {
+      "subject": "The Contrarian Trickster, flipping the consensus to see what falls out: a grinning jester in a two-tone tunic (coral red and violet) with diamond patterns and a zigzag hem, a three-pointed jester cap with yellow bells, arms flung up and out, one leg kicked up mid-dance, with three yellow juggling balls in the air near the hands.",
+      "constraints": [
+        "Tall 5:6 full-height figure, centred.",
+        "The juggling balls stay close to the hands."
+      ]
+    },
+    "settings/general": {
+      "subject": "General settings: a big violet gear left of centre, a teal globe with simple meridian lines at the upper right, and a round clock face with a teal wedge at the lower right, overlapping slightly.",
+      "constraints": [
+        "Shown small next to the settings title: bold and simple, few details.",
+        "The clock has no numerals."
+      ]
+    },
+    "settings/appearance": {
+      "subject": "Appearance settings: a pale painter's palette with a thumb notch, holding three paint blobs (violet, teal, yellow) along its top edge, with a small yellow sun at the upper right and a yellow crescent moon at the upper left for light and dark themes.",
+      "constraints": [
+        "Shown small next to the settings title: bold and simple."
+      ]
+    },
+    "settings/reading_writing": {
+      "subject": "Reading and writing settings: two overlapping blank pages with four blank lines each, and a yellow pencil with a coral eraser tilted diagonally on the right.",
+      "constraints": [
+        "Shown small: bold and simple.",
+        "Blank lines only."
+      ]
+    },
+    "settings/ai_models": {
+      "subject": "AI model settings: a large violet microchip in the centre with short pins on all four sides and a pale inner square, a yellow four-point sparkle at the upper right and a small teal sparkle at the right.",
+      "constraints": [
+        "Shown small: bold and simple.",
+        "No logos or markings on the chip."
+      ]
+    },
+    "settings/embeddings": {
+      "subject": "Embedding settings: a cluster of five teal nodes linked by grey lines into a small three-dimensional wireframe shape, with a magnifying glass overlapping it at the lower right.",
+      "constraints": [
+        "Shown small: bold and simple."
+      ]
+    },
+    "settings/images": {
+      "subject": "Image settings: a picture frame showing green hills and a yellow sun, a yellow sparkle at the upper right, and a round teal smiling face like a sticker overlapping the frame's lower right corner.",
+      "constraints": [
+        "Shown small: bold and simple."
+      ]
+    },
+    "settings/agents": {
+      "subject": "Agent settings: two little person figures side by side, one in violet and one in teal, each waving with one arm, and a pale speech bubble with two blank bars floating between and above their heads.",
+      "constraints": [
+        "Shown small: bold and simple.",
+        "One figure violet, the other teal."
+      ]
+    },
+    "settings/learning": {
+      "subject": "Learning settings: an open teal book with blank pale lines left of centre and a yellow light bulb at the upper right touching the book's corner.",
+      "constraints": [
+        "Shown small: bold and simple."
+      ]
+    },
+    "settings/import": {
+      "subject": "Import settings: a document page on the left with blank lines, and a bold green arrow arcing from it down into an open tray at the lower right.",
+      "constraints": [
+        "Shown small: bold and simple."
+      ]
+    },
+    "settings/privacy_data": {
+      "subject": "Privacy and data settings: a small server cabinet on the left with three green status lights, and a large teal shield on the right with a yellow padlock on it.",
+      "constraints": [
+        "Shown small: bold and simple."
+      ]
+    },
+    "settings/notifications": {
+      "subject": "Notification settings: a big yellow bell in the centre with a dark clapper and a small knob on top, a small coral notification dot at its upper right, and two short curved ring lines touching its sides.",
+      "constraints": [
+        "Shown small: bold and simple."
+      ]
+    },
+    "settings/shortcuts": {
+      "subject": "Keyboard shortcut settings: a small keyboard seen from the front with two rows of four blank keycaps and a wide space bar below, one key in the second row highlighted in violet.",
+      "constraints": [
+        "Shown small: bold and simple.",
+        "Keycaps are blank."
+      ]
+    },
+    "settings/symbols": {
+      "subject": "Symbol settings: a bullet-journal page as a rounded panel with three rows, each starting with a symbol (a filled violet dot, a teal ring, a dark dash) followed by a blank line, and a small green cross mark at the upper right.",
+      "constraints": [
+        "Shown small: bold and simple.",
+        "The symbols are simple shapes; no writing."
+      ]
+    },
+    "settings/licences": {
+      "subject": "Licences: a certificate page with a folded top right corner and three blank lines, and a teal rosette seal with two ribbon tails at its lower right.",
+      "constraints": [
+        "Shown small: bold and simple.",
+        "Blank lines only."
+      ]
+    },
+    "settings/code": {
+      "subject": "Code settings: a code editor window with three small dots (coral, yellow, green) in its top bar, a bold green chevron and a short underline cursor, a couple of blank grey lines, and a large translucent green angle-bracket shape at its right edge.",
+      "constraints": [
+        "Shown small: bold and simple.",
+        "The chevron and bracket are graphic shapes, no code text."
+      ]
+    },
+    "settings/advanced": {
+      "subject": "Advanced settings: a terminal window (a pale panel with a grey top bar) showing a chevron prompt and a short cursor bar, with a teal gear overlapping its lower right corner.",
+      "constraints": [
+        "Shown small: bold and simple.",
+        "No text in the terminal."
+      ]
+    },
+    "import/archive": {
+      "subject": "Archive files: a yellow archive box with a lid, a row of small dark zipper teeth running down its front and a pale pull tab at the bottom of the zipper.",
+      "constraints": [
+        "Shown small on file cards: one bold silhouette."
+      ]
+    },
+    "import/audio": {
+      "subject": "Audio files: a sound waveform of six vertical rounded bars of different heights, tallest in the middle, alternating teal and violet.",
+      "constraints": [
+        "Shown small on file cards: one bold silhouette; the bars touch a shared base so they read as one shape."
+      ]
+    },
+    "import/book": {
+      "subject": "Books: an open teal book with blank pale lines on its pages and a yellow bookmark ribbon hanging from the top of the right page.",
+      "constraints": [
+        "Shown small on file cards: one bold silhouette."
+      ]
+    },
+    "import/data": {
+      "subject": "Data files: a small spreadsheet table with a green header row and a three by three grid of blank cells, and a small green dot in the bottom row.",
+      "constraints": [
+        "Shown small on file cards.",
+        "Cells are blank."
+      ]
+    },
+    "import/drop": {
+      "subject": "Drop files here: an open tray at the bottom with a bold violet arrow pointing down into it, and a yellow and a teal sparkle beside the arrow.",
+      "constraints": [
+        "Shown small as the drag-and-drop target.",
+        "The sparkles touch the arrow or tray."
+      ]
+    },
+    "import/image": {
+      "subject": "Image files: a photo frame showing green mountains and a yellow sun with a few short solid rays attached to it.",
+      "constraints": [
+        "Shown small on file cards: one bold silhouette."
+      ]
+    },
+    "import/office": {
+      "subject": "Office documents: a document page with a folded top right corner, a violet title bar and four blank lines, and a yellow pencil leaning against its right side.",
+      "constraints": [
+        "Shown small on file cards.",
+        "Blank lines and bars only."
+      ]
+    },
+    "import/pdf": {
+      "subject": "PDF files: a document page with a folded top right corner and blank lines, a coral band across its middle like a blank label strip, and a small yellow sparkle at the upper right.",
+      "constraints": [
+        "Shown small on file cards.",
+        "The band is blank: never write PDF or any letters."
+      ]
+    },
+    "import/text": {
+      "subject": "Plain text files: a blank page with five blank lines on the left, and a large bold paragraph mark shape (a pilcrow) in violet on the right.",
+      "constraints": [
+        "Shown small on file cards.",
+        "The pilcrow is a bold graphic symbol; no other characters."
+      ]
+    },
+    "import/unknown": {
+      "subject": "Unknown file type: a pale rounded square tile with a big grey question mark shape in its centre and a small violet sparkle at its upper right corner.",
+      "constraints": [
+        "Shown small on file cards.",
+        "The question mark is a bold graphic shape."
+      ]
+    },
+    "import/video": {
+      "subject": "Video files: a film-strip frame with small sprocket holes along its top and bottom edges and a coral play triangle in its centre.",
+      "constraints": [
+        "Shown small on file cards: one bold silhouette."
+      ]
+    },
+    "import/web": {
+      "subject": "Web pages: a browser window with three small grey dots in its top bar, three blank lines and a round teal globe dot at its lower right.",
+      "constraints": [
+        "Shown small on file cards.",
+        "No address text in the bar."
+      ]
+    },
+    "palace/hall": {
+      "subject": "Memory-palace entrance hall: a room seen from the front, a back wall softly tinted teal above a grey floor band. Landmarks from left to right: a violet door with a small knob on the left wall, an oval wall mirror, a chandelier with three solid yellow bulbs (no glow) hanging from the ceiling at the top centre, a long yellow bench on the floor right of centre, and a tall teal grandfather clock on the right.",
+      "constraints": [
+        "The scene fills the whole 4:3 canvas edge to edge as one rounded card (only the four rounded corners show magenta); no people.",
+        "Every landmark stays exactly at its position as a share of width and height: door at (0.15, 0.52); mirror at (0.34, 0.37); chandelier at (0.50, 0.17); bench at (0.68, 0.71); clock at (0.85, 0.45).",
+        "The floor line runs straight across at 70% of the height.",
+        "Front-facing view, no strong perspective, so the positions hold."
+      ]
+    },
+    "palace/library": {
+      "subject": "Memory-palace library: a room seen from the front, a warm back wall above a grey floor band. Landmarks from left to right: a wooden ladder leaning on the left, a wall bookshelf with a row of coloured books with blank spines high up, a green globe on a small stand on the floor in the centre, a standing lamp with a yellow shade right of centre (the shade near the top), and a violet armchair on the right.",
+      "constraints": [
+        "The scene fills the whole 4:3 canvas edge to edge as one rounded card (only the four rounded corners show magenta); no people.",
+        "Every landmark stays exactly at its position as a share of width and height: ladder at (0.15, 0.53); shelf at (0.34, 0.33); globe at (0.53, 0.67); lamp at (0.70, 0.23); armchair at (0.87, 0.64).",
+        "The floor line runs straight across at 70% of the height.",
+        "Book spines are blank."
+      ]
+    },
+    "palace/garden": {
+      "subject": "Memory-palace garden: an outdoor scene seen from the front, a pale sky above a green lawn band. Landmarks from left to right: a barred garden gate on the left, a round green tree with a grey trunk, a fountain basin with teal water arcs on the lawn in the centre, a yellow garden bench right of centre, and a yellow birdhouse on a pole on the right.",
+      "constraints": [
+        "The scene fills the whole 4:3 canvas edge to edge as one rounded card (only the four rounded corners show magenta); no people.",
+        "Every landmark stays exactly at its position as a share of width and height: gate at (0.12, 0.60); tree at (0.31, 0.28); fountain at (0.51, 0.68); bench at (0.71, 0.68); birdhouse at (0.86, 0.35).",
+        "The lawn line runs straight across at 70% of the height."
+      ]
+    },
+    "palace/kitchen": {
+      "subject": "Memory-palace kitchen: a room seen from the front, a warm back wall above a grey floor band. Landmarks from left to right: a grey stove with two coral knobs and an oven door on the left, a wall shelf holding two jars (yellow and teal), a yellow wooden table on the floor in the centre, a sink with a tap right of centre, and a window with four panes high on the right.",
+      "constraints": [
+        "The scene fills the whole 4:3 canvas edge to edge as one rounded card (only the four rounded corners show magenta); no people.",
+        "Every landmark stays exactly at its position as a share of width and height: stove at (0.16, 0.60); shelf at (0.34, 0.27); table at (0.51, 0.71); sink at (0.71, 0.63); window at (0.85, 0.30).",
+        "The floor line runs straight across at 70% of the height.",
+        "Jars are unlabelled."
+      ]
+    },
+    "palace/study": {
+      "subject": "Memory-palace study: a room seen from the front, a softly tinted back wall above a grey floor band. Landmarks from left to right: a tall bookcase with three shelves of coloured blank-spined books on the left, a framed yellow landscape painting on the wall, a violet desk with a small box on it in the centre, a green potted plant in a yellow pot right of centre, and a window with four panes high on the right.",
+      "constraints": [
+        "The scene fills the whole 4:3 canvas edge to edge as one rounded card (only the four rounded corners show magenta); no people.",
+        "Every landmark stays exactly at its position as a share of width and height: bookcase at (0.14, 0.47); painting at (0.34, 0.28); desk at (0.53, 0.65); plant at (0.71, 0.70); window at (0.85, 0.33).",
+        "The floor line runs straight across at 70% of the height."
+      ]
+    },
+    "palace/stairwell": {
+      "subject": "Memory-palace stairwell: a room seen from the front with a staircase of pale steps rising from the lower left to an upper landing on the right. Landmarks: the bottom step at the lower left, a yellow banister rail running up along the stairs, a violet framed portrait (a simple round face shape) on the wall near the top centre, a yellow landing ledge on the right, and a tall narrow window high at the top right.",
+      "constraints": [
+        "The scene fills the whole 4:3 canvas edge to edge as one rounded card (only the four rounded corners show magenta); no people.",
+        "Every landmark stays exactly at its position as a share of width and height: step at (0.15, 0.82); banister at (0.34, 0.55); portrait at (0.54, 0.26); landing at (0.74, 0.36); window at (0.88, 0.17).",
+        "The portrait shows a simple shape, not a real face."
+      ]
+    },
+    "garden/seed": {
+      "subject": "Seed stage of a garden note: a round badge disc with a golden seed (an upright oval) at its lower centre and a single green shoot curling up from the top of the seed.",
+      "constraints": [
+        "Small round badge: the disc fills the square canvas (about 90% of its width), in a soft pale neutral of the pack palette with a thin yellow ring.",
+        "One bold plant shape, readable at 24 px; it keeps its own shape, never just a colour change."
+      ]
+    },
+    "garden/budding": {
+      "subject": "Budding stage of a garden note: a round badge disc with a green stem rising from the bottom, two green leaves on either side, and a round violet flower bud on top.",
+      "constraints": [
+        "Small round badge: the disc fills the square canvas (about 90% of its width), in a soft pale neutral of the pack palette with a thin green ring.",
+        "One bold plant shape, readable at 24 px; the bud is violet."
+      ]
+    },
+    "garden/evergreen": {
+      "subject": "Evergreen stage of a garden note: a round badge disc with a small green conifer tree (two stacked tiers) on a short grey trunk.",
+      "constraints": [
+        "Small round badge: the disc fills the square canvas (about 90% of its width), in a soft pale neutral of the pack palette with a thin green ring.",
+        "One bold plant shape, readable at 24 px."
+      ]
+    },
+    "vault/subject_index": {
+      "subject": "The vault's subject index: on the left a grey card-catalogue cabinet with three pale drawers, each with a small dark handle; on the right an open index card with blank lines, five coloured tab dividers (violet, yellow, green, violet, yellow) standing up along its top edge, and a small branching tree diagram (a dark stem with three coloured dots) on the card; a yellow sparkle at the top right.",
+      "constraints": [
+        "Wide 8:3 banner: cabinet on the left half, index card on the right half.",
+        "Tabs and drawers are blank."
+      ]
+    }
+  }
+}

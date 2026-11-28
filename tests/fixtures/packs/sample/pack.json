@@ -1,0 +1,24 @@
+{
+  "coverage": {
+    "portrait/face/round": {
+      "file": "portrait/face/round.webp",
+      "height": 512,
+      "sha256": "2f2c991b75e2715555a64828a3e04dae2b798da6a968649799a5dcd32320b57f",
+      "width": 512
+    },
+    "spot/ideas": {
+      "file": "spot/ideas.webp",
+      "height": 240,
+      "sha256": "f163c1d3c6409fe1868690c1f3d9799352d3bf1dd5267c610a3877dffa0a47d4",
+      "width": 320
+    }
+  },
+  "description": "A tiny test pack.",
+  "id": "sample",
+  "name": "Sample",
+  "samples": [
+    "spot/ideas"
+  ],
+  "style": "sample",
+  "version": "1.0.0"
+}

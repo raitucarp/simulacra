@@ -1,7 +1,7 @@
 //! [`Illustration`]: a themed illustration template rendered as a sized `img()`.
 
-use super::active::with_active_cache;
 use super::keys::{ClassKey, EmptyKey, GuidePose, IllustrationKind, NoticeKey, SpotKey, StepKey};
+use super::pack::load_illustration;
 use super::template::{raster_width, TemplateExtras};
 use crate::domain::TraitOption;
 use gpui_kit::gpui::Image;
@@ -16,12 +16,14 @@ pub struct Illustration {
     kind: IllustrationKind,
     width: Pixels,
     extras: TemplateExtras,
+    /// Pack to draw from instead of the active one (pack previews).
+    pack: Option<SharedString>,
 }
 
 impl Illustration {
     /// Any illustration asset (`illustrations/...svg`) of `kind`.
     pub fn asset(path: impl Into<String>, kind: IllustrationKind) -> Self {
-        Self { path: path.into(), kind, width: px(kind.canvas().0), extras: TemplateExtras::none() }
+        Self { path: path.into(), kind, width: px(kind.canvas().0), extras: TemplateExtras::none(), pack: None }
     }
 
     /// Option card of a trait value (`illustrations/<group>/<key>.svg`).
@@ -78,16 +80,21 @@ impl Illustration {
         self
     }
 
+    /// Draws from pack `id` instead of the active pack (`classic`: the templates).
+    pub fn pack(mut self, id: impl Into<SharedString>) -> Self {
+        self.pack = Some(id.into());
+        self
+    }
+
     /// Displayed (width, height).
     pub fn display_size(&self) -> (Pixels, Pixels) {
         let (w, h) = self.kind.canvas();
         (self.width, px(self.width.as_f32() * h / w))
     }
 
-    /// The themed image from the UI thread's cache.
+    /// The image from the pack in use (or the themed template), from the UI thread's caches.
     pub fn image(&self) -> Arc<Image> {
-        let width = Some(raster_width(self.width.as_f32()));
-        with_active_cache(|cache, colors| cache.load_sized(&self.path, colors, &self.extras, width))
+        load_illustration(&self.path, &self.extras, raster_width(self.width.as_f32()), self.pack.as_deref())
     }
 }
 

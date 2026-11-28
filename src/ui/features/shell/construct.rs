@@ -70,7 +70,7 @@ impl AppView {
             chrome: ChromeState { is_onboarding_open: onboarding, ..ChromeState::new(initial_lang) },
             feed, composer_modal, appearance, llm_inputs, settings_ui,
             lab, scheduler, graph, vault, import, review, insights, journal, thinking, arena, data, semantic: SemanticState::new(cx), recommend: Default::default(), media: MediaHost::new(cx), spend: super::spend_host::SpendHost::new(window.window_handle()),
-            reactions, symbols, tasks: Default::default(), search: None, forge: None, sidebar, palette,
+            reactions, symbols, packs: Default::default(), tasks: Default::default(), search: None, forge: None, sidebar, palette,
             panels: ShellPanels::new(cx),
             _subscriptions: subscriptions,
         };
@@ -100,12 +100,13 @@ impl AppView {
 }
 
 /// Points the render-side globals at the store: the interface language and date settings,
-/// the vault folder (relative avatar photos), the active palette (themed illustrations) and the icon store
-/// (custom symbols).
+/// the vault folder (relative avatar photos), the active palette (themed illustrations), the icon store
+/// (custom symbols) and the illustration packs.
 fn register_render_globals(state: &AppState) {
     crate::i18n::set_locale(state.preferences().general.language);
     crate::ui::format::set_clock(crate::ui::format::Clock::of(&state.preferences().general));
     crate::storage::avatars::register_vault_dir(state.vault_dir());
     let _ = crate::ui::illustration::set_active_palette(&state.theme_settings.effective_palette().colors);
     crate::ui::assets::set_symbol_store(Some(state.symbols_dir())); // S14: custom symbols
+    let _ = crate::ui::illustration::configure_packs(&state.packs_dir(), &state.preferences().appearance.illustration_pack); // WS5
 }

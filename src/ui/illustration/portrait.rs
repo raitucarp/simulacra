@@ -2,6 +2,7 @@
 //! SVG (one raster, exact alignment) and personality emblems, both cached per look.
 
 use super::active::with_active_cache;
+use super::pack::{layer_plan, raster_avatar};
 use super::template::TemplateExtras;
 use crate::domain::portrait::{EmblemSpec, PortraitLayer, PortraitSpec};
 use crate::ui::assets::template_text;
@@ -20,6 +21,8 @@ const LAYER_GROUP_CLOSE: &str = "</g>";
 const SVG_OPEN: &str = "<svg";
 const SVG_CLOSE: &str = "</svg>";
 const TAG_END: char = '>';
+/// Raster bucket of a composed avatar drawn at its canvas size.
+pub(super) const AVATAR_CANVAS: u16 = 256;
 /// Separator of variant keys in a portrait cache source.
 const KEY_SEPARATOR: &str = "/";
 
@@ -62,10 +65,15 @@ pub fn portrait_source(spec: &PortraitSpec) -> String {
     format!("{PORTRAIT_SOURCE_PREFIX}{}", keys.join(KEY_SEPARATOR))
 }
 
-/// Themed portrait image rasterized `width` units wide.
+/// Themed portrait image rasterized `width` units wide (from the active pack's raster
+/// layers when it covers this look).
 pub fn portrait_image(spec: &PortraitSpec, width: Option<u16>) -> Arc<Image> {
     let extras = TemplateExtras::portrait(spec.skin, spec.hair_color);
     let source = portrait_source(spec);
+    let layers = || spec.layer_paths().into_iter().map(|path| layer_plan(path, &extras, None, false)).collect();
+    if let Some(image) = raster_avatar(&source, layers, &extras, width.unwrap_or(AVATAR_CANVAS)) {
+        return image;
+    }
     with_active_cache(|cache, colors| {
         cache.load_with(&source, || Some(compose_portrait_template(spec)), colors, &extras, width)
     })

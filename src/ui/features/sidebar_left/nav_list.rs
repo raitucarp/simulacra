@@ -7,6 +7,8 @@ use crate::state::{AppState, NavigationTab};
 use crate::theme::ThemeTokens;
 use crate::ui::features::command_palette::CommandId;
 use crate::ui::icons::LucideIcon;
+use crate::ui::menus::render_menu;
+use gpui_kit::component::menu::ContextMenuExt;
 use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::*;
 use rust_i18n::t;
@@ -59,7 +61,8 @@ pub(super) fn render_nav_list(state: &AppState, review_due: Option<usize>, is_ra
             command: Some(place.command),
         };
         let (nav, tab) = (callbacks.on_select_nav.clone(), place.tab);
-        render_nav_button(spec, is_rail, theme, Rc::new(move |window, cx| nav(tab, window, cx)))
+        let menu = super::nav_menu::nav_menu_spec(place.command, callbacks); // M1: open it, and its jump list
+        render_nav_button(spec, is_rail, theme, Rc::new(move |window, cx| nav(tab, window, cx))).context_menu(move |popup, window, cx| render_menu(popup, &menu, window, cx))
     });
     div().flex().flex_col().gap(theme.spacing_2xs).when(is_rail, |list| list.items_center()).children(buttons)
 }

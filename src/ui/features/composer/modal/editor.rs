@@ -72,6 +72,6 @@ impl ComposerModalView {
                     (on_submit_key)(window, cx);
                 }
             })
-            .child(Textarea::new(&draft.input).bordered(false).on_paste(move |item, window, cx| on_paste(item, window, cx)))
+            .child(Textarea::new(&draft.input).bordered(false).on_paste(move |item, window, cx| on_paste(item, window, cx)).context_menu(super::super::text_menu::composer_text_menu(&draft.input)))
     }
 }

@@ -14,7 +14,7 @@ impl AppView {
             state: &self.state,
             theme: &self.theme,
             sidebar: &self.sidebar,
-            is_workspace_open: self.chrome.is_workspace_open,
+            is_workspace_open: self.chrome.workspace_menu.is_open(),
             shell_focus: self.palette.shell_focus.clone(),
             review_due: Some(self.review.due),
             callbacks: SidebarCallbacks {

@@ -56,6 +56,20 @@ fn availability_decides_listing_and_running() {
 }
 
 #[test]
+fn every_category_has_commands_and_a_title_in_every_locale() {
+    for category in CommandCategory::ALL {
+        assert!(CommandId::ALL.iter().any(|id| id.category() == category), "{category:?} has no command");
+        for language in crate::i18n::Language::ALL {
+            assert!(crate::_rust_i18n_try_translate(language.code(), category.title_key()).is_some(), "{category:?} in {}", language.code());
+        }
+    }
+    let screens = COMMANDS.iter().filter(|spec| spec.kind == CommandKind::Screen);
+    assert!(screens.into_iter().all(|spec| spec.id.category() == CommandCategory::Navigate), "screens are places to go");
+    assert_eq!(CommandId::NewDebate.category(), CommandCategory::Create);
+    assert_eq!(CommandId::BookmarkPost.category(), CommandCategory::Post);
+}
+
+#[test]
 fn screens_are_the_go_commands() {
     let screens: Vec<CommandId> = COMMANDS.iter().filter(|spec| spec.kind == CommandKind::Screen).map(|spec| spec.id).collect();
     assert_eq!(screens, vec![CommandId::GoTimeline, CommandId::GoKnowledge, CommandId::GoAgents, CommandId::GoPersonas, CommandId::GoMindGraph, CommandId::GoReview, CommandId::GoInsights, CommandId::GoJournal, CommandId::GoArena, CommandId::GoTasks, CommandId::GoSearch]);

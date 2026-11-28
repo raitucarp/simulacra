@@ -23,7 +23,7 @@ pub(super) struct SectionView {
     pub is_collapsed: bool,
     pub is_showing_all: bool,
     /// Rows before truncation.
-    pub rows: Vec<Stateful<Div>>,
+    pub rows: Vec<AnyElement>,
 }
 
 /// The rows a section shows: all of them, or the first few.

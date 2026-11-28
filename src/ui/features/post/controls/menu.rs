@@ -1,80 +1,38 @@
-//! "…" overflow menu of a post card: copy, reply, quote, find similar, learn (a submenu)
-//! and (own thoughts) delete.
+//! The post card's menu (M1): the ghost "…" button that opens it, the right-click menu on the
+//! card that shows the same spec, and Delete with its confirmation.
 
 use super::super::consts::OVERFLOW_BTN_ID_PREFIX;
-use super::actions_menu::with_actions_submenu;
 use super::handlers::{PostAction, PostCardHandlers};
-use super::learn::with_learn_submenu;
-use super::share::{copy_with_toast, post_permalink};
+use super::post_menu::{post_menu_spec, PostMenuSource};
 use crate::domain::Post;
 use crate::ui::icons::LucideIcon;
+use crate::ui::menus::{context_menu_of, post_ids as ids, render_menu, MenuItem, MenuText};
 use gpui_kit::component::button::{Button, ButtonVariant, ButtonVariants};
-use gpui_kit::component::menu::{DropdownMenu, PopupMenu, PopupMenuItem};
+use gpui_kit::component::menu::{ContextMenu, ContextMenuExt, DropdownMenu};
 use gpui_kit::component::{Icon, Sizable, WindowExt};
-use gpui_kit::{Anchor, App, Context, IntoElement, Window};
+use gpui_kit::{Anchor, App, InteractiveElement, IntoElement, ParentElement, Styled, Window};
 use rust_i18n::t;
 
-/// Ghost "…" button opening the post's action menu.
+/// Ghost "…" button opening the post's menu.
 pub(crate) fn render_overflow_menu(post: &Post, handlers: &PostCardHandlers) -> impl IntoElement {
-    let (text, link, embed) = (post.content.clone(), post_permalink(post), embed_code(post));
-    let handlers = handlers.clone();
+    let source = PostMenuSource::of(post, handlers);
     Button::new(format!("{OVERFLOW_BTN_ID_PREFIX}{}", post.id))
         .ghost()
         .xsmall()
         .icon(Icon::new(LucideIcon::Ellipsis))
         .tooltip(t!("post.menu_tooltip").to_string())
-        .dropdown_menu_with_anchor(Anchor::TopRight, move |menu, window, cx| {
-            let menu = with_actions_submenu(menu, handlers.on_post_action.as_ref(), window, cx);
-            build_menu(menu, [&text, &link, &embed], &handlers, window, cx)
-        })
+        .dropdown_menu_with_anchor(Anchor::TopRight, move |menu, window, cx| render_menu(menu, &post_menu_spec(&source), window, cx))
 }
 
-/// The three copy entries, gathered under one "Copy" submenu.
-fn copy_submenu(menu: PopupMenu, [text, link, embed]: &[String; 3]) -> PopupMenu {
-    menu.item(copy_item(LucideIcon::Copy, t!("post.menu_copy_text"), text, t!("post.copied_text")))
-        .item(copy_item(LucideIcon::Link2, t!("post.menu_copy_link"), link, t!("post.copied_link")))
-        .item(copy_item(LucideIcon::Layers, t!("post.menu_copy_embed"), embed, t!("post.copied_embed")))
+/// `card` with the post menu on right-click (and long press).
+pub(crate) fn with_post_context_menu<E: InteractiveElement + ParentElement + Styled>(card: E, post: &Post, handlers: &PostCardHandlers) -> ContextMenu<E> {
+    let source = PostMenuSource::of(post, handlers);
+    card.context_menu(context_menu_of(move || post_menu_spec(&source)))
 }
 
-fn build_menu(menu: PopupMenu, [text, link, embed]: [&str; 3], handlers: &PostCardHandlers, window: &mut Window, cx: &mut Context<PopupMenu>) -> PopupMenu {
-    let copies = [text.to_string(), link.to_string(), embed.to_string()];
-    let menu = menu
-        .item(action_item(LucideIcon::MessageSquare, t!("post.menu_reply"), &handlers.on_reply))
-        .item(action_item(LucideIcon::Edit, t!("post.menu_quote"), &handlers.on_quote))
-        .item(action_item(LucideIcon::Compass, t!("post.menu_find_similar"), &handlers.on_find_similar))
-        .submenu_with_icon(Some(Icon::new(LucideIcon::Copy)), t!("post.menu_copy").to_string(), window, cx, move |submenu, _, _| copy_submenu(submenu, &copies));
-    let menu = with_learn_submenu(menu, &handlers.learn, window, cx);
-    let menu = crate::ui::features::thinking::credence::with_credence_item(menu, handlers.credence.as_ref());
-    let menu = crate::ui::features::data::with_data_items(menu, handlers.data.as_ref(), window, cx);
-    match &handlers.on_delete {
-        Some(on_delete) => menu.separator().item(delete_item(on_delete.clone())),
-        None => menu,
-    }
-}
-
-fn copy_item(
-    icon: LucideIcon,
-    label: impl ToString,
-    payload: &str,
-    toast: impl ToString,
-) -> PopupMenuItem {
-    let (payload, toast) = (payload.to_string(), toast.to_string());
-    PopupMenuItem::new(label.to_string())
-        .icon(Icon::new(icon))
-        .on_click(move |_, window, cx| copy_with_toast(payload.clone(), toast.clone(), window, cx))
-}
-
-fn action_item(icon: LucideIcon, label: impl ToString, action: &PostAction) -> PopupMenuItem {
-    let action = action.clone();
-    PopupMenuItem::new(label.to_string())
-        .icon(Icon::new(icon))
-        .on_click(move |_, window, cx| action(window, cx))
-}
-
-fn delete_item(on_delete: PostAction) -> PopupMenuItem {
-    PopupMenuItem::new(t!("post.menu_delete").to_string())
-        .icon(Icon::new(LucideIcon::Trash))
-        .on_click(move |_, window, cx| confirm_delete(on_delete.clone(), window, cx))
+/// "Delete" (red), asking for confirmation first.
+pub(super) fn delete_item(on_delete: PostAction) -> MenuItem {
+    MenuItem::new(ids::DELETE, MenuText::key("post.menu_delete")).icon(LucideIcon::Trash).destructive().on_click(move |window, cx| confirm_delete(on_delete.clone(), window, cx))
 }
 
 /// Asks for confirmation before running `on_delete`.

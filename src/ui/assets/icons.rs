@@ -42,5 +42,7 @@ gpui_kit::assets::icon_assets!(
         NotebookText, CalendarDays, CalendarRange, SquareKanban,
         // N3: the garden; N11: voice notes; N12: drawings
         Sprout, Mic, PenTool,
+        // M1: the title bar app menu
+        Menu,
     ]
 );

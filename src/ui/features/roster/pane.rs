@@ -47,7 +47,7 @@ fn contact_list(params: &RosterParams<'_>, data: &RosterData<'_>, callbacks: &Ro
                 selected: selected_id == Some(&prof.id),
                 active_user_persona: params.state.active_profile_id == prof.id,
             };
-            render_contact_row(idx, prof, state, theme, callbacks.select.clone())
+            render_contact_row(idx, prof, state, theme, callbacks)
         }))
 }
 

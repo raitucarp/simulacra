@@ -1,11 +1,11 @@
 //! The palette overlay: scrim, search row, grouped results and the key hint footer.
 
 use super::footer::render_footer;
-use super::rows::{render_group_heading, render_result_row};
+use super::rows::{render_category_heading, render_group_heading, render_result_row};
 use super::{CommandPalette, PaletteEvent};
 use crate::theme::ThemeTokens;
 use crate::ui::atoms::ElevationExt;
-use crate::ui::features::command_palette::model::PaletteMode;
+use crate::ui::features::command_palette::model::{category_of, PaletteGroup, PaletteMode};
 use crate::ui::icons::LucideIcon;
 use crate::ui::keymap::PALETTE_KEY_CONTEXT;
 use gpui_kit::component::input::Input;
@@ -93,8 +93,14 @@ impl CommandPalette {
         let mut children: Vec<AnyElement> = Vec::new();
         for group in &self.groups {
             children.push(render_group_heading(group.group, theme).into_any_element());
+            let mut heading = None;
             for ranked in &group.items {
                 let item = &self.items[ranked.index];
+                let category = (group.group == PaletteGroup::Commands).then(|| category_of(item)).flatten();
+                if category.is_some() && category != heading {
+                    heading = category;
+                    children.extend(category.map(|category| render_category_heading(category, theme).into_any_element()));
+                }
                 let index = flat;
                 let row = render_result_row(index, item, &ranked.positions, index == self.selected, theme);
                 children.push(row.on_click(cx.listener(move |this, _, _, cx| this.run(index, cx))).into_any_element());

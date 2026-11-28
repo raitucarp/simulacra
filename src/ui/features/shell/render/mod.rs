@@ -49,7 +49,6 @@ impl Render for AppView {
             // Fully Resizable Multi-Column Layout Container
             .child(div().w_full().flex_1().min_h_0().overflow_hidden().child(columns))
             .children(self.right_drawer(&bind, class))
-            .children(self.language_popover(&bind))
             .children(self.settings_modal(&bind, cx))
             .children(self.workspace_popover(&bind))
             .children(self.composer_modal_view(cx))

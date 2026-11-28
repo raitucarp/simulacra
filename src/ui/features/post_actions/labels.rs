@@ -37,6 +37,15 @@ pub fn kind_icon(kind: ActionKind) -> LucideIcon {
     }
 }
 
+/// The icon of an action group's submenu in the post menu.
+pub fn group_icon(group: ActionGroup) -> LucideIcon {
+    match group {
+        ActionGroup::Understand => LucideIcon::Lightbulb,
+        ActionGroup::Challenge => LucideIcon::Swords,
+        ActionGroup::Explore => LucideIcon::Compass,
+    }
+}
+
 fn keyed(prefix: &str, key: &str) -> String {
     let full = format!("{prefix}.{key}");
     t!(full.as_str()).to_string()

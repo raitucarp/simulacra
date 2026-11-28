@@ -7,6 +7,7 @@ mod header;
 mod input;
 mod labels;
 mod legend;
+mod menu; // M1
 pub(crate) mod paint;
 mod panel;
 mod render;

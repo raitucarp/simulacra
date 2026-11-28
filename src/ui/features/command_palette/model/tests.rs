@@ -102,6 +102,18 @@ fn past_uses_lift_a_result() {
 }
 
 #[test]
+fn commands_gather_under_their_categories() {
+    use crate::ui::features::command_palette::registry::CommandCategory;
+    let all = items();
+    let categories = |groups: &[ResultGroup]| groups.iter().find(|group| group.group == PaletteGroup::Commands).map(|group| group.items.iter().map(|ranked| category_of(&all[ranked.index])).collect::<Vec<_>>());
+    let blank = rank(&all, &parse_query(""), &PaletteHistory::default());
+    assert_eq!(categories(&blank), Some(vec![Some(CommandCategory::Navigate), Some(CommandCategory::Create)]), "the registry's order with no query");
+    let searched = rank(&all, &parse_query(">new thread"), &PaletteHistory::default());
+    assert_eq!(categories(&searched).and_then(|found| found.first().copied().flatten()), Some(CommandCategory::Create), "the best result's category first");
+    assert_eq!(category_of(&all[4]), None, "only commands have a category");
+}
+
+#[test]
 fn empty_query_shows_recent_then_frequent_then_screens_and_commands() {
     let all = items();
     let history = PaletteHistory::default().recorded("doc:d1").recorded("cmd:new_thread").recorded("doc:d1").recorded("cmd:go_timeline");

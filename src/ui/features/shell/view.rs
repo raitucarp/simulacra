@@ -100,12 +100,12 @@ pub struct AppView {
 /// Open/closed state of the window chrome: menus, modals and side columns.
 pub struct ChromeState {
     pub current_language: Language,
-    pub is_lang_menu_open: bool,
     pub is_settings_open: bool,
     pub active_settings_tab: SettingsTab,
     /// Unsaved provider/model picks of the open settings modal.
     pub settings_draft: SettingsDraft,
-    pub is_workspace_open: bool,
+    /// The network menu, opened from the switcher or the "Switch network" command (M1).
+    pub workspace_menu: crate::ui::menus::OpenMenu,
     /// The right panel column per place where the user toggled it; elsewhere it follows the
     /// default (see `AppView::is_right_panel_shown`).
     pub right_panel_choices: Vec<(NavigationTab, bool)>,
@@ -121,11 +121,10 @@ impl ChromeState {
     pub(super) fn new(current_language: Language) -> Self {
         Self {
             current_language,
-            is_lang_menu_open: false,
             is_settings_open: false,
             active_settings_tab: SettingsTab::General,
             settings_draft: SettingsDraft::default(),
-            is_workspace_open: false,
+            workspace_menu: Default::default(),
             right_panel_choices: Vec::new(),
             is_right_drawer_open: false,
             right_sidebar_tab: RightSidebarTab::MindCadence,

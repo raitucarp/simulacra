@@ -52,3 +52,42 @@ pub fn view_label_key(view: PostView) -> &'static str {
 pub fn view_label(view: PostView) -> String {
     t!(view_label_key(view)).to_string()
 }
+
+/// The section of the view menu a view is listed in.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum ViewSection {
+    /// The same posts, laid out another way (cards, outline, calendar, board…).
+    Layouts,
+    /// One kind of thought singled out (forks, lens fans, claims to recheck…).
+    Lenses,
+    /// What the posts gathered (garden, series, glossary).
+    Collections,
+}
+
+impl ViewSection {
+    pub const ALL: [Self; 3] = [Self::Layouts, Self::Lenses, Self::Collections];
+
+    /// Locale key of the section heading.
+    pub const fn title_key(self) -> &'static str {
+        match self {
+            Self::Layouts => "views.menu.section.layouts",
+            Self::Lenses => "views.menu.section.lenses",
+            Self::Collections => "views.menu.section.collections",
+        }
+    }
+}
+
+/// Where `view` is listed in the view menu.
+pub const fn view_section(view: PostView) -> ViewSection {
+    match view {
+        PostView::Cards | PostView::Outline | PostView::Argument | PostView::RapidLog | PostView::Raw | PostView::Calendar | PostView::Future | PostView::Board => ViewSection::Layouts,
+        PostView::Branches | PostView::LensFan | PostView::StillTrue | PostView::OpenQuestions | PostView::MindChanges => ViewSection::Lenses,
+        PostView::Garden | PostView::Series | PostView::Glossary => ViewSection::Collections,
+    }
+}
+
+/// The locale key of `view`'s entry in the view menu ("Show as a calendar"); the stored
+/// [`PostView`] key is unchanged.
+pub fn view_menu_key(view: PostView) -> String {
+    format!("views.menu.{}", view.key())
+}

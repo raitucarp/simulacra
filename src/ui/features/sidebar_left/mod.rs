@@ -21,6 +21,7 @@ mod item_row;
 mod mode;
 pub mod nav_button;
 mod nav_list;
+mod nav_menu; // M1
 mod new_menu;
 mod prefs;
 mod render;
@@ -38,6 +39,7 @@ pub use mode::{sidebar_mode, sidebar_mode_for, toggled_preference, SidebarMode, 
 pub use nav_button::{render_nav_button, NavButtonSpec};
 pub use prefs::{NavRef, SidebarPrefs, SidebarSection, PIN_CAPACITY, RECENT_CAPACITY};
 pub use render::render_left_sidebar;
+pub use new_menu::new_menu_spec;
 pub use resolve::{resolve, resolve_all, ResolvedRef};
 pub use state::SidebarState;
 pub use user_card::render_interactive_user_card;

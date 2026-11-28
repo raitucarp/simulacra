@@ -30,5 +30,5 @@ pub use crate::domain::views::{PostView, ViewScope};
 pub use body::render_list_view;
 pub use garden::{maturity_art, maturity_label};
 pub use input::{OpenPost, PickMonth, ViewInput};
-pub use registry::{view_icon, view_label, view_label_key};
-pub use switcher::{render_view_switcher, switcher_button_id, PickView};
+pub use registry::{view_icon, view_label, view_label_key, view_menu_key, view_section, ViewSection};
+pub use switcher::{render_view_switcher, switcher_button_id, view_menu_spec, PickView};

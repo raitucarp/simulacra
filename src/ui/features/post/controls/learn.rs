@@ -1,12 +1,12 @@
-//! Learning on a post (sb C1b): the "Learn" submenu of the "…" menu (add a question or an
-//! answer to the post, edit or stop its review, learn its thread's connections) and the
-//! small indicator a post in review carries, saying when it is due.
+//! Learning on a post (sb C1b): the review items of the post menu's Study section (add a
+//! review question or answer to the post, edit or stop its review, learn its thread's
+//! connections) and the small indicator a post in review carries, saying when it is due.
 
 use crate::theme::ThemeTokens;
 use crate::ui::icons::LucideIcon;
-use gpui_kit::component::menu::{PopupMenu, PopupMenuItem};
+use crate::ui::menus::{post_ids as ids, MenuItem, MenuText};
 use gpui_kit::component::Icon;
-use gpui_kit::{div, App, Context, Div, FontWeight, ParentElement, Styled, Window};
+use gpui_kit::{div, App, Div, FontWeight, ParentElement, Styled, Window};
 use rust_i18n::t;
 use std::rc::Rc;
 
@@ -52,23 +52,23 @@ impl LearnControls {
     }
 }
 
-fn item(icon: LucideIcon, key: &str, kind: LearnRequestKind, action: &LearnAction) -> PopupMenuItem {
+fn item(id: &'static str, icon: LucideIcon, key: &'static str, kind: LearnRequestKind, action: &LearnAction) -> MenuItem {
     let action = action.clone();
-    PopupMenuItem::new(t!(key).to_string()).icon(Icon::new(icon)).on_click(move |_, window, cx| action(kind, window, cx))
+    MenuItem::new(id, MenuText::key(key)).icon(icon).on_click(move |window, cx| action(kind, window, cx))
 }
 
-/// `menu` with the "Learn" submenu.
-pub(crate) fn with_learn_submenu(menu: PopupMenu, controls: &LearnControls, window: &mut Window, cx: &mut Context<PopupMenu>) -> PopupMenu {
-    let (learning, action) = (controls.status.is_some(), controls.on_learn.clone());
-    menu.submenu_with_icon(Some(Icon::new(LucideIcon::GraduationCap)), t!("post.learn.menu").to_string(), window, cx, move |sub, _, _| {
-        let sub = if learning {
-            sub.item(item(LucideIcon::Edit, "post.learn.edit", LearnRequestKind::Edit, &action)).item(item(LucideIcon::CircleStop, "post.learn.stop", LearnRequestKind::Stop, &action))
-        } else {
-            sub.item(item(LucideIcon::HelpCircle, "post.learn.add_question", LearnRequestKind::AddQuestion, &action))
-                .item(item(LucideIcon::MessageSquareReply, "post.learn.add_answer", LearnRequestKind::AddAnswer, &action))
-        };
-        sub.separator().item(item(LucideIcon::Share2, "post.learn.thread_connections", LearnRequestKind::ThreadConnections, &action))
-    })
+/// The review items of the post menu's Study section: write a review question or answer for
+/// the post (or, once it is in review, edit or stop its review), and learn its thread's
+/// connections.
+pub(crate) fn learn_items(controls: &LearnControls) -> Vec<MenuItem> {
+    let action = &controls.on_learn;
+    let mut items = if controls.status.is_some() {
+        vec![item(ids::LEARN_EDIT, LucideIcon::Edit, "post.learn.edit", LearnRequestKind::Edit, action), item(ids::LEARN_STOP, LucideIcon::CircleStop, "post.learn.stop", LearnRequestKind::Stop, action)]
+    } else {
+        vec![item(ids::LEARN_ADD_QUESTION, LucideIcon::HelpCircle, "menus.post.review_question", LearnRequestKind::AddQuestion, action), item(ids::LEARN_ADD_ANSWER, LucideIcon::MessageSquareReply, "menus.post.review_answer", LearnRequestKind::AddAnswer, action)]
+    };
+    items.push(item(ids::LEARN_CONNECTIONS, LucideIcon::Share2, "post.learn.thread_connections", LearnRequestKind::ThreadConnections, action));
+    items
 }
 
 /// The "learning" indicator of a post in review: a cap and when it is due.

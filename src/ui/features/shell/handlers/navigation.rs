@@ -13,7 +13,7 @@ impl AppView {
     /// left open from the previous network closes: it would sit beside a feed it is not in.
     pub(crate) fn select_network(&mut self, net_id: NetworkId, window: &mut Window, cx: &mut Context<Self>) {
         let _ = self.state.switch_network(&net_id);
-        self.chrome.is_workspace_open = false;
+        self.chrome.workspace_menu.close();
         let open_elsewhere = self.feed.selected_thread_post_id.as_ref().and_then(|id| self.state.get_post(id)).is_some_and(|post| post.network_id != net_id);
         if open_elsewhere {
             self.feed.selected_thread_post_id = None;

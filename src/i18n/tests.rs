@@ -48,7 +48,7 @@ const COUNT_LABEL_BASES: &[&str] = &[
     "vault.chunks_count", "vault.corpus_header", "graph.nodes_count", "graph.links_count",
     "graph.mini_nodes", "graph.mini_edges", "feed.replies_count", "feed.show_more",
     "feed.show_more_replies", "sidebar.posts_count", "sidebar.doc_count", "sidebar.member_count",
-    "sidebar.member_agents", "cadence.badge", "cadence.day_posts", "post.refs_open_thread",
+    "sidebar.member_agents", "cadence.badge", "cadence.day_posts", "post.refs_open_thread", "post.refs_backlinks",
     "post.scheduled.published", "data.scheduled.count", "post.auto_archived", "post.auto_deleted",
     "composer.free_posts", "thinking.atomic.hint",
 ];

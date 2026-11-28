@@ -8,6 +8,7 @@ use crate::ui::features::vault::panel::VaultPanel;
 use crate::ui::features::vault::screen::Screen;
 use crate::ui::features::vault::text::kind_label;
 use crate::ui::icons::LucideIcon;
+use gpui_kit::component::menu::ContextMenuExt;
 use gpui_kit::component::Icon;
 use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::*;
@@ -111,6 +112,7 @@ impl VaultPanel {
             .hover(move |s| s.bg(hover))
             .on_click(cx.listener(move |this, _, _, cx| this.go(Screen::Entry(id.clone()), cx)))
             .children(cells.into_iter().filter(|(_, _, keep)| *keep || !compact).map(|(cell, width, _)| sized(div().child(cell), width)))
+            .context_menu(super::doc_menu::doc_context_menu(doc, cx.entity().downgrade())) // M1
             .into_any_element()
     }
 

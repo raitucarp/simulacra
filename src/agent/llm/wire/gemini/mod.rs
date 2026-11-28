@@ -1,9 +1,14 @@
 //! Google Gemini `generateContent` wire format (`functionDeclarations` / `functionCall`).
 
-use super::super::chat::{ChatMessage, ChatReply, ChatRequest, Role, ToolCall, ToolChoice};
+mod reply;
+
+pub(crate) use reply::parse;
+
+use super::super::chat::{ChatMessage, ChatRequest, Role, ToolCall, ToolChoice};
 use super::super::LlmSettings;
 use super::schema::gemini_schema;
 use super::ErrorLabels;
+use reply::{is_synthetic_id, SIGNATURE_FIELD};
 use serde_json::{json, Value};
 
 /// Base URL of the Gemini `models` collection.
@@ -12,6 +17,9 @@ pub(crate) const GEMINI_MODELS_URL: &str = "https://generativelanguage.googleapi
 pub(crate) const API_KEY_HEADER: &str = "x-goog-api-key";
 /// MIME type that turns on JSON output.
 const JSON_MIME: &str = "application/json";
+/// Output tokens allowed for thinking on top of the answer budget: Gemini counts thinking
+/// against `maxOutputTokens`, so a short answer budget alone is spent before any text.
+pub(crate) const THINKING_HEADROOM_TOKENS: u32 = 4096;
 
 pub(crate) const GEMINI_ERRORS: ErrorLabels = ErrorLabels {
     network: "Gemini network request error",
@@ -27,7 +35,8 @@ pub(crate) fn url(base: &str, settings: &LlmSettings) -> String {
 
 /// The request body.
 pub(crate) fn body(settings: &LlmSettings, req: &ChatRequest) -> Value {
-    let mut config = json!({ "temperature": settings.temperature, "maxOutputTokens": settings.max_tokens });
+    let max_output = settings.max_tokens.saturating_add(THINKING_HEADROOM_TOKENS);
+    let mut config = json!({ "temperature": settings.temperature, "maxOutputTokens": max_output });
     if let Some(schema) = &req.schema {
         config["responseMimeType"] = json!(JSON_MIME);
         config["responseSchema"] = gemini_schema(schema);
@@ -83,8 +92,17 @@ fn contents(messages: &[ChatMessage]) -> Value {
     Value::Array(out)
 }
 
+/// The model's own call id, when it sent one.
+fn provider_id(id: Option<&str>) -> Option<&str> {
+    id.filter(|id| !id.is_empty() && !is_synthetic_id(id))
+}
+
 fn function_response(msg: &ChatMessage) -> Value {
-    json!({ "functionResponse": { "name": msg.tool_name, "response": { "content": msg.content } } })
+    let mut response = json!({ "name": msg.tool_name, "response": { "content": msg.content } });
+    if let Some(id) = provider_id(msg.tool_call_id.as_deref()) {
+        response["id"] = json!(id);
+    }
+    json!({ "functionResponse": response })
 }
 
 fn model_parts(msg: &ChatMessage) -> Vec<Value> {
@@ -92,23 +110,19 @@ fn model_parts(msg: &ChatMessage) -> Vec<Value> {
     if !msg.content.trim().is_empty() || msg.tool_calls.is_empty() {
         parts.push(json!({ "text": msg.content }));
     }
-    parts.extend(msg.tool_calls.iter().map(|call| json!({ "functionCall": { "name": call.name, "args": call.arguments } })));
+    parts.extend(msg.tool_calls.iter().map(function_call_part));
     parts
 }
 
-/// Text parts joined (thoughts skipped) plus `functionCall` parts as tool calls.
-pub(crate) fn parse(reply: &Value) -> ChatReply {
-    let parts = reply["candidates"][0]["content"]["parts"].as_array().cloned().unwrap_or_default();
-    let mut texts: Vec<&str> = Vec::new();
-    let mut tool_calls = Vec::new();
-    for (idx, part) in parts.iter().enumerate() {
-        if let Some(call) = part.get("functionCall") {
-            let id = call["id"].as_str().map_or_else(|| format!("call_{idx}"), str::to_string);
-            let name = call["name"].as_str().unwrap_or_default().to_string();
-            tool_calls.push(ToolCall { id, name, arguments: call["args"].clone() });
-        } else if part["thought"] != Value::Bool(true) {
-            texts.extend(part["text"].as_str());
-        }
+/// A `functionCall` part with the call's id and thought signature echoed as received.
+fn function_call_part(call: &ToolCall) -> Value {
+    let mut function_call = json!({ "name": call.name, "args": call.arguments });
+    if let Some(id) = provider_id(Some(&call.id)) {
+        function_call["id"] = json!(id);
     }
-    ChatReply { text: texts.join("").trim().to_string(), tool_calls }
+    let mut part = json!({ "functionCall": function_call });
+    if let Some(signature) = &call.signature {
+        part[SIGNATURE_FIELD] = json!(signature);
+    }
+    part
 }

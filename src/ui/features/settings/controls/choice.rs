@@ -9,7 +9,8 @@ use super::labels::option_label;
 use crate::domain::preferences::{SettingField, SettingValue};
 use crate::ui::components::{chip_row, choice_chip};
 use gpui_kit::component::button::Button;
-use gpui_kit::component::menu::{DropdownMenu, PopupMenuItem};
+use crate::ui::menus::{render_menu, MenuItem, MenuSpec, MenuText};
+use gpui_kit::component::menu::DropdownMenu;
 use gpui_kit::component::{Disableable, Sizable};
 use gpui_kit::*;
 use rust_i18n::t;
@@ -56,15 +57,17 @@ fn menu(ctx: &RowContext, row: SettingRow, field: SettingField, options: MenuOpt
         .label(label)
         .dropdown_caret(true)
         .disabled(!enabled)
-        .dropdown_menu_with_anchor(Anchor::TopRight, move |menu, _, _| {
-            options.iter().fold(menu, |menu, (value, label)| menu.item(menu_item(field, value, label, &current, &on_edit)))
+        .dropdown_menu_with_anchor(Anchor::TopRight, move |menu, window, cx| {
+            let items = options.iter().map(|(value, label)| menu_item(field, value, label, &current, &on_edit));
+            render_menu(menu, &MenuSpec::of(items).scrollable(), window, cx)
         })
         .into_any_element()
 }
 
-fn menu_item(field: SettingField, value: &SettingValue, label: &str, current: &SettingValue, on_edit: &EditAction) -> PopupMenuItem {
-    let (on_edit, value) = (on_edit.clone(), value.clone());
-    PopupMenuItem::new(label.to_string())
-        .checked(value == *current)
-        .on_click(move |_, window, cx| on_edit(field, value.clone(), window, cx))
+/// One option, ticked (on the right, as in every menu) while it is the current value.
+fn menu_item(field: SettingField, value: &SettingValue, label: &str, current: &SettingValue, on_edit: &EditAction) -> MenuItem {
+    let (on_edit, picked) = (on_edit.clone(), value.clone());
+    MenuItem::new(format!("setting.{label}"), MenuText::plain(label.to_string()))
+        .checked(value == current)
+        .on_click(move |window, cx| on_edit(field, picked.clone(), window, cx))
 }

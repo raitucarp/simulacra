@@ -1,5 +1,6 @@
 //! Provider-neutral conversation types: messages, tool specs, tool calls and replies.
 
+use crate::domain::post::SourceRef;
 use serde_json::Value;
 
 /// Who speaks a message.
@@ -58,6 +59,8 @@ pub struct ToolCall {
     pub id: String,
     pub name: String,
     pub arguments: Value,
+    /// Opaque thought signature sent back with the call (Gemini 3+ rejects a tool loop without it).
+    pub signature: Option<String>,
 }
 
 /// A function tool offered to the model; `parameters` is a JSON schema.
@@ -113,6 +116,8 @@ impl ChatRequest {
 pub struct ChatReply {
     pub text: String,
     pub tool_calls: Vec<ToolCall>,
+    /// Web pages the provider's own search grounded the reply on.
+    pub sources: Vec<SourceRef>,
 }
 
 impl ChatReply {

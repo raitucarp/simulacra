@@ -9,7 +9,7 @@ fn settings(provider: LlmProvider, model: &str) -> LlmSettings {
 }
 
 fn call() -> ToolCall {
-    ToolCall { id: "call_1".into(), name: "vault_search".into(), arguments: json!({ "query": "monism" }) }
+    ToolCall { id: "call_1".into(), name: "vault_search".into(), arguments: json!({ "query": "monism" }), signature: None }
 }
 
 /// system, user, an assistant tool call, two tool results.
@@ -79,7 +79,7 @@ fn openai_replies_parse_text_and_tool_calls() {
     ] } }] });
     let parsed = openai::parse(&reply);
     assert_eq!(parsed.text, "hello");
-    assert_eq!(parsed.tool_calls[0], ToolCall { id: "a".into(), name: "web_fetch".into(), arguments: json!({ "url": "https://x.test" }) });
+    assert_eq!(parsed.tool_calls[0], ToolCall { id: "a".into(), name: "web_fetch".into(), arguments: json!({ "url": "https://x.test" }), signature: None });
     assert_eq!(parsed.tool_calls[1].id, "call_1");
     assert_eq!(parsed.tool_calls[1].arguments, json!("not json"));
     let flat = openai::parse_tool_calls(&json!([{ "id": "f", "name": "n", "arguments": { "k": 1 } }]));
@@ -123,7 +123,7 @@ fn anthropic_replies_parse_text_blocks_and_tool_use() {
     ] });
     let parsed = anthropic::parse(&reply);
     assert_eq!(parsed.text, "Let me look. Done");
-    assert_eq!(parsed.tool_calls, vec![ToolCall { id: "tu_1".into(), name: "emit_post".into(), arguments: json!({ "content": "Hi" }) }]);
+    assert_eq!(parsed.tool_calls, vec![ToolCall { id: "tu_1".into(), name: "emit_post".into(), arguments: json!({ "content": "Hi" }), signature: None }]);
 }
 
 #[test]
@@ -150,8 +150,9 @@ fn gemini_body_uses_function_declarations_and_sanitized_schemas() {
         { "google_search": {} }
     ]));
     assert_eq!(body["toolConfig"], json!({ "functionCallingConfig": { "mode": "ANY" } }));
-    assert_eq!(body["generationConfig"], json!({ "temperature": 0.5, "maxOutputTokens": 200 }));
-    assert_eq!(gemini::url("https://g.test/models/", &settings(LlmProvider::Gemini, "")), "https://g.test/models/gemini-1.5-flash:generateContent");
+    let thinking = gemini::THINKING_HEADROOM_TOKENS;
+    assert_eq!(body["generationConfig"], json!({ "temperature": 0.5, "maxOutputTokens": 200 + thinking }), "thinking gets room beyond the answer budget");
+    assert_eq!(gemini::url("https://g.test/models/", &settings(LlmProvider::Gemini, "")), "https://g.test/models/gemini-4-hydrogen:generateContent");
 }
 
 #[test]
@@ -166,7 +167,7 @@ fn gemini_schema_output_and_reply_parsing() {
     ] } }] });
     let parsed = gemini::parse(&reply);
     assert_eq!(parsed.text, "Answer");
-    assert_eq!(parsed.tool_calls, vec![ToolCall { id: "call_2".into(), name: "read_network".into(), arguments: json!({ "action": "recent" }) }]);
+    assert_eq!(parsed.tool_calls, vec![ToolCall { id: "call_2".into(), name: "read_network".into(), arguments: json!({ "action": "recent" }), signature: None }]);
 }
 
 #[test]

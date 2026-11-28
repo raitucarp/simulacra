@@ -18,7 +18,7 @@ mod view;
 pub use collect::{collect_items, excerpt};
 pub use host::{load_history, save_history, PaletteHost};
 pub use model::{PaletteHistory, PaletteMode, PaletteTarget};
-pub use registry::{spec, Availability, CommandId, CommandKind, CommandSpec, COMMANDS};
+pub use registry::{spec, Availability, CommandCategory, CommandId, CommandKind, CommandSpec, COMMANDS};
 pub use view::{
     CommandPalette, ConfirmSelection, DismissPalette, NextGroup, PaletteEvent, PreviousGroup, SelectNext,
     SelectPrevious,

@@ -1,6 +1,7 @@
-//! A post's data controls: in the "…" menu, "Edit" (the user's own posts), "History" (once
-//! edited), "Reply in the margin…" (N2) and "Fork a what-if…" (N6), never on a locked post,, "Bookmark" and the "Add to
-//! collection" submenu. The card's "edited" mark is `edited_mark`.
+//! A post's data controls: what the feed knows of every card (revisions, bookmarks,
+//! collections and the facts its menu needs), the item helper of the menu entries built in
+//! this module, and the "Add to collection" submenu. The card's "edited" mark is
+//! `edited_mark`.
 
 use super::events::{DataAction, DataEvent};
 use super::text::tr;
@@ -9,8 +10,8 @@ use crate::domain::post::PostLifecycle;
 use crate::domain::preferences::ArchiveAfter;
 use crate::domain::PostId;
 use crate::ui::icons::LucideIcon;
-use gpui_kit::component::menu::{PopupMenu, PopupMenuItem};
-use gpui_kit::component::Icon;
+use crate::ui::menus::{post_ids as ids, MenuItem, MenuSection, MenuSpec, MenuText, Submenu};
+use gpui_kit::SharedString;
 use std::collections::{HashMap, HashSet};
 use std::rc::Rc;
 
@@ -99,19 +100,21 @@ impl DataControls {
     }
 }
 
-pub(super) fn item(label: String, icon: LucideIcon, event: DataEvent, on_event: &DataAction) -> PopupMenuItem {
+pub(super) fn item(id: impl Into<SharedString>, label: MenuText, icon: LucideIcon, event: DataEvent, on_event: &DataAction) -> MenuItem {
     let on_event = on_event.clone();
-    PopupMenuItem::new(label).icon(Icon::new(icon)).on_click(move |_, window, cx| on_event(event.clone(), window, cx))
+    MenuItem::new(id, label).icon(icon).on_click(move |window, cx| on_event(event.clone(), window, cx))
 }
 
-pub(super) fn collections_submenu(menu: PopupMenu, controls: &DataControls) -> PopupMenu {
+/// "Add to collection": every collection of the network, ticked when it holds the post (a
+/// click adds or removes it), then "New collection…".
+pub(super) fn collections_submenu(controls: &DataControls) -> Submenu {
     let post = &controls.post_id;
-    let menu = controls.collections.iter().fold(menu, |menu, (id, name)| {
+    let toggles = controls.collections.iter().map(|(id, name)| {
         let member = controls.member_of.contains(id);
         let event = if member { DataEvent::RemoveFromCollection(post.clone(), id.clone()) } else { DataEvent::AddToCollection(post.clone(), id.clone()) };
-        let icon = if member { LucideIcon::Check } else { LucideIcon::Folder };
-        menu.item(item(name.clone(), icon, event, &controls.on_event))
+        item(ids::COLLECTION_TOGGLE, MenuText::plain(name.clone()), LucideIcon::Folder, event, &controls.on_event).checked(member)
     });
-    let menu = if controls.collections.is_empty() { menu } else { menu.separator() };
-    menu.item(item(tr("data.menu.new_collection"), LucideIcon::FolderPlus, DataEvent::NewCollectionFor(post.clone()), &controls.on_event))
+    let new = item(ids::COLLECTION_NEW, MenuText::key("data.menu.new_collection"), LucideIcon::FolderPlus, DataEvent::NewCollectionFor(post.clone()), &controls.on_event);
+    let spec = MenuSpec::new().section(MenuSection::new().entries(toggles)).section(MenuSection::new().entry(new)).scrollable();
+    Submenu::new(ids::COLLECTIONS, MenuText::key("data.menu.add_to_collection"), spec).icon(LucideIcon::FolderPlus)
 }

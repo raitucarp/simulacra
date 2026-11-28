@@ -69,7 +69,11 @@ fn message(msg: &ChatMessage) -> Value {
 
 fn call(call: &ToolCall) -> Value {
     let arguments = call.arguments.to_string();
-    json!({ "id": call.id, "type": "function", "function": { "name": call.name, "arguments": arguments } })
+    let mut wire = json!({ "id": call.id, "type": "function", "function": { "name": call.name, "arguments": arguments } });
+    if let Some(signature) = &call.signature {
+        wire["extra_content"] = json!({ "google": { "thought_signature": signature } });
+    }
+    wire
 }
 
 /// Tool specs in OpenAI form (also the `{{tools}}` value of custom requests).
@@ -94,11 +98,12 @@ fn choice(choice: &ToolChoice) -> Value {
 pub(crate) fn parse(reply: &Value) -> ChatReply {
     let message = &reply["choices"][0]["message"];
     let text = message["content"].as_str().unwrap_or_default().trim().to_string();
-    ChatReply { text, tool_calls: parse_tool_calls(&message["tool_calls"]) }
+    ChatReply { text, tool_calls: parse_tool_calls(&message["tool_calls"]), ..ChatReply::default() }
 }
 
 /// An OpenAI-style tool-call array (`[{id, function: {name, arguments}}]`); flat
-/// `{id, name, arguments}` items are accepted too.
+/// `{id, name, arguments}` items are accepted too. Gemini's OpenAI-compatible endpoint puts
+/// the call's thought signature in `extra_content.google.thought_signature`.
 pub(crate) fn parse_tool_calls(calls: &Value) -> Vec<ToolCall> {
     let Some(items) = calls.as_array() else { return Vec::new() };
     items
@@ -108,7 +113,8 @@ pub(crate) fn parse_tool_calls(calls: &Value) -> Vec<ToolCall> {
             let function = item.get("function").unwrap_or(item);
             let name = function["name"].as_str()?.to_string();
             let id = item["id"].as_str().map_or_else(|| format!("call_{idx}"), str::to_string);
-            Some(ToolCall { id, name, arguments: parse_arguments(&function["arguments"]) })
+            let signature = item["extra_content"]["google"]["thought_signature"].as_str().map(str::to_string);
+            Some(ToolCall { id, name, arguments: parse_arguments(&function["arguments"]), signature })
         })
         .collect()
 }

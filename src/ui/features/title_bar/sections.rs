@@ -9,10 +9,13 @@ use crate::ui::features::command_palette::CommandId;
 use crate::ui::icons::LucideIcon;
 use crate::ui::keymap::{chord_text, shortcut_for};
 use gpui_kit::base::StyledExt;
+use crate::ui::features::popovers::language::{language_menu_spec, SelectLangCallback};
+use crate::ui::menus::render_menu;
 use gpui_kit::component::button::{Button, ButtonVariants};
+use gpui_kit::component::menu::DropdownMenu;
 use gpui_kit::component::Icon;
 use gpui_kit::prelude::FluentBuilder;
-use gpui_kit::{div, Div, ParentElement, Styled};
+use gpui_kit::{div, Anchor, Div, ParentElement, Styled};
 use rust_i18n::t;
 
 const TOGGLE_LEFT_SIDEBAR_ID: &str = "toggle-left-sidebar-btn";
@@ -23,7 +26,7 @@ const SETTINGS_ID: &str = "settings-btn";
 /// Callbacks owned by the right-hand action cluster.
 pub(super) struct ActionCallbacks {
     pub on_toggle_right: TitleBarAction,
-    pub on_toggle_lang: TitleBarAction,
+    pub on_select_lang: SelectLangCallback,
     pub on_toggle_settings: TitleBarAction,
     pub appearance: Option<(AppearanceMode, TitleBarAction)>,
 }
@@ -49,9 +52,10 @@ fn ghost_icon_button(id: &'static str, icon: LucideIcon, tooltip: String, action
         })
 }
 
-/// Sidebar toggle followed by the `app title › network` breadcrumb.
+/// The ☰ app menu (M1), the sidebar toggle, then the `app title › network` breadcrumb.
 pub(super) fn render_brand_section(
     on_toggle_left: TitleBarAction,
+    app_menu: Option<gpui_kit::FocusHandle>,
     active_net_name: String,
     theme: &ThemeTokens,
 ) -> Div {
@@ -60,6 +64,7 @@ pub(super) fn render_brand_section(
         .items_center()
         .min_w_0()
         .gap(theme.spacing_sm)
+        .children(app_menu.map(super::app_menu::render_app_menu))
         .child(ghost_icon_button(TOGGLE_LEFT_SIDEBAR_ID, LucideIcon::PanelLeft, command_tooltip(CommandId::ToggleSidebar, "palette.cmd.toggle_sidebar"), on_toggle_left))
         .child(render_breadcrumb(active_net_name, theme))
 }
@@ -103,7 +108,7 @@ pub(super) fn render_action_cluster(
     is_maximized: bool,
     theme: &ThemeTokens,
 ) -> Div {
-    let on_toggle_lang = callbacks.on_toggle_lang;
+    let on_select_lang = callbacks.on_select_lang;
     div()
         .flex()
         .flex_none()
@@ -116,7 +121,7 @@ pub(super) fn render_action_cluster(
             command_tooltip(CommandId::ToggleRightSidebar, "palette.cmd.toggle_right_sidebar"),
             callbacks.on_toggle_right,
         ))
-        // Language Dropdown Trigger
+        // Language menu (M1: a kit dropdown, the current language ticked)
         .child(
             Button::new(LANG_MENU_ID)
                 .ghost()
@@ -124,9 +129,7 @@ pub(super) fn render_action_cluster(
                 .icon(Icon::new(LucideIcon::Globe))
                 .label(current_language.code().to_uppercase())
                 .tooltip(t!("language.select").to_string())
-                .on_click(move |_, window, cx| {
-                    on_toggle_lang(window, cx);
-                }),
+                .dropdown_menu_with_anchor(Anchor::TopRight, move |menu, window, cx| render_menu(menu, &language_menu_spec(current_language, &on_select_lang), window, cx)),
         )
         // Dark / Light / System toggle
         .when_some(callbacks.appearance, |row, (mode, on_cycle)| row.child(render_appearance_toggle(mode, on_cycle)))

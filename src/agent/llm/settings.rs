@@ -1,16 +1,18 @@
 //! LLM configuration and its persistence in the SQLite `settings` table.
 
-use super::LlmProvider;
+use super::{redact_secrets, LlmProvider};
 use crate::storage::{Database, SettingKey};
 use serde::{Deserialize, Serialize};
+use std::fmt;
 
 /// Default sampling temperature.
 pub(crate) const DEFAULT_TEMPERATURE: f32 = 0.7;
-/// Default max output token budget.
-pub(crate) const DEFAULT_MAX_TOKENS: u32 = 300;
+/// Default answer budget in output tokens: room beyond a short post, since thinking models
+/// spend output tokens before they answer (the Gemini wire adds thinking headroom on top).
+pub(crate) const DEFAULT_MAX_TOKENS: u32 = 1024;
 
-/// LLM Configuration Settings.
-#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+/// LLM Configuration Settings. `Debug` never prints the key, only whether one is set.
+#[derive(Clone, PartialEq, Serialize, Deserialize)]
 pub struct LlmSettings {
     pub provider: LlmProvider,
     pub api_key: String,
@@ -31,6 +33,19 @@ impl Default for LlmSettings {
             temperature: DEFAULT_TEMPERATURE,
             max_tokens: DEFAULT_MAX_TOKENS,
         }
+    }
+}
+
+impl fmt::Debug for LlmSettings {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("LlmSettings")
+            .field("provider", &self.provider)
+            .field("has_api_key", &self.has_api_key())
+            .field("model", &self.model)
+            .field("custom_endpoint", &redact_secrets(&self.custom_endpoint, std::slice::from_ref(&self.api_key)))
+            .field("temperature", &self.temperature)
+            .field("max_tokens", &self.max_tokens)
+            .finish()
     }
 }
 

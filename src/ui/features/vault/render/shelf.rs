@@ -8,6 +8,7 @@ use crate::ui::features::vault::panel::VaultPanel;
 use crate::ui::features::vault::screen::Screen;
 use crate::ui::features::vault::text::kind_label;
 use crate::ui::icons::LucideIcon;
+use gpui_kit::component::menu::ContextMenuExt;
 use gpui_kit::component::Icon;
 use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::*;
@@ -59,6 +60,7 @@ impl VaultPanel {
             .child(div().text_size(theme.font_size_xs).text_color(theme.text_secondary).truncate().child(first_creator(doc)))
             .child(meta_line(year_and_kind(doc), theme).text_size(theme.font_size_2xs))
             .when_some(mark, |card, mark| card.child(mark))
+            .context_menu(super::doc_menu::doc_context_menu(doc, cx.entity().downgrade())) // M1
             .into_any_element()
     }
 

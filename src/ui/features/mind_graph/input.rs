@@ -15,13 +15,13 @@ const SCROLL_LINE_HEIGHT: f32 = 20.0;
 /// Click count of a double click.
 const DOUBLE_CLICK: usize = 2;
 
-fn xy(p: Point<Pixels>) -> (f32, f32) {
+pub(super) fn xy(p: Point<Pixels>) -> (f32, f32) {
     (p.x.as_f32(), p.y.as_f32())
 }
 
 impl MindGraphPanel {
     /// Node under `pos` in the last painted frame.
-    fn hit(&self, pos: (f32, f32)) -> Option<usize> {
+    pub(super) fn hit(&self, pos: (f32, f32)) -> Option<usize> {
         let frame = self.frame.get()?;
         hit_test(&self.scene, &self.view, &frame, self.fit(), self.radius_range(), pos)
     }

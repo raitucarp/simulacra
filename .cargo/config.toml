@@ -1,2 +1,7 @@
 [target.'cfg(windows)']
 rustflags = ["-C", "link-arg=/STACK:8388608"]
+
+[alias]
+# WS7: the live model suite against the real Gemini API (tests/live/README.md). Needs
+# GEMINI_API_KEY; writes target/live-report.md.
+live = "test --test live_models -- --ignored --test-threads=1 --nocapture"

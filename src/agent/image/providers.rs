@@ -3,16 +3,18 @@
 use super::save::ImageData;
 use super::ImageJob;
 use crate::agent::llm::send_json;
-use crate::agent::llm::wire::ErrorLabels;
+use crate::agent::llm::wire::{finish, gemini, ErrorLabels};
 use serde_json::{json, Value};
 
 const OPENAI_IMAGES_URL: &str = "https://api.openai.com/v1/images/generations";
 const OPENAI_DEFAULT_MODEL: &str = "gpt-image-1";
 const GOOGLE_MODELS_URL: &str = "https://generativelanguage.googleapis.com/v1beta/models";
-const GOOGLE_DEFAULT_MODEL: &str = "imagen-3.0-generate-002";
+const GOOGLE_DEFAULT_MODEL: &str = "gemini-nano-banana-2.1";
 const GOOGLE_KEY_HEADER: &str = "x-goog-api-key";
 /// Model-id prefix of Imagen models (`:predict`); others use `:generateContent`.
 const IMAGEN_PREFIX: &str = "imagen";
+/// Characters of a text-only answer quoted when no image came back.
+const MAX_TEXT_INSTEAD_CHARS: usize = 80;
 
 const OPENAI_IMAGE_ERRORS: ErrorLabels = ErrorLabels {
     network: "OpenAI image request error",
@@ -70,9 +72,13 @@ pub async fn google(http: &reqwest::Client, job: &ImageJob, prompt: &str) -> Res
     let predicted = reply["predictions"][0]["bytesBase64Encoded"].as_str();
     let parts = reply["candidates"][0]["content"]["parts"].as_array().cloned().unwrap_or_default();
     let inline = parts.iter().find_map(|part| part["inlineData"]["data"].as_str().map(str::to_string));
-    predicted
-        .map(str::to_string)
-        .or(inline)
-        .map(ImageData::Base64)
-        .ok_or_else(|| GOOGLE_IMAGE_ERRORS.empty.to_string())
+    predicted.map(str::to_string).or(inline).map(ImageData::Base64).ok_or_else(|| no_image_error(&reply))
+}
+
+/// Why a Google reply has no image: a blocked prompt, the finish reason, or the text the
+/// model sent instead (shortened).
+pub fn no_image_error(reply: &Value) -> String {
+    let text: String = gemini::parse(reply).text.chars().take(MAX_TEXT_INSTEAD_CHARS).collect();
+    let reason = finish::gemini_reason(reply).or_else(|| (!text.is_empty()).then(|| format!("the model answered with text only: {text}")));
+    reason.map_or_else(|| GOOGLE_IMAGE_ERRORS.empty.to_string(), |reason| format!("{}: {reason}", GOOGLE_IMAGE_ERRORS.empty))
 }

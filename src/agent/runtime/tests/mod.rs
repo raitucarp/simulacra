@@ -1,5 +1,6 @@
 mod job;
 mod draft;
+mod gemini; // WS7: thought signatures and grounding
 mod native;
 mod requests;
 mod react;

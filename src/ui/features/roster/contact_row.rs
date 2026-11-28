@@ -4,7 +4,9 @@ use crate::domain::Profile;
 use crate::theme::ThemeTokens;
 use crate::ui::atoms::render_profile_avatar;
 use crate::ui::components::{mono_tag, selectable_row, status_dot, status_glyph};
-use super::params::ProfileCallback;
+use super::params::RosterCallbacks;
+use crate::ui::menus::render_menu;
+use gpui_kit::component::menu::ContextMenuExt;
 use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::*;
 
@@ -23,10 +25,11 @@ pub(super) fn render_contact_row(
     prof: &Profile,
     state: ContactRowState,
     theme: &ThemeTokens,
-    on_select: ProfileCallback,
-) -> Stateful<Div> {
-    let prof_id = prof.id.clone();
+    callbacks: &RosterCallbacks,
+) -> impl IntoElement {
+    let (prof_id, on_select) = (prof.id.clone(), callbacks.select.clone());
     let row_id = format!("{}-{}-{}", ROW_ID_PREFIX, idx, prof.id);
+    let menu = super::profile_menu::profile_menu_spec(prof, callbacks);
     selectable_row(row_id, state.selected, theme.accent_brand, theme)
         .on_click(move |_, w, cx| on_select(prof_id.clone(), w, cx))
         .flex()
@@ -35,6 +38,7 @@ pub(super) fn render_contact_row(
         .gap(theme.spacing_sm)
         .child(identity(prof, state.selected, theme))
         .child(markers(prof, state.active_user_persona, theme))
+        .context_menu(move |popup, window, cx| render_menu(popup, &menu, window, cx)) // M1
 }
 
 fn identity(prof: &Profile, selected: bool, theme: &ThemeTokens) -> Div {

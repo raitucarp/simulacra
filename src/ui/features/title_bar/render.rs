@@ -18,7 +18,7 @@ impl RenderOnce for AppTitleBar {
         let theme = self.theme;
         let callbacks = ActionCallbacks {
             on_toggle_right: self.on_toggle_right_sidebar,
-            on_toggle_lang: self.on_toggle_lang,
+            on_select_lang: self.on_select_lang,
             on_toggle_settings: self.on_toggle_settings,
             appearance: self.appearance,
         };
@@ -34,7 +34,7 @@ impl RenderOnce for AppTitleBar {
             .justify_between()
             .px(theme.spacing_md)
             // 1. Left Section: Sidebar Toggle + Brand & Breadcrumbs
-            .child(render_brand_section(self.on_toggle_left_sidebar, active_net_name, &theme))
+            .child(render_brand_section(self.on_toggle_left_sidebar, self.app_menu, active_net_name, &theme))
             // 2. Center Draggable Area
             .child(div().flex_1().h_full().window_control_area(WindowControlArea::Drag))
             // 3. Right Section: PanelRight Toggle + Language + Settings + Window Controls

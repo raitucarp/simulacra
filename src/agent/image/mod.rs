@@ -14,23 +14,37 @@ pub mod save;
 mod tests;
 
 use crate::agent::custom_request;
+use crate::agent::llm::redact_secrets;
 use crate::domain::engine::{value_text, ImageEngine, ImageEngineConfig, ImageTrigger};
 use save::ImageData;
 use serde_json::Value;
+use std::fmt;
 use std::path::PathBuf;
 use std::time::Duration;
 
 /// Timeout of one image request (local servers can be slow).
 const IMAGE_REQUEST_TIMEOUT: Duration = Duration::from_secs(180);
 
-/// One image engine, resolved with its credential and destination folder.
-#[derive(Debug, Clone)]
+/// One image engine, resolved with its credential and destination folder. `Debug` never
+/// prints the secret, only whether one is set.
+#[derive(Clone)]
 pub struct ImageJob {
     pub config: ImageEngineConfig,
     pub secret: String,
     /// The credential's endpoint (replaces the provider URL when non-blank).
     pub endpoint: String,
     pub media_dir: PathBuf,
+}
+
+impl fmt::Debug for ImageJob {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("ImageJob")
+            .field("config", &self.config)
+            .field("has_secret", &!self.secret.trim().is_empty())
+            .field("endpoint", &redact_secrets(&self.endpoint, std::slice::from_ref(&self.secret)))
+            .field("media_dir", &self.media_dir)
+            .finish()
+    }
 }
 
 impl ImageJob {

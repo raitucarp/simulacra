@@ -64,6 +64,12 @@ impl CatalogueQuery {
         }
     }
 
+    /// This query sorted by `key` in the given direction.
+    pub fn sorted(mut self, key: SortKey, descending: bool) -> Self {
+        (self.sort, self.descending) = (key, descending);
+        self
+    }
+
     /// This query sorted by `key`; choosing the current key again reverses the direction.
     pub fn sorted_by(mut self, key: SortKey) -> Self {
         if self.sort == key {

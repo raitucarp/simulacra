@@ -50,7 +50,7 @@ pub const URL_TEMPLATES: [&str; 4] = [
 /// Most model ids offered.
 const MAX_MODELS: usize = 6;
 const OPENAI_IMAGES: [&str; 2] = ["gpt-image-1", "dall-e-3"];
-const GOOGLE_IMAGES: [&str; 2] = ["imagen-4.0-generate-001", "gemini-2.5-flash-image"];
+const GOOGLE_IMAGES: [&str; 3] = ["gemini-nano-banana-2.1", "gemini-3-pro-image", "imagen-4.0-generate-001"];
 const LOCAL_IMAGES: [&str; 2] = ["sd_xl_base_1.0.safetensors", "v1-5-pruned-emaonly.safetensors"];
 
 /// The own model's provider presets (every provider's when the agent uses the global model),

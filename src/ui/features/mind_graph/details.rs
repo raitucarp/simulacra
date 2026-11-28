@@ -16,7 +16,7 @@ const OPEN_BUTTON_ID: &str = "mind-graph-open-node";
 const RESET_BUTTON_ID: &str = "mind-graph-reset-view";
 
 /// Translation key of the "open" action for a node kind.
-fn open_label_key(kind: NodeKind) -> &'static str {
+pub(super) fn open_label_key(kind: NodeKind) -> &'static str {
     match kind {
         NodeKind::Post => "graph.open_post",
         NodeKind::Document => "graph.open_doc",

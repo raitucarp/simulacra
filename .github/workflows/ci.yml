@@ -1,11 +1,12 @@
 name: CI
 
 # Pull requests and pushes to main. Order:
-#   1. changes: works out whether anything but documentation changed.
+#   1. changes: works out whether anything but documentation changed, and whether the docs site did.
 #   2. Fast gates, in parallel: dependency policy (cargo-deny, plus dependency review on pull
 #      requests) and the workflow security audit (zizmor).
 #   3. Once both pass and code changed: clippy on Linux, and the test suite on Linux and Windows
 #      (pull requests) or Linux, Windows and macOS (main, whose macOS minutes cost more).
+#      Pull requests that touch the docs site (docs/) check and build it; docs.yml deploys it.
 #   4. CI passed: one status for branch protection, green only when every job above succeeded
 #      or was skipped on purpose.
 # Installers are built only by the Release workflow.
@@ -34,6 +35,7 @@ jobs:
     timeout-minutes: 5
     outputs:
       code: ${{ steps.diff.outputs.code }}
+      docs: ${{ steps.diff.outputs.docs }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -50,7 +52,10 @@ jobs:
           fi
           changed=$(git diff --name-only "origin/$BASE_REF...HEAD")
           echo "$changed"
-          # The docs site (docs/) has its own workflow (docs.yml); its changes need no Rust build.
+          # The docs site (docs/) is built by the docs job below; its changes need no Rust build.
+          if echo "$changed" | grep -qE '^docs/|^\.github/workflows/(ci|docs)\.yml$'; then
+            echo "docs=true" >> "$GITHUB_OUTPUT"
+          fi
           if echo "$changed" | grep -qvE '(\.md$|^LICENSE|^docs/|^\.github/workflows/docs\.yml$)'; then
             echo "code=true" >> "$GITHUB_OUTPUT"
           else
@@ -126,9 +131,35 @@ jobs:
       name: ${{ matrix.name }}
       os: ${{ matrix.os }}
 
+  docs:
+    name: Docs site
+    needs: [changes]
+    if: needs.changes.outputs.docs == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: docs
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: docs/package-lock.json
+      - name: Install dependencies
+        run: npm ci
+      # MDX and links, then the static export that docs.yml deploys (next build type-checks).
+      - name: Check pages and screenshots
+        run: npm run check
+      - name: Build
+        run: npm run build
+
   passed:
     name: CI passed
-    needs: [changes, dependencies, workflows, clippy, test]
+    needs: [changes, dependencies, workflows, clippy, test, docs]
     if: always()
     runs-on: ubuntu-latest
     timeout-minutes: 5

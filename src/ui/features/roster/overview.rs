@@ -68,7 +68,7 @@ fn actions(profile: &Profile, callbacks: &RosterCallbacks) -> Div {
 }
 
 /// Asks before removing a profile: it leaves the roster for good (its posts stay).
-fn confirm_remove(name: String, id: ProfileId, delete: ProfileCallback, window: &mut Window, cx: &mut App) {
+pub(super) fn confirm_remove(name: String, id: ProfileId, delete: ProfileCallback, window: &mut Window, cx: &mut App) {
     window.open_alert_dialog(cx, move |alert, _, _| {
         let (id, delete) = (id.clone(), delete.clone());
         alert

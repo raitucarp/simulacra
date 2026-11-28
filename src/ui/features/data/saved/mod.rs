@@ -4,6 +4,7 @@
 //! it, and "Learn this collection" for the Review page. The Library / Saved switch sits above
 //! the vault and this view.
 
+mod menus; // M1
 mod render;
 mod rows;
 

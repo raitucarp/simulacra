@@ -9,7 +9,8 @@ use crate::ui::features::vault::text::sort_label;
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::button::{Button, ButtonVariants};
 use gpui_kit::component::input::Input;
-use gpui_kit::component::menu::{DropdownMenu, PopupMenuItem};
+use crate::ui::menus::{render_menu, MenuItem, MenuSection, MenuSpec, MenuText};
+use gpui_kit::component::menu::DropdownMenu;
 use gpui_kit::component::{Icon, Sizable};
 use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::*;
@@ -67,27 +68,16 @@ impl VaultPanel {
     }
 
     fn render_sort_menu(&self, compact: bool, cx: &mut Context<Self>) -> impl IntoElement {
-        let (current, _) = self.query.effective_sort();
+        let (current, descending) = self.query.effective_sort();
         let panel = cx.entity().downgrade();
         let label = t!("vault.sort_by", key = sort_label(current)).to_string();
         Button::new(SORT_BUTTON_ID)
             .ghost()
             .small()
-            .icon(Icon::new(LucideIcon::ArrowUpDown))
+            .icon(Icon::new(if descending { LucideIcon::ArrowDown } else { LucideIcon::ArrowUp }))
             .tooltip(label.clone())
             .when(!compact, |b| b.label(label))
-            .dropdown_menu(move |menu, _, _| {
-                SortKey::ALL.iter().fold(menu, |menu, key| {
-                    let (panel, key) = (panel.clone(), *key);
-                    menu.item(
-                        PopupMenuItem::new(sort_label(key))
-                            .checked(key == current)
-                            .on_click(move |_, _, cx| {
-                                let _ = panel.update(cx, |this, cx| this.sort_by(key, cx));
-                            }),
-                    )
-                })
-            })
+            .dropdown_menu(move |menu, window, cx| render_menu(menu, &sort_menu_spec(current, descending, &panel), window, cx))
     }
 
     fn render_layout_switch(&self, cx: &mut Context<Self>) -> impl IntoElement {
@@ -116,4 +106,24 @@ impl VaultPanel {
             let _ = panel.update(cx, |this, cx| this.set_layout(layout, cx));
         }
     }
+}
+
+/// Sort by (every key, the current one ticked; choosing it again still reverses it) and
+/// Order (ascending or descending, the current direction ticked).
+fn sort_menu_spec(current: SortKey, descending: bool, panel: &WeakEntity<VaultPanel>) -> MenuSpec {
+    let by = |key: SortKey| {
+        let panel = panel.clone();
+        move |_: &mut Window, cx: &mut App| {
+            let _ = panel.update(cx, |this, cx| this.sort_by(key, cx));
+        }
+    };
+    let order = |desc: bool| {
+        let panel = panel.clone();
+        move |_: &mut Window, cx: &mut App| {
+            let _ = panel.update(cx, |this, cx| this.set_query(this.query.clone().sorted(current, desc), cx));
+        }
+    };
+    let keys = SortKey::ALL.iter().map(|key| MenuItem::new(format!("vault.sort.{}", key.key()), MenuText::keyed(format!("vault.sort.{}", key.key()), sort_label(*key))).checked(*key == current).on_click(by(*key)));
+    let order = [(false, "menus.sort.ascending", LucideIcon::ArrowUp), (true, "menus.sort.descending", LucideIcon::ArrowDown)].map(|(desc, key, icon)| MenuItem::new(key, MenuText::key(key)).icon(icon).checked(desc == descending).on_click(order(desc)));
+    MenuSpec::new().section(MenuSection::labelled("menus.sort.by").entries(keys)).section(MenuSection::labelled("menus.sort.order").entries(order))
 }

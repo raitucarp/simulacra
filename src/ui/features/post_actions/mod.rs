@@ -12,6 +12,6 @@ mod model;
 mod rail;
 mod sheet;
 
-pub use labels::{failure_text, group_title, kind_icon, kind_title};
+pub use labels::{failure_text, group_icon, group_title, kind_icon, kind_title};
 pub use model::{ActionChoice, ActionSheet, ActionStatus, ConceptHits, SheetEvent};
 pub use sheet::{render_actions_sheet, SheetAction, SheetInputs};

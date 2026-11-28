@@ -7,7 +7,8 @@ use crate::theme::{AppearanceMode, PaletteMode, ThemeRegistry, ThemeSettings, Th
 use crate::ui::components::{chip_row, choice_chip};
 use crate::ui::features::title_bar::mode_label;
 use gpui_kit::component::button::Button;
-use gpui_kit::component::menu::{DropdownMenu, PopupMenuItem};
+use crate::ui::menus::{render_menu, MenuItem, MenuSection, MenuSpec, MenuText};
+use gpui_kit::component::menu::DropdownMenu;
 use gpui_kit::component::Sizable;
 use gpui_kit::*;
 use rust_i18n::t;
@@ -15,11 +16,25 @@ use rust_i18n::t;
 const MODE_CHIP_ID_PREFIX: &str = "appearance-mode-";
 const PREFERRED_MENU_ID_PREFIX: &str = "appearance-preferred-";
 
-/// `(id, name)` of every palette of `mode`: the bundled ones, then the user's own.
-fn palettes_of(settings: &ThemeSettings, mode: PaletteMode) -> Vec<(String, String)> {
-    let bundled = ThemeRegistry::global().by_mode(mode);
-    let custom = settings.custom.iter().filter(|palette| palette.mode == mode);
-    bundled.chain(custom).map(|palette| (palette.id.clone(), palette.name.clone())).collect()
+/// `(id, name)` of every palette of `mode`: the bundled ones, and the user's own.
+fn palettes_of(settings: &ThemeSettings, mode: PaletteMode) -> [Vec<(String, String)>; 2] {
+    let bundled = ThemeRegistry::global().by_mode(mode).map(|palette| (palette.id.clone(), palette.name.clone())).collect();
+    let custom = settings.custom.iter().filter(|palette| palette.mode == mode).map(|palette| (palette.id.clone(), palette.name.clone())).collect();
+    [bundled, custom]
+}
+
+/// The palette menu: Built-in and Custom sections, the current palette ticked.
+fn palette_menu(sections: &[Vec<(String, String)>; 2], current: &str, mode: PaletteMode, handle: &PanelHandle) -> MenuSpec {
+    let item = |(id, name): &(String, String)| {
+        let picked = id.clone();
+        let pick = act(handle, move |pane, window, cx| pane.set_preferred(mode, &picked, window, cx));
+        MenuItem::new(format!("palette.{id}"), MenuText::plain(name.clone())).checked(id == current).on_click(pick)
+    };
+    let [bundled, custom] = sections;
+    MenuSpec::new()
+        .section(MenuSection::labelled("menus.palette.built_in").entries(bundled.iter().map(item)))
+        .section(MenuSection::labelled("menus.palette.custom").entries(custom.iter().map(item)))
+        .scrollable()
 }
 
 /// Translation key of the "<mode> theme" field title.
@@ -43,15 +58,7 @@ fn preferred_row(pane: &AppearancePanel, handle: &PanelHandle, mode: PaletteMode
         .label(name)
         // The caret says it is a menu, as on every other settings menu button.
         .dropdown_caret(true)
-        .dropdown_menu(move |mut menu, _, _| {
-            for (id, label) in &options {
-                let checked = *id == current;
-                let id = id.clone();
-                let pick = act(&handle, move |pane, window, cx| pane.set_preferred(mode, &id, window, cx));
-                menu = menu.item(PopupMenuItem::new(label.clone()).checked(checked).on_click(move |_, window, cx| pick(window, cx)));
-            }
-            menu.scrollable(true)
-        });
+        .dropdown_menu(move |menu, window, cx| render_menu(menu, &palette_menu(&options, &current, mode, &handle), window, cx));
     spaced_row().gap(theme.control_gap).child(field_title(theme, t!(preferred_title_key(mode)).to_string())).child(menu)
 }
 

@@ -39,7 +39,7 @@ pub fn rank(items: &[PaletteItem], query: &PaletteQuery, history: &PaletteHistor
         return Vec::new();
     }
     if query.is_blank() {
-        return blank_groups(items, query.mode, history);
+        return super::categories::by_category(blank_groups(items, query.mode, history), items, false);
     }
     let mut scored: Vec<(i32, PaletteGroup, RankedItem)> = items
         .iter()
@@ -51,7 +51,7 @@ pub fn rank(items: &[PaletteItem], query: &PaletteQuery, history: &PaletteHistor
         })
         .collect();
     scored.sort_by_key(|a| std::cmp::Reverse(a.0));
-    grouped_by_best(scored)
+    super::categories::by_category(grouped_by_best(scored), items, true)
 }
 
 fn in_mode(item: &PaletteItem, mode: PaletteMode) -> bool {

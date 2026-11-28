@@ -3,7 +3,7 @@
 use super::actions::render_action_bar;
 use super::checklist::render_post_content;
 use super::consts::POST_ITEM_ID_PREFIX;
-use super::controls::{collect_references, PostCardHandlers};
+use super::controls::{collect_references, with_post_context_menu, PostCardHandlers};
 use super::extras::render_post_extras;
 use super::header::{render_author_row, render_repost_header};
 use super::lookup::PostLookup;
@@ -35,8 +35,9 @@ pub fn render_post_item<L: PostLookup>(
     let hover_bg = surface.hover;
     let has_repost_header = post.repost_id.is_some();
     let on_select = handlers.on_select.clone();
+    let menu_handlers = handlers.clone();
 
-    div()
+    let card = div()
         .id(format!("{POST_ITEM_ID_PREFIX}{}", post.id))
         .w_full()
         .px(theme.panel_padding)
@@ -51,8 +52,9 @@ pub fn render_post_item<L: PostLookup>(
         .items_start()
         .gap(theme.spacing_md)
         .child(render_avatar_column(effective_post, lookup.author_of(effective_post), threadline_style, has_repost_header, theme))
-        .child(render_content_column(post, effective_post, is_instant_repost, lookup, theme, handlers))
-        .into_any_element()
+        .child(render_content_column(post, effective_post, is_instant_repost, lookup, theme, handlers));
+    // M1: the "…" menu's spec on right-click too (timeline, inspector root and replies).
+    with_post_context_menu(card, effective_post, &menu_handlers).into_any_element()
 }
 
 /// Resolves the original thought an instant repost wraps (same rule as the action target).

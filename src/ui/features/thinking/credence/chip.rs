@@ -1,6 +1,6 @@
 //! The chip itself: the percentage, coloured by where the prediction stands (open, due,
-//! true, false, ambiguous), as the trigger of the popover; and the "…" menu item that opens
-//! the popover on a post without a credence yet.
+//! true, false, ambiguous), as the trigger of the popover; and what the post menu's "Set a
+//! credence…" does on a post without a credence yet.
 
 use super::super::labels::{outcome_colour, tr};
 use super::popover::{popover_content, summary};
@@ -8,7 +8,6 @@ use super::{CredenceControls, CredenceEvent};
 use crate::theme::ThemeTokens;
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::button::{Button, ButtonVariants};
-use gpui_kit::component::menu::{PopupMenu, PopupMenuItem};
 use gpui_kit::component::popover::Popover;
 use gpui_kit::component::{Icon, Sizable};
 use gpui_kit::*;
@@ -51,10 +50,10 @@ pub fn render_credence_chip(controls: &CredenceControls, theme: &ThemeTokens) ->
     Some(popover.into_any_element())
 }
 
-/// `menu` with "Set a credence…" when the post is the user's and has none yet.
-pub fn with_credence_item(menu: PopupMenu, controls: Option<&CredenceControls>) -> PopupMenu {
-    let Some(controls) = controls.filter(|c| c.chip.is_none()) else { return menu };
+/// What "Set a credence…" in the post menu does: open the popover on the user's post that
+/// has no credence yet (`None` otherwise, so the item is left out).
+pub fn credence_opener(controls: Option<&CredenceControls>) -> Option<crate::ui::menus::MenuHandler> {
+    let controls = controls.filter(|c| c.chip.is_none())?;
     let (on_event, post, pane) = (controls.on_event.clone(), controls.post_id.clone(), controls.pane);
-    let item = PopupMenuItem::new(tr("thinking.credence.set")).icon(Icon::new(LucideIcon::Percent)).on_click(move |_, window, cx| on_event(CredenceEvent::Open(post.clone(), pane), window, cx));
-    menu.item(item)
+    Some(std::rc::Rc::new(move |window, cx| on_event(CredenceEvent::Open(post.clone(), pane), window, cx)))
 }

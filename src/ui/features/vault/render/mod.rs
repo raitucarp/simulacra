@@ -3,6 +3,7 @@
 mod browse;
 mod common;
 mod cover_view;
+mod doc_menu;
 mod editor;
 mod empty;
 mod entry;

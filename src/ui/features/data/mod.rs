@@ -63,7 +63,7 @@ pub use translation_sheet::{render_words_sheet, TranslateEvent, WordsDialog}; //
 pub use depth_dial::{depth_label, render_depth_dial, DepthView};
 pub use history::{render_history_sheet, HistorySheet};
 pub use edited_mark::render_edited_mark;
-pub use menu_groups::with_data_items;
+pub use menu_groups::{data_menu, DataMenu};
 pub use post_menu::{DataControls, DataSource};
 pub use replied::{render_replied_hint, replied_text};
 pub use review::{render_review_sheet, tally_text, ReviewView};

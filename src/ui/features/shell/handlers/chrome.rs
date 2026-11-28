@@ -37,51 +37,55 @@ impl AppView {
         cx.notify();
     }
 
-    /// Toggles the language menu, closing the other menus.
-    pub(crate) fn toggle_lang_menu(&mut self, _: &mut Window, cx: &mut Context<Self>) {
-        let chrome = &mut self.chrome;
-        chrome.is_lang_menu_open = !chrome.is_lang_menu_open;
-        chrome.is_settings_open = false;
-        chrome.is_workspace_open = false;
-        cx.notify();
-    }
-
-    /// Toggles the settings modal, closing the other menus. An opened modal takes the keyboard
-    /// focus (its rail), so Escape closes it at once.
+    /// Toggles the settings modal, closing the network menu. An opened modal takes the
+    /// keyboard focus (its rail), so Escape closes it at once.
     pub(crate) fn toggle_settings(&mut self, window: &mut Window, cx: &mut Context<Self>) {
         self.revert_settings_draft(window, cx);
         let chrome = &mut self.chrome;
         chrome.is_settings_open = !chrome.is_settings_open;
-        chrome.is_lang_menu_open = false;
-        chrome.is_workspace_open = false;
+        chrome.workspace_menu.close();
         if chrome.is_settings_open {
             window.focus(&self.settings_ui.rail_focus, cx);
         }
         cx.notify();
     }
 
-    /// Toggles the workspace switcher, closing the other menus.
-    pub(crate) fn toggle_workspace(&mut self, _: &mut Window, cx: &mut Context<Self>) {
-        let chrome = &mut self.chrome;
-        chrome.is_workspace_open = !chrome.is_workspace_open;
-        chrome.is_lang_menu_open = false;
-        chrome.is_settings_open = false;
+    /// Opens the network menu (focused, so the arrow keys move through it), or closes it.
+    pub(crate) fn toggle_workspace(&mut self, window: &mut Window, cx: &mut Context<Self>) {
+        self.chrome.is_settings_open = false;
+        if self.chrome.workspace_menu.is_open() {
+            self.chrome.workspace_menu.close();
+        } else {
+            let spec = self.network_menu(cx);
+            self.chrome.workspace_menu.open(spec, window, cx, |this, _, cx| {
+                this.chrome.workspace_menu.close();
+                cx.notify();
+            });
+        }
         cx.notify();
     }
 
-    /// Applies the language picked in the language menu and closes it.
+    /// The network menu's spec, its picks sent back to this view.
+    fn network_menu(&self, cx: &mut Context<Self>) -> crate::ui::menus::MenuSpec {
+        let view = cx.entity().downgrade();
+        let (select_view, create_view) = (view.clone(), view);
+        let on_select: crate::ui::features::popovers::workspace::SelectNetworkCallback = std::rc::Rc::new(move |id, window, cx| {
+            let _ = select_view.update(cx, |this, cx| this.select_network(id, window, cx));
+        });
+        let on_create: crate::ui::features::popovers::workspace::CreateNetworkCallback = std::rc::Rc::new(move |window, cx| {
+            let _ = create_view.update(cx, |this, cx| this.open_create_network(window, cx));
+        });
+        let active = self.state.current_network().map(|network| network.id.clone());
+        crate::ui::features::popovers::network_menu_spec(&self.state.networks, active.as_ref(), self.theme.workspace_popover_width, &on_select, &on_create)
+    }
+
+    /// Applies the language picked in the language menu.
     pub(crate) fn select_language(&mut self, lang: Language, _: &mut Window, cx: &mut Context<Self>) {
         self.switch_language(lang, cx);
-        self.chrome.is_lang_menu_open = false;
-    }
-
-    pub(crate) fn dismiss_lang_menu(&mut self, _: &mut Window, cx: &mut Context<Self>) {
-        self.chrome.is_lang_menu_open = false;
-        cx.notify();
     }
 
     pub(crate) fn dismiss_workspace(&mut self, _: &mut Window, cx: &mut Context<Self>) {
-        self.chrome.is_workspace_open = false;
+        self.chrome.workspace_menu.close();
         cx.notify();
     }
 

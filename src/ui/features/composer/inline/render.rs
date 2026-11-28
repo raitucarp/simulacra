@@ -82,7 +82,7 @@ impl PostComposerView {
                     this.submit(window, cx);
                 }
             }))
-            .child(Textarea::new(&self.composer_input).bordered(false))
+            .child(Textarea::new(&self.composer_input).bordered(false).context_menu(super::super::text_menu::composer_text_menu(&self.composer_input)))
     }
 }
 

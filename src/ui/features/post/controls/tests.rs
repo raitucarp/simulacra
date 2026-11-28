@@ -73,3 +73,21 @@ fn references_list_embeds_then_every_thought_referring_back_without_leaking_lock
         assert_ne!(rust_i18n::t!(key, locale = "en"), key);
     }
 }
+
+#[test]
+fn the_references_menu_sections_what_it_refers_to_and_what_refers_back() {
+    use super::{refs_menu_spec, OpenPostAction, PostReference};
+    let refs = vec![
+        PostReference { id: PostId::new("q"), kind: ReferenceKind::Quote, excerpt: "Quoted".into() },
+        PostReference { id: PostId::new("b"), kind: ReferenceKind::ReferredBy(crate::domain::post::refs::RefKind::Link), excerpt: "Back".into() },
+    ];
+    let on_open: OpenPostAction = std::rc::Rc::new(|_, _, _| {});
+    let spec = refs_menu_spec(&refs, 2, &PostId::new("p"), &on_open);
+    assert_eq!(crate::ui::menus::rules::violations(&spec), Vec::<String>::new());
+    assert!(spec.scrollable, "a long list scrolls instead of running off the window");
+    assert_eq!(spec.sections.len(), 3, "outgoing, incoming, the conversation");
+    assert!(spec.sections[..2].iter().all(|section| section.label.is_some()));
+    assert!(spec.reaches("refs.outgoing") && spec.reaches("refs.incoming") && spec.reaches("refs.thread"));
+    let lonely = refs_menu_spec(&[], 0, &PostId::new("p"), &on_open);
+    assert!(lonely.item("refs.none").is_some_and(|item| item.disabled.is_some()), "says there is nothing, greyed out");
+}

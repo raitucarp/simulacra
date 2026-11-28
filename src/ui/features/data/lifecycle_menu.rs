@@ -1,53 +1,54 @@
-//! The lifecycle items of the user's own post in its "…" menu: Archive or Unarchive (Y5),
-//! the "Archive automatically" submenu (Y6), its current choice ticked, and the "Delete
-//! automatically" submenu (Y7).
+//! The lifecycle entries of the user's own post: Archive or Unarchive (Y5), the "Archive
+//! automatically" submenu (Y6) with its current choice ticked, and the "Delete
+//! automatically" submenu (Y7), "Never" ticked while the post keeps itself.
 
 use super::events::DataEvent;
 use super::post_menu::{item, DataControls};
-use super::text::tr;
 use crate::domain::post::auto_delete::DeleteAfter;
 use crate::domain::preferences::{ArchiveAfter, Choice};
 use crate::ui::icons::LucideIcon;
-use gpui_kit::component::menu::PopupMenu;
-use gpui_kit::component::Icon;
-use gpui_kit::*;
+use crate::ui::menus::{post_ids as ids, MenuEntry, MenuItem, MenuSpec, MenuText, Submenu};
 
 /// Prefix of the auto-archive option labels (shared with the Writing setting).
 const AUTO_ARCHIVE_PREFIX: &str = "prefs.option.auto_archive";
 /// Prefix of the auto-delete option labels.
 const AUTO_DELETE_PREFIX: &str = "data.auto_delete";
 
-fn auto_archive_submenu(menu: PopupMenu, controls: &DataControls) -> PopupMenu {
-    ArchiveAfter::ALL.iter().fold(menu, |menu, after| {
-        let icon = if controls.auto_archive == Some(*after) { LucideIcon::Check } else { LucideIcon::Clock };
-        let label = tr(&format!("{AUTO_ARCHIVE_PREFIX}.{}", after.key()));
-        menu.item(item(label, icon, DataEvent::SetAutoArchive(controls.post_id.clone(), *after), &controls.on_event))
-    })
+fn auto_archive_submenu(controls: &DataControls) -> Submenu {
+    let choices = ArchiveAfter::ALL.iter().map(|after| {
+        let label = MenuText::key(format!("{AUTO_ARCHIVE_PREFIX}.{}", after.key()));
+        let event = DataEvent::SetAutoArchive(controls.post_id.clone(), *after);
+        item(format!("{}{}", ids::AUTO_ARCHIVE_PREFIX, after.key()), label, LucideIcon::Clock, event, &controls.on_event).checked(controls.auto_archive == Some(*after))
+    });
+    Submenu::new(ids::AUTO_ARCHIVE, MenuText::key("data.menu.auto_archive"), MenuSpec::of(choices)).icon(LucideIcon::Clock)
 }
 
 /// "Never" (ticked while the post keeps itself) and every delay, counted from now.
-fn auto_delete_submenu(menu: PopupMenu, controls: &DataControls) -> PopupMenu {
+pub(super) fn auto_delete_submenu(controls: &DataControls) -> Option<Submenu> {
+    if !controls.own {
+        return None;
+    }
     let post = &controls.post_id;
-    let icon = if controls.lifecycle.delete_at.is_none() { LucideIcon::Check } else { LucideIcon::Timer };
-    let never = item(tr("data.auto_delete.never"), icon, DataEvent::SetAutoDelete(post.clone(), None), &controls.on_event);
-    DeleteAfter::ALL.iter().fold(menu.item(never), |menu, after| {
-        let label = tr(&format!("{AUTO_DELETE_PREFIX}.{}", after.key()));
-        menu.item(item(label, LucideIcon::Timer, DataEvent::SetAutoDelete(post.clone(), Some(*after)), &controls.on_event))
-    })
+    let never = item(ids::AUTO_DELETE_NEVER, MenuText::key("data.auto_delete.never"), LucideIcon::Timer, DataEvent::SetAutoDelete(post.clone(), None), &controls.on_event).checked(controls.lifecycle.delete_at.is_none());
+    let delays = DeleteAfter::ALL.iter().map(|after| {
+        let label = MenuText::key(format!("{AUTO_DELETE_PREFIX}.{}", after.key()));
+        item(format!("{}{}", ids::AUTO_DELETE_PREFIX, after.key()), label, LucideIcon::Timer, DataEvent::SetAutoDelete(post.clone(), Some(*after)), &controls.on_event)
+    });
+    let spec = MenuSpec::of(std::iter::once(never).chain(delays));
+    Some(Submenu::new(ids::AUTO_DELETE, MenuText::key("data.menu.auto_delete"), spec).icon(LucideIcon::Timer).destructive())
 }
 
-/// `menu` with Archive (or Unarchive), the "Archive automatically" submenu while the post
-/// is in the feed, and the "Delete automatically" submenu.
-pub(super) fn with_lifecycle_items(menu: PopupMenu, controls: &DataControls, window: &mut Window, cx: &mut Context<PopupMenu>) -> PopupMenu {
-    let archived = controls.lifecycle.is_archived();
-    let (label, icon) = if archived { (tr("data.menu.unarchive"), LucideIcon::ArchiveRestore) } else { (tr("data.menu.archive"), LucideIcon::Archive) };
-    let mut menu = menu.item(item(label, icon, DataEvent::SetArchived(controls.post_id.clone(), !archived), &controls.on_event));
-    if !archived {
-        let controls = controls.clone();
-        let icon = Some(Icon::new(LucideIcon::Clock));
-        menu = menu.submenu_with_icon(icon, tr("data.menu.auto_archive"), window, cx, move |submenu, _, _| auto_archive_submenu(submenu, &controls));
+/// Archive (or Unarchive) and, while the post is in the feed, "Archive automatically".
+pub(super) fn lifecycle_entries(controls: &DataControls) -> Vec<MenuEntry> {
+    if !controls.own {
+        return Vec::new();
     }
-    let controls = controls.clone();
-    let icon = Some(Icon::new(LucideIcon::Timer));
-    menu.submenu_with_icon(icon, tr("data.menu.auto_delete"), window, cx, move |submenu, _, _| auto_delete_submenu(submenu, &controls))
+    let archived = controls.lifecycle.is_archived();
+    let (id, key, icon) = if archived { (ids::UNARCHIVE, "data.menu.unarchive", LucideIcon::ArchiveRestore) } else { (ids::ARCHIVE, "data.menu.archive", LucideIcon::Archive) };
+    let archive: MenuItem = item(id, MenuText::key(key), icon, DataEvent::SetArchived(controls.post_id.clone(), !archived), &controls.on_event);
+    let mut entries = vec![MenuEntry::from(archive)];
+    if !archived {
+        entries.push(auto_archive_submenu(controls).into());
+    }
+    entries
 }

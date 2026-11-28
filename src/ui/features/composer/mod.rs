@@ -5,6 +5,7 @@ mod avatar;
 mod consts;
 mod format;
 mod format_keys;
+mod text_menu; // M1
 pub mod inline;
 pub mod keys;
 mod messages;

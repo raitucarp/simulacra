@@ -31,7 +31,7 @@ type NameProblem = Rc<RefCell<Option<(String, String)>>>;
 impl AppView {
     /// Closes the workspace popover and asks for the new network's name.
     pub(crate) fn open_create_network(&mut self, window: &mut Window, cx: &mut Context<Self>) {
-        self.chrome.is_workspace_open = false;
+        self.chrome.workspace_menu.close();
         let placeholder = t!("workspace.create_placeholder").to_string();
         let input = cx.new(|cx| InputState::new(window, cx).placeholder(placeholder));
         let view = cx.entity().downgrade();

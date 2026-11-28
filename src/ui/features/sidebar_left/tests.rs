@@ -63,6 +63,28 @@ fn show_all_is_toggled_per_section() {
 }
 
 #[test]
+fn every_place_opens_from_its_menu_with_its_jump_list() {
+    use crate::ui::features::command_palette::CommandId;
+    use std::rc::Rc;
+    let callbacks = SidebarCallbacks {
+        on_select_nav: Rc::new(|_, _, _| {}),
+        on_command: Rc::new(|_, _, _| {}),
+        on_open: Rc::new(|_, _, _| {}),
+        on_toggle_pin: Rc::new(|_, _, _| {}),
+        on_toggle_section: Rc::new(|_, _, _| {}),
+        on_toggle_show_all: Rc::new(|_, _, _| {}),
+    };
+    let places = [CommandId::GoTimeline, CommandId::GoKnowledge, CommandId::GoAgents, CommandId::GoMindGraph, CommandId::GoReview, CommandId::GoInsights, CommandId::GoJournal, CommandId::GoArena, CommandId::GoTasks, CommandId::GoSearch];
+    for open in places {
+        let spec = super::nav_menu::nav_menu_spec(open, &callbacks);
+        assert_eq!(crate::ui::menus::rules::violations(&spec), Vec::<String>::new(), "{open:?}");
+        for id in std::iter::once(open).chain(super::nav_menu::jump_list(open).iter().copied()) {
+            assert!(spec.item(&format!("command.{}", id.wire_key())).is_some_and(|item| item.on_click.is_some() && item.action.is_some()), "{open:?} offers {id:?} with its shortcut");
+        }
+    }
+}
+
+#[test]
 fn section_titles_and_hints_are_translated() {
     for section in SidebarSection::ALL {
         for key in [section.title_key(), section.empty_key()] {

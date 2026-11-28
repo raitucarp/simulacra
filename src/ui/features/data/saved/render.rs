@@ -3,8 +3,10 @@
 
 use super::super::events::{DataAction, DataEvent, SavedTarget};
 use super::super::text::tr;
+use super::menus;
 use super::rows::item_row;
 use super::SavedView;
+use gpui_kit::component::menu::ContextMenuExt;
 use crate::theme::ThemeTokens;
 use crate::ui::components::{art_state, ArtState};
 use crate::ui::icons::LucideIcon;
@@ -69,6 +71,7 @@ fn chips(view: &SavedView, on_event: &DataAction, theme: &ThemeTokens) -> Div {
             .child(Icon::new(icon).size(theme.icon_size_xs))
             .child(div().min_w_0().truncate().child(chip.label.clone()))
             .child(div().flex_none().font_family(theme.font_family_mono.clone()).text_size(theme.font_size_2xs).text_color(theme.text_muted).child(chip.count.to_string()))
+            .context_menu(menus::builder(menus::shelf_menu(&chip.target, on_event))) // M1
     });
     div().flex().flex_wrap().gap(theme.control_gap).children(chips)
 }
@@ -84,7 +87,7 @@ fn empty(view: &SavedView, theme: &ThemeTokens) -> Div {
 /// The page.
 pub fn render_saved_page(view: &SavedView, on_event: DataAction, theme: &ThemeTokens) -> Stateful<Div> {
     let count = t!("data.saved.count", count = view.items.len()).to_string();
-    let rows = view.items.iter().enumerate().map(|(index, item)| item_row(view, index, item, &on_event, theme));
+    let rows = view.items.iter().enumerate().map(|(index, item)| item_row(view, index, item, &on_event, theme).context_menu(menus::builder(menus::item_menu(view, item, &on_event))));
     let list = if view.items.is_empty() { empty(view, theme) } else { div().flex().flex_col().gap(theme.spacing_xs).children(rows) };
     let hint = view.reorderable.then(|| div().text_size(theme.font_size_2xs).text_color(theme.text_muted).child(tr("data.saved.drag_hint")));
     let column = div()

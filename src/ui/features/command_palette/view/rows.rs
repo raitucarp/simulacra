@@ -2,6 +2,7 @@
 
 use crate::theme::ThemeTokens;
 use crate::ui::features::command_palette::model::{PaletteGroup, PaletteItem};
+use crate::ui::features::command_palette::registry::CommandCategory;
 use crate::ui::features::command_palette::search::highlight_ranges;
 use crate::ui::keymap::render_chord;
 use gpui_kit::component::Icon;
@@ -21,6 +22,12 @@ pub(super) fn render_group_heading(group: PaletteGroup, theme: &ThemeTokens) -> 
         .font_weight(FontWeight::BOLD)
         .text_color(theme.text_muted)
         .child(t!(group.title_key()).to_string())
+}
+
+/// M1: a category heading inside the Commands group ("Create", "Post"…), set in from the
+/// group heading.
+pub(super) fn render_category_heading(category: CommandCategory, theme: &ThemeTokens) -> Div {
+    div().px(theme.spacing_md).pt(theme.spacing_xs).text_size(theme.font_size_2xs).text_color(theme.text_muted).child(t!(category.title_key()).to_string())
 }
 
 pub(super) fn render_result_row(

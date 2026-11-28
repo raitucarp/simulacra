@@ -8,8 +8,8 @@ use crate::ui::features::vault::screen::Screen;
 use crate::ui::features::vault::text::{kind_label, status_label};
 use crate::ui::features::vault::VaultEvent;
 use crate::ui::icons::LucideIcon;
-use gpui_kit::component::button::{Button, ButtonVariant, ButtonVariants};
-use gpui_kit::component::{Icon, Sizable, WindowExt};
+use gpui_kit::component::button::{Button, ButtonVariants};
+use gpui_kit::component::{Icon, Sizable};
 use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::*;
 use rust_i18n::t;
@@ -100,24 +100,11 @@ impl VaultPanel {
     fn render_delete_button(&self, doc: &GroundingDocument, cx: &mut Context<Self>) -> impl IntoElement {
         let panel = cx.entity().downgrade();
         let (id, title) = (doc.id.clone(), doc.title.clone());
-        Button::new(DELETE_BUTTON_ID).ghost().small().icon(Icon::new(LucideIcon::Trash)).label(t!("vault.delete").to_string()).on_click(
-            move |_, window, cx| {
-                let (panel, id, title) = (panel.clone(), id.clone(), title.clone());
-                window.open_alert_dialog(cx, move |alert, _, _| {
-                    let (panel, id) = (panel.clone(), id.clone());
-                    alert
-                        .confirm()
-                        .title(t!("vault.delete_title").to_string())
-                        .description(t!("vault.delete_desc", title = title.clone()).to_string())
-                        .ok_text(t!("vault.delete").to_string())
-                        .ok_variant(ButtonVariant::Danger)
-                        .cancel_text(t!("composer.cancel").to_string())
-                        .on_ok(move |_, _, cx| {
-                            let _ = panel.update(cx, |_, cx| cx.emit(VaultEvent::Delete(id.clone())));
-                            true
-                        })
-                });
-            },
-        )
+        Button::new(DELETE_BUTTON_ID)
+            .ghost()
+            .small()
+            .icon(Icon::new(LucideIcon::Trash))
+            .label(t!("vault.delete").to_string())
+            .on_click(move |_, window, cx| super::super::doc_menu::confirm_delete(panel.clone(), id.clone(), title.clone(), window, cx))
     }
 }

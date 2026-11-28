@@ -9,6 +9,8 @@ use crate::theme::ThemeTokens;
 use crate::ui::atoms::render_profile_avatar;
 use crate::ui::features::forge::widgets::KeyboardStop;
 use crate::ui::icons::LucideIcon;
+use crate::ui::menus::{render_menu, MenuItem, MenuSpec, MenuText};
+use gpui_kit::component::menu::ContextMenuExt;
 use gpui_kit::component::Icon;
 use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::*;
@@ -43,7 +45,21 @@ fn render_leading(leading: &Leading, theme: &ThemeTokens) -> Div {
     }
 }
 
-pub(super) fn render_item_row(row: ItemRow, callbacks: &SidebarCallbacks, theme: &ThemeTokens) -> Stateful<Div> {
+/// M1: the row's right-click menu: open it, pin or unpin it.
+fn row_menu(row: &ItemRow, callbacks: &SidebarCallbacks) -> MenuSpec {
+    let (on_open, on_pin, open_ref, pin_ref) = (callbacks.on_open.clone(), callbacks.on_toggle_pin.clone(), row.reference.clone(), row.reference.clone());
+    let (icon, key) = if row.is_pinned { (LucideIcon::PinOff, "sidebar.unpin") } else { (LucideIcon::Pin, "sidebar.pin") };
+    let open = MenuItem::new("sidebar.item.open", MenuText::key("data.saved.open")).icon(LucideIcon::ExternalLink).on_click(move |window, cx| on_open(open_ref.clone(), window, cx));
+    let pin = MenuItem::new("sidebar.item.pin", MenuText::key(key)).icon(icon).on_click(move |window, cx| on_pin(pin_ref.clone(), window, cx));
+    MenuSpec::of([open, pin])
+}
+
+pub(super) fn render_item_row(row: ItemRow, callbacks: &SidebarCallbacks, theme: &ThemeTokens) -> AnyElement {
+    let menu = row_menu(&row, callbacks);
+    render_row_body(row, callbacks, theme).context_menu(move |popup, window, cx| render_menu(popup, &menu, window, cx)).into_any_element()
+}
+
+fn render_row_body(row: ItemRow, callbacks: &SidebarCallbacks, theme: &ThemeTokens) -> Stateful<Div> {
     let hover_bg = theme.hover_bg;
     let (on_open, on_key) = (callbacks.on_open.clone(), callbacks.on_open.clone());
     let (open_ref, key_ref) = (row.reference.clone(), row.reference.clone());

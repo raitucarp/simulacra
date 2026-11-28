@@ -15,8 +15,8 @@ impl AppView {
         if event.keystroke.key != ESCAPE_KEY {
             return;
         }
-        if self.chrome.is_lang_menu_open || self.chrome.is_workspace_open {
-            (self.chrome.is_lang_menu_open, self.chrome.is_workspace_open) = (false, false);
+        if self.chrome.workspace_menu.is_open() {
+            self.chrome.workspace_menu.close();
             cx.stop_propagation();
             cx.notify();
         } else if self.import.session.is_some() {

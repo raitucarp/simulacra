@@ -5,7 +5,8 @@ use super::super::consts::{MODAL_CANCEL_BTN_ID, MODAL_MORE_BTN_ID};
 use super::{ComposerModalView, ModalActionCallback};
 use crate::ui::icons::LucideIcon;
 use gpui_kit::component::button::{Button, ButtonVariants};
-use gpui_kit::component::menu::{DropdownMenu, PopupMenuItem};
+use crate::ui::menus::{render_menu, MenuItem, MenuSection, MenuSpec, MenuText};
+use gpui_kit::component::menu::DropdownMenu;
 use gpui_kit::component::{Icon, Sizable};
 use gpui_kit::*;
 use rust_i18n::t;
@@ -56,26 +57,30 @@ impl ComposerModalView {
             .child(t!("composer.cancel").to_string())
     }
 
-    /// "…" menu: add a post to the thread, attach a link or image, insert a hashtag.
+    /// "…" menu: add a post to the thread; attach a link (ticked while its field is open),
+    /// pick an image, insert a hashtag.
     fn more_options_button(&self) -> impl IntoElement {
-        let callbacks = self.callbacks.clone();
+        let (callbacks, link_open) = (self.callbacks.clone(), self.is_link_input_open);
         Button::new(MODAL_MORE_BTN_ID)
             .ghost()
             .xsmall()
             .icon(Icon::new(LucideIcon::MoreHorizontal))
             .tooltip(t!("composer.more_options").to_string())
-            .dropdown_menu_with_anchor(Anchor::TopRight, move |menu, _, _| {
-                menu.item(menu_item(LucideIcon::Plus, t!("composer.add_to_thread"), &callbacks.on_add_draft))
-                    .item(menu_item(LucideIcon::Link2, t!("composer.attach_link"), &callbacks.on_toggle_link))
-                    .item(menu_item(LucideIcon::Image, t!("composer.pick_image"), &callbacks.on_pick_image))
-                    .item(menu_item(LucideIcon::Hash, t!("composer.insert_tag"), &callbacks.on_insert_tag))
-            })
+            .dropdown_menu_with_anchor(Anchor::TopRight, move |menu, window, cx| render_menu(menu, &more_options_spec(&callbacks, link_open), window, cx))
     }
 }
 
-fn menu_item(icon: LucideIcon, label: impl ToString, action: &ModalActionCallback) -> PopupMenuItem {
+/// The composer's "More options" menu.
+pub(super) fn more_options_spec(callbacks: &super::ModalCallbacks, link_open: bool) -> MenuSpec {
+    let thread = MenuSection::new().entry(menu_item("composer.add_to_thread", LucideIcon::Plus, &callbacks.on_add_draft));
+    let attach = MenuSection::new()
+        .entry(menu_item("composer.attach_link", LucideIcon::Link2, &callbacks.on_toggle_link).checked(link_open))
+        .entry(menu_item("composer.pick_image", LucideIcon::Image, &callbacks.on_pick_image))
+        .entry(menu_item("composer.insert_tag", LucideIcon::Hash, &callbacks.on_insert_tag));
+    MenuSpec::new().section(thread).section(attach)
+}
+
+fn menu_item(key: &'static str, icon: LucideIcon, action: &ModalActionCallback) -> MenuItem {
     let action = action.clone();
-    PopupMenuItem::new(label.to_string())
-        .icon(Icon::new(icon))
-        .on_click(move |_, window, cx| action(window, cx))
+    MenuItem::new(key, MenuText::key(key)).icon(icon).on_click(move |window, cx| action(window, cx))
 }

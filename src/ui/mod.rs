@@ -8,6 +8,7 @@ pub mod format;
 pub mod icons;
 pub mod illustration;
 pub mod keymap;
+pub mod menus;
 pub mod molecules;
 pub mod organisms;
 pub mod render_stats;

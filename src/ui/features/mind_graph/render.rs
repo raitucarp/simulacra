@@ -9,6 +9,7 @@ use super::viewport::Frame;
 use crate::domain::graph::NODE_KINDS;
 use crate::ui::components::{art_state, persisted_v_resizable, ArtState, SplitPane};
 use crate::ui::illustration::{EmptyKey, Illustration};
+use gpui_kit::component::menu::ContextMenuExt;
 use gpui_kit::prelude::FluentBuilder;
 use gpui_kit::*;
 use rust_i18n::t;
@@ -21,7 +22,7 @@ const SPLIT_ID: &str = "mind-graph-split";
 
 impl MindGraphPanel {
     /// Canvas container wired for drag, wheel, hover and click, painting the scene.
-    fn render_canvas(&self, cx: &mut Context<Self>) -> Stateful<Div> {
+    fn render_canvas(&self, cx: &mut Context<Self>) -> impl IntoElement {
         let (scene, theme) = (Rc::clone(&self.scene), self.theme.clone());
         let (view, focus, options) = (self.view, self.focus(), self.options());
         let frame_slot = Rc::clone(&self.frame);
@@ -51,12 +52,14 @@ impl MindGraphPanel {
             .bg(self.theme.bg_app)
             .map(|d| if dragging { d.cursor_grabbing() } else if pointing { d.cursor_pointer() } else { d.cursor_grab() })
             .on_mouse_down(MouseButton::Left, cx.listener(Self::on_press))
+            .on_mouse_down(MouseButton::Right, cx.listener(Self::on_secondary_press))
             .on_mouse_move(cx.listener(Self::on_move))
             .on_mouse_up(MouseButton::Left, cx.listener(Self::on_release))
             .on_mouse_up_out(MouseButton::Left, cx.listener(Self::on_release_out))
             .on_scroll(cx.listener(Self::on_scroll))
             .child(surface)
             .when(is_empty, |d| d.flex().items_center().justify_center().child(self.render_empty()))
+            .context_menu(super::menu::canvas_menu(cx.entity().downgrade())) // M1
     }
 
     fn render_empty(&self) -> Div {

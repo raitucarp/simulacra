@@ -12,6 +12,7 @@ mod params;
 mod post_cards; // W7
 mod posts_state; // W7
 mod posts_tab; // W7
+mod profile_menu; // M1
 mod profile_tabs;
 mod recommended;
 mod run_status; // A5

@@ -10,16 +10,16 @@ remote debugging (127.0.0.1 only) and drives only the Flow tab it opened or atta
 
 A job is a sprite sheet (`sheets/<pack>/<id>.{png,txt,json}` from sheets.py) or a single
 (`refs-magenta/<key>.png` and the catalog's `prompts.<pack>`). Each job:
-  1. uploads its reference to the Flow project (skipped when an asset of that name exists);
+  1. (before the first job) uploads every reference the project lacks, ten at a time;
   2. sets the job's aspect and the number of outputs, then picks the first Nano Banana model
      whose run costs 0 credits; stops if none does (nothing is generated or spent);
   3. attaches the pack anchor (`anchor-<pack>.jpg`, uploaded once) and the reference;
-  4. generates, downloads every variant at 2K into `inbox/<pack>/_variants/`;
-  5. scores each variant with process.py in a scratch folder (cells that pass QA) and copies
-     the best one to `inbox/<pack>/<id>.jpg`, where `process.py <pack> --all` picks it up.
+  4. generates, reads every variant's 1K original into `inbox/<pack>/_variants/`;
+  5. scores each with process.py in a scratch folder (cells that pass QA) and downloads the
+     best one at 2K to `inbox/<pack>/<id>.jpg`, where `process.py <pack> --all` picks it up.
 A job is done once `inbox/<pack>/<id>.*` exists; `run` skips those and logs failures.
 """
-import argparse, glob, json, math, os, re, shutil, subprocess, sys, tempfile, time, urllib.error, urllib.request
+import argparse, base64, glob, json, math, os, re, shutil, subprocess, sys, tempfile, time, urllib.error, urllib.request
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
@@ -211,12 +211,50 @@ def ensure_asset(name, source, wait=180):
     raise RuntimeError(f'asset {name!r} did not finish uploading: {rows}')
 
 
-def attach(names):
-    """Add each named project asset to the prompt as an ingredient (exactly one must match)."""
+def present(names):
+    """Which of `names` the project already has (one picker session, a search per name)."""
+    found = set()
+    open_picker()
     for name in names:
-        rows = picker_rows(name)
-        if len(rows) != 1 or rows[0].startswith('Uploading'):
-            close_picker(); raise RuntimeError(f'asset {name!r}: {rows} in the picker')
+        ev("(()=>{const i=document.querySelector(%s);i.focus();i.select();return 1})()" % json.dumps(SEARCH))
+        insert_text(name); time.sleep(1.5)
+        if ev("[...document.querySelectorAll('.cdk-overlay-pane button')].some(b=>b.innerText.includes(%s))" % json.dumps(name)):
+            found.add(name)
+    close_picker()
+    return found
+
+
+def prepare(pack, todo, chunk=10):
+    """Upload every reference the jobs need and the project lacks, `chunk` files at a time."""
+    refs = {asset_name(pack, x['id']): x['ref'] for x in todo}
+    missing = [n for n in refs if n not in present(list(refs))]
+    staged = []
+    for name in missing:
+        path = common.INBOX_DIR / '_upload' / name
+        path.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(refs[name], path)
+        staged.append(str(path.resolve()))
+    for i in range(0, len(staged), chunk):
+        fc({'op': 'armUpload', 'files': staged[i:i + chunk]})
+        open_picker()
+        js('click_deep.js', '^Upload media$'); time.sleep(4)
+        js('click_deep.js', '^I agree$')
+        close_picker(); time.sleep(4)
+        print(f'  uploaded {min(i + chunk, len(staged))}/{len(staged)} references', flush=True)
+    return len(staged)
+
+
+def attach(names, wait=90):
+    """Add each named project asset to the prompt as an ingredient (the first match; a name
+    uploaded twice holds the same file)."""
+    for name in names:
+        for _ in range(wait // 5):
+            rows = picker_rows(name)
+            if rows and not rows[0].startswith('Uploading'):
+                break
+            close_picker(); time.sleep(3)
+        else:
+            raise RuntimeError(f'asset {name!r}: {rows} in the picker')
         ev("(()=>{const b=[...document.querySelectorAll('.cdk-overlay-pane button')].find(b=>b.innerText.includes(%s));"
            "b.click();return 1})()" % json.dumps(name))
         time.sleep(1)
@@ -286,6 +324,21 @@ def download(src, dest, size='2K'):
 
 # --- choosing a variant ---------------------------------------------------------------------
 
+def fetch_original(src, dest):
+    """The generated image at its original size (1024 px JPEG), read in the page."""
+    url = re.sub(r'=[^/=]*$', '', src) + '=s0'
+    code = ("(async()=>{const r=await fetch(%s,{credentials:'include'});if(!r.ok)return [r.status,''];"
+            "const b=new Uint8Array(await r.arrayBuffer());let s='';"
+            "for(let i=0;i<b.length;i+=32768)s+=String.fromCharCode.apply(null,b.subarray(i,i+32768));"
+            "return [r.status,btoa(s)]})()") % json.dumps(url)
+    status, data = ev(code)
+    if status != 200 or not data:
+        raise RuntimeError(f'original image fetch failed ({status})')
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    dest.write_bytes(base64.b64decode(data))
+    return dest
+
+
 def score(pack, job, variant):
     """(cells written, -cells failed) when process.py runs on this variant in a scratch folder."""
     with tempfile.TemporaryDirectory() as tmp:
@@ -302,28 +355,31 @@ def score(pack, job, variant):
 
 
 def choose(pack, job, variants):
+    """Scores of each variant and the index of the best (the first on a tie)."""
     scores = [score(pack, job, v) for v in variants]
-    best = max(range(len(variants)), key=lambda i: (scores[i], -i))
-    dest = common.INBOX_DIR / pack / f"{job['id']}{variants[best].suffix}"
-    dest.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copyfile(variants[best], dest)
-    return dest, scores, best
+    return scores, max(range(len(variants)), key=lambda i: (scores[i], -i))
 
 
 # --- a job ----------------------------------------------------------------------------------
 
 def run_job(pack, job, n_out=2):
-    anchor = common.TOOLS_DIR / 'anchors' / f'{pack}-1.jpg'
-    ensure_asset(f'anchor-{pack}.jpg', anchor)
+    clock = [time.time()]
+
+    def lap(step):
+        now = time.time()
+        print(f'    {step}: {now - clock[0]:.0f}s', flush=True)
+        clock[0] = now
+
     name = asset_name(pack, job['id'])
-    ensure_asset(name, job['ref'])
-    model = configure(job['aspect'], n_out)
+    model = configure(job['aspect'], n_out); lap('settings')
     js('click_match.js', '^Clear prompt$'); time.sleep(0.5)
     if attach([f'anchor-{pack}.jpg', name]) != 2:
         raise RuntimeError('ingredients not attached')
-    srcs = generate(job['prompt'], n_out)
-    variants = [download(s, common.INBOX_DIR / pack / '_variants' / f"{job['id']}-v{i + 1}.jpg") for i, s in enumerate(srcs)]
-    dest, scores, best = choose(pack, job, variants)
+    lap('ingredients')
+    srcs = generate(job['prompt'], n_out); lap('generate')
+    variants = [fetch_original(s, common.INBOX_DIR / pack / '_variants' / f"{job['id']}-v{i + 1}.jpg") for i, s in enumerate(srcs)]
+    scores, best = choose(pack, job, variants); lap('score')
+    dest = download(srcs[best], common.INBOX_DIR / pack / f"{job['id']}.jpg"); lap('download')
     with open(common.INBOX_DIR / pack / '_variants' / 'log.jsonl', 'a', encoding='utf-8') as f:
         f.write(json.dumps({'job': job['id'], 'model': model, 'aspect': job['aspect'], 'scores': scores,
                             'chosen': best + 1, 'at': time.time()}) + '\n')
@@ -349,6 +405,8 @@ def main():
         if not todo:
             raise SystemExit(f'no job {a.id!r} in the {a.pack} catalog')
     todo = todo[: a.limit or None] if a.cmd == 'run' else todo
+    ensure_asset(f'anchor-{a.pack}.jpg', common.TOOLS_DIR / 'anchors' / f'{a.pack}-1.jpg')
+    print(f'{prepare(a.pack, todo)} references uploaded', flush=True)
     failed = 0
     for i, x in enumerate(todo):
         print(f"[{i + 1}/{len(todo)}] {x['id']} ({x['kind']}, {x['aspect']})", flush=True)

@@ -109,8 +109,9 @@ Everything here needs only Python 3 and Pillow. Run commands from the repository
    Open a Flow project first, then attach flowctl to that tab (or let it open one). For each job
    it uploads the reference (once), sets the aspect and 2 outputs, and refuses to generate unless a
    Nano Banana model costs **0 credits**. It then attaches the anchor and the reference, generates,
-   and downloads both variants at 2K into `inbox/<pack>/_variants/`. The variant whose cells pass
-   the most checks in a scratch run of `process.py` is copied to `inbox/<pack>/<id>.jpg`. Choices
+   and reads both variants' 1K originals into `inbox/<pack>/_variants/`. The variant whose cells
+   pass the most checks in a scratch run of `process.py` is downloaded at 2K to
+   `inbox/<pack>/<id>.jpg`. References are uploaded before the first job, ten at a time. Choices
    and scores go to `inbox/<pack>/_variants/log.jsonl`; failed jobs are retried on the next `run`.
 
    By hand: add the ingredients **in this order**:

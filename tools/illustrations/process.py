@@ -25,6 +25,7 @@ from PIL import Image
 
 import catalog as catalog_io
 import common
+import grid
 import imaging
 import packfile
 
@@ -165,7 +166,8 @@ def process_sheet(ctx: Context, sheet_id: str) -> list[dict]:
         sheet = imaging.flatten(opened)
     sx, sy = sheet.width / layout["size"][0], sheet.height / layout["size"][1]
     warning = abs(sx / sy - 1.0) > SHEET_ASPECT_TOLERANCE
-    results = [process_cell(ctx, sheet, layout, cell, (sx, sy), f"{source}#{cell['key']}") for cell in layout["cells"]]
+    found = grid.regions(imaging.key_background(sheet).getchannel("A"), layout, (sx, sy))
+    results = [process_cell(ctx, sheet, layout, cell, (sx, sy), f"{source}#{cell['key']}", found) for cell in layout["cells"]]
     if warning:
         for result in results:
             result["reasons"].append(f"warning: the download's aspect differs from the sheet's ({sheet.width}x{sheet.height})")
@@ -173,10 +175,12 @@ def process_sheet(ctx: Context, sheet_id: str) -> list[dict]:
     return results
 
 
-def process_cell(ctx: Context, sheet: Image.Image, layout: dict, cell: dict, scale, source: str) -> dict:
+def process_cell(ctx: Context, sheet: Image.Image, layout: dict, cell: dict, scale, source: str, found: dict) -> dict:
+    """One cell: layers and rooms are cut at their reference box (their alignment is checked);
+    other cells span the gaps around them in the generated sheet (`grid.regions`)."""
     fit_mode = layout.get("fit") or ctx.entry(cell["key"])["fit"]
-    region = cell["box"] if fit_mode == "canvas" else cell["slot"]
-    keyed = imaging.key_background(sheet.crop(scaled(region, *scale)))
+    region = scaled(cell["box"], *scale) if fit_mode == "canvas" else found[cell["key"]]
+    keyed = imaging.key_background(sheet.crop(region))
     problems = cell_problems(keyed, fit_mode)
     label = f"row {cell['row'] + 1}, cell {cell['col'] + 1}"
     if problems:

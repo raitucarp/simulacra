@@ -1,0 +1,4 @@
+{
+  "about": "Illustration packs offered in Settings > Appearance > Illustrations. Each entry: id, name, description, version, url (https, a .simpack release asset), sha256 (lowercase hex of the .simpack) and bytes. tools/illustrations/make_simpack.py prints the entry for a built pack.",
+  "packs": []
+}

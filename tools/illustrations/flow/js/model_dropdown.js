@@ -1,0 +1,1 @@
+(() => { const b=[...document.querySelectorAll('button,[role=combobox],mat-select,[role=button]')].filter(x=>/Nano Banana|Imagen/.test(x.textContent) && x.getAttribute('aria-label')!=='Settings trigger'); if(!b.length) return 'no dropdown'; b[0].click(); return b.map(x=>x.tagName+':'+x.textContent.trim()); })()

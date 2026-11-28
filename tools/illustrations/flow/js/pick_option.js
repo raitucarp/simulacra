@@ -1,0 +1,1 @@
+(() => { const e=[...document.querySelectorAll('[role=option],mat-option,[role=menuitemradio],[role=menuitem]')].find(x=>x.textContent.trim().replace(/\s+/g,' ').endsWith(__ARG__)); if(!e) return 'missing'; e.click(); return 'picked'; })()

@@ -110,6 +110,7 @@ theme_tokens! {
         insight_lane_height, insight_lane_label_width, insight_axis_height, insight_brush_min_width, insight_cell_gap, insight_list_max_height, insight_meter_width, insight_meter_height, insight_peak_ring_width, // sb F3: concept timeline lanes and brush, detail lists, composer readability meter
         emoji_picker_width, emoji_picker_grid_height, emoji_cell_size, // epic R: emoji picker (width, scrolling grid, one cell)
         symbol_badge_size, symbol_badge_offset, symbol_outline_size, symbol_progress_width, symbol_progress_height, // epic S: signifier badges on a symbol face, the symbol of an outline bullet, an icon set download bar
+        pack_card_width, pack_sample_height, // WS5: an illustration pack's picker card and the height of its sample previews
         todo_help_sample_width, todo_indent, todo_box_size, tasks_page_max_width, tasks_filter_label_width, // epic D: to-dos (the syntax help card, the indent of a nested item, a box, the Tasks page and its filter labels)
         search_page_max_width, code_output_max_height, // epic Q: the Search page column; P6: the output panel under a code block
         view_gutter_width, calendar_cell_min_height, board_column_width, ink_canvas_width, ink_canvas_height, ink_card_height, // epic W: the bullet gutter of the rapid log, a calendar day, a board column; N12: the drawing pad, a drawing on its card

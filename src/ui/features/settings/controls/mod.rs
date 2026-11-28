@@ -42,7 +42,7 @@ const fn home_tab(pane: EmbeddedPane) -> SettingsTab {
     match pane {
         EmbeddedPane::AiProvider | EmbeddedPane::Credentials => SettingsTab::AiIntelligence,
         EmbeddedPane::SchedulerStatus => SettingsTab::Agents,
-        EmbeddedPane::Themes => SettingsTab::Appearance,
+        EmbeddedPane::Themes | EmbeddedPane::IllustrationPacks => SettingsTab::Appearance,
         EmbeddedPane::SymbolSets => SettingsTab::Symbols,
         EmbeddedPane::Licences => SettingsTab::Licences,
         EmbeddedPane::Runtimes => SettingsTab::Code,

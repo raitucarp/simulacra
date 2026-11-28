@@ -48,6 +48,11 @@ impl AppState {
         crate::icons::symbols_dir_for(&self.db.as_ref().map(|db| db.path()).unwrap_or_default())
     }
 
+    /// Folder of the installed illustration packs (next to the vault, WS5).
+    pub fn packs_dir(&self) -> std::path::PathBuf {
+        crate::packs::packs_dir_for(&self.db.as_ref().map(|db| db.path()).unwrap_or_default())
+    }
+
     /// Folder where generated agent images are saved (next to the vault).
     pub fn media_dir(&self) -> std::path::PathBuf {
         crate::storage::media::media_dir_for(&self.db.as_ref().map(|db| db.path()).unwrap_or_default())

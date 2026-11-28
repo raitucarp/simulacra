@@ -82,6 +82,8 @@ pub struct AppView {
     pub reactions: super::reactions_host::ReactionsHost,
     /// Epic S: what the symbol picker remembers.
     pub symbols: super::symbols_host::SymbolsHost,
+    /// WS5: illustration pack installs, downloads and removals.
+    pub packs: super::packs_host::PacksHost,
     /// sb F2: history, export, snapshots, collections and bookmarks.
     pub data: DataHost,
     /// sb P16: what "Ask before spending" allowed this session.

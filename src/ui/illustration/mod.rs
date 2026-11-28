@@ -11,6 +11,11 @@
 //! width snapped to [`RASTER_WIDTHS`] at or above the displayed width: crisp at up to 200 %
 //! scaling, small for tiny avatars, and a bounded number of cache variants per template.
 //!
+//! **Packs** (WS5, [`pack`]): every image resolves through the active illustration pack
+//! first; a raster pack's WebP file draws a key it covers and Classic (these templates)
+//! draws everything else. Raster images are cached apart from the themed ones, so a theme
+//! change keeps them and a pack switch clears them.
+//!
 //! **Portraits** are composed into one SVG (one raster, exact layer alignment) instead of
 //! eight stacked images, and **forms** likewise from their kind's catalog (see [`form`]);
 //! **photos** are clipped to a circle inside a tiny SVG because gpui content masks are
@@ -21,6 +26,7 @@ mod cache;
 mod element;
 pub mod form;
 mod keys;
+pub mod pack; // WS5
 pub mod photo;
 pub mod portrait;
 mod portrait_view;
@@ -30,6 +36,7 @@ pub use active::{active_palette, forget_illustrations, set_active_palette, with_
 pub use cache::{palette_hash, IllustrationCache, FALLBACK_TEMPLATE};
 pub use element::Illustration;
 pub use keys::{ClassKey, EmptyKey, GuidePose, IllustrationKind, NoticeKey, SpotKey, StepKey, ILLUSTRATION_EXT, ILLUSTRATION_ROOT};
+pub use pack::{active_pack_id, configure_packs, set_active_pack, RasterPack};
 pub use form::{compose_form_template, form_image, form_source};
 pub use photo::{forget_photo, forget_stored_photo};
 pub use portrait_view::{avatar_source, render_avatar_mode, PortraitView};

@@ -48,6 +48,8 @@ pub enum EmbeddedPane {
     Licences,
     /// The runtimes code blocks run in, and Refresh (P1).
     Runtimes,
+    /// The illustration pack picker, install from file and downloadable packs (WS5).
+    IllustrationPacks,
 }
 
 /// One row of the settings window.
@@ -95,5 +97,6 @@ const fn pane_key(pane: EmbeddedPane) -> &'static str {
         EmbeddedPane::SymbolSets => "symbol_sets",
         EmbeddedPane::Licences => "licences",
         EmbeddedPane::Runtimes => "runtimes",
+        EmbeddedPane::IllustrationPacks => "illustration_packs",
     }
 }

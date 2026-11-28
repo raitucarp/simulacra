@@ -96,6 +96,9 @@ mod settings_commands;
 mod scheduler;
 mod symbol_downloads; // S13
 pub(in crate::ui::features::shell) use symbol_downloads::DownloadJob;
+mod packs; // WS5
+mod pack_downloads; // WS5
+pub(in crate::ui::features::shell) use pack_downloads::PackDownloadJob;
 mod semantic_index;
 mod semantic_pump;
 mod semantic_search;

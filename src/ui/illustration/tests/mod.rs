@@ -4,6 +4,7 @@ mod avatars;
 mod cache;
 mod forms;
 mod keys;
+mod packs; // WS5
 mod preview;
 mod template;
 

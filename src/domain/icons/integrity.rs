@@ -11,7 +11,14 @@ pub fn sha512_integrity(bytes: &[u8]) -> String {
     format!("{SHA512_PREFIX}{}", base64::engine::general_purpose::STANDARD.encode(Sha512::digest(bytes)))
 }
 
-/// Whether `bytes` match the integrity string `expected`.
+/// Prefix of a SHA-256 integrity string (illustration packs pin their archives with it).
+const SHA256_PREFIX: &str = "sha256-";
+
+/// Whether `bytes` match the integrity string `expected` (`sha512-` or `sha256-`, base64).
 pub fn matches_integrity(bytes: &[u8], expected: &str) -> bool {
-    expected.starts_with(SHA512_PREFIX) && sha512_integrity(bytes) == expected
+    if expected.starts_with(SHA512_PREFIX) {
+        return sha512_integrity(bytes) == expected;
+    }
+    let hex = crate::domain::packs::sha256_hex(bytes);
+    expected.starts_with(SHA256_PREFIX) && crate::domain::packs::sha256_integrity(&hex).is_some_and(|actual| actual == expected)
 }

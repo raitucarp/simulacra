@@ -3,7 +3,8 @@
 //! silhouette; anchored layers (eyes, mouth, accessory) move with the form's face anchor.
 
 use super::active::with_active_cache;
-use super::portrait::{compose_groups, layer_body};
+use super::pack::{layer_plan, raster_avatar, LayerPlan};
+use super::portrait::{compose_groups, layer_body, AVATAR_CANVAS};
 use super::template::TemplateExtras;
 use crate::domain::portrait::form::{FaceAnchor, FormLayer, FormSpec};
 use crate::ui::assets::template_text;
@@ -49,8 +50,26 @@ pub fn form_source(spec: &FormSpec) -> String {
     format!("{FORM_SOURCE_PREFIX}{}/{}", spec.kind.key(), parts.join(PART_SEPARATOR))
 }
 
-/// Themed form image rasterized `width` units wide.
+/// The raster layers of `spec`: clipped layers keep their clip, anchored ones the face
+/// anchor's matrix, as in [`compose_form_template`].
+fn raster_layers(spec: &FormSpec, extras: &TemplateExtras) -> Vec<LayerPlan> {
+    let anchor = spec.anchor();
+    let catalog = spec.catalog();
+    let plan = |(layer, path): (FormLayer, String)| {
+        let entry = catalog.layers.get(&layer);
+        let clip = entry.is_some_and(|entry| entry.clip);
+        let matrix = entry.filter(|entry| entry.anchor && anchor != FaceAnchor::default()).map(|_| anchor.matrix());
+        layer_plan(path, extras, matrix, clip)
+    };
+    spec.layer_paths().into_iter().map(plan).collect()
+}
+
+/// Themed form image rasterized `width` units wide (from the active pack's raster layers
+/// when it covers this form).
 pub fn form_image(spec: &FormSpec, width: Option<u16>) -> Arc<Image> {
     let extras = TemplateExtras::form(spec);
+    if let Some(image) = raster_avatar(&form_source(spec), || raster_layers(spec, &extras), &extras, width.unwrap_or(AVATAR_CANVAS)) {
+        return image;
+    }
     with_active_cache(|cache, colors| cache.load_with(&form_source(spec), || Some(compose_form_template(spec)), colors, &extras, width))
 }

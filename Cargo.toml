@@ -71,7 +71,7 @@ windows = { version = "0.62", features = ["Win32_Foundation", "Win32_Graphics_Gd
 libc = "0.2"
 
 [dev-dependencies]
-resvg = "0.46.0"
+resvg = "0.49.0"
 
 # Clippy policy, following the gpui codebase (Zed): the style group stays advisory and builder-heavy
 # UI types are allowed to be complex, while real mistakes are denied. CI runs clippy with -D warnings.
